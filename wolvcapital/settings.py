@@ -22,7 +22,7 @@ SECRET_KEY = env('SECRET_KEY', default='django-insecure-change-me-in-production'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1', '0.0.0.0'])
 
 # Application definition
 DJANGO_APPS = [
@@ -84,16 +84,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'wolvcapital.wsgi.application'
 
 # Database
+default_db_url = f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
 DATABASES = {
-    'default': env.db()
+    'default': env.db(default=default_db_url)
 }
-
-# Default database for development
-if not env('DATABASE_URL', default=None):
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

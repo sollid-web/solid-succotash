@@ -6,8 +6,8 @@ from django.shortcuts import get_object_or_404
 from investments.models import InvestmentPlan, UserInvestment
 from transactions.models import Transaction
 from users.models import UserWallet
-from investments.services import create_investment, approve_investment, reject_investment
-from transactions.services import create_transaction, approve_transaction, reject_transaction
+# from investments.services import create_investment, approve_investment, reject_investment
+# from transactions.services import create_transaction, approve_transaction, reject_transaction
 from .serializers import (
     InvestmentPlanSerializer,
     UserInvestmentSerializer,
@@ -32,15 +32,6 @@ class UserInvestmentViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         return UserInvestment.objects.filter(user=self.request.user)
-    
-    def perform_create(self, serializer):
-        plan = get_object_or_404(InvestmentPlan, id=serializer.validated_data['plan_id'])
-        investment = create_investment(
-            user=self.request.user,
-            plan=plan,
-            amount=serializer.validated_data['amount']
-        )
-        serializer.instance = investment
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
@@ -50,15 +41,6 @@ class TransactionViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         return Transaction.objects.filter(user=self.request.user)
-    
-    def perform_create(self, serializer):
-        transaction = create_transaction(
-            user=self.request.user,
-            tx_type=serializer.validated_data['tx_type'],
-            amount=serializer.validated_data['amount'],
-            reference=serializer.validated_data['reference']
-        )
-        serializer.instance = transaction
 
 
 class WalletView(APIView):
@@ -76,34 +58,6 @@ class AdminTransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = AdminTransactionSerializer
     permission_classes = [permissions.IsAdminUser]
-    
-    @action(detail=True, methods=['post'])
-    def approve(self, request, pk=None):
-        transaction = self.get_object()
-        notes = request.data.get('notes', '')
-        
-        try:
-            approve_transaction(transaction, request.user, notes)
-            return Response({'status': 'approved'})
-        except Exception as e:
-            return Response(
-                {'error': str(e)},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-    
-    @action(detail=True, methods=['post'])
-    def reject(self, request, pk=None):
-        transaction = self.get_object()
-        notes = request.data.get('notes', '')
-        
-        try:
-            reject_transaction(transaction, request.user, notes)
-            return Response({'status': 'rejected'})
-        except Exception as e:
-            return Response(
-                {'error': str(e)},
-                status=status.HTTP_400_BAD_REQUEST
-            )
 
 
 class AdminUserInvestmentViewSet(viewsets.ModelViewSet):
@@ -111,31 +65,3 @@ class AdminUserInvestmentViewSet(viewsets.ModelViewSet):
     queryset = UserInvestment.objects.all()
     serializer_class = AdminUserInvestmentSerializer
     permission_classes = [permissions.IsAdminUser]
-    
-    @action(detail=True, methods=['post'])
-    def approve(self, request, pk=None):
-        investment = self.get_object()
-        notes = request.data.get('notes', '')
-        
-        try:
-            approve_investment(investment, request.user, notes)
-            return Response({'status': 'approved'})
-        except Exception as e:
-            return Response(
-                {'error': str(e)},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-    
-    @action(detail=True, methods=['post'])
-    def reject(self, request, pk=None):
-        investment = self.get_object()
-        notes = request.data.get('notes', '')
-        
-        try:
-            reject_investment(investment, request.user, notes)
-            return Response({'status': 'rejected'})
-        except Exception as e:
-            return Response(
-                {'error': str(e)},
-                status=status.HTTP_400_BAD_REQUEST
-            )

@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: wolvcapital
+    env: python
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+      python manage.py migrate
+    startCommand: "gunicorn --bind 0.0.0.0:$PORT --workers 2 wolvcapital.wsgi:application"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        value: ".render.com"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: wolvcapital-db
+          property: connectionString
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://wolvcapital.onrender.com"
+
+databases:
+  - name: wolvcapital-db
+    databaseName: wolvcapital
+    user: wolvcapital

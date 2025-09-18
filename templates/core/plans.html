@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Investment Plans - WolvCapital{% endblock %}
+
+{% block content %}
+<div class="bg-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Investment Plans</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Choose from our carefully crafted investment plans designed to meet different risk tolerances and investment goals.
+            </p>
+        </div>
+
+        <!-- Risk Warning -->
+        <div class="bg-red-50 border border-red-200 rounded-lg p-6 mb-8">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-red-800">Investment Risk Disclosure</h3>
+                    <p class="mt-2 text-sm text-red-700">
+                        All investments involve risk of loss. Returns are not guaranteed and depend on market conditions. 
+                        All investments require manual approval by our team. Please carefully read our 
+                        <a href="{% url 'risk_disclosure' %}" class="underline">Risk Disclosure</a> before investing.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            {% for plan in plans %}
+            <div class="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition duration-300">
+                <div class="text-center">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ plan.name }}</h3>
+                    <div class="text-3xl font-bold text-blue-600 mb-2">{{ plan.daily_roi }}%</div>
+                    <p class="text-sm text-gray-600 mb-4">Daily Return</p>
+                    
+                    <div class="space-y-2 text-sm text-gray-600 mb-6">
+                        <div class="flex justify-between">
+                            <span>Duration:</span>
+                            <span class="font-semibold">{{ plan.duration_days }} days</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Min Amount:</span>
+                            <span class="font-semibold">${{ plan.min_amount|floatformat:0 }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Max Amount:</span>
+                            <span class="font-semibold">${{ plan.max_amount|floatformat:0 }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Total Return:</span>
+                            <span class="font-semibold text-green-600">
+                                {% widthratio plan.daily_roi 1 plan.duration_days %}%
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <p class="text-xs text-gray-500 mb-6">{{ plan.description }}</p>
+                    
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700 transition duration-300 inline-block">
+                        Invest Now
+                    </a>
+                    {% else %}
+                    <a href="{% url 'account_signup' %}" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700 transition duration-300 inline-block">
+                        Get Started
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- How Manual Approval Works -->
+        <div class="bg-gray-50 rounded-lg p-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Manual Off-Chain Approval Process</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Submit Request</h3>
+                    <p class="text-gray-600">Choose your plan and submit your investment request with proof of payment.</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Manual Review</h3>
+                    <p class="text-gray-600">Our expert team manually reviews and verifies each investment request.</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Approval & Start</h3>
+                    <p class="text-gray-600">Once approved, your investment begins earning daily returns immediately.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

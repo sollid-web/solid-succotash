@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block title %}WolvCapital - Professional Investment Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="gradient-bg text-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl md:text-6xl font-bold mb-6">
+            Welcome to WolvCapital
+        </h1>
+        <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+            Professional investment platform with manual off-chain approvals for maximum security and transparency.
+        </p>
+        <div class="space-x-4">
+            <a href="{% url 'plans' %}" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300">
+                View Investment Plans
+            </a>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'account_signup' %}" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition duration-300">
+                Get Started
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Risk Disclosure Banner -->
+<section class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm">
+                    <strong>Investment Risk Warning:</strong> All investments carry risk of loss. Past performance does not guarantee future results. 
+                    Please read our <a href="{% url 'risk_disclosure' %}" class="underline">Risk Disclosure</a> before investing.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Why Choose WolvCapital?</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Our platform combines cutting-edge technology with human oversight for the ultimate in security and reliability.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="text-center p-6">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Manual Off-Chain Approvals</h3>
+                <p class="text-gray-600">All transactions are manually reviewed and approved by our expert team for maximum security.</p>
+            </div>
+            
+            <div class="text-center p-6">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Competitive Returns</h3>
+                <p class="text-gray-600">Earn daily returns from 1% to 2% with our carefully structured investment plans.</p>
+            </div>
+            
+            <div class="text-center p-6">
+                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.944l8 4.5v9.112l-8 4.5-8-4.5V7.444l8-4.5z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Transparent Process</h3>
+                <p class="text-gray-600">Track all your investments and transactions with full transparency and detailed reporting.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Manual Off-Chain Approval Process</h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                Unlike automated systems, every transaction on WolvCapital is manually reviewed by our expert team to ensure security and compliance.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="text-center">
+                <div class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">1</div>
+                <h3 class="text-lg font-semibold mb-2">Submit Request</h3>
+                <p class="text-gray-600">Submit your deposit, withdrawal, or investment request through our secure platform.</p>
+            </div>
+            
+            <div class="text-center">
+                <div class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">2</div>
+                <h3 class="text-lg font-semibold mb-2">Expert Review</h3>
+                <p class="text-gray-600">Our compliance team manually reviews each request for authenticity and security.</p>
+            </div>
+            
+            <div class="text-center">
+                <div class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">3</div>
+                <h3 class="text-lg font-semibold mb-2">Manual Approval</h3>
+                <p class="text-gray-600">Approved requests are processed manually by authorized administrators.</p>
+            </div>
+            
+            <div class="text-center">
+                <div class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">4</div>
+                <h3 class="text-lg font-semibold mb-2">Execution</h3>
+                <p class="text-gray-600">Your transaction is executed and reflected in your account balance immediately.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Diversified Revenue Section -->
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Diversified Revenue Streams</h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                Our returns are generated through a diversified portfolio of investment strategies and revenue streams.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <h3 class="font-semibold mb-2">Forex Trading</h3>
+                <p class="text-sm text-gray-600">Professional currency trading with risk management protocols.</p>
+            </div>
+            
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <h3 class="font-semibold mb-2">Crypto Assets</h3>
+                <p class="text-sm text-gray-600">Strategic cryptocurrency investments and DeFi opportunities.</p>
+            </div>
+            
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <h3 class="font-semibold mb-2">Stock Market</h3>
+                <p class="text-sm text-gray-600">Equity investments in growth and dividend-paying stocks.</p>
+            </div>
+            
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <h3 class="font-semibold mb-2">Real Estate</h3>
+                <p class="text-sm text-gray-600">Commercial and residential real estate investment opportunities.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="gradient-bg text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold mb-4">Ready to Start Investing?</h2>
+        <p class="text-xl mb-8 max-w-2xl mx-auto">
+            Join thousands of investors who trust WolvCapital for secure, profitable investments.
+        </p>
+        <div class="space-x-4">
+            <a href="{% url 'plans' %}" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300">
+                View Our Plans
+            </a>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'account_signup' %}" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition duration-300">
+                Create Account
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

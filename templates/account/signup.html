@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load account socialaccount %}
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load account socialaccount %}
     <title>{% block title %}Create Account - WolvCapital{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -70,9 +70,7 @@
                 {% if form.errors %}
                     <div id="signupErrors" class="mb-4 p-4 rounded-lg bg-red-500/20 border border-red-500/30 text-red-100" role="alert" aria-live="assertive">
                         <p class="font-medium mb-2">Please correct the following errors:</p>
-                        <ul class="list-disc list-inside space-y-1 text-sm">
-{% for field, errors in form.errors.items %}{% for error in errors %}<li>{{ field|title }}: {{ error }}</li>{% endfor %}{% endfor %}
-                        </ul>
+                        {% spaceless %}<ul class="list-disc list-inside space-y-1 text-sm">{% for field, errors in form.errors.items %}{% for error in errors %}<li>{{ error }}</li>{% endfor %}{% endfor %}</ul>{% endspaceless %}
                     </div>
                 {% endif %}
 

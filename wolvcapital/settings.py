@@ -145,6 +145,7 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # --- AUTHENTICATION ---
+# AUTH_USER_MODEL = "users.User"  # Commented out - using Django's default User model
 AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"

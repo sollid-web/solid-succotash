@@ -1,7 +1,6 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import Profile, UserWallet
+from .models import Profile, UserWallet, User
 
 
 class ProfileInline(admin.StackedInline):
@@ -55,5 +54,5 @@ class UserWalletAdmin(admin.ModelAdmin):
 
 
 # Re-register UserAdmin
-admin.site.unregister(User)
+# admin.site.unregister(User)  # Not needed with custom User model
 admin.site.register(User, UserAdmin)

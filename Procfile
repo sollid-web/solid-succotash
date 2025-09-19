@@ -1,2 +1,2 @@
-web: gunicorn wolvcapital.wsgi:application --bind 0.0.0.0:$PORT
-release: python manage.py migrate && python manage.py seed_plans && python manage.py collectstatic --noinput
+web: bash start.sh
+release: python manage.py migrate && python manage.py seed_plans

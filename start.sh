@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# WolvCapital Railway Automated Startup Script
-echo "🚀 Starting WolvCapital automated deployment..."
+# WolvCapital Render.com Startup Script
+echo "🚀 Starting WolvCapital on Render.com..."
+
+# Exit on any error
+set -e
 
 # Apply database migrations
 echo "📦 Running migrations..."
@@ -10,10 +13,6 @@ python manage.py migrate --noinput
 # Seed investment plans (critical for WolvCapital)
 echo "💰 Seeding investment plans..."
 python manage.py seed_plans
-
-# Collect static files
-echo "📁 Collecting static files..."
-python manage.py collectstatic --noinput
 
 # Create crypto wallets for deposits
 echo "₿ Setting up cryptocurrency wallets..."
@@ -67,10 +66,16 @@ else:
     print(f"✅ Admin user already exists: {admin_email}")
 EOF
 
-echo "🎉 WolvCapital deployment complete!"
+echo "🎉 WolvCapital startup complete!"
 echo "🌐 Admin Login: admin@wolvcapital.com / admin123"
 echo "💼 Platform Features: Investment Plans, Crypto Deposits, Virtual Cards, Admin Notifications"
 
-# Start the application
-echo "🚀 Starting Gunicorn server..."
-exec gunicorn wolvcapital.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+# Start the application with proper Render.com configuration
+echo "🚀 Starting Gunicorn server on port $PORT..."
+exec gunicorn wolvcapital.wsgi:application \
+    --bind 0.0.0.0:$PORT \
+    --workers 2 \
+    --timeout 120 \
+    --keep-alive 5 \
+    --max-requests 1000 \
+    --preload

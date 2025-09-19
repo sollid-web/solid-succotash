@@ -20,9 +20,16 @@ environ.Env.read_env(BASE_DIR / '.env')
 SECRET_KEY = env('SECRET_KEY', default='django-insecure-change-me-in-production')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = env('DEBUG', default=False)
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1', '0.0.0.0'])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[
+    'localhost', 
+    '127.0.0.1', 
+    '0.0.0.0',
+    '*.onrender.com',
+    'solid-succotash-654g.onrender.com',
+    '*.railway.app'
+])
 
 # Application definition
 DJANGO_APPS = [

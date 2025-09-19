@@ -5,10 +5,43 @@ from django.utils import timezone
 import uuid
 
 
+class CryptocurrencyWallet(models.Model):
+    CRYPTO_CHOICES = [
+        ('BTC', 'Bitcoin'),
+        ('USDT', 'Tether USD'),
+        ('USDC', 'USD Coin'),
+        ('ETH', 'Ethereum'),
+    ]
+    
+    currency = models.CharField(max_length=10, choices=CRYPTO_CHOICES, unique=True)
+    wallet_address = models.CharField(max_length=255, help_text="Wallet address for receiving deposits")
+    network = models.CharField(max_length=50, blank=True, help_text="Network (e.g., ERC-20, TRC-20, BEP-20)")
+    is_active = models.BooleanField(default=True, help_text="Whether this wallet is accepting deposits")
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"{self.currency} - {self.wallet_address[:10]}..."
+    
+    class Meta:
+        db_table = 'transactions_crypto_wallet'
+        verbose_name = 'Cryptocurrency Wallet'
+        verbose_name_plural = 'Cryptocurrency Wallets'
+        ordering = ['currency']
+
+
 class Transaction(models.Model):
     TYPE_CHOICES = [
         ('deposit', 'Deposit'),
         ('withdrawal', 'Withdrawal'),
+    ]
+    
+    PAYMENT_METHOD_CHOICES = [
+        ('bank_transfer', 'Bank Transfer'),
+        ('BTC', 'Bitcoin'),
+        ('USDT', 'Tether USD'),
+        ('USDC', 'USD Coin'),
+        ('ETH', 'Ethereum'),
     ]
     
     STATUS_CHOICES = [
@@ -20,8 +53,11 @@ class Transaction(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transactions')
     tx_type = models.CharField(max_length=20, choices=TYPE_CHOICES)
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, default='bank_transfer')
     amount = models.DecimalField(max_digits=12, decimal_places=2, validators=[MinValueValidator(0)])
     reference = models.TextField(help_text="Reference number, notes, or proof of payment")
+    tx_hash = models.CharField(max_length=255, blank=True, help_text="Cryptocurrency transaction hash")
+    wallet_address_used = models.CharField(max_length=255, blank=True, help_text="Wallet address used for crypto deposit")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     notes = models.TextField(blank=True, help_text="Admin notes")
     approved_by = models.ForeignKey(
@@ -37,6 +73,9 @@ class Transaction(models.Model):
     def __str__(self):
         return f"{self.user.email} - {self.tx_type} - ${self.amount} - {self.status}"
     
+    def is_crypto(self):
+        return self.payment_method in ['BTC', 'USDT', 'USDC', 'ETH']
+    
     class Meta:
         db_table = 'transactions_transaction'
         constraints = [
@@ -48,10 +87,161 @@ class Transaction(models.Model):
         indexes = [
             models.Index(fields=['user', 'status']),
             models.Index(fields=['tx_type', 'status']),
+            models.Index(fields=['payment_method']),
             models.Index(fields=['created_at']),
             models.Index(fields=['status']),
         ]
         ordering = ['-created_at']
+
+
+class VirtualCard(models.Model):
+    CARD_TYPE_CHOICES = [
+        ('visa', 'Visa Virtual Card'),
+    ]
+    
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+        ('active', 'Active'),
+        ('suspended', 'Suspended'),
+        ('expired', 'Expired'),
+    ]
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='virtual_cards')
+    card_type = models.CharField(max_length=20, choices=CARD_TYPE_CHOICES, default='visa')
+    card_number = models.CharField(max_length=16, blank=True, help_text="Generated card number")
+    cardholder_name = models.CharField(max_length=100, blank=True)
+    expiry_month = models.CharField(max_length=2, blank=True)
+    expiry_year = models.CharField(max_length=2, blank=True)
+    cvv = models.CharField(max_length=3, blank=True)
+    balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    purchase_amount = models.DecimalField(max_digits=12, decimal_places=2, default=1000)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    is_active = models.BooleanField(default=False)
+    approved_by = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name='approved_cards'
+    )
+    notes = models.TextField(blank=True, help_text="Admin notes")
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+    expires_at = models.DateTimeField(null=True, blank=True)
+    
+    def __str__(self):
+        return f"{self.user.email} - {self.card_type} - {self.card_number[-4:] if self.card_number else 'Pending'}"
+    
+    def generate_card_details(self):
+        """Generate card number, CVV, and expiry date"""
+        import random
+        from datetime import datetime, timedelta
+        
+        # Generate card number (starts with 4 for Visa)
+        self.card_number = '4' + ''.join([str(random.randint(0, 9)) for _ in range(15)])
+        
+        # Generate CVV
+        self.cvv = ''.join([str(random.randint(0, 9)) for _ in range(3)])
+        
+        # Set cardholder name
+        self.cardholder_name = self.user.get_full_name() or self.user.email.split('@')[0].upper()
+        
+        # Set expiry date (3 years from now)
+        expiry_date = datetime.now() + timedelta(days=365*3)
+        self.expiry_month = f"{expiry_date.month:02d}"
+        self.expiry_year = f"{expiry_date.year % 100:02d}"
+        self.expires_at = expiry_date
+        
+        self.save()
+    
+    def get_masked_number(self):
+        """Return masked card number for display"""
+        if self.card_number:
+            return f"****-****-****-{self.card_number[-4:]}"
+        return "****-****-****-****"
+    
+    class Meta:
+        db_table = 'transactions_virtual_card'
+        verbose_name = 'Virtual Card'
+        verbose_name_plural = 'Virtual Cards'
+        ordering = ['-created_at']
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(balance__gte=0),
+                name='positive_card_balance'
+            ),
+            models.CheckConstraint(
+                check=models.Q(purchase_amount__gt=0),
+                name='positive_purchase_amount'
+            ),
+        ]
+
+
+class AdminNotification(models.Model):
+    NOTIFICATION_TYPES = [
+        ('new_deposit', 'New Deposit Request'),
+        ('new_withdrawal', 'New Withdrawal Request'),
+        ('new_investment', 'New Investment Request'),
+        ('new_card_request', 'New Virtual Card Request'),
+        ('user_registration', 'New User Registration'),
+    ]
+    
+    PRIORITY_CHOICES = [
+        ('low', 'Low'),
+        ('medium', 'Medium'),
+        ('high', 'High'),
+        ('urgent', 'Urgent'),
+    ]
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    notification_type = models.CharField(max_length=30, choices=NOTIFICATION_TYPES)
+    title = models.CharField(max_length=200)
+    message = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='admin_notifications', null=True, blank=True)
+    entity_type = models.CharField(max_length=20, null=True, blank=True)  # 'transaction', 'investment', 'virtual_card'
+    entity_id = models.CharField(max_length=100, null=True, blank=True)  # UUID or ID of the entity
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium')
+    is_read = models.BooleanField(default=False)
+    is_resolved = models.BooleanField(default=False)
+    resolved_by = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name='resolved_notifications'
+    )
+    resolved_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    
+    def __str__(self):
+        return f"{self.title} - {self.priority} priority"
+    
+    def mark_as_read(self):
+        self.is_read = True
+        self.save()
+    
+    def mark_as_resolved(self, resolved_by=None):
+        self.is_resolved = True
+        self.resolved_by = resolved_by
+        self.resolved_at = timezone.now()
+        self.save()
+    
+    class Meta:
+        db_table = 'transactions_admin_notification'
+        verbose_name = 'Admin Notification'
+        verbose_name_plural = 'Admin Notifications'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['notification_type']),
+            models.Index(fields=['is_read']),
+            models.Index(fields=['is_resolved']),
+            models.Index(fields=['priority']),
+            models.Index(fields=['created_at']),
+            models.Index(fields=['user']),
+        ]
 
 
 class AdminAuditLog(models.Model):

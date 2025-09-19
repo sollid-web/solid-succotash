@@ -10,7 +10,7 @@ from transactions.models import Transaction
 from transactions.services import create_transaction
 from investments.services import create_investment
 from users.models import UserWallet
-from .forms import InvestmentForm, WithdrawalForm
+from .forms import InvestmentForm, WithdrawalForm, DepositForm
 
 
 class HomeView(TemplateView):
@@ -50,6 +50,15 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'core/dashboard.html'
     login_url = '/accounts/login/'
     
+    def dispatch(self, request, *args, **kwargs):
+        # Redirect admin users to admin panel instead of dashboard
+        if request.user.is_authenticated:
+            profile = getattr(request.user, 'profile', None)
+            if profile and profile.role == 'admin' or request.user.is_staff:
+                messages.info(request, "Admin accounts are redirected to the administration panel.")
+                return redirect('/admin/')
+        return super().dispatch(request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
@@ -70,13 +79,19 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         
         active_investments = investments.filter(status='approved').count()
         
+        # Get crypto wallets for deposits
+        from transactions.models import CryptocurrencyWallet
+        crypto_wallets = CryptocurrencyWallet.objects.filter(is_active=True).order_by('currency')
+        
         context.update({
             'wallet': wallet,
             'investments': investments,
             'transactions': transactions,
             'total_invested': total_invested,
             'active_investments': active_investments,
-            'investment_form': InvestmentForm(),
+            'investment_form': InvestmentForm(user=user),
+            'deposit_form': DepositForm(),
+            'crypto_wallets': crypto_wallets,
         })
         return context
 
@@ -85,7 +100,7 @@ class InvestView(LoginRequiredMixin, View):
     login_url = '/accounts/login/'
     
     def post(self, request):
-        form = InvestmentForm(request.POST)
+        form = InvestmentForm(request.POST, user=request.user)
         if form.is_valid():
             try:
                 investment = create_investment(
@@ -97,6 +112,61 @@ class InvestView(LoginRequiredMixin, View):
                     request,
                     f"Investment request submitted successfully! Reference: {investment.id}"
                 )
+            except Exception as e:
+                messages.error(request, str(e))
+        else:
+            for error in form.non_field_errors():
+                messages.error(request, error)
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+        
+        return redirect('dashboard')
+
+
+class DepositView(LoginRequiredMixin, View):
+    login_url = '/accounts/login/'
+    
+    def post(self, request):
+        form = DepositForm(request.POST)
+        if form.is_valid():
+            try:
+                # Get wallet address for crypto deposits
+                wallet_address_used = ''
+                if form.cleaned_data['payment_method'] in ['BTC', 'USDT', 'USDC', 'ETH']:
+                    from transactions.models import CryptocurrencyWallet
+                    try:
+                        crypto_wallet = CryptocurrencyWallet.objects.get(
+                            currency=form.cleaned_data['payment_method'],
+                            is_active=True
+                        )
+                        wallet_address_used = crypto_wallet.wallet_address
+                    except CryptocurrencyWallet.DoesNotExist:
+                        messages.error(request, f"{form.cleaned_data['payment_method']} deposits are currently unavailable.")
+                        return redirect('dashboard')
+                
+                transaction = create_transaction(
+                    user=request.user,
+                    tx_type='deposit',
+                    amount=form.cleaned_data['amount'],
+                    reference=form.cleaned_data['reference'],
+                    payment_method=form.cleaned_data['payment_method'],
+                    tx_hash=form.cleaned_data.get('tx_hash', ''),
+                    wallet_address_used=wallet_address_used
+                )
+                
+                if form.cleaned_data['payment_method'] == 'bank_transfer':
+                    messages.success(
+                        request,
+                        f"Bank transfer deposit request submitted! Reference: {transaction.id}. "
+                        f"Your funds will be available after admin approval."
+                    )
+                else:
+                    messages.success(
+                        request,
+                        f"{form.cleaned_data['payment_method']} deposit request submitted! Reference: {transaction.id}. "
+                        f"Your funds will be available after transaction confirmation and admin approval."
+                    )
             except Exception as e:
                 messages.error(request, str(e))
         else:

@@ -1,18 +1,26 @@
-{% extends 'base.html' %}
+{% extends 'dashboard_base.html' %}
 
 {% block title %}Dashboard - WolvCapital{% endblock %}
+
+{% block extra_css %}
+<style>
+    .crypto-wallet-hidden { display: none; }
+    .crypto-deposit-section { display: none; }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="bg-gray-50 min-h-screen py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
             <p class="text-gray-600">Welcome back, {{ user.first_name|default:user.email }}</p>
         </div>
 
         <!-- Wallet Balance & Quick Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white rounded-lg shadow p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-green-500">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
                         <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -26,7 +34,7 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-lg shadow p-6">
+            <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-blue-500">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
                         <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -40,7 +48,7 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-lg shadow p-6">
+            <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-purple-500">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
                         <svg class="h-8 w-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -54,11 +62,11 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-lg shadow p-6">
-                <a href="{% url 'withdrawals' %}" class="block">
+            <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-orange-500">
+                <a href="{% url 'withdrawals' %}" class="block hover:bg-gray-50 transition duration-200">
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
-                            <svg class="h-8 w-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="h-8 w-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
                             </svg>
                         </div>
@@ -71,15 +79,116 @@
             </div>
         </div>
 
-        <!-- New Investment Form -->
-        <div class="bg-white rounded-lg shadow mb-8">
-            <div class="px-6 py-4 border-b border-gray-200">
-                <h2 class="text-lg font-semibold text-gray-900">Start New Investment</h2>
+        <!-- Action Cards Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Deposit Card -->
+            <div class="bg-white rounded-lg shadow-lg">
+                <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-green-500 to-green-600">
+                    <div class="flex items-center">
+                        <svg class="h-6 w-6 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        <h2 class="text-lg font-semibold text-white">Add Funds</h2>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <form method="post" action="{% url 'deposit' %}" class="space-y-4">
+                        {% csrf_token %}
+                        
+                        <!-- Payment Method Selection -->
+                        <div>
+                            <label for="{{ deposit_form.payment_method.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                                Payment Method
+                            </label>
+                            {{ deposit_form.payment_method }}
+                        </div>
+                        
+                        <!-- Crypto Wallet Address Display -->
+                        <div id="crypto-wallet-info" class="crypto-deposit-section bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h4 class="font-medium text-blue-900 mb-3">Send to this address:</h4>
+                            {% for wallet in crypto_wallets %}
+                            <div class="crypto-wallet-{{ wallet.currency }} hidden">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-blue-800">{{ wallet.currency }} Address:</span>
+                                    {% if wallet.network %}
+                                    <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">{{ wallet.network }}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <input type="text" value="{{ wallet.wallet_address }}" readonly 
+                                           class="flex-1 text-xs bg-white border border-blue-300 rounded px-3 py-2 text-gray-900 font-mono">
+                                    <button type="button" onclick="copyAddress('{{ wallet.wallet_address }}')" 
+                                            class="bg-blue-600 text-white px-3 py-2 rounded text-xs hover:bg-blue-700">
+                                        Copy
+                                    </button>
+                                </div>
+                                <div class="mt-2 text-center">
+                                    <div id="qr-{{ wallet.currency }}" class="inline-block"></div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div>
+                            <label for="{{ deposit_form.amount.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                                Deposit Amount ($)
+                            </label>
+                            {{ deposit_form.amount }}
+                        </div>
+                        
+                        <!-- Transaction Hash (for crypto) -->
+                        <div id="tx-hash-field" class="crypto-deposit-section">
+                            <label for="{{ deposit_form.tx_hash.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                                Transaction Hash *
+                            </label>
+                            {{ deposit_form.tx_hash }}
+                            <p class="text-xs text-gray-500 mt-1">Required for cryptocurrency deposits</p>
+                        </div>
+                        
+                        <div>
+                            <label for="{{ deposit_form.reference.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                                Payment Reference
+                            </label>
+                            {{ deposit_form.reference }}
+                            <p class="text-xs text-gray-500 mt-1">{{ deposit_form.reference.help_text }}</p>
+                        </div>
+                        
+                        <div class="bg-blue-50 border border-blue-200 rounded-md p-4">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm text-blue-700">
+                                        <strong>Manual Verification:</strong> All deposits require admin approval before funds are added to your wallet.
+                                        <span class="crypto-warning hidden text-red-700 font-semibold"> For crypto deposits, ensure you send to the correct address and network!</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition duration-300 font-semibold">
+                            Submit Deposit Request
+                        </button>
+                    </form>
+                </div>
             </div>
-            <div class="p-6">
-                <form method="post" action="{% url 'invest' %}" class="space-y-4">
-                    {% csrf_token %}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <!-- Investment Card -->
+            <div class="bg-white rounded-lg shadow-lg">
+                <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-500 to-blue-600">
+                    <div class="flex items-center">
+                        <svg class="h-6 w-6 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                        <h2 class="text-lg font-semibold text-white">Start New Investment</h2>
+                    </div>
+                </div>
+                <div class="p-6">
+                    {% if wallet.balance > 0 %}
+                    <form method="post" action="{% url 'invest' %}" class="space-y-4">
+                        {% csrf_token %}
                         <div>
                             <label for="{{ investment_form.plan.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
                                 Investment Plan
@@ -91,34 +200,56 @@
                                 Amount ($)
                             </label>
                             {{ investment_form.amount }}
+                            <p class="text-xs text-gray-500 mt-1">Available balance: ${{ wallet.balance }}</p>
                         </div>
-                    </div>
-                    <div class="bg-yellow-50 border border-yellow-200 rounded-md p-4">
-                        <div class="flex">
-                            <div class="flex-shrink-0">
-                                <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm text-yellow-700">
+                                        <strong>Manual Approval Required:</strong> Investment requests are reviewed within 24-48 hours.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition duration-300 font-semibold">
+                            Submit Investment Request
+                        </button>
+                    </form>
+                    {% else %}
+                    <div class="text-center py-8">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                        <h3 class="mt-2 text-sm font-medium text-gray-900">No funds available</h3>
+                        <p class="mt-1 text-sm text-gray-500">You need to deposit funds before making an investment.</p>
+                        <div class="mt-6">
+                            <button onclick="document.querySelector('input[name=amount]').focus()" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700">
+                                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                 </svg>
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-sm text-yellow-700">
-                                    <strong>Manual Approval Required:</strong> Your investment request will be manually reviewed and approved by our team. 
-                                    This process may take 24-48 hours. You will be notified once approved.
-                                </p>
-                            </div>
+                                Add Funds First
+                            </button>
                         </div>
                     </div>
-                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition duration-300">
-                        Submit Investment Request
-                    </button>
-                </form>
+                    {% endif %}
+                </div>
             </div>
         </div>
 
         <!-- Active Investments -->
-        <div class="bg-white rounded-lg shadow mb-8">
-            <div class="px-6 py-4 border-b border-gray-200">
-                <h2 class="text-lg font-semibold text-gray-900">My Investments</h2>
+        <div class="bg-white rounded-lg shadow-lg mb-8">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-purple-500 to-purple-600">
+                <div class="flex items-center">
+                    <svg class="h-6 w-6 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                    </svg>
+                    <h2 class="text-lg font-semibold text-white">My Investments</h2>
+                </div>
             </div>
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
@@ -134,9 +265,10 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         {% for investment in investments %}
-                        <tr>
+                        <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                 {{ investment.plan.name }}
+                                <div class="text-xs text-gray-500">{{ investment.plan.daily_roi }}% daily</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 ${{ investment.amount }}
@@ -144,7 +276,7 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 {% if investment.status == 'pending' %}
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                        Pending
+                                        Pending Approval
                                     </span>
                                 {% elif investment.status == 'approved' %}
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
@@ -164,24 +296,28 @@
                                 {% if investment.started_at %}
                                     {{ investment.started_at|date:"M d, Y" }}
                                 {% else %}
-                                    -
+                                    <span class="text-gray-400">Pending</span>
                                 {% endif %}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 {% if investment.ends_at %}
                                     {{ investment.ends_at|date:"M d, Y" }}
                                 {% else %}
-                                    -
+                                    <span class="text-gray-400">Pending</span>
                                 {% endif %}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                ${{ investment.total_return }}
+                                <span class="font-semibold text-green-600">${{ investment.total_return }}</span>
                             </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="6" class="px-6 py-4 text-center text-gray-500">
-                                No investments yet. Start your first investment above!
+                            <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                                <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                </svg>
+                                <p class="text-lg font-medium">No investments yet</p>
+                                <p class="mt-1">Start your first investment above to begin earning returns!</p>
                             </td>
                         </tr>
                         {% endfor %}
@@ -191,9 +327,14 @@
         </div>
 
         <!-- Recent Transactions -->
-        <div class="bg-white rounded-lg shadow">
-            <div class="px-6 py-4 border-b border-gray-200">
-                <h2 class="text-lg font-semibold text-gray-900">Recent Transactions</h2>
+        <div class="bg-white rounded-lg shadow-lg">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-gray-500 to-gray-600">
+                <div class="flex items-center">
+                    <svg class="h-6 w-6 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                    </svg>
+                    <h2 class="text-lg font-semibold text-white">Recent Transactions</h2>
+                </div>
             </div>
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
@@ -208,17 +349,32 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         {% for transaction in transactions %}
-                        <tr>
+                        <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                <span class="capitalize">{{ transaction.tx_type }}</span>
+                                <div class="flex items-center">
+                                    {% if transaction.tx_type == 'deposit' %}
+                                        <svg class="h-4 w-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                        </svg>
+                                    {% else %}
+                                        <svg class="h-4 w-4 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6"></path>
+                                        </svg>
+                                    {% endif %}
+                                    <span class="capitalize font-medium">{{ transaction.tx_type }}</span>
+                                </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {% if transaction.tx_type == 'withdrawal' %}-{% endif %}${{ transaction.amount }}
+                                {% if transaction.tx_type == 'withdrawal' %}
+                                    <span class="text-red-600 font-medium">-${{ transaction.amount }}</span>
+                                {% else %}
+                                    <span class="text-green-600 font-medium">+${{ transaction.amount }}</span>
+                                {% endif %}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 {% if transaction.status == 'pending' %}
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                        Pending
+                                        Pending Review
                                     </span>
                                 {% elif transaction.status == 'approved' %}
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
@@ -233,14 +389,20 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 {{ transaction.created_at|date:"M d, Y H:i" }}
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-900 max-w-xs truncate">
-                                {{ transaction.reference|truncatechars:50 }}
+                            <td class="px-6 py-4 text-sm text-gray-900 max-w-xs">
+                                <div class="truncate" title="{{ transaction.reference }}">
+                                    {{ transaction.reference|truncatechars:40 }}
+                                </div>
                             </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="5" class="px-6 py-4 text-center text-gray-500">
-                                No transactions yet.
+                            <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+                                <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                                </svg>
+                                <p class="text-lg font-medium">No transactions yet</p>
+                                <p class="mt-1">Make your first deposit or investment to get started!</p>
                             </td>
                         </tr>
                         {% endfor %}
@@ -250,4 +412,75 @@
         </div>
     </div>
 </div>
+
+<script>
+// QR Code generation (simple implementation)
+function generateQR(text, elementId) {
+    // For production, use a proper QR code library like qrcode.js
+    document.getElementById(elementId).innerHTML = `<div class="w-32 h-32 bg-gray-200 flex items-center justify-center text-xs text-gray-600 border">QR Code<br>for ${text.substring(0,10)}...</div>`;
+}
+
+// Toggle crypto fields based on payment method
+function toggleCryptoFields(paymentMethod) {
+    const cryptoInfo = document.getElementById('crypto-wallet-info');
+    const txHashField = document.getElementById('tx-hash-field');
+    const cryptoWarning = document.querySelector('.crypto-warning');
+    const txHashInput = document.querySelector('input[name="tx_hash"]');
+    
+    // Hide all crypto wallet divs first
+    document.querySelectorAll('[class*="crypto-wallet-"]').forEach(div => {
+        div.classList.add('hidden');
+    });
+    
+    if (['BTC', 'USDT', 'USDC', 'ETH'].includes(paymentMethod)) {
+        // Show crypto fields
+        cryptoInfo.style.display = 'block';
+        txHashField.style.display = 'block';
+        cryptoWarning.classList.remove('hidden');
+        txHashInput.style.display = 'block';
+        txHashInput.required = true;
+        
+        // Show specific crypto wallet
+        const walletDiv = document.querySelector(`.crypto-wallet-${paymentMethod}`);
+        if (walletDiv) {
+            walletDiv.classList.remove('hidden');
+            // Generate QR code
+            const address = walletDiv.querySelector('input').value;
+            generateQR(address, `qr-${paymentMethod}`);
+        }
+    } else {
+        // Hide crypto fields
+        cryptoInfo.style.display = 'none';
+        txHashField.style.display = 'none';
+        cryptoWarning.classList.add('hidden');
+        txHashInput.style.display = 'none';
+        txHashInput.required = false;
+    }
+}
+
+// Copy address to clipboard
+function copyAddress(address) {
+    navigator.clipboard.writeText(address).then(function() {
+        // Show success message
+        const toast = document.createElement('div');
+        toast.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50';
+        toast.textContent = 'Address copied to clipboard!';
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 3000);
+    }).catch(function(err) {
+        console.error('Could not copy text: ', err);
+        alert('Address: ' + address);
+    });
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const paymentMethodSelect = document.querySelector('select[name="payment_method"]');
+    if (paymentMethodSelect) {
+        toggleCryptoFields(paymentMethodSelect.value);
+    }
+});
+</script>
 {% endblock %}

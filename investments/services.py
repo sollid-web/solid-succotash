@@ -5,6 +5,7 @@ from django.utils import timezone
 from datetime import timedelta
 from .models import UserInvestment, InvestmentPlan
 from transactions.models import AdminAuditLog
+from transactions.notifications import create_admin_notification
 
 
 @transaction.atomic
@@ -28,6 +29,18 @@ def approve_investment(investment: UserInvestment, admin_user: User, notes: str 
         entity_id=str(investment.id),
         action='approve',
         notes=notes
+    )
+    
+    # Mark related notifications as resolved
+    from transactions.models import AdminNotification
+    AdminNotification.objects.filter(
+        entity_type='investment',
+        entity_id=str(investment.id),
+        is_resolved=False
+    ).update(
+        is_resolved=True,
+        resolved_by=admin_user,
+        resolved_at=timezone.now()
     )
     
     return investment
@@ -54,12 +67,24 @@ def reject_investment(investment: UserInvestment, admin_user: User, notes: str =
         notes=notes
     )
     
+    # Mark related notifications as resolved
+    from transactions.models import AdminNotification
+    AdminNotification.objects.filter(
+        entity_type='investment',
+        entity_id=str(investment.id),
+        is_resolved=False
+    ).update(
+        is_resolved=True,
+        resolved_by=admin_user,
+        resolved_at=timezone.now()
+    )
+    
     return investment
 
 
 def create_investment(user: User, plan: InvestmentPlan, amount: float) -> UserInvestment:
     """
-    Create a new investment request.
+    Create a new investment request and notify admins.
     """
     # Validate amount within plan limits
     if amount < plan.min_amount:
@@ -71,8 +96,25 @@ def create_investment(user: User, plan: InvestmentPlan, amount: float) -> UserIn
     if amount <= 0:
         raise ValidationError("Investment amount must be positive")
     
-    return UserInvestment.objects.create(
+    investment = UserInvestment.objects.create(
         user=user,
         plan=plan,
         amount=amount
     )
+    
+    # Create admin notification
+    priority = 'high' if amount >= 15000 else 'medium'
+    title = f"New Investment Request: ${amount}"
+    message = f"User {user.email} has submitted an investment request for ${amount} in the {plan.name} plan ({plan.daily_roi}% daily for {plan.duration_days} days)."
+    
+    create_admin_notification(
+        notification_type='new_investment',
+        title=title,
+        message=message,
+        user=user,
+        entity_type='investment',
+        entity_id=investment.id,
+        priority=priority
+    )
+    
+    return investment

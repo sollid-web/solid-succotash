@@ -1,7 +1,9 @@
 from django.db import transaction
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from .models import Transaction, AdminAuditLog
+from .notifications import create_admin_notification, mark_notification_as_resolved
 from users.models import UserWallet
 
 
@@ -44,6 +46,18 @@ def approve_transaction(txn: Transaction, admin_user: User, notes: str = "") -> 
         notes=notes
     )
     
+    # Mark related notifications as resolved
+    from .models import AdminNotification
+    AdminNotification.objects.filter(
+        entity_type='transaction',
+        entity_id=str(txn.id),
+        is_resolved=False
+    ).update(
+        is_resolved=True,
+        resolved_by=admin_user,
+        resolved_at=timezone.now()
+    )
+    
     return txn
 
 
@@ -70,19 +84,64 @@ def reject_transaction(txn: Transaction, admin_user: User, notes: str = "") -> T
         notes=notes
     )
     
+    # Mark related notifications as resolved
+    from .models import AdminNotification
+    AdminNotification.objects.filter(
+        entity_type='transaction',
+        entity_id=str(txn.id),
+        is_resolved=False
+    ).update(
+        is_resolved=True,
+        resolved_by=admin_user,
+        resolved_at=timezone.now()
+    )
+    
     return txn
 
 
-def create_transaction(user: User, tx_type: str, amount: float, reference: str) -> Transaction:
+def create_transaction(user: User, tx_type: str, amount: float, reference: str, 
+                     payment_method: str = 'bank_transfer', tx_hash: str = '', 
+                     wallet_address_used: str = '') -> Transaction:
     """
-    Create a new transaction.
+    Create a new transaction and notify admins.
     """
     if amount <= 0:
         raise ValidationError("Amount must be positive")
     
-    return Transaction.objects.create(
+    txn = Transaction.objects.create(
         user=user,
         tx_type=tx_type,
+        payment_method=payment_method,
         amount=amount,
-        reference=reference
+        reference=reference,
+        tx_hash=tx_hash,
+        wallet_address_used=wallet_address_used
     )
+    
+    # Create admin notification
+    if tx_type == 'deposit':
+        notification_type = 'new_deposit'
+        title = f"New Deposit Request: ${amount}"
+        priority = 'high' if amount >= 10000 else 'medium'
+    elif tx_type == 'withdrawal':
+        notification_type = 'new_withdrawal'
+        title = f"New Withdrawal Request: ${amount}"
+        priority = 'high' if amount >= 5000 else 'medium'
+    
+    payment_info = f" via {payment_method}"
+    if payment_method in ['BTC', 'USDT', 'USDC', 'ETH']:
+        payment_info += f" (Hash: {tx_hash[:10]}...)" if tx_hash else ""
+    
+    message = f"User {user.email} has submitted a {tx_type} request for ${amount}{payment_info}. Reference: {reference}"
+    
+    create_admin_notification(
+        notification_type=notification_type,
+        title=title,
+        message=message,
+        user=user,
+        entity_type='transaction',
+        entity_id=txn.id,
+        priority=priority
+    )
+    
+    return txn

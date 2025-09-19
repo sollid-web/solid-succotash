@@ -16,6 +16,7 @@ urlpatterns = [
     # User area
     path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
     path('invest/', views.InvestView.as_view(), name='invest'),
+    path('deposit/', views.DepositView.as_view(), name='deposit'),
     path('withdrawals/', views.WithdrawalsView.as_view(), name='withdrawals'),
     path('withdraw/', views.WithdrawView.as_view(), name='withdraw'),
 ]

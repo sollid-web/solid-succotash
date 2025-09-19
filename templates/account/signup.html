@@ -106,7 +106,13 @@
                 {% if form.errors %}
                     <div class="mb-4 p-4 rounded-lg bg-red-500/20 border border-red-500/30 text-red-100">
                         <p class="font-medium mb-2">Please correct the following errors:</p>
-                        <ul class="list-disc list-inside space-y-1 text-sm">{% for field, errors in form.errors.items %}{% for error in errors %}<li>{{ field|title }}: {{ error }}</li>{% endfor %}{% endfor %}</ul>
+                        <ul class="list-disc list-inside space-y-1 text-sm">
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <li>{{ field|title }}: {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
                     </div>
                 {% endif %}
 

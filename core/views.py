@@ -22,7 +22,12 @@ class PlansView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['plans'] = InvestmentPlan.objects.all().order_by('min_amount')
+        try:
+            context['plans'] = InvestmentPlan.objects.all().order_by('min_amount')
+        except Exception as e:
+            # Handle case where database is not properly seeded
+            context['plans'] = []
+            context['error'] = "Investment plans are currently being loaded. Please try again in a moment."
         return context
 
 
@@ -63,36 +68,48 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         
-        # Get or create wallet
-        wallet, created = UserWallet.objects.get_or_create(user=user)
-        
-        # Get user investments
-        investments = UserInvestment.objects.filter(user=user).select_related('plan')
-        
-        # Get recent transactions
-        transactions = Transaction.objects.filter(user=user)[:10]
-        
-        # Calculate stats
-        total_invested = investments.filter(status='approved').aggregate(
-            total=Sum('amount')
-        )['total'] or 0
-        
-        active_investments = investments.filter(status='approved').count()
-        
-        # Get crypto wallets for deposits
-        from transactions.models import CryptocurrencyWallet
-        crypto_wallets = CryptocurrencyWallet.objects.filter(is_active=True).order_by('currency')
-        
-        context.update({
-            'wallet': wallet,
-            'investments': investments,
-            'transactions': transactions,
-            'total_invested': total_invested,
-            'active_investments': active_investments,
-            'investment_form': InvestmentForm(user=user),
-            'deposit_form': DepositForm(),
-            'crypto_wallets': crypto_wallets,
-        })
+        try:
+            # Get or create wallet
+            wallet, created = UserWallet.objects.get_or_create(user=user)
+            
+            # Get user investments
+            investments = UserInvestment.objects.filter(user=user).select_related('plan')
+            
+            # Get recent transactions
+            transactions = Transaction.objects.filter(user=user)[:10]
+            
+            # Calculate stats
+            total_invested = investments.filter(status='approved').aggregate(
+                total=Sum('amount')
+            )['total'] or 0
+            
+            active_investments = investments.filter(status='approved').count()
+            
+            # Get crypto wallets for deposits
+            from transactions.models import CryptocurrencyWallet
+            crypto_wallets = CryptocurrencyWallet.objects.filter(is_active=True).order_by('currency')
+            
+            context.update({
+                'wallet': wallet,
+                'investments': investments,
+                'transactions': transactions,
+                'total_invested': total_invested,
+                'active_investments': active_investments,
+                'investment_form': InvestmentForm(user=user),
+                'deposit_form': DepositForm(),
+                'crypto_wallets': crypto_wallets,
+            })
+        except Exception as e:
+            # Handle database errors gracefully
+            context.update({
+                'wallet': None,
+                'investments': [],
+                'transactions': [],
+                'total_invested': 0,
+                'active_investments': 0,
+                'crypto_wallets': [],
+                'error': "Dashboard is currently loading. Please try again in a moment."
+            })
         return context
 
 
@@ -187,20 +204,29 @@ class WithdrawalsView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         
-        # Get withdrawal history
-        withdrawals = Transaction.objects.filter(
-            user=user, 
-            tx_type='withdrawal'
-        ).order_by('-created_at')
-        
-        # Get wallet
-        wallet, created = UserWallet.objects.get_or_create(user=user)
-        
-        context.update({
-            'withdrawals': withdrawals,
-            'wallet': wallet,
-            'withdrawal_form': WithdrawalForm(),
-        })
+        try:
+            # Get withdrawal history
+            withdrawals = Transaction.objects.filter(
+                user=user, 
+                tx_type='withdrawal'
+            ).order_by('-created_at')
+            
+            # Get wallet
+            wallet, created = UserWallet.objects.get_or_create(user=user)
+            
+            context.update({
+                'withdrawals': withdrawals,
+                'wallet': wallet,
+                'withdrawal_form': WithdrawalForm(),
+            })
+        except Exception as e:
+            # Handle database errors gracefully
+            context.update({
+                'withdrawals': [],
+                'wallet': None,
+                'withdrawal_form': WithdrawalForm(),
+                'error': "Withdrawals page is currently loading. Please try again in a moment."
+            })
         return context
 
 

@@ -1,8 +1,7 @@
-{% load account socialaccount %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load account socialaccount %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Create Account - WolvCapital{% endblock %}</title>
@@ -12,55 +11,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .crypto-pattern {
-            background-image: 
-                radial-gradient(circle at 25% 25%, #1e40af 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, #7c3aed 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, #059669 0%, transparent 50%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-        }
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .glass-morphism {
-            background: rgba(255, 255, 255, 0.1);
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .floating-icons {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            pointer-events: none;
-        }
-        .icon {
-            position: absolute;
-            opacity: 0.1;
-            animation: float 20s infinite linear;
-        }
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); }
-            100% { transform: translateY(-100px) rotate(360deg); }
-        }
-        .icon-1 { left: 10%; animation-delay: 0s; }
-        .icon-2 { left: 20%; animation-delay: 2s; }
-        .icon-3 { left: 30%; animation-delay: 4s; }
-        .icon-4 { left: 40%; animation-delay: 6s; }
-        .icon-5 { left: 50%; animation-delay: 8s; }
-        .icon-6 { left: 60%; animation-delay: 10s; }
-        .icon-7 { left: 70%; animation-delay: 12s; }
-        .icon-8 { left: 80%; animation-delay: 14s; }
-        .icon-9 { left: 90%; animation-delay: 16s; }
+        .crypto-pattern { background-image: radial-gradient(circle at 25% 25%, #1e40af 0%, transparent 50%), radial-gradient(circle at 75% 75%, #7c3aed 0%, transparent 50%), radial-gradient(circle at 50% 50%, #059669 0%, transparent 50%); background-size: 400% 400%; animation: gradientShift 15s ease infinite; }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; }
+        .glass-morphism { background: rgba(255, 255, 255, 0.1); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .floating-icons { position: absolute; width: 100%; height: 100%; overflow: hidden; pointer-events: none; }
+        .icon { position: absolute; opacity: 0.1; animation: float 20s infinite linear; }
+        @keyframes float { 0% { transform: translateY(100vh) rotate(0deg); } 100% { transform: translateY(-100px) rotate(360deg); } }
+        .icon-1 { left: 10%; animation-delay: 0s; } .icon-2 { left: 20%; animation-delay: 2s; } .icon-3 { left: 30%; animation-delay: 4s; } .icon-4 { left: 40%; animation-delay: 6s; } .icon-5 { left: 50%; animation-delay: 8s; } .icon-6 { left: 60%; animation-delay: 10s; } .icon-7 { left: 70%; animation-delay: 12s; } .icon-8 { left: 80%; animation-delay: 14s; } .icon-9 { left: 90%; animation-delay: 16s; }
     </style>
 </head>
 <body class="min-h-screen crypto-pattern relative">
     <!-- Floating Crypto Icons -->
-    <div class="floating-icons">
+    <div class="floating-icons" aria-hidden="true">
         <div class="icon text-6xl icon-1">₿</div>
         <div class="icon text-4xl icon-2">Ξ</div>
         <div class="icon text-5xl icon-3">₮</div>
@@ -72,14 +34,14 @@
         <div class="icon text-6xl icon-9">₿</div>
     </div>
 
-    <div class="min-h-screen flex items-center justify-center px-4 py-12 relative z-10">
-        <div class="max-w-md w-full space-y-8">
+    <main class="min-h-screen flex items-center justify-center px-4 py-12 relative z-10" role="main">
+        <div class="max-w-md w-full space-y-8" aria-labelledby="signupHeading">
             <!-- Logo and Header -->
             <div class="text-center">
                 <div class="glass-morphism rounded-2xl p-8 mb-8">
-                    <h1 class="text-4xl font-bold text-white mb-2">WolvCapital</h1>
+                    <h1 id="signupHeading" class="text-4xl font-bold text-white mb-2">WolvCapital</h1>
                     <p class="text-blue-200 text-lg font-medium">Professional Investment Platform</p>
-                    <div class="flex justify-center space-x-4 mt-4 text-2xl">
+                    <div class="flex justify-center space-x-4 mt-4 text-2xl" aria-hidden="true">
                         <span class="text-yellow-400">₿</span>
                         <span class="text-purple-400">Ξ</span>
                         <span class="text-green-400">₮</span>
@@ -94,83 +56,47 @@
             </div>
 
             <!-- Signup Form -->
-            <div class="glass-morphism rounded-2xl p-8">
+            <div class="glass-morphism rounded-2xl p-8" aria-describedby="signupErrors">
                 {% if messages %}
-                    {% for message in messages %}
-                    <div class="mb-4 p-4 rounded-lg {% if message.tags == 'error' %}bg-red-500/20 border border-red-500/30 text-red-100{% else %}bg-green-500/20 border border-green-500/30 text-green-100{% endif %}">
-                        {{ message }}
+                    <div class="space-y-2" role="alert" aria-live="polite">
+                        {% for message in messages %}
+                        <div class="p-4 rounded-lg {% if message.tags == 'error' %}bg-red-500/20 border border-red-500/30 text-red-100{% else %}bg-green-500/20 border border-green-500/30 text-green-100{% endif %}">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 {% endif %}
 
                 {% if form.errors %}
-                    <div class="mb-4 p-4 rounded-lg bg-red-500/20 border border-red-500/30 text-red-100">
+                    <div id="signupErrors" class="mb-4 p-4 rounded-lg bg-red-500/20 border border-red-500/30 text-red-100" role="alert" aria-live="assertive">
                         <p class="font-medium mb-2">Please correct the following errors:</p>
                         <ul class="list-disc list-inside space-y-1 text-sm">
-                            {% for field, errors in form.errors.items %}
-                                {% for error in errors %}
-                                    <li>{{ field|title }}: {{ error }}</li>
-                                {% endfor %}
-                            {% endfor %}
+{% for field, errors in form.errors.items %}{% for error in errors %}<li>{{ field|title }}: {{ error }}</li>{% endfor %}{% endfor %}
                         </ul>
                     </div>
                 {% endif %}
 
-                <form method="post" action="{% url 'account_signup' %}" class="space-y-6">
+                <form method="post" action="{% url 'account_signup' %}" class="space-y-6" novalidate>
                     {% csrf_token %}
-                    
                     <div>
-                        <label for="id_email" class="block text-sm font-medium text-blue-100 mb-2">
-                            Email Address
-                        </label>
-                        <input type="email" 
-                               name="email" 
-                               id="id_email"
-                               value="{{ form.email.value|default:'' }}"
-                               required
-                               class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200"
-                               placeholder="Enter your email address">
-                        {% if form.email.errors %}
-                            <p class="mt-1 text-sm text-red-300">{{ form.email.errors.0 }}</p>
-                        {% endif %}
+                        <label for="id_email" class="block text-sm font-medium text-blue-100 mb-2">Email Address</label>
+                        <input type="email" name="email" id="id_email" value="{{ form.email.value|default:'' }}" required autocomplete="email" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200" placeholder="Enter your email address" aria-required="true">
+                        {% if form.email.errors %}<p class="mt-1 text-sm text-red-300">{{ form.email.errors.0 }}</p>{% endif %}
                     </div>
-
                     <div>
-                        <label for="id_password1" class="block text-sm font-medium text-blue-100 mb-2">
-                            Password
-                        </label>
-                        <input type="password" 
-                               name="password1" 
-                               id="id_password1"
-                               required
-                               class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200"
-                               placeholder="Create a strong password">
-                        {% if form.password1.errors %}
-                            <p class="mt-1 text-sm text-red-300">{{ form.password1.errors.0 }}</p>
-                        {% endif %}
+                        <label for="id_password1" class="block text-sm font-medium text-blue-100 mb-2">Password</label>
+                        <input type="password" name="password1" id="id_password1" required autocomplete="new-password" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200" placeholder="Create a strong password" aria-required="true">
+                        {% if form.password1.errors %}<p class="mt-1 text-sm text-red-300">{{ form.password1.errors.0 }}</p>{% endif %}
                     </div>
-
                     <div>
-                        <label for="id_password2" class="block text-sm font-medium text-blue-100 mb-2">
-                            Confirm Password
-                        </label>
-                        <input type="password" 
-                               name="password2" 
-                               id="id_password2"
-                               required
-                               class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200"
-                               placeholder="Confirm your password">
-                        {% if form.password2.errors %}
-                            <p class="mt-1 text-sm text-red-300">{{ form.password2.errors.0 }}</p>
-                        {% endif %}
+                        <label for="id_password2" class="block text-sm font-medium text-blue-100 mb-2">Confirm Password</label>
+                        <input type="password" name="password2" id="id_password2" required autocomplete="new-password" class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition duration-200" placeholder="Confirm your password" aria-required="true">
+                        {% if form.password2.errors %}<p class="mt-1 text-sm text-red-300">{{ form.password2.errors.0 }}</p>{% endif %}
                     </div>
 
                     <!-- Terms Agreement -->
                     <div class="flex items-start">
-                        <input type="checkbox" 
-                               id="terms_agreement"
-                               required
-                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-white/20 rounded bg-white/10 mt-1">
+                        <input type="checkbox" id="terms_agreement" required class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-white/20 rounded bg-white/10 mt-1" aria-required="true">
                         <label for="terms_agreement" class="ml-3 block text-sm text-blue-200">
                             I agree to the 
                             <a href="{% url 'terms' %}" target="_blank" class="text-blue-300 hover:text-blue-100 underline">Terms of Service</a> 
@@ -181,10 +107,7 @@
 
                     <!-- Risk Acknowledgment -->
                     <div class="flex items-start">
-                        <input type="checkbox" 
-                               id="risk_acknowledgment"
-                               required
-                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-white/20 rounded bg-white/10 mt-1">
+                        <input type="checkbox" id="risk_acknowledgment" required class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-white/20 rounded bg-white/10 mt-1" aria-required="true">
                         <label for="risk_acknowledgment" class="ml-3 block text-sm text-blue-200">
                             I acknowledge the 
                             <a href="{% url 'risk_disclosure' %}" target="_blank" class="text-blue-300 hover:text-blue-100 underline">investment risks</a> 
@@ -192,12 +115,9 @@
                         </label>
                     </div>
 
-                    <button type="submit" 
-                            class="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-transparent">
+                    <button type="submit" class="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-transparent">
                         <span class="flex items-center justify-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                            </svg>
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
                             Create Account
                         </span>
                     </button>
@@ -214,7 +134,7 @@
                 </div>
 
                 <!-- Features -->
-                <div class="mt-8 grid grid-cols-2 gap-4 text-center">
+                <div class="mt-8 grid grid-cols-2 gap-4 text-center" aria-hidden="true">
                     <div class="p-3 bg-white/5 rounded-lg">
                         <div class="text-2xl mb-1">🚀</div>
                         <div class="text-xs text-blue-200">Quick Start</div>
@@ -235,7 +155,7 @@
             </div>
 
             <!-- Footer -->
-            <div class="text-center">
+            <footer class="text-center">
                 <p class="text-blue-300 text-sm">
                     © 2025 WolvCapital Ltd. All rights reserved.
                 </p>
@@ -244,8 +164,8 @@
                     <a href="{% url 'terms' %}" class="hover:text-blue-200 transition duration-200">Terms</a>
                     <a href="{% url 'risk_disclosure' %}" class="hover:text-blue-200 transition duration-200">Risk Disclosure</a>
                 </div>
-            </div>
+            </footer>
         </div>
-    </div>
+    </main>
 </body>
 </html>

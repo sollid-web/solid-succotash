@@ -73,3 +73,99 @@ if not DEBUG:
 
     # Helps allauth build correct absolute URLs in emails
     ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
+
+# --- INSTALLED_APPS ---
+INSTALLED_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "django.contrib.sites",
+
+    # Third-party apps
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+
+    # Local apps
+    "core",
+    "users",
+    "investments",
+    "transactions",
+    "api",
+]
+
+# --- MIDDLEWARE ---
+MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # For static files in production
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
+]
+
+# --- DATABASES ---
+# Default to SQLite for development
+DATABASES = {
+    "default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")
+}
+
+# --- TEMPLATES ---
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.i18n",
+            ],
+        },
+    },
+]
+
+# --- STATIC FILES ---
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# --- MEDIA FILES ---
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+# --- AUTHENTICATION ---
+AUTH_USER_MODEL = "users.User"
+LOGIN_REDIRECT_URL = "/dashboard/"
+LOGOUT_REDIRECT_URL = "/"
+
+# Django Allauth settings
+SITE_ID = 1
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
+ACCOUNT_LOGOUT_ON_GET = True
+
+# Email settings (for development)
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# --- INTERNATIONALIZATION ---
+LANGUAGE_CODE = "en-us"
+TIME_ZONE = "UTC"
+USE_I18N = True
+USE_TZ = True
+
+# --- DEFAULT AUTO FIELD ---
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

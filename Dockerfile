@@ -1,37 +1,35 @@
-FROM python:3.12-slim
+# -------- Base image --------
+FROM python:3.12-slim AS base
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-ENV DJANGO_SETTINGS_MODULE=wolvcapital.settings
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PATH="/root/.local/bin:${PATH}"
 
-# Set work directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        postgresql-client \
-        build-essential \
-        libpq-dev \
+# System deps (psycopg2-binary usually OK, but libpq is small)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl build-essential libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# -------- Python deps --------
+COPY requirements.txt /app/requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copy project
-COPY . .
+# -------- App code --------
+COPY . /app
 
-# Collect static files
-RUN python manage.py collectstatic --noinput
+# Entrypoint to run migrations + collectstatic + gunicorn
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Create a non-root user
-RUN adduser --disabled-password --gecos '' appuser && chown -R appuser:appuser /app
-USER appuser
-
-# Expose port
+# Expose the gunicorn port
 EXPOSE 8000
 
-# Run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "wolvcapital.wsgi:application"]
+# Healthcheck (optional)
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+ CMD curl -fsS http://127.0.0.1:8000/ || exit 1
+
+# Start
+CMD ["/entrypoint.sh"]

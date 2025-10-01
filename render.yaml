@@ -3,9 +3,10 @@ services:
     name: wolvcapital
     env: python
     buildCommand: |
+      pip install --upgrade pip
       pip install -r requirements.txt
       python manage.py collectstatic --noinput
-    startCommand: "bash start.sh"
+    startCommand: bash start.sh
     envVars:
       - key: SECRET_KEY
         generateValue: true
@@ -13,8 +14,6 @@ services:
         value: "0"
       - key: DJANGO_SETTINGS_MODULE
         value: "wolvcapital.settings"
-      - key: PYTHONPATH
-        value: "."
       - key: WEB_CONCURRENCY
         value: "2"
       - key: DATABASE_URL

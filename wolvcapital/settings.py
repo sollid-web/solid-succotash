@@ -1,98 +1,53 @@
 # ---------- Render / Production Hardening ----------
 import os
 from pathlib import Path
+from urllib.parse import urlparse
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load environment variables from .env file if it exists
-env_file = BASE_DIR / ".env"
-if env_file.exists():
-    with open(env_file) as f:
-        for line in f:
-            line = line.strip()
-            if line and not line.startswith('#') and '=' in line:
-                key, value = line.split('=', 1)
-                os.environ.setdefault(key.strip(), value.strip())
-
-# Base flags
+# ------------------------------------------------------------------
+# Core flags / secrets
+# ------------------------------------------------------------------
 DEBUG = os.getenv("DEBUG", "0") == "1"
-SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-change-me")  # replaced in Render env
-RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME")  # Render injects this
-CUSTOM_DOMAIN = os.getenv("CUSTOM_DOMAIN")  # optional: e.g., "example.com"
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-change-me")
 
+# Render injects this, e.g. https://solid-succotash-654g.onrender.com
+RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL")
+CUSTOM_DOMAIN = os.getenv("CUSTOM_DOMAIN")  # optional
+
+# ------------------------------------------------------------------
 # Hosts & CSRF
+# ------------------------------------------------------------------
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
-if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+CSRF_TRUSTED_ORIGINS = []
+
+if RENDER_EXTERNAL_URL:
+    p = urlparse(RENDER_EXTERNAL_URL)
+    if p.hostname:
+        ALLOWED_HOSTS.append(p.hostname)
+    # CSRF expects full origins with scheme
+    CSRF_TRUSTED_ORIGINS.append(RENDER_EXTERNAL_URL)
+
 if CUSTOM_DOMAIN:
     ALLOWED_HOSTS.append(CUSTOM_DOMAIN)
-
-# Optional: allow manually-specified extra hosts via env
-extra_hosts = os.getenv("ALLOWED_HOSTS_EXTRA", "")
-if extra_hosts:
-    ALLOWED_HOSTS.extend([host.strip() for host in extra_hosts.split(",")])
-
-# Keep Railway compatibility (optional)
-RAILWAY_HOSTS = [".railway.app", ".up.railway.app"]
-if "RAILWAY_ENVIRONMENT" in os.environ:
-    ALLOWED_HOSTS.extend(RAILWAY_HOSTS)
-    if "RAILWAY_PUBLIC_DOMAIN" in os.environ:
-        ALLOWED_HOSTS.append(os.environ["RAILWAY_PUBLIC_DOMAIN"])
-
-CSRF_TRUSTED_ORIGINS = []
-if RENDER_EXTERNAL_HOSTNAME:
-    CSRF_TRUSTED_ORIGINS.append(f"https://{RENDER_EXTERNAL_HOSTNAME}")
-if CUSTOM_DOMAIN:
     CSRF_TRUSTED_ORIGINS.append(f"https://{CUSTOM_DOMAIN}")
 
-# Extra trusted origins from env (comma-separated)
-extra_origins = os.getenv("CSRF_TRUSTED_ORIGINS", "")
-if extra_origins:
-    CSRF_TRUSTED_ORIGINS.extend([origin.strip() for origin in extra_origins.split(",")])
+# Optional extras
+extra_hosts = os.getenv("ALLOWED_HOSTS_EXTRA", "")
+if extra_hosts:
+    ALLOWED_HOSTS += [h.strip() for h in extra_hosts.split(",") if h.strip()]
 
-# Railway convenience
-if "RAILWAY_ENVIRONMENT" in os.environ:
-    if "RAILWAY_PUBLIC_DOMAIN" in os.environ:
-        domain = os.environ["RAILWAY_PUBLIC_DOMAIN"]
-        CSRF_TRUSTED_ORIGINS.append(f"https://{domain}")
+extra_origins = os.getenv("CSRF_TRUSTED_ORIGINS_EXTRA", "")
+if extra_origins:
+    CSRF_TRUSTED_ORIGINS += [o.strip() for o in extra_origins.split(",") if o.strip()]
 
 # Trust Render's TLS termination
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-# Production-only security
-if not DEBUG:
-    # Force HTTPS & HSTS (enable only when ALL traffic is HTTPS)
-    SECURE_SSL_REDIRECT = True
-    SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "31536000"))  # 1y
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-
-    # Cookies over HTTPS only
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-
-    # Extra headers
-    SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
-    X_FRAME_OPTIONS = "DENY"
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_BROWSER_XSS_FILTER = True
-    # Django default: SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin"
-    
-    # Session and CSRF settings for production
-    SESSION_COOKIE_HTTPONLY = True
-    CSRF_COOKIE_HTTPONLY = True
-    CSRF_COOKIE_SAMESITE = 'Strict'
-    SESSION_COOKIE_SAMESITE = 'Strict'
-    CSRF_USE_SESSIONS = True
-    
-    # Helps allauth build correct absolute URLs in emails
-    ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
-
-# Session basics (optional but recommended)
-SESSION_COOKIE_AGE = 60 * 60 * 24 * 7  # 7 days
-SESSION_SAVE_EVERY_REQUEST = False
-
-# --- INSTALLED_APPS ---
+# ------------------------------------------------------------------
+# Installed apps / middleware
+# ------------------------------------------------------------------
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -102,11 +57,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
 
-    # Third-party apps
+    # Third-party
+    "whitenoise.runserver_nostatic",  # keeps runserver simple + consistent
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "whitenoise.runserver_nostatic",  # WhiteNoise for static files
 
     # Local apps
     "core",
@@ -116,10 +71,9 @@ INSTALLED_APPS = [
     "api",
 ]
 
-# --- MIDDLEWARE ---
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # For static files in production
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # serve static files
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -129,33 +83,30 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
-# --- DATABASES ---
-# Default to SQLite for development
-DATABASE_URL = os.getenv("DATABASE_URL")
-if DATABASE_URL:
-    # For production, you can manually configure database settings
-    # Example for PostgreSQL:
-    # DATABASES = {
-    #     "default": {
-    #         "ENGINE": "django.db.backends.postgresql",
-    #         "NAME": os.getenv("DB_NAME"),
-    #         "USER": os.getenv("DB_USER"),
-    #         "PASSWORD": os.getenv("DB_PASSWORD"),
-    #         "HOST": os.getenv("DB_HOST", "localhost"),
-    #         "PORT": os.getenv("DB_PORT", "5432"),
-    #     }
-    # }
-    pass
+ROOT_URLCONF = "wolvcapital.urls"
+WSGI_APPLICATION = "wolvcapital.wsgi.application"
+ASGI_APPLICATION = "wolvcapital.asgi.application"
 
-# Use SQLite for local development (fallback)
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+# ------------------------------------------------------------------
+# Database (Postgres in prod, SQLite locally)
+# ------------------------------------------------------------------
+if os.getenv("DATABASE_URL"):
+    DATABASES = {
+        "default": dj_database_url.parse(
+            os.environ["DATABASE_URL"], conn_max_age=600, ssl_require=True
+        )
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
-# --- TEMPLATES ---
+# ------------------------------------------------------------------
+# Templates
+# ------------------------------------------------------------------
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -173,24 +124,28 @@ TEMPLATES = [
     },
 ]
 
-# --- STATIC FILES ---
-# Static files (WhiteNoise)
+# ------------------------------------------------------------------
+# Static & media
+# ------------------------------------------------------------------
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [BASE_DIR / "static"]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-# --- MEDIA FILES ---
+# If you DON'T have a ./static folder, keep this line commented to avoid W004:
+# STATICFILES_DIRS = [BASE_DIR / "static"]
+
+if not DEBUG:
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# --- AUTHENTICATION ---
-# AUTH_USER_MODEL = "users.User"  # Commented out - using Django's default User model
+# ------------------------------------------------------------------
+# Auth / Allauth
+# ------------------------------------------------------------------
 AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
 
-# Django Allauth settings
 SITE_ID = 1
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
@@ -198,21 +153,44 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
 ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 
-# Email settings (for development)
+# ------------------------------------------------------------------
+# Email (dev default; switch to SMTP provider in prod)
+# ------------------------------------------------------------------
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-# --- INTERNATIONALIZATION ---
+# ------------------------------------------------------------------
+# I18N / TZ
+# ------------------------------------------------------------------
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-# --- DEFAULT AUTO FIELD ---
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# --- CORE ENTRYPOINTS ---
-# Required so Django knows where the root URL configuration and WSGI/ASGI apps live.
-ROOT_URLCONF = "wolvcapital.urls"
-WSGI_APPLICATION = "wolvcapital.wsgi.application"
-ASGI_APPLICATION = "wolvcapital.asgi.application"
+# ------------------------------------------------------------------
+# Prod hardening (safe defaults)
+# ------------------------------------------------------------------
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    # Enable HSTS after confirming HTTPS works end-to-end
+    SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "31536000"))
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    X_FRAME_OPTIONS = "DENY"
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
+# CSRF approach (cookie readable; simplest for fetch/axios)
+CSRF_USE_SESSIONS = False
+CSRF_COOKIE_HTTPONLY = False
+
+# Session basics
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7  # 7 days
+SESSION_SAVE_EVERY_REQUEST = False

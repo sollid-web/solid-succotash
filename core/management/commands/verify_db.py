@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from django.db import connection
 from investments.models import InvestmentPlan
 from transactions.models import CryptocurrencyWallet
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from users.models import Profile
 
 
@@ -11,6 +11,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write("🔍 Verifying WolvCapital database setup...")
+        
+        User = get_user_model()
         
         # Check database connection
         try:

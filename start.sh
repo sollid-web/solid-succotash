@@ -66,9 +66,10 @@ EOF
 echo "👤 Setting up admin user..."
 python manage.py shell << 'EOF' || echo "⚠️ Admin user setup failed, continuing..."
 try:
-    from django.contrib.auth.models import User
+    from django.contrib.auth import get_user_model
     from users.models import Profile
 
+    User = get_user_model()
     admin_email = 'admin@wolvcapital.com'
     if not User.objects.filter(email=admin_email).exists():
         user = User.objects.create_user(
@@ -99,7 +100,7 @@ echo "💼 Platform Features: Investment Plans, Crypto Deposits, Virtual Cards, 
 
 # Start the application with proper Render.com configuration
 echo "🚀 Starting Gunicorn server on port $PORT..."
-exec gunicorn wolvcapital.wsgi:application \
+exec python -m gunicorn wolvcapital.wsgi:application \
     --bind 0.0.0.0:$PORT \
     --workers 2 \
     --timeout 120 \

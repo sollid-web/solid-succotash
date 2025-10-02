@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ------------------------------------------------------------------
 # Core flags / secrets
 # ------------------------------------------------------------------
-DEBUG = os.getenv("DEBUG", "0") == "1"
+DEBUG = os.getenv("DEBUG", "1") == "1"  # Default to True for development
 SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-change-me")
 
 # Render injects this, e.g. https://solid-succotash-654g.onrender.com
@@ -20,7 +20,25 @@ CUSTOM_DOMAIN = os.getenv("CUSTOM_DOMAIN")  # optional
 # Hosts & CSRF
 # ------------------------------------------------------------------
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
-CSRF_TRUSTED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000"]
+
+# --- GitHub Codespaces support ---
+CODESPACES_DOMAIN = os.getenv("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN")  # e.g. supreme-spoon-...app.github.dev
+IN_CODESPACES = bool(CODESPACES_DOMAIN or os.getenv("CODESPACES") or os.getenv("GITHUB_CODESPACES"))
+
+if IN_CODESPACES:
+    # Allow all forwarded subdomains from Codespaces
+    ALLOWED_HOSTS += [".app.github.dev"]
+    # CSRF needs full origins (scheme + host); wildcard is allowed
+    CSRF_TRUSTED_ORIGINS += ["https://*.app.github.dev"]
+
+    # If you still see CSRF issues behind the proxy, keep this:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+    # For local/dev convenience only (remove in Render production):
+    # If cookies don't stick in your browser during dev, you can relax these:
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
 
 if RENDER_EXTERNAL_URL:
     p = urlparse(RENDER_EXTERNAL_URL)
@@ -150,7 +168,7 @@ SITE_ID = 1
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_VERIFICATION = "none"  # Disable email verification for development
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"

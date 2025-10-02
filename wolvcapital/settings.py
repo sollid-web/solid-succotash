@@ -30,8 +30,11 @@ if IN_CODESPACES:
     ALLOWED_HOSTS += [".app.github.dev"]
     CSRF_TRUSTED_ORIGINS += ["https://*.app.github.dev"]
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    # Keep cookies insecure for development
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
+    # Allow session cookies to work in codespaces
+    SESSION_COOKIE_SAMESITE = None
 
 if RENDER_EXTERNAL_URL:
     p = urlparse(RENDER_EXTERNAL_URL)
@@ -154,6 +157,12 @@ MEDIA_ROOT = BASE_DIR / "media"
 # ------------------------------------------------------------------
 AUTH_USER_MODEL = "users.User"
 
+# Authentication backends
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
 # Explicit login/logout redirect flow
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/dashboard/"
@@ -167,6 +176,7 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 
 # ------------------------------------------------------------------
 # Email
@@ -208,5 +218,8 @@ CSRF_USE_SESSIONS = False
 CSRF_COOKIE_HTTPONLY = False
 
 # Session basics
+SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Use database-backed sessions
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 7  # 7 days
-SESSION_SAVE_EVERY_REQUEST = False
+SESSION_SAVE_EVERY_REQUEST = True  # Save session on every request to maintain login
+SESSION_COOKIE_NAME = "wolvcapital_sessionid"
+SESSION_COOKIE_DOMAIN = None  # Let Django handle this automatically

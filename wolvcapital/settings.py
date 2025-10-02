@@ -23,20 +23,13 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000"]
 
 # --- GitHub Codespaces support ---
-CODESPACES_DOMAIN = os.getenv("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN")  # e.g. supreme-spoon-...app.github.dev
+CODESPACES_DOMAIN = os.getenv("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN")
 IN_CODESPACES = bool(CODESPACES_DOMAIN or os.getenv("CODESPACES") or os.getenv("GITHUB_CODESPACES"))
 
 if IN_CODESPACES:
-    # Allow all forwarded subdomains from Codespaces
     ALLOWED_HOSTS += [".app.github.dev"]
-    # CSRF needs full origins (scheme + host); wildcard is allowed
     CSRF_TRUSTED_ORIGINS += ["https://*.app.github.dev"]
-
-    # If you still see CSRF issues behind the proxy, keep this:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-
-    # For local/dev convenience only (remove in Render production):
-    # If cookies don't stick in your browser during dev, you can relax these:
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
 
@@ -44,14 +37,15 @@ if RENDER_EXTERNAL_URL:
     p = urlparse(RENDER_EXTERNAL_URL)
     if p.hostname:
         ALLOWED_HOSTS.append(p.hostname)
-    # CSRF expects full origins with scheme
-    CSRF_TRUSTED_ORIGINS.append(RENDER_EXTERNAL_URL)
+    if RENDER_EXTERNAL_URL not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(RENDER_EXTERNAL_URL)
 
 if CUSTOM_DOMAIN:
     ALLOWED_HOSTS.append(CUSTOM_DOMAIN)
-    CSRF_TRUSTED_ORIGINS.append(f"https://{CUSTOM_DOMAIN}")
+    https_origin = f"https://{CUSTOM_DOMAIN}"
+    if https_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(https_origin)
 
-# Optional extras
 extra_hosts = os.getenv("ALLOWED_HOSTS_EXTRA", "")
 if extra_hosts:
     ALLOWED_HOSTS += [h.strip() for h in extra_hosts.split(",") if h.strip()]
@@ -61,6 +55,7 @@ if extra_origins:
     CSRF_TRUSTED_ORIGINS += [o.strip() for o in extra_origins.split(",") if o.strip()]
 
 # Trust Render's TLS termination
+USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # ------------------------------------------------------------------
@@ -76,7 +71,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
 
     # Third-party
-    "whitenoise.runserver_nostatic",  # keeps runserver simple + consistent
+    "whitenoise.runserver_nostatic",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -91,7 +86,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # serve static files
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -148,9 +143,6 @@ TEMPLATES = [
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# If you DON'T have a ./static folder, keep this line commented to avoid W004:
-# STATICFILES_DIRS = [BASE_DIR / "static"]
-
 if not DEBUG:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
@@ -161,6 +153,9 @@ MEDIA_ROOT = BASE_DIR / "media"
 # Auth / Allauth
 # ------------------------------------------------------------------
 AUTH_USER_MODEL = "users.User"
+
+# Explicit login/logout redirect flow
+LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/dashboard/"
 LOGOUT_REDIRECT_URL = "/"
 
@@ -168,13 +163,13 @@ SITE_ID = 1
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_VERIFICATION = "none"  # Disable email verification for development
+ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 
 # ------------------------------------------------------------------
-# Email (dev default; switch to SMTP provider in prod)
+# Email
 # ------------------------------------------------------------------
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
@@ -189,14 +184,13 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # ------------------------------------------------------------------
-# Prod hardening (safe defaults)
+# Prod hardening
 # ------------------------------------------------------------------
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
 
-    # Enable HSTS after confirming HTTPS works end-to-end
     SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "31536000"))
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
@@ -205,7 +199,11 @@ if not DEBUG:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
-# CSRF approach (cookie readable; simplest for fetch/axios)
+# ------------------------------------------------------------------
+# Cookie / CSRF tweaks for Render
+# ------------------------------------------------------------------
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "Lax"
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_HTTPONLY = False
 

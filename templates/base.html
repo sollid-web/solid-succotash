@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}WolvCapital - Professional Investment Platform{% endblock %}</title>
+    <title>{% block title %}WolvCapital Invest{% endblock %}</title>
     <meta name="description" content="{% block description %}WolvCapital offers professional investment opportunities with manual off-chain approvals for maximum security.{% endblock %}">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
+    <!-- Brand CSS -->
+    <link rel="stylesheet" href="{% static 'css/brand.css' %}">
+
     <!-- Custom CSS -->
     <style>
         .gradient-bg { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
@@ -79,95 +83,25 @@
     </style>
     
     {% block extra_css %}{% endblock %}
-</head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <a href="{% url 'home' %}" class="text-2xl font-bold text-gradient">
-                        WolvCapital
-                    </a>
-                </div>
-                
-                <div class="hidden md:flex items-center space-x-4">
-                    <a href="{% url 'home' %}" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                    <a href="{% url 'plans' %}" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Plans</a>
-                    
-                    <!-- Pages Dropdown -->
-                    <div class="relative group">
-                        <button class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
-                            Pages
-                            <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                            <div class="py-1">
-                                <a href="{% url 'about' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">About Us</a>
-                                <a href="{% url 'contact' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">Contact</a>
-                                <div class="border-t border-gray-100"></div>
-                                <a href="{% url 'terms_of_service' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">Terms of Service</a>
-                                <a href="{% url 'terms' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">Legal Disclaimer</a>
-                                <a href="{% url 'risk_disclosure' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">Risk Disclosure</a>
-                                <a href="{% url 'privacy' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">Privacy Policy</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'dashboard' %}" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Dashboard</a>
-                        <a href="{% url 'account_logout' %}" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Logout</a>
-                    {% else %}
-                        <a href="{% url 'account_login' %}" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Login</a>
-                        <a href="{% url 'account_signup' %}" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Sign Up</a>
-                    {% endif %}
-                </div>
-                
-                <!-- Mobile menu button -->
-                <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-button" title="Toggle mobile menu" class="text-gray-700 hover:text-blue-600 focus:outline-none focus:text-blue-600" aria-label="Toggle mobile menu">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Mobile menu -->
-            <div id="mobile-menu" class="md:hidden hidden">
-                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-50 border-t border-gray-200">
-                    <a href="{% url 'home' %}" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">Home</a>
-                    <a href="{% url 'plans' %}" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">Plans</a>
-                    
-                    <!-- Mobile Pages Section -->
-                    <div class="px-3 py-2">
-                        <div class="text-gray-500 text-sm font-medium mb-2">Pages</div>
-                        <div class="pl-4 space-y-1">
-                            <a href="{% url 'about' %}" class="block text-gray-600 hover:text-blue-600 py-1 text-sm">About Us</a>
-                            <a href="{% url 'contact' %}" class="block text-gray-600 hover:text-blue-600 py-1 text-sm">Contact</a>
-                        </div>
-                        <div class="text-gray-500 text-sm font-medium mb-2 mt-3">Legal</div>
-                        <div class="pl-4 space-y-1">
-                            <a href="{% url 'terms_of_service' %}" class="block text-gray-600 hover:text-blue-600 py-1 text-sm">Terms of Service</a>
-                            <a href="{% url 'terms' %}" class="block text-gray-600 hover:text-blue-600 py-1 text-sm">Legal Disclaimer</a>
-                            <a href="{% url 'risk_disclosure' %}" class="block text-gray-600 hover:text-blue-600 py-1 text-sm">Risk Disclosure</a>
-                            <a href="{% url 'privacy' %}" class="block text-gray-600 hover:text-blue-600 py-1 text-sm">Privacy Policy</a>
-                        </div>
-                    </div>
-                    
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'dashboard' %}" class="block bg-blue-600 text-white px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700 mx-3">Dashboard</a>
-                        <a href="{% url 'account_logout' %}" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">Logout</a>
-                    {% else %}
-                        <a href="{% url 'account_login' %}" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">Login</a>
-                        <a href="{% url 'account_signup' %}" class="block bg-blue-600 text-white px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700 mx-3">Sign Up</a>
-                    {% endif %}
-                </div>
-            </div>
+    </head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div style="display:flex;align-items:center;gap:.75rem;">
+            <img src="{% static 'img/wolvcapital-invest-logo.svg' %}" alt="logo">
+            <strong>WOLVCAPITAL INVEST</strong>
         </div>
-    </nav>
+        <nav>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'plans' %}">Plans</a>
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'account_logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'account_login' %}">Login</a>
+            {% endif %}
+        </nav>
+    </header>
 
     <!-- Messages -->
     {% if messages %}
@@ -186,7 +120,7 @@
     </main>
 
     <!-- Customer Support Chat Widget -->
-    <div id="chat-widget" class="fixed bottom-6 right-6 z-50">
+    <div id="chat-widget" class="fixed bottom-6 right-6 z-50" style="display:none;">
         <!-- Chat Button -->
         <button id="chat-button" title="Open customer support chat" aria-label="Open customer support chat" class="bg-blue-600 hover:bg-blue-700 text-white rounded-full w-16 h-16 shadow-lg transition-all duration-300 transform hover:scale-110 flex items-center justify-center chat-pulse">
             <svg id="chat-icon" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -238,49 +172,10 @@
             <div class="p-3 border-t border-gray-200 bg-white">
                 <div class="grid grid-cols-2 gap-2 mb-3">
                     <button class="quick-action-btn text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 p-2 rounded-md transition-colors duration-200" data-message="I need help with deposits">
-                        💰 Deposits
-                    </button>
-                    <button class="quick-action-btn text-xs bg-green-50 hover:bg-green-100 text-green-700 p-2 rounded-md transition-colors duration-200" data-message="I have questions about investments">
-                        📈 Investments
-                    </button>
-                    <button class="quick-action-btn text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 p-2 rounded-md transition-colors duration-200" data-message="I need help with withdrawals">
-                        💸 Withdrawals
-                    </button>
-                    <button class="quick-action-btn text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-700 p-2 rounded-md transition-colors duration-200" data-message="I have account issues">
-                        👤 Account
-                    </button>
-                </div>
-
-                <!-- Message Input -->
-                <div class="flex space-x-2">
-                    <input type="text" id="chat-input" placeholder="Type your message..." class="flex-1 p-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <button id="send-button" title="Send message" aria-label="Send message" class="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md transition-colors duration-200">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Footer -->
-            <div class="px-4 py-2 bg-gray-100 rounded-b-lg">
-                <div class="flex items-center justify-between text-xs text-gray-600">
-                    <span>🔒 Secure & Private</span>
-                    <span>Powered by WolvCapital</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">WolvCapital</h3>
-                    <p class="text-gray-300">Professional investment platform with manual off-chain approvals for maximum security.</p>
-                </div>
-                
+                        <!-- Footer -->
+                        <footer style="text-align:center;padding:2rem;color:#555;">
+                            © 2025 WOLVCAPITAL INVEST. All rights reserved.
+                        </footer>
                 <div>
                     <h4 class="text-md font-semibold mb-4">Quick Links</h4>
                     <ul class="space-y-2 text-gray-300">

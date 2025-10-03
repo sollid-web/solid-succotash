@@ -135,6 +135,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.i18n",
+                "core.context_processors.brand_context",
             ],
         },
     },
@@ -144,6 +145,7 @@ TEMPLATES = [
 # Static & media
 # ------------------------------------------------------------------
 STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 if not DEBUG:
@@ -151,6 +153,24 @@ if not DEBUG:
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# ------------------------------------------------------------------
+# Branding Configuration
+# ------------------------------------------------------------------
+BRAND = {
+    "name": "WolvCapital",
+    "tagline": "Invest Smart, Grow Fast",
+    "primary": "#2196F3",
+    "primary_light": "#6EC1E4",
+    "primary_dark": "#0D47A1",
+    "accent_gold": "#FFD700",
+    "success": "#10B981",
+    "danger": "#EF4444",
+    "warning": "#F59E0B",
+    "logo_svg": "img/wolvcapital-logo.svg",
+    "logo_png": "img/wolvcapital-logo.png",
+    "favicon": "img/favicon.ico",
+}
 
 # ------------------------------------------------------------------
 # Auth / Allauth

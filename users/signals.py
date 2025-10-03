@@ -23,3 +23,11 @@ def create_user_wallet(sender, instance, created, **kwargs):
     """Create a wallet when a new user is created."""
     if created:
         UserWallet.objects.create(user=instance)
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def send_welcome_notification(sender, instance, created, **kwargs):
+    """Send welcome notification to new users."""
+    if created:
+        from .notification_service import notify_welcome
+        notify_welcome(instance)

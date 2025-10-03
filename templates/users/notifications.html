@@ -1,0 +1,207 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+
+{% block title %}Notifications - WolvCapital{% endblock %}
+
+{% block dashboard_content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="mb-8 flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Notifications</h1>
+            <p class="mt-2 text-gray-600 dark:text-gray-400">
+                {% if unread_count > 0 %}
+                    You have <span class="font-bold text-indigo-600">{{ unread_count }}</span> unread notification{{ unread_count|pluralize }}
+                {% else %}
+                    All caught up! No unread notifications
+                {% endif %}
+            </p>
+        </div>
+        
+        {% if unread_count > 0 %}
+        <form method="post" action="{% url 'mark_all_read' %}" id="markAllReadForm">
+            {% csrf_token %}
+            <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                <i class="fas fa-check-double mr-2"></i>Mark All as Read
+            </button>
+        </form>
+        {% endif %}
+    </div>
+
+    <!-- Notifications List -->
+    {% if notifications %}
+    <div class="space-y-4">
+        {% for notification in notifications %}
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-all hover:shadow-lg
+                    {% if not notification.is_read %}border-l-4 border-indigo-500{% endif %}">
+            <div class="p-6">
+                <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                        <!-- Priority Badge -->
+                        <div class="flex items-center gap-3 mb-2">
+                            {% if notification.priority == 'high' %}
+                            <span class="px-2 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full">
+                                <i class="fas fa-exclamation-circle"></i> High Priority
+                            </span>
+                            {% elif notification.priority == 'medium' %}
+                            <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full">
+                                <i class="fas fa-info-circle"></i> Medium
+                            </span>
+                            {% else %}
+                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">
+                                <i class="fas fa-check-circle"></i> Low
+                            </span>
+                            {% endif %}
+                            
+                            <!-- Type Badge -->
+                            <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">
+                                {{ notification.get_notification_type_display }}
+                            </span>
+                            
+                            <!-- Unread Indicator -->
+                            {% if not notification.is_read %}
+                            <span class="flex items-center gap-1 text-indigo-600 text-sm font-semibold">
+                                <i class="fas fa-circle text-xs"></i> Unread
+                            </span>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Title -->
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                            {{ notification.title }}
+                        </h3>
+                        
+                        <!-- Message -->
+                        <p class="text-gray-700 dark:text-gray-300 whitespace-pre-line mb-3">
+                            {{ notification.message }}
+                        </p>
+                        
+                        <!-- Timestamp -->
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            <i class="far fa-clock mr-1"></i>
+                            {{ notification.created_at|date:"F d, Y - g:i A" }}
+                            {% if notification.is_read %}
+                            <span class="ml-3 text-green-600">
+                                <i class="fas fa-check mr-1"></i>Read on {{ notification.read_at|date:"F d, Y - g:i A" }}
+                            </span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div class="flex flex-col gap-2 ml-4">
+                        {% if notification.action_url %}
+                        <a href="{{ notification.action_url }}" 
+                           class="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors">
+                            <i class="fas fa-arrow-right mr-1"></i>View
+                        </a>
+                        {% endif %}
+                        
+                        {% if not notification.is_read %}
+                        <button onclick="markAsRead('{{ notification.id }}')" 
+                                class="px-4 py-2 bg-gray-200 text-gray-700 text-sm rounded-lg hover:bg-gray-300 transition-colors">
+                            <i class="fas fa-check mr-1"></i>Mark Read
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="mt-8 flex justify-center">
+        <nav class="flex items-center gap-2">
+            {% if page_obj.has_previous %}
+            <a href="?page=1" class="px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                <i class="fas fa-angle-double-left"></i>
+            </a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                <i class="fas fa-angle-left"></i>
+            </a>
+            {% endif %}
+            
+            <span class="px-4 py-2 bg-indigo-600 text-white rounded-lg">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+            
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                <i class="fas fa-angle-right"></i>
+            </a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                <i class="fas fa-angle-double-right"></i>
+            </a>
+            {% endif %}
+        </nav>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <!-- Empty State -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-12 text-center">
+        <div class="mb-4">
+            <i class="fas fa-bell-slash text-6xl text-gray-300 dark:text-gray-600"></i>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">No Notifications</h3>
+        <p class="text-gray-600 dark:text-gray-400">You don't have any notifications yet.</p>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+// Mark single notification as read
+function markAsRead(notificationId) {
+    fetch(`/notifications/${notificationId}/read/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+// Mark all as read
+document.getElementById('markAllReadForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    fetch('/notifications/mark-all-read/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+
+// Auto-refresh unread count every 30 seconds
+setInterval(() => {
+    fetch('/notifications/unread-count/')
+        .then(response => response.json())
+        .then(data => {
+            // Update badge if it exists in navigation
+            const badge = document.getElementById('notification-badge');
+            if (badge) {
+                badge.textContent = data.count;
+                badge.style.display = data.count > 0 ? 'block' : 'none';
+            }
+        });
+}, 30000);
+</script>
+{% endblock %}

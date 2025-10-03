@@ -1,0 +1,311 @@
+/* WolvCapital Invest Brand Styles */
+
+:root {
+    /* Brand Colors */
+    --brand-primary: #1e40af;      /* Deep Blue */
+    --brand-secondary: #7c3aed;    /* Purple */
+    --brand-accent: #3b82f6;       /* Light Blue */
+    --brand-gold: #fbbf24;         /* Gold accent */
+    
+    /* Neutral Colors */
+    --brand-dark: #1f2937;
+    --brand-light: #f9fafb;
+    --brand-gray: #6b7280;
+    
+    /* Gradients */
+    --brand-gradient: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
+    --brand-gradient-hover: linear-gradient(135deg, #1e3a8a 0%, #6d28d9 100%);
+}
+
+/* Brand Typography */
+.brand-title {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.brand-text {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 400;
+}
+
+/* Logo Styles */
+.brand-logo {
+    height: 40px;
+    width: auto;
+}
+
+.brand-logo-large {
+    height: 60px;
+    width: auto;
+}
+
+/* Navbar Branding */
+.brand-navbar {
+    background: linear-gradient(to right, #ffffff 0%, #f9fafb 100%);
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.brand-nav-link {
+    color: var(--brand-dark);
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.brand-nav-link:hover {
+    color: var(--brand-primary);
+}
+
+/* Buttons */
+.brand-btn-primary {
+    background: var(--brand-gradient);
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.3);
+}
+
+.brand-btn-primary:hover {
+    background: var(--brand-gradient-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(30, 64, 175, 0.4);
+}
+
+.brand-btn-secondary {
+    background: white;
+    color: var(--brand-primary);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: 2px solid var(--brand-primary);
+    transition: all 0.3s ease;
+}
+
+.brand-btn-secondary:hover {
+    background: var(--brand-primary);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Cards */
+.brand-card {
+    background: white;
+    border-radius: 1rem;
+    border: 1px solid #e5e7eb;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.brand-card:hover {
+    box-shadow: 0 10px 25px -5px rgba(30, 64, 175, 0.2);
+    transform: translateY(-4px);
+    border-color: var(--brand-accent);
+}
+
+.brand-card-premium {
+    background: var(--brand-gradient);
+    color: white;
+    border: none;
+}
+
+/* Investment Plan Cards */
+.brand-plan-card {
+    background: white;
+    border-radius: 1rem;
+    border: 2px solid #e5e7eb;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.brand-plan-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--brand-gradient);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.brand-plan-card:hover::before {
+    transform: scaleX(1);
+}
+
+.brand-plan-card:hover {
+    border-color: var(--brand-primary);
+    box-shadow: 0 20px 40px -10px rgba(30, 64, 175, 0.3);
+    transform: translateY(-8px);
+}
+
+.brand-plan-name {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--brand-dark);
+    margin-bottom: 0.5rem;
+}
+
+.brand-plan-roi {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: var(--brand-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.25rem;
+}
+
+.brand-plan-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: white;
+    margin-bottom: 1rem;
+}
+
+/* Hero Section */
+.brand-hero {
+    background: var(--brand-gradient);
+    padding: 6rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.brand-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    opacity: 0.3;
+}
+
+.brand-hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+}
+
+.brand-hero-subtitle {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 2rem;
+}
+
+/* Status Badges */
+.brand-badge-pending {
+    background-color: #fef3c7;
+    color: #92400e;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.brand-badge-approved {
+    background-color: #d1fae5;
+    color: #065f46;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.brand-badge-rejected {
+    background-color: #fee2e2;
+    color: #991b1b;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Footer Branding */
+.brand-footer {
+    background: linear-gradient(to bottom, #1f2937 0%, #111827 100%);
+    color: #d1d5db;
+    padding: 3rem 0 1.5rem;
+}
+
+.brand-footer-link {
+    color: #9ca3af;
+    transition: color 0.2s ease;
+}
+
+.brand-footer-link:hover {
+    color: var(--brand-accent);
+}
+
+/* Animations */
+@keyframes brand-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.brand-pulse {
+    animation: brand-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes brand-float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.brand-float {
+    animation: brand-float 3s ease-in-out infinite;
+}
+
+/* Utility Classes */
+.brand-shadow {
+    box-shadow: 0 10px 25px -5px rgba(30, 64, 175, 0.2);
+}
+
+.brand-shadow-lg {
+    box-shadow: 0 20px 40px -10px rgba(30, 64, 175, 0.3);
+}
+
+.brand-text-gradient {
+    background: var(--brand-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .brand-hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .brand-hero-subtitle {
+        font-size: 1.25rem;
+    }
+    
+    .brand-plan-roi {
+        font-size: 2rem;
+    }
+}

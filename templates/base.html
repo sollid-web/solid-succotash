@@ -9,6 +9,10 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Brand CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/brand.css' %}">
+    
     <!-- Custom CSS -->
     <style>
         .gradient-bg { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
@@ -82,12 +86,12 @@
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg">
+    <nav class="brand-navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="{% url 'home' %}" class="text-2xl font-bold text-gradient">
-                        WolvCapital
+                    <a href="{% url 'home' %}" class="flex items-center">
+                        <img src="{% static 'img/wolvcapital-invest-logo.svg' %}" alt="WolvCapital Invest" class="brand-logo">
                     </a>
                 </div>
                 

@@ -308,6 +308,65 @@
     </div>
 </section>
 
+<!-- Investment Plans Section -->
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Investment Plans</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Choose from our carefully crafted investment plans designed to meet different risk tolerances and investment goals
+            </p>
+        </div>
+
+        {% if plans %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {% for plan in plans %}
+            <div class="brand-plan-card">
+                <h3 class="brand-plan-name">{{ plan.name }}</h3>
+                <div class="brand-plan-roi">{{ plan.daily_roi }}%</div>
+                <p class="text-sm text-gray-600 mb-6">Daily Return</p>
+                
+                <div class="space-y-3 text-sm text-left mb-6">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Duration:</span>
+                        <span class="font-semibold">{{ plan.duration_days }} days</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Min Amount:</span>
+                        <span class="font-semibold">${{ plan.min_amount }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Max Amount:</span>
+                        <span class="font-semibold">${{ plan.max_amount }}</span>
+                    </div>
+                    <div class="flex justify-between border-t pt-3">
+                        <span class="text-gray-600">Total Return:</span>
+                        <span class="font-bold text-green-600">{{ plan.daily_roi|floatformat:2 }}%</span>
+                    </div>
+                </div>
+                
+                <p class="text-xs text-gray-500 mb-6">{{ plan.description }}</p>
+                
+                {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="brand-btn-primary w-full inline-block text-center">
+                    Invest Now
+                </a>
+                {% else %}
+                <a href="{% url 'account_signup' %}" class="brand-btn-primary w-full inline-block text-center">
+                    Get Started
+                </a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-8">
+            <p class="text-gray-500">Investment plans are being loaded. Please check back shortly.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
 <!-- CTA Section -->
 <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

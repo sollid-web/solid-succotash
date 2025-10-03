@@ -15,6 +15,14 @@ from .forms import InvestmentForm, WithdrawalForm, DepositForm
 
 class HomeView(TemplateView):
     template_name = 'core/home.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['plans'] = InvestmentPlan.objects.all().order_by('min_amount')
+        except Exception as e:
+            context['plans'] = []
+        return context
 
 
 class PlansView(TemplateView):

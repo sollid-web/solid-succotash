@@ -9,11 +9,6 @@
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Brand CSS -->
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/brand.css' %}">
-    
 
     <!-- Brand CSS -->
     <link rel="stylesheet" href="{% static 'css/brand.css' %}">
@@ -171,90 +166,6 @@
     
     {% block extra_css %}{% endblock %}
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
-    <!-- Navigation -->
-    <nav class="brand-navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <a href="{% url 'home' %}" class="flex items-center">
-                        <img src="{% static 'img/wolvcapital-invest-logo.svg' %}" alt="WolvCapital Invest" class="brand-logo">
-                    </a>
-                </div>
-                
-                <div class="hidden md:flex items-center space-x-4">
-                    <a href="{% url 'home' %}" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
-                    <a href="{% url 'plans' %}" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Plans</a>
-                    
-                    <!-- Pages Dropdown -->
-                    <div class="relative group">
-                        <button class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium flex items-center">
-                            Pages
-                            <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                            <div class="py-1">
-                                <a href="{% url 'about' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">About Us</a>
-                                <a href="{% url 'contact' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">Contact</a>
-                                <div class="border-t border-gray-100"></div>
-                                <a href="{% url 'risk_disclosure' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">Risk Disclosure</a>
-                                <a href="{% url 'terms' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">Terms of Service</a>
-                                <a href="{% url 'privacy' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">Privacy Policy</a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'dashboard' %}" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Dashboard</a>
-                        <a href="{% url 'account_logout' %}" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Logout</a>
-                    {% else %}
-                        <a href="{% url 'account_login' %}" class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">Login</a>
-                        <a href="{% url 'account_signup' %}" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Sign Up</a>
-                    {% endif %}
-                </div>
-                
-                <!-- Mobile menu button -->
-                <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-button" title="Toggle mobile menu" class="text-gray-700 hover:text-blue-600 focus:outline-none focus:text-blue-600" aria-label="Toggle mobile menu">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Mobile menu -->
-            <div id="mobile-menu" class="md:hidden hidden">
-                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-50 border-t border-gray-200">
-                    <a href="{% url 'home' %}" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">Home</a>
-                    <a href="{% url 'plans' %}" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">Plans</a>
-                    
-                    <!-- Mobile Pages Section -->
-                    <div class="px-3 py-2">
-                        <div class="text-gray-500 text-sm font-medium mb-2">Pages</div>
-                        <div class="pl-4 space-y-1">
-                            <a href="{% url 'about' %}" class="block text-gray-600 hover:text-blue-600 py-1 text-sm">About Us</a>
-                            <a href="{% url 'contact' %}" class="block text-gray-600 hover:text-blue-600 py-1 text-sm">Contact</a>
-                        </div>
-                        <div class="text-gray-500 text-sm font-medium mb-2 mt-3">Legal</div>
-                        <div class="pl-4 space-y-1">
-                            <a href="{% url 'risk_disclosure' %}" class="block text-gray-600 hover:text-blue-600 py-1 text-sm">Risk Disclosure</a>
-                            <a href="{% url 'terms' %}" class="block text-gray-600 hover:text-blue-600 py-1 text-sm">Terms of Service</a>
-                            <a href="{% url 'privacy' %}" class="block text-gray-600 hover:text-blue-600 py-1 text-sm">Privacy Policy</a>
-                        </div>
-                    </div>
-                    
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'dashboard' %}" class="block bg-blue-600 text-white px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700 mx-3">Dashboard</a>
-                        <a href="{% url 'account_logout' %}" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">Logout</a>
-                    {% else %}
-                        <a href="{% url 'account_login' %}" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">Login</a>
-                        <a href="{% url 'account_signup' %}" class="block bg-blue-600 text-white px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700 mx-3">Sign Up</a>
-                    {% endif %}
-                </div>
-            </div>
 <body>
     <!-- Navbar -->
     <header class="brand-navbar">

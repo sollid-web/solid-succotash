@@ -2,7 +2,12 @@
 import os
 from pathlib import Path
 from urllib.parse import urlparse
-import dj_database_url
+
+# dj-database-url is optional in some environments; try to import and fall back gracefully.
+try:
+    import dj_database_url
+except Exception:
+    dj_database_url = None
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -101,22 +106,41 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
 ]
-
-ROOT_URLCONF = "wolvcapital.urls"
-WSGI_APPLICATION = "wolvcapital.wsgi.application"
-ASGI_APPLICATION = "wolvcapital.asgi.application"
-
 # ------------------------------------------------------------------
 # Database (Postgres in prod, SQLite locally)
 # ------------------------------------------------------------------
 if os.getenv("DATABASE_URL"):
-    DATABASES = {
-        "default": dj_database_url.parse(
-            os.environ["DATABASE_URL"], conn_max_age=600, ssl_require=True
-        )
-    }
+    if dj_database_url:
+        DATABASES = {
+            "default": dj_database_url.parse(
+                os.environ["DATABASE_URL"], conn_max_age=600, ssl_require=True
+            )
+        }
+    else:
+        # Minimal fallback parser for DATABASE_URL when dj-database-url isn't installed.
+        # Supports common PostgreSQL URLs like: postgres://user:pass@host:port/dbname
+        p = urlparse(os.environ["DATABASE_URL"])
+        db_name = p.path.lstrip("/") if p.path else ""
+        db_engine = "django.db.backends.postgresql"
+        DATABASES = {
+            "default": {
+                "ENGINE": db_engine,
+                "NAME": db_name,
+                "USER": p.username or "",
+                "PASSWORD": p.password or "",
+                "HOST": p.hostname or "",
+                "PORT": str(p.port) if p.port else "",
+                "CONN_MAX_AGE": 600,
+                "OPTIONS": {"sslmode": "require"},
+            }
+        }
 else:
     DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",

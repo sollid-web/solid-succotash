@@ -115,10 +115,10 @@
     <div class="mt-8 flex justify-center">
         <nav class="flex items-center gap-2">
             {% if page_obj.has_previous %}
-            <a href="?page=1" class="px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+            <a href="?page=1" title="Go to first page" class="px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                 <i class="fas fa-angle-double-left"></i>
             </a>
-            <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+            <a href="?page={{ page_obj.previous_page_number }}" title="Go to previous page" class="px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                 <i class="fas fa-angle-left"></i>
             </a>
             {% endif %}
@@ -128,10 +128,10 @@
             </span>
             
             {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+            <a href="?page={{ page_obj.next_page_number }}" title="Go to next page" class="px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                 <i class="fas fa-angle-right"></i>
             </a>
-            <a href="?page={{ page_obj.paginator.num_pages }}" class="px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+            <a href="?page={{ page_obj.paginator.num_pages }}" title="Go to last page" class="px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                 <i class="fas fa-angle-double-right"></i>
             </a>
             {% endif %}

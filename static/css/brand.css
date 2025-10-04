@@ -1,10 +1,12 @@
-/* WolvCapital Brand Styles */
+/* WolvCapital Invest Brand Styles (base utilities + layout) */
 :root {
     /* Primary Colors */
     --brand-primary: #2196F3;
     --brand-primary-light: #6EC1E4;
     --brand-primary-dark: #0D47A1;
     --brand-accent-gold: #FFD700;
+    --brand-bg: #F7FAFC;
+    --brand-text: #0F172A;
     
     /* Semantic Colors */
     --brand-success: #10B981;
@@ -23,6 +25,65 @@
     --brand-gray-700: #374151;
     --brand-gray-800: #1F2937;
     --brand-gray-900: #111827;
+}
+
+/* Base Elements */
+body {
+    background: var(--brand-bg);
+    color: var(--brand-text);
+    font-family: "Inter", Arial, sans-serif;
+    margin: 0;
+}
+
+/* Header / Navbar */
+.navbar {
+    background: var(--brand-primary);
+    color: #fff;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar img { height: 32px; }
+
+.navbar a {
+    color: #fff;
+    margin-left: 1.5rem;
+    text-decoration: none;
+    font-weight: 500;
+}
+.navbar a:hover { color: var(--brand-accent-gold); }
+
+/* Buttons */
+.btn-brand {
+    background: var(--brand-primary);
+    color: #fff;
+    padding: .6rem 1.2rem;
+    border-radius: .5rem;
+    border: none;
+    font-weight: 600;
+}
+.btn-brand:hover { background: var(--brand-primary-dark); }
+
+.btn-gold {
+    background: var(--brand-accent-gold);
+    color: #111;
+    padding: .6rem 1.2rem;
+    border-radius: .5rem;
+    border: none;
+    font-weight: 600;
+}
+
+/* Card */
+.card {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 2rem;
+    margin: 2rem auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,.05);
+    text-align: center;
+    max-width: 650px;
 }
 
 /* Brand Utility Classes */

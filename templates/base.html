@@ -1,9 +1,8 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-      <meta charset="utf-8">
-    </head>{% load static %}
-    
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}WOLVCAPITAL INVEST{% endblock %}</title>
     <meta name="description" content="{% block description %}WOLVCAPITAL INVEST offers professional investment opportunities with manual off-chain approvals for maximum security.{% endblock %}">
@@ -28,34 +27,66 @@
             align-items: center;
             justify-content: space-between;
             box-shadow: 0 2px 10px rgba(33, 150, 243, 0.1);
+            position: relative;
+            z-index: 100;
         }
         
         .brand-navbar .logo-section {
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            flex-shrink: 0;
         }
         
         .brand-navbar img {
-            height: 32px;
+            height: 40px;
+            width: auto;
+            max-width: 40px;
+            object-fit: contain;
         }
         
         .brand-navbar .brand-title {
             font-weight: 700;
             font-size: 1.25rem;
             letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+        
+        .brand-navbar nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
         }
         
         .brand-navbar nav a {
             color: #fff;
-            margin-left: 1.5rem;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s ease;
+            white-space: nowrap;
         }
         
         .brand-navbar nav a:hover {
             color: var(--brand-accent-gold);
+        }
+        
+        /* Responsive navbar */
+        @media (max-width: 768px) {
+            .brand-navbar {
+                padding: 0.75rem 1rem;
+            }
+            
+            .brand-navbar .brand-title {
+                font-size: 1rem;
+            }
+            
+            .brand-navbar nav {
+                gap: 1rem;
+            }
+            
+            .brand-navbar nav a {
+                font-size: 0.875rem;
+            }
         }
         
         .brand-footer {

@@ -3,9 +3,16 @@ from investments.models import InvestmentPlan
 
 
 class Command(BaseCommand):
-    help = 'Seed the database with default investment plans'
+    help = 'Update existing investment plans with new durations'
     
     def handle(self, *args, **options):
+        # Delete all existing plans
+        deleted_count = InvestmentPlan.objects.all().delete()[0]
+        self.stdout.write(
+            self.style.WARNING(f'Deleted {deleted_count} existing plan(s)')
+        )
+        
+        # Create new plans with updated durations
         plans = [
             {
                 'name': 'Pioneer',
@@ -19,7 +26,7 @@ class Command(BaseCommand):
                 'name': 'Vanguard',
                 'description': 'Intermediate investment plan for growing portfolios. Balanced risk and reward over 5 months.',
                 'daily_roi': 1.25,
-                'duration_days': 150,  # 5 months (30 days × 5)
+                'duration_days': 150,  # 5 months
                 'min_amount': 1000,
                 'max_amount': 4999,
             },
@@ -43,20 +50,15 @@ class Command(BaseCommand):
         
         created_count = 0
         for plan_data in plans:
-            plan, created = InvestmentPlan.objects.get_or_create(
-                name=plan_data['name'],
-                defaults=plan_data
+            plan = InvestmentPlan.objects.create(**plan_data)
+            created_count += 1
+            total_roi = plan_data['daily_roi'] * plan_data['duration_days']
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f'✓ Created: {plan.name} - {plan.daily_roi}% daily for {plan.duration_days} days (Total ROI: {total_roi}%)'
+                )
             )
-            if created:
-                created_count += 1
-                self.stdout.write(
-                    self.style.SUCCESS(f'Created plan: {plan.name}')
-                )
-            else:
-                self.stdout.write(
-                    self.style.WARNING(f'Plan already exists: {plan.name}')
-                )
         
         self.stdout.write(
-            self.style.SUCCESS(f'Successfully created {created_count} new plan(s)')
+            self.style.SUCCESS(f'\n✅ Successfully created {created_count} plan(s) with new durations!')
         )

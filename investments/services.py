@@ -31,7 +31,7 @@ def approve_investment(investment: UserInvestment, admin_user: User, notes: str 
         notes=notes
     )
     
-    # Mark related notifications as resolved
+    # Mark related admin notifications as resolved
     from transactions.models import AdminNotification
     AdminNotification.objects.filter(
         entity_type='investment',
@@ -42,6 +42,10 @@ def approve_investment(investment: UserInvestment, admin_user: User, notes: str 
         resolved_by=admin_user,
         resolved_at=timezone.now()
     )
+    
+    # Send user notification
+    from users.notification_service import notify_investment_approved
+    notify_investment_approved(investment.user, investment, notes)
     
     return investment
 
@@ -67,7 +71,7 @@ def reject_investment(investment: UserInvestment, admin_user: User, notes: str =
         notes=notes
     )
     
-    # Mark related notifications as resolved
+    # Mark related admin notifications as resolved
     from transactions.models import AdminNotification
     AdminNotification.objects.filter(
         entity_type='investment',
@@ -78,6 +82,10 @@ def reject_investment(investment: UserInvestment, admin_user: User, notes: str =
         resolved_by=admin_user,
         resolved_at=timezone.now()
     )
+    
+    # Send user notification
+    from users.notification_service import notify_investment_rejected
+    notify_investment_rejected(investment.user, investment, notes)
     
     return investment
 

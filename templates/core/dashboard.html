@@ -241,6 +241,62 @@
             </div>
         </div>
 
+        <!-- Available Investment Plans -->
+        <div class="bg-white rounded-lg shadow-lg mb-8">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-indigo-500 to-indigo-600">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <svg class="h-6 w-6 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <h2 class="text-lg font-semibold text-white">Available Investment Plans</h2>
+                    </div>
+                    <a href="{% url 'plans' %}" class="text-white text-sm hover:text-indigo-200">View All Details →</a>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {% for plan in all_plans %}
+                    <div class="bg-gradient-to-br from-gray-50 to-white rounded-lg border-2 border-gray-200 hover:border-indigo-500 transition-all duration-300 overflow-hidden">
+                        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-4 text-white text-center">
+                            <h3 class="text-xl font-bold mb-1">{{ plan.name }}</h3>
+                            <div class="text-3xl font-bold">{{ plan.daily_roi }}%</div>
+                            <p class="text-indigo-100 text-sm">Daily</p>
+                        </div>
+                        
+                        <div class="p-4 space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Duration</span>
+                                <span class="font-semibold">
+                                    {% if plan.duration_days == 90 %}3 Months
+                                    {% elif plan.duration_days == 150 %}5 Months
+                                    {% elif plan.duration_days == 180 %}6 Months
+                                    {% elif plan.duration_days == 365 %}Annual
+                                    {% else %}{{ plan.duration_days }} Days
+                                    {% endif %}
+                                </span>
+                            </div>
+                            
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Range</span>
+                                <span class="font-semibold">${{ plan.min_amount }} - ${{ plan.max_amount }}</span>
+                            </div>
+                            
+                            <div class="bg-green-50 rounded p-3 text-center">
+                                <div class="text-xs text-gray-600">Total Return</div>
+                                <div class="text-xl font-bold text-green-600">{{ plan.total_roi }}%</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-span-full text-center py-8 text-gray-500">
+                        <p>No investment plans available at this time.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
         <!-- Active Investments -->
         <div class="bg-white rounded-lg shadow-lg mb-8">
             <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-purple-500 to-purple-600">

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import Profile, UserWallet, User
+from .models import Profile, UserWallet, User, UserNotification
 
 
 class ProfileInline(admin.StackedInline):
@@ -51,6 +51,40 @@ class UserWalletAdmin(admin.ModelAdmin):
     list_display = ('user', 'balance', 'updated_at')
     search_fields = ('user__email', 'user__first_name', 'user__last_name')
     readonly_fields = ('updated_at',)
+
+
+@admin.register(UserNotification)
+class UserNotificationAdmin(admin.ModelAdmin):
+    list_display = ('user', 'title', 'notification_type', 'priority', 'is_read', 'created_at')
+    list_filter = ('notification_type', 'priority', 'is_read', 'created_at')
+    search_fields = ('user__email', 'title', 'message')
+    readonly_fields = ('id', 'created_at', 'read_at')
+    ordering = ('-created_at',)
+    
+    fieldsets = (
+        ('Notification Info', {
+            'fields': ('id', 'user', 'notification_type', 'title', 'message', 'priority')
+        }),
+        ('Status', {
+            'fields': ('is_read', 'read_at', 'created_at', 'expires_at')
+        }),
+        ('Related Entity', {
+            'fields': ('entity_type', 'entity_id', 'action_url'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    actions = ['mark_as_read', 'mark_as_unread']
+    
+    def mark_as_read(self, request, queryset):
+        count = queryset.update(is_read=True)
+        self.message_user(request, f'{count} notification(s) marked as read.')
+    mark_as_read.short_description = 'Mark selected notifications as read'
+    
+    def mark_as_unread(self, request, queryset):
+        count = queryset.update(is_read=False, read_at=None)
+        self.message_user(request, f'{count} notification(s) marked as unread.')
+    mark_as_unread.short_description = 'Mark selected notifications as unread'
 
 
 # Re-register UserAdmin

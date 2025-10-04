@@ -46,7 +46,7 @@ def approve_transaction(txn: Transaction, admin_user: User, notes: str = "") -> 
         notes=notes
     )
     
-    # Mark related notifications as resolved
+    # Mark related admin notifications as resolved
     from .models import AdminNotification
     AdminNotification.objects.filter(
         entity_type='transaction',
@@ -57,6 +57,13 @@ def approve_transaction(txn: Transaction, admin_user: User, notes: str = "") -> 
         resolved_by=admin_user,
         resolved_at=timezone.now()
     )
+    
+    # Send user notification
+    from users.notification_service import notify_deposit_approved, notify_withdrawal_approved
+    if txn.tx_type == 'deposit':
+        notify_deposit_approved(txn.user, txn, notes)
+    elif txn.tx_type == 'withdrawal':
+        notify_withdrawal_approved(txn.user, txn, notes)
     
     return txn
 
@@ -84,7 +91,7 @@ def reject_transaction(txn: Transaction, admin_user: User, notes: str = "") -> T
         notes=notes
     )
     
-    # Mark related notifications as resolved
+    # Mark related admin notifications as resolved
     from .models import AdminNotification
     AdminNotification.objects.filter(
         entity_type='transaction',
@@ -95,6 +102,13 @@ def reject_transaction(txn: Transaction, admin_user: User, notes: str = "") -> T
         resolved_by=admin_user,
         resolved_at=timezone.now()
     )
+    
+    # Send user notification
+    from users.notification_service import notify_deposit_rejected, notify_withdrawal_rejected
+    if txn.tx_type == 'deposit':
+        notify_deposit_rejected(txn.user, txn, notes)
+    elif txn.tx_type == 'withdrawal':
+        notify_withdrawal_rejected(txn.user, txn, notes)
     
     return txn
 

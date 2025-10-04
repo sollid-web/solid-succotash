@@ -52,7 +52,13 @@ class RiskDisclosureView(TemplateView):
 
 
 class TermsView(TemplateView):
+    """Legal Disclaimer view"""
     template_name = 'core/terms.html'
+
+
+class TermsOfServiceView(TemplateView):
+    """Terms of Service view"""
+    template_name = 'core/terms_of_service.html'
 
 
 class PrivacyView(TemplateView):
@@ -97,6 +103,14 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             from transactions.models import CryptocurrencyWallet
             crypto_wallets = CryptocurrencyWallet.objects.filter(is_active=True).order_by('currency')
             
+            # Get all investment plans
+            all_plans = InvestmentPlan.objects.all().order_by('min_amount')
+            
+            # Get user notifications (5 most recent unread)
+            from users.models import UserNotification
+            notifications = UserNotification.objects.filter(user=user, is_read=False)[:5]
+            unread_count = UserNotification.objects.filter(user=user, is_read=False).count()
+            
             context.update({
                 'wallet': wallet,
                 'investments': investments,
@@ -106,6 +120,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 'investment_form': InvestmentForm(user=user),
                 'deposit_form': DepositForm(),
                 'crypto_wallets': crypto_wallets,
+                'all_plans': all_plans,
+                'notifications': notifications,
+                'unread_count': unread_count,
             })
         except Exception as e:
             # Handle database errors gracefully

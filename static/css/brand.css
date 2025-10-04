@@ -253,12 +253,250 @@
 }
 
 /* Animations */
+/* WolvCapital Invest Brand Styles (base utilities + layout) */
+:root {
+    /* Primary Colors */
+    --brand-primary: #2196F3;
+    --brand-primary-light: #6EC1E4;
+    --brand-primary-dark: #0D47A1;
+    --brand-accent-gold: #FFD700;
+    --brand-bg: #F7FAFC;
+    --brand-text: #0F172A;
+    
+    /* Semantic Colors */
+    --brand-success: #10B981;
+    --brand-danger: #EF4444;
+    --brand-warning: #F59E0B;
+    --brand-info: #3B82F6;
+    
+    /* Neutral Colors */
+    --brand-gray-50: #F9FAFB;
+    --brand-gray-100: #F3F4F6;
+    --brand-gray-200: #E5E7EB;
+    --brand-gray-300: #D1D5DB;
+    --brand-gray-400: #9CA3AF;
+    --brand-gray-500: #6B7280;
+    --brand-gray-600: #4B5563;
+    --brand-gray-700: #374151;
+    --brand-gray-800: #1F2937;
+    --brand-gray-900: #111827;
+}
+
+/* Base Elements */
+body {
+    background: var(--brand-bg);
+    color: var(--brand-text);
+    font-family: "Inter", Arial, sans-serif;
+    margin: 0;
+}
+
+/* Header / Navbar */
+.navbar {
+    background: var(--brand-primary);
+    color: #fff;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar img { height: 32px; }
+
+.navbar a {
+    color: #fff;
+    margin-left: 1.5rem;
+    text-decoration: none;
+    font-weight: 500;
+}
+.navbar a:hover { color: var(--brand-accent-gold); }
+
+/* Buttons */
+.btn-brand {
+    background: var(--brand-primary);
+    color: #fff;
+    padding: .6rem 1.2rem;
+    border-radius: .5rem;
+    border: none;
+    font-weight: 600;
+}
+.btn-brand:hover { background: var(--brand-primary-dark); }
+
+.btn-gold {
+    background: var(--brand-accent-gold);
+    color: #111;
+    padding: .6rem 1.2rem;
+    border-radius: .5rem;
+    border: none;
+    font-weight: 600;
+}
+
+/* Card */
+.card {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 2rem;
+    margin: 2rem auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,.05);
+    text-align: center;
+    max-width: 650px;
+}
+
+/* Brand Utility Classes */
+.brand-primary {
+    color: var(--brand-primary);
+}
+
+.brand-bg-primary {
+    background-color: var(--brand-primary);
+}
+
+.brand-primary-light {
+    color: var(--brand-primary-light);
+}
+
+.brand-bg-primary-light {
+    background-color: var(--brand-primary-light);
+}
+
+.brand-primary-dark {
+    color: var(--brand-primary-dark);
+}
+
+.brand-bg-primary-dark {
+    background-color: var(--brand-primary-dark);
+}
+
+.brand-accent-gold {
+    color: var(--brand-accent-gold);
+}
+
+.brand-bg-accent-gold {
+    background-color: var(--brand-accent-gold);
+}
+
+/* Brand Gradient Backgrounds */
+.brand-gradient-primary {
+    background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-dark) 100%);
+}
+
+.brand-gradient-light {
+    background: linear-gradient(135deg, var(--brand-primary-light) 0%, var(--brand-primary) 100%);
+}
+
+.brand-gradient-gold {
+    background: linear-gradient(135deg, var(--brand-accent-gold) 0%, #FFA500 100%);
+}
+
+.brand-gradient-hero {
+    background: linear-gradient(135deg, var(--brand-primary-dark) 0%, var(--brand-primary) 50%, var(--brand-primary-light) 100%);
+}
+
+/* Brand Buttons */
+.btn-brand-primary {
+    background-color: var(--brand-primary);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-brand-primary:hover {
+    background-color: var(--brand-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(33, 150, 243, 0.3);
+}
+
+.btn-brand-gold {
+    background-color: var(--brand-accent-gold);
+    color: var(--brand-gray-900);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-brand-gold:hover {
+    background-color: #FFA500;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+}
+
+/* Brand Cards */
+.brand-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.brand-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(33, 150, 243, 0.2);
+}
+
+.brand-card-primary {
+    background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-primary-dark) 100%);
+    color: white;
+}
+
+.brand-card-gold {
+    background: linear-gradient(135deg, var(--brand-accent-gold) 0%, #FFA500 100%);
+    color: var(--brand-gray-900);
+}
+
+/* Brand Text Effects */
+.brand-text-gradient {
+    background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-accent-gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.brand-text-shadow {
+    text-shadow: 0 2px 4px rgba(33, 150, 243, 0.3);
+}
+
+/* Brand Badges */
+.brand-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.brand-badge-primary {
+    background-color: var(--brand-primary);
+    color: white;
+}
+
+.brand-badge-gold {
+    background-color: var(--brand-accent-gold);
+    color: var(--brand-gray-900);
+}
+
+.brand-badge-success {
+    background-color: var(--brand-success);
+    color: white;
+}
+
+.brand-badge-danger {
+    background-color: var(--brand-danger);
+    color: white;
+}
+
+/* Brand Animations */
 @keyframes brand-pulse {
     0%, 100% {
         opacity: 1;
     }
     50% {
         opacity: 0.8;
+        opacity: 0.5;
     }
 }
 
@@ -267,6 +505,7 @@
 }
 
 @keyframes brand-float {
+@keyframes brand-bounce {
     0%, 100% {
         transform: translateY(0);
     }
@@ -307,5 +546,23 @@
     
     .brand-plan-roi {
         font-size: 2rem;
+.brand-bounce {
+    animation: brand-bounce 1s ease-in-out infinite;
+}
+
+/* Brand Borders */
+.brand-border-primary {
+    border: 2px solid var(--brand-primary);
+}
+
+.brand-border-gold {
+    border: 2px solid var(--brand-accent-gold);
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .brand-card {
+        background: var(--brand-gray-800);
+        color: white;
     }
 }

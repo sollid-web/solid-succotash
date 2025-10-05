@@ -3,8 +3,8 @@
 # WolvCapital Render.com Startup Script
 echo "🚀 Starting WolvCapital on Render.com..."
 
-# Exit on any error
-set -e
+# Don't exit on errors during setup - we want to try to start the server even if setup fails
+set +e
 
 # Apply database migrations with retry
 echo "📦 Running migrations..."
@@ -15,6 +15,9 @@ for i in {1..3}; do
     else
         echo "❌ Migration attempt $i failed, retrying in 5 seconds..."
         sleep 5
+        if [ $i -eq 3 ]; then
+            echo "⚠️ Migrations failed after 3 attempts, continuing anyway..."
+        fi
     fi
 done
 
@@ -97,6 +100,9 @@ python manage.py verify_db || echo "⚠️ Setup verification failed, continuing
 echo "🎉 WolvCapital startup complete!"
 echo "🌐 Admin Login: admin@wolvcapital.com / admin123"
 echo "💼 Platform Features: Investment Plans, Crypto Deposits, Virtual Cards, Admin Notifications"
+
+# Enable error handling for the server start
+set -e
 
 # Start the application with proper Render.com configuration
 echo "🚀 Starting Gunicorn server on port $PORT..."

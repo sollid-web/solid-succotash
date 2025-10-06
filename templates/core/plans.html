@@ -31,6 +31,18 @@
             </div>
         </div>
 
+        {% if plans_error %}
+        <div class="mb-8 p-4 rounded-lg border border-yellow-300 bg-yellow-50 text-yellow-800 text-sm">
+            {{ plans_error }}
+        </div>
+        {% endif %}
+
+        {% if plans_seeded_now %}
+        <div class="mb-8 p-4 rounded-lg border border-blue-300 bg-blue-50 text-blue-800 text-sm">
+            Default plans were just initialized. If they don’t appear immediately, refresh in a moment.
+        </div>
+        {% endif %}
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
             {% for plan in plans %}
             <div class="brand-plan-card">

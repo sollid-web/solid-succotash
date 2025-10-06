@@ -6,6 +6,11 @@ from django.db.models import Sum
 from django.urls import reverse_lazy
 from django.views import View
 from investments.models import InvestmentPlan, UserInvestment
+import logging
+from django.conf import settings
+from django.db import transaction
+
+logger = logging.getLogger(__name__)
 from transactions.models import Transaction
 from transactions.services import create_transaction
 from investments.services import create_investment
@@ -30,12 +35,65 @@ class PlansView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        try:
-            context['plans'] = InvestmentPlan.objects.all().order_by('min_amount')
-        except Exception as e:
-            # Handle case where database is not properly seeded
+        plans_qs = InvestmentPlan.objects.all().order_by('min_amount')
+        if plans_qs.exists():
+            context['plans'] = plans_qs
+            return context
+
+        # No plans found – attempt a guarded auto-seed ONLY in production (DEBUG=False) as a safety net
+        if not settings.DEBUG:
+            default_plans = [
+                {
+                    'name': 'Pioneer',
+                    'description': 'Entry-level investment plan perfect for beginners. Low risk with steady returns over 3 months.',
+                    'daily_roi': 1.00,
+                    'duration_days': 90,
+                    'min_amount': 100,
+                    'max_amount': 999,
+                },
+                {
+                    'name': 'Vanguard',
+                    'description': 'Intermediate plan for growing portfolios over 5 months.',
+                    'daily_roi': 1.25,
+                    'duration_days': 150,
+                    'min_amount': 1000,
+                    'max_amount': 4999,
+                },
+                {
+                    'name': 'Horizon',
+                    'description': 'Advanced plan with higher allocation over 6 months.',
+                    'daily_roi': 1.50,
+                    'duration_days': 180,
+                    'min_amount': 5000,
+                    'max_amount': 14999,
+                },
+                {
+                    'name': 'Summit',
+                    'description': 'Premium annual plan for high-net-worth investors.',
+                    'daily_roi': 2.00,
+                    'duration_days': 365,
+                    'min_amount': 15000,
+                    'max_amount': 100000,
+                },
+            ]
+            try:
+                with transaction.atomic():
+                    created_any = False
+                    for data in default_plans:
+                        obj, created = InvestmentPlan.objects.get_or_create(name=data['name'], defaults=data)
+                        created_any = created_any or created
+                    if created_any:
+                        logger.warning("Auto-seeded default investment plans in production fallback path.")
+                        context['plans_seeded_now'] = True
+                context['plans'] = InvestmentPlan.objects.all().order_by('min_amount')
+            except Exception as e:  # pragma: no cover (safety catch for prod diagnostics)
+                logger.error("Failed fallback auto-seed for investment plans: %s", e)
+                context['plans'] = []
+                context['plans_error'] = "Investment plans are currently being initialized. Please refresh shortly."
+        else:
+            # In DEBUG we do not auto-seed here; rely on management command to surface issues
             context['plans'] = []
-            context['error'] = "Investment plans are currently being loaded. Please try again in a moment."
+            context['plans_error'] = "No investment plans found. Run: python manage.py seed_plans"
         return context
 
 

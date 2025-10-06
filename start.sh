@@ -21,6 +21,14 @@ for i in {1..3}; do
     fi
 done
 
+# Collect static files (critical for production)
+echo "📂 Collecting static files..."
+if python manage.py collectstatic --noinput; then
+    echo "✅ Static files collected successfully"
+else
+    echo "⚠️ Static files collection failed, continuing anyway..."
+fi
+
 # Seed investment plans (critical for WolvCapital) with retry
 echo "💰 Seeding investment plans..."
 for i in {1..3}; do

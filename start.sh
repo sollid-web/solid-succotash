@@ -29,15 +29,27 @@ else
     echo "⚠️ Static files collection failed, continuing anyway..."
 fi
 
-# Seed investment plans (critical for WolvCapital) with retry
+# Seed investment plans (critical for WolvCapital) with retry and verbose logging
 echo "💰 Seeding investment plans..."
 for i in {1..3}; do
+    echo "ℹ️  Attempt $i running: python manage.py seed_plans"
     if python manage.py seed_plans; then
-        echo "✅ Investment plans seeded successfully"
+        echo "✅ Investment plans seed attempt $i succeeded"
+        echo "📊 Current plans in DB (post-seed):"
+        python manage.py shell << 'EOF'
+from investments.models import InvestmentPlan
+qs = InvestmentPlan.objects.all().order_by('min_amount')
+print(f"Total plans: {qs.count()}")
+for p in qs:
+    print(f" - {p.name}: ROI {p.daily_roi}% | {p.duration_days} days | ${p.min_amount}-${p.max_amount}")
+EOF
         break
     else
         echo "❌ Seeding attempt $i failed, retrying in 3 seconds..."
         sleep 3
+        if [ $i -eq 3 ]; then
+            echo "⚠️  All seeding attempts failed. Continuing startup; /plans/ will show empty until fixed." 
+        fi
     fi
 done
 

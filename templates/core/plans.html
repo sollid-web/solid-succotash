@@ -37,7 +37,7 @@
                 <h3 class="brand-plan-name">{{ plan.name }}</h3>
                 <div class="brand-plan-roi">{{ plan.daily_roi }}%</div>
                 <p class="text-sm text-gray-600 mb-4">Daily Return</p>
-                
+
                 <div class="space-y-2 text-sm text-gray-600 mb-6">
                     <div class="flex justify-between">
                         <span>Duration:</span>
@@ -58,152 +58,24 @@
                         </span>
                     </div>
                 </div>
-                
+
                 <p class="text-xs text-gray-500 mb-6">{{ plan.description }}</p>
-                
+
                 {% if user.is_authenticated %}
-                <a href="{% url 'dashboard' %}" class="brand-btn-primary w-full inline-block text-center">
-                    Invest Now
-                </a>
+                <a href="{% url 'dashboard' %}" class="brand-btn-primary w-full inline-block text-center">Invest Now</a>
                 {% else %}
-                <a href="{% url 'account_signup' %}" class="brand-btn-primary w-full inline-block text-center">
-            <div class="border-2 border-gray-200 rounded-2xl overflow-hidden hover:shadow-2xl hover:border-blue-500 transition duration-300 transform hover:-translate-y-1">
-                <!-- Plan Header -->
-                <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white text-center">
-                    <h3 class="text-2xl font-bold mb-2">{{ plan.name }}</h3>
-                    <div class="text-4xl font-bold mb-1">{{ plan.daily_roi }}%</div>
-                    <p class="text-blue-100 text-sm">Daily Return</p>
-                </div>
-                
-                <!-- Plan Details -->
-                <div class="p-6">
-                    <div class="space-y-3 mb-6">
-                        <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                            <span class="text-gray-600">Duration:</span>
-                            <span class="font-semibold text-gray-900">
-                                {% if plan.duration_days == 90 %}3 Months
-                                {% elif plan.duration_days == 150 %}5 Months
-                                {% elif plan.duration_days == 180 %}6 Months
-                                {% elif plan.duration_days == 365 %}Annual (1 Year)
-                                {% else %}{{ plan.duration_days }} Days
-                                {% endif %}
-                            </span>
-                        </div>
-                        <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                            <span class="text-gray-600">Min Amount:</span>
-                            <span class="font-semibold text-gray-900">${{ plan.min_amount|floatformat:0 }}</span>
-                        </div>
-                        <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                            <span class="text-gray-600">Max Amount:</span>
-                            <span class="font-semibold text-gray-900">${{ plan.max_amount|floatformat:0 }}</span>
-                        </div>
-                    </div>
-                    
-                    {% for plan in plans %}
-                    <div class="border-2 border-gray-200 rounded-2xl overflow-hidden hover:shadow-2xl hover:border-blue-500 transition duration-300 transform hover:-translate-y-1">
-                        <!-- Plan Header -->
-                        <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white text-center">
-                            <h3 class="text-2xl font-bold mb-2">{{ plan.name|default:'Plan' }}</h3>
-                            <div class="text-4xl font-bold mb-1">{{ plan.daily_roi|default:'0' }}%</div>
-                            <p class="text-blue-100 text-sm">Daily Return</p>
-                        </div>
-                        <!-- Plan Details -->
-                        <div class="p-6">
-                            <div class="space-y-3 mb-6">
-                                <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                                    <span class="text-gray-600">Duration:</span>
-                                    <span class="font-semibold text-gray-900">
-                                        {% if plan.duration_days == 90 %}3 Months
-                                        {% elif plan.duration_days == 150 %}5 Months
-                                        {% elif plan.duration_days == 180 %}6 Months
-                                        {% elif plan.duration_days == 365 %}Annual (1 Year)
-                                        {% else %}{{ plan.duration_days|default:'N/A' }} Days
-                                        {% endif %}
-                                    </span>
-                                </div>
-                                <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                                    <span class="text-gray-600">Min Amount:</span>
-                                    <span class="font-semibold text-gray-900">${{ plan.min_amount|default:'0'|floatformat:0 }}</span>
-                                </div>
-                                <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                                    <span class="text-gray-600">Max Amount:</span>
-                                    <span class="font-semibold text-gray-900">${{ plan.max_amount|default:'0'|floatformat:0 }}</span>
-                                </div>
-                            </div>
-                            <!-- Total Return Highlight -->
-                            <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-4 mb-6 border border-green-200">
-                                <div class="text-center">
-                                    <div class="text-xs text-gray-600 uppercase tracking-wide mb-1">Total Return</div>
-                                    <div class="text-3xl font-bold text-green-600 mb-2">{{ plan.total_roi|default:'0' }}%</div>
-                                    <div class="text-xs text-gray-700">
-                                        <strong>Example:</strong> $1,000 → ${{ plan.total_roi|default:'0'|add:100|floatformat:0|default:"1000" }}
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Potential Rewards -->
-                            <div class="bg-blue-50 rounded-lg p-4 mb-6">
-                                <div class="text-xs font-semibold text-blue-900 mb-2">Potential Rewards:</div>
-                                <div class="space-y-1 text-xs text-gray-700">
-                                    <div class="flex justify-between">
-                                        <span>${{ plan.min_amount|default:'0'|floatformat:0 }} investment:</span>
-                                        <span class="font-bold text-green-600">${{ plan.min_amount|default:'0'|floatformat:2 }}</span>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <span>${{ plan.max_amount|default:'0'|floatformat:0 }} investment:</span>
-                                        <span class="font-bold text-green-600">${{ plan.max_amount|default:'0'|floatformat:2 }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="text-xs text-gray-600 mb-6 italic">{{ plan.description|default:'' }}</p>
-                            {% if user.is_authenticated %}
-                            <a href="{% url 'dashboard' %}" class="block w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-center px-4 py-3 rounded-lg font-semibold transition duration-300">
-                                Invest Now
-                            </a>
-                            {% else %}
-                            <a href="{% url 'account_signup' %}" class="block w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-center px-4 py-3 rounded-lg font-semibold transition duration-300">
-                                Get Started
-                            </a>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% endfor %}
-                <button onclick="calculateReturns()" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
-                    Calculate Returns
-                </button>
-                
-                <!-- Results -->
-                <div id="calc-results" class="mt-6 hidden">
-                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-6 border-2 border-green-200">
-                        <h3 class="text-lg font-bold text-gray-900 mb-4 text-center">Your Potential Returns</h3>
-                        <div class="grid grid-cols-2 gap-4 text-center">
-                            <div class="bg-white rounded-lg p-4">
-                                <div class="text-sm text-gray-600 mb-1">Initial Investment</div>
-                                <div class="text-2xl font-bold text-gray-900">$<span id="result-investment">0</span></div>
-                            </div>
-                            <div class="bg-white rounded-lg p-4">
-                                <div class="text-sm text-gray-600 mb-1">Daily Returns</div>
-                                <div class="text-2xl font-bold text-blue-600">$<span id="result-daily">0</span></div>
-                            </div>
-                            <div class="bg-white rounded-lg p-4">
-                                <div class="text-sm text-gray-600 mb-1">Total Returns</div>
-                                <div class="text-2xl font-bold text-green-600">$<span id="result-total">0</span></div>
-                            </div>
-                            <div class="bg-white rounded-lg p-4">
-                                <div class="text-sm text-gray-600 mb-1">Final Amount</div>
-                                <div class="text-2xl font-bold text-purple-600">$<span id="result-final">0</span></div>
-                            </div>
-                        </div>
-                        <div class="mt-4 text-center">
-                            <div class="text-sm text-gray-600">Duration: <span id="result-duration" class="font-semibold">-</span></div>
-                            <div class="text-sm text-gray-600">ROI: <span id="result-roi" class="font-bold text-green-600">0%</span></div>
-                        </div>
-                    </div>
-                </div>
+                <a href="{% url 'account_signup' %}" class="brand-btn-primary w-full inline-block text-center">Get Started</a>
+                {% endif %}
             </div>
+            {% empty %}
+            <div class="col-span-full text-center py-12">
+                <p class="text-gray-600 text-lg">Investment plans are being loaded. Please check back shortly.</p>
+            </div>
+            {% endfor %}
         </div>
 
-        <!-- How Manual Approval Works -->
-        <div class="bg-gray-50 rounded-lg p-8">
+    <!-- How Manual Approval Works -->
+    <div class="bg-gray-50 rounded-lg p-8">
             <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Manual Off-Chain Approval Process</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="text-center">

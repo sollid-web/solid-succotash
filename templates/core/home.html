@@ -264,75 +264,6 @@
     </div>
 </div>
 
-<!-- Investment Plans Section -->
-<section class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Investment Plans</h2>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                Choose from our carefully structured investment plans designed for different investment levels
-            </p>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {% for plan in plans %}
-            <div class="bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-xl border-2 border-gray-200 hover:border-blue-500 transition-all duration-300 transform hover:-translate-y-2 overflow-hidden">
-                <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white text-center">
-                    <h3 class="text-2xl font-bold mb-2">{{ plan.name }}</h3>
-                    <div class="text-4xl font-bold mb-2">{{ plan.daily_roi }}%</div>
-                    <p class="text-blue-100">Daily Returns</p>
-                </div>
-                
-                <div class="p-6 space-y-4">
-                    <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                        <span class="text-gray-600">Duration</span>
-                        <span class="font-semibold text-gray-900">
-                            {% if plan.duration_days == 90 %}3 Months
-                            {% elif plan.duration_days == 150 %}5 Months
-                            {% elif plan.duration_days == 180 %}6 Months
-                            {% elif plan.duration_days == 365 %}Annual (1 Year)
-                            {% else %}{{ plan.duration_days }} Days
-                            {% endif %}
-                        </span>
-                    </div>
-                    
-                    <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                        <span class="text-gray-600">Min. Amount</span>
-                        <span class="font-semibold text-gray-900">${{ plan.min_amount }}</span>
-                    </div>
-                    
-                    <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                        <span class="text-gray-600">Max. Amount</span>
-                        <span class="font-semibold text-gray-900">${{ plan.max_amount }}</span>
-                    </div>
-                    
-                    <div class="bg-green-50 rounded-lg p-4 mt-4">
-                        <div class="text-sm text-gray-600 mb-1">Total Return</div>
-                        <div class="text-2xl font-bold text-green-600">
-                            {{ plan.total_roi }}%
-                        </div>
-                    </div>
-                    
-                    <a href="{% url 'account_signup' %}" 
-                       class="block w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-center font-semibold py-3 px-6 rounded-lg transition duration-300">
-                        Start Investing
-                    </a>
-                </div>
-            </div>
-            {% empty %}
-            <div class="col-span-full text-center py-12">
-                <p class="text-gray-600 text-lg">Investment plans are currently being loaded. Please check back soon!</p>
-            </div>
-            {% endfor %}
-        </div>
-        
-        <div class="text-center mt-12">
-            <a href="{% url 'plans' %}" class="inline-block bg-white text-blue-600 border-2 border-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-blue-600 hover:text-white transition duration-300">
-                View All Details
-            </a>
-        </div>
-    </div>
-</section>
 
 <!-- Features Section -->
 <section class="py-16 bg-gray-50">
@@ -411,7 +342,7 @@
                     </div>
                     <div class="flex justify-between border-t pt-3">
                         <span class="text-gray-600">Total Return:</span>
-                        <span class="font-bold text-green-600">{{ plan.daily_roi|floatformat:2 }}%</span>
+                        <span class="font-bold text-green-600">{% widthratio plan.daily_roi 1 plan.duration_days %}%</span>
                     </div>
                 </div>
                 

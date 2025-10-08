@@ -6,36 +6,37 @@ class Command(BaseCommand):
     help = 'Seed the database with default investment plans'
     
     def handle(self, *args, **options):
+        # Canonical fixed plans (see README) - do NOT change without migration & communication
         plans = [
             {
                 'name': 'Pioneer',
-                'description': 'Entry-level investment plan perfect for beginners. Low risk with steady returns over 3 months.',
+                'description': 'Entry-level plan: 14-day cycle for new investors.',
                 'daily_roi': 1.00,
-                'duration_days': 90,  # 3 months
+                'duration_days': 14,
                 'min_amount': 100,
                 'max_amount': 999,
             },
             {
                 'name': 'Vanguard',
-                'description': 'Intermediate investment plan for growing portfolios. Balanced risk and reward over 5 months.',
+                'description': 'Growth plan: 21-day cycle balanced risk/reward.',
                 'daily_roi': 1.25,
-                'duration_days': 150,  # 5 months (30 days × 5)
+                'duration_days': 21,
                 'min_amount': 1000,
                 'max_amount': 4999,
             },
             {
                 'name': 'Horizon',
-                'description': 'Advanced investment plan for serious investors. Higher returns for larger investments over 6 months.',
+                'description': 'Advanced plan: 30-day cycle for larger positions.',
                 'daily_roi': 1.50,
-                'duration_days': 180,  # 6 months
+                'duration_days': 30,
                 'min_amount': 5000,
                 'max_amount': 14999,
             },
             {
                 'name': 'Summit',
-                'description': 'Premium investment plan for high-net-worth individuals. Maximum returns for maximum investment over 1 year.',
+                'description': 'Premium plan: 45-day cycle, highest bracket returns.',
                 'daily_roi': 2.00,
-                'duration_days': 365,  # 1 year (annual)
+                'duration_days': 45,
                 'min_amount': 15000,
                 'max_amount': 100000,
             },

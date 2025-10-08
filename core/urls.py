@@ -1,6 +1,10 @@
 from django.urls import path
 from . import views
 from users import views as user_views
+from django.http import JsonResponse
+
+def healthz(request):
+    return JsonResponse({"status": "ok"})
 
 urlpatterns = [
     # Public pages
@@ -21,6 +25,10 @@ urlpatterns = [
     path('deposit/', views.DepositView.as_view(), name='deposit'),
     path('withdrawals/', views.WithdrawalsView.as_view(), name='withdrawals'),
     path('withdraw/', views.WithdrawView.as_view(), name='withdraw'),
+    # PDF exports
+    path('agreements/<int:agreement_id>/pdf/', views.agreement_pdf, name='agreement_pdf'),
+    path('agreements/<int:agreement_id>/view/', views.agreement_view, name='agreement_view'),
+    path('healthz/', healthz, name='healthz'),
     
     # Notifications
     path('notifications/', user_views.NotificationListView.as_view(), name='notifications'),

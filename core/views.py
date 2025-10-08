@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import FileResponse, Http404
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
@@ -16,6 +17,20 @@ from transactions.services import create_transaction
 from investments.services import create_investment
 from users.models import UserWallet
 from .forms import InvestmentForm, WithdrawalForm, DepositForm
+# Lazy import of PDF builder (ReportLab). We avoid importing at module load
+# so that the entire site doesn't crash if the optional PDF stack isn't
+# installed yet. Inside the view we attempt the import and degrade gracefully.
+# from .pdf_letterhead import build_pdf  # (moved to inside agreement_pdf)
+import tempfile
+import os
+from .models import Agreement
+from django.views.decorators.http import require_http_methods
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from .models import UserAgreementAcceptance
+import hashlib
 
 
 class HomeView(TemplateView):
@@ -42,36 +57,37 @@ class PlansView(TemplateView):
 
         # No plans found – attempt a guarded auto-seed ONLY in production (DEBUG=False) as a safety net
         if not settings.DEBUG:
+            # Canonical fixed plans (match seed_plans management command)
             default_plans = [
                 {
                     'name': 'Pioneer',
-                    'description': 'Entry-level investment plan perfect for beginners. Low risk with steady returns over 3 months.',
+                    'description': 'Entry-level plan (14 days) with steady daily ROI.',
                     'daily_roi': 1.00,
-                    'duration_days': 90,
+                    'duration_days': 14,
                     'min_amount': 100,
                     'max_amount': 999,
                 },
                 {
                     'name': 'Vanguard',
-                    'description': 'Intermediate plan for growing portfolios over 5 months.',
+                    'description': 'Growth-focused plan (21 days) for expanding portfolios.',
                     'daily_roi': 1.25,
-                    'duration_days': 150,
+                    'duration_days': 21,
                     'min_amount': 1000,
                     'max_amount': 4999,
                 },
                 {
                     'name': 'Horizon',
-                    'description': 'Advanced plan with higher allocation over 6 months.',
+                    'description': 'Advanced allocation plan (30 days) with higher limits.',
                     'daily_roi': 1.50,
-                    'duration_days': 180,
+                    'duration_days': 30,
                     'min_amount': 5000,
                     'max_amount': 14999,
                 },
                 {
                     'name': 'Summit',
-                    'description': 'Premium annual plan for high-net-worth investors.',
+                    'description': 'Premium high-cap plan (45 days).',
                     'daily_roi': 2.00,
-                    'duration_days': 365,
+                    'duration_days': 45,
                     'min_amount': 15000,
                     'max_amount': 100000,
                 },
@@ -350,3 +366,81 @@ class WithdrawView(LoginRequiredMixin, View):
                     messages.error(request, f"{field}: {error}")
         
         return redirect('withdrawals')
+
+
+def agreement_pdf(request, agreement_id: int):
+    """Return a PDF for a stored Agreement version.
+
+    Looks up an active Agreement by primary key and uses its paragraph
+    splitting helper. Falls back gracefully if PDF stack is unavailable.
+    """
+    if not request.user.is_authenticated:
+        raise Http404
+
+    try:
+        agreement = Agreement.objects.get(pk=agreement_id, is_active=True)
+    except Agreement.DoesNotExist:
+        raise Http404
+
+    try:
+        from .pdf_letterhead import build_pdf  # type: ignore
+    except Exception:  # pragma: no cover - environment specific
+        from django.http import HttpResponse
+        return HttpResponse(
+            "PDF generation temporarily unavailable (missing ReportLab).",
+            status=503,
+            content_type="text/plain",
+        )
+
+    paragraphs = agreement.paragraphs()
+    if not paragraphs:
+        paragraphs = ["(This agreement currently has no body content.)"]
+
+    tmp = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False)
+    tmp_path = tmp.name
+    tmp.close()
+    try:
+        build_pdf(tmp_path, paragraphs)
+        return FileResponse(open(tmp_path, "rb"), content_type="application/pdf")
+    finally:
+        pass
+
+
+@login_required
+@require_http_methods(["GET", "POST"])
+def agreement_view(request, agreement_id: int):
+    """Render an agreement and allow user to accept it.
+
+    POST will create a UserAgreementAcceptance if one doesn't exist.
+    Idempotent: multiple posts do not duplicate.
+    """
+    try:
+        agreement = Agreement.objects.get(pk=agreement_id, is_active=True)
+    except Agreement.DoesNotExist:
+        raise Http404
+
+    acceptance = UserAgreementAcceptance.objects.filter(user=request.user, agreement=agreement).first()
+
+    if request.method == "POST":
+        if acceptance:
+            messages.info(request, "You have already accepted this agreement.")
+        else:
+            body_hash = hashlib.sha256(agreement.body.encode('utf-8')).hexdigest()
+            UserAgreementAcceptance.objects.create(
+                user=request.user,
+                agreement=agreement,
+                ip_address=request.META.get("REMOTE_ADDR"),
+                user_agent=request.META.get("HTTP_USER_AGENT", ""),
+                agreement_hash=body_hash,
+                agreement_version=agreement.version,
+            )
+            messages.success(request, "Agreement accepted.")
+        return HttpResponseRedirect(reverse("agreement_view", args=[agreement.pk]))
+
+    paragraphs = agreement.paragraphs()
+    return render(request, "core/agreement_view.html", {
+        "agreement": agreement,
+        "paragraphs": paragraphs,
+        "accepted": bool(acceptance),
+        "acceptance": acceptance,
+    })

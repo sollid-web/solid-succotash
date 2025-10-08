@@ -99,6 +99,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "wolvcapital.middleware.RequestIDMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -176,7 +177,11 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-if not DEBUG:
+TESTING = any(arg in os.environ.get("PYTEST_CURRENT_TEST", "") for arg in ["::"]) or any(
+    c in " ".join(os.sys.argv) for c in ["test", "pytest"]
+)
+
+if not DEBUG and not TESTING:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"
@@ -242,10 +247,67 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # ------------------------------------------------------------------
+# Logging (structured JSON in production)
+# ------------------------------------------------------------------
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
+LOG_FORMAT = os.getenv("LOG_FORMAT", "json")  # 'json' or 'plain'
+
+class JsonFormatter:
+    """Minimal JSON log formatter to avoid external deps.
+
+    Produces a single-line JSON object with level, message, logger, and timestamp.
+    """
+    def format(self, record):  # pragma: no cover (formatting utility)
+        import json, datetime
+        from wolvcapital.middleware import get_request_id  # local import to avoid circular
+        rid = get_request_id()
+        data = {
+            "level": record.levelname,
+            "logger": record.name,
+            "message": record.getMessage(),
+            "time": datetime.datetime.utcnow().isoformat() + "Z",
+        }
+        if rid:
+            data["request_id"] = rid
+        if record.exc_info:
+            import traceback
+            data["exc"] = "".join(traceback.format_exception(*record.exc_info))
+        return json.dumps(data, ensure_ascii=False)
+
+if LOG_FORMAT == "json" and not DEBUG:
+    SIMPLE_FORMATTER = {
+        "()": JsonFormatter,
+    }
+else:
+    SIMPLE_FORMATTER = {
+        "format": "[%(asctime)s] %(levelname)s %(name)s: %(message)s",
+        "datefmt": "%Y-%m-%dT%H:%M:%SZ",
+    }
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "simple": SIMPLE_FORMATTER,
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        }
+    },
+    "root": {"handlers": ["console"], "level": LOG_LEVEL},
+    "loggers": {
+        "django": {"handlers": ["console"], "level": LOG_LEVEL, "propagate": False},
+        "wolvcapital": {"handlers": ["console"], "level": LOG_LEVEL, "propagate": False},
+    },
+}
+
+# ------------------------------------------------------------------
 # Security Settings (Production Ready)
 # ------------------------------------------------------------------
 # Always enable security features for production deployment
-SECURE_SSL_REDIRECT = not DEBUG and not IN_CODESPACES
+SECURE_SSL_REDIRECT = not DEBUG and not IN_CODESPACES and not TESTING
 SESSION_COOKIE_SECURE = not DEBUG and not IN_CODESPACES
 CSRF_COOKIE_SECURE = not DEBUG and not IN_CODESPACES
 

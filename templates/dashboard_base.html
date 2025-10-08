@@ -28,12 +28,13 @@
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
                     <a href="{% url 'dashboard' %}" class="flex items-center">
-                        <img src="{% static 'img/wolvcapital-invest-logo.svg' %}" alt="WolvCapital Invest" class="brand-logo">
+                        <img src="{% static 'img/wolvcapital-logo.svg' %}" alt="WolvCapital Invest" class="brand-logo">
                     </a>
                     <span class="ml-4 text-gray-500">Dashboard</span>
                 </div>
                 
                 <div class="flex items-center space-x-4">
+                    <a href="{% url 'notifications' %}" class="text-gray-600 hover:text-blue-600 font-medium">Notifications</a>
                     <span class="text-gray-600">{{ user.first_name|default:user.email }}</span>
                     <a href="{% url 'account_logout' %}" class="text-red-600 hover:text-red-800 font-medium">Logout</a>
                 </div>

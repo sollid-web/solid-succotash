@@ -489,34 +489,11 @@ body {
     color: white;
 }
 
-/* Brand Animations */
-@keyframes brand-pulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.8;
-        opacity: 0.5;
-    }
-}
-
-.brand-pulse {
-    animation: brand-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes brand-float {
-@keyframes brand-bounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-.brand-float {
-    animation: brand-float 3s ease-in-out infinite;
-}
+/* Brand Animations (cleaned) */
+@keyframes brand-pulse { 0%,100% {opacity:1;} 50% {opacity:.6;} }
+.brand-pulse { animation: brand-pulse 2s cubic-bezier(0.4,0,0.6,1) infinite; }
+@keyframes brand-bounce { 0%,100% {transform:translateY(0);} 50% {transform:translateY(-10px);} }
+.brand-bounce { animation: brand-bounce 1s ease-in-out infinite; }
 
 /* Utility Classes */
 .brand-shadow {
@@ -536,18 +513,9 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .brand-hero-title {
-        font-size: 2.5rem;
-    }
-    
-    .brand-hero-subtitle {
-        font-size: 1.25rem;
-    }
-    
-    .brand-plan-roi {
-        font-size: 2rem;
-.brand-bounce {
-    animation: brand-bounce 1s ease-in-out infinite;
+    .brand-hero-title { font-size: 2.5rem; }
+    .brand-hero-subtitle { font-size: 1.25rem; }
+    .brand-plan-roi { font-size: 2rem; }
 }
 
 /* Brand Borders */

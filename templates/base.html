@@ -1,5 +1,5 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8"> <!-- Ensured charset meta is first in <head> -->
@@ -382,6 +382,8 @@
     <script>
         // Chat Widget Functionality
         document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
             const chatButton = document.getElementById('chat-button');
             const chatWindow = document.getElementById('chat-window');
             const chatIcon = document.getElementById('chat-icon');
@@ -392,6 +394,37 @@
             const quickActionBtns = document.querySelectorAll('.quick-action-btn');
 
             let isOpen = false;
+            let isMobileMenuOpen = false;
+
+            if (mobileMenuButton && mobileMenu) {
+                const toggleMobileMenu = () => {
+                    isMobileMenuOpen = !isMobileMenuOpen;
+                    if (isMobileMenuOpen) {
+                        mobileMenu.classList.remove('hidden');
+                        mobileMenuButton.setAttribute('aria-expanded', 'true');
+                    } else {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenuButton.setAttribute('aria-expanded', 'false');
+                    }
+                };
+
+                mobileMenuButton.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    toggleMobileMenu();
+                });
+
+                document.addEventListener('click', (event) => {
+                    if (isMobileMenuOpen && !mobileMenu.contains(event.target) && event.target !== mobileMenuButton) {
+                        toggleMobileMenu();
+                    }
+                });
+
+                mobileMenuButton.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape' && isMobileMenuOpen) {
+                        toggleMobileMenu();
+                    }
+                });
+            }
 
             // Toggle chat window
             function toggleChat() {
@@ -464,7 +497,7 @@
                 } else if (lowerMessage.includes('withdrawal') || lowerMessage.includes('withdraw')) {
                     return "I can help you with withdrawals! Withdrawal requests are processed manually within 24 hours. Please ensure your account is verified and you have sufficient balance. What specific help do you need?";
                 } else if (lowerMessage.includes('investment') || lowerMessage.includes('plan')) {
-                    return "Great question about our investment plans! We offer 4 plans: Pioneer (3 months), Vanguard (5 months), Horizon (6 months), and Summit (Annual). All investments require manual approval. Which plan interests you?";
+                    return "Great question about our investment plans! We offer Pioneer (14 days), Vanguard (21 days), Horizon (30 days), and Summit (45 days). All investments require manual approval. Which plan interests you?";
                 } else if (lowerMessage.includes('account') || lowerMessage.includes('login') || lowerMessage.includes('password')) {
                     return "I can help with account issues! For password resets, use the 'Forgot Password' link on the login page. For other account issues, please provide more details about the problem you're experiencing.";
                 } else if (lowerMessage.includes('card') || lowerMessage.includes('virtual')) {

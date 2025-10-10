@@ -1,541 +1,253 @@
 # WolvCapital - Professional Investment Platform
 
-WolvCapital is a production-ready Django 5 investment platform featuring manual off-chain approvals for maximum security and transparency. Built with Python 3.12, PostgreSQL, and modern web technologies.
+WolvCapital is a Django 5 investment platform where every financial action requires human oversight. Automated services calculate returns and enforce business rules, while administrators approve or reject all transactions and investments.
 
-## Features
-# WolvCapital - Professional Investment Platform
+## Key Features
 
-WolvCapital is a production-ready Django 5 investment platform featuring manual off-chain approvals for maximum security and transparency. Built with Python 3.12, PostgreSQL, and modern web technologies.
+### Manual Off-Chain Approvals
+- Deposits, withdrawals, and investments remain pending until an administrator verifies them.
+- Service-layer functions require an `admin_user`, ensuring audit trails and accountability.
+- All approval decisions are stored in `AdminAuditLog` with reference identifiers.
 
-## Features
+### Investment Management
+- Four predefined investment plans with fixed ROI ranges and durations.
+- Wallet balances update atomically after approvals to prevent inconsistent states.
+- Dashboards show wallet history, active plans, and recent transactions.
 
-### 🔐 Manual Off-Chain Approvals
-- All transactions (deposits, withdrawals, investments) are manually reviewed
-- Human oversight for maximum security and fraud prevention
-- Admin dashboard for approval workflows
-- Comprehensive audit logging
+### Security and Compliance
+- Email-only authentication via django-allauth and synchronized staff roles.
+- Legal agreements, privacy policies, and risk disclosures stored as versioned content.
+- Structured logging with request correlation identifiers aids forensic reviews.
 
-### 💼 Investment Management
-- Multiple investment plans with configurable ROI and durations
-- User-friendly dashboard for portfolio management
-- Real-time transaction tracking
-- Automated return calculations
-
-### 🛡️ Security & Compliance
-- Django-allauth for robust authentication
-- Email-based user accounts
-- CSRF protection and security middleware
-- Comprehensive risk disclosure and legal pages
-
-### 📊 Admin Features
-- Django Admin interface with custom actions
-- Bulk approval/rejection capabilities
-- Detailed transaction and investment management
+### Administrative Tooling
+- Enhanced Django Admin configuration with bulk approval actions and filters.
+- REST API endpoints for both user and admin workflows.
+- Management commands to seed data, promote admins, and process ROI payouts.
 
 ## Technology Stack
 
-- **Backend**: Django 5.0.7, Python 3.12
-- **Database**: PostgreSQL (Neon compatible)
-- **API**: Django REST Framework
-- **Authentication**: django-allauth
-- **Frontend**: Tailwind CSS, responsive design
-- **Deployment**: Docker, Render.com ready
-- **Static Files**: WhiteNoise
+- Python 3.12 and Django 5.0
+- PostgreSQL (Render ready) with SQLite fallback for local development
+- Django REST Framework for API endpoints
+- Tailwind CSS and custom branding assets
+- WhiteNoise for static file serving
+- Dockerfile and `render.yaml` for deployment on Render.com
 
-## Quick Start
+## Getting Started
 
 ### Local Development
 
-1. **Clone and Setup**
-   
+1. **Clone and Install**
    ```bash
    git clone <repository-url>
    cd solid-succotash
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   venv\Scripts\activate  # Use source venv/bin/activate on macOS/Linux
    pip install -r requirements.txt
    ```
-
-2. **Environment Configuration**
-   
+2. **Configure Environment**
    ```bash
-   cp .env.example .env
-   # Edit .env file with your settings
+   copy .env.example .env
+   # Populate .env with local settings and secrets
    ```
-
-3. **Database Setup**
-   
+3. **Bootstrap Database**
    ```bash
-   python manage.py makemigrations
    python manage.py migrate
    python manage.py seed_plans
    ```
-
-4. **Create Superuser**
-   
+4. **Create an Administrator**
    ```bash
    python manage.py createsuperuser
    ```
-
-5. **Run Development Server**
-   
+5. **Run the Server**
    ```bash
    python manage.py runserver
    ```
 
-Visit [`http://localhost:8000`](http://localhost:8000) to access the application.
+Visit `http://localhost:8000` to access the dashboard. Promote additional admins using management commands or the Django Admin.
 
-### Production Deployment (Render.com)
+### Render Deployment
 
-1. **Database Setup**
-   - Create a PostgreSQL database on Render
-   - Note the database URL
-
-2. **Environment Variables**
-   
+1. Provision a PostgreSQL database and capture the `DATABASE_URL`.
+2. Set required environment variables (`SECRET_KEY`, `DATABASE_URL`, `ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS`, etc.) in the Render dashboard.
+3. Deploy using the provided `render.yaml` or Dockerfile.
+4. After the first deploy, run the setup commands via the Render shell:
    ```bash
-   SECRET_KEY=your-production-secret-key
-   DEBUG=False
-   ALLOWED_HOSTS=your-domain.onrender.com
-   DATABASE_URL=postgresql://user:password@host:port/database?sslmode=require
-   CSRF_TRUSTED_ORIGINS=https://your-domain.onrender.com
-   ```
-
-3. **Deploy**
-   - Push to GitHub
-   - Connect repository to Render
-   - Use the provided `render.yaml` configuration
-
-4. **Post-deployment**
-   
-   ```bash
+   python manage.py migrate
    python manage.py seed_plans
    python manage.py createsuperuser
    ```
 
-## Project Structure
+## Project Layout
 
 ```text
 wolvcapital/
-├── api/                    # REST API endpoints
-├── core/                   # Main views and templates
-├── investments/            # Investment plans and user investments
-├── transactions/           # Transaction management
-├── users/                  # User profiles and wallets
-├── templates/              # HTML templates
-├── static/                 # Static files
-├── wolvcapital/            # Django settings
-├── requirements.txt        # Python dependencies
-├── Dockerfile              # Docker configuration
-├── render.yaml             # Render.com deployment config
-└── manage.py               # Django management script
+├── api/              # REST endpoints for users and admins
+├── core/             # Public pages, dashboard views, forms, templates
+├── investments/      # Investment models, services, management commands
+├── transactions/     # Deposit and withdrawal workflows with notifications
+├── users/            # Profiles, wallets, notification services
+├── templates/        # Django template hierarchy (Tailwind-based)
+├── static/           # CSS, JS, and image assets
+├── wolvcapital/      # Project settings, URLs, ASGI/WSGI entry points
+├── manage.py         # Django management entry point
+├── Dockerfile        # Container build instructions
+└── render.yaml       # Render.com blueprint
 ```
 
 ## Investment Plans
 
-The platform includes 4 default investment plans:
+| Plan | Daily ROI | Duration | Minimum | Maximum |
+| --- | --- | --- | --- | --- |
+| Pioneer | 1.00% | 14 days | $100 | $999 |
+| Vanguard | 1.25% | 21 days | $1,000 | $4,999 |
+| Horizon | 1.50% | 30 days | $5,000 | $14,999 |
+| Summit | 2.00% | 45 days | $15,000 | $100,000 |
 
-| Plan     | Daily ROI | Duration | Min Amount | Max Amount |
-|----------|-----------|----------|------------|------------|
-| Pioneer  | 1.00%     | 14 days  | $100       | $999       |
-| Vanguard | 1.25%     | 21 days  | $1,000     | $4,999     |
-| Horizon  | 1.50%     | 30 days  | $5,000     | $14,999    |
-| Summit   | 2.00%     | 45 days  | $15,000    | $100,000   |
+Run `python manage.py seed_plans` whenever the `InvestmentPlan` table is empty to restore defaults.
 
 ## Management Commands
 
-### Seed Investment Plans
+- `python manage.py seed_plans` — populate the default investment plans
+- `python manage.py promote_admin user@example.com` — elevate an existing user
+- `python manage.py payout_roi [--dry-run]` — preview or post daily ROI payouts
 
-```bash
-python manage.py seed_plans
-```
+## API Overview
 
-### Promote User to Admin
+### Public
+- `GET /api/plans/`
 
-```bash
-python manage.py promote_admin user@example.com
-```
+### Authenticated User
+- `GET /api/investments/`
+- `POST /api/investments/`
+- `GET /api/transactions/`
+- `POST /api/transactions/`
+- `GET /api/wallet/`
 
-## API Endpoints
+### Administrator
+- `GET /api/admin/transactions/`
+- `POST /api/admin/transactions/{id}/approve/`
+- `POST /api/admin/transactions/{id}/reject/`
+- `GET /api/admin/investments/`
+- `POST /api/admin/investments/{id}/approve/`
+- `POST /api/admin/investments/{id}/reject/`
 
-### Public Endpoints
+## Business Rules
 
-- `GET /api/plans/` - List investment plans
-
-### Authenticated User Endpoints
-
-- `GET /api/investments/` - User's investments
-- `POST /api/investments/` - Create investment request
-- `GET /api/transactions/` - User's transactions  
-- `POST /api/transactions/` - Create transaction
-- `GET /api/wallet/` - User's wallet balance
-
-### Admin Endpoints
-
-- `GET/POST /api/admin/transactions/` - Manage all transactions
-- `POST /api/admin/transactions/{id}/approve/` - Approve transaction
-- `POST /api/admin/transactions/{id}/reject/` - Reject transaction
-- `GET/POST /api/admin/investments/` - Manage all investments
-- `POST /api/admin/investments/{id}/approve/` - Approve investment
-- `POST /api/admin/investments/{id}/reject/` - Reject investment
-
-## Business Logic
-
-### Manual Approval Process
-
-1. **User Submission**: Users submit investment/transaction requests
-2. **Admin Review**: Administrators manually review each request
-3. **Approval/Rejection**: Admins approve or reject with notes
-4. **Execution**: Approved requests are processed automatically
-5. **Audit Trail**: All actions are logged for compliance
+### Approval Lifecycle
+1. Users submit deposit, withdrawal, or investment requests.
+2. Administrators review the request via Django Admin or the admin API.
+3. Approval triggers service logic that updates balances and schedules payouts.
+4. Rejections persist admin notes and maintain audit logs without altering funds.
 
 ### Transaction Flow
+- **Deposits**: Approved deposits credit the user wallet atomically.
+- **Withdrawals**: Services confirm the requested amount before debiting the wallet.
+- **Investments**: Approval locks capital, assigns plan dates, and schedules ROI accrual.
 
-#### Deposits
+All operations run inside `transaction.atomic()` blocks to guarantee consistency.
 
-1. User submits deposit request with proof
-2. Admin verifies and approves
-3. User wallet is credited automatically
-4. Audit log created
+## Core Models
 
-#### Withdrawals  
+- `Profile` extends Django `User` with role metadata (`user` or `admin`).
+- `UserWallet` tracks balances and enforces positive constraints.
+- `InvestmentPlan` defines ROI, duration, and allowable amount ranges.
+- `UserInvestment` links users to plans and stores accrual data.
+- `Transaction` captures deposit and withdrawal requests with UUID primary keys.
+- `AdminAuditLog` records who approved or rejected each action.
 
-1. User submits withdrawal request with payment details
-2. Admin verifies user balance and request
-3. If approved, wallet is debited
-4. Payment processed manually
-5. Audit log created
+## Security Practices
 
-#### Investments
-
-1. User selects plan and amount
-2. Admin reviews investment request
-3. If approved, investment period begins
-4. Returns calculated based on plan parameters
-5. Audit log created
-
-## Database Models
-
-### Core Models
-
-- **User**: Django's built-in user model
-- **Profile**: User role (user/admin) and metadata
-- **UserWallet**: User's balance and transaction history
-- **InvestmentPlan**: Available investment options
-- **UserInvestment**: User's investment instances
-- **Transaction**: Deposits and withdrawals
-- **AdminAuditLog**: Administrative action history
-
-### Key Constraints
-
-- Investment amounts within plan limits
-- Positive transaction amounts
-- Daily ROI between 0-2%
-- Unique investment plan names
-- Foreign key relationships with cascade/protection
-
-## Security Features
-
-### Authentication & Authorization
-
-- Email-based authentication via django-allauth
-- Role-based access control (user/admin)
-- Session management and CSRF protection
-- Password validation and reset functionality
-
-### Transaction Security
-
-- Manual approval for all financial operations
-- Admin verification and dual-approval workflows
-- Comprehensive audit logging
-- Balance validation for withdrawals
-
-### Data Protection
-
-- Input validation and sanitization
-- SQL injection prevention
-- XSS protection via Django templates
-- Secure static file serving with WhiteNoise
+- CSRF protection, secure cookies, and security middleware enabled by default.
+- Templates escape output and use `select_related()` to avoid N+1 access patterns.
+- Logging supports JSON format with `request_id` for traceability.
 
 ## Testing
 
-Run the test suite:
-
+Run the suite locally to validate models, services, and API endpoints:
 ```bash
 python manage.py test
 ```
 
-The test suite covers:
-
-- Model creation and validation
-- Business logic (services)
-- Transaction approval workflows
-- Investment management
-- API endpoints
-- Management commands
-
 ## Environment Variables
 
-| Variable | Description | Required | Default |
-|----------|-------------|----------|---------|
-| SECRET_KEY | Django secret key | Yes | - |
-| DEBUG | Debug mode | No | False |
-| ALLOWED_HOSTS | Allowed host names | No | localhost |
-| DATABASE_URL | PostgreSQL connection string | No | SQLite |
-| EMAIL_BACKEND | Email backend | No | Console |
-| EMAIL_HOST | SMTP host | No | - |
-| EMAIL_PORT | SMTP port | No | 587 |
-| EMAIL_USE_TLS | Use TLS for email | No | True |
-| EMAIL_HOST_USER | SMTP username | No | - |
-| EMAIL_HOST_PASSWORD | SMTP password | No | - |
-| CSRF_TRUSTED_ORIGINS | Trusted origins for CSRF | No | - |
+| Variable | Purpose | Required | Default |
+| --- | --- | --- | --- |
+| `SECRET_KEY` | Django secret key | Yes | none |
+| `DEBUG` | Enable debug mode | No | `False` |
+| `ALLOWED_HOSTS` | Comma-separated hostnames | No | `localhost` |
+| `DATABASE_URL` | PostgreSQL connection string | No | SQLite fallback |
+| `EMAIL_BACKEND` | Email backend | No | Console backend |
+| `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USE_TLS`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD` | SMTP configuration | No | none |
+| `CSRF_TRUSTED_ORIGINS` | Trusted origins for CSRF | No | none |
+| `LOG_LEVEL` | Logging verbosity | No | `INFO` |
+| `LOG_FORMAT` | `json` or `plain` logging | No | `json` |
 
 ## Production Hardening
 
-### Security Settings (when DEBUG=False)
+- Enforce TLS and set `SECURE_SSL_REDIRECT = True`.
+- Configure HTTP Strict Transport Security (`SECURE_HSTS_SECONDS = 31536000`).
+- Set `SESSION_COOKIE_SECURE` and `CSRF_COOKIE_SECURE` to `True`.
+- Rotate credentials and audit admin activity regularly.
+- Schedule nightly database backups and monitor ROI payouts for anomalies.
 
-- `SECURE_BROWSER_XSS_FILTER = True`
-- `SECURE_CONTENT_TYPE_NOSNIFF = True`
-- `SECURE_HSTS_INCLUDE_SUBDOMAINS = True`
-- `SECURE_HSTS_SECONDS = 31536000`
-- `SECURE_SSL_REDIRECT = True`
-- `SESSION_COOKIE_SECURE = True`
-- `CSRF_COOKIE_SECURE = True`
+## Support
 
-### Additional Recommendations
+- Admin site: `/admin/`
+- Health check: `/healthz/`
+- Legal agreements are versioned through the `Agreement` model with SHA256 hashing.
+- Contact: support@wolvcapital.com
 
-- Use strong SECRET_KEY in production
-- Configure proper email backend (not console)
-- Set up monitoring and logging
-- Regular database backups
-- SSL/TLS certificates
-- Rate limiting for APIs
-- Regular security updates
+## License and Contributions
 
-## Support & Documentation
+This repository is proprietary to WolvCapital. Coordinate with the engineering team before opening pull requests or distributing copies.
 
-- **Admin Interface**: `/admin/` - Django admin for manual approvals
-- **API Documentation**: Available through Django REST Framework
-- **Legal Pages**: Risk disclosure, terms of service, privacy policy
-- **Contact**: support@wolvcapital.com
+## Risk Notice
 
-## License
-
-This project is proprietary software. All rights reserved.
-
-## Contributing
-
-This is a production system. Please contact the development team before making any changes.
-
----
-
-**⚠️ Investment Risk Warning**: All investments carry substantial risk of loss. This platform is for demonstration purposes. Always consult qualified financial advisors before making investment decisions.
+Investing involves significant risk. All examples in this project are for demonstration purposes only and do not constitute financial advice.
 
 ## Structured Logging
 
-Production (DEBUG=False) defaults to JSON logs (level, logger, message, time). Override with `LOG_FORMAT=plain` or adjust verbosity with `LOG_LEVEL=DEBUG`.
+When `DEBUG=False`, logging defaults to JSON with level, logger, message, timestamp, and `request_id`. Set `LOG_FORMAT=plain` or adjust `LOG_LEVEL` if you prefer different output.
 
 ## Agreement Acceptance Workflow
 
-Active agreements are versioned (`Agreement` model). Users view & accept at `/agreements/<id>/view/`. Acceptance is idempotent and stored in `UserAgreementAcceptance`. PDF export at `/agreements/<id>/pdf/`.
+Active legal agreements are versioned through the `Agreement` model. Users review content at `/agreements/<id>/view/`, and responses are captured in `UserAgreementAcceptance`. PDF exports are available at `/agreements/<id>/pdf/`.
 
 ### Adding a New Version
 
-Create a new `Agreement` row with the same slug and higher version + `is_active=True` (previous active auto-deactivates).
+Create a new `Agreement` row with the same slug, a higher version number, and `is_active=True`. The previous version is automatically deactivated.
 
 ## ROI Payout Command
 
-`python manage.py payout_roi --dry-run` previews daily payouts; omit `--dry-run` to create credit transactions. Intended for scheduling via external cron (e.g., Render Cron Job at `30 0 * * *`).
+Use `python manage.py payout_roi --dry-run` to preview daily ROI credits. Omit `--dry-run` in production to post wallet credits. Schedule via Render cron (`30 0 * * *`) or your preferred scheduler.
 
 ## Operational Startup Flags
 
-Environment variables influencing startup (default disabled):
+Environment variables that can bootstrap new environments (all default to disabled):
 
 | Variable | Effect |
-|----------|--------|
-| RUN_SEED_PLANS=1 | Seeds default investment plans |
-| RUN_SEED_AGREEMENTS=1 | Seeds baseline legal agreements |
-| CREATE_INITIAL_ADMIN=1 | Creates initial admin (requires password) |
-| INITIAL_ADMIN_EMAIL | Admin email (default `admin@wolvcapital.com`) |
-| INITIAL_ADMIN_PASSWORD | Admin password (must set when creating) |
+| --- | --- |
+| `RUN_SEED_PLANS=1` | Seed default investment plans on startup |
+| `RUN_SEED_AGREEMENTS=1` | Seed baseline legal agreements |
+| `CREATE_INITIAL_ADMIN=1` | Create an initial admin account |
+| `INITIAL_ADMIN_EMAIL` | Email for the seeded admin (default `admin@wolvcapital.com`) |
+| `INITIAL_ADMIN_PASSWORD` | Password used when creating the admin |
 
-Disable (set to 0 / remove) after first successful deployment.
+Unset these flags after provisioning so they do not run on every restart.
 
 ## Idempotent Daily ROI Payouts
 
-Daily payouts create a `DailyRoiPayout` record (unique per investment/date) to prevent duplicate credits. Re-running the command for the same day skips already processed investments.
+`DailyRoiPayout` records enforce a single payout per investment per day. Re-running the command safely skips already processed dates.
 
 ## Agreement Acceptance Integrity
 
-Each acceptance stores a SHA256 hash (`agreement_hash`) of the agreement body and captured `agreement_version` ensuring later audits can verify the exact text accepted.
+Each acceptance stores a SHA256 `agreement_hash` and the accepted `agreement_version`, ensuring auditors can verify the exact terms the user saw.
 
 ## Health Endpoint
 
-`/healthz/` returns `{ "status": "ok" }` for uptime and Render health checks.
+`/healthz/` returns `{ "status": "ok" }`, suitable for uptime probes and Render health checks.
 
 ## Request Correlation
 
-Middleware attaches a UUID4 request ID to each request (header `X-Request-ID`). Structured JSON logs include `request_id` for cross-service tracing.
-#### Withdrawals  
-1. User submits withdrawal request with payment details
-2. Admin verifies user balance and request
-3. If approved, wallet is debited
-4. Payment processed manually
-5. Audit log created
-
-#### Investments
-1. User selects plan and amount
-2. Admin reviews investment request
-3. If approved, investment period begins
-4. Returns calculated based on plan parameters
-5. Audit log created
-
-## Database Models
-
-### Core Models
-- **User**: Django's built-in user model
-- **Profile**: User role (user/admin) and metadata
-- **UserWallet**: User's balance and transaction history
-- **InvestmentPlan**: Available investment options
-- **UserInvestment**: User's investment instances
-- **Transaction**: Deposits and withdrawals
-- **AdminAuditLog**: Administrative action history
-
-### Key Constraints
-- Investment amounts within plan limits
-- Positive transaction amounts
-- Daily ROI between 0-2%
-- Unique investment plan names
-- Foreign key relationships with cascade/protection
-
-## Security Features
-
-### Authentication & Authorization
-- Email-based authentication via django-allauth
-- Role-based access control (user/admin)
-- Session management and CSRF protection
-- Password validation and reset functionality
-
-### Transaction Security
-- Manual approval for all financial operations
-- Admin verification and dual-approval workflows
-- Comprehensive audit logging
-- Balance validation for withdrawals
-
-### Data Protection
-- Input validation and sanitization
-- SQL injection prevention
-- XSS protection via Django templates
-- Secure static file serving with WhiteNoise
-
-## Testing
-
-Run the test suite:
-```bash
-python manage.py test
-```
-
-The test suite covers:
-- Model creation and validation
-- Business logic (services)
-- Transaction approval workflows
-- Investment management
-- API endpoints
-- Management commands
-
-## Environment Variables
-
-| Variable | Description | Required | Default |
-|----------|-------------|----------|---------|
-| SECRET_KEY | Django secret key | Yes | - |
-| DEBUG | Debug mode | No | False |
-| ALLOWED_HOSTS | Allowed host names | No | localhost |
-| DATABASE_URL | PostgreSQL connection string | No | SQLite |
-| EMAIL_BACKEND | Email backend | No | Console |
-| EMAIL_HOST | SMTP host | No | - |
-| EMAIL_PORT | SMTP port | No | 587 |
-| EMAIL_USE_TLS | Use TLS for email | No | True |
-| EMAIL_HOST_USER | SMTP username | No | - |
-| EMAIL_HOST_PASSWORD | SMTP password | No | - |
-| CSRF_TRUSTED_ORIGINS | Trusted origins for CSRF | No | - |
-
-## Production Hardening
-
-### Security Settings (when DEBUG=False)
-- `SECURE_BROWSER_XSS_FILTER = True`
-- `SECURE_CONTENT_TYPE_NOSNIFF = True`
-- `SECURE_HSTS_INCLUDE_SUBDOMAINS = True`
-- `SECURE_HSTS_SECONDS = 31536000`
-- `SECURE_SSL_REDIRECT = True`
-- `SESSION_COOKIE_SECURE = True`
-- `CSRF_COOKIE_SECURE = True`
-
-### Additional Recommendations
-- Use strong SECRET_KEY in production
-- Configure proper email backend (not console)
-- Set up monitoring and logging
-- Regular database backups
-- SSL/TLS certificates
-- Rate limiting for APIs
-- Regular security updates
-
-## Support & Documentation
-
-- **Admin Interface**: `/admin/` - Django admin for manual approvals
-- **API Documentation**: Available through Django REST Framework
-- **Legal Pages**: Risk disclosure, terms of service, privacy policy
-- **Contact**: support@wolvcapital.com
-
-## License
-
-This project is proprietary software. All rights reserved.
-
-## Contributing
-
-This is a production system. Please contact the development team before making any changes.
-
----
-
-**⚠️ Investment Risk Warning**: All investments carry substantial risk of loss. This platform is for demonstration purposes. Always consult qualified financial advisors before making investment decisions.
-
-## Structured Logging
-
-Production (DEBUG=False) defaults to JSON logs (level, logger, message, time). Override with `LOG_FORMAT=plain` or adjust verbosity with `LOG_LEVEL=DEBUG`.
-
-## Agreement Acceptance Workflow
-
-Active agreements are versioned (`Agreement` model). Users view & accept at `/agreements/<id>/view/`. Acceptance is idempotent and stored in `UserAgreementAcceptance`. PDF export at `/agreements/<id>/pdf/`.
-
-### Adding a New Version
-
-Create a new `Agreement` row with the same slug and higher version + `is_active=True` (previous active auto-deactivates).
-
-## ROI Payout Command
-
-`python manage.py payout_roi --dry-run` previews daily payouts; omit `--dry-run` to create credit transactions. Intended for scheduling via external cron (e.g., Render Cron Job at `30 0 * * *`).
-
-## Operational Startup Flags
-
-Environment variables influencing startup (default disabled):
-
-| Variable | Effect |
-|----------|--------|
-| RUN_SEED_PLANS=1 | Seeds default investment plans |
-| RUN_SEED_AGREEMENTS=1 | Seeds baseline legal agreements |
-| CREATE_INITIAL_ADMIN=1 | Creates initial admin (requires password) |
-| INITIAL_ADMIN_EMAIL | Admin email (default `admin@wolvcapital.com`) |
-| INITIAL_ADMIN_PASSWORD | Admin password (must set when creating) |
-
-Disable (set to 0 / remove) after first successful deployment.
-
-## Idempotent Daily ROI Payouts
-Daily payouts create a `DailyRoiPayout` record (unique per investment/date) to prevent duplicate credits. Re-running the command for the same day skips already processed investments.
-
-## Agreement Acceptance Integrity
-Each acceptance stores a SHA256 hash (`agreement_hash`) of the agreement body and captured `agreement_version` ensuring later audits can verify the exact text accepted.
-
-## Health Endpoint
-`/healthz/` returns `{ "status": "ok" }` for uptime and Render health checks.
-
-## Request Correlation
-Middleware attaches a UUID4 request ID to each request (header `X-Request-ID`). Structured JSON logs include `request_id` for cross-service tracing.
+Middleware attaches a UUIDv4 (`X-Request-ID`) to every request. Structured logs include the same ID for cross-service tracing and debugging.

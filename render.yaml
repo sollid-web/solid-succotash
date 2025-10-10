@@ -1,7 +1,7 @@
 services:
   - type: web
     name: wolvcapital
-    env: python
+    runtime: python
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt

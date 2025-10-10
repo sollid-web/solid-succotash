@@ -84,3 +84,26 @@ class UserInvestment(models.Model):
             models.Index(fields=['status']),
             models.Index(fields=['created_at']),
         ]
+
+
+class DailyRoiPayout(models.Model):
+    """Tracks ROI payout calculations on a per-day basis."""
+
+    investment = models.ForeignKey(
+        UserInvestment,
+        on_delete=models.CASCADE,
+        related_name='daily_payouts',
+    )
+    payout_date = models.DateField()
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('investment', 'payout_date')
+        ordering = ['-payout_date', '-created_at']
+        indexes = [
+            models.Index(fields=['payout_date']),
+        ]
+
+    def __str__(self):  # pragma: no cover - trivial representation
+        return f"ROI payout {self.payout_date} for investment {self.investment_id}"

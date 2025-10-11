@@ -22,7 +22,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", default_secret)
 
 # Render injects this, e.g. https://solid-succotash-654g.onrender.com
 RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL")
-CUSTOM_DOMAIN = os.getenv("CUSTOM_DOMAIN")  # optional
+CUSTOM_DOMAIN = os.getenv("CUSTOM_DOMAIN")  # optional, supports comma-separated list
 
 # ------------------------------------------------------------------
 # Hosts & CSRF
@@ -52,10 +52,21 @@ if RENDER_EXTERNAL_URL:
         CSRF_TRUSTED_ORIGINS.append(RENDER_EXTERNAL_URL)
 
 if CUSTOM_DOMAIN:
-    ALLOWED_HOSTS.append(CUSTOM_DOMAIN)
-    https_origin = f"https://{CUSTOM_DOMAIN}"
-    if https_origin not in CSRF_TRUSTED_ORIGINS:
-        CSRF_TRUSTED_ORIGINS.append(https_origin)
+    raw_domains = [d.strip() for d in CUSTOM_DOMAIN.split(",") if d.strip()]
+    for domain in raw_domains:
+        candidates = {domain}
+        # If caller supplied bare apex, also trust the www subdomain (and vice versa)
+        if domain.startswith("www."):
+            candidates.add(domain.removeprefix("www."))
+        else:
+            candidates.add(f"www.{domain}")
+
+        for host in candidates:
+            if host not in ALLOWED_HOSTS:
+                ALLOWED_HOSTS.append(host)
+            https_origin = f"https://{host}"
+            if https_origin not in CSRF_TRUSTED_ORIGINS:
+                CSRF_TRUSTED_ORIGINS.append(https_origin)
 
 extra_hosts = os.getenv("ALLOWED_HOSTS_EXTRA", "")
 if extra_hosts:

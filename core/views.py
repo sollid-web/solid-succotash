@@ -1,5 +1,7 @@
+import json
+
 from django.shortcuts import render, redirect
-from django.http import FileResponse, Http404
+from django.http import FileResponse, Http404, JsonResponse
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
@@ -23,7 +25,7 @@ from .forms import InvestmentForm, WithdrawalForm, DepositForm
 # from .pdf_letterhead import build_pdf  # (moved to inside agreement_pdf)
 import tempfile
 import os
-from .models import Agreement
+from .models import Agreement, SupportRequest
 from django.views.decorators.http import require_http_methods
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -366,6 +368,61 @@ class WithdrawView(LoginRequiredMixin, View):
                     messages.error(request, f"{field}: {error}")
         
         return redirect('withdrawals')
+
+
+class SupportRequestView(View):
+    http_method_names = ["post"]
+
+    def post(self, request):
+        if request.content_type == "application/json":
+            try:
+                payload = json.loads(request.body.decode("utf-8")) if request.body else {}
+            except json.JSONDecodeError:
+                return JsonResponse({"error": "Invalid JSON payload."}, status=400)
+        else:
+            payload = request.POST
+
+        message = (payload.get("message") or "").strip()
+        if not message:
+            return JsonResponse({"error": "Support message cannot be empty."}, status=400)
+
+        topic = (payload.get("topic") or "").strip()
+        source_url = (payload.get("source_url") or request.META.get("HTTP_REFERER") or "").strip()
+        contact_email = (payload.get("contact_email") or "").strip()
+        full_name = (payload.get("full_name") or "").strip()
+        current_user = request.user if request.user.is_authenticated else None
+
+        if current_user:
+            if not contact_email:
+                contact_email = current_user.email or ""
+            if not full_name:
+                profile_name = getattr(getattr(current_user, "profile", None), "full_name", "")
+                full_name = current_user.get_full_name() or profile_name or current_user.email
+        else:
+            if not contact_email:
+                return JsonResponse({"error": "Please include an email so our team can respond."}, status=400)
+
+        ip_chain = (request.META.get("HTTP_X_FORWARDED_FOR") or "").split(",")
+        ip_address = ip_chain[0].strip() if ip_chain and ip_chain[0].strip() else request.META.get("REMOTE_ADDR")
+
+        support_request = SupportRequest.objects.create(
+            user=current_user,
+            full_name=full_name,
+            contact_email=contact_email,
+            topic=topic,
+            source_url=source_url,
+            message=message,
+            ip_address=ip_address,
+            user_agent=request.META.get("HTTP_USER_AGENT", ""),
+        )
+
+        return JsonResponse(
+            {
+                "status": "received",
+                "reference": str(support_request.pk),
+                "detail": "Our support team will review and respond shortly.",
+            }
+        )
 
 
 def agreement_pdf(request, agreement_id: int):

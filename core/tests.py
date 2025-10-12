@@ -349,17 +349,59 @@ class ViewTests(TestCase):
             password='testpass123'
         )
     
+    def assertBaseStylesPresent(self, response):
+        self.assertContains(response, 'href="/static/css/base.css"')
+        self.assertContains(response, 'href="/static/css/brand.css"')
+
+    def assertChatWidgetPresent(self, response, *, authenticated: bool):
+        flag = 'true' if authenticated else 'false'
+        self.assertContains(response, 'id="chat-widget"')
+        self.assertContains(response, f'data-user-authenticated="{flag}"')
+
     def test_home_page(self):
         """Test home page loads"""
         response = self.client.get(reverse('home'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'WolvCapital')
+        self.assertBaseStylesPresent(response)
+        self.assertChatWidgetPresent(response, authenticated=False)
     
+    def test_home_page_includes_core_stylesheets(self):
+        """UI should load both base and brand stylesheets"""
+        response = self.client.get(reverse('home'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'href="/static/css/base.css"')
+        self.assertContains(response, 'href="/static/css/brand.css"')
+
+    def test_chat_widget_for_guest(self):
+        """Guest users should see chat dataset marking authentication as false"""
+        response = self.client.get(reverse('home'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="chat-widget"')
+        self.assertContains(response, 'data-user-authenticated="false"')
+
+    def test_chat_widget_for_authenticated_user(self):
+        """Authenticated users should render chat widget with user metadata"""
+        self.client.login(username='testuser', password='testpass123')
+        response = self.client.get(reverse('home'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'data-user-authenticated="true"')
+        self.assertContains(response, 'data-user-email="test@example.com"')
+
     def test_plans_page(self):
         """Test plans page loads"""
         response = self.client.get(reverse('plans'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Investment Plans')
+        self.assertBaseStylesPresent(response)
+        self.assertChatWidgetPresent(response, authenticated=False)
+
+    def test_contact_page_styles_and_chat(self):
+        """Public contact page should include shared styles and chat widget"""
+        response = self.client.get(reverse('contact'))
+        self.assertEqual(response.status_code, 200)
+        self.assertBaseStylesPresent(response)
+        self.assertChatWidgetPresent(response, authenticated=False)
     
     def test_dashboard_requires_login(self):
         """Test dashboard requires authentication"""
@@ -372,6 +414,7 @@ class ViewTests(TestCase):
         response = self.client.get(reverse('dashboard'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Dashboard')
+        self.assertBaseStylesPresent(response)
 
 
 class ManagementCommandTests(TestCase):

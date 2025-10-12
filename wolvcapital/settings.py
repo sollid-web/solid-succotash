@@ -27,7 +27,7 @@ CUSTOM_DOMAIN = os.getenv("CUSTOM_DOMAIN")  # optional, supports comma-separated
 # ------------------------------------------------------------------
 # Hosts & CSRF
 # ------------------------------------------------------------------
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "testserver"]
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000"]
 
 # --- GitHub Codespaces support ---

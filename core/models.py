@@ -3,6 +3,52 @@ from django.db import models
 from django.utils import timezone
 
 
+class SupportRequest(models.Model):
+	"""Inbound support message awaiting manual follow-up."""
+
+	STATUS_PENDING = "pending"
+	STATUS_IN_PROGRESS = "in_progress"
+	STATUS_RESOLVED = "resolved"
+	STATUS_CHOICES = [
+		(STATUS_PENDING, "Pending"),
+		(STATUS_IN_PROGRESS, "In Progress"),
+		(STATUS_RESOLVED, "Resolved"),
+	]
+
+	user = models.ForeignKey(
+		settings.AUTH_USER_MODEL,
+		on_delete=models.SET_NULL,
+		null=True,
+		blank=True,
+		related_name="support_requests",
+	)
+	full_name = models.CharField(max_length=255, blank=True)
+	contact_email = models.EmailField(blank=True)
+	topic = models.CharField(max_length=120, blank=True)
+	source_url = models.CharField(max_length=255, blank=True)
+	message = models.TextField()
+	status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_PENDING)
+	admin_notes = models.TextField(blank=True)
+	handled_by = models.ForeignKey(
+		settings.AUTH_USER_MODEL,
+		on_delete=models.SET_NULL,
+		null=True,
+		blank=True,
+		related_name="handled_support_requests",
+	)
+	responded_at = models.DateTimeField(null=True, blank=True)
+	ip_address = models.GenericIPAddressField(null=True, blank=True)
+	user_agent = models.TextField(blank=True)
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
+
+	class Meta:
+		ordering = ["-created_at"]
+
+	def __str__(self) -> str:  # pragma: no cover - trivial
+		return f"Support request from {self.contact_email or self.full_name or 'guest'}"
+
+
 class Agreement(models.Model):
 	"""Versioned legal agreement presented to end users."""
 

@@ -2,16 +2,17 @@
 {% load static %}
 <html lang="en">
 <head>
-    <meta charset="UTF-8"> <!-- Ensured charset meta is first in <head> -->
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}WOLVCAPITAL INVEST{% endblock %}</title>
     <meta name="description" content="{% block description %}WOLVCAPITAL INVEST offers professional investment opportunities with manual off-chain approvals for maximum security.{% endblock %}">
     <link rel="icon" type="image/svg+xml" sizes="any" href="{% static 'img/wolvcapital-favicon.svg' %}">
-    <link rel="apple-touch-icon" href="{% static 'img/wolvcapital-favicon.svg' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <!-- Brand CSS -->
     <link rel="stylesheet" href="{% static 'css/brand.css' %}">
 
@@ -262,12 +263,19 @@
 <!-- Duplicate body/header/messages block removed -->
 
     <!-- Main Content -->
-    <main class="flex-grow">
+    <main class="main-container">
         {% block content %}{% endblock %}
     </main>
 
     <!-- Customer Support Chat Widget -->
-    <div id="chat-widget" class="fixed bottom-6 right-6 z-50 chat-widget-hidden">
+    <div
+        id="chat-widget"
+        class="fixed bottom-6 right-6 z-50 chat-widget-hidden"
+        data-support-url="{% url 'support_request' %}"
+        data-user-authenticated="{% if user.is_authenticated %}true{% else %}false{% endif %}"
+        data-user-email="{% if user.is_authenticated %}{{ user.email|default_if_none:''|escape }}{% endif %}"
+        data-user-name="{% if user.is_authenticated %}{{ user.get_full_name|default:user.profile.full_name|default_if_none:''|escape }}{% endif %}"
+    >
         <!-- Chat Button -->
         <button id="chat-button" title="Open customer support chat" aria-label="Open customer support chat" class="bg-blue-600 hover:bg-blue-700 text-white rounded-full w-16 h-16 shadow-lg transition-all duration-300 transform hover:scale-110 flex items-center justify-center chat-pulse">
             <svg id="chat-icon" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -318,18 +326,23 @@
             <!-- Quick Actions -->
             <div class="p-3 border-t border-gray-200 bg-white">
                 <div class="grid grid-cols-2 gap-2 mb-3">
-                    <button class="quick-action-btn text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 p-2 rounded-md transition-colors duration-200" data-message="I need help with deposits">
+                    <button class="quick-action-btn text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 p-2 rounded-md transition-colors duration-200" data-message="I need help with deposits" data-topic="Deposits">
                         💰 Deposits
                     </button>
-                    <button class="quick-action-btn text-xs bg-green-50 hover:bg-green-100 text-green-700 p-2 rounded-md transition-colors duration-200" data-message="I have questions about withdrawals">
+                    <button class="quick-action-btn text-xs bg-green-50 hover:bg-green-100 text-green-700 p-2 rounded-md transition-colors duration-200" data-message="I have questions about withdrawals" data-topic="Withdrawals">
                         💸 Withdrawals
                     </button>
-                    <button class="quick-action-btn text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 p-2 rounded-md transition-colors duration-200" data-message="Tell me about investment plans">
+                    <button class="quick-action-btn text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 p-2 rounded-md transition-colors duration-200" data-message="Tell me about investment plans" data-topic="Investments">
                         📈 Investments
                     </button>
-                    <button class="quick-action-btn text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-700 p-2 rounded-md transition-colors duration-200" data-message="I need account support">
+                    <button class="quick-action-btn text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-700 p-2 rounded-md transition-colors duration-200" data-message="I need account support" data-topic="Account">
                         🔧 Account
                     </button>
+                </div>
+
+                <div id="chat-contact-info" class="mb-3 space-y-2">
+                    <input id="chat-contact-name" type="text" placeholder="Your name (optional)" class="w-full text-xs border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <input id="chat-contact-email" type="email" placeholder="Your email (required for a reply)" class="w-full text-xs border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
                 
                 <!-- Chat Input -->
@@ -399,9 +412,28 @@
             const sendButton = document.getElementById('send-button');
             const chatMessages = document.getElementById('chat-messages');
             const quickActionBtns = document.querySelectorAll('.quick-action-btn');
+            const chatWidget = document.getElementById('chat-widget');
+            const supportEndpoint = chatWidget ? chatWidget.dataset.supportUrl : '';
+            const userAuthenticated = chatWidget ? chatWidget.dataset.userAuthenticated === 'true' : false;
+            const defaultEmail = chatWidget ? chatWidget.dataset.userEmail || '' : '';
+            const defaultName = chatWidget ? chatWidget.dataset.userName || '' : '';
+            const contactSection = document.getElementById('chat-contact-info');
+            const contactNameInput = document.getElementById('chat-contact-name');
+            const contactEmailInput = document.getElementById('chat-contact-email');
 
             let isOpen = false;
             let isMobileMenuOpen = false;
+            let selectedTopic = '';
+
+            if (contactNameInput && defaultName) {
+                contactNameInput.value = defaultName;
+            }
+            if (contactEmailInput && defaultEmail) {
+                contactEmailInput.value = defaultEmail;
+            }
+            if (contactSection && userAuthenticated && defaultEmail) {
+                contactSection.classList.add('hidden');
+            }
 
             if (mobileMenuButton && mobileMenu) {
                 const toggleMobileMenu = () => {
@@ -444,7 +476,11 @@
                     chatIcon.classList.add('hidden');
                     closeIcon.classList.remove('hidden');
                     chatButton.classList.remove('chat-pulse');
-                    chatInput.focus();
+                    if (!userAuthenticated && contactEmailInput && !contactEmailInput.value) {
+                        contactEmailInput.focus();
+                    } else {
+                        chatInput.focus();
+                    }
                 } else {
                     chatWindow.classList.remove('chat-show');
                     setTimeout(() => {
@@ -495,39 +531,75 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
 
-            // Simulate support response
-            function getAutoResponse(userMessage) {
-                const lowerMessage = userMessage.toLowerCase();
-                
-                if (lowerMessage.includes('deposit') || lowerMessage.includes('funding')) {
-                    return "Thanks for your question about deposits! We support bank transfers and multiple cryptocurrencies (BTC, USDT, USDC, ETH). All deposits are manually reviewed for security. How can I help you with your deposit?";
-                } else if (lowerMessage.includes('withdrawal') || lowerMessage.includes('withdraw')) {
-                    return "I can help you with withdrawals! Withdrawal requests are processed manually within 24 hours. Please ensure your account is verified and you have sufficient balance. What specific help do you need?";
-                } else if (lowerMessage.includes('investment') || lowerMessage.includes('plan')) {
-                    return "Great question about our investment plans! We offer Pioneer (14 days), Vanguard (21 days), Horizon (30 days), and Summit (45 days). All investments require manual approval. Which plan interests you?";
-                } else if (lowerMessage.includes('account') || lowerMessage.includes('login') || lowerMessage.includes('password')) {
-                    return "I can help with account issues! For password resets, use the 'Forgot Password' link on the login page. For other account issues, please provide more details about the problem you're experiencing.";
-                } else if (lowerMessage.includes('card') || lowerMessage.includes('virtual')) {
-                    return "Our Virtual Visa Cards are a premium feature! Cards are available for qualified investors and require admin approval. They come with global payment capabilities and enhanced security. Would you like more information?";
-                } else if (lowerMessage.includes('help') || lowerMessage.includes('support')) {
-                    return "I'm here to help! I can assist with deposits, withdrawals, investments, account issues, and virtual cards. What specific topic would you like help with?";
-                } else {
-                    return "Thank you for your message! Our support team will review your inquiry and respond shortly. For urgent matters, you can also email us at support@wolvcapital.com or call +1 (555) 123-4567.";
-                }
+            function addSystemMessage(text) {
+                const systemRow = document.createElement('div');
+                systemRow.className = 'flex justify-center text-xs text-gray-500 message-bubble';
+                systemRow.textContent = text;
+                chatMessages.appendChild(systemRow);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
             }
 
-            // Send message
+            function getCsrfToken() {
+                const cookie = document.cookie.split(';').map(item => item.trim()).find(item => item.startsWith('csrftoken='));
+                return cookie ? decodeURIComponent(cookie.split('=')[1]) : '';
+            }
+
             function sendMessage() {
                 const message = chatInput.value.trim();
-                if (message) {
-                    addMessage(message, true);
-                    chatInput.value = '';
-                    
-                    // Simulate typing delay
-                    setTimeout(() => {
-                        const response = getAutoResponse(message);
-                        addMessage(response, false);
-                    }, 1000 + Math.random() * 2000);
+                if (!message) {
+                    return;
+                }
+
+                const emailField = (userAuthenticated && defaultEmail) ? defaultEmail : (contactEmailInput ? contactEmailInput.value.trim() : '');
+                if (!emailField) {
+                    addSystemMessage('Please enter an email address so support can reach you.');
+                    if (contactEmailInput) {
+                        contactEmailInput.focus();
+                    }
+                    return;
+                }
+
+                const nameField = (userAuthenticated && defaultName) ? defaultName : (contactNameInput ? contactNameInput.value.trim() : '');
+
+                addMessage(message, true);
+                chatInput.value = '';
+
+                submitSupportRequest({
+                    message,
+                    topic: selectedTopic,
+                    contact_email: emailField,
+                    full_name: nameField,
+                    source_url: window.location.pathname + window.location.search,
+                });
+
+                selectedTopic = '';
+            }
+
+            async function submitSupportRequest(payload) {
+                if (!supportEndpoint) {
+                    addSystemMessage('Support endpoint is not configured.');
+                    return;
+                }
+
+                try {
+                    const response = await fetch(supportEndpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCsrfToken(),
+                        },
+                        body: JSON.stringify(payload),
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.error || 'Unable to submit support request.');
+                    }
+
+                    addSystemMessage(`Thanks! Reference: ${data.reference}. Our team will follow up shortly.`);
+                } catch (error) {
+                    addSystemMessage(error.message || 'We could not reach support. Please try again.');
                 }
             }
 
@@ -545,12 +617,9 @@
             quickActionBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     const message = this.getAttribute('data-message');
-                    addMessage(message, true);
-                    
-                    setTimeout(() => {
-                        const response = getAutoResponse(message);
-                        addMessage(response, false);
-                    }, 800);
+                    selectedTopic = this.getAttribute('data-topic') || '';
+                    chatInput.value = message;
+                    sendMessage();
                 });
             });
 

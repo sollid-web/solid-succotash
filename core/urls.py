@@ -25,6 +25,7 @@ urlpatterns = [
     path('deposit/', views.DepositView.as_view(), name='deposit'),
     path('withdrawals/', views.WithdrawalsView.as_view(), name='withdrawals'),
     path('withdraw/', views.WithdrawView.as_view(), name='withdraw'),
+    path('support/chat/', views.SupportRequestView.as_view(), name='support_request'),
     # PDF exports
     path('agreements/<int:agreement_id>/pdf/', views.agreement_pdf, name='agreement_pdf'),
     path('agreements/<int:agreement_id>/view/', views.agreement_view, name='agreement_view'),

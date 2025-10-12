@@ -18,7 +18,7 @@
     
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
         <div class="text-center">
-            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6">
+            <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-6">
                 <span class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
                     WolvCapital
                 </span>
@@ -32,7 +32,7 @@
                     Start Investing Today
                 </a>
                 <a href="{% url 'plans' %}" 
-                   class="bg-white/10 backdrop-blur-sm border border-white/20 text-white font-semibold py-4 px-8 rounded-lg hover:bg-white/20 transition duration-300">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 text-center">
                     View Investment Plans
                 </a>
             </div>
@@ -88,7 +88,7 @@
             <!-- 3D Card Display -->
             <div class="relative">
                 <div class="card-container perspective-1000">
-                    <div class="card w-96 h-60 mx-auto relative transform-preserve-3d transition-transform duration-700 hover:rotate-y-180 cursor-pointer">
+                    <div class="card w-full max-w-sm sm:w-96 h-56 sm:h-60 mx-auto relative transform-preserve-3d transition-transform duration-700 hover:rotate-y-180 cursor-pointer">
                         <!-- Card Front -->
                         <div class="card-side absolute w-full h-full rounded-2xl overflow-hidden shadow-2xl backface-hidden">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 240" class="w-full h-full">
@@ -220,7 +220,7 @@
             </p>
         </div>
         
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-8 text-center">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 text-center">
             <div class="group hover:scale-110 transition-transform duration-300">
                 <div class="bg-gradient-to-br from-yellow-400 to-yellow-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                     <span class="text-white text-3xl font-bold">₿</span>
@@ -375,12 +375,12 @@
         <p class="text-xl mb-8 max-w-2xl mx-auto">
             Join thousands of investors who trust WolvCapital for secure, profitable digital investments
         </p>
-        <div class="space-x-4">
-            <a href="{% url 'plans' %}" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300">
+        <div class="flex flex-col sm:flex-row gap-4 sm:justify-center">
+            <a href="{% url 'plans' %}" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300 text-center">
                 View Investment Plans
             </a>
             {% if not user.is_authenticated %}
-            <a href="{% url 'account_signup' %}" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition duration-300">
+            <a href="{% url 'account_signup' %}" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition duration-300 text-center">
                 Create Account
             </a>
             {% endif %}

@@ -12,8 +12,8 @@ const WolvCapitalBrand = {
         accentGold: '#FFD700',
         success: '#10B981',
         danger: '#EF4444',
-        warning: '#F59E0B',
-        info: '#3B82F6'
+    warning: '#F59E0B',
+    info: '#3B82F6'
     },
 
     /**

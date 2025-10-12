@@ -1,20 +1,35 @@
-/* ======== MOBILE VIEW FIX ======== */
+/* Base layout helpers shared across templates */
 html, body {
-  height: 100%;
+  min-height: 100%;
   margin: 0;
 }
 
 body {
+  background: #f7f8fa;
+  font-family: 'Segoe UI', sans-serif;
+  color: #0f172a;
+}
+
+.main-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Optional compact layout used by UI regression snapshots */
+.ui-regression body,
+body.ui-regression {
   min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #f7f8fa;
-  font-family: 'Segoe UI', sans-serif;
 }
 
-/* main content wrapper */
-.main-container {
+.ui-regression .main-container,
+body.ui-regression .main-container {
   width: min(100%, 420px);
   max-height: 92dvh;
   overflow-y: auto;
@@ -24,8 +39,8 @@ body {
   padding: 20px;
 }
 
-/* optional hero image or banner */
-.main-container img {
+.ui-regression .main-container img,
+body.ui-regression .main-container img {
   width: 100%;
   height: clamp(160px, 35dvh, 280px);
   object-fit: cover;

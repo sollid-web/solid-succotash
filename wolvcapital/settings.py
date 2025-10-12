@@ -188,6 +188,9 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+# Ensure STATIC_ROOT exists so whitenoise/tests don't warn about missing directory
+STATIC_ROOT.mkdir(parents=True, exist_ok=True)
+
 TESTING = any(arg in os.environ.get("PYTEST_CURRENT_TEST", "") for arg in ["::"]) or any(
     c in " ".join(os.sys.argv) for c in ["test", "pytest"]
 )

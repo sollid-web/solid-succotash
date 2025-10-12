@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -10,9 +12,9 @@ class InvestmentPlan(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField()
     daily_roi = models.DecimalField(
-        max_digits=5, 
+        max_digits=5,
         decimal_places=2,
-        validators=[MinValueValidator(0), MaxValueValidator(2.00)],
+        validators=[MinValueValidator(Decimal("0.00")), MaxValueValidator(Decimal("2.00"))],
         help_text="Daily ROI percentage (0.00-2.00)"
     )
     duration_days = models.PositiveIntegerField(validators=[MinValueValidator(1)])
@@ -27,7 +29,7 @@ class InvestmentPlan(models.Model):
         db_table = 'investments_plan'
         constraints = [
             models.CheckConstraint(
-                check=models.Q(daily_roi__gte=0) & models.Q(daily_roi__lte=2.00),
+                check=models.Q(daily_roi__gte=Decimal("0.00")) & models.Q(daily_roi__lte=Decimal("2.00")),
                 name='valid_daily_roi'
             ),
             models.CheckConstraint(
@@ -55,7 +57,7 @@ class UserInvestment(models.Model):
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='investments')
     plan = models.ForeignKey(InvestmentPlan, on_delete=models.CASCADE, related_name='user_investments')
-    amount = models.DecimalField(max_digits=12, decimal_places=2, validators=[MinValueValidator(0)])
+    amount = models.DecimalField(max_digits=12, decimal_places=2, validators=[MinValueValidator(Decimal("0.00"))])
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     started_at = models.DateTimeField(null=True, blank=True)
     ends_at = models.DateTimeField(null=True, blank=True)

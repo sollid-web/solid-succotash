@@ -1,8 +1,10 @@
+import uuid
+from decimal import Decimal
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
-import uuid
 
 
 class User(AbstractUser):
@@ -31,7 +33,7 @@ class Profile(models.Model):
 
 class UserWallet(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='wallet')
-    balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    balance = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):

@@ -1,8 +1,10 @@
+import uuid
+from decimal import Decimal
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.core.validators import MinValueValidator
 from django.utils import timezone
-import uuid
 
 User = get_user_model()
 
@@ -56,7 +58,7 @@ class Transaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transactions')
     tx_type = models.CharField(max_length=20, choices=TYPE_CHOICES)
     payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, default='bank_transfer')
-    amount = models.DecimalField(max_digits=12, decimal_places=2, validators=[MinValueValidator(0)])
+    amount = models.DecimalField(max_digits=12, decimal_places=2, validators=[MinValueValidator(Decimal("0.00"))])
     reference = models.TextField(help_text="Reference number, notes, or proof of payment")
     tx_hash = models.CharField(max_length=255, blank=True, help_text="Cryptocurrency transaction hash")
     wallet_address_used = models.CharField(max_length=255, blank=True, help_text="Wallet address used for crypto deposit")
@@ -82,7 +84,7 @@ class Transaction(models.Model):
         db_table = 'transactions_transaction'
         constraints = [
             models.CheckConstraint(
-                check=models.Q(amount__gt=0),
+                check=models.Q(amount__gt=Decimal("0.00")),
                 name='positive_transaction_amount'
             ),
         ]
@@ -118,8 +120,8 @@ class VirtualCard(models.Model):
     expiry_month = models.CharField(max_length=2, blank=True)
     expiry_year = models.CharField(max_length=2, blank=True)
     cvv = models.CharField(max_length=3, blank=True)
-    balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    purchase_amount = models.DecimalField(max_digits=12, decimal_places=2, default=1000)
+    balance = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
+    purchase_amount = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("1000.00"))
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     is_active = models.BooleanField(default=False)
     approved_by = models.ForeignKey(
@@ -172,11 +174,11 @@ class VirtualCard(models.Model):
         ordering = ['-created_at']
         constraints = [
             models.CheckConstraint(
-                check=models.Q(balance__gte=0),
+                check=models.Q(balance__gte=Decimal("0.00")),
                 name='positive_card_balance'
             ),
             models.CheckConstraint(
-                check=models.Q(purchase_amount__gt=0),
+                check=models.Q(purchase_amount__gt=Decimal("0.00")),
                 name='positive_purchase_amount'
             ),
         ]

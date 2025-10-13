@@ -38,16 +38,12 @@ class CoreConfig(AppConfig):
         domain = _determine_site_domain()
         site_defaults = {"domain": domain, "name": settings.BRAND.get("name", "WolvCapital")}
 
-        site, created = Site.objects.get_or_create(id=settings.SITE_ID, defaults=site_defaults)
+        target_domain = site_defaults["domain"]
 
-        if not created:
-            updated = False
-            if site.domain != site_defaults["domain"]:
-                site.domain = site_defaults["domain"]
-                updated = True
-            if site.name != site_defaults["name"]:
-                site.name = site_defaults["name"]
-                updated = True
+        # Remove conflicting domain rows so the unique constraint stays happy.
+        Site.objects.filter(domain=target_domain).exclude(id=settings.SITE_ID).delete()
 
-            if updated:
-                site.save(update_fields=["domain", "name"])
+        site, created = Site.objects.update_or_create(
+            id=settings.SITE_ID,
+            defaults={"domain": target_domain, "name": site_defaults["name"]},
+        )

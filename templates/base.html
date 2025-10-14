@@ -6,7 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}WOLVCAPITAL INVEST{% endblock %}</title>
     <meta name="description" content="{% block description %}WOLVCAPITAL INVEST offers professional investment opportunities with manual off-chain approvals for maximum security.{% endblock %}">
-    <link rel="icon" type="image/svg+xml" sizes="any" href="{% static 'img/wolvcapital-favicon.svg' %}">
+    <link rel="icon" type="image/svg+xml" sizes="any" href="{% static 'images/logos/wolvcapital-favicon.svg' %}">
+    <meta property="og:image" content="{% static 'images/hero-crypto-abstract-xl.webp' %}">
+    <meta property="og:image:alt" content="Secure blockchain infrastructure visual">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{% static 'images/hero-crypto-abstract-xl.webp' %}">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -34,6 +38,7 @@
             padding: 0.75rem 1.5rem;
             box-shadow: 0 20px 40px rgba(37, 99, 235, 0.18);
             backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
         }
 
         .brand-navbar .nav-content {
@@ -95,8 +100,8 @@
         }
 
         .brand-navbar .nav-cta {
-            background: var(--brand-accent-gold);
-            color: var(--brand-primary-dark);
+            background: var(--brand-gold);
+            color: var(--brand-primary);
             font-weight: 600;
             box-shadow: 0 10px 20px rgba(250, 204, 21, 0.35);
         }
@@ -104,7 +109,7 @@
         .brand-navbar .nav-cta:hover,
         .brand-navbar .nav-cta:focus-visible {
             background: #fff;
-            color: var(--brand-primary-dark);
+            color: var(--brand-primary);
             box-shadow: 0 12px 24px rgba(15, 118, 110, 0.15);
         }
 
@@ -247,7 +252,7 @@
             <div class="nav-content">
                 <div class="logo-section">
                     <a href="{% url 'home' %}" class="flex items-center">
-                        <img src="{% static 'img/wolvcapital-logo.svg' %}" alt="WolvCapital Invest" class="brand-logo">
+                        <img src="{% static 'images/logos/wolvcapital-logo.svg' %}" alt="WolvCapital logo" class="brand-logo" loading="eager">
                     </a>
                 </div>
 

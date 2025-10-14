@@ -2,19 +2,24 @@
 
 :root {
     /* Brand Colors */
-    --brand-primary: #1e40af;      /* Deep Blue */
-    --brand-secondary: #7c3aed;    /* Purple */
-    --brand-accent: #3b82f6;       /* Light Blue */
-    --brand-gold: #fbbf24;         /* Gold accent */
-    
+    --brand-primary: #0b2f6b;      /* Deep corporate blue */
+    --brand-secondary: #153b84;    /* Supplemental blue */
+    --brand-accent: #1f4fa3;       /* Interface blue */
+    --brand-gold: #fde047;         /* Trust gold */
+
     /* Neutral Colors */
-    --brand-dark: #1f2937;
-    --brand-light: #f9fafb;
-    --brand-gray: #6b7280;
-    
+    --brand-dark: #0f172a;
+    --brand-light: #f8fafc;
+    --brand-gray: #64748b;
+
     /* Gradients */
-    --brand-gradient: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
-    --brand-gradient-hover: linear-gradient(135deg, #1e3a8a 0%, #6d28d9 100%);
+    --brand-gradient: linear-gradient(135deg, #0b2f6b 0%, #153b84 100%);
+    --brand-gradient-hover: linear-gradient(135deg, #092451 0%, #12306c 100%);
+
+    /* Patterns */
+    --brand-mesh: radial-gradient(circle at 20% 20%, rgba(29, 78, 216, 0.22) 0%, rgba(11, 47, 107, 0.05) 35%, transparent 60%),
+        radial-gradient(circle at 80% 0%, rgba(253, 224, 71, 0.15) 0%, transparent 50%),
+        linear-gradient(180deg, rgba(11, 47, 107, 0.08) 0%, rgba(11, 47, 107, 0.4) 100%);
 }
 
 /* Brand Typography */
@@ -45,6 +50,67 @@
     background: linear-gradient(to right, #ffffff 0%, #f9fafb 100%);
     border-bottom: 1px solid #e5e7eb;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.hero {
+    position: relative;
+    min-height: 52vh;
+    overflow: hidden;
+    background: #0b2f6b;
+}
+
+.hero-picture,
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 13, 30, 0.52) 0%, rgba(11, 47, 107, 0.82) 100%);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+    padding: 6rem 0 5rem;
+}
+
+.hero--mesh::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--brand-mesh);
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.hero .cta-group a + a {
+    margin-left: 0.75rem;
+}
+
+.mesh-section {
+    position: relative;
+    background: #f8fbff;
+}
+
+.mesh-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--brand-mesh);
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+.mesh-section > * {
+    position: relative;
+    z-index: 1;
 }
 
 .brand-nav-link {
@@ -256,30 +322,30 @@
 /* WolvCapital Invest Brand Styles (base utilities + layout) */
 :root {
     /* Primary Colors */
-    --brand-primary: #2196F3;
-    --brand-primary-light: #6EC1E4;
-    --brand-primary-dark: #0D47A1;
-    --brand-accent-gold: #FFD700;
-    --brand-bg: #F7FAFC;
-    --brand-text: #0F172A;
-    
+    --brand-primary: #0b2f6b;
+    --brand-primary-light: #1a3f88;
+    --brand-primary-dark: #071d42;
+    --brand-accent-gold: #fde047;
+    --brand-bg: #f5f7fb;
+    --brand-text: #0f172a;
+
     /* Semantic Colors */
-    --brand-success: #10B981;
-    --brand-danger: #EF4444;
-    --brand-warning: #F59E0B;
-    --brand-info: #3B82F6;
-    
+    --brand-success: #0f9d58;
+    --brand-danger: #d93025;
+    --brand-warning: #f4b400;
+    --brand-info: #1f4fa3;
+
     /* Neutral Colors */
-    --brand-gray-50: #F9FAFB;
-    --brand-gray-100: #F3F4F6;
-    --brand-gray-200: #E5E7EB;
-    --brand-gray-300: #D1D5DB;
-    --brand-gray-400: #9CA3AF;
-    --brand-gray-500: #6B7280;
-    --brand-gray-600: #4B5563;
-    --brand-gray-700: #374151;
-    --brand-gray-800: #1F2937;
-    --brand-gray-900: #111827;
+    --brand-gray-50: #f8fafc;
+    --brand-gray-100: #f1f5f9;
+    --brand-gray-200: #e2e8f0;
+    --brand-gray-300: #cbd5f5;
+    --brand-gray-400: #94a3b8;
+    --brand-gray-500: #64748b;
+    --brand-gray-600: #475569;
+    --brand-gray-700: #334155;
+    --brand-gray-800: #1e293b;
+    --brand-gray-900: #0f172a;
 }
 
 /* Base Elements */

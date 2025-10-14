@@ -1,78 +1,106 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}WolvCapital - Professional Investment Platform{% endblock %}
 
 {% block content %}
-<!-- Hero Section with Crypto Animation -->
-<div class="relative bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 overflow-hidden">
-    <div class="absolute inset-0">
-        <div class="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
-        <!-- Animated Crypto Symbols -->
-        <div class="absolute inset-0 overflow-hidden">
-            <div class="absolute top-1/4 left-1/4 text-6xl text-white/10 animate-pulse">₿</div>
-            <div class="absolute top-1/3 right-1/4 text-4xl text-yellow-400/20 animate-bounce">Ξ</div>
-            <div class="absolute bottom-1/4 left-1/3 text-5xl text-green-400/20 animate-pulse">₮</div>
-            <div class="absolute top-1/2 right-1/3 text-4xl text-blue-400/20 animate-bounce">💎</div>
+<!-- Hero Section with responsive imagery and overlay -->
+<section class="hero hero--mesh">
+    <picture class="hero-picture">
+        <source type="image/avif" srcset="{% static 'images/hero-crypto-abstract-sm.avif' %} 768w, {% static 'images/hero-crypto-abstract-md.avif' %} 1280w, {% static 'images/hero-crypto-abstract-xl.avif' %} 1920w" sizes="100vw">
+        <source type="image/webp" srcset="{% static 'images/hero-crypto-abstract-sm.webp' %} 768w, {% static 'images/hero-crypto-abstract-md.webp' %} 1280w, {% static 'images/hero-crypto-abstract-xl.webp' %} 1920w" sizes="100vw">
+        <img src="{% static 'images/hero-crypto-abstract-xl.jpg' %}" srcset="{% static 'images/hero-crypto-abstract-sm.jpg' %} 768w, {% static 'images/hero-crypto-abstract-md.jpg' %} 1280w, {% static 'images/hero-crypto-abstract-xl.jpg' %} 1920w" sizes="100vw" alt="Secure blockchain operations visual" class="hero-bg" loading="eager" fetchpriority="high" decoding="async" width="1920" height="1269">
+    </picture>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl">
+                <span class="inline-flex items-center px-3 py-1 text-sm font-semibold bg-white/10 backdrop-blur border border-white/20 rounded-full">Institutional-grade digital investing</span>
+                <h1 class="mt-6 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">WolvCapital</h1>
+                <p class="mt-4 text-lg sm:text-xl text-blue-100 leading-relaxed">
+                    Secure crypto banking, audited ROI programs, and virtual cards&mdash;all governed by a human approval loop so capital never moves without oversight.
+                </p>
+                <div class="mt-8 flex flex-col sm:flex-row sm:items-center gap-4 cta-group">
+                    <a href="{% url 'account_signup' %}" class="brand-btn-primary inline-flex items-center justify-center">Open an account</a>
+                    <a href="{% url 'plans' %}" class="brand-btn-secondary inline-flex items-center justify-center">View investment plans</a>
+                </div>
+                <dl class="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm text-blue-100/90">
+                    <div class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">
+                        <dt class="text-xs uppercase tracking-wide text-blue-100/70">Bitcoin</dt>
+                        <dd class="mt-1 text-lg font-semibold text-white">+2.4%</dd>
+                    </div>
+                    <div class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">
+                        <dt class="text-xs uppercase tracking-wide text-blue-100/70">Ethereum</dt>
+                        <dd class="mt-1 text-lg font-semibold text-white">+1.8%</dd>
+                    </div>
+                    <div class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">
+                        <dt class="text-xs uppercase tracking-wide text-blue-100/70">USDT</dt>
+                        <dd class="mt-1 text-lg font-semibold text-white">Stable</dd>
+                    </div>
+                    <div class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">
+                        <dt class="text-xs uppercase tracking-wide text-blue-100/70">Virtual cards</dt>
+                        <dd class="mt-1 text-lg font-semibold text-white">24/7 issue</dd>
+                    </div>
+                </dl>
+            </div>
         </div>
     </div>
-    
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-        <div class="text-center">
-            <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-6">
-                <span class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                    WolvCapital
-                </span>
-            </h1>
-            <p class="text-xl md:text-2xl text-blue-200 mb-8 max-w-3xl mx-auto">
-                The Future of Digital Investment & Cryptocurrency Banking
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-                <a href="{% url 'account_signup' %}" 
-                   class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-lg transition duration-300 transform hover:scale-105">
-                    Start Investing Today
-                </a>
-                <a href="{% url 'plans' %}" 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 text-center">
-                    View Investment Plans
-                </a>
+</section>
+
+<!-- Brand Imagery Grid -->
+<section class="mesh-section py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div class="grid grid-cols-2 grid-rows-2 gap-6">
+                <figure class="overflow-hidden rounded-2xl shadow-lg">
+                    <picture>
+                        <source type="image/avif" srcset="{% static 'images/blockchain-network-sm.avif' %} 768w, {% static 'images/blockchain-network-md.avif' %} 1280w, {% static 'images/blockchain-network-xl.avif' %} 1920w" sizes="(max-width: 768px) 50vw, 35vw">
+                        <source type="image/webp" srcset="{% static 'images/blockchain-network-sm.webp' %} 768w, {% static 'images/blockchain-network-md.webp' %} 1280w, {% static 'images/blockchain-network-xl.webp' %} 1920w" sizes="(max-width: 768px) 50vw, 35vw">
+                            <img src="{% static 'images/wolvcapital_set1.png' %}" alt="Investment dashboard on laptop" class="rounded-xl object-cover h-32 w-full" loading="lazy" decoding="async">
+                    </picture>
+                </figure>
+                <figure class="overflow-hidden rounded-2xl shadow-lg">
+                    <picture>
+                        <source type="image/avif" srcset="{% static 'images/team-meeting-sm.avif' %} 768w, {% static 'images/team-meeting-md.avif' %} 1280w, {% static 'images/team-meeting-xl.avif' %} 1920w" sizes="(max-width: 768px) 50vw, 35vw">
+                        <source type="image/webp" srcset="{% static 'images/team-meeting-sm.webp' %} 768w, {% static 'images/team-meeting-md.webp' %} 1280w, {% static 'images/team-meeting-xl.webp' %} 1920w" sizes="(max-width: 768px) 50vw, 35vw">
+                            <img src="{% static 'images/wolvcapital_set2.png' %}" alt="Elegant gold texture for VIP plans" class="rounded-xl object-cover h-32 w-full" loading="lazy" decoding="async">
+                    </picture>
+                </figure>
+                <figure class="overflow-hidden rounded-2xl shadow-lg">
+                    <picture>
+                        <source type="image/avif" srcset="{% static 'images/growth-chart-sm.avif' %} 768w, {% static 'images/growth-chart-md.avif' %} 1280w, {% static 'images/growth-chart-xl.avif' %} 1920w" sizes="(max-width: 768px) 50vw, 35vw">
+                        <source type="image/webp" srcset="{% static 'images/growth-chart-sm.webp' %} 768w, {% static 'images/growth-chart-md.webp' %} 1280w, {% static 'images/growth-chart-xl.webp' %} 1920w" sizes="(max-width: 768px) 50vw, 35vw">
+                            <img src="{% static 'images/wolvcapital_set3.png' %}" alt="Digital lock in data center" class="rounded-xl object-cover h-32 w-full" loading="lazy" decoding="async">
+                    </picture>
+                </figure>
+                <figure class="overflow-hidden rounded-2xl shadow-lg">
+                    <picture>
+                        <source type="image/avif" srcset="{% static 'images/crypto-symbol-sm.avif' %} 768w, {% static 'images/crypto-symbol-md.avif' %} 1280w, {% static 'images/crypto-symbol-xl.avif' %} 1920w" sizes="(max-width: 768px) 50vw, 35vw">
+                        <source type="image/webp" srcset="{% static 'images/crypto-symbol-sm.webp' %} 768w, {% static 'images/crypto-symbol-md.webp' %} 1280w, {% static 'images/crypto-symbol-xl.webp' %} 1920w" sizes="(max-width: 768px) 50vw, 35vw">
+                            <img src="{% static 'images/wolvcapital_set4.png' %}" alt="World map with blockchain nodes" class="rounded-xl object-cover h-32 w-full" loading="lazy" decoding="async">
+                    </picture>
+                </figure>
             </div>
-            
-            <!-- Crypto Ticker -->
-            <div class="bg-black/30 backdrop-blur-sm rounded-lg p-4 max-w-4xl mx-auto">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                    <div class="flex items-center justify-center space-x-2">
-                        <span class="text-yellow-400 text-2xl">₿</span>
-                        <div>
-                            <div class="text-white font-semibold">Bitcoin</div>
-                            <div class="text-green-400 text-sm">+2.4%</div>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-center space-x-2">
-                        <span class="text-purple-400 text-2xl">Ξ</span>
-                        <div>
-                            <div class="text-white font-semibold">Ethereum</div>
-                            <div class="text-green-400 text-sm">+1.8%</div>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-center space-x-2">
-                        <span class="text-green-400 text-2xl">₮</span>
-                        <div>
-                            <div class="text-white font-semibold">USDT</div>
-                            <div class="text-blue-400 text-sm">Stable</div>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-center space-x-2">
-                        <span class="text-blue-400 text-2xl">💳</span>
-                        <div>
-                            <div class="text-white font-semibold">Virtual Cards</div>
-                            <div class="text-purple-400 text-sm">Available</div>
-                        </div>
-                    </div>
+            <div class="space-y-6">
+                <span class="inline-flex items-center px-3 py-1 text-sm font-semibold text-blue-700 bg-blue-100 rounded-full">Human oversight. Digital precision.</span>
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">Where institutional discipline meets crypto innovation</h2>
+                <p class="text-lg text-gray-600">
+                    Our analysts pair blockchain telemetry with boardroom experience. Every investment decision blends
+                    transparent data, audited reporting, and manual verification so your assets are protected and primed for growth.
+                </p>
+                <ul class="space-y-3 text-gray-700">
+                    <li class="flex items-start"><span class="mt-1 mr-3 text-blue-600">•</span>Real-time monitoring across digital asset networks.</li>
+                    <li class="flex items-start"><span class="mt-1 mr-3 text-blue-600">•</span>Dedicated investment committee validating each funding request.</li>
+                    <li class="flex items-start"><span class="mt-1 mr-3 text-blue-600">•</span>Actionable reporting that keeps your wallet, plans, and virtual cards in sync.</li>
+                </ul>
+                <div class="flex flex-wrap gap-4">
+                    <a href="{% url 'about' %}" class="brand-btn-primary">Meet the team</a>
+                    <a href="{% url 'plans' %}" class="brand-btn-secondary">Explore strategies</a>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
 <!-- Virtual Visa Card Feature -->
 <div class="py-20 bg-gray-50">

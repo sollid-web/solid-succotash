@@ -1,15 +1,30 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Investment Plans - WolvCapital{% endblock %}
 
 {% block content %}
-<div class="bg-white py-16">
+<div class="mesh-section py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">Investment Plans</h1>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                Choose from our carefully crafted investment plans designed to meet different risk tolerances and investment goals.
-            </p>
+        <div class="grid lg:grid-cols-2 gap-10 items-center mb-12">
+            <div>
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">Investment Plans</h1>
+                <p class="text-xl text-gray-600">
+                    Choose from our carefully crafted strategies designed to meet different risk tolerances and investment goals.
+                </p>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <picture>
+                    <source type="image/avif" srcset="{% static 'images/blockchain-network-sm.avif' %} 768w, {% static 'images/blockchain-network-md.avif' %} 1280w, {% static 'images/blockchain-network-xl.avif' %} 1920w" sizes="(max-width: 768px) 50vw, 40vw">
+                    <source type="image/webp" srcset="{% static 'images/blockchain-network-sm.webp' %} 768w, {% static 'images/blockchain-network-md.webp' %} 1280w, {% static 'images/blockchain-network-xl.webp' %} 1920w" sizes="(max-width: 768px) 50vw, 40vw">
+                    <img src="{% static 'images/blockchain-network-md.jpg' %}" srcset="{% static 'images/blockchain-network-sm.jpg' %} 768w, {% static 'images/blockchain-network-md.jpg' %} 1280w, {% static 'images/blockchain-network-xl.jpg' %} 1920w" sizes="(max-width: 768px) 50vw, 40vw" alt="Blockchain network abstract" class="rounded-2xl shadow-lg object-cover h-40 w-full" loading="lazy" decoding="async">
+                </picture>
+                <picture>
+                    <source type="image/avif" srcset="{% static 'images/growth-chart-sm.avif' %} 768w, {% static 'images/growth-chart-md.avif' %} 1280w, {% static 'images/growth-chart-xl.avif' %} 1920w" sizes="(max-width: 768px) 50vw, 40vw">
+                    <source type="image/webp" srcset="{% static 'images/growth-chart-sm.webp' %} 768w, {% static 'images/growth-chart-md.webp' %} 1280w, {% static 'images/growth-chart-xl.webp' %} 1920w" sizes="(max-width: 768px) 50vw, 40vw">
+                    <img src="{% static 'images/growth-chart-md.jpg' %}" srcset="{% static 'images/growth-chart-sm.jpg' %} 768w, {% static 'images/growth-chart-md.jpg' %} 1280w, {% static 'images/growth-chart-xl.jpg' %} 1920w" sizes="(max-width: 768px) 50vw, 40vw" alt="Investment growth chart" class="rounded-2xl shadow-lg object-cover h-40 w-full" loading="lazy" decoding="async">
+                </picture>
+            </div>
         </div>
 
         <!-- Risk Warning -->

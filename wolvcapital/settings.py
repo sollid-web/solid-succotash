@@ -214,9 +214,9 @@ BRAND = {
     "success": "#10B981",
     "danger": "#EF4444",
     "warning": "#F59E0B",
-    "logo_svg": "img/wolvcapital-logo.svg",
-    "logo_png": "img/wolvcapital-logo.png",
-    "favicon": "img/favicon.ico",
+    "logo_svg": "images/logos/wolvcapital-logo.svg",
+    "logo_png": "images/logos/wolvcapital-logo.svg",
+    "favicon": "images/logos/wolvcapital-favicon.svg",
 }
 
 # ------------------------------------------------------------------

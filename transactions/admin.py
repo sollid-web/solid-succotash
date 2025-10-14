@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.contrib import messages
-from django.db import transaction
 from django.utils.html import format_html
 from django.utils import timezone
 from django.urls import reverse
@@ -235,6 +234,25 @@ class TransactionAdmin(admin.ModelAdmin):
             messages.warning(request, f"Failed to reject {failed_count} transaction(s)")
     
     reject_transactions.short_description = "Reject selected transactions"
+
+    def save_model(self, request, obj, form, change):
+        """Ensure manual status changes go through service layer so wallets stay accurate."""
+        if change and obj.pk:
+            original = Transaction.objects.select_related('user').get(pk=obj.pk)
+            new_status = form.cleaned_data.get('status')
+            notes = form.cleaned_data.get('notes', '')
+
+            if original.status == 'pending' and new_status == 'approved':
+                approve_transaction(original, request.user, notes or f"Approved via admin edit by {request.user.email}")
+                messages.success(request, f"Transaction {original.id} approved and wallet credited.")
+                return
+
+            if original.status == 'pending' and new_status == 'rejected':
+                reject_transaction(original, request.user, notes or f"Rejected via admin edit by {request.user.email}")
+                messages.info(request, f"Transaction {original.id} rejected.")
+                return
+
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(AdminAuditLog)

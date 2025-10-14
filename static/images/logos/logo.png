@@ -1,27 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" fill="none">
-  <!-- Wolf Head Icon -->
-  <g transform="translate(10, 10)">
-    <!-- Wolf silhouette -->
-    <path d="M20 5 L25 2 L30 5 L32 10 L30 15 L28 18 L25 20 L22 18 L20 15 L18 10 Z" 
-          fill="#2196F3" stroke="#0D47A1" stroke-width="1"/>
-    <!-- Eye -->
-    <circle cx="24" cy="12" r="1.5" fill="#FFD700"/>
-    <circle cx="26" cy="12" r="1.5" fill="#FFD700"/>
-    <!-- Ears -->
-    <path d="M22 5 L20 2 L23 6 Z" fill="#0D47A1"/>
-    <path d="M28 5 L30 2 L27 6 Z" fill="#0D47A1"/>
-  </g>
-  
-  <!-- Brand Text -->
-  <text x="55" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#2196F3">
-    Wolv
-  </text>
-  <text x="110" y="35" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#FFD700">
-    Capital
-  </text>
-  
-  <!-- Tagline -->
-  <text x="55" y="48" font-family="Arial, sans-serif" font-size="8" fill="#6B7280" letter-spacing="1">
-    INVEST SMART, GROW FAST
-  </text>
-</svg>
+    from PIL import Image, ImageDraw, ImageFont
+    import os
+
+    # Create a new image with a transparent background
+    width, height = 400, 200
+    image = Image.new('RGBA', (width, height), (0, 0, 0, 0))
+
+    # Get a drawing context
+    draw = ImageDraw.Draw(image)
+
+    # Try to use a fancy font; fallback to default if not available
+    try:
+        font = ImageFont.truetype("arial.ttf", 40)  # Adjust path if needed
+    except IOError:
+        font = ImageFont.load_default()
+
+    # Draw the text with a gradient or shadow for fanciness
+    text = "WOLVCAPITAL INVEST"
+    bbox = draw.textbbox((0, 0), text, font=font)
+    text_width = bbox[2] - bbox[0]
+    text_height = bbox[3] - bbox[1]
+    x = (width - text_width) // 2
+    y = (height - text_height) // 2
+
+    # Add a shadow
+    shadow_color = (100, 100, 100, 128)
+    draw.text((x+2, y+2), text, font=font, fill=shadow_color)
+
+    # Main text in gold gradient (simplified)
+    text_color = (255, 215, 0)  # Gold
+    draw.text((x, y), text, font=font, fill=text_color)
+
+    # Save the image
+    output_path = "/workspaces/solid-succotash/static/images/logos/logo.png"
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    image.save(output_path, "PNG")

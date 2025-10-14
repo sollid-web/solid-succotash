@@ -44,8 +44,24 @@ class UserInvestmentSerializer(serializers.ModelSerializer):
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = ['id', 'tx_type', 'amount', 'reference', 'status', 'created_at', 'updated_at']
+        fields = [
+            'id',
+            'tx_type',
+            'amount',
+            'reference',
+            'payment_method',
+            'tx_hash',
+            'wallet_address_used',
+            'status',
+            'created_at',
+            'updated_at',
+        ]
         read_only_fields = ['status', 'created_at', 'updated_at']
+        extra_kwargs = {
+            'payment_method': {'required': False},
+            'tx_hash': {'required': False, 'allow_blank': True},
+            'wallet_address_used': {'required': False, 'allow_blank': True},
+        }
 
 
 class UserWalletSerializer(serializers.ModelSerializer):

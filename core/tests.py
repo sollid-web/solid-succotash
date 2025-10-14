@@ -111,6 +111,7 @@ from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from decimal import Decimal
+from django.core.exceptions import ValidationError
 from users.models import Profile, UserWallet
 from investments.models import InvestmentPlan, UserInvestment
 from transactions.models import Transaction, AdminAuditLog
@@ -156,6 +157,9 @@ class InvestmentModelTests(TestCase):
             min_amount=Decimal('100'),
             max_amount=Decimal('1000')
         )
+        self.wallet = self.user.wallet
+        self.wallet.balance = Decimal('1000')
+        self.wallet.save(update_fields=['balance'])
     
     def test_investment_creation(self):
         """Test investment creation"""
@@ -176,8 +180,9 @@ class InvestmentModelTests(TestCase):
             plan=self.plan,
             amount=Decimal('500')
         )
-        # For pending investments, total_return should equal amount
-        self.assertEqual(investment.total_return, Decimal('500'))
+        roi_rate = self.plan.daily_roi / Decimal('100')
+        expected_return = Decimal('500') * (Decimal('1') + roi_rate * Decimal(self.plan.duration_days))
+        self.assertEqual(investment.total_return, expected_return.quantize(Decimal('0.01')))
 
 
 class TransactionModelTests(TestCase):
@@ -261,15 +266,13 @@ class TransactionServiceTests(TestCase):
     
     def test_approve_withdrawal_with_insufficient_funds(self):
         """Test withdrawal approval fails with insufficient funds"""
-        transaction = create_transaction(
-            user=self.user,
-            tx_type='withdrawal',
-            amount=2000,  # More than wallet balance
-            reference='Test withdrawal'
-        )
-        
-        with self.assertRaises(Exception):
-            approve_transaction(transaction, self.admin_user, 'Should fail')
+        with self.assertRaises(ValidationError):
+            create_transaction(
+                user=self.user,
+                tx_type='withdrawal',
+                amount=2000,  # More than wallet balance
+                reference='Test withdrawal'
+            )
 
 
 class InvestmentServiceTests(TestCase):
@@ -293,6 +296,9 @@ class InvestmentServiceTests(TestCase):
             min_amount=Decimal('100'),
             max_amount=Decimal('1000')
         )
+        self.wallet = self.user.wallet
+        self.wallet.balance = Decimal('1000')
+        self.wallet.save(update_fields=['balance'])
     
     def test_create_investment_within_limits(self):
         """Test investment creation within plan limits"""
@@ -338,6 +344,26 @@ class InvestmentServiceTests(TestCase):
         self.assertEqual(investment.status, 'approved')
         self.assertIsNotNone(investment.started_at)
         self.assertIsNotNone(investment.ends_at)
+        self.wallet.refresh_from_db()
+        self.assertEqual(self.wallet.balance, Decimal('500'))
+
+    def test_approve_investment_requires_sufficient_wallet_balance(self):
+        """Approval should fail if wallet funds drop before review"""
+        # Create investment while funds are available
+        self.wallet.balance = Decimal('200')
+        self.wallet.save(update_fields=['balance'])
+        investment = create_investment(
+            user=self.user,
+            plan=self.plan,
+            amount=Decimal('150')
+        )
+
+        # Simulate other withdrawals reducing wallet prior to admin review
+        self.wallet.balance = Decimal('50')
+        self.wallet.save(update_fields=['balance'])
+
+        with self.assertRaises(ValidationError):
+            approve_investment(investment, self.admin_user, 'Should fail due to balance')
 
 
 class ViewTests(TestCase):

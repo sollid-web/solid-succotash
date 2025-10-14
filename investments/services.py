@@ -1,20 +1,39 @@
+from decimal import Decimal
+
 from django.db import transaction
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from datetime import timedelta
+
 from .models import UserInvestment, InvestmentPlan
 from transactions.models import AdminAuditLog
 from transactions.notifications import create_admin_notification
+from users.models import UserWallet
 
 
 @transaction.atomic
 def approve_investment(investment: UserInvestment, admin_user: User, notes: str = "") -> UserInvestment:
     """
-    Approve an investment and set start/end dates.
+    Approve an investment, set dates, and debit the user's wallet.
     """
     if investment.status != 'pending':
         raise ValidationError("Can only approve pending investments")
+
+    # Lock the user's wallet row to keep balances consistent during approval
+    try:
+        wallet = UserWallet.objects.select_for_update().get(user=investment.user)
+    except UserWallet.DoesNotExist:
+        wallet = UserWallet.objects.create(user=investment.user)
+
+    investment_amount = investment.amount if isinstance(investment.amount, Decimal) else Decimal(str(investment.amount))
+
+    if wallet.balance < investment_amount:
+        raise ValidationError(
+            f"Insufficient wallet balance for approval. Balance ${wallet.balance}, required ${investment_amount}"
+        )
+    wallet.balance -= investment_amount
+    wallet.save(update_fields=['balance', 'updated_at'])
     
     # Set investment dates
     investment.status = 'approved'
@@ -46,6 +65,13 @@ def approve_investment(investment: UserInvestment, admin_user: User, notes: str 
     # Send user notification
     from users.notification_service import notify_investment_approved
     notify_investment_approved(investment.user, investment, notes)
+
+    from users.notification_service import notify_wallet_debited
+    notify_wallet_debited(
+        investment.user,
+        investment_amount,
+        reason=f"Investment approved for {investment.plan.name}"
+    )
     
     return investment
 
@@ -94,26 +120,38 @@ def create_investment(user: User, plan: InvestmentPlan, amount: float) -> UserIn
     """
     Create a new investment request and notify admins.
     """
+    amount_decimal = amount if isinstance(amount, Decimal) else Decimal(str(amount))
+    amount_display = amount_decimal.quantize(Decimal('0.01'))
+
     # Validate amount within plan limits
-    if amount < plan.min_amount:
+    if amount_decimal < plan.min_amount:
         raise ValidationError(f"Minimum investment amount is ${plan.min_amount}")
     
-    if amount > plan.max_amount:
+    if amount_decimal > plan.max_amount:
         raise ValidationError(f"Maximum investment amount is ${plan.max_amount}")
     
-    if amount <= 0:
+    if amount_decimal <= 0:
         raise ValidationError("Investment amount must be positive")
+
+    wallet, _ = UserWallet.objects.get_or_create(user=user)
+    if wallet.balance < amount_decimal:
+        raise ValidationError(
+            f"Insufficient balance. Wallet balance is ${wallet.balance}; investment requires ${amount_decimal}"
+        )
     
     investment = UserInvestment.objects.create(
         user=user,
         plan=plan,
-        amount=amount
+        amount=amount_decimal
     )
     
     # Create admin notification
-    priority = 'high' if amount >= 15000 else 'medium'
-    title = f"New Investment Request: ${amount}"
-    message = f"User {user.email} has submitted an investment request for ${amount} in the {plan.name} plan ({plan.daily_roi}% daily for {plan.duration_days} days)."
+    priority = 'high' if amount_decimal >= Decimal('15000') else 'medium'
+    title = f"New Investment Request: ${amount_display}"
+    message = (
+        f"User {user.email} has submitted an investment request for ${amount_display} "
+        f"in the {plan.name} plan ({plan.daily_roi}% daily for {plan.duration_days} days)."
+    )
     
     create_admin_notification(
         notification_type='new_investment',
@@ -121,7 +159,7 @@ def create_investment(user: User, plan: InvestmentPlan, amount: float) -> UserIn
         message=message,
         user=user,
         entity_type='investment',
-        entity_id=investment.id,
+    entity_id=str(investment.id),
         priority=priority
     )
     

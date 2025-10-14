@@ -68,10 +68,14 @@ class UserInvestment(models.Model):
     
     @property
     def total_return(self):
-        if self.started_at and self.ends_at and self.status == 'approved':
-            days = (self.ends_at - self.started_at).days
-            return self.amount * (1 + (self.plan.daily_roi / 100) * days)
-        return self.amount
+        if not self.plan or self.amount is None:
+            return Decimal('0.00')
+
+        roi_rate = self.plan.daily_roi or Decimal('0')
+        duration = Decimal(self.plan.duration_days or 0)
+
+        projected = self.amount * (Decimal('1') + (roi_rate / Decimal('100')) * duration)
+        return projected.quantize(Decimal('0.01'))
     
     class Meta:
         db_table = 'investments_user_investment'

@@ -73,6 +73,9 @@ class InvestmentRejectionTests(TestCase):
 			min_amount=Decimal('100'),
 			max_amount=Decimal('1000')
 		)
+		self.wallet = self.user.wallet
+		self.wallet.balance = Decimal('500')
+		self.wallet.save(update_fields=['balance'])
 
 	def test_reject_investment(self):
 		inv = create_investment(self.user, self.plan, 200)

@@ -1,9 +1,12 @@
+from decimal import Decimal
+
 from django.db import transaction
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+
 from .models import Transaction, AdminAuditLog
-from .notifications import create_admin_notification, mark_notification_as_resolved
+from .notifications import create_admin_notification
 from users.models import UserWallet
 
 
@@ -16,12 +19,15 @@ def approve_transaction(txn: Transaction, admin_user: User, notes: str = "") -> 
         raise ValidationError("Can only approve pending transactions")
     
     # Get or create user wallet
-    wallet, created = UserWallet.objects.get_or_create(user=txn.user)
+    try:
+        wallet = UserWallet.objects.select_for_update().get(user=txn.user)
+    except UserWallet.DoesNotExist:
+        wallet = UserWallet.objects.create(user=txn.user)
     
     if txn.tx_type == 'deposit':
         # Credit the wallet
         wallet.balance += txn.amount
-        wallet.save()
+        wallet.save(update_fields=['balance', 'updated_at'])
     elif txn.tx_type == 'withdrawal':
         # Check if user has sufficient funds
         if wallet.balance < txn.amount:
@@ -29,7 +35,7 @@ def approve_transaction(txn: Transaction, admin_user: User, notes: str = "") -> 
         
         # Debit the wallet
         wallet.balance -= txn.amount
-        wallet.save()
+        wallet.save(update_fields=['balance', 'updated_at'])
     
     # Update transaction
     txn.status = 'approved'
@@ -119,34 +125,47 @@ def create_transaction(user: User, tx_type: str, amount: float, reference: str,
     """
     Create a new transaction and notify admins.
     """
-    if amount <= 0:
+    amount_decimal = amount if isinstance(amount, Decimal) else Decimal(str(amount))
+
+    if amount_decimal <= 0:
         raise ValidationError("Amount must be positive")
+
+    wallet, _ = UserWallet.objects.get_or_create(user=user)
+
+    if tx_type == 'withdrawal' and wallet.balance < amount_decimal:
+        raise ValidationError(
+            f"Insufficient balance. Wallet balance is ${wallet.balance}; withdrawal request was ${amount_decimal}"
+        )
     
     txn = Transaction.objects.create(
         user=user,
         tx_type=tx_type,
         payment_method=payment_method,
-        amount=amount,
+        amount=amount_decimal,
         reference=reference,
         tx_hash=tx_hash,
         wallet_address_used=wallet_address_used
     )
     
     # Create admin notification
+    amount_display = amount_decimal.quantize(Decimal('0.01'))
+
     if tx_type == 'deposit':
         notification_type = 'new_deposit'
-        title = f"New Deposit Request: ${amount}"
-        priority = 'high' if amount >= 10000 else 'medium'
+        title = f"New Deposit Request: ${amount_display}"
+        priority = 'high' if amount_decimal >= Decimal('10000') else 'medium'
     elif tx_type == 'withdrawal':
         notification_type = 'new_withdrawal'
-        title = f"New Withdrawal Request: ${amount}"
-        priority = 'high' if amount >= 5000 else 'medium'
+        title = f"New Withdrawal Request: ${amount_display}"
+        priority = 'high' if amount_decimal >= Decimal('5000') else 'medium'
+    else:
+        raise ValidationError("Invalid transaction type")
     
     payment_info = f" via {payment_method}"
     if payment_method in ['BTC', 'USDT', 'USDC', 'ETH']:
         payment_info += f" (Hash: {tx_hash[:10]}...)" if tx_hash else ""
     
-    message = f"User {user.email} has submitted a {tx_type} request for ${amount}{payment_info}. Reference: {reference}"
+    message = f"User {user.email} has submitted a {tx_type} request for ${amount_display}{payment_info}. Reference: {reference}"
     
     create_admin_notification(
         notification_type=notification_type,
@@ -154,7 +173,7 @@ def create_transaction(user: User, tx_type: str, amount: float, reference: str,
         message=message,
         user=user,
         entity_type='transaction',
-        entity_id=txn.id,
+    entity_id=str(txn.id),
         priority=priority
     )
     

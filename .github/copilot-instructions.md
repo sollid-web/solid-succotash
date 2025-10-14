@@ -64,6 +64,7 @@ Templates use inheritance from `base.html` with Tailwind CSS. Forms in `core/for
 ## Business Logic Specifics
 
 ### Investment Plans (Fixed Schema)
+
 Four predefined plans with specific ROI/duration/amount ranges:
 - Pioneer: 1.00% daily, 14 days, $100-$999
 - Vanguard: 1.25% daily, 21 days, $1,000-$4,999  
@@ -72,10 +73,16 @@ Four predefined plans with specific ROI/duration/amount ranges:
 
 **Don't modify these without running `seed_plans` command**.
 
-### Transaction Processing
+### Transaction & ROI Processing
 1. **Deposits**: User submits → Admin verifies → Wallet credited automatically
 2. **Withdrawals**: User submits → Admin checks balance → Wallet debited if approved
 3. **Investments**: User selects plan/amount → Admin approves → Start/end dates set automatically
+
+
+
+4. **ROI payouts**: Daily ROI is calculated independently for each active `UserInvestment` plan. The resulting wallet update is triggered by ROI as part of daily returns, but only after admin authorization or via the scheduled payout command (`payout_roi`).
+
+**Wallet balances are updated by ROI after admin approval or scheduled payout. All updates are atomic and require explicit authorization.**
 
 **UUID Pattern**: `Transaction` uses UUID primary keys for security. Always use `str(transaction.id)` in audit logs.
 

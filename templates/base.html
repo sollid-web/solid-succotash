@@ -470,54 +470,7 @@
                 
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
-                    <header class="nav" id="site-nav">
-                      <div class="row container">
-                                                <a href="{% url 'home' %}" class="logo">
-                                                    <img src="{% static 'images/logos/logo.png' %}" alt="WolvCapital" height="22">
-                                                </a>
-
-                        <!-- desktop menu -->
-                        <ul class="nav-links desktop">
-                          <li><a href="{% url 'home' %}">Home</a></li>
-                          <li><a href="{% url 'plans' %}">Plans</a></li>
-                          <li class="has-sub">
-                            <a href="#">Pages</a>
-                            <ul class="sub">
-                              <li><a href="{% url 'about' %}">About Us</a></li>
-                              <li><a href="{% url 'contact' %}">Contact</a></li>
-                                                            <li><a href="{% url 'risk_disclosure' %}">Risk Disclosure</a></li>
-                              <li><a href="{% url 'terms' %}">Terms of Service</a></li>
-                              <li><a href="{% url 'privacy' %}">Privacy Policy</a></li>
-                            </ul>
-                          </li>
-                                                    <li><a href="{% url 'account_login' %}">Login</a></li>
-                                                    <li><a class="btn btn-primary" href="{% url 'account_signup' %}">Sign Up</a></li>
-                        </ul>
-
-                        <!-- mobile hamburger -->
-                        <button class="nav-toggle" aria-controls="mobile-menu" aria-expanded="false" aria-label="Menu">☰</button>
-                      </div>
-
-                      <!-- Mobile drawer -->
-                      <nav id="mobile-menu" class="nav-drawer" role="dialog" aria-modal="true">
-                        <div class="drawer-content">
-                          <a href="{% url 'home' %}">Home</a>
-                          <a href="{% url 'plans' %}">Plans</a>
-                          <span class="group">Pages</span>
-                          <a href="{% url 'about' %}">About Us</a>
-                          <a href="{% url 'contact' %}">Contact</a>
-                          <span class="group">Legal</span>
-                                                    <a href="{% url 'risk_disclosure' %}">Risk Disclosure</a>
-                          <a href="{% url 'terms' %}">Terms of Service</a>
-                          <a href="{% url 'privacy' %}">Privacy Policy</a>
-                          <span class="group">Login</span>
-                                                    <a class="btn btn-primary" href="{% url 'account_signup' %}">Sign Up</a>
-                        </div>
-                      </nav>
-
-                      <!-- Backdrop -->
-                      <div class="nav-backdrop" hidden></div>
-                    </header>
+                    
                 if (isOpen) {
                     chatWindow.classList.remove('hidden');
                     setTimeout(() => {

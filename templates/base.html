@@ -503,39 +503,7 @@
                 const avatar = document.createElement('div');
                 avatar.className = 'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0';
                 
-                <script>
-                (function(){
-                  const header = document.getElementById('site-nav');
-                  const btn = header.querySelector('.nav-toggle');
-                  const drawer = document.getElementById('mobile-menu');
-                  const backdrop = header.querySelector('.nav-backdrop');
-
-                  // keep CSS variable in sync with actual header height
-                  function setNavH(){ document.documentElement.style.setProperty('--nav-h', header.offsetHeight + 'px'); }
-                  setNavH(); addEventListener('resize', setNavH);
-
-                  function openMenu(){
-                    document.body.classList.add('nav-open');
-                    btn.setAttribute('aria-expanded','true');
-                    backdrop.hidden = false;
-                  }
-                  function closeMenu(){
-                    document.body.classList.remove('nav-open');
-                    btn.setAttribute('aria-expanded','false');
-                    backdrop.hidden = true;
-                  }
-
-                  btn.addEventListener('click', () => {
-                    document.body.classList.contains('nav-open') ? closeMenu() : openMenu();
-                  });
-
-                  // Close on backdrop click, ESC, link click, or scroll
-                  backdrop.addEventListener('click', closeMenu);
-                  document.addEventListener('keydown', e => { if(e.key==='Escape') closeMenu(); });
-                  drawer.addEventListener('click', e => { if(e.target.tagName==='A') closeMenu(); });
-                  addEventListener('scroll', () => { if(document.body.classList.contains('nav-open')) closeMenu(); }, {passive:true});
-                })();
-                </script>
+                
 
             function getCsrfToken() {
                 const cookie = document.cookie.split(';').map(item => item.trim()).find(item => item.startsWith('csrftoken='));

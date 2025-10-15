@@ -96,7 +96,7 @@
 
 .mesh-section {
     position: relative;
-    background: #f8fbff;
+    background: linear-gradient(to bottom, #ffffff 0%, #f8fbff 50%, #ffffff 100%);
 }
 
 .mesh-section::before {
@@ -104,7 +104,7 @@
     position: absolute;
     inset: 0;
     background: var(--brand-mesh);
-    opacity: 0.35;
+    opacity: 0.25;
     pointer-events: none;
 }
 

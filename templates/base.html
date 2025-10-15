@@ -21,24 +21,68 @@
 
     <!-- Custom CSS -->
     <style>
+        /* Page Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        body {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
         .gradient-bg { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
         .text-gradient { background: linear-gradient(135deg, #1e3a8a, #3b82f6); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
         
         /* Brand specific navbar styles */
         .brand-navbar {
             background: transparent;
-            padding: 1.5rem 0.75rem;
+            padding: 1rem 0.75rem;
             position: relative;
             z-index: 100;
+            animation: slideDown 0.6s ease-out;
         }
 
         .brand-navbar .nav-shell {
             background: linear-gradient(135deg, rgba(30, 58, 138, 0.95) 0%, rgba(37, 99, 235, 0.95) 100%);
-            border-radius: 1.75rem;
-            padding: 0.75rem 1.5rem;
-            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.18);
+            border-radius: 1.5rem;
+            padding: 0.625rem 1.25rem;
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.2);
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .brand-navbar .nav-shell:hover {
+            box-shadow: 0 12px 32px rgba(37, 99, 235, 0.25);
         }
 
         .brand-navbar .nav-content {
@@ -56,16 +100,22 @@
         }
         
         .brand-navbar img {
-            height: 56px;
+            height: 42px;
             width: auto;
-            max-width: 56px;
+            max-width: 180px;
             object-fit: contain;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s ease;
+        }
+        
+        .brand-navbar img:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
         }
         
         .brand-navbar .brand-title {
             font-weight: 700;
-            font-size: 1.25rem;
-            letter-spacing: 0.05em;
+            font-size: 1.125rem;
+            letter-spacing: 0.02em;
             white-space: nowrap;
             color: #fff;
         }
@@ -80,37 +130,80 @@
             display: inline-flex;
             align-items: center;
             gap: 0.35rem;
-            padding: 0.5rem 0.85rem;
+            padding: 0.5rem 0.875rem;
             border-radius: 999px;
             font-weight: 500;
-            font-size: 0.95rem;
-            color: rgba(255, 255, 255, 0.88);
+            font-size: 0.9375rem;
+            color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
-            transition: background 0.25s ease, color 0.25s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap;
             border: none;
             background: transparent;
             cursor: pointer;
+            position: relative;
+        }
+        
+        .brand-navbar .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #fff;
+            transform: translateX(-50%);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .brand-navbar .nav-link:hover,
         .brand-navbar .nav-link:focus-visible {
             background: rgba(255, 255, 255, 0.14);
             color: #fff;
+            transform: translateY(-1px);
+        }
+        
+        .brand-navbar .nav-link:hover::before {
+            width: 70%;
         }
 
         .brand-navbar .nav-cta {
-            background: var(--brand-gold);
-            color: var(--brand-primary);
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            background-size: 200% 200%;
+            color: #fff;
             font-weight: 600;
-            box-shadow: 0 10px 20px rgba(250, 204, 21, 0.35);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .brand-navbar .nav-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
         }
 
         .brand-navbar .nav-cta:hover,
         .brand-navbar .nav-cta:focus-visible {
-            background: #fff;
-            color: var(--brand-primary);
-            box-shadow: 0 12px 24px rgba(15, 118, 110, 0.15);
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            background-size: 200% 200%;
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+            transform: translateY(-2px) scale(1.05);
+        }
+        
+        .brand-navbar .nav-cta:hover::before {
+            left: 100%;
+        }
+        
+        .brand-navbar .nav-cta::before {
+            animation: none;
         }
 
         .brand-navbar .nav-mobile-trigger {
@@ -252,7 +345,7 @@
             <div class="nav-content">
                 <div class="logo-section">
                     <a href="{% url 'home' %}" class="flex items-center">
-                        <img src="{% static 'images/logos/wolvcapital-logo.svg' %}" alt="WolvCapital logo" class="brand-logo" loading="eager">
+                        <img src="{% static 'images/logos/logo.png' %}" alt="WolvCapital logo" class="brand-logo" loading="eager">
                     </a>
                 </div>
 
@@ -301,8 +394,8 @@
             </div>
 
             <!-- Mobile menu -->
-            <div id="mobile-menu" class="md:hidden hidden mt-3">
-                <div class="px-3 pt-3 pb-4 space-y-1 bg-white/95 border border-blue-100 rounded-xl shadow-lg">
+            <div id="mobile-menu" class="md:hidden hidden mt-3" style="animation: slideDown 0.3s ease-out;">
+                <div class="px-3 pt-3 pb-4 space-y-1 bg-white/95 border border-blue-100 rounded-xl shadow-lg transition-all duration-300">
                     <a href="{% url 'home' %}" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">Home</a>
                     <a href="{% url 'plans' %}" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">Plans</a>
                     
@@ -327,7 +420,7 @@
                         <a href="{% url 'account_logout' %}" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">Logout</a>
                     {% else %}
                         <a href="{% url 'account_login' %}" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">Login</a>
-                        <a href="{% url 'account_signup' %}" class="block bg-blue-600 text-white px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700 mx-3">Sign Up</a>
+                        <a href="{% url 'account_signup' %}" class="block bg-gradient-to-r from-blue-900 to-blue-600 text-white px-3 py-2 rounded-md text-base font-medium hover:from-blue-800 hover:to-blue-500 mx-3 shadow-md">Sign Up</a>
                     {% endif %}
                 </div>
             </div>
@@ -337,7 +430,7 @@
     {% if messages %}
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
             {% for message in messages %}
-                <div class="mb-4 rounded-lg p-4 text-sm font-medium
+                <div class="mb-4 rounded-lg p-4 text-sm font-medium transition-all duration-500 ease-out" style="animation: slideDown 0.5s ease-out;"
                     {% if message.tags == 'error' %}bg-red-50 text-red-700 border border-red-200
                     {% elif message.tags == 'warning' %}bg-yellow-50 text-yellow-700 border border-yellow-200
                     {% elif message.tags == 'success' %}bg-green-50 text-green-700 border border-green-200
@@ -445,36 +538,85 @@
     </div>
 
     <!-- Footer -->
-    <footer class="brand-footer">
+    <footer class="brand-footer" style="animation: fadeIn 0.8s ease-out 0.3s both;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
                     <ul class="space-y-2 text-gray-300">
-                        <li><a href="{% url 'home' %}" class="hover:text-white transition-colors">Home</a></li>
-                        <li><a href="{% url 'plans' %}" class="hover:text-white transition-colors">Investment Plans</a></li>
-                        <li><a href="{% url 'about' %}" class="hover:text-white transition-colors">About Us</a></li>
-                        <li><a href="{% url 'contact' %}" class="hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="{% url 'home' %}" class="hover:text-white hover:translate-x-1 transition-all duration-300 inline-block">Home</a></li>
+                        <li><a href="{% url 'plans' %}" class="hover:text-white hover:translate-x-1 transition-all duration-300 inline-block">Investment Plans</a></li>
+                        <li><a href="{% url 'about' %}" class="hover:text-white hover:translate-x-1 transition-all duration-300 inline-block">About Us</a></li>
+                        <li><a href="{% url 'contact' %}" class="hover:text-white hover:translate-x-1 transition-all duration-300 inline-block">Contact</a></li>
                     </ul>
                 </div>
                 
                 <div>
                     <h4 class="text-lg font-semibold mb-4">Legal</h4>
                     <ul class="space-y-2 text-gray-300">
-                        <li><a href="{% url 'terms_of_service' %}" class="hover:text-white transition-colors">Terms of Service</a></li>
-                        <li><a href="{% url 'terms' %}" class="hover:text-white transition-colors">Legal Disclaimer</a></li>
-                        <li><a href="{% url 'risk_disclosure' %}" class="hover:text-white transition-colors">Risk Disclosure</a></li>
-                        <li><a href="{% url 'privacy' %}" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="{% url 'terms_of_service' %}" class="hover:text-white hover:translate-x-1 transition-all duration-300 inline-block">Terms of Service</a></li>
+                        <li><a href="{% url 'terms' %}" class="hover:text-white hover:translate-x-1 transition-all duration-300 inline-block">Legal Disclaimer</a></li>
+                        <li><a href="{% url 'risk_disclosure' %}" class="hover:text-white hover:translate-x-1 transition-all duration-300 inline-block">Risk Disclosure</a></li>
+                        <li><a href="{% url 'privacy' %}" class="hover:text-white hover:translate-x-1 transition-all duration-300 inline-block">Privacy Policy</a></li>
                     </ul>
                 </div>
                 
-                                <div>
-                                        <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
-                                        <div class="flex items-center justify-center p-6 bg-blue-900/40 rounded-lg">
-                                                <img src="{% static 'images/logos/wolvcapital-logo.svg' %}" alt="WolvCapital" class="brand-logo-large" loading="lazy">
-                                        </div>
-                                </div>
-                                if (isOpen) {
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
+                    <div class="space-y-2 text-gray-300">
+                        <p class="flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            support@wolvcapital.com
+                        </p>
+                        <p class="flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            24/7 Support
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-blue-800 pt-8 mt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-4 md:mb-0">
+                        <img src="{% static 'images/logos/logo.png' %}" alt="WolvCapital" class="h-12 transition-all duration-300 hover:scale-110 hover:brightness-110" loading="lazy">
+                    </div>
+                    <p class="text-gray-300 text-sm">
+                        &copy; {% now 'Y' %} WolvCapital Invest. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatButton = document.getElementById('chat-button');
+            const chatWindow = document.getElementById('chat-window');
+            const chatInput = document.getElementById('chat-input');
+            const sendButton = document.getElementById('send-button');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatIcon = document.getElementById('chat-icon');
+            const closeIcon = document.getElementById('close-icon');
+            const quickActionBtns = document.querySelectorAll('.quick-action-btn');
+            const contactNameInput = document.getElementById('chat-contact-name');
+            const contactEmailInput = document.getElementById('chat-contact-email');
+            
+            const userAuthenticated = {{ user.is_authenticated|yesno:'true,false' }};
+            const defaultEmail = "{{ user.email|default:'' }}";
+            const defaultName = "{{ user.get_full_name|default:'' }}";
+            const supportEndpoint = "{% url 'support_request' %}";
+            
+            let isOpen = false;
+            let selectedTopic = '';
+
+            function toggleChat() {
+                isOpen = !isOpen;
+                if (isOpen) {
                     chatWindow.classList.remove('hidden');
                     setTimeout(() => {
                         chatWindow.classList.add('chat-show');
@@ -498,6 +640,10 @@
                 }
             }
 
+            function addSystemMessage(text) {
+                addMessage(text, false);
+            }
+
             // Add message to chat
             function addMessage(message, isUser = false) {
                 const messageDiv = document.createElement('div');
@@ -505,8 +651,18 @@
                 
                 const avatar = document.createElement('div');
                 avatar.className = 'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0';
+                avatar.style.background = isUser ? 'linear-gradient(135deg, #3b82f6, #1e3a8a)' : '#e5e7eb';
+                avatar.innerHTML = isUser ? '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>' : '<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>';
                 
+                const bubble = document.createElement('div');
+                bubble.className = (isUser ? 'bg-blue-600 text-white' : 'bg-white text-gray-800') + ' p-3 rounded-lg shadow-sm max-w-xs';
+                bubble.innerHTML = '<p class="text-sm">' + message + '</p><div class="text-xs ' + (isUser ? 'text-blue-100' : 'text-gray-500') + ' mt-1">Just now</div>';
                 
+                messageDiv.appendChild(avatar);
+                messageDiv.appendChild(bubble);
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
 
             function getCsrfToken() {
                 const cookie = document.cookie.split(';').map(item => item.trim()).find(item => item.startsWith('csrftoken='));
@@ -599,6 +755,30 @@
                     chatButton.classList.add('chat-pulse');
                 }
             }, 2000);
+        });
+        
+        // Mobile menu toggle with animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    if (mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.remove('hidden');
+                        setTimeout(() => {
+                            mobileMenu.style.opacity = '1';
+                            mobileMenu.style.transform = 'translateY(0)';
+                        }, 10);
+                    } else {
+                        mobileMenu.style.opacity = '0';
+                        mobileMenu.style.transform = 'translateY(-10px)';
+                        setTimeout(() => {
+                            mobileMenu.classList.add('hidden');
+                        }, 300);
+                    }
+                });
+            }
         });
     </script>
 </body>

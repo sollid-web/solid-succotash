@@ -605,7 +605,7 @@
             const contactNameInput = document.getElementById('chat-contact-name');
             const contactEmailInput = document.getElementById('chat-contact-email');
             
-            const userAuthenticated = {{ user.is_authenticated|yesno:'true,false' }};
+            const userAuthenticated = "{{ user.is_authenticated|yesno:'true,false' }}" === "true";
             const defaultEmail = "{{ user.email|default:'' }}";
             const defaultName = "{{ user.get_full_name|default:'' }}";
             const supportEndpoint = "{% url 'support_request' %}";

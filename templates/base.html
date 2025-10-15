@@ -15,6 +15,8 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/brand.css' %}">
     <link rel="stylesheet" href="{% static 'css/wolvcapital_style_fixed.css' %}">
 
     <!-- Custom CSS -->
@@ -483,13 +485,13 @@
                             <ul class="sub">
                               <li><a href="{% url 'about' %}">About Us</a></li>
                               <li><a href="{% url 'contact' %}">Contact</a></li>
-                              <li><a href="{% url 'risk' %}">Risk Disclosure</a></li>
+                                                            <li><a href="{% url 'risk_disclosure' %}">Risk Disclosure</a></li>
                               <li><a href="{% url 'terms' %}">Terms of Service</a></li>
                               <li><a href="{% url 'privacy' %}">Privacy Policy</a></li>
                             </ul>
                           </li>
-                          <li><a href="{% url 'login' %}">Login</a></li>
-                          <li><a class="btn btn-primary" href="{% url 'signup' %}">Sign Up</a></li>
+                                                    <li><a href="{% url 'account_login' %}">Login</a></li>
+                                                    <li><a class="btn btn-primary" href="{% url 'account_signup' %}">Sign Up</a></li>
                         </ul>
 
                         <!-- mobile hamburger -->
@@ -505,11 +507,11 @@
                           <a href="{% url 'about' %}">About Us</a>
                           <a href="{% url 'contact' %}">Contact</a>
                           <span class="group">Legal</span>
-                          <a href="{% url 'risk' %}">Risk Disclosure</a>
+                                                    <a href="{% url 'risk_disclosure' %}">Risk Disclosure</a>
                           <a href="{% url 'terms' %}">Terms of Service</a>
                           <a href="{% url 'privacy' %}">Privacy Policy</a>
                           <span class="group">Login</span>
-                          <a class="btn btn-primary" href="{% url 'signup' %}">Sign Up</a>
+                                                    <a class="btn btn-primary" href="{% url 'account_signup' %}">Sign Up</a>
                         </div>
                       </nav>
 

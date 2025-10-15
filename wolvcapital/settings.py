@@ -197,6 +197,9 @@ TESTING = any(arg in os.environ.get("PYTEST_CURRENT_TEST", "") for arg in ["::"]
 
 if not DEBUG and not TESTING:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    # Avoid hard 500s if a static path is referenced but missing in the manifest.
+    # WhiteNoise will fall back to the un-hashed file path instead of raising ValueError.
+    WHITENOISE_MANIFEST_STRICT = False
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"

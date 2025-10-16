@@ -55,7 +55,7 @@
 {% endblock %}
 
 <!-- Hero Section with responsive imagery and overlay -->
-<section class="hero hero--mesh relative">
+<section class="hero hero--mesh relative pt-0" style="margin-top:0;">
     <picture class="hero-picture">
         <source type="image/avif" srcset="{% static 'images/hero-crypto-abstract-sm.avif' %} 768w, {% static 'images/hero-crypto-abstract-md.avif' %} 1280w, {% static 'images/hero-crypto-abstract-xl.avif' %} 1920w" sizes="100vw">
         <source type="image/webp" srcset="{% static 'images/hero-crypto-abstract-sm.webp' %} 768w, {% static 'images/hero-crypto-abstract-md.webp' %} 1280w, {% static 'images/hero-crypto-abstract-xl.webp' %} 1920w" sizes="100vw">
@@ -63,8 +63,8 @@
     </picture>
     <div class="hero-overlay"></div>
 
-    <!-- Centered name card overlay -->
-    <div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none px-4">
+    <!-- Centered name card overlay, lifted up to avoid collision with CTA -->
+    <div class="absolute inset-0 z-10 flex items-start justify-center pointer-events-none px-4 pt-12 md:pt-16 lg:pt-20">
         <div class="hero-name-card pointer-events-auto px-6 py-4 sm:px-8 sm:py-5 md:px-10 md:py-6">
             <div class="hero-crest" aria-hidden="true">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

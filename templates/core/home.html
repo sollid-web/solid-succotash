@@ -4,14 +4,56 @@
 {% block title %}WolvCapital - Professional Investment Platform{% endblock %}
 
 {% block content %}
+{% block extra_css %}
+<style>
+    /* Center name card overlay styles (scoped to home hero) */
+    .hero-name-card {
+        background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+        border: 1px solid rgba(255,255,255,0.25);
+        border-radius: 1rem; /* 16px */
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.2);
+    }
+    .hero-name-text {
+        color: rgba(255,255,255,0.95);
+        letter-spacing: 0.02em;
+        text-shadow:
+            0 1px 0 rgba(255,255,255,0.25),
+            0 -1px 0 rgba(0,0,0,0.45),
+            0 8px 22px rgba(0,0,0,0.45);
+        -webkit-text-stroke: 0.5px rgba(255,255,255,0.15);
+    }
+    .hero-name-sub {
+        color: rgba(255,255,255,0.85);
+        text-shadow: 0 1px 0 rgba(0,0,0,0.3);
+    }
+    @media (max-width: 640px) {
+        .hero-name-card { padding: 0.75rem 1rem; }
+    }
+</style>
+{% endblock %}
+
 <!-- Hero Section with responsive imagery and overlay -->
-<section class="hero hero--mesh">
+<section class="hero hero--mesh relative">
     <picture class="hero-picture">
         <source type="image/avif" srcset="{% static 'images/hero-crypto-abstract-sm.avif' %} 768w, {% static 'images/hero-crypto-abstract-md.avif' %} 1280w, {% static 'images/hero-crypto-abstract-xl.avif' %} 1920w" sizes="100vw">
         <source type="image/webp" srcset="{% static 'images/hero-crypto-abstract-sm.webp' %} 768w, {% static 'images/hero-crypto-abstract-md.webp' %} 1280w, {% static 'images/hero-crypto-abstract-xl.webp' %} 1920w" sizes="100vw">
         <img src="{% static 'images/hero-crypto-abstract-xl.jpg' %}" srcset="{% static 'images/hero-crypto-abstract-sm.jpg' %} 768w, {% static 'images/hero-crypto-abstract-md.jpg' %} 1280w, {% static 'images/hero-crypto-abstract-xl.jpg' %} 1920w" sizes="100vw" alt="Secure blockchain operations visual" class="hero-bg" loading="eager" fetchpriority="high" decoding="async" width="1920" height="1269">
     </picture>
     <div class="hero-overlay"></div>
+
+    <!-- Centered name card overlay -->
+    <div class="absolute inset-0 z-10 flex items-center justify-center pointer-events-none px-4">
+        <div class="hero-name-card pointer-events-auto px-6 py-4 sm:px-8 sm:py-5 md:px-10 md:py-6">
+            <div class="hero-name-text text-2xl sm:text-3xl md:text-5xl font-extrabold text-center">
+                WOLVCAPITAL INVEST
+            </div>
+            <div class="hero-name-sub text-center text-xs sm:text-sm md:text-base mt-1 md:mt-2">
+                Institutional-grade digital investing
+            </div>
+        </div>
+    </div>
     <div class="hero-content">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl">

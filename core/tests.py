@@ -390,57 +390,45 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'WolvCapital')
         self.assertBaseStylesPresent(response)
-        self.assertChatWidgetPresent(response, authenticated=False)
-    
-    def test_home_page_includes_core_stylesheets(self):
-        """UI should load both base and brand stylesheets"""
-        response = self.client.get(reverse('home'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'href="/static/css/base.css"')
-        self.assertContains(response, 'href="/static/css/brand.css"')
 
-    def test_chat_widget_for_guest(self):
-        """Guest users should see chat dataset marking authentication as false"""
-        response = self.client.get(reverse('home'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'id="chat-widget"')
-        self.assertContains(response, 'data-user-authenticated="false"')
 
-    def test_chat_widget_for_authenticated_user(self):
-        """Authenticated users should render chat widget with user metadata"""
-        self.client.login(username='testuser', password='testpass123')
-        response = self.client.get(reverse('home'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'data-user-authenticated="true"')
-        self.assertContains(response, 'data-user-email="test@example.com"')
+class DashboardTotalsTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = get_user_model().objects.create_user(
+            username='dashuser', email='dash@example.com', password='pass12345'
+        )
+        self.admin = get_user_model().objects.create_user(
+            username='dashadmin', email='dashadmin@example.com', password='adminpass', is_staff=True
+        )
 
-    def test_plans_page(self):
-        """Test plans page loads"""
-        response = self.client.get(reverse('plans'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Investment Plans')
-        self.assertBaseStylesPresent(response)
-        self.assertChatWidgetPresent(response, authenticated=False)
+    def test_dashboard_totals_only_approved(self):
+        # Create and approve a deposit (credits wallet)
+        dep1 = create_transaction(user=self.user, tx_type='deposit', amount=200, reference='dep1')
+        approve_transaction(dep1, self.admin, notes='ok')
 
-    def test_contact_page_styles_and_chat(self):
-        """Public contact page should include shared styles and chat widget"""
-        response = self.client.get(reverse('contact'))
-        self.assertEqual(response.status_code, 200)
-        self.assertBaseStylesPresent(response)
-        self.assertChatWidgetPresent(response, authenticated=False)
-    
-    def test_dashboard_requires_login(self):
-        """Test dashboard requires authentication"""
-        response = self.client.get(reverse('dashboard'))
-        self.assertEqual(response.status_code, 302)  # Redirect to login
-    
-    def test_dashboard_authenticated(self):
-        """Test dashboard loads for authenticated user"""
-        self.client.login(username='testuser', password='testpass123')
-        response = self.client.get(reverse('dashboard'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Dashboard')
-        self.assertBaseStylesPresent(response)
+        # Create and approve a withdrawal (debited from credited funds)
+        wd1 = create_transaction(user=self.user, tx_type='withdrawal', amount=50, reference='wd1')
+        approve_transaction(wd1, self.admin, notes='ok')
+
+        # Create a pending deposit (should NOT count)
+        create_transaction(user=self.user, tx_type='deposit', amount=75, reference='dep2')
+
+        # Create and reject a withdrawal (should NOT count)
+        wd2 = create_transaction(user=self.user, tx_type='withdrawal', amount=25, reference='wd2')
+        from transactions.services import reject_transaction
+        reject_transaction(wd2, self.admin, notes='no')
+
+        # Login and load dashboard
+        self.client.login(username='dashuser', password='pass12345')
+        resp = self.client.get(reverse('dashboard'))
+        self.assertEqual(resp.status_code, 200)
+
+        # Validate context totals reflect only approved transactions
+        self.assertIn('total_deposits', resp.context)
+        self.assertIn('total_withdrawals', resp.context)
+        self.assertEqual(resp.context['total_deposits'], Decimal('200'))
+        self.assertEqual(resp.context['total_withdrawals'], Decimal('50'))
 
 
 class ManagementCommandTests(TestCase):

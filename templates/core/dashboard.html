@@ -9,6 +9,7 @@
 </style>
 {% endblock %}
 
+{% load currency %}
 {% block content %}
 <div class="bg-gray-50 min-h-screen py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,7 +20,7 @@
         </div>
 
         <!-- Wallet Balance & Quick Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 mb-8">
             <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-green-500">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
@@ -29,7 +30,7 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm font-medium text-gray-500">Wallet Balance</p>
-                        <p class="text-2xl font-bold text-gray-900">${{ wallet.balance }}</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ wallet.balance|currency }}</p>
                     </div>
                 </div>
             </div>
@@ -43,7 +44,7 @@
                     </div>
                     <div class="ml-4">
                         <p class="text-sm font-medium text-gray-500">Total Invested</p>
-                        <p class="text-2xl font-bold text-gray-900">${{ total_invested }}</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ total_invested|currency }}</p>
                     </div>
                 </div>
             </div>
@@ -58,6 +59,36 @@
                     <div class="ml-4">
                         <p class="text-sm font-medium text-gray-500">Active Investments</p>
                         <p class="text-2xl font-bold text-gray-900">{{ active_investments }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Deposits -->
+            <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-emerald-500">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6" />
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Total Deposits</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ total_deposits|currency }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Withdrawals -->
+            <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-rose-500">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6m6 6V6" />
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Total Withdrawals</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ total_withdrawals|currency }}</p>
                     </div>
                 </div>
             </div>

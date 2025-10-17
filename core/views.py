@@ -172,6 +172,11 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             total_invested = investments.filter(status='approved').aggregate(
                 total=Sum('amount')
             )['total'] or 0
+
+            # Totals: only count approved money movements
+            totals_qs = Transaction.objects.filter(user=user, status='approved')
+            total_deposits = totals_qs.filter(tx_type='deposit').aggregate(total=Sum('amount'))['total'] or 0
+            total_withdrawals = totals_qs.filter(tx_type='withdrawal').aggregate(total=Sum('amount'))['total'] or 0
             
             active_investments = investments.filter(status='approved').count()
             
@@ -192,6 +197,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 'investments': investments,
                 'transactions': transactions,
                 'total_invested': total_invested,
+                'total_deposits': total_deposits,
+                'total_withdrawals': total_withdrawals,
                 'active_investments': active_investments,
                 'investment_form': InvestmentForm(user=user),
                 'deposit_form': DepositForm(),

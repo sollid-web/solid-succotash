@@ -53,7 +53,6 @@
     }
 </style>
 {% endblock %}
-
 <!-- Hero Section with responsive imagery and overlay -->
 <section class="hero hero--mesh relative pt-0" style="margin-top:0;">
     <picture class="hero-picture">
@@ -62,8 +61,7 @@
         <img src="{% static 'images/hero-crypto-abstract-xl.jpg' %}" srcset="{% static 'images/hero-crypto-abstract-sm.jpg' %} 768w, {% static 'images/hero-crypto-abstract-md.jpg' %} 1280w, {% static 'images/hero-crypto-abstract-xl.jpg' %} 1920w" sizes="100vw" alt="Secure blockchain operations visual" class="hero-bg" loading="eager" fetchpriority="high" decoding="async" width="1920" height="1269">
     </picture>
     <div class="hero-overlay"></div>
-
-    <!-- Centered name card overlay, lifted up to avoid collision with CTA -->
+<!-- Centered name card overlay, lifted up to avoid collision with CTA -->
     <div class="absolute inset-0 z-10 flex items-start justify-center pointer-events-none px-4 pt-12 md:pt-16 lg:pt-20">
         <div class="hero-name-card pointer-events-auto px-6 py-4 sm:px-8 sm:py-5 md:px-10 md:py-6">
             <div class="hero-crest" aria-hidden="true">
@@ -86,7 +84,8 @@
                 <span class="inline-flex items-center px-3 py-1 text-sm font-semibold bg-white/10 backdrop-blur border border-white/20 rounded-full">Institutional-grade digital investing</span>
                 <h1 class="mt-6 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">WolvCapital</h1>
                 <p class="mt-4 text-lg sm:text-xl text-blue-100 leading-relaxed">
-                    Secure crypto banking, audited ROI programs, and virtual cards&mdash;all governed by a human approval loop so capital never moves without oversight.
+                    
+        Secure crypto banking, audited ROI programs, and virtual cards&mdash;all governed by a human approval loop so capital never moves without oversight.
                 </p>
                 <div class="mt-8 flex flex-col sm:flex-row sm:items-center gap-4 cta-group">
                     <a href="{% url 'account_signup' %}" class="brand-btn-primary inline-flex items-center justify-center">Open an account</a>

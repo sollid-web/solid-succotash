@@ -51,6 +51,23 @@
     @media (max-width: 640px) {
         .hero-name-card { padding: 0.75rem 1rem; }
     }
+    /* Home-only navbar overlap and enriched hero background */
+    body .brand-navbar { position: absolute; top: 0; left: 0; right: 0; background: transparent !important; z-index: 40; }
+    body .brand-navbar .nav-shell { background: transparent !important; box-shadow: none !important; border: 1px solid rgba(255,255,255,0.15); }
+    @media (max-width: 768px) { body .brand-navbar .nav-shell { border-color: rgba(255,255,255,0.1); } }
+
+    .hero { min-height: 78vh; }
+    .hero .hero-picture, .hero .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .hero .hero-overlay { position: absolute; inset: 0; background:
+        radial-gradient(1000px 500px at 10% 0%, rgba(59, 130, 246, 0.25) 0%, transparent 60%),
+        radial-gradient(1000px 500px at 90% 10%, rgba(147, 51, 234, 0.25) 0%, transparent 60%),
+        linear-gradient(180deg, rgba(17, 24, 39, 0.72) 0%, rgba(17, 24, 39, 0.40) 30%, rgba(17, 24, 39, 0.68) 100%);
+        mix-blend-mode: multiply;
+        pointer-events: none;
+    }
+    .hero .hero-content { position: relative; z-index: 10; padding-top: 5.5rem; padding-bottom: 4rem; }
+    @media (min-width: 768px) { .hero .hero-content { padding-top: 7.5rem; } }
+    .hero .hero-bg { filter: saturate(1.1) contrast(1.05); }
 </style>
 {% endblock %}
 <!-- Hero Section with responsive imagery and overlay -->

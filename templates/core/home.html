@@ -4,28 +4,42 @@
 {% block title %}Home · WolvCapital{% endblock %}
 
 {% block content %}
-<section class="py-4 py-md-5">
-    <div class="container">
-        <div class="row align-items-center gy-4">
+<!-- Hero Section with Gradient Background -->
+<section class="position-relative overflow-hidden" style="min-height: 70vh; background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);">
+    <div class="container position-relative" style="z-index: 2; padding-top: 80px; padding-bottom: 80px;">
+        <div class="row align-items-center gy-5">
             <div class="col-12 col-lg-6">
-                <h1 class="display-6 fw-semibold">Invest. Track. Withdraw — Anywhere.</h1>
-                <p class="text-muted">Mobile-ready virtual banking and investments with manual admin approvals for deposits and withdrawals.</p>
-                <div class="d-flex gap-2 flex-wrap">
-                    <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg">Open Dashboard</a>
-                    <a href="{% url 'plans' %}" class="btn btn-outline-secondary btn-lg">View Plans</a>
+                <h1 class="display-4 fw-bold text-white mb-4">
+                    Invest. Track. Withdraw — Anywhere.
+                </h1>
+                <p class="lead text-white mb-4" style="opacity: 0.95;">
+                    Mobile-ready virtual banking and investments with manual admin approvals for deposits and withdrawals.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg px-5 py-3 fw-semibold shadow-lg" style="border-radius: 12px;">
+                        Open Dashboard
+                    </a>
+                    <a href="{% url 'plans' %}" class="btn btn-outline-light btn-lg px-5 py-3 fw-semibold" style="border-radius: 12px; border-width: 2px;">
+                        View Plans
+                    </a>
                 </div>
             </div>
             <div class="col-12 col-lg-6 text-center">
-                <div class="card shadow-lg border-0">
+                <div class="card shadow-lg border-0" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 20px;">
                     <div class="card-body p-5">
-                        <div class="display-1 text-primary mb-3">💳</div>
-                        <h3 class="mb-3">Virtual Banking</h3>
-                        <p class="text-muted">Manage your investments with secure virtual cards and real-time tracking.</p>
+                        <div class="display-1 mb-4" style="font-size: 5rem;">💳</div>
+                        <h3 class="fw-bold mb-3" style="color: #1e3a8a;">Virtual Banking</h3>
+                        <p class="text-muted fs-5">
+                            Manage your investments with secure virtual cards and real-time tracking.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Decorative gradient overlay -->
+    <div class="position-absolute w-100 h-100 top-0 start-0" style="background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.3) 0%, transparent 50%); z-index: 1;"></div>
 </section>
 
 <section class="py-4 border-top">

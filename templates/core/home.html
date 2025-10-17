@@ -6,51 +6,6 @@
 {% block content %}
 {% block extra_css %}
 <style>
-    /* Center name card overlay styles (scoped to home hero) */
-    .hero-name-card {
-        background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
-        border: 1px solid rgba(255,255,255,0.25);
-        border-radius: 1rem; /* 16px */
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        box-shadow: 0 8px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.2);
-    }
-    .hero-name-text {
-        color: rgba(255,255,255,0.95);
-        letter-spacing: 0.02em;
-        text-shadow:
-            0 1px 0 rgba(255,255,255,0.25),
-            0 -1px 0 rgba(0,0,0,0.45),
-            0 8px 22px rgba(0,0,0,0.45);
-        -webkit-text-stroke: 0.5px rgba(255,255,255,0.15);
-    }
-    .hero-name-sub {
-        color: rgba(255,255,255,0.85);
-        text-shadow: 0 1px 0 rgba(0,0,0,0.3);
-    }
-    .hero-name-accent {
-        height: 3px;
-        width: 56px;
-        margin: 0.5rem auto 0.25rem;
-        background: linear-gradient(90deg, rgba(253,224,71,0), rgba(253,224,71,0.9), rgba(253,224,71,0));
-        box-shadow: 0 1px 6px rgba(253, 224, 71, 0.55);
-        border-radius: 9999px;
-    }
-    .hero-crest {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 28px;
-        height: 28px;
-        border-radius: 9999px;
-        background: linear-gradient(135deg, rgba(253, 224, 71, 0.95), rgba(237, 203, 47, 0.9));
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 6px 20px rgba(253, 224, 71, 0.35);
-        margin: 0 auto 0.5rem;
-        border: 1px solid rgba(0,0,0,0.08);
-    }
-    @media (max-width: 640px) {
-        .hero-name-card { padding: 0.75rem 1rem; }
-    }
     /* Home-only navbar overlap and enriched hero background */
     body .brand-navbar { position: absolute; top: 0; left: 0; right: 0; background: transparent !important; z-index: 40; }
     body .brand-navbar .nav-shell { background: transparent !important; box-shadow: none !important; border: 1px solid rgba(255,255,255,0.15); }
@@ -78,23 +33,6 @@
         <img src="{% static 'images/hero-crypto-abstract-xl.jpg' %}" srcset="{% static 'images/hero-crypto-abstract-sm.jpg' %} 768w, {% static 'images/hero-crypto-abstract-md.jpg' %} 1280w, {% static 'images/hero-crypto-abstract-xl.jpg' %} 1920w" sizes="100vw" alt="Secure blockchain operations visual" class="hero-bg" loading="eager" fetchpriority="high" decoding="async" width="1920" height="1269">
     </picture>
     <div class="hero-overlay"></div>
-<!-- Centered name card overlay, lifted up to avoid collision with CTA -->
-    <div class="absolute inset-0 z-10 flex items-start justify-center pointer-events-none px-4 pt-12 md:pt-16 lg:pt-20">
-        <div class="hero-name-card pointer-events-auto px-6 py-4 sm:px-8 sm:py-5 md:px-10 md:py-6">
-            <div class="hero-crest" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 3l7 4v5c0 5-7 9-7 9s-7-4-7-9V7l7-4z" stroke="#5b4a00" stroke-width="1" fill="rgba(255,255,255,0.5)"/>
-                </svg>
-            </div>
-            <div class="hero-name-text text-2xl sm:text-3xl md:text-5xl font-extrabold text-center">
-                WOLVCAPITAL INVEST
-            </div>
-            <div class="hero-name-accent"></div>
-            <div class="hero-name-sub text-center text-xs sm:text-sm md:text-base mt-1 md:mt-2">
-                Institutional-grade digital investing
-            </div>
-        </div>
-    </div>
     <div class="hero-content">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="max-w-3xl">

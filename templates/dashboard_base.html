@@ -5,21 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Dashboard - WolvCapital{% endblock %}</title>
     <meta name="description" content="{% block description %}WolvCapital user dashboard for managing investments and transactions.{% endblock %}">
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Brand CSS -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/brand.css' %}">
-    
+
     <!-- Custom CSS -->
     <style>
         .gradient-bg { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
         .text-gradient { background: linear-gradient(135deg, #1e3a8a, #3b82f6); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
     </style>
-    
+
     {% block extra_css %}{% endblock %}
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -33,7 +33,7 @@
                     </a>
                     <span class="ml-4 text-gray-500">Dashboard</span>
                 </div>
-                
+
                 <div class="flex items-center space-x-4">
                     <a href="{% url 'notifications' %}" class="text-gray-600 hover:text-blue-600 font-medium">Notifications</a>
                     <span class="text-gray-600">{{ user.first_name|default:user.email }}</span>

@@ -2,6 +2,7 @@
 import os
 from pathlib import Path
 from urllib.parse import urlparse
+
 import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -75,13 +76,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
-
     # Third-party
     "whitenoise.runserver_nostatic",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-
     # Local apps
     "core",
     "users",
@@ -182,8 +181,8 @@ AUTH_USER_MODEL = "users.User"
 
 # Authentication backends
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 # Explicit login/logout redirect flow

@@ -50,13 +50,13 @@ Step 3: Connect Repository
    • Branch: main
 
 Step 4: Configure Environment Variables
-   
+
    Required:
    ┌───────────────────────────────────────────────────────────┐
    │ SECRET_KEY                                                │
    │ ism+7l(h49h2v4(p9jg_9vlu)-m89nc_&pfztmavk_m4$6iwq*      │
    └───────────────────────────────────────────────────────────┘
-   
+
    Optional (recommended):
    • DEBUG=0
    • DJANGO_SETTINGS_MODULE=wolvcapital.settings
@@ -83,14 +83,14 @@ Once deployment shows "Live" status:
    └─ Dashboard → Your Service → "Shell" tab
 
 2. Run these commands IN ORDER:
-   
+
    a) Fix authentication setup:
       $ python manage.py fix_admin_login
-   
+
    b) Create admin account:
       $ python manage.py createsuperuser
       (Enter your email and password)
-   
+
    c) Run health check:
       $ python manage.py healthcheck
 

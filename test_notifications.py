@@ -2,7 +2,9 @@
 Test script to demonstrate the notification system
 Run this from Django shell: python manage.py shell < test_notifications.py
 """
+
 from django.contrib.auth import get_user_model
+
 from users.notification_service import *  # noqa: F401,F403 (script-style usage)
 
 User = get_user_model()
@@ -15,16 +17,12 @@ if __name__ == "__main__":
 
     # Get or create a test user
     user, created = User.objects.get_or_create(
-        email='testuser@example.com',
-        defaults={
-            'username': 'testuser',
-            'first_name': 'Test',
-            'last_name': 'User'
-        }
+        email="testuser@example.com",
+        defaults={"username": "testuser", "first_name": "Test", "last_name": "User"},
     )
 
     if created:
-        user.set_password('testpass123')
+        user.set_password("testpass123")
         user.save()
         print(f"\n✅ Created test user: {user.email}")
     else:
@@ -50,11 +48,11 @@ if __name__ == "__main__":
     print("=" * 60)
     create_user_notification(
         user=user,
-        notification_type='system_alert',
-        title='Platform Upgrade',
-        message='We are upgrading our servers tonight. Expect improved performance!',
-        priority='high',
-        expires_in_days=3
+        notification_type="system_alert",
+        title="Platform Upgrade",
+        message="We are upgrading our servers tonight. Expect improved performance!",
+        priority="high",
+        expires_in_days=3,
     )
     print("✅ System alert notification sent!")
 

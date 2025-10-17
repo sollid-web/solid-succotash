@@ -136,7 +136,7 @@
                         <div class="card-body">
                             <form method="post" action="{% url 'deposit' %}" class="row g-3">
                         {% csrf_token %}
-                        
+
                         <!-- Payment Method Selection -->
                             <div class="col-12 col-md-6">
                                 <label for="{{ deposit_form.payment_method.id_for_label }}" class="form-label">
@@ -144,14 +144,14 @@
                             </label>
                             {{ deposit_form.payment_method }}
                         </div>
-                        
+
                             <div class="col-12 col-md-6">
                                 <label for="{{ deposit_form.amount.id_for_label }}" class="form-label">
                                     Deposit Amount ($)
                                 </label>
                                 {{ deposit_form.amount }}
                             </div>
-                        
+
                         <!-- Crypto Wallet Address Display -->
                             <div id="crypto-wallet-info" class="col-12 crypto-deposit-section bg-light border border-info rounded p-3">
                             <h4 class="font-medium text-blue-900 mb-3">Send to this address:</h4>
@@ -175,7 +175,7 @@
                             </div>
                             {% endfor %}
                         </div>
-                        
+
                         <!-- Transaction Hash (for crypto) -->
                             <div id="tx-hash-field" class="col-12 crypto-deposit-section">
                                 <label for="{{ deposit_form.tx_hash.id_for_label }}" class="form-label">
@@ -184,7 +184,7 @@
                             {{ deposit_form.tx_hash }}
                                 <div class="form-text">Required for cryptocurrency deposits</div>
                         </div>
-                        
+
                             <div class="col-12">
                                 <label for="{{ deposit_form.reference.id_for_label }}" class="form-label">
                                 Payment Reference
@@ -192,7 +192,7 @@
                             {{ deposit_form.reference }}
                                 <div class="form-text">{{ deposit_form.reference.help_text }}</div>
                         </div>
-                        
+
                             <div class="col-12">
                                 <div class="alert alert-info small mb-0">
                                     <strong>Manual Verification:</strong> All deposits require admin approval before funds are added to your wallet.
@@ -290,7 +290,7 @@
                             <div class="text-3xl font-bold">{{ plan.daily_roi }}%</div>
                             <p class="text-indigo-100 text-sm">Daily</p>
                         </div>
-                        
+
                         <div class="p-4 space-y-3">
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Duration</span>
@@ -303,12 +303,12 @@
                                     {% endif %}
                                 </span>
                             </div>
-                            
+
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Range</span>
                                 <span class="font-semibold">{{ plan.min_amount|currency }} - {{ plan.max_amount|currency }}</span>
                             </div>
-                            
+
                             <div class="bg-green-50 rounded p-3 text-center">
                                 <div class="text-xs text-gray-600">Total Return</div>
                                 <div class="text-xl font-bold text-green-600">{{ plan.total_roi }}%</div>
@@ -509,12 +509,12 @@ function toggleCryptoFields(paymentMethod) {
     const txHashField = document.getElementById('tx-hash-field');
     const cryptoWarning = document.querySelector('.crypto-warning');
     const txHashInput = document.querySelector('input[name="tx_hash"]');
-    
+
     // Hide all crypto wallet divs first
     document.querySelectorAll('[class*="crypto-wallet-"]').forEach(div => {
         div.classList.add('hidden');
     });
-    
+
     if (['BTC', 'USDT', 'USDC', 'ETH'].includes(paymentMethod)) {
         // Show crypto fields
         cryptoInfo.style.display = 'block';
@@ -522,7 +522,7 @@ function toggleCryptoFields(paymentMethod) {
         cryptoWarning.classList.remove('hidden');
         txHashInput.style.display = 'block';
         txHashInput.required = true;
-        
+
         // Show specific crypto wallet
         const walletDiv = document.querySelector(`.crypto-wallet-${paymentMethod}`);
         if (walletDiv) {

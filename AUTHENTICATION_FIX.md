@@ -8,7 +8,7 @@ Users could sign up successfully and be redirected to dashboard, but when trying
 ### 1. **Wrong User Model Import in Signals** ❌
 **File**: `users/signals.py`
 
-**Problem**: 
+**Problem**:
 ```python
 from django.contrib.auth.models import User  # Wrong!
 ```

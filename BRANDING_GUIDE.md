@@ -284,7 +284,7 @@ Use in custom CSS:
                 <span class="text-gray-500"> daily ROI</span>
             </div>
         </div>
-        
+
         <div class="brand-card brand-card-primary">
             <span class="brand-badge brand-badge-gold">Popular</span>
             <h3 class="text-2xl font-bold mt-4">Vanguard Plan</h3>
@@ -294,7 +294,7 @@ Use in custom CSS:
                 <span> daily ROI</span>
             </div>
         </div>
-        
+
         <div class="brand-card brand-card-gold">
             <span class="brand-badge brand-badge-primary">Premium</span>
             <h3 class="text-2xl font-bold mt-4">Summit Plan</h3>

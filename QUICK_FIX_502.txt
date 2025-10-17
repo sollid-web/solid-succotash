@@ -11,13 +11,13 @@
 └─────────────────────────────────────────────────────────────────────┘
 
     1. Go to: https://dashboard.render.com/
-    
+
     2. Click on your "wolvcapital" service
-    
+
     3. Click the "Logs" tab at the top
-    
+
     4. Look for RED error messages
-    
+
     5. Copy the last 50-100 lines and paste them here
 
 
@@ -27,16 +27,16 @@
 
     ❌ "could not connect to server"
        → DATABASE NOT CONNECTED
-       
+
     ❌ "KeyError: 'SECRET_KEY'"
        → MISSING SECRET_KEY VARIABLE
-       
+
     ❌ "ModuleNotFoundError"
        → BUILD FAILED
-       
+
     ❌ "Migration failed"
        → DATABASE SCHEMA ISSUES
-       
+
     ❌ "Failed to bind"
        → PORT CONFIGURATION ISSUE
 
@@ -82,9 +82,9 @@
 └─────────────────────────────────────────────────────────────────────┘
 
     In Render Shell, run:
-    
+
         python manage.py healthcheck
-    
+
     This will diagnose all potential issues automatically!
 
 

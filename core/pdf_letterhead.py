@@ -7,7 +7,7 @@ available in environment). No HTML->PDF libs are introduced here.
 
 Usage:
     from core.pdf_letterhead import build_pdf
-    build_pdf("/tmp/agreement.pdf", ["Paragraph 1", "Paragraph 2"])  
+    build_pdf("/tmp/agreement.pdf", ["Paragraph 1", "Paragraph 2"])
 
 This will create a PDF with the WolvCapital letterhead on each page and
 the provided paragraphs styled for readability.
@@ -15,20 +15,18 @@ the provided paragraphs styled for readability.
 
 from __future__ import annotations
 
-from typing import List
-
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.cidfonts import UnicodeCIDFont
+from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import (
-    SimpleDocTemplate,
-    Paragraph,
-    Spacer,
     Frame,
     PageTemplate,
+    Paragraph,
+    SimpleDocTemplate,
+    Spacer,
 )
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.pdfgen.canvas import Canvas
-from reportlab.pdfbase.cidfonts import UnicodeCIDFont
-from reportlab.pdfbase import pdfmetrics
 
 # Register a Unicode font (ReportLab core CID font for broad glyph coverage)
 pdfmetrics.registerFont(UnicodeCIDFont("HeiseiKakuGo-W5"))
@@ -77,7 +75,7 @@ def _draw_letterhead(canvas: Canvas, doc):  # pragma: no cover - drawing side ef
     )
 
 
-def build_pdf(path: str, paragraphs: List[str]):
+def build_pdf(path: str, paragraphs: list[str]):
     """Build a PDF at `path` containing the given paragraphs.
 
     A top/bottom margin reserve the letterhead area (header ~170px, footer ~60px).
@@ -125,9 +123,7 @@ def build_pdf(path: str, paragraphs: List[str]):
         topMargin=top,
         bottomMargin=bottom,
     )
-    doc.addPageTemplates(
-        [PageTemplate(id="Letterhead", frames=[frame], onPage=_draw_letterhead)]
-    )
+    doc.addPageTemplates([PageTemplate(id="Letterhead", frames=[frame], onPage=_draw_letterhead)])
 
     story = [Paragraph("Service Agreement", styles["H1"])]
     for p in paragraphs:

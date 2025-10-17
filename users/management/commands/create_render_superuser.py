@@ -39,9 +39,7 @@ class Command(BaseCommand):
         full_name = options.get("full_name")
 
         if not email:
-            raise CommandError(
-                "No email supplied. Pass --email or set RENDER_SUPERUSER_EMAIL."
-            )
+            raise CommandError("No email supplied. Pass --email or set RENDER_SUPERUSER_EMAIL.")
 
         if not password:
             raise CommandError(

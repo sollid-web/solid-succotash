@@ -7,23 +7,40 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('investments', '0001_initial'),
+        ("investments", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='DailyRoiPayout',
+            name="DailyRoiPayout",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('payout_date', models.DateField()),
-                ('amount', models.DecimalField(decimal_places=2, max_digits=12)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('investment', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='daily_payouts', to='investments.userinvestment')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("payout_date", models.DateField()),
+                ("amount", models.DecimalField(decimal_places=2, max_digits=12)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "investment",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="daily_payouts",
+                        to="investments.userinvestment",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['-payout_date', '-created_at'],
-                'indexes': [models.Index(fields=['payout_date'], name='investments_payout__eff298_idx')],
-                'unique_together': {('investment', 'payout_date')},
+                "ordering": ["-payout_date", "-created_at"],
+                "indexes": [
+                    models.Index(fields=["payout_date"], name="investments_payout__eff298_idx")
+                ],
+                "unique_together": {("investment", "payout_date")},
             },
         ),
     ]

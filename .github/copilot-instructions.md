@@ -67,7 +67,7 @@ The platform follows a strict **pending → approved/rejected** flow for all fin
 ```
 core/           # Main views, templates, forms (user-facing)
 users/          # Profile, wallet models + admin promotion commands
-investments/    # Investment plans, user investments + seeding commands  
+investments/    # Investment plans, user investments + seeding commands
 transactions/   # Deposits/withdrawals + comprehensive audit logging
 api/            # REST endpoints (user + admin views)
 ```
@@ -117,7 +117,7 @@ Templates use inheritance from `base.html` with Tailwind CSS. Forms in `core/for
 
 Four predefined plans with specific ROI/duration/amount ranges:
 - Pioneer: 1.00% daily, 14 days, $100-$999
-- Vanguard: 1.25% daily, 21 days, $1,000-$4,999  
+- Vanguard: 1.25% daily, 21 days, $1,000-$4,999
 - Horizon: 1.50% daily, 30 days, $5,000-$14,999
 - Summit: 2.00% daily, 45 days, $15,000-$100,000
 

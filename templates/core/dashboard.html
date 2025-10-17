@@ -233,7 +233,7 @@
                                 Amount ($)
                             </label>
                             {{ investment_form.amount }}
-                                <div class="form-text">Available balance: ${{ wallet.balance }}</div>
+                                <div class="form-text">Available balance: {{ wallet.balance|currency }}</div>
                         </div>
                             <div class="col-12">
                                 <div class="alert alert-warning small mb-0">
@@ -306,7 +306,7 @@
                             
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Range</span>
-                                <span class="font-semibold">${{ plan.min_amount }} - ${{ plan.max_amount }}</span>
+                                <span class="font-semibold">{{ plan.min_amount|currency }} - {{ plan.max_amount|currency }}</span>
                             </div>
                             
                             <div class="bg-green-50 rounded p-3 text-center">
@@ -354,7 +354,7 @@
                                     <div class="small text-muted">{{ investment.plan.daily_roi }}% daily</div>
                             </td>
                                 <td>
-                                ${{ investment.amount }}
+                                    {{ investment.amount|currency }}
                             </td>
                                 <td>
                                 {% if investment.status == 'pending' %}
@@ -449,9 +449,9 @@
                             </td>
                                 <td>
                                 {% if transaction.tx_type == 'withdrawal' %}
-                                        <span class="text-danger fw-medium">-${{ transaction.amount }}</span>
+                                        <span class="text-danger fw-medium">-{{ transaction.amount|currency }}</span>
                                 {% else %}
-                                        <span class="text-success fw-medium">+${{ transaction.amount }}</span>
+                                        <span class="text-success fw-medium">+{{ transaction.amount|currency }}</span>
                                 {% endif %}
                             </td>
                                 <td>

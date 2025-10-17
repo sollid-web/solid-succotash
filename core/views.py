@@ -48,7 +48,7 @@ class HomeView(TemplateView):
 
 
 class PlansView(TemplateView):
-    template_name = 'core/plans.html'
+    template_name = 'investments/plans.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

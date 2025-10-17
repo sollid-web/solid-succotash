@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 from users import views as user_views
 from django.http import JsonResponse
+from transactions import views as tx_views
+from investments import views as inv_views
 
 def healthz(request):
     return JsonResponse({"status": "ok"})
@@ -12,6 +14,7 @@ urlpatterns = [
     path('plans/', views.PlansView.as_view(), name='plans'),
     path('about/', views.AboutView.as_view(), name='about'),
     path('contact/', views.ContactView.as_view(), name='contact'),
+    path('banking/virtual-card/', views.TemplateView.as_view(template_name='banking/virtual_card.html'), name='virtual_card'),
     
     # Legal pages
     path('risk-disclosure/', views.RiskDisclosureView.as_view(), name='risk_disclosure'),
@@ -26,6 +29,8 @@ urlpatterns = [
     path('withdrawals/', views.WithdrawalsView.as_view(), name='withdrawals'),
     path('withdraw/', views.WithdrawView.as_view(), name='withdraw'),
     path('support/chat/', views.SupportRequestView.as_view(), name='support_request'),
+    path('transactions/', tx_views.list_transactions, name='transactions_list'),
+    path('plans-list/', inv_views.plans_list, name='plans_list_view'),
     # PDF exports
     path('agreements/<int:agreement_id>/pdf/', views.agreement_pdf, name='agreement_pdf'),
     path('agreements/<int:agreement_id>/view/', views.agreement_view, name='agreement_view'),

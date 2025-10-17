@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Transactions · WolvCapital{% endblock %}
+
+{% block content %}
+<section class="py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h5 mb-0">Transactions</h2>
+    <div class="d-flex gap-2">
+      <a href="{% url 'deposit' %}" class="btn btn-success btn-sm">New Deposit</a>
+      <a href="{% url 'withdrawals' %}" class="btn btn-outline-danger btn-sm">Request Withdrawal</a>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-sm align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Date</th><th>Type</th><th>Amount</th><th>Status</th><th>Ref</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tx in transactions %}
+          <tr>
+            <td>{{ tx.created_at|date:"Y-m-d H:i" }}</td>
+            <td>{{ tx.tx_type|title }}</td>
+            <td>${{ tx.amount }}</td>
+            <td>
+              <span class="badge {% if tx.status == 'approved' %}bg-success{% elif tx.status == 'pending' %}bg-warning text-dark{% else %}bg-secondary{% endif %}">
+                {{ tx.status|title }}
+              </span>
+            </td>
+            <td class="text-truncate" style="max-width:140px">{{ tx.reference }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-center text-muted">No transactions yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

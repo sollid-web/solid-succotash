@@ -1,7 +1,8 @@
+from urllib.parse import urlparse
+
 from django.apps import AppConfig
 from django.conf import settings
 from django.db.models.signals import post_migrate
-from urllib.parse import urlparse
 
 
 def _determine_site_domain() -> str:
@@ -25,8 +26,8 @@ def _determine_site_domain() -> str:
 
 
 class CoreConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'core'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "core"
 
     def ready(self):
         post_migrate.connect(self._ensure_site_record, sender=self)
@@ -36,7 +37,10 @@ class CoreConfig(AppConfig):
         from django.contrib.sites.models import Site
 
         domain = _determine_site_domain()
-        site_defaults = {"domain": domain, "name": settings.BRAND.get("name", "WolvCapital")}
+        site_defaults = {
+            "domain": domain,
+            "name": settings.BRAND.get("name", "WolvCapital"),
+        }
 
         target_domain = site_defaults["domain"]
 

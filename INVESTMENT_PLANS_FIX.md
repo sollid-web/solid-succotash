@@ -12,7 +12,7 @@ Added `get_context_data` method to include investment plans:
 ```python
 class HomeView(TemplateView):
     template_name = 'core/home.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
@@ -206,7 +206,7 @@ python manage.py seed_plans
 ### For Render.com or similar platforms:
 
 1. **Ensure seed command runs on deployment**
-   
+
    Add to `render.yaml` or build script:
    ```yaml
    buildCommand: |
@@ -217,7 +217,7 @@ python manage.py seed_plans
    ```
 
 2. **Or use release command**
-   
+
    In `Procfile`:
    ```
    release: python manage.py migrate && python manage.py seed_plans
@@ -267,12 +267,12 @@ python manage.py seed_plans
 
 ## Benefits
 
-✅ **Improved User Experience**: Plans visible on first page load  
-✅ **Better Conversion**: Users can see opportunities immediately  
-✅ **Dashboard Enhancement**: Quick plan reference for logged-in users  
-✅ **Consistent Design**: Matches existing WolvCapital aesthetic  
-✅ **Mobile Friendly**: Fully responsive across all devices  
-✅ **SEO Friendly**: Plans visible to search engines on home page  
+✅ **Improved User Experience**: Plans visible on first page load
+✅ **Better Conversion**: Users can see opportunities immediately
+✅ **Dashboard Enhancement**: Quick plan reference for logged-in users
+✅ **Consistent Design**: Matches existing WolvCapital aesthetic
+✅ **Mobile Friendly**: Fully responsive across all devices
+✅ **SEO Friendly**: Plans visible to search engines on home page
 
 ## Support
 
@@ -286,6 +286,6 @@ If you encounter any issues:
 
 ---
 
-**Status**: ✅ Implemented and Ready for Testing  
-**Date**: October 2, 2025  
+**Status**: ✅ Implemented and Ready for Testing
+**Date**: October 2, 2025
 **Version**: 1.0

@@ -17,7 +17,7 @@
                 {% endif %}
             </p>
         </div>
-        
+
         {% if unread_count > 0 %}
         <form method="post" action="{% url 'mark_all_read' %}" id="markAllReadForm">
             {% csrf_token %}
@@ -52,12 +52,12 @@
                                 <i class="fas fa-check-circle"></i> Low
                             </span>
                             {% endif %}
-                            
+
                             <!-- Type Badge -->
                             <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">
                                 {{ notification.get_notification_type_display }}
                             </span>
-                            
+
                             <!-- Unread Indicator -->
                             {% if not notification.is_read %}
                             <span class="flex items-center gap-1 text-indigo-600 text-sm font-semibold">
@@ -65,17 +65,17 @@
                             </span>
                             {% endif %}
                         </div>
-                        
+
                         <!-- Title -->
                         <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">
                             {{ notification.title }}
                         </h3>
-                        
+
                         <!-- Message -->
                         <p class="text-gray-700 dark:text-gray-300 whitespace-pre-line mb-3">
                             {{ notification.message }}
                         </p>
-                        
+
                         <!-- Timestamp -->
                         <p class="text-sm text-gray-500 dark:text-gray-400">
                             <i class="far fa-clock mr-1"></i>
@@ -87,18 +87,18 @@
                             {% endif %}
                         </p>
                     </div>
-                    
+
                     <!-- Actions -->
                     <div class="flex flex-col gap-2 ml-4">
                         {% if notification.action_url %}
-                        <a href="{{ notification.action_url }}" 
+                        <a href="{{ notification.action_url }}"
                            class="px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 transition-colors">
                             <i class="fas fa-arrow-right mr-1"></i>View
                         </a>
                         {% endif %}
-                        
+
                         {% if not notification.is_read %}
-                        <button onclick="markAsRead('{{ notification.id }}')" 
+                        <button onclick="markAsRead('{{ notification.id }}')"
                                 class="px-4 py-2 bg-gray-200 text-gray-700 text-sm rounded-lg hover:bg-gray-300 transition-colors">
                             <i class="fas fa-check mr-1"></i>Mark Read
                         </button>
@@ -122,11 +122,11 @@
                 <i class="fas fa-angle-left"></i>
             </a>
             {% endif %}
-            
+
             <span class="px-4 py-2 bg-indigo-600 text-white rounded-lg">
                 Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
             </span>
-            
+
             {% if page_obj.has_next %}
             <a href="?page={{ page_obj.next_page_number }}" title="Go to next page" class="px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                 <i class="fas fa-angle-right"></i>
@@ -173,7 +173,7 @@ function markAsRead(notificationId) {
 // Mark all as read
 document.getElementById('markAllReadForm')?.addEventListener('submit', function(e) {
     e.preventDefault();
-    
+
     fetch('/notifications/mark-all-read/', {
         method: 'POST',
         headers: {

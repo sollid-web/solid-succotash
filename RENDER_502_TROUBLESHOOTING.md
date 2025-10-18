@@ -122,7 +122,7 @@ Page loads but shows "Bad Request (400)"
 1. Check `ALLOWED_HOSTS` in environment:
    - Render sets `RENDER_EXTERNAL_URL` automatically
    - Your `settings.py` should parse this correctly
-   
+
 2. Add to Environment variables:
    ```
    DEBUG=0

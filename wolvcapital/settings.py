@@ -22,6 +22,8 @@ SECRET_KEY = os.getenv("SECRET_KEY", default_secret)
 
 # Render injects this, e.g. https://solid-succotash-654g.onrender.com
 RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL")
+# Render commonly exposes the hostname via this env var
+RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME")
 CUSTOM_DOMAIN = os.getenv("CUSTOM_DOMAIN")  # optional, supports comma-separated list
 
 # ------------------------------------------------------------------
@@ -50,6 +52,13 @@ if RENDER_EXTERNAL_URL:
         ALLOWED_HOSTS.append(p.hostname)
     if RENDER_EXTERNAL_URL not in CSRF_TRUSTED_ORIGINS:
         CSRF_TRUSTED_ORIGINS.append(RENDER_EXTERNAL_URL)
+
+# Fallback: allow Render external hostname if provided
+if RENDER_EXTERNAL_HOSTNAME and RENDER_EXTERNAL_HOSTNAME not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    https_origin = f"https://{RENDER_EXTERNAL_HOSTNAME}"
+    if https_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(https_origin)
 
 if CUSTOM_DOMAIN:
     raw_domains = [d.strip() for d in CUSTOM_DOMAIN.split(",") if d.strip()]
@@ -91,13 +100,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
-
     # Third-party
     "whitenoise.runserver_nostatic",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-
     # Local apps
     "core",
     "users",
@@ -229,8 +236,8 @@ AUTH_USER_MODEL = "users.User"
 
 # Authentication backends
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 # Explicit login/logout redirect flow
@@ -269,14 +276,21 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 LOG_FORMAT = os.getenv("LOG_FORMAT", "json")  # 'json' or 'plain'
 
+
 class JsonFormatter:
     """Minimal JSON log formatter to avoid external deps.
 
     Produces a single-line JSON object with level, message, logger, and timestamp.
     """
+
     def format(self, record):  # pragma: no cover (formatting utility)
-        import json, datetime
-        from wolvcapital.middleware import get_request_id  # local import to avoid circular
+        import datetime
+        import json
+
+        from wolvcapital.middleware import (
+            get_request_id,
+        )  # local import to avoid circular
+
         rid = get_request_id()
         data = {
             "level": record.levelname,
@@ -288,8 +302,10 @@ class JsonFormatter:
             data["request_id"] = rid
         if record.exc_info:
             import traceback
+
             data["exc"] = "".join(traceback.format_exception(*record.exc_info))
         return json.dumps(data, ensure_ascii=False)
+
 
 if LOG_FORMAT == "json" and not DEBUG:
     SIMPLE_FORMATTER = {
@@ -316,7 +332,11 @@ LOGGING = {
     "root": {"handlers": ["console"], "level": LOG_LEVEL},
     "loggers": {
         "django": {"handlers": ["console"], "level": LOG_LEVEL, "propagate": False},
-        "wolvcapital": {"handlers": ["console"], "level": LOG_LEVEL, "propagate": False},
+        "wolvcapital": {
+            "handlers": ["console"],
+            "level": LOG_LEVEL,
+            "propagate": False,
+        },
     },
 }
 

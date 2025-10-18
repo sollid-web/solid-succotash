@@ -2,6 +2,7 @@ services:
   - type: web
     name: wolvcapital
     runtime: python
+    healthCheckPath: /healthz/
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt

@@ -123,7 +123,7 @@ count = mark_all_read(user)
     <h4>{{ notification.title }}</h4>
     <p>{{ notification.message }}</p>
     <small>{{ notification.created_at|date:"Y-m-d H:i" }}</small>
-    
+
     {% if notification.action_url %}
     <a href="{{ notification.action_url }}">View</a>
     {% endif %}
@@ -137,7 +137,7 @@ from users.models import UserNotification
 
 # In your view
 notifications = UserNotification.objects.filter(
-    user=request.user, 
+    user=request.user,
     is_read=False
 )[:5]
 
@@ -254,7 +254,7 @@ For complete documentation, see:
 
 ---
 
-**✅ Server Running:** http://127.0.0.1:8000/  
+**✅ Server Running:** http://127.0.0.1:8000/
 **✅ Notifications:** http://127.0.0.1:8000/notifications/
 
 *Quick Reference - October 3, 2025*

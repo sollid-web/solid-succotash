@@ -17,72 +17,144 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='UserInvestment',
+            name="UserInvestment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('amount', models.DecimalField(decimal_places=2, max_digits=12, validators=[django.core.validators.MinValueValidator(0)])),
-                ('status', models.CharField(choices=[('pending', 'Pending'), ('approved', 'Approved'), ('rejected', 'Rejected'), ('completed', 'Completed')], default='pending', max_length=20)),
-                ('started_at', models.DateTimeField(blank=True, null=True)),
-                ('ends_at', models.DateTimeField(blank=True, null=True)),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "amount",
+                    models.DecimalField(
+                        decimal_places=2,
+                        max_digits=12,
+                        validators=[django.core.validators.MinValueValidator(0)],
+                    ),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("pending", "Pending"),
+                            ("approved", "Approved"),
+                            ("rejected", "Rejected"),
+                            ("completed", "Completed"),
+                        ],
+                        default="pending",
+                        max_length=20,
+                    ),
+                ),
+                ("started_at", models.DateTimeField(blank=True, null=True)),
+                ("ends_at", models.DateTimeField(blank=True, null=True)),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
             ],
             options={
-                'db_table': 'investments_user_investment',
+                "db_table": "investments_user_investment",
             },
         ),
         migrations.CreateModel(
-            name='InvestmentPlan',
+            name="InvestmentPlan",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100, unique=True)),
-                ('description', models.TextField()),
-                ('daily_roi', models.DecimalField(decimal_places=2, help_text='Daily ROI percentage (0.00-2.00)', max_digits=5, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(2.0)])),
-                ('duration_days', models.PositiveIntegerField(validators=[django.core.validators.MinValueValidator(1)])),
-                ('min_amount', models.DecimalField(decimal_places=2, max_digits=12)),
-                ('max_amount', models.DecimalField(decimal_places=2, max_digits=12)),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100, unique=True)),
+                ("description", models.TextField()),
+                (
+                    "daily_roi",
+                    models.DecimalField(
+                        decimal_places=2,
+                        help_text="Daily ROI percentage (0.00-2.00)",
+                        max_digits=5,
+                        validators=[
+                            django.core.validators.MinValueValidator(0),
+                            django.core.validators.MaxValueValidator(2.0),
+                        ],
+                    ),
+                ),
+                (
+                    "duration_days",
+                    models.PositiveIntegerField(
+                        validators=[django.core.validators.MinValueValidator(1)]
+                    ),
+                ),
+                ("min_amount", models.DecimalField(decimal_places=2, max_digits=12)),
+                ("max_amount", models.DecimalField(decimal_places=2, max_digits=12)),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
             ],
             options={
-                'db_table': 'investments_plan',
-                'indexes': [models.Index(fields=['name'], name='investments_name_2248e3_idx'), models.Index(fields=['created_at'], name='investments_created_1f6b3e_idx')],
+                "db_table": "investments_plan",
+                "indexes": [
+                    models.Index(fields=["name"], name="investments_name_2248e3_idx"),
+                    models.Index(fields=["created_at"], name="investments_created_1f6b3e_idx"),
+                ],
             },
         ),
         migrations.AddConstraint(
-            model_name='investmentplan',
-            constraint=models.CheckConstraint(check=models.Q(('daily_roi__gte', 0), ('daily_roi__lte', 2.0)), name='valid_daily_roi'),
+            model_name="investmentplan",
+            constraint=models.CheckConstraint(
+                check=models.Q(("daily_roi__gte", 0), ("daily_roi__lte", 2.0)),
+                name="valid_daily_roi",
+            ),
         ),
         migrations.AddConstraint(
-            model_name='investmentplan',
-            constraint=models.CheckConstraint(check=models.Q(('duration_days__gt', 0)), name='positive_duration'),
+            model_name="investmentplan",
+            constraint=models.CheckConstraint(
+                check=models.Q(("duration_days__gt", 0)), name="positive_duration"
+            ),
         ),
         migrations.AddConstraint(
-            model_name='investmentplan',
-            constraint=models.CheckConstraint(check=models.Q(('min_amount__lte', models.F('max_amount'))), name='min_amount_lte_max_amount'),
+            model_name="investmentplan",
+            constraint=models.CheckConstraint(
+                check=models.Q(("min_amount__lte", models.F("max_amount"))),
+                name="min_amount_lte_max_amount",
+            ),
         ),
         migrations.AddField(
-            model_name='userinvestment',
-            name='plan',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_investments', to='investments.investmentplan'),
+            model_name="userinvestment",
+            name="plan",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="user_investments",
+                to="investments.investmentplan",
+            ),
         ),
         migrations.AddField(
-            model_name='userinvestment',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='investments', to=settings.AUTH_USER_MODEL),
+            model_name="userinvestment",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="investments",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddIndex(
-            model_name='userinvestment',
-            index=models.Index(fields=['user', 'status'], name='investments_user_id_66c729_idx'),
+            model_name="userinvestment",
+            index=models.Index(fields=["user", "status"], name="investments_user_id_66c729_idx"),
         ),
         migrations.AddIndex(
-            model_name='userinvestment',
-            index=models.Index(fields=['status'], name='investments_status_4e7b70_idx'),
+            model_name="userinvestment",
+            index=models.Index(fields=["status"], name="investments_status_4e7b70_idx"),
         ),
         migrations.AddIndex(
-            model_name='userinvestment',
-            index=models.Index(fields=['created_at'], name='investments_created_72262d_idx'),
+            model_name="userinvestment",
+            index=models.Index(fields=["created_at"], name="investments_created_72262d_idx"),
         ),
         migrations.AddConstraint(
-            model_name='userinvestment',
-            constraint=models.CheckConstraint(check=models.Q(('amount__gt', 0)), name='positive_investment_amount'),
+            model_name="userinvestment",
+            constraint=models.CheckConstraint(
+                check=models.Q(("amount__gt", 0)), name="positive_investment_amount"
+            ),
         ),
     ]

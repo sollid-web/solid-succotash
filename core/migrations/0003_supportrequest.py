@@ -14,7 +14,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="SupportRequest",
             fields=[
-                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
                 ("full_name", models.CharField(blank=True, max_length=255)),
                 ("contact_email", models.EmailField(blank=True, max_length=254)),
                 ("topic", models.CharField(blank=True, max_length=120)),
@@ -23,7 +31,11 @@ class Migration(migrations.Migration):
                 (
                     "status",
                     models.CharField(
-                        choices=[("pending", "Pending"), ("in_progress", "In Progress"), ("resolved", "Resolved")],
+                        choices=[
+                            ("pending", "Pending"),
+                            ("in_progress", "In Progress"),
+                            ("resolved", "Resolved"),
+                        ],
                         default="pending",
                         max_length=20,
                     ),

@@ -48,7 +48,7 @@ EOF
         echo "❌ Seeding attempt $i failed, retrying in 3 seconds..."
         sleep 3
         if [ $i -eq 3 ]; then
-            echo "⚠️  All seeding attempts failed. Continuing startup; /plans/ will show empty until fixed." 
+            echo "⚠️  All seeding attempts failed. Continuing startup; /plans/ will show empty until fixed."
         fi
     fi
 done

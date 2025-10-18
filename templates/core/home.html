@@ -1,494 +1,138 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 
-{% block title %}WolvCapital - Professional Investment Platform{% endblock %}
+{% block title %}Home · WolvCapital{% endblock %}
 
 {% block content %}
-{% block extra_css %}
-<style>
-    /* Center name card overlay styles (scoped to home hero) */
-    .hero-name-card {
-        background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
-        border: 1px solid rgba(255,255,255,0.25);
-        border-radius: 1rem; /* 16px */
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        box-shadow: 0 8px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.2);
-    }
-    .hero-name-text {
-        color: rgba(255,255,255,0.95);
-        letter-spacing: 0.02em;
-        text-shadow:
-            0 1px 0 rgba(255,255,255,0.25),
-            0 -1px 0 rgba(0,0,0,0.45),
-            0 8px 22px rgba(0,0,0,0.45);
-        -webkit-text-stroke: 0.5px rgba(255,255,255,0.15);
-    }
-    .hero-name-sub {
-        color: rgba(255,255,255,0.85);
-        text-shadow: 0 1px 0 rgba(0,0,0,0.3);
-    }
-    .hero-name-accent {
-        height: 3px;
-        width: 56px;
-        margin: 0.5rem auto 0.25rem;
-        background: linear-gradient(90deg, rgba(253,224,71,0), rgba(253,224,71,0.9), rgba(253,224,71,0));
-        box-shadow: 0 1px 6px rgba(253, 224, 71, 0.55);
-        border-radius: 9999px;
-    }
-    .hero-crest {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 28px;
-        height: 28px;
-        border-radius: 9999px;
-        background: linear-gradient(135deg, rgba(253, 224, 71, 0.95), rgba(237, 203, 47, 0.9));
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 6px 20px rgba(253, 224, 71, 0.35);
-        margin: 0 auto 0.5rem;
-        border: 1px solid rgba(0,0,0,0.08);
-    }
-    @media (max-width: 640px) {
-        .hero-name-card { padding: 0.75rem 1rem; }
-    }
-</style>
-{% endblock %}
-
-<!-- Hero Section with responsive imagery and overlay -->
-<section class="hero hero--mesh relative pt-0" style="margin-top:0;">
-    <picture class="hero-picture">
-        <source type="image/avif" srcset="{% static 'images/hero-crypto-abstract-sm.avif' %} 768w, {% static 'images/hero-crypto-abstract-md.avif' %} 1280w, {% static 'images/hero-crypto-abstract-xl.avif' %} 1920w" sizes="100vw">
-        <source type="image/webp" srcset="{% static 'images/hero-crypto-abstract-sm.webp' %} 768w, {% static 'images/hero-crypto-abstract-md.webp' %} 1280w, {% static 'images/hero-crypto-abstract-xl.webp' %} 1920w" sizes="100vw">
-        <img src="{% static 'images/hero-crypto-abstract-xl.jpg' %}" srcset="{% static 'images/hero-crypto-abstract-sm.jpg' %} 768w, {% static 'images/hero-crypto-abstract-md.jpg' %} 1280w, {% static 'images/hero-crypto-abstract-xl.jpg' %} 1920w" sizes="100vw" alt="Secure blockchain operations visual" class="hero-bg" loading="eager" fetchpriority="high" decoding="async" width="1920" height="1269">
-    </picture>
-    <div class="hero-overlay"></div>
-
-    <!-- Centered name card overlay, lifted up to avoid collision with CTA -->
-    <div class="absolute inset-0 z-10 flex items-start justify-center pointer-events-none px-4 pt-12 md:pt-16 lg:pt-20">
-        <div class="hero-name-card pointer-events-auto px-6 py-4 sm:px-8 sm:py-5 md:px-10 md:py-6">
-            <div class="hero-crest" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 3l7 4v5c0 5-7 9-7 9s-7-4-7-9V7l7-4z" stroke="#5b4a00" stroke-width="1" fill="rgba(255,255,255,0.5)"/>
-                </svg>
-            </div>
-            <div class="hero-name-text text-2xl sm:text-3xl md:text-5xl font-extrabold text-center">
-                WOLVCAPITAL INVEST
-            </div>
-            <div class="hero-name-accent"></div>
-            <div class="hero-name-sub text-center text-xs sm:text-sm md:text-base mt-1 md:mt-2">
-                Institutional-grade digital investing
-            </div>
-        </div>
-    </div>
-    <div class="hero-content">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="max-w-3xl">
-                <span class="inline-flex items-center px-3 py-1 text-sm font-semibold bg-white/10 backdrop-blur border border-white/20 rounded-full">Institutional-grade digital investing</span>
-                <h1 class="mt-6 text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">WolvCapital</h1>
-                <p class="mt-4 text-lg sm:text-xl text-blue-100 leading-relaxed">
-                    Secure crypto banking, audited ROI programs, and virtual cards&mdash;all governed by a human approval loop so capital never moves without oversight.
+<!-- Hero Section - Premium Solid Design -->
+<section class="position-relative overflow-hidden" style="min-height: 75vh; background: linear-gradient(135deg, #0c1e3e 0%, #1e3a8a 40%, #2563eb 100%); box-shadow: inset 0 -10px 30px rgba(0,0,0,0.3);">
+    <div class="container position-relative" style="z-index: 2; padding-top: 100px; padding-bottom: 100px;">
+        <div class="row align-items-center gy-5">
+            <div class="col-12 col-lg-6">
+                <div class="mb-4">
+                    <span class="badge px-4 py-2 fw-bold" style="background: linear-gradient(135deg, #FFD700, #FFA500); color: #0c1e3e; font-size: 0.9rem; border-radius: 30px; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);">
+                        🏆 TRUSTED INVESTMENT PLATFORM
+                    </span>
+                </div>
+                <h1 class="display-3 fw-black text-white mb-4" style="line-height: 1.1; text-shadow: 0 4px 20px rgba(0,0,0,0.5); letter-spacing: -1px;">
+                    Invest. Track.<br>Withdraw — <span style="background: linear-gradient(135deg, #FFD700, #FFA500); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Anywhere</span>.
+                </h1>
+                <p class="lead text-white mb-5" style="font-size: 1.3rem; font-weight: 500; line-height: 1.6; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+                    Professional investment platform with secure deposits, real-time tracking, and verified withdrawals. Your capital, our expertise.
                 </p>
-                <div class="mt-8 flex flex-col sm:flex-row sm:items-center gap-4 cta-group">
-                    <a href="{% url 'account_signup' %}" class="brand-btn-primary inline-flex items-center justify-center">Open an account</a>
-                    <a href="{% url 'plans' %}" class="brand-btn-secondary inline-flex items-center justify-center">View investment plans</a>
-                </div>
-                <dl class="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm text-blue-100/90">
-                    <div class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">
-                        <dt class="text-xs uppercase tracking-wide text-blue-100/70">Bitcoin</dt>
-                        <dd class="mt-1 text-lg font-semibold text-white">+2.4%</dd>
-                    </div>
-                    <div class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">
-                        <dt class="text-xs uppercase tracking-wide text-blue-100/70">Ethereum</dt>
-                        <dd class="mt-1 text-lg font-semibold text-white">+1.8%</dd>
-                    </div>
-                    <div class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">
-                        <dt class="text-xs uppercase tracking-wide text-blue-100/70">USDT</dt>
-                        <dd class="mt-1 text-lg font-semibold text-white">Stable</dd>
-                    </div>
-                    <div class="rounded-lg border border-white/10 bg-white/5 px-4 py-3">
-                        <dt class="text-xs uppercase tracking-wide text-blue-100/70">Virtual cards</dt>
-                        <dd class="mt-1 text-lg font-semibold text-white">24/7 issue</dd>
-                    </div>
-                </dl>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Brand Imagery Grid -->
-<section class="mesh-section py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div class="grid grid-cols-2 grid-rows-2 gap-6">
-                <figure class="overflow-hidden rounded-2xl shadow-lg">
-                    <picture>
-                        <source type="image/avif" srcset="{% static 'images/blockchain-network-sm.avif' %} 768w, {% static 'images/blockchain-network-md.avif' %} 1280w, {% static 'images/blockchain-network-xl.avif' %} 1920w" sizes="(max-width: 768px) 50vw, 35vw">
-                        <source type="image/webp" srcset="{% static 'images/blockchain-network-sm.webp' %} 768w, {% static 'images/blockchain-network-md.webp' %} 1280w, {% static 'images/blockchain-network-xl.webp' %} 1920w" sizes="(max-width: 768px) 50vw, 35vw">
-                            <img src="{% static 'images/wolvcapital_set1.png' %}" alt="Investment dashboard on laptop" class="rounded-xl object-cover h-32 w-full" loading="lazy" decoding="async">
-                    </picture>
-                </figure>
-                <figure class="overflow-hidden rounded-2xl shadow-lg">
-                    <picture>
-                        <source type="image/avif" srcset="{% static 'images/team-meeting-sm.avif' %} 768w, {% static 'images/team-meeting-md.avif' %} 1280w, {% static 'images/team-meeting-xl.avif' %} 1920w" sizes="(max-width: 768px) 50vw, 35vw">
-                        <source type="image/webp" srcset="{% static 'images/team-meeting-sm.webp' %} 768w, {% static 'images/team-meeting-md.webp' %} 1280w, {% static 'images/team-meeting-xl.webp' %} 1920w" sizes="(max-width: 768px) 50vw, 35vw">
-                            <img src="{% static 'images/wolvcapital_set2.png' %}" alt="Elegant gold texture for VIP plans" class="rounded-xl object-cover h-32 w-full" loading="lazy" decoding="async">
-                    </picture>
-                </figure>
-                <figure class="overflow-hidden rounded-2xl shadow-lg">
-                    <picture>
-                        <source type="image/avif" srcset="{% static 'images/growth-chart-sm.avif' %} 768w, {% static 'images/growth-chart-md.avif' %} 1280w, {% static 'images/growth-chart-xl.avif' %} 1920w" sizes="(max-width: 768px) 50vw, 35vw">
-                        <source type="image/webp" srcset="{% static 'images/growth-chart-sm.webp' %} 768w, {% static 'images/growth-chart-md.webp' %} 1280w, {% static 'images/growth-chart-xl.webp' %} 1920w" sizes="(max-width: 768px) 50vw, 35vw">
-                            <img src="{% static 'images/wolvcapital_set3.png' %}" alt="Digital lock in data center" class="rounded-xl object-cover h-32 w-full" loading="lazy" decoding="async">
-                    </picture>
-                </figure>
-                <figure class="overflow-hidden rounded-2xl shadow-lg">
-                    <picture>
-                        <source type="image/avif" srcset="{% static 'images/crypto-symbol-sm.avif' %} 768w, {% static 'images/crypto-symbol-md.avif' %} 1280w, {% static 'images/crypto-symbol-xl.avif' %} 1920w" sizes="(max-width: 768px) 50vw, 35vw">
-                        <source type="image/webp" srcset="{% static 'images/crypto-symbol-sm.webp' %} 768w, {% static 'images/crypto-symbol-md.webp' %} 1280w, {% static 'images/crypto-symbol-xl.webp' %} 1920w" sizes="(max-width: 768px) 50vw, 35vw">
-                            <img src="{% static 'images/wolvcapital_set4.png' %}" alt="World map with blockchain nodes" class="rounded-xl object-cover h-32 w-full" loading="lazy" decoding="async">
-                    </picture>
-                </figure>
-            </div>
-            <div class="space-y-6">
-                <span class="inline-flex items-center px-3 py-1 text-sm font-semibold text-blue-700 bg-blue-100 rounded-full">Human oversight. Digital precision.</span>
-                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">Where institutional discipline meets crypto innovation</h2>
-                <p class="text-lg text-gray-600">
-                    Our analysts pair blockchain telemetry with boardroom experience. Every investment decision blends
-                    transparent data, audited reporting, and manual verification so your assets are protected and primed for growth.
-                </p>
-                <ul class="space-y-3 text-gray-700">
-                    <li class="flex items-start"><span class="mt-1 mr-3 text-blue-600">•</span>Real-time monitoring across digital asset networks.</li>
-                    <li class="flex items-start"><span class="mt-1 mr-3 text-blue-600">•</span>Dedicated investment committee validating each funding request.</li>
-                    <li class="flex items-start"><span class="mt-1 mr-3 text-blue-600">•</span>Actionable reporting that keeps your wallet, plans, and virtual cards in sync.</li>
-                </ul>
-                <div class="flex flex-wrap gap-4">
-                    <a href="{% url 'about' %}" class="brand-btn-primary">Meet the team</a>
-                    <a href="{% url 'plans' %}" class="brand-btn-secondary">Explore strategies</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Virtual Visa Card Feature -->
-<div class="py-20 bg-gradient-to-b from-gray-50 to-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold text-gray-900 mb-4">Premium Virtual Banking</h2>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                Get your exclusive WolvCapital Virtual Visa Card and unlock premium banking features
-            </p>
-        </div>
-        
-        <div class="grid lg:grid-cols-2 gap-12 items-center">
-            <!-- 3D Card Display -->
-            <div class="relative">
-                <div class="card-container perspective-1000">
-                    <div class="card w-full max-w-sm sm:w-96 h-56 sm:h-60 mx-auto relative transform-preserve-3d transition-transform duration-700 hover:rotate-y-180 cursor-pointer">
-                        <!-- Card Front -->
-                        <div class="card-side absolute w-full h-full rounded-2xl overflow-hidden shadow-2xl backface-hidden">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 240" class="w-full h-full">
-                                <defs>
-                                    <linearGradient id="cardGradient" x1="0" y1="0" x2="1" y2="1">
-                                        <stop offset="0%" stop-color="#1e40af"/>
-                                        <stop offset="100%" stop-color="#7c3aed"/>
-                                    </linearGradient>
-                                    <linearGradient id="chipGradient" x1="0" y1="0" x2="1" y2="1">
-                                        <stop offset="0%" stop-color="#FFD700"/>
-                                        <stop offset="100%" stop-color="#B8860B"/>
-                                    </linearGradient>
-                                </defs>
-                                
-                                <rect width="384" height="240" rx="16" fill="url(#cardGradient)"/>
-                                
-                                <text x="20" y="35" fill="white" font-size="16" font-family="Arial" font-weight="bold">WOLVCAPITAL LTD</text>
-                                <text x="20" y="55" fill="white" font-size="12" font-family="Arial" font-weight="bold">VIRTUAL BANKING CARD</text>
-                                
-                                <!-- Chip -->
-                                <rect x="25" y="80" width="45" height="35" rx="4" fill="url(#chipGradient)" stroke="black" stroke-width="1"/>
-                                <line x1="30" y1="80" x2="30" y2="115" stroke="black" stroke-width="0.5"/>
-                                <line x1="40" y1="80" x2="40" y2="115" stroke="black" stroke-width="0.5"/>
-                                <line x1="50" y1="80" x2="50" y2="115" stroke="black" stroke-width="0.5"/>
-                                <line x1="60" y1="80" x2="60" y2="115" stroke="black" stroke-width="0.5"/>
-                                <line x1="25" y1="90" x2="70" y2="90" stroke="black" stroke-width="0.5"/>
-                                <line x1="25" y1="105" x2="70" y2="105" stroke="black" stroke-width="0.5"/>
-                                
-                                <!-- NFC -->
-                                <path d="M85 85 q10 10 0 20 M92 80 q17 17 0 34 M99 75 q24 24 0 48" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
-                                
-                                <text x="25" y="160" fill="white" font-size="18" font-family="Courier New" font-weight="bold">•••• •••• •••• ••••</text>
-                                <text x="25" y="185" fill="white" font-size="12" font-family="Arial" font-weight="bold">VALID THRU ••/••</text>
-                                <text x="25" y="205" fill="white" font-size="12" font-family="Arial" font-weight="bold">PREMIUM MEMBER</text>
-                                <text x="290" y="220" fill="white" font-size="24" font-family="Arial" font-weight="bold">VISA</text>
-                            </svg>
-                        </div>
-                        
-                        <!-- Card Back -->
-                        <div class="card-side absolute w-full h-full rounded-2xl overflow-hidden shadow-2xl backface-hidden rotate-y-180">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 240" class="w-full h-full">
-                                <rect width="384" height="240" rx="16" fill="url(#cardGradient)"/>
-                                <rect x="0" y="30" width="384" height="45" fill="black"/>
-                                <rect x="25" y="100" width="334" height="35" fill="white"/>
-                                <text x="320" y="125" fill="black" font-size="16" font-family="Courier New" font-weight="bold">•••</text>
-                                <text x="25" y="165" fill="white" font-size="12" font-family="Arial" font-weight="bold">AUTHORIZED SIGNATURE</text>
-                                <text x="25" y="190" fill="white" font-size="12" font-family="Arial" font-weight="bold">24/7 SUPPORT: WWW.WOLVCAPITAL.COM</text>
-                                <text x="25" y="210" fill="white" font-size="12" font-family="Arial" font-weight="bold">PREMIUM VIRTUAL BANKING SERVICES</text>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Card Features -->
-            <div class="space-y-6">
-                <h3 class="text-3xl font-bold text-gray-900 mb-6">Exclusive Virtual Visa Card</h3>
-                
-                <div class="space-y-4">
-                    <div class="flex items-start space-x-4">
-                        <div class="bg-blue-600 text-white p-2 rounded-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-semibold text-gray-900">Instant Global Payments</h4>
-                            <p class="text-gray-600">Make secure payments worldwide with your virtual card</p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-start space-x-4">
-                        <div class="bg-purple-600 text-white p-2 rounded-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-semibold text-gray-900">Enhanced Security</h4>
-                            <p class="text-gray-600">Advanced fraud protection and real-time monitoring</p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-start space-x-4">
-                        <div class="bg-green-600 text-white p-2 rounded-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-semibold text-gray-900">Instant Activation</h4>
-                            <p class="text-gray-600">Get your card activated immediately after approval</p>
-                        </div>
-                    </div>
-                    
-                    <div class="flex items-start space-x-4">
-                        <div class="bg-yellow-600 text-white p-2 rounded-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-semibold text-gray-900">Premium Benefits</h4>
-                            <p class="text-gray-600">Exclusive rewards and cashback opportunities</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-6 rounded-lg text-white mt-8">
-                    <h4 class="text-xl font-bold mb-2">Limited Time Offer</h4>
-                    <p class="mb-4">Get your exclusive WolvCapital Virtual Visa Card today!</p>
-                    <a href="{% url 'account_signup' %}" 
-                       class="inline-block bg-white text-blue-600 font-semibold py-2 px-6 rounded-lg hover:bg-gray-100 transition duration-300">
-                        Apply Now
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'dashboard' %}" class="btn btn-lg px-5 py-3 fw-bold" style="background: linear-gradient(135deg, #FFD700, #FFA500); color: #0c1e3e; border: none; border-radius: 12px; box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4); font-size: 1.1rem; transition: all 0.3s;">
+                        Get Started Now →
+                    </a>
+                    <a href="{% url 'plans' %}" class="btn btn-lg px-5 py-3 fw-bold" style="background: white; color: #1e3a8a; border: none; border-radius: 12px; box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2); font-size: 1.1rem;">
+                        View Investment Plans
                     </a>
                 </div>
             </div>
+            <div class="col-12 col-lg-6">
+                <div class="position-relative">
+                    <!-- Main Card -->
+                    <div class="card border-0" style="background: white; border-radius: 24px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); transform: perspective(1000px) rotateY(-5deg); transition: all 0.3s;">
+                        <div class="card-body p-5">
+                            <!-- Card Stats -->
+                            <div class="d-flex justify-content-between align-items-center mb-4 pb-3" style="border-bottom: 2px solid #f0f0f0;">
+                                <div>
+                                    <div class="text-muted small fw-semibold mb-1">TOTAL ASSETS</div>
+                                    <div class="h3 fw-black mb-0" style="color: #1e3a8a;">$2,847,392</div>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge px-3 py-2 fw-bold" style="background: linear-gradient(135deg, #10B981, #059669); color: white; border-radius: 20px;">
+                                        ↗ +24.5%
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Virtual Card Display -->
+                            <div class="position-relative p-4 mb-4" style="background: linear-gradient(135deg, #1e3a8a, #0c1e3e); border-radius: 16px; box-shadow: 0 10px 30px rgba(30, 58, 138, 0.5);">
+                                <div class="d-flex justify-content-between align-items-start mb-4">
+                                    <div>
+                                        <div class="text-white small opacity-75 mb-1">WOLVCAPITAL</div>
+                                        <div class="text-white fw-bold" style="font-size: 0.9rem;">Premium Account</div>
+                                    </div>
+                                    <div style="font-size: 2rem;">💳</div>
+                                </div>
+                                <div class="text-white mb-3" style="font-family: 'Courier New', monospace; font-size: 1.3rem; font-weight: 600; letter-spacing: 3px;">
+                                    •••• •••• •••• 8429
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <div class="text-white small opacity-75">VALID THRU</div>
+                                        <div class="text-white fw-bold">12/28</div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="text-white small opacity-75">CVV</div>
+                                        <div class="text-white fw-bold">•••</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Stats -->
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <div class="p-3 text-center" style="background: #f8fafc; border-radius: 12px;">
+                                        <div class="h4 fw-black mb-1" style="color: #1e3a8a;">4</div>
+                                        <div class="small text-muted fw-semibold">Active Plans</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-3 text-center" style="background: #f8fafc; border-radius: 12px;">
+                                        <div class="h4 fw-black mb-1" style="color: #10B981;">2.0%</div>
+                                        <div class="small text-muted fw-semibold">Daily ROI</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating badge -->
+                    <div class="position-absolute" style="top: -20px; right: -20px; z-index: 10;">
+                        <div class="px-4 py-3 fw-bold" style="background: linear-gradient(135deg, #10B981, #059669); color: white; border-radius: 50px; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);">
+                            ✓ Verified Platform
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Cryptocurrency Support Section -->
-<div class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold text-gray-900 mb-4">Multi-Currency Deposit Options</h2>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                Seamlessly deposit funds using traditional banking or leading cryptocurrencies
-            </p>
-        </div>
-        
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8 text-center">
-            <div class="group hover:scale-110 transition-transform duration-300">
-                <div class="bg-gradient-to-br from-yellow-400 to-yellow-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <span class="text-white text-3xl font-bold">₿</span>
-                </div>
-                <h3 class="font-semibold text-gray-900">Bitcoin</h3>
-                <p class="text-sm text-gray-600">BTC Network</p>
-            </div>
-            
-            <div class="group hover:scale-110 transition-transform duration-300">
-                <div class="bg-gradient-to-br from-purple-400 to-purple-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <span class="text-white text-3xl font-bold">Ξ</span>
-                </div>
-                <h3 class="font-semibold text-gray-900">Ethereum</h3>
-                <p class="text-sm text-gray-600">ERC-20</p>
-            </div>
-            
-            <div class="group hover:scale-110 transition-transform duration-300">
-                <div class="bg-gradient-to-br from-green-400 to-green-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <span class="text-white text-2xl font-bold">₮</span>
-                </div>
-                <h3 class="font-semibold text-gray-900">Tether USD</h3>
-                <p class="text-sm text-gray-600">USDT</p>
-            </div>
-            
-            <div class="group hover:scale-110 transition-transform duration-300">
-                <div class="bg-gradient-to-br from-blue-400 to-blue-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <span class="text-white text-2xl font-bold">$</span>
-                </div>
-                <h3 class="font-semibold text-gray-900">USD Coin</h3>
-                <p class="text-sm text-gray-600">USDC</p>
-            </div>
-            
-            <div class="group hover:scale-110 transition-transform duration-300">
-                <div class="bg-gradient-to-br from-gray-400 to-gray-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                    <span class="text-white text-2xl font-bold">🏦</span>
-                </div>
-                <h3 class="font-semibold text-gray-900">Bank Transfer</h3>
-                <p class="text-sm text-gray-600">Traditional</p>
-            </div>
-        </div>
-    </div>
-</div>
+    <!-- Solid geometric patterns for depth -->
+    <div class="position-absolute" style="top: 10%; right: 5%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%); border-radius: 50%; z-index: 1;"></div>
+    <div class="position-absolute" style="bottom: 10%; left: 5%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%); border-radius: 50%; z-index: 1;"></div>
+</section>
 
-
-<!-- Features Section -->
-<section class="py-16 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-gray-900 mb-4">Why Choose WolvCapital?</h2>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                Advanced technology with human oversight for ultimate security and profitability
-            </p>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="text-center p-6 bg-white rounded-lg shadow-lg">
-                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">Manual Security</h3>
-                <p class="text-gray-600">Every transaction manually reviewed for maximum security</p>
+<section class="py-4 border-top">
+    <div class="container">
+        <div class="row g-3">
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card h-100"><div class="card-body">
+                    <div class="text-muted small">Daily ROI</div>
+                    <div class="fs-4 fw-bold">2%–5%</div>
+                </div></div>
             </div>
-            
-            <div class="text-center p-6 bg-white rounded-lg shadow-lg">
-                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">Premium Returns</h3>
-                <p class="text-gray-600">Daily returns from 1% to 2% with our investment plans</p>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card h-100"><div class="card-body">
+                    <div class="text-muted small">Withdrawals</div>
+                    <div class="fs-4 fw-bold">Every 7 days</div>
+                </div></div>
             </div>
-            
-            <div class="text-center p-6 bg-white rounded-lg shadow-lg">
-                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold mb-2">Virtual Cards</h3>
-                <p class="text-gray-600">Premium virtual Visa cards for global transactions</p>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card h-100"><div class="card-body">
+                    <div class="text-muted small">Capital</div>
+                    <div class="fs-4 fw-bold">14-day release</div>
+                </div></div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <div class="card h-100"><div class="card-body">
+                    <div class="text-muted small">Support</div>
+                    <div class="fs-4 fw-bold">Admin approval</div>
+                </div></div>
             </div>
         </div>
     </div>
 </section>
-
-<!-- Investment Plans Section -->
-<section class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Investment Plans</h2>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                Choose from our carefully crafted investment plans designed to meet different risk tolerances and investment goals
-            </p>
-        </div>
-
-        {% if plans %}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {% for plan in plans %}
-            <div class="brand-plan-card">
-                <h3 class="brand-plan-name">{{ plan.name }}</h3>
-                <div class="brand-plan-roi">{{ plan.daily_roi }}%</div>
-                <p class="text-sm text-gray-600 mb-6">Daily Return</p>
-                
-                <div class="space-y-3 text-sm text-left mb-6">
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Duration:</span>
-                        <span class="font-semibold">{{ plan.duration_days }} days</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Min Amount:</span>
-                        <span class="font-semibold">${{ plan.min_amount }}</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Max Amount:</span>
-                        <span class="font-semibold">${{ plan.max_amount }}</span>
-                    </div>
-                    <div class="flex justify-between border-t pt-3">
-                        <span class="text-gray-600">Total Return:</span>
-                        <span class="font-bold text-green-600">{% widthratio plan.daily_roi 1 plan.duration_days %}%</span>
-                    </div>
-                </div>
-                
-                <p class="text-xs text-gray-500 mb-6">{{ plan.description }}</p>
-                
-                {% if user.is_authenticated %}
-                <a href="{% url 'dashboard' %}" class="brand-btn-primary w-full inline-block text-center">
-                    Invest Now
-                </a>
-                {% else %}
-                <a href="{% url 'account_signup' %}" class="brand-btn-primary w-full inline-block text-center">
-                    Get Started
-                </a>
-                {% endif %}
-            </div>
-            {% endfor %}
-        </div>
-        {% else %}
-        <div class="text-center py-8">
-            <p class="text-gray-500">Investment plans are being loaded. Please check back shortly.</p>
-        </div>
-        {% endif %}
-    </div>
-</section>
-
-<!-- CTA Section -->
-<section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-3xl font-bold mb-4">Ready to Start Your Investment Journey?</h2>
-        <p class="text-xl mb-8 max-w-2xl mx-auto">
-            Join thousands of investors who trust WolvCapital for secure, profitable digital investments
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 sm:justify-center">
-            <a href="{% url 'plans' %}" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300 text-center">
-                View Investment Plans
-            </a>
-            {% if not user.is_authenticated %}
-            <a href="{% url 'account_signup' %}" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition duration-300 text-center">
-                Create Account
-            </a>
-            {% endif %}
-        </div>
-    </div>
-</section>
-
-<style>
-.perspective-1000 { perspective: 1000px; }
-.transform-preserve-3d { transform-style: preserve-3d; }
-.backface-hidden { backface-visibility: hidden; }
-.rotate-y-180 { transform: rotateY(180deg); }
-.hover\:rotate-y-180:hover { transform: rotateY(180deg); }
-</style>
 {% endblock %}

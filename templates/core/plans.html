@@ -38,8 +38,8 @@
                 <div class="ml-3">
                     <h3 class="text-sm font-medium text-red-800">Investment Risk Disclosure</h3>
                     <p class="mt-2 text-sm text-red-700">
-                        All investments involve risk of loss. Returns are not guaranteed and depend on market conditions. 
-                        All investments require manual approval by our team. Please carefully read our 
+                        All investments involve risk of loss. Returns are not guaranteed and depend on market conditions.
+                        All investments require manual approval by our team. Please carefully read our
                         <a href="{% url 'risk_disclosure' %}" class="underline">Risk Disclosure</a> before investing.
                     </p>
                 </div>
@@ -114,7 +114,7 @@
                     <h3 class="text-lg font-semibold mb-2">Submit Request</h3>
                     <p class="text-gray-600">Choose your plan and submit your investment request with proof of payment.</p>
                 </div>
-                
+
                 <div class="text-center">
                     <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,7 +124,7 @@
                     <h3 class="text-lg font-semibold mb-2">Manual Review</h3>
                     <p class="text-gray-600">Our expert team manually reviews and verifies each investment request.</p>
                 </div>
-                
+
                 <div class="text-center">
                     <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,26 +144,26 @@ function calculateReturns() {
     const planSelect = document.getElementById('calc-plan');
     const amountInput = document.getElementById('calc-amount');
     const resultsDiv = document.getElementById('calc-results');
-    
+
     const planValue = planSelect.value;
     const amount = parseFloat(amountInput.value);
-    
+
     if (!planValue || !amount || amount < 100) {
         alert('Please select a plan and enter a valid investment amount (minimum $100)');
         return;
     }
-    
+
     // Parse plan data: daily_roi,duration_days,name
     const [dailyRoi, durationDays, planName] = planValue.split(',');
     const roi = parseFloat(dailyRoi);
     const days = parseInt(durationDays);
-    
+
     // Calculate returns
     const dailyReturn = (amount * roi) / 100;
     const totalReturns = dailyReturn * days;
     const finalAmount = amount + totalReturns;
     const totalRoiPercent = (totalReturns / amount) * 100;
-    
+
     // Format duration
     let durationText = '';
     if (days === 90) durationText = '3 Months (90 days)';
@@ -171,7 +171,7 @@ function calculateReturns() {
     else if (days === 180) durationText = '6 Months (180 days)';
     else if (days === 365) durationText = '1 Year (365 days)';
     else durationText = days + ' days';
-    
+
     // Update results
     document.getElementById('result-investment').textContent = amount.toFixed(2);
     document.getElementById('result-daily').textContent = dailyReturn.toFixed(2);
@@ -179,7 +179,7 @@ function calculateReturns() {
     document.getElementById('result-final').textContent = finalAmount.toFixed(2);
     document.getElementById('result-duration').textContent = durationText;
     document.getElementById('result-roi').textContent = totalRoiPercent.toFixed(2) + '%';
-    
+
     // Show results
     resultsDiv.classList.remove('hidden');
     resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Virtual Banking · WolvCapital{% endblock %}
+
+{% block content %}
+<section class="py-4">
+  <div class="row align-items-center gy-4">
+    <div class="col-12 col-lg-6 order-2 order-lg-1">
+      <h2 class="h4">WolvCapital Virtual Visa</h2>
+      <p class="text-muted">Instant, secure payments for your investments. Works globally. Mobile-ready, with automatic fraud checks.</p>
+      <ul class="text-muted small mb-3">
+        <li>Instant issuance (KYC may apply)</li>
+        <li>Freeze/unfreeze from dashboard</li>
+        <li>Works with Apple/Google Pay (where supported)</li>
+      </ul>
+      <a href="{% url 'dashboard' %}" class="btn btn-primary">Open Dashboard</a>
+    </div>
+    <div class="col-12 col-lg-6 text-center order-1 order-lg-2">
+      <img src="{% static 'img/virtual-card-hero.png' %}" class="img-fluid" alt="Virtual Card">
+    </div>
+  </div>
+</section>
+
+<section class="py-4 border-top">
+  <h3 class="h5 mb-3">Usage Limits</h3>
+  <div class="row g-3">
+    <div class="col-12 col-md-4">
+      <div class="card h-100"><div class="card-body">
+        <div class="text-muted small">Daily Spend</div>
+        <div class="fs-4 fw-bold">$2,500</div>
+      </div></div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="card h-100"><div class="card-body">
+        <div class="text-muted small">Monthly Spend</div>
+        <div class="fs-4 fw-bold">$15,000</div>
+      </div></div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="card h-100"><div class="card-body">
+        <div class="text-muted small">ATM Withdrawals</div>
+        <div class="fs-4 fw-bold">Enabled</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,3 +1,53 @@
+# WolvCapital — Copilot Agent Guide
+
+WolvCapital is a Django 5 investment platform where every financial action requires human review. Services perform calculations, but admins approve or reject all money-moving operations. Never auto-approve.
+
+## Architecture and flow
+- Apps: `core/` (UI, forms), `users/` (auth, Profile, Wallet, notifications), `investments/` (plans, user investments, ROI), `transactions/` (deposits/withdrawals, admin audit + notifications), `api/` (DRF endpoints).
+- Lifecycle: User submits → Admin approves/rejects via services → Audit + notifications recorded. All services run in `transaction.atomic()`.
+
+## Must-use service layer (no direct model edits)
+- Transactions: `transactions/services.py`
+	- `create_transaction(user, tx_type, amount, reference, payment_method='bank_transfer', tx_hash='', wallet_address_used='')`
+	- `approve_transaction(txn, admin_user, notes='')`, `reject_transaction(txn, admin_user, notes='')`
+- Investments: `investments/services.py`
+	- `create_investment(user, plan, amount)`
+	- `approve_investment(investment, admin_user, notes='')`, `reject_investment(investment, admin_user, notes='')`
+- Contracts: Approvals require `admin_user`; wallets are locked with `select_for_update()`; amounts must be positive and within plan bounds.
+
+## Models and constraints
+- `users.User` (custom `AUTH_USER_MODEL`), `Profile.role` governs admin access, `UserWallet` holds balances.
+- `transactions.Transaction` uses UUID `id`, `status in {pending, approved, rejected}`; `AdminAuditLog` uses `entity` + string `entity_id`.
+- `transactions.AdminNotification` and `users.UserNotification` implement admin/user notification channels.
+- `investments.InvestmentPlan` (fixed four plans), `UserInvestment` (pending→approved→completed), `DailyRoiPayout` ensures idempotent daily ROI records.
+
+## ROI payouts (idempotent)
+- Command: `python manage.py payout_roi [--dry-run] [--date YYYY-MM-DD]` creates pending deposit transactions per approved investment and records `DailyRoiPayout`.
+- Wallets are credited only after an admin approves those ROI deposit transactions.
+
+## API surface (DRF)
+- Public: `GET /api/plans/`
+- User: `GET/POST /api/investments/`, `GET/POST /api/transactions/`, `GET /api/wallet/`
+- Admin: `GET /api/admin/transactions/`, `POST /api/admin/transactions/{id}/approve|reject`, `GET /api/admin/investments/`, `POST /api/admin/investments/{id}/approve|reject`
+
+## Developer workflow
+- Setup: `pip install -r requirements.txt`; run `python manage.py migrate && python manage.py seed_plans && python manage.py createsuperuser`.
+- Run: `python manage.py runserver` (SQLite locally). Tests: `python manage.py test`.
+- Deployment: Render via `render.yaml` → `start.sh` + WhiteNoise; env: `SECRET_KEY`, `DATABASE_URL`, `DEBUG=0`, `DJANGO_SETTINGS_MODULE=wolvcapital.settings`.
+
+## Conventions and gotchas
+- Never bypass services for approvals; always pass `admin_user`. Log approvals via `AdminAuditLog` with `str(uuid)` for `entity_id`.
+- Use `select_related()` on FK-heavy queries (e.g., `UserInvestment.plan`, `Transaction.user`).
+- Plans are canonical; restore with `python manage.py seed_plans`. The `update_plans` command is destructive—use only for coordinated migrations.
+- Auth: Email-only via django-allauth; redirects to `/dashboard/`. Request IDs via `wolvcapital.middleware.RequestIDMiddleware`. JSON logs when `DEBUG=0`.
+
+### Example: approving a transaction
+```python
+from transactions.services import approve_transaction
+txn = approve_transaction(txn, admin_user, notes="Verified bank proof")
+```
+
+Questions or gaps? Tell us which section is unclear or missing so we can extend these rules.
 # WolvCapital - AI Coding Agent Instructions
 
 ## Project Overview
@@ -17,7 +67,7 @@ The platform follows a strict **pending → approved/rejected** flow for all fin
 ```
 core/           # Main views, templates, forms (user-facing)
 users/          # Profile, wallet models + admin promotion commands
-investments/    # Investment plans, user investments + seeding commands  
+investments/    # Investment plans, user investments + seeding commands
 transactions/   # Deposits/withdrawals + comprehensive audit logging
 api/            # REST endpoints (user + admin views)
 ```
@@ -67,7 +117,7 @@ Templates use inheritance from `base.html` with Tailwind CSS. Forms in `core/for
 
 Four predefined plans with specific ROI/duration/amount ranges:
 - Pioneer: 1.00% daily, 14 days, $100-$999
-- Vanguard: 1.25% daily, 21 days, $1,000-$4,999  
+- Vanguard: 1.25% daily, 21 days, $1,000-$4,999
 - Horizon: 1.50% daily, 30 days, $5,000-$14,999
 - Summit: 2.00% daily, 45 days, $15,000-$100,000
 

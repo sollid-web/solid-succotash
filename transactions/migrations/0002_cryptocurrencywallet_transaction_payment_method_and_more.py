@@ -8,46 +8,101 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('transactions', '0001_initial'),
+        ("transactions", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CryptocurrencyWallet',
+            name="CryptocurrencyWallet",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('currency', models.CharField(choices=[('BTC', 'Bitcoin'), ('USDT', 'Tether USD'), ('USDC', 'USD Coin'), ('ETH', 'Ethereum')], max_length=10, unique=True)),
-                ('wallet_address', models.CharField(help_text='Wallet address for receiving deposits', max_length=255)),
-                ('network', models.CharField(blank=True, help_text='Network (e.g., ERC-20, TRC-20, BEP-20)', max_length=50)),
-                ('is_active', models.BooleanField(default=True, help_text='Whether this wallet is accepting deposits')),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "currency",
+                    models.CharField(
+                        choices=[
+                            ("BTC", "Bitcoin"),
+                            ("USDT", "Tether USD"),
+                            ("USDC", "USD Coin"),
+                            ("ETH", "Ethereum"),
+                        ],
+                        max_length=10,
+                        unique=True,
+                    ),
+                ),
+                (
+                    "wallet_address",
+                    models.CharField(
+                        help_text="Wallet address for receiving deposits",
+                        max_length=255,
+                    ),
+                ),
+                (
+                    "network",
+                    models.CharField(
+                        blank=True,
+                        help_text="Network (e.g., ERC-20, TRC-20, BEP-20)",
+                        max_length=50,
+                    ),
+                ),
+                (
+                    "is_active",
+                    models.BooleanField(
+                        default=True,
+                        help_text="Whether this wallet is accepting deposits",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
             options={
-                'verbose_name': 'Cryptocurrency Wallet',
-                'verbose_name_plural': 'Cryptocurrency Wallets',
-                'db_table': 'transactions_crypto_wallet',
-                'ordering': ['currency'],
+                "verbose_name": "Cryptocurrency Wallet",
+                "verbose_name_plural": "Cryptocurrency Wallets",
+                "db_table": "transactions_crypto_wallet",
+                "ordering": ["currency"],
             },
         ),
         migrations.AddField(
-            model_name='transaction',
-            name='payment_method',
-            field=models.CharField(choices=[('bank_transfer', 'Bank Transfer'), ('BTC', 'Bitcoin'), ('USDT', 'Tether USD'), ('USDC', 'USD Coin'), ('ETH', 'Ethereum')], default='bank_transfer', max_length=20),
+            model_name="transaction",
+            name="payment_method",
+            field=models.CharField(
+                choices=[
+                    ("bank_transfer", "Bank Transfer"),
+                    ("BTC", "Bitcoin"),
+                    ("USDT", "Tether USD"),
+                    ("USDC", "USD Coin"),
+                    ("ETH", "Ethereum"),
+                ],
+                default="bank_transfer",
+                max_length=20,
+            ),
         ),
         migrations.AddField(
-            model_name='transaction',
-            name='tx_hash',
-            field=models.CharField(blank=True, help_text='Cryptocurrency transaction hash', max_length=255),
+            model_name="transaction",
+            name="tx_hash",
+            field=models.CharField(
+                blank=True, help_text="Cryptocurrency transaction hash", max_length=255
+            ),
         ),
         migrations.AddField(
-            model_name='transaction',
-            name='wallet_address_used',
-            field=models.CharField(blank=True, help_text='Wallet address used for crypto deposit', max_length=255),
+            model_name="transaction",
+            name="wallet_address_used",
+            field=models.CharField(
+                blank=True,
+                help_text="Wallet address used for crypto deposit",
+                max_length=255,
+            ),
         ),
         migrations.AddIndex(
-            model_name='transaction',
-            index=models.Index(fields=['payment_method'], name='transaction_payment_77b5ab_idx'),
+            model_name="transaction",
+            index=models.Index(fields=["payment_method"], name="transaction_payment_77b5ab_idx"),
         ),
     ]

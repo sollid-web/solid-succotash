@@ -156,28 +156,28 @@ Complete overhaul of WolvCapital's legal and informational pages to reflect prof
 ## Key Features & Highlights
 
 ### Professional Standards:
-✅ UK-based governing law  
-✅ Manual off-chain approval emphasis  
-✅ Cryptocurrency-specific risk disclosures  
-✅ GDPR/data protection compliance  
-✅ AML/KYC requirements  
-✅ Clear limitation of liability  
-✅ Processing time transparency (24-72 hours)  
+✅ UK-based governing law
+✅ Manual off-chain approval emphasis
+✅ Cryptocurrency-specific risk disclosures
+✅ GDPR/data protection compliance
+✅ AML/KYC requirements
+✅ Clear limitation of liability
+✅ Processing time transparency (24-72 hours)
 
 ### Content Quality:
-✅ Professional legal language  
-✅ Clear, accessible explanations  
-✅ Cross-document references  
-✅ Comprehensive risk coverage  
-✅ User responsibility clarity  
-✅ Regulatory awareness  
+✅ Professional legal language
+✅ Clear, accessible explanations
+✅ Cross-document references
+✅ Comprehensive risk coverage
+✅ User responsibility clarity
+✅ Regulatory awareness
 
 ### User Experience:
-✅ Consistent Tailwind CSS styling  
-✅ Mobile-responsive design  
-✅ Clear section headings  
-✅ Visual callout boxes  
-✅ Easy navigation between legal pages  
+✅ Consistent Tailwind CSS styling
+✅ Mobile-responsive design
+✅ Clear section headings
+✅ Visual callout boxes
+✅ Easy navigation between legal pages
 
 ---
 
@@ -197,11 +197,11 @@ Complete overhaul of WolvCapital's legal and informational pages to reflect prof
 
 ## Contact Information Provided
 
-**General Support:** support@wolvcapital.com  
-**Legal Matters:** legal@wolvcapital.com  
-**Compliance:** compliance@wolvcapital.com  
-**Privacy:** privacy@wolvcapital.com  
-**Security:** security@wolvcapital.com  
+**General Support:** support@wolvcapital.com
+**Legal Matters:** legal@wolvcapital.com
+**Compliance:** compliance@wolvcapital.com
+**Privacy:** privacy@wolvcapital.com
+**Security:** security@wolvcapital.com
 
 ---
 
@@ -234,9 +234,9 @@ Complete overhaul of WolvCapital's legal and informational pages to reflect prof
 
 ---
 
-**Effective Date:** October 2025  
-**Last Updated:** October 2, 2025  
-**Version:** 1.0  
+**Effective Date:** October 2025
+**Last Updated:** October 2, 2025
+**Version:** 1.0
 **Status:** Ready for legal review and deployment
 
 ---

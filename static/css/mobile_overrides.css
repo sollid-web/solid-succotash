@@ -1,0 +1,69 @@
+@media (max-width: 768px) {
+  .card, .hero-card {
+    width: 100% !important;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  img, video, svg {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  .brand-navbar .nav-content {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+
+  .brand-navbar .nav-links {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+/* ====== GLOBAL MOBILE FIXES ====== */
+@media (max-width: 768px) {
+  /* Kill the gap between header and first section */
+  header, .navbar, .brand-navbar { margin-bottom: 0 !important; }
+  main, .hero, .hero-section, section:first-of-type {
+    margin-top: 0 !important;
+    padding-top: 0.75rem !important;
+  }
+
+  /* Ensure nothing overflows the screen */
+  html, body { overflow-x: hidden; }
+  .container, .wrap, .section, .content { max-width: 100vw; padding-left: 1rem; padding-right: 1rem; }
+
+  /* Hero card sizing & centering */
+  .hero-card, .card.hero, .wc-hero-card {
+    width: 100% !important;
+    max-width: 640px;
+    margin: 0.75rem auto !important;
+    padding: 1rem !important;
+  }
+
+  /* Generic cards */
+  .card, .plan-card, .section-card {
+    width: 100% !important;
+    max-width: 640px;
+    margin: 0.75rem auto !important;
+  }
+
+  /* Media should never clip */
+  img, video, svg { max-width: 100% !important; height: auto !important; }
+
+  /* Nav collapse (prevents items pushing content down/sideways) */
+  .brand-navbar .nav-content { flex-direction: column; gap: .5rem; align-items: stretch; }
+  .brand-navbar .nav-links { justify-content: center; flex-wrap: wrap; }
+
+  /* Chat widget not covering buttons on mobile */
+  #chat-widget, .chat-widget, .tawk-min-container, .crisp-client {
+    right: 1rem !important; bottom: 1rem !important; z-index: 9999 !important;
+  }
+  /* give bottom breathing room for CTA above chat bubble */
+  .cta, .cta-section { padding-bottom: 5rem !important; }
+
+  /* Keep footer readable & centered */
+  footer { text-align: center; }
+}

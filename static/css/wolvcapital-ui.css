@@ -1,0 +1,183 @@
+/* Brand specific navbar styles */
+.brand-navbar {
+    background: transparent;
+    padding: 1rem 0.75rem;
+    position: relative;
+    z-index: 100;
+}
+
+.brand-navbar .nav-shell {
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.95) 0%, rgba(37, 99, 235, 0.95) 100%);
+    border-radius: 1.5rem;
+    padding: 0.625rem 1.25rem;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.2);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.brand-navbar .nav-shell:hover {
+    box-shadow: 0 12px 32px rgba(37, 99, 235, 0.25);
+}
+
+.brand-navbar .nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.brand-navbar .logo-section {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.brand-navbar img {
+    height: 42px;
+    width: auto;
+    max-width: 180px;
+    object-fit: contain;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s ease;
+}
+
+.brand-navbar img:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.brand-navbar .brand-title {
+    font-weight: 700;
+    font-size: 1.125rem;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    color: #fff;
+}
+
+.brand-navbar .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.brand-navbar .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 0.875rem;
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+}
+
+.brand-navbar .nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: #fff;
+    transform: translateX(-50%);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.brand-navbar .nav-link:hover,
+.brand-navbar .nav-link:focus-visible {
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.brand-navbar .nav-link:hover::before {
+    width: 70%;
+}
+
+.brand-navbar .nav-cta {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    background-size: 200% 200%;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.brand-navbar .nav-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.brand-navbar .nav-cta:hover,
+.brand-navbar .nav-cta:focus-visible {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    background-size: 200% 200%;
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+    transform: translateY(-2px) scale(1.05);
+}
+
+.brand-navbar .nav-cta:hover::before {
+    left: 100%;
+}
+
+.brand-navbar .nav-mobile-trigger {
+    color: rgba(255, 255, 255, 0.88);
+    transition: color 0.25s ease;
+}
+
+.brand-navbar .nav-mobile-trigger:hover,
+.brand-navbar .nav-mobile-trigger:focus-visible {
+    color: #fff;
+}
+
+/* Brand Footer */
+.brand-footer {
+    background: var(--brand-primary-dark);
+    color: white;
+    text-align: center;
+    padding: 2rem;
+}
+
+/* Chat Widget Styles */
+#chat-messages::-webkit-scrollbar {
+    width: 4px;
+}
+
+#chat-messages::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+#chat-messages::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 2px;
+}
+
+.quick-action-btn:hover {
+    transform: translateY(-1px);
+}
+
+.chat-widget-hidden {
+    display: none;
+}
+
+.chat-show {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+}

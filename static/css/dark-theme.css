@@ -1,0 +1,144 @@
+/* Dark Theme Base Variables */
+:root {
+    --dark-bg-primary: #0f172a;
+    --dark-bg-secondary: #1e293b;
+    --dark-bg-card: rgba(30, 41, 59, 0.95);
+    --dark-bg-card-hover: rgba(30, 41, 59, 0.98);
+    --dark-text-primary: #f8fafc;
+    --dark-text-secondary: #cbd5e1;
+    --dark-text-muted: #94a3b8;
+    --dark-border: rgba(148, 163, 184, 0.1);
+    --dark-gradient-start: #0f172a;
+    --dark-gradient-end: #1e293b;
+    --dark-card-blur: blur(10px);
+    --section-spacing: 3rem;
+}
+
+/* Base Dark Theme */
+body {
+    background: linear-gradient(135deg, var(--dark-bg-primary), var(--dark-bg-secondary));
+    color: var(--dark-text-primary);
+}
+
+/* Section Spacing */
+section {
+    padding-top: var(--section-spacing);
+    padding-bottom: var(--section-spacing);
+}
+
+/* Card Styles */
+.card, .plan-card, .section-card, .feature-card {
+    background: var(--dark-bg-card);
+    backdrop-filter: var(--dark-card-blur);
+    -webkit-backdrop-filter: var(--dark-card-blur);
+    border: 1px solid var(--dark-border);
+    color: var(--dark-text-primary);
+    transition: all 0.3s ease;
+}
+
+.card:hover, .plan-card:hover, .section-card:hover, .feature-card:hover {
+    background: var(--dark-bg-card-hover);
+    transform: translateY(-2px);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--dark-text-primary);
+}
+
+p, span, li {
+    color: var(--dark-text-secondary);
+}
+
+.text-muted, .text-subtle {
+    color: var(--dark-text-muted);
+}
+
+/* Borders and Dividers */
+.border, .border-t, .border-b, .border-l, .border-r {
+    border-color: var(--dark-border);
+}
+
+/* Form Elements */
+input, textarea, select {
+    background: rgba(15, 23, 42, 0.6);
+    border-color: var(--dark-border);
+    color: var(--dark-text-primary);
+}
+
+input:focus, textarea:focus, select:focus {
+    background: rgba(15, 23, 42, 0.8);
+}
+
+/* Message/Alert Cards */
+.alert, .message, .notification {
+    background: var(--dark-bg-card);
+    border: 1px solid var(--dark-border);
+}
+
+/* Tables */
+table {
+    background: var(--dark-bg-card);
+}
+
+tr:nth-child(even) {
+    background: rgba(15, 23, 42, 0.3);
+}
+
+/* Links */
+a:not(.btn):not(.nav-link) {
+    color: #60a5fa;
+}
+
+a:not(.btn):not(.nav-link):hover {
+    color: #93c5fd;
+}
+
+/* Dropdowns and Menus */
+.dropdown-menu, .context-menu {
+    background: var(--dark-bg-card);
+    border: 1px solid var(--dark-border);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Chat Widget Updates */
+#chat-window {
+    background: var(--dark-bg-card);
+    border-color: var(--dark-border);
+}
+
+#chat-messages {
+    background: rgba(15, 23, 42, 0.3);
+}
+
+.message-bubble {
+    background: var(--dark-bg-secondary);
+    color: var(--dark-text-primary);
+}
+
+/* Button Gradients */
+.gradient-btn {
+    background: linear-gradient(135deg, #1e40af, #3b82f6);
+}
+
+.gradient-btn:hover {
+    background: linear-gradient(135deg, #1e4faf, #4b92ff);
+}
+
+/* Mobile Menu Dark Theme */
+@media (max-width: 768px) {
+    .navbar-collapse {
+        background: var(--dark-bg-card);
+        border: 1px solid var(--dark-border);
+    }
+
+    .mobile-menu-item {
+        border-color: var(--dark-border);
+    }
+}
+
+/* Footer Dark Theme */
+.brand-footer {
+    background: var(--dark-bg-primary);
+    border-top: 1px solid var(--dark-border);
+}

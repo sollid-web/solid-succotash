@@ -276,12 +276,21 @@ SENDGRID_ECHO_TO_STDOUT = True           # set True to print emails in console
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@wolvcapital.com")
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
+# Multiple Email Addresses for Different Purposes
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@wolvcapital.com")
+SUPPORT_EMAIL = os.getenv("SUPPORT_EMAIL", "support@wolvcapital.com")
+COMPLIANCE_EMAIL = os.getenv("COMPLIANCE_EMAIL", "compliance@wolvcapital.com")
+LEGAL_EMAIL = os.getenv("LEGAL_EMAIL", "legal@wolvcapital.com")
+PRIVACY_EMAIL = os.getenv("PRIVACY_EMAIL", "privacy@wolvcapital.com")
+MARKETING_EMAIL = os.getenv("MARKETING_EMAIL", "marketing@wolvcapital.com")
+
 # Fallback to console backend if SendGrid API key is not set
 if not SENDGRID_API_KEY:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
     print("⚠️  Warning: SENDGRID_API_KEY not found. Using console email backend.")
 else:
     print(f"✅ SendGrid configured with API key: {SENDGRID_API_KEY[:10]}...")
+    print(f"📧 Email addresses configured: {ADMIN_EMAIL}, {SUPPORT_EMAIL}, {MARKETING_EMAIL}")
 
 # ------------------------------------------------------------------
 # I18N / TZ

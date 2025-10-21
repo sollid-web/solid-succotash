@@ -59,29 +59,107 @@ def send_test_email(recipient_email, subject=None, message=None):
         return False
 
 
-def send_welcome_email(to_email, first_name):
+def send_welcome_email(to_email, first_name, user=None):
     """
-    Send a welcome email to a new user
+    Send a welcome email to a new user using dedicated support email address
     
     Args:
         to_email (str): Recipient email address
         first_name (str): User's first name
+        user (User, optional): Django User object for additional context
     """
     try:
         context = {
             "first_name": first_name,
+            "to_email": to_email,
+            "user": user,
         }
         
         # Render HTML template
-        html_content = render_to_string("emails/welcome.html", context)
+        try:
+            html_content = render_to_string("emails/welcome.html", context)
+        except Exception as template_error:
+            logger.warning(f"Welcome template not found, using fallback HTML: {template_error}")
+            html_content = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <title>Welcome to WolvCapital</title>
+                <style>
+                    body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+                    .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+                    .header {{ background: linear-gradient(135deg, #2196F3, #0D47A1); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }}
+                    .content {{ background: #ffffff; padding: 30px; border: 1px solid #e0e0e0; }}
+                    .footer {{ background: #f5f5f5; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; }}
+                    .btn {{ display: inline-block; background: #FFD700; color: #0D47A1; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 20px 0; }}
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>🚀 WolvCapital</h1>
+                        <p>Invest Smart, Grow Fast</p>
+                    </div>
+                    <div class="content">
+                        <h2>Welcome {first_name}! 🎉</h2>
+                        <p>Thank you for joining WolvCapital! Your investment journey starts here.</p>
+                        <p><strong>What's Next?</strong></p>
+                        <ul>
+                            <li>💰 Explore our investment plans</li>
+                            <li>🔒 Secure your account</li>
+                            <li>📊 Access your dashboard</li>
+                            <li>🎯 Start building your portfolio</li>
+                        </ul>
+                        <div style="text-align: center;">
+                            <a href="https://wolvcapital.com/dashboard" class="btn">Access Your Dashboard</a>
+                        </div>
+                        <p>Need help? Contact our support team at support@wolvcapital.com</p>
+                    </div>
+                    <div class="footer">
+                        <p><strong>WolvCapital Support Team</strong></p>
+                        <p>📧 support@wolvcapital.com | 🌐 wolvcapital.com</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """
         
-        # Create email message
-        subject = "Welcome to WolvCapital - Your Investment Journey Begins!"
-        from_email = settings.DEFAULT_FROM_EMAIL
+        # Create email message using SUPPORT_EMAIL for welcoming new users
+        subject = "🎉 Welcome to WolvCapital - Your Investment Journey Begins!"
+        from_email = getattr(settings, 'SUPPORT_EMAIL', settings.DEFAULT_FROM_EMAIL)
+        
+        # Plain text version
+        text_content = f"""
+        Welcome to WolvCapital, {first_name}!
+        
+        Thank you for joining our investment platform. Your account is now ready and you can start building your financial future.
+        
+        What's Next:
+        • Access your dashboard: https://wolvcapital.com/dashboard
+        • Explore investment plans
+        • Set up your portfolio
+        • Contact support if you need help
+        
+        Why WolvCapital:
+        • Competitive returns on investments
+        • Bank-level security for your funds
+        • Professional portfolio management
+        • Expert guidance and support
+        
+        Need assistance? Our support team is here to help:
+        Email: support@wolvcapital.com
+        Website: https://wolvcapital.com
+        
+        Welcome aboard!
+        
+        Best regards,
+        WolvCapital Support Team
+        """
         
         msg = EmailMultiAlternatives(
             subject=subject,
-            body=f"Welcome {first_name}! Thanks for joining WolvCapital.",
+            body=text_content.strip(),
             from_email=from_email,
             to=[to_email]
         )
@@ -90,7 +168,7 @@ def send_welcome_email(to_email, first_name):
         # Send email
         msg.send()
         
-        logger.info(f"Welcome email sent successfully to {to_email}")
+        logger.info(f"Welcome email sent successfully to {to_email} from {from_email}")
         return True
         
     except Exception as e:
@@ -100,7 +178,7 @@ def send_welcome_email(to_email, first_name):
 
 def send_verification_email(user, request=None):
     """
-    Send email verification email to user
+    Send email verification email to user using compliance email address
     
     Args:
         user: Django User object
@@ -129,9 +207,9 @@ def send_verification_email(user, request=None):
         # Render HTML template
         html_content = render_to_string("emails/email_verification.html", context)
         
-        # Create email message
+        # Create email message using COMPLIANCE_EMAIL for verification
         subject = "Verify Your Email - WolvCapital"
-        from_email = settings.DEFAULT_FROM_EMAIL
+        from_email = getattr(settings, 'COMPLIANCE_EMAIL', settings.DEFAULT_FROM_EMAIL)
         
         msg = EmailMultiAlternatives(
             subject=subject,
@@ -144,7 +222,7 @@ def send_verification_email(user, request=None):
         # Send email
         msg.send()
         
-        logger.info(f"Verification email sent successfully to {user.email}")
+        logger.info(f"Verification email sent successfully to {user.email} from {from_email}")
         return True
         
     except Exception as e:
@@ -154,7 +232,7 @@ def send_verification_email(user, request=None):
 
 def send_password_reset_email(user, reset_url):
     """
-    Send password reset email to user
+    Send password reset email to user using privacy email address
     
     Args:
         user: Django User object
@@ -169,9 +247,9 @@ def send_password_reset_email(user, reset_url):
         # Render HTML template
         html_content = render_to_string("emails/password_reset.html", context)
         
-        # Create email message
+        # Create email message using PRIVACY_EMAIL for security-related communications
         subject = "Password Reset - WolvCapital"
-        from_email = settings.DEFAULT_FROM_EMAIL
+        from_email = getattr(settings, 'PRIVACY_EMAIL', settings.DEFAULT_FROM_EMAIL)
         
         msg = EmailMultiAlternatives(
             subject=subject,
@@ -184,7 +262,7 @@ def send_password_reset_email(user, reset_url):
         # Send email
         msg.send()
         
-        logger.info(f"Password reset email sent successfully to {user.email}")
+        logger.info(f"Password reset email sent successfully to {user.email} from {from_email}")
         return True
         
     except Exception as e:
@@ -194,7 +272,7 @@ def send_password_reset_email(user, reset_url):
 
 def send_investment_notification(user, investment_type, amount):
     """
-    Send investment notification email to user
+    Send investment notification email to user using admin email address
     
     Args:
         user: Django User object
@@ -212,9 +290,9 @@ def send_investment_notification(user, investment_type, amount):
         # Render HTML template
         html_content = render_to_string("emails/investment_notification.html", context)
         
-        # Create email message
+        # Create email message using ADMIN_EMAIL for financial transactions
         subject = f"Investment Confirmation - {investment_type}"
-        from_email = settings.DEFAULT_FROM_EMAIL
+        from_email = getattr(settings, 'ADMIN_EMAIL', settings.DEFAULT_FROM_EMAIL)
         
         msg = EmailMultiAlternatives(
             subject=subject,
@@ -227,7 +305,7 @@ def send_investment_notification(user, investment_type, amount):
         # Send email
         msg.send()
         
-        logger.info(f"Investment notification sent successfully to {user.email}")
+        logger.info(f"Investment notification sent successfully to {user.email} from {from_email}")
         return True
         
     except Exception as e:
@@ -237,7 +315,7 @@ def send_investment_notification(user, investment_type, amount):
 
 def send_withdrawal_notification(user, amount):
     """
-    Send withdrawal notification email to user
+    Send withdrawal notification email to user using admin email address
     
     Args:
         user: Django User object
@@ -253,9 +331,9 @@ def send_withdrawal_notification(user, amount):
         # Render HTML template
         html_content = render_to_string("emails/withdrawal_notification.html", context)
         
-        # Create email message
+        # Create email message using ADMIN_EMAIL for financial transactions
         subject = "Withdrawal Confirmation - WolvCapital"
-        from_email = settings.DEFAULT_FROM_EMAIL
+        from_email = getattr(settings, 'ADMIN_EMAIL', settings.DEFAULT_FROM_EMAIL)
         
         msg = EmailMultiAlternatives(
             subject=subject,
@@ -268,7 +346,7 @@ def send_withdrawal_notification(user, amount):
         # Send email
         msg.send()
         
-        logger.info(f"Withdrawal notification sent successfully to {user.email}")
+        logger.info(f"Withdrawal notification sent successfully to {user.email} from {from_email}")
         return True
         
     except Exception as e:
@@ -278,7 +356,7 @@ def send_withdrawal_notification(user, amount):
 
 def send_admin_alert(subject, message, admin_emails=None):
     """
-    Send alert email to administrators
+    Send alert email to administrators using admin email address
     
     Args:
         subject (str): Email subject
@@ -289,17 +367,178 @@ def send_admin_alert(subject, message, admin_emails=None):
         if not admin_emails:
             admin_emails = [getattr(settings, 'ADMIN_EMAIL', 'admin@wolvcapital.com')]
         
+        # Use ADMIN_EMAIL as the sender for administrative communications
+        from_email = getattr(settings, 'ADMIN_EMAIL', settings.DEFAULT_FROM_EMAIL)
+        
         send_mail(
             subject=f"[WolvCapital Admin Alert] {subject}",
             message=message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
+            from_email=from_email,
             recipient_list=admin_emails,
             fail_silently=False,
         )
         
-        logger.info(f"Admin alert sent successfully: {subject}")
+        logger.info(f"Admin alert sent successfully: {subject} from {from_email}")
         return True
         
     except Exception as e:
         logger.error(f"Failed to send admin alert '{subject}': {str(e)}")
+        return False
+
+
+def send_marketing_email(to_email, subject, content, user_first_name=None, call_to_action_url=None):
+    """
+    Send marketing/promotional email using marketing email address
+    
+    Args:
+        to_email (str): Recipient email address
+        subject (str): Email subject
+        content (str): Email content/message
+        user_first_name (str, optional): User's first name for personalization
+        call_to_action_url (str, optional): URL for call-to-action button
+    """
+    try:
+        context = {
+            "first_name": user_first_name,
+            "content": content,
+            "to_email": to_email,
+            "subject": subject,
+            "call_to_action_url": call_to_action_url,
+        }
+        
+        # Render HTML template if available
+        try:
+            html_content = render_to_string("emails/marketing.html", context)
+        except:
+            html_content = f"""
+            <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <div style="background: linear-gradient(135deg, #2196F3, #0D47A1); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
+                        <h1>🚀 WolvCapital</h1>
+                        <p>Invest Smart, Grow Fast</p>
+                    </div>
+                    <div style="background: #ffffff; padding: 30px; border: 1px solid #e0e0e0;">
+                        <h2>Hello {user_first_name or 'Valued Investor'}!</h2>
+                        <div style="background: #E3F2FD; padding: 15px; border-left: 4px solid #2196F3; margin: 20px 0;">
+                            {content}
+                        </div>
+                        {'<div style="text-align: center; margin: 20px 0;"><a href="' + call_to_action_url + '" style="background: #FFD700; color: #0D47A1; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">Explore Opportunities</a></div>' if call_to_action_url else ''}
+                        <p>Best regards,<br><strong>WolvCapital Marketing Team</strong></p>
+                    </div>
+                    <div style="background: #f5f5f5; padding: 20px; text-align: center; border-radius: 0 0 10px 10px;">
+                        <p>📧 marketing@wolvcapital.com | 🌐 wolvcapital.com</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            """
+        
+        # Create email message using MARKETING_EMAIL
+        from_email = getattr(settings, 'MARKETING_EMAIL', settings.DEFAULT_FROM_EMAIL)
+        
+        msg = EmailMultiAlternatives(
+            subject=subject,
+            body=f"Hello {user_first_name or 'Valued Investor'},\n\n{content}\n\nBest regards,\nWolvCapital Marketing Team",
+            from_email=from_email,
+            to=[to_email]
+        )
+        msg.attach_alternative(html_content, "text/html")
+        
+        # Send email
+        msg.send()
+        
+        logger.info(f"Marketing email sent successfully to {to_email} from {from_email}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Failed to send marketing email to {to_email}: {str(e)}")
+        return False
+
+
+def send_support_email(to_email, subject, message, user_first_name=None):
+    """
+    Send support response email using support email address
+    
+    Args:
+        to_email (str): Recipient email address
+        subject (str): Email subject
+        message (str): Support message
+        user_first_name (str, optional): User's first name for personalization
+    """
+    try:
+        context = {
+            "first_name": user_first_name,
+            "message": message,
+        }
+        
+        # Render HTML template if available
+        try:
+            html_content = render_to_string("emails/support_response.html", context)
+        except:
+            html_content = f"<html><body><p>Hello {user_first_name or 'Valued Customer'},</p><p>{message}</p><p>Best regards,<br>WolvCapital Support Team</p></body></html>"
+        
+        # Create email message using SUPPORT_EMAIL
+        from_email = getattr(settings, 'SUPPORT_EMAIL', settings.DEFAULT_FROM_EMAIL)
+        
+        msg = EmailMultiAlternatives(
+            subject=subject,
+            body=message,
+            from_email=from_email,
+            to=[to_email]
+        )
+        msg.attach_alternative(html_content, "text/html")
+        
+        # Send email
+        msg.send()
+        
+        logger.info(f"Support email sent successfully to {to_email} from {from_email}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Failed to send support email to {to_email}: {str(e)}")
+        return False
+
+
+def send_legal_notification(to_email, subject, message, user_first_name=None):
+    """
+    Send legal/compliance notification using legal email address
+    
+    Args:
+        to_email (str): Recipient email address
+        subject (str): Email subject
+        message (str): Legal notification message
+        user_first_name (str, optional): User's first name for personalization
+    """
+    try:
+        context = {
+            "first_name": user_first_name,
+            "message": message,
+        }
+        
+        # Render HTML template if available
+        try:
+            html_content = render_to_string("emails/legal_notification.html", context)
+        except:
+            html_content = f"<html><body><p>Dear {user_first_name or 'Account Holder'},</p><p>{message}</p><p>Regards,<br>WolvCapital Legal Department</p></body></html>"
+        
+        # Create email message using LEGAL_EMAIL
+        from_email = getattr(settings, 'LEGAL_EMAIL', settings.DEFAULT_FROM_EMAIL)
+        
+        msg = EmailMultiAlternatives(
+            subject=subject,
+            body=message,
+            from_email=from_email,
+            to=[to_email]
+        )
+        msg.attach_alternative(html_content, "text/html")
+        
+        # Send email
+        msg.send()
+        
+        logger.info(f"Legal notification sent successfully to {to_email} from {from_email}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Failed to send legal notification to {to_email}: {str(e)}")
         return False

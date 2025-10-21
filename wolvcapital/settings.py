@@ -258,7 +258,22 @@ ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 # ------------------------------------------------------------------
 # Email
 # ------------------------------------------------------------------
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# ------------------------------------------------------------------
+# Email - SendGrid Configuration
+# ------------------------------------------------------------------
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", "")
+SENDGRID_SANDBOX_MODE_IN_DEBUG = False   # set True to test without sending
+SENDGRID_ECHO_TO_STDOUT = True           # set True to print emails in console
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@wolvcapital.com")
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
+# Fallback to console backend if SendGrid API key is not set
+if not SENDGRID_API_KEY:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    print("⚠️  Warning: SENDGRID_API_KEY not found. Using console email backend.")
+else:
+    print(f"✅ SendGrid configured with API key: {SENDGRID_API_KEY[:10]}...")
 
 # ------------------------------------------------------------------
 # I18N / TZ

@@ -23,6 +23,10 @@ services:
         fromDatabase:
           name: wolvcapital-db
           property: connectionString
+      - key: SENDGRID_API_KEY
+        value: ""  # Set this in Render Dashboard Environment Variables
+      - key: DEFAULT_FROM_EMAIL
+        value: "noreply@wolvcapital.com"
 
 databases:
   - name: wolvcapital-db

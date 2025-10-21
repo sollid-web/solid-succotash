@@ -3,6 +3,14 @@ import os
 from pathlib import Path
 from urllib.parse import urlparse
 
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    # dotenv is optional; gracefully fall back if not installed
+    pass
+
 # dj-database-url is optional in some environments; try to import and fall back gracefully.
 try:
     import dj_database_url

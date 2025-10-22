@@ -1,5 +1,6 @@
 # ---------- Render / Production Hardening ----------
 import os
+import sys
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -39,6 +40,10 @@ CUSTOM_DOMAIN = os.getenv("CUSTOM_DOMAIN")  # optional, supports comma-separated
 # ------------------------------------------------------------------
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "testserver"]
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000"]
+
+# Add development hostnames
+ALLOWED_HOSTS += ["solid-succotash-654g", ".onrender.com", "*"]
+CSRF_TRUSTED_ORIGINS += ["http://solid-succotash-654g:8000", "https://solid-succotash-654g.onrender.com"]
 
 # --- GitHub Codespaces support ---
 CODESPACES_DOMAIN = os.getenv("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN")
@@ -207,7 +212,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_ROOT.mkdir(parents=True, exist_ok=True)
 
 TESTING = any(arg in os.environ.get("PYTEST_CURRENT_TEST", "") for arg in ["::"]) or any(
-    c in " ".join(os.sys.argv) for c in ["test", "pytest"]
+    c in " ".join(sys.argv) for c in ["test", "pytest"]
 )
 
 if not DEBUG and not TESTING:
@@ -315,9 +320,10 @@ class JsonFormatter:
     Produces a single-line JSON object with level, message, logger, and timestamp.
     """
 
-    def format(self, record):  # pragma: no cover (formatting utility)
+    def format(self, record) -> str:  # pragma: no cover (formatting utility)
         import datetime
         import json
+        import traceback
 
         from wolvcapital.middleware import (
             get_request_id,
@@ -328,7 +334,7 @@ class JsonFormatter:
             "level": record.levelname,
             "logger": record.name,
             "message": record.getMessage(),
-            "time": datetime.datetime.utcnow().isoformat() + "Z",
+            "time": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         }
         if rid:
             data["request_id"] = rid

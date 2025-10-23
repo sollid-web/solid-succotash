@@ -5,10 +5,9 @@ WolvCapital Email System Automation Script
 This script automates email system setup, testing, and deployment tasks.
 """
 
+import json
 import os
 import sys
-import subprocess
-import json
 from pathlib import Path
 
 # Add Django project to Python path
@@ -19,13 +18,18 @@ sys.path.insert(0, str(project_root))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wolvcapital.settings')
 
 import django
+
 django.setup()
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+
 from core.email_utils import (
-    send_test_email, send_welcome_email, send_marketing_email,
-    send_support_email, send_admin_alert
+    send_admin_alert,
+    send_marketing_email,
+    send_support_email,
+    send_test_email,
+    send_welcome_email,
 )
 
 User = get_user_model()

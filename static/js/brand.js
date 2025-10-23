@@ -116,10 +116,16 @@ const WolvCapitalBrand = {
             animation: slideIn 0.3s ease-out;
         `;
 
-        toast.innerHTML = `
-            <span style="font-size: 1.25rem;">${icons[type]}</span>
-            <span>${message}</span>
-        `;
+        // Create elements safely to prevent XSS
+        const iconSpan = document.createElement('span');
+        iconSpan.style.fontSize = '1.25rem';
+        iconSpan.textContent = icons[type];
+        
+        const messageSpan = document.createElement('span');
+        messageSpan.textContent = message;
+        
+        toast.appendChild(iconSpan);
+        toast.appendChild(messageSpan);
 
         document.body.appendChild(toast);
 

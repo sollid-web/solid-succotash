@@ -1,0 +1,569 @@
+{% extends 'dashboard_base.html' %}
+
+{% block title %}Dashboard - WolvCapital{% endblock %}
+
+{% block extra_css %}
+<style>
+    .crypto-wallet-hidden { display: none; }
+    .crypto-deposit-section { display: none; }
+</style>
+{% endblock %}
+
+{% load currency %}
+{% block content %}
+<div class="bg-gray-50 min-h-screen py-3">
+    <div class="container py-3">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+            <p class="text-gray-600">Welcome back, {{ user.first_name|default:user.email }}</p>
+        </div>
+
+        <!-- Wallet Balance & Quick Stats -->
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-sm-6 col-lg-2">
+                <div class="card h-100 border-start border-success border-4">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="flex-shrink-0 me-3">
+                        <svg class="h-8 w-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-muted small">Wallet Balance</div>
+                        <div class="fs-4 fw-bold text-success">{{ wallet.balance|currency }}</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg-2">
+                <div class="card h-100 border-start border-primary border-4">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="flex-shrink-0 me-3">
+                        <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-muted small">Total Invested</div>
+                        <div class="fs-4 fw-bold">{{ total_invested|currency }}</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg-2">
+                <div class="card h-100 border-start border-4" style="border-color: #a855f7 !important;">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="flex-shrink-0 me-3">
+                        <svg class="h-8 w-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-muted small">Active Investments</div>
+                        <div class="fs-4 fw-bold">{{ active_investments }}</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <!-- Total Deposits -->
+            <div class="col-12 col-sm-6 col-lg-2">
+                <div class="card h-100 border-start border-4" style="border-color: #10b981 !important;">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="flex-shrink-0 me-3">
+                        <svg class="h-8 w-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-muted small">Total Deposits</div>
+                        <div class="fs-4 fw-bold">{{ total_deposits|currency }}</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <!-- Total Withdrawals -->
+            <div class="col-12 col-sm-6 col-lg-2">
+                <div class="card h-100 border-start border-danger border-4">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="flex-shrink-0 me-3">
+                        <svg class="h-8 w-8 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6m6 6V6" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-muted small">Total Withdrawals</div>
+                        <div class="fs-4 fw-bold">{{ total_withdrawals|currency }}</div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg-2">
+                <div class="card h-100 border-start border-warning border-4">
+                    <div class="card-body">
+                        <a href="{% url 'withdrawals' %}" class="text-decoration-none d-flex align-items-center">
+                            <div class="flex-shrink-0 me-3">
+                            <svg class="h-8 w-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-muted small">Withdrawals</div>
+                            <div class="fw-bold">Manage</div>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Cards Grid -->
+            <div class="row g-3 mb-4">
+            <!-- Deposit Card -->
+                <div class="col-12 col-lg-6">
+                    <div class="card">
+                        <div class="card-header bg-success text-white d-flex align-items-center">
+                        <svg class="h-6 w-6 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                            <h2 class="mb-0 ms-2">Add Funds</h2>
+                    </div>
+                        <div class="card-body">
+                            <form method="post" action="{% url 'deposit' %}" class="row g-3">
+                        {% csrf_token %}
+
+                        <!-- Payment Method Selection -->
+                            <div class="col-12 col-md-6">
+                                <label for="{{ deposit_form.payment_method.id_for_label }}" class="form-label">
+                                Payment Method
+                            </label>
+                            {{ deposit_form.payment_method }}
+                        </div>
+
+                            <div class="col-12 col-md-6">
+                                <label for="{{ deposit_form.amount.id_for_label }}" class="form-label">
+                                    Deposit Amount ($)
+                                </label>
+                                {{ deposit_form.amount }}
+                            </div>
+
+                        <!-- Crypto Wallet Address Display -->
+                            <div id="crypto-wallet-info" class="col-12 crypto-deposit-section bg-light border border-info rounded p-3">
+                            <h4 class="font-medium text-blue-900 mb-3">Send to this address:</h4>
+                            {% for wallet in crypto_wallets %}
+                            <div class="crypto-wallet-{{ wallet.currency }} hidden">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="small fw-medium">{{ wallet.currency }} Address:</span>
+                                    {% if wallet.network %}
+                                        <span class="badge bg-info">{{ wallet.network }}</span>
+                                    {% endif %}
+                                </div>
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" value="{{ wallet.wallet_address }}" readonly class="form-control font-monospace">
+                                        <button type="button" onclick="copyAddress('{{ wallet.wallet_address }}')" class="btn btn-primary btn-sm">
+                                        Copy
+                                    </button>
+                                </div>
+                                    <div class="text-center mt-2">
+                                    <div id="qr-{{ wallet.currency }}" class="inline-block"></div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Transaction Hash (for crypto) -->
+                            <div id="tx-hash-field" class="col-12 crypto-deposit-section">
+                                <label for="{{ deposit_form.tx_hash.id_for_label }}" class="form-label">
+                                Transaction Hash *
+                            </label>
+                            {{ deposit_form.tx_hash }}
+                                <div class="form-text">Required for cryptocurrency deposits</div>
+                        </div>
+
+                            <div class="col-12">
+                                <label for="{{ deposit_form.reference.id_for_label }}" class="form-label">
+                                Payment Reference
+                            </label>
+                            {{ deposit_form.reference }}
+                                <div class="form-text">{{ deposit_form.reference.help_text }}</div>
+                        </div>
+
+                            <div class="col-12">
+                                <div class="alert alert-info small mb-0">
+                                    <strong>Manual Verification:</strong> All deposits require admin approval before funds are added to your wallet.
+                                    <span class="crypto-warning d-none text-danger fw-semibold"> For crypto deposits, ensure you send to the correct address and network!</span>
+                        </div>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-success w-100">
+                            Submit Deposit Request
+                        </button>
+                            </div>
+                    </form>
+                </div>
+                    </div>
+            </div>
+
+            <!-- Investment Card -->
+                <div class="col-12 col-lg-6">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white d-flex align-items-center">
+                        <svg class="h-6 w-6 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                            <h2 class="mb-0 ms-2">Start New Investment</h2>
+                    </div>
+                        <div class="card-body">
+                    {% if wallet.balance > 0 %}
+                            <form method="post" action="{% url 'invest' %}" class="row g-3">
+                        {% csrf_token %}
+                            <div class="col-12 col-md-6">
+                                <label for="{{ investment_form.plan.id_for_label }}" class="form-label">
+                                Investment Plan
+                            </label>
+                            {{ investment_form.plan }}
+                        </div>
+                            <div class="col-12 col-md-6">
+                                <label for="{{ investment_form.amount.id_for_label }}" class="form-label">
+                                Amount ($)
+                            </label>
+                            {{ investment_form.amount }}
+                                <div class="form-text">Available balance: {{ wallet.balance|currency }}</div>
+                        </div>
+                            <div class="col-12">
+                                <div class="alert alert-warning small mb-0">
+                                    <strong>Manual Approval Required:</strong> 24–48 hours.
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    Submit Investment Request
+                                </button>
+                            </div>
+                    </form>
+                    {% else %}
+                                <div class="text-center py-5">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                                <h3 class="mt-2 fw-medium">No funds available</h3>
+                                <p class="mt-1 text-muted small">You need to deposit funds before making an investment.</p>
+                        <div class="mt-6">
+                                    <button onclick="document.querySelector('input[name=amount]').focus()" class="btn btn-success">
+                                        <svg class="me-1" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                Add Funds First
+                            </button>
+                        </div>
+                    </div>
+                    {% endif %}
+                            </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Available Investment Plans -->
+        <div class="bg-white rounded-lg shadow-lg mb-8">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-indigo-500 to-indigo-600">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <svg class="h-6 w-6 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <h2 class="text-lg font-semibold text-white">Available Investment Plans</h2>
+                    </div>
+                    <a href="{% url 'plans' %}" class="text-white text-sm hover:text-indigo-200">View All Details →</a>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {% for plan in all_plans %}
+                    <div class="bg-gradient-to-br from-gray-50 to-white rounded-lg border-2 border-gray-200 hover:border-indigo-500 transition-all duration-300 overflow-hidden">
+                        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-4 text-white text-center">
+                            <h3 class="text-xl font-bold mb-1">{{ plan.name }}</h3>
+                            <div class="text-3xl font-bold">{{ plan.daily_roi }}%</div>
+                            <p class="text-indigo-100 text-sm">Daily</p>
+                        </div>
+
+                        <div class="p-4 space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Duration</span>
+                                <span class="font-semibold">
+                                    {% if plan.duration_days == 90 %}3 Months
+                                    {% elif plan.duration_days == 150 %}5 Months
+                                    {% elif plan.duration_days == 180 %}6 Months
+                                    {% elif plan.duration_days == 365 %}Annual
+                                    {% else %}{{ plan.duration_days }} Days
+                                    {% endif %}
+                                </span>
+                            </div>
+
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">Range</span>
+                                <span class="font-semibold">{{ plan.min_amount|currency }} - {{ plan.max_amount|currency }}</span>
+                            </div>
+
+                            <div class="bg-green-50 rounded p-3 text-center">
+                                <div class="text-xs text-gray-600">Total Return</div>
+                                <div class="text-xl font-bold text-green-600">{{ plan.total_roi }}%</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-span-full text-center py-8 text-gray-500">
+                        <p>No investment plans available at this time.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Investments -->
+        <div class="bg-white rounded-lg shadow-lg mb-8">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-purple-500 to-purple-600">
+                <div class="flex items-center">
+                    <svg class="h-6 w-6 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                    </svg>
+                    <h2 class="text-lg font-semibold text-white">My Investments</h2>
+                </div>
+            </div>
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle">
+                        <thead>
+                        <tr>
+                                <th>Plan</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Started</th>
+                                <th>Ends</th>
+                                <th>Expected Return</th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                        {% for investment in investments %}
+                            <tr>
+                                <td class="fw-medium">
+                                {{ investment.plan.name }}
+                                    <div class="small text-muted">{{ investment.plan.daily_roi }}% daily</div>
+                            </td>
+                                <td>
+                                    {{ investment.amount|currency }}
+                            </td>
+                                <td>
+                                {% if investment.status == 'pending' %}
+                                        <span class="badge bg-warning">
+                                        Pending Approval
+                                    </span>
+                                {% elif investment.status == 'approved' %}
+                                        <span class="badge bg-success">
+                                        Active
+                                    </span>
+                                {% elif investment.status == 'rejected' %}
+                                        <span class="badge bg-danger">
+                                        Rejected
+                                    </span>
+                                {% elif investment.status == 'completed' %}
+                                        <span class="badge bg-secondary">
+                                        Completed
+                                    </span>
+                                {% endif %}
+                            </td>
+                                <td>
+                                {% if investment.started_at %}
+                                    {{ investment.started_at|date:"M d, Y" }}
+                                {% else %}
+                                    <span class="text-gray-400">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {% if investment.ends_at %}
+                                    {{ investment.ends_at|date:"M d, Y" }}
+                                {% else %}
+                                    <span class="text-gray-400">Pending</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <span class="font-semibold text-green-600">${{ investment.total_return }}</span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                                <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                </svg>
+                                <p class="text-lg font-medium">No investments yet</p>
+                                <p class="mt-1">Start your first investment above to begin earning returns!</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="bg-white rounded-lg shadow-lg">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-gray-500 to-gray-600">
+                <div class="flex items-center">
+                    <svg class="h-6 w-6 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                    </svg>
+                    <h2 class="text-lg font-semibold text-white">Recent Transactions</h2>
+                </div>
+            </div>
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle">
+                        <thead>
+                        <tr>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Reference</th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                        {% for transaction in transactions %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                    {% if transaction.tx_type == 'deposit' %}
+                                            <svg class="text-success me-2" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                        </svg>
+                                    {% else %}
+                                            <svg class="text-danger me-2" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6"></path>
+                                        </svg>
+                                    {% endif %}
+                                        <span class="text-capitalize fw-medium">{{ transaction.tx_type }}</span>
+                                </div>
+                            </td>
+                                <td>
+                                {% if transaction.tx_type == 'withdrawal' %}
+                                        <span class="text-danger fw-medium">-{{ transaction.amount|currency }}</span>
+                                {% else %}
+                                        <span class="text-success fw-medium">+{{ transaction.amount|currency }}</span>
+                                {% endif %}
+                            </td>
+                                <td>
+                                {% if transaction.status == 'pending' %}
+                                        <span class="badge bg-warning">
+                                        Pending Review
+                                    </span>
+                                {% elif transaction.status == 'approved' %}
+                                        <span class="badge bg-success">
+                                        Approved
+                                    </span>
+                                {% elif transaction.status == 'rejected' %}
+                                        <span class="badge bg-danger">
+                                        Rejected
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ transaction.created_at|date:"M d, Y H:i" }}
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-900 max-w-xs">
+                                <div class="truncate" title="{{ transaction.reference }}">
+                                    {{ transaction.reference|truncatechars:40 }}
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+                                <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                                </svg>
+                                <p class="text-lg font-medium">No transactions yet</p>
+                                <p class="mt-1">Make your first deposit or investment to get started!</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// QR Code generation (simple implementation)
+function generateQR(text, elementId) {
+    // For production, use a proper QR code library like qrcode.js
+    document.getElementById(elementId).innerHTML = `<div class="w-32 h-32 bg-gray-200 flex items-center justify-center text-xs text-gray-600 border">QR Code<br>for ${text.substring(0,10)}...</div>`;
+}
+
+// Toggle crypto fields based on payment method
+function toggleCryptoFields(paymentMethod) {
+    const cryptoInfo = document.getElementById('crypto-wallet-info');
+    const txHashField = document.getElementById('tx-hash-field');
+    const cryptoWarning = document.querySelector('.crypto-warning');
+    const txHashInput = document.querySelector('input[name="tx_hash"]');
+
+    // Hide all crypto wallet divs first
+    document.querySelectorAll('[class*="crypto-wallet-"]').forEach(div => {
+        div.classList.add('hidden');
+    });
+
+    if (['BTC', 'USDT', 'USDC', 'ETH'].includes(paymentMethod)) {
+        // Show crypto fields
+        cryptoInfo.style.display = 'block';
+        txHashField.style.display = 'block';
+        cryptoWarning.classList.remove('hidden');
+        txHashInput.style.display = 'block';
+        txHashInput.required = true;
+
+        // Show specific crypto wallet
+        const walletDiv = document.querySelector(`.crypto-wallet-${paymentMethod}`);
+        if (walletDiv) {
+            walletDiv.classList.remove('hidden');
+            // Generate QR code
+            const address = walletDiv.querySelector('input').value;
+            generateQR(address, `qr-${paymentMethod}`);
+        }
+    } else {
+        // Hide crypto fields
+        cryptoInfo.style.display = 'none';
+        txHashField.style.display = 'none';
+        cryptoWarning.classList.add('hidden');
+        txHashInput.style.display = 'none';
+        txHashInput.required = false;
+    }
+}
+
+// Copy address to clipboard
+function copyAddress(address) {
+    navigator.clipboard.writeText(address).then(function() {
+        // Show success message
+        const toast = document.createElement('div');
+        toast.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-50';
+        toast.textContent = 'Address copied to clipboard!';
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 3000);
+    }).catch(function(err) {
+        console.error('Could not copy text: ', err);
+        alert('Address: ' + address);
+    });
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const paymentMethodSelect = document.querySelector('select[name="payment_method"]');
+    if (paymentMethodSelect) {
+        toggleCryptoFields(paymentMethodSelect.value);
+    }
+});
+</script>
+{% endblock %}

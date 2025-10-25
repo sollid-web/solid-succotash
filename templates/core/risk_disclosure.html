@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Risk Disclosure - WolvCapital{% endblock %}
+
+{% block content %}
+<div class="py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Risk Disclosure</h1>
+            <p class="text-xl text-gray-600">Important information about cryptocurrency and investment risks</p>
+        </div>
+
+        <div class="bg-red-50 border-l-4 border-red-400 p-6 mb-8">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-red-800">High Risk Investment Warning</h3>
+                    <div class="mt-2 text-sm text-red-700">
+                        <p>Investing in cryptocurrencies and digital assets involves significant risk. Never invest money you cannot afford to lose.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="prose max-w-none">
+            <p class="text-lg text-gray-700 mb-8">
+                Investing in cryptocurrencies and digital assets involves significant risk. By using WolvCapital,
+                you acknowledge and accept the following risks:
+            </p>
+
+            <h2>Market Volatility</h2>
+            <p>
+                Cryptocurrency markets are highly volatile. Prices may fluctuate rapidly and unpredictably,
+                resulting in potential substantial gains or losses. Market movements can be influenced by
+                regulatory announcements, technological developments, market sentiment, and macroeconomic factors.
+            </p>
+
+            <h2>Regulatory Uncertainty</h2>
+            <p>
+                The legal and regulatory framework for digital assets is evolving and varies by jurisdiction.
+                Changes in laws, regulations, or enforcement actions may impact platform operations, user access,
+                or the value of digital assets. Future regulatory developments could restrict or prohibit
+                cryptocurrency activities in certain regions.
+            </p>
+
+            <h2>Security Risks</h2>
+            <p>
+                While WolvCapital employs advanced security measures and manual transaction reviews, no system
+                is immune to cyber threats or operational disruptions. Potential security risks include:
+            </p>
+            <ul>
+                <li>Cybersecurity attacks and data breaches</li>
+                <li>Technical vulnerabilities in blockchain protocols</li>
+                <li>Human error in manual review processes</li>
+                <li>System outages or technical failures</li>
+                <li>Third-party service provider risks</li>
+            </ul>
+
+            <h2>Liquidity Risk</h2>
+            <p>
+                Certain assets or investment plans may have limited liquidity, affecting your ability to
+                withdraw or transfer funds promptly. Market conditions, platform policies, or external
+                factors may impact the availability of funds when needed. Emergency withdrawals may not
+                always be possible due to our manual approval process.
+            </p>
+
+            <h2>Technology and Operational Risks</h2>
+            <p>
+                Digital asset platforms depend on complex technology infrastructure. Risks include:
+            </p>
+            <ul>
+                <li>Platform downtime or technical malfunctions</li>
+                <li>Loss of private keys or access credentials</li>
+                <li>Smart contract vulnerabilities or failures</li>
+                <li>Network congestion or transaction delays</li>
+                <li>Software bugs or coding errors</li>
+            </ul>
+
+            <h2>Manual Review Process</h2>
+            <p>
+                Our manual off-chain approval process, while designed for security, introduces specific risks:
+            </p>
+            <ul>
+                <li>Processing delays of 24-72 hours or longer</li>
+                <li>Potential for human error in transaction review</li>
+                <li>Limited availability during non-business hours</li>
+                <li>Possible rejection of legitimate transactions</li>
+                <li>Inability to process urgent or time-sensitive requests</li>
+            </ul>
+
+            <h2>No Financial Advice</h2>
+            <p>
+                Information provided on the platform does not constitute financial, legal, or investment advice.
+                WolvCapital does not provide personalized investment recommendations. Users should conduct their
+                own research and consult qualified professionals before making investment decisions.
+            </p>
+
+            <h2>Loss of Investment</h2>
+            <p>
+                You may lose some or all of your invested capital. Digital assets can become worthless,
+                and there is no guarantee of returns or capital preservation. Past performance does not
+                predict future results, and investment values can decline rapidly.
+            </p>
+
+            <h2>Your Acknowledgment</h2>
+            <p>
+                By participating in WolvCapital's services, you agree to assume full responsibility for
+                your investment choices and associated risks. You acknowledge that:
+            </p>
+            <ul>
+                <li>You understand the high-risk nature of cryptocurrency investments</li>
+                <li>You are investing only funds you can afford to lose entirely</li>
+                <li>You have read and understood this comprehensive risk disclosure</li>
+                <li>You accept full responsibility for all investment decisions</li>
+                <li>You will not hold WolvCapital liable for investment losses or damages</li>
+                <li>You understand that no returns are guaranteed</li>
+            </ul>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded-md p-6 mt-8">
+                <h3 class="text-lg font-medium text-yellow-800 mb-2">Seek Professional Advice</h3>
+                <p class="text-yellow-700">
+                    If you are unsure about any investment decision or the risks involved, you should seek
+                    advice from qualified financial, legal, and tax professionals before proceeding. Consider
+                    your financial situation, investment objectives, and risk tolerance carefully.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

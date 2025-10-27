@@ -22,3 +22,10 @@ if settings.DEBUG:
 admin.site.site_header = "WolvCapital Administration"
 admin.site.site_title = "WolvCapital Admin"
 admin.site.index_title = "Welcome to WolvCapital Administration"
+
+# -------------------------
+# Custom error handlers (used when DEBUG=False)
+# -------------------------
+# Ensure these point to view callables in `core.views` that render branded templates.
+handler404 = "core.views.custom_404"
+handler500 = "core.views.custom_500"

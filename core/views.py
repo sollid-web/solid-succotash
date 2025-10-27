@@ -559,3 +559,18 @@ def agreement_view(request, agreement_id: int):
             "acceptance": acceptance,
         },
     )
+
+
+def custom_404(request, exception=None):
+    """
+    Render a branded 404 page. Django will use this when DEBUG=False.
+    """
+    # `exception` included for signature compatibility
+    return render(request, "404.html", status=404)
+
+
+def custom_500(request):
+    """
+    Render a branded 500 page. Django will use this when DEBUG=False.
+    """
+    return render(request, "500.html", status=500)

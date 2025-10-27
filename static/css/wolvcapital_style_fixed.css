@@ -130,3 +130,17 @@ img,video,canvas,svg{max-width:100%;height:auto;display:block}
   .nav,.band,.footer{display:none !important}
   section{padding:1rem 0}
 }
+
+/* ------------------ Brand navbar compatibility fixes ------------------ */
+/* Ensure .brand-navbar (used in templates/base.html) behaves like the .nav rules above */
+.brand-navbar{position:sticky;top:0;z-index:50;background:transparent}
+.brand-navbar + main > section:first-child{padding-top:0;margin-top:0}
+
+/* Allow opt-in fixed header variant using .fixed on .brand-navbar */
+:root{--header-height:72px}
+.brand-navbar.fixed{position:fixed;left:0;right:0;top:0;height:var(--header-height)}
+.brand-navbar.fixed + main{padding-top:var(--header-height)}
+
+@media (max-width:768px){
+  .brand-navbar + main > section:first-child{padding-top:0.5rem}
+}

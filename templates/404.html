@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}404 — Page not found · WolvCapital{% endblock %}
+{% block description %}The page you're looking for couldn't be found. Return home or contact support.{% endblock %}
+
+{% block content %}
+<section class="section-dark text-center py-20">
+  <div class="container">
+    <img src="{% static 'images/logos/logo.png' %}" alt="WolvCapital" class="brand-logo-large mx-auto mb-6" loading="lazy" style="height:84px">
+    <h1 class="text-4xl font-bold text-white mb-4">404 — Page not found</h1>
+    <p class="text-white/90 mb-6">Sorry, we couldn't find the page you requested. It may have moved or no longer exists.</p>
+
+    <div class="flex items-center justify-center gap-4">
+      <a href="{% url 'home' %}" class="btn btn-primary" style="background:var(--accent); color:#111;">Return home</a>
+      <a href="{% url 'support_request' %}" class="btn btn-secondary" style="background:#fff; color:var(--brand);">Contact support</a>
+    </div>
+
+    <p class="text-sm text-white/70 mt-6">If you need help, email <a href="mailto:support@wolvcapital.com" class="underline text-white/90">support@wolvcapital.com</a> and include the URL that returned 404.</p>
+  </div>
+</section>
+{% endblock %}

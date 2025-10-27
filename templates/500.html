@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}500 — Server error · WolvCapital{% endblock %}
+{% block description %}An unexpected error occurred. Our team has been notified and will investigate.{% endblock %}
+
+{% block content %}
+<section class="section-dark text-center py-20">
+  <div class="container">
+    <img src="{% static 'images/logos/logo.png' %}" alt="WolvCapital" class="brand-logo-large mx-auto mb-6" loading="lazy" style="height:84px">
+    <h1 class="text-4xl font-bold text-white mb-4">500 — Something went wrong</h1>
+    <p class="text-white/90 mb-6">We're sorry — something unexpected happened. Our engineers have been notified.</p>
+
+    <div class="flex items-center justify-center gap-4">
+      <a href="{% url 'home' %}" class="btn btn-primary" style="background:var(--accent); color:#111;">Return home</a>
+      <a href="{% url 'support_request' %}" class="btn btn-secondary" style="background:#fff; color:var(--brand);">Contact support</a>
+    </div>
+
+    <p class="text-sm text-white/70 mt-6">If this persists, please email <a href="mailto:support@wolvcapital.com" class="underline text-white/90">support@wolvcapital.com</a> with details.</p>
+  </div>
+</section>
+{% endblock %}

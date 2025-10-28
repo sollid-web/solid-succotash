@@ -111,9 +111,10 @@ def notify_welcome(user, send_email=True):
     message = f"Hello {user.get_full_name() or user.email}, welcome to WolvCapital!"
     return create_user_notification(user, "welcome", title, message, priority="low", action_url=reverse("dashboard"), send_email=send_email)
 
-def notify_wallet_credited(user, amount, reason, send_email=True):
+def notify_wallet_credited(user, amount, reason=None, send_email=True):
     title = f"Wallet credited: ${amount:.2f}"
-    message = f"Your wallet was credited with ${amount:.2f}. Reason: {reason}"
+    reason_text = f" Reason: {reason}" if reason else ""
+    message = f"Your wallet was credited with ${amount:.2f}.{reason_text}"
     return create_user_notification(user, "wallet_credited", title, message, priority="low", action_url=reverse("wallet"), send_email=send_email)
 
 # If your repo already has other helper functions (get_user_notifications, get_unread_count, mark_notification_read),

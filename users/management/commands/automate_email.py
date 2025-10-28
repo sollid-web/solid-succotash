@@ -15,14 +15,36 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if options["digests"]:
             self.stdout.write("Sending daily digests...")
-            users = User.objects.filter(is_active=True, email__isnull=False).iterator()
-            for u in users:
-                unread = UserNotification.objects.filter(user=u, is_read=False)
-                if unread.exists():
-                    subject = "WolvCapital Daily Summary"
-                    template = "digest"
-                    context = {"unread_count": unread.count(), "notifications": unread[:10], "action_url": "/dashboard/"}
-                    send_email_notification(u, subject, template, context)
+            from django.core.validators import validate_email
+            from django.core.exceptions import ValidationError
+
+            batch_size = 1000
+            seen_emails = set()
+            qs = User.objects.filter(is_active=True, email__isnull=False).order_by('id')
+            last_id = None
+            while True:
+                batch = qs
+                if last_id is not None:
+                    batch = batch.filter(id__gt=last_id)
+                users = list(batch[:batch_size])
+                if not users:
+                    break
+                for u in users:
+                    last_id = u.id
+                    email = u.email
+                    if not email or email in seen_emails:
+                        continue
+                    try:
+                        validate_email(email)
+                    except ValidationError:
+                        continue
+                    seen_emails.add(email)
+                    unread = UserNotification.objects.filter(user=u, is_read=False)
+                    if unread.exists():
+                        subject = "WolvCapital Daily Summary"
+                        template = "digest"
+                        context = {"unread_count": unread.count(), "notifications": unread[:10], "action_url": "/dashboard/"}
+                        send_email_notification(u, subject, template, context)
             self.stdout.write("Digests sent.")
         if options["retry-failures"]:
             # Implement EmailSendAttempt model and retry logic for production.

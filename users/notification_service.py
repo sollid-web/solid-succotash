@@ -12,8 +12,7 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_FROM_EMAIL = getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@wolvcapital.com")
 EMAIL_SENDER_POOL = None
-_raw_pool = getattr(settings, "EMAIL_SENDER_POOL", None)
-if _raw_pool:
+if _raw_pool := getattr(settings, "EMAIL_SENDER_POOL", None):
     # support comma-separated env var
     EMAIL_SENDER_POOL = [s.strip() for s in _raw_pool.split(",") if s.strip()]
 

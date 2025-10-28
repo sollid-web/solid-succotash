@@ -19,10 +19,7 @@ if _raw_pool := getattr(settings, "EMAIL_SENDER_POOL", None):
 def _choose_from_email(preferred=None):
     if preferred:
         return preferred
-    if EMAIL_SENDER_POOL:
-        # simple rotation: use first sender for now. Replace with round-robin if needed.
-        return EMAIL_SENDER_POOL[0]
-    return DEFAULT_FROM_EMAIL
+    return EMAIL_SENDER_POOL[0] if EMAIL_SENDER_POOL else DEFAULT_FROM_EMAIL
 
 def send_email_notification(user, subject, template_name, context=None, from_email=None, to_email=None, fail_silently=False):
     """

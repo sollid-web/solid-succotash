@@ -1,0 +1,44 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Wallet Credited - {{ brand_name }}{% endblock %}
+
+{% block content %}
+<h2>💰 Wallet Credited</h2>
+
+<p>Dear {{ user.first_name|default:user.email }},</p>
+
+<p>Good news! Your wallet has been credited with funds.</p>
+
+<div class="success-box">
+    <h3>Credit Processed</h3>
+    <p>The amount has been successfully added to your wallet balance.</p>
+</div>
+
+<table class="details-table">
+    <tr>
+        <td>Amount Credited:</td>
+        <td><strong style="color: #10B981; font-size: 18px;">${{ amount }}</strong></td>
+    </tr>
+    {% if reason %}
+    <tr>
+        <td>Reason:</td>
+        <td>{{ reason }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+        <td>Processed:</td>
+        <td>{{ timestamp|date:"F d, Y \a\t g:i A"|default:"Now" }}</td>
+    </tr>
+</table>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}{{ dashboard_url }}" class="btn">View Dashboard</a>
+</div>
+
+<p>You can view your updated wallet balance in your dashboard.</p>
+
+<p>Thank you for using {{ brand_name }}!</p>
+
+<p>Best regards,<br>
+The {{ brand_name }} Team</p>
+{% endblock %}

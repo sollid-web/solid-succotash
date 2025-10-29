@@ -1,0 +1,44 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Wallet Debited - {{ brand_name }}{% endblock %}
+
+{% block content %}
+<h2>💸 Wallet Debited</h2>
+
+<p>Dear {{ user.first_name|default:user.email }},</p>
+
+<p>This is to inform you that an amount has been deducted from your wallet.</p>
+
+<div class="warning-box">
+    <h3>Debit Processed</h3>
+    <p>The amount has been successfully deducted from your wallet balance.</p>
+</div>
+
+<table class="details-table">
+    <tr>
+        <td>Amount Debited:</td>
+        <td><strong style="color: #EF4444; font-size: 18px;">${{ amount }}</strong></td>
+    </tr>
+    {% if reason %}
+    <tr>
+        <td>Reason:</td>
+        <td>{{ reason }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+        <td>Processed:</td>
+        <td>{{ timestamp|date:"F d, Y \a\t g:i A"|default:"Now" }}</td>
+    </tr>
+</table>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}{{ dashboard_url }}" class="btn">View Dashboard</a>
+</div>
+
+<p>You can view your updated wallet balance in your dashboard.</p>
+
+<p>If you have any questions about this transaction, please contact our support team.</p>
+
+<p>Best regards,<br>
+The {{ brand_name }} Team</p>
+{% endblock %}

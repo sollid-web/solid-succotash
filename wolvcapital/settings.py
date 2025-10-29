@@ -256,9 +256,43 @@ ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 
 # ------------------------------------------------------------------
-# Email
+# Email Configuration
 # ------------------------------------------------------------------
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# Email backend selection based on environment
+email_backend_override = os.getenv("EMAIL_BACKEND")
+if email_backend_override:
+    EMAIL_BACKEND = email_backend_override
+elif DEBUG:
+    # Development: Print emails to console
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+else:
+    # Production: Use SMTP
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+# SMTP Configuration (for production)
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True").lower() == "true"
+EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "False").lower() == "true"
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+
+# Default from email
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "WolvCapital <noreply@wolvcapital.com>")
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
+# Email timeout (30 seconds)
+EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "30"))
+
+# Email subject prefix
+EMAIL_SUBJECT_PREFIX = os.getenv("EMAIL_SUBJECT_PREFIX", "[WolvCapital] ")
+
+# Site URL for email templates
+SITE_URL = os.getenv("SITE_URL", "https://wolvcapital.com")
+if RENDER_EXTERNAL_URL:
+    SITE_URL = RENDER_EXTERNAL_URL
+elif IN_CODESPACES and CODESPACES_DOMAIN:
+    SITE_URL = f"https://{os.getenv('GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN', '')}"
 
 # ------------------------------------------------------------------
 # I18N / TZ

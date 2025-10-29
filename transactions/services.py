@@ -62,7 +62,7 @@ def approve_transaction(txn: Transaction, admin_user: User, notes: str = "") -> 
         entity_type="transaction", entity_id=str(txn.id), is_resolved=False
     ).update(is_resolved=True, resolved_by=admin_user, resolved_at=timezone.now())
 
-    # Send user notification
+    # Send user notification (in-app)
     from users.notification_service import (
         notify_deposit_approved,
         notify_withdrawal_approved,
@@ -72,6 +72,11 @@ def approve_transaction(txn: Transaction, admin_user: User, notes: str = "") -> 
         notify_deposit_approved(txn.user, txn, notes)
     elif txn.tx_type == "withdrawal":
         notify_withdrawal_approved(txn.user, txn, notes)
+
+    # Send email notification
+    from core.email_service import EmailService
+    
+    EmailService.send_transaction_notification(txn, 'approved', notes)
 
     return txn
 
@@ -106,7 +111,7 @@ def reject_transaction(txn: Transaction, admin_user: User, notes: str = "") -> T
         entity_type="transaction", entity_id=str(txn.id), is_resolved=False
     ).update(is_resolved=True, resolved_by=admin_user, resolved_at=timezone.now())
 
-    # Send user notification
+    # Send user notification (in-app)
     from users.notification_service import (
         notify_deposit_rejected,
         notify_withdrawal_rejected,
@@ -116,6 +121,11 @@ def reject_transaction(txn: Transaction, admin_user: User, notes: str = "") -> T
         notify_deposit_rejected(txn.user, txn, notes)
     elif txn.tx_type == "withdrawal":
         notify_withdrawal_rejected(txn.user, txn, notes)
+
+    # Send email notification
+    from core.email_service import EmailService
+    
+    EmailService.send_transaction_notification(txn, 'rejected', notes)
 
     return txn
 
@@ -169,7 +179,7 @@ def create_transaction(
         raise ValidationError("Invalid transaction type")
 
     payment_info = f" via {payment_method}"
-    if payment_method in ["BTC", "USDT", "USDC", "ETH"]:
+    if payment_method in {"BTC", "USDT", "USDC", "ETH"}:
         payment_info += f" (Hash: {tx_hash[:10]}...)" if tx_hash else ""
 
     message = f"User {user.email} has submitted a {tx_type} request for ${amount_display}{payment_info}. Reference: {reference}"
@@ -183,5 +193,10 @@ def create_transaction(
         entity_id=str(txn.id),
         priority=priority,
     )
+
+    # Send email notification for transaction creation
+    from core.email_service import EmailService
+
+    EmailService.send_transaction_notification(txn, 'created')
 
     return txn

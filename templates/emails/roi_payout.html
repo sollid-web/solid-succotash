@@ -1,0 +1,56 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}ROI Payout Received - {{ brand_name }}{% endblock %}
+
+{% block content %}
+<h2>💰 ROI Payout Received</h2>
+
+<p>Dear {{ user.first_name|default:user.email }},</p>
+
+<p>Great news! You've received your daily ROI payout. Your returns have been credited to your wallet.</p>
+
+<div class="success-box">
+    <h3>Payout Processed</h3>
+    <p>Your daily returns have been successfully credited to your account.</p>
+</div>
+
+<table class="details-table">
+    <tr>
+        <td>Payout Amount:</td>
+        <td><strong style="color: #10B981; font-size: 18px;">${{ amount }}</strong></td>
+    </tr>
+    <tr>
+        <td>Investment Plan:</td>
+        <td>{{ investment.plan.name }}</td>
+    </tr>
+    <tr>
+        <td>Principal Amount:</td>
+        <td>${{ investment.amount }}</td>
+    </tr>
+    <tr>
+        <td>Daily ROI Rate:</td>
+        <td>{{ investment.plan.daily_roi_percentage }}%</td>
+    </tr>
+    <tr>
+        <td>Payout Date:</td>
+        <td>{{ payout_date|date:"F d, Y" }}</td>
+    </tr>
+</table>
+
+<h3>Investment Summary</h3>
+<p>Your <strong>{{ investment.plan.name }}</strong> investment continues to perform well. Keep track of your daily returns in your dashboard.</p>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}{{ dashboard_url }}" class="btn">View Dashboard</a>
+</div>
+
+<div class="info-box">
+    <h3>💡 Growing Your Investment</h3>
+    <p>Consider reinvesting your returns or exploring our other investment plans to maximize your earnings potential.</p>
+</div>
+
+<p>Thank you for choosing {{ brand_name }} for your investment needs!</p>
+
+<p>Best regards,<br>
+The {{ brand_name }} Team</p>
+{% endblock %}

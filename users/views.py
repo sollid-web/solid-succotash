@@ -1,15 +1,17 @@
 """
-Views for user notifications
+Views for user notifications and preferences
 """
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 
 from .models import UserNotification
+from .forms import EmailPreferencesForm
 
 
 class NotificationListView(LoginRequiredMixin, ListView):
@@ -66,3 +68,23 @@ def get_unread_count(request):
     count = UserNotification.objects.filter(user=request.user, is_read=False).count()
 
     return JsonResponse({"count": count})
+
+
+@login_required
+def email_preferences(request):
+    """Manage email preferences"""
+    profile = request.user.profile
+    
+    if request.method == 'POST':
+        form = EmailPreferencesForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your email preferences have been updated successfully.')
+            return redirect('users:email_preferences')
+    else:
+        form = EmailPreferencesForm(instance=profile)
+    
+    return render(request, 'users/email_preferences.html', {
+        'form': form,
+        'profile': profile,
+    })

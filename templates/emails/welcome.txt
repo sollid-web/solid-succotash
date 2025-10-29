@@ -1,0 +1,35 @@
+Welcome to {{ brand_name }}!
+
+Dear {{ user.first_name|default:user.email }},
+
+Welcome to {{ brand_name }}! Your account has been successfully created, and we're excited to have you join our community of smart investors.
+
+🎉 Your account is ready!
+You can now explore our investment plans and start your journey to financial growth.
+
+What's next?
+Here are some things you can do to get started:
+
+• Explore Investment Plans: Check out our carefully designed investment plans with competitive ROI rates
+• Fund Your Wallet: Add funds to your wallet to start investing
+• Make Your First Investment: Choose a plan that fits your investment goals
+• Track Your Returns: Monitor your investment performance in real-time
+
+Visit your dashboard: {{ site_url }}{{ dashboard_url }}
+View investment plans: {{ site_url }}{{ plans_url }}
+
+Need Help?
+If you have any questions or need assistance getting started, our support team is here to help. You can reach us through the support section in your dashboard.
+
+Thank you for choosing {{ brand_name }}. We look forward to helping you achieve your financial goals!
+
+Best regards,
+The {{ brand_name }} Team
+
+---
+© {{ current_year }} {{ brand_name }}. All rights reserved.
+Visit our website: {{ site_url }}
+{% if user %}
+This email was sent to {{ user.email }}. 
+Manage email preferences: {{ site_url }}/profile/email-preferences/
+{% endif %}

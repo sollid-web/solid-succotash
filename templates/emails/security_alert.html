@@ -1,0 +1,52 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Security Alert - {{ brand_name }}{% endblock %}
+
+{% block content %}
+<h2>🚨 Security Alert</h2>
+
+<p>Dear {{ user.first_name|default:user.email }},</p>
+
+<p>We detected {{ alert_type }} on your account and wanted to notify you immediately.</p>
+
+<div class="danger-box">
+    <h3>Security Event Detected</h3>
+    <p>{{ details }}</p>
+</div>
+
+<table class="details-table">
+    <tr>
+        <td>Alert Type:</td>
+        <td>{{ alert_type|title }}</td>
+    </tr>
+    <tr>
+        <td>Time:</td>
+        <td>{{ timestamp|date:"F d, Y \a\t g:i A T" }}</td>
+    </tr>
+</table>
+
+<h3>What should you do?</h3>
+<p>If this was you:</p>
+<ul style="margin: 20px 0; padding-left: 30px;">
+    <li style="margin-bottom: 10px;">No action needed - your account remains secure</li>
+</ul>
+
+<p>If this was NOT you:</p>
+<ul style="margin: 20px 0; padding-left: 30px;">
+    <li style="margin-bottom: 10px;">Change your password immediately</li>
+    <li style="margin-bottom: 10px;">Review your account activity</li>
+    <li style="margin-bottom: 10px;">Contact our support team</li>
+</ul>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}{{ dashboard_url }}" class="btn btn-danger">Secure My Account</a>
+</div>
+
+<div class="info-box">
+    <h3>Need Help?</h3>
+    <p>If you have any concerns about your account security, please contact our support team immediately through your dashboard.</p>
+</div>
+
+<p>Stay safe,<br>
+The {{ brand_name }} Security Team</p>
+{% endblock %}

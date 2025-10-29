@@ -33,3 +33,8 @@ def send_welcome_notification(sender, instance, created, **kwargs):
         from .notification_service import notify_welcome
 
         notify_welcome(instance)
+        
+        # Send welcome email
+        from core.email_service import EmailService
+        
+        EmailService.send_welcome_email(instance)

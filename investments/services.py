@@ -64,7 +64,7 @@ def approve_investment(
         entity_type="investment", entity_id=str(investment.id), is_resolved=False
     ).update(is_resolved=True, resolved_by=admin_user, resolved_at=timezone.now())
 
-    # Send user notification
+    # Send user notification (in-app)
     from users.notification_service import notify_investment_approved
 
     notify_investment_approved(investment.user, investment, notes)
@@ -76,6 +76,11 @@ def approve_investment(
         investment_amount,
         reason=f"Investment approved for {investment.plan.name}",
     )
+
+    # Send email notification
+    from core.email_service import EmailService
+    
+    EmailService.send_investment_notification(investment, 'approved', notes)
 
     return investment
 
@@ -110,10 +115,15 @@ def reject_investment(
         entity_type="investment", entity_id=str(investment.id), is_resolved=False
     ).update(is_resolved=True, resolved_by=admin_user, resolved_at=timezone.now())
 
-    # Send user notification
+    # Send user notification (in-app)
     from users.notification_service import notify_investment_rejected
 
     notify_investment_rejected(investment.user, investment, notes)
+
+    # Send email notification
+    from core.email_service import EmailService
+    
+    EmailService.send_investment_notification(investment, 'rejected', notes)
 
     return investment
 
@@ -160,5 +170,10 @@ def create_investment(user: User, plan: InvestmentPlan, amount: float) -> UserIn
         entity_id=str(investment.id),
         priority=priority,
     )
+
+    # Send email notification for investment creation
+    from core.email_service import EmailService
+    
+    EmailService.send_investment_notification(investment, 'created')
 
     return investment

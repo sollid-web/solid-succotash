@@ -1,0 +1,41 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Welcome to {{ brand_name|escape }}!{% endblock %}
+
+{% block content %}
+<h2 style="color: #2196F3; font-size: 24px; font-weight: 600; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">Welcome to {{ brand_name|escape }}!</h2>
+
+<p style="font-size: 16px; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">Dear {{ user.first_name|default:user.email }},</p>
+
+<p style="font-size: 16px; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">Welcome to {{ brand_name|escape }}! Your account has been successfully created, and we're excited to have you join our community of smart investors.</p>
+
+<div style="background-color: #f0f9f5; border-left: 4px solid #10B981; padding: 20px; margin: 25px 0; border-radius: 0 6px 6px 0;">
+    <h3 style="color: #444444; font-size: 18px; font-weight: 600; margin: 0 0 15px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">🎉 Your account is ready!</h3>
+    <p style="font-size: 16px; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">You can now explore our investment plans and start your journey to financial growth.</p>
+</div>
+
+<h3 style="color: #444444; font-size: 18px; font-weight: 600; margin: 25px 0 15px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">What's next?</h3>
+<p style="font-size: 16px; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">Here are some things you can do to get started:</p>
+
+<ul style="margin: 20px 0; padding-left: 30px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">
+    <li style="margin-bottom: 10px; font-size: 16px;"><strong>Explore Investment Plans:</strong> Check out our carefully designed investment plans with competitive ROI rates</li>
+    <li style="margin-bottom: 10px; font-size: 16px;"><strong>Fund Your Wallet:</strong> Add funds to your wallet to start investing</li>
+    <li style="margin-bottom: 10px; font-size: 16px;"><strong>Make Your First Investment:</strong> Choose a plan that fits your investment goals</li>
+    <li style="margin-bottom: 10px; font-size: 16px;"><strong>Track Your Returns:</strong> Monitor your investment performance in real-time</li>
+</ul>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}{{ dashboard_url }}" style="display: inline-block; padding: 14px 28px; background-color: #2196F3; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px; margin: 10px 5px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">Go to Dashboard</a>
+    <a href="{{ site_url }}{{ plans_url }}" style="display: inline-block; padding: 14px 28px; background-color: #10B981; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px; margin: 10px 5px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">View Investment Plans</a>
+</div>
+
+<div style="background-color: #f8f9fa; border-left: 4px solid #2196F3; padding: 20px; margin: 25px 0; border-radius: 0 6px 6px 0;">
+    <h3 style="color: #444444; font-size: 18px; font-weight: 600; margin: 0 0 15px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">Need Help?</h3>
+    <p style="font-size: 16px; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">If you have any questions or need assistance getting started, our support team is here to help. You can reach us through the support section in your dashboard.</p>
+</div>
+
+<p style="font-size: 16px; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">Thank you for choosing {{ brand_name|escape }}. We look forward to helping you achieve your financial goals!</p>
+
+<p style="font-size: 16px; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">Best regards,<br>
+The {{ brand_name|escape }} Team</p>
+{% endblock %}

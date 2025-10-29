@@ -1,0 +1,34 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Test Email - {{ brand_name }}{% endblock %}
+
+{% block content %}
+<h2>📧 Test Email</h2>
+
+<p>This is a test email from the {{ brand_name }} email system.</p>
+
+<div class="success-box">
+    <h3>✅ Email System Working</h3>
+    <p>If you're reading this, the email configuration is working correctly!</p>
+</div>
+
+<table class="details-table">
+    <tr>
+        <td>Test Timestamp:</td>
+        <td>{{ test_timestamp|date:"F d, Y \a\t g:i A T" }}</td>
+    </tr>
+    <tr>
+        <td>Email Backend:</td>
+        <td>{{ email_backend|default:"Default Django Email Backend" }}</td>
+    </tr>
+</table>
+
+<p>This test email confirms that:</p>
+<ul style="margin: 20px 0; padding-left: 30px;">
+    <li style="margin-bottom: 10px;">Email templates are rendering correctly</li>
+    <li style="margin-bottom: 10px;">HTML and CSS styling is working</li>
+    <li style="margin-bottom: 10px;">Email delivery system is functional</li>
+</ul>
+
+<p>Email system is ready for production use!</p>
+{% endblock %}

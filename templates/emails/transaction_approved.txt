@@ -1,0 +1,38 @@
+Transaction Approved - {{ brand_name }}
+
+Dear {{ user.first_name|default:user.email }},
+
+Great news! Your {{ transaction.get_transaction_type_display|lower }} transaction has been approved and processed.
+
+✅ Transaction Approved
+Your transaction has been successfully processed and your wallet has been updated.
+
+Transaction Details:
+- Transaction ID: {{ transaction.id }}
+- Type: {{ transaction.get_transaction_type_display }}
+- Amount: ${{ transaction.amount }}
+- Payment Method: {{ transaction.get_payment_method_display }}
+- Status: Approved
+- Processed: {{ transaction.approved_at|date:"F d, Y \a\t g:i A" }}
+
+{% if admin_notes %}
+Admin Notes:
+{{ admin_notes }}
+{% endif %}
+
+You can view all your transactions and current wallet balance in your dashboard.
+
+Dashboard: {{ site_url }}{{ dashboard_url }}
+
+Thank you for using {{ brand_name }}!
+
+Best regards,
+The {{ brand_name }} Team
+
+---
+© {{ current_year }} {{ brand_name }}. All rights reserved.
+Visit our website: {{ site_url }}
+{% if user %}
+This email was sent to {{ user.email }}. 
+Manage email preferences: {{ site_url }}/profile/email-preferences/
+{% endif %}

@@ -4,9 +4,23 @@
 {% block title %}Home · WolvCapital{% endblock %}
 
 {% block content %}
-<!-- Hero Section - Premium Solid Design -->
-<section class="position-relative overflow-hidden" style="min-height: 75vh; background: linear-gradient(135deg, #0c1e3e 0%, #1e3a8a 40%, #2563eb 100%); box-shadow: inset 0 -10px 30px rgba(0,0,0,0.3);">
-    <div class="container position-relative" style="z-index: 2; padding-top: 100px; padding-bottom: 100px;">
+<!-- Hero Section - Professional Investment Platform -->
+<section class="hero hero--mesh position-relative overflow-hidden">
+    <!-- Responsive Background Image -->
+    <picture class="hero-bg">
+        <source type="image/avif" media="(min-width: 1200px)" srcset="{% static 'images/hero-crypto-abstract-xl.avif' %}">
+        <source type="image/avif" media="(min-width: 768px)" srcset="{% static 'images/hero-crypto-abstract-md.avif' %}">
+        <source type="image/avif" srcset="{% static 'images/hero-crypto-abstract-sm.avif' %}">
+        <source type="image/webp" media="(min-width: 1200px)" srcset="{% static 'images/hero-crypto-abstract-xl.webp' %}">
+        <source type="image/webp" media="(min-width: 768px)" srcset="{% static 'images/hero-crypto-abstract-md.webp' %}">
+        <source type="image/webp" srcset="{% static 'images/hero-crypto-abstract-sm.webp' %}">
+        <img src="{% static 'images/hero-crypto-abstract-xl.jpg' %}" alt="Professional Investment Background" loading="eager" decoding="async">
+    </picture>
+    
+    <!-- Professional Gradient Overlay -->
+    <div class="hero-overlay"></div>
+    
+    <div class="container hero-content">
         <div class="row align-items-center gy-5">
             <div class="col-12 col-lg-6">
                 <div class="mb-4">
@@ -14,17 +28,17 @@
                         🏆 TRUSTED INVESTMENT PLATFORM
                     </span>
                 </div>
-                <h1 class="display-3 fw-black text-white mb-4" style="line-height: 1.1; text-shadow: 0 4px 20px rgba(0,0,0,0.5); letter-spacing: -1px;">
+                <h1 class="display-3 fw-black text-white mb-4 brand-title" style="line-height: 1.1; text-shadow: 0 4px 20px rgba(7, 29, 66, 0.8); letter-spacing: -1px;">
                     Invest. Track.<br>Withdraw — <span style="background: linear-gradient(135deg, #FFD700, #FFA500); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Anywhere</span>.
                 </h1>
                 <p class="lead text-white mb-5" style="font-size: 1.3rem; font-weight: 500; line-height: 1.6; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
                     Professional investment platform with secure deposits, real-time tracking, and verified withdrawals. Your capital, our expertise.
                 </p>
                 <div class="d-flex gap-3 flex-wrap">
-                    <a href="{% url 'dashboard' %}" class="btn btn-lg px-5 py-3 fw-bold" style="background: linear-gradient(135deg, #FFD700, #FFA500); color: #0c1e3e; border: none; border-radius: 12px; box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4); font-size: 1.1rem; transition: all 0.3s;">
+                    <a href="{% url 'dashboard' %}" class="btn btn-lg px-5 py-3 fw-bold" style="background: linear-gradient(135deg, #FFD700, #FFA500); color: var(--brand-dark); border: none; border-radius: 12px; box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4); font-size: 1.1rem; transition: all 0.3s;">
                         Get Started Now →
                     </a>
-                    <a href="{% url 'plans' %}" class="btn btn-lg px-5 py-3 fw-bold" style="background: white; color: #1e3a8a; border: none; border-radius: 12px; box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2); font-size: 1.1rem;">
+                    <a href="{% url 'plans' %}" class="btn btn-brand-secondary btn-lg px-5 py-3 fw-bold" style="font-size: 1.1rem;">
                         View Investment Plans
                     </a>
                 </div>
@@ -32,13 +46,13 @@
             <div class="col-12 col-lg-6">
                 <div class="position-relative">
                     <!-- Main Card -->
-                    <div class="card border-0" style="background: white; border-radius: 24px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4); transform: perspective(1000px) rotateY(-5deg); transition: all 0.3s;">
+                    <div class="card-brand" style="background: white; transform: perspective(1000px) rotateY(-5deg); transition: all 0.3s;">
                         <div class="card-body p-5">
                             <!-- Card Stats -->
                             <div class="d-flex justify-content-between align-items-center mb-4 pb-3" style="border-bottom: 2px solid #f0f0f0;">
                                 <div>
                                     <div class="text-muted small fw-semibold mb-1">TOTAL ASSETS</div>
-                                    <div class="h3 fw-black mb-0" style="color: #1e3a8a;">$2,847,392</div>
+                                    <div class="h3 fw-black mb-0" style="color: var(--brand-secondary);">$2,847,392</div>
                                 </div>
                                 <div class="text-end">
                                     <span class="badge px-3 py-2 fw-bold" style="background: linear-gradient(135deg, #10B981, #059669); color: white; border-radius: 20px;">
@@ -48,8 +62,8 @@
                             </div>
 
                             <!-- Virtual Card Display -->
-                            <div class="position-relative p-4 mb-4" style="background: linear-gradient(135deg, #1e3a8a, #0c1e3e); border-radius: 16px; box-shadow: 0 10px 30px rgba(30, 58, 138, 0.5);">
-                                <div class="d-flex justify-content-between align-items-start mb-4">
+                            <div class="position-relative p-4 mb-4" style="background: var(--brand-gradient); border-radius: 16px; box-shadow: 0 10px 30px rgba(11, 47, 107, 0.4);">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
                                     <div>
                                         <div class="text-white small opacity-75 mb-1">WOLVCAPITAL</div>
                                         <div class="text-white fw-bold" style="font-size: 0.9rem;">Premium Account</div>
@@ -75,7 +89,7 @@
                             <div class="row g-3">
                                 <div class="col-6">
                                     <div class="p-3 text-center" style="background: #f8fafc; border-radius: 12px;">
-                                        <div class="h4 fw-black mb-1" style="color: #1e3a8a;">4</div>
+                                        <div class="h4 fw-black mb-1" style="color: var(--brand-secondary);">4</div>
                                         <div class="small text-muted fw-semibold">Active Plans</div>
                                     </div>
                                 </div>
@@ -101,7 +115,7 @@
     </div>
 
     <!-- Solid geometric patterns for depth -->
-    <div class="position-absolute" style="top: 10%; right: 5%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%); border-radius: 50%; z-index: 1;"></div>
+    <div class="position-absolute" style="top: 10%; right: 5%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, transparent 70%); border-radius: 50%; z-index: 1;"></div>
     <div class="position-absolute" style="bottom: 10%; left: 5%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%); border-radius: 50%; z-index: 1;"></div>
 </section>
 

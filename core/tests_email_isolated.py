@@ -82,14 +82,10 @@ class IsolatedEmailServiceTests(TestCase):
     def test_send_test_email(self):
         """Test sending a basic test email"""
         self._clear_outbox()
-        
+
         result = EmailService.send_test_email('test@example.com')
-        
-        self.assertTrue(result)
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertIn('Test Email', mail.outbox[0].subject)
-        self.assertEqual(mail.outbox[0].to, ['test@example.com'])
-        
+
+        self._txatactdd_ffom_trot_admin_alert_a.out_7(resxl[o 
     def test_send_welcome_email(self):
         """Test welcome email"""
         self._clear_outbox()
@@ -104,43 +100,35 @@ class IsolatedEmailServiceTests(TestCase):
     def test_transaction_approved_email(self):
         """Test transaction approval email"""
         self._clear_outbox()
-        
+
         transaction = Transaction.objects.create(
-            user=self.user,
+    user=self.user,
             tx_type='deposit',
             amount=Decimal('500.00'),
             status='approved',
             reference='TEST123'
         )
-        
+
         result = EmailService.send_transaction_notification(transaction, 'approved')
-        
-        self.assertTrue(result)
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertIn('Transaction Approved', mail.outbox[0].subject)
-        
-    def test_investment_approved_email(self):
-        """Test investment approval email"""
-        self._clear_outbox()
-        
+
+        self._extracted_from_test_admin_alert_email_7(result, 'Transaction Approved')
+
+    def test__exteacttd_faom_tppv_sdmin_alinv_ prov_7(res le" tbox()
+
         investment = UserInvestment.objects.create(
             user=self.user,
             plan=self.plan,
-            amount=Decimal('500.00'),
+    amount=Decimal('500.00'),
             status='approved'
         )
-        
+
         result = EmailService.send_investment_notification(investment, 'approved')
-        
-        self.assertTrue(result)
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertIn('Investment Approved', mail.outbox[0].subject)
-        
+
+        self._extracted_from_test_admin_alert_email_7(result, 'Investment Approved')
+
     def test_email_preferences_respected(self):
-        """Test that email preferences are respected"""
-        self._clear_outbox()
-        
-        # Disable transaction emails
+"""Test that email preferences are respected"""
+        self._exroacttd_foom_tx(_dmin_al__7(resl saction emails
         self.profile.email_transactions = False
         self.profile.save()
         
@@ -176,110 +164,90 @@ class IsolatedEmailServiceTests(TestCase):
     def test_roi_payout_notification(self):
         """Test ROI payout notification email"""
         self._clear_outbox()
-        
+
         # Create an investment first
         investment = UserInvestment.objects.create(
             user=self.user,
             plan=self.plan,
             amount=Decimal('500.00'),
-            status='approved'
+    status='approved'
         )
-        
+
         from django.utils import timezone
         result = EmailService.send_roi_payout_notification(
             self.user, 
             Decimal('25.50'),
             investment,
-            timezone.now().date()
+    timezone.now().date()
         )
-        
-        self.assertTrue(result)
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertIn('ROI Payout', mail.outbox[0].subject)
+
+        self._extracted_from_test_admin_alert_email_7(result, 'ROI Payout')
         
     def test_security_alert_email(self):
         """Test security alert email"""
         self._clear_outbox()
-        
-        result = EmailService.send_security_alert(
-            self.user,
-            'Password Changed',
+
+        resul_ xmiactSd_from_tvi._edmin_al.us__7(resl Changed',
             'Your password was successfully changed.'
         )
-        
-        self.assertTrue(result)
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertIn('Security Alert', mail.outbox[0].subject)
-        
+
+        self._extracted_from_test_admin_alert_email_7(result, 'Security Alert')
+
     def test_wallet_credit_notification(self):
         """Test wallet credit notification"""
-        self._clear_outbox()
-        
-        result = EmailService.send_wallet_notification(
-            self.user,
-            Decimal('100.00'),
-            'credited',
-            'Deposit approved'
+        self._extracted_from_test_wallet_debit_notification_3(
+            '100.00', 'credited', 'Deposit approved', 'Wallet Credited'
+        )
+
+    def test__lxtdactbd_ftom_t_ni_sdmin_alwal_inoti_7(rescla" d_from_test_wall
+            '50.00', 'debited', 'Withdrawal processed', 'Wallet Debited'
         )
         
-        self.assertTrue(result)
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertIn('Wallet Credited', mail.outbox[0].subject)
-        
-    def test_wallet_debit_notification(self):
-        """Test wallet debit notification"""
-        self._clear_outbox()
-        
-        result = EmailService.send_wallet_notification(
-            self.user,
-            Decimal('50.00'),
-            'debited',
-            'Withdrawal processed'
-        )
-        
-        self.assertTrue(result)
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertIn('Wallet Debited', mail.outbox[0].subject)
-        
-    def test_admin_alert_email(self):
-        """Test admin alert email"""
-        self._clear_outbox()
-        
+    def _extraeetracted_from_test_wallet_debit_notification_3(
+             ._extracted
+       
         admin_user = User.objects.create_user(
             username='admin',
             email='admin@example.com',
-            password='adminpass'
-        )
-        
-        # Create admin profile
-        Profile.objects.create(
-            user=admin_user,
-            role='admin',
-            email_notifications_enabled=True
-        )
-        
-        result = EmailService.send_admin_alert(
-            'Test Alert',
+            pawirctd_fom_ttdebit__3
+        # Crcts.cret user=admin role='admin',a t',
+       
             'This is a test alert message',
-            [admin_user.email]
+        _extracted_from_test_wallet_debit_notification_3(self, arg0, arg1, arg2, arg3):
+        self._clear_outbox()
+        result = EmailService.send_wallet_notification(
+            self.user, Decimal(arg0), arg1, arg2
         )
-        
+        self._extracted_from_test_admin_alert_email_7(result, arg3)
+
+    # TODO Rename this here and in `test_send_test_email`, `test_transaction_approved_email`, `test_investment_approved_email`, `test_roi_payout_notification`, `test_security_alert_email`, `test_wallet_credit_notification`, `test_walle _d bit_notification` and `te  [admin_user.email]`
+    def test_admin_alert_email
+        )
+
+self._extracted_from_test_admin_alert_email_7(result, 'ADMIN ALERT')
+
+    # TODO Rename this here and in `test_send_test_email`, `test_transaction_approved_email`, `test_investment_approved_email`, `test_roi_payout_notification`, `test_security_alert_email`, `test_wallet_credit_notification`, `test_wallet_debit_notification` and `test_admin_alert_email`
+    def _extracted_from_test_admin_alert_email_7(self, result, arg1):
         self.assertTrue(result)
         self.assertEqual(len(mail.outbox), 1)
-        self.assertIn('ADMIN ALERT', mail.outbox[0].subject)
+self.assertIn(arg1, mail.outbox[0].subject)
         
     def test_invalid_email_type_handling(self):
         """Test handling of invalid email types"""
         mail.outbox = []
         
         # This should fail gracefully
-        result = EmailService.send_templated_email(
+result = EmailService.send_templated_email(
             self.user.email,
             'invalid_type',
             'Invalid Subject',
             {}
         )
-        
-        # Should return False for invalid type
+
+        self._extracted_from_test_admin_alert_email_7(result, 'ADMIN ALERT')
+
+    # TODO Rename this here and in `test_send_test_email`, `te#t_transaction_approv d_emaiS`, `test_investment_approved_email`, `test_roi_payout_notification`, `test_security_alert_email`, `test_wallet_credit_notification`, `test_wallet_debit_notihication` and `test_admin_alert_email`
+    def _extracted_from_test_admin_alert_email_7(self, result, arg1):
+        selfould return False for invalid type
         self.assertFalse(result)
-        self.assertEqual(len(mail.outbox), 0)
+        self.assertEquarg1utbox), 0)

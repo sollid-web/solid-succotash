@@ -7,17 +7,30 @@
     <title>{% block title %}WOLVCAPITAL INVEST{% endblock %}</title>
     <meta name="description" content="{% block description %}WOLVCAPITAL INVEST offers professional investment opportunities with manual off-chain approvals for maximum security.{% endblock %}">
     <link rel="icon" type="image/svg+xml" sizes="any" href="{% static 'images/logos/wolvcapital-favicon.svg' %}">
-    <meta property="og:image" content="{% static 'images/hero-crypto-abstract-xl.webp' %}">
+    <meta property="og:image" content="{% static 'images/hero-crypto-abstract-xl.avif' %}">
     <meta property="og:image:alt" content="Secure blockchain infrastructure visual">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="{% static 'images/hero-crypto-abstract-xl.webp' %}">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="twitter:image" content="{% static 'images/hero-crypto-abstract-xl.avif' %}">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand': {
+                            'primary': '#0b2f6b',
+                            'secondary': '#153b84',
+                            'accent': '#fde047',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
+    <!-- Restore original styling that matches live site -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="{% static 'css/brand.css' %}">
     <link rel="stylesheet" href="{% static 'css/wolvcapital_style_fixed.css' %}">
@@ -349,7 +362,7 @@
             <div class="nav-content">
                 <div class="logo-section">
                     <a href="{% url 'home' %}" class="flex items-center">
-                        <img src="{% static 'images/logos/logo.png' %}" alt="WolvCapital logo" class="brand-logo" loading="eager">
+                        <img src="{% static 'images/logos/wolvcapital-logo.svg' %}" alt="WolvCapital logo" class="brand-logo" loading="eager">
                     </a>
                 </div>
 
@@ -389,7 +402,7 @@
 
                 <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center justify-end">
-                        <button class="navbar-toggler nav-mobile-trigger" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler nav-mobile-trigger" type="button" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
@@ -398,7 +411,7 @@
             </div>
 
             <!-- Mobile menu -->
-                <div class="collapse navbar-collapse md:hidden mt-3" id="navbarNav">
+            <div class="hidden md:hidden mt-3" id="navbarNav">
                 <div class="px-3 pt-3 pb-4 space-y-1 bg-white/95 border border-blue-100 rounded-xl shadow-lg transition-all duration-300">
                     <a href="{% url 'home' %}" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">Home</a>
                     <a href="{% url 'plans' %}" class="block text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">Plans</a>
@@ -587,7 +600,7 @@
             <div class="border-t border-blue-800 pt-8 mt-8">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="mb-4 md:mb-0">
-                        <img src="{% static 'images/logos/logo.png' %}" alt="WolvCapital" class="h-12 transition-all duration-300 hover:scale-110 hover:brightness-110" loading="lazy">
+                        <img src="{% static 'images/logos/wolvcapital-logo.svg' %}" alt="WolvCapital" class="h-12 transition-all duration-300 hover:scale-110 hover:brightness-110" loading="lazy">
                     </div>
                     <p class="text-gray-300 text-sm">
                         &copy; {% now 'Y' %} WolvCapital Invest. All rights reserved.
@@ -759,9 +772,15 @@
                 }
             }, 2000);
         });
-        // Bootstrap handles mobile menu collapse via data attributes
+        // Simple mobile menu toggle without Bootstrap
+        const navToggle = document.querySelector('.navbar-toggler');
+        const navMenu = document.querySelector('#navbarNav');
+        
+        if (navToggle && navMenu) {
+            navToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('show');
+            });
+        }
     </script>
-        <!-- Bootstrap JS Bundle -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

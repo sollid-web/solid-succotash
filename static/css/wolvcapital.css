@@ -1,0 +1,572 @@
+/*! WolvCapital Unified CSS v2.0
+ * Consolidated from brand.css, wolvcapital_style_fixed.css, base.css, site.css
+ * Removes duplicates and conflicts for optimal performance
+ */
+
+/* ------------------ CSS Reset & Base ------------------ */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;height:100%}
+body{margin:0;padding:0;height:100%;overflow-x:hidden}
+
+/* ------------------ Design System Tokens ------------------ */
+:root{
+  /* Primary Brand Colors - Single source of truth */
+  --wc-primary: #0b2f6b;          /* Deep corporate blue */
+  --wc-secondary: #153b84;        /* Mid blue */
+  --wc-accent: #fde047;           /* Trust gold */
+  --wc-accent-dark: #f59e0b;      /* Darker gold variant */
+
+  /* Semantic Colors */
+  --wc-success: #0f9d58;
+  --wc-warning: #f4b400;
+  --wc-error: #d93025;
+  --wc-info: #1f4fa3;
+
+  /* Neutral Colors */
+  --wc-gray-50: #f8fafc;
+  --wc-gray-100: #f1f5f9;
+  --wc-gray-200: #e2e8f0;
+  --wc-gray-300: #cbd5e1;
+  --wc-gray-400: #94a3b8;
+  --wc-gray-500: #64748b;
+  --wc-gray-600: #475569;
+  --wc-gray-700: #334155;
+  --wc-gray-800: #1e293b;
+  --wc-gray-900: #0f172a;
+
+  /* Layout & Spacing */
+  --wc-radius: 16px;
+  --wc-radius-sm: 8px;
+  --wc-shadow: 0 6px 18px rgba(11, 47, 107, 0.08);
+  --wc-shadow-lg: 0 20px 40px rgba(11, 47, 107, 0.15);
+  --wc-container: 1200px;
+  --wc-sp-1: 0.5rem;
+  --wc-sp-2: 0.75rem;
+  --wc-sp-3: 1rem;
+  --wc-sp-4: 1.5rem;
+  --wc-sp-5: 2rem;
+  --wc-sp-6: 3rem;
+
+  /* Gradients */
+  --wc-gradient-primary: linear-gradient(135deg, var(--wc-primary) 0%, var(--wc-secondary) 100%);
+  --wc-gradient-hero: linear-gradient(180deg, rgba(0,0,0,.45), rgba(11,47,107,.6));
+  --wc-gradient-mesh: radial-gradient(circle at 20% 20%, rgba(29, 78, 216, 0.22) 0%, rgba(11, 47, 107, 0.05) 35%, transparent 60%),
+                      radial-gradient(circle at 80% 0%, rgba(253, 224, 71, 0.15) 0%, transparent 50%),
+                      linear-gradient(180deg, rgba(11, 47, 107, 0.08) 0%, rgba(11, 47, 107, 0.4) 100%);
+}
+
+/* ------------------ Typography ------------------ */
+body {
+  background: var(--wc-gray-50);
+  color: var(--wc-gray-900);
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  line-height: 1.6;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  margin: 0 0 var(--wc-sp-2);
+  font-weight: 700;
+  color: var(--wc-gray-900);
+  letter-spacing: -0.025em;
+}
+
+h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: clamp(1.25rem, 2.5vw, 1.875rem);
+  line-height: 1.25;
+}
+
+p {
+  margin: 0 0 var(--wc-sp-3);
+}
+
+/* ------------------ Layout & Containers ------------------ */
+.container {
+  max-width: var(--wc-container);
+  margin-inline: auto;
+  padding-inline: var(--wc-sp-3);
+}
+
+.main-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+section {
+  padding-block: clamp(2rem, 5vw, 4rem);
+}
+
+section + section {
+  margin-top: 0;
+}
+
+/* ------------------ Navigation ------------------ */
+.brand-navbar {
+  background: transparent;
+  padding: 1rem 0.75rem;
+  position: relative;
+  z-index: 100;
+}
+
+/* Mobile menu states */
+#navbarNav {
+  transition: all 0.3s ease;
+}
+
+#navbarNav.show {
+  display: block !important;
+}
+
+.nav-shell {
+  background: var(--wc-gradient-primary);
+  border-radius: 1.5rem;
+  padding: 0.625rem 1.25rem;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.2);
+  backdrop-filter: blur(6px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-shell:hover {
+  box-shadow: 0 12px 32px rgba(37, 99, 235, 0.25);
+}
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.brand-logo {
+  height: 42px;
+  width: auto;
+  max-width: 180px;
+  object-fit: contain;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.brand-logo:hover {
+  transform: scale(1.05);
+}
+
+/* ------------------ Buttons - Unified System ------------------ */
+.btn,
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--wc-radius-sm);
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-decoration: none;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--wc-shadow);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: var(--wc-gradient-primary);
+  color: white;
+  border-color: var(--wc-primary);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #092451 0%, #12306c 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--wc-shadow-lg);
+  color: white;
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--wc-primary);
+  border-color: var(--wc-primary);
+}
+
+.btn-secondary:hover {
+  background: var(--wc-primary);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btn-gold {
+  background: var(--wc-accent);
+  color: var(--wc-gray-900);
+  border-color: var(--wc-accent);
+}
+
+.btn-gold:hover {
+  background: var(--wc-accent-dark);
+  color: var(--wc-gray-900);
+  transform: translateY(-2px);
+}
+
+/* ------------------ Cards & Components ------------------ */
+.card {
+  background: white;
+  border: 1px solid var(--wc-gray-200);
+  border-radius: var(--wc-radius);
+  box-shadow: var(--wc-shadow);
+  padding: var(--wc-sp-5);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--wc-shadow-lg);
+  border-color: var(--wc-primary);
+}
+
+.brand-card {
+  background: white;
+  border-radius: var(--wc-radius);
+  border: 1px solid var(--wc-gray-200);
+  padding: var(--wc-sp-4);
+  transition: all 0.3s ease;
+  box-shadow: var(--wc-shadow);
+}
+
+.brand-card:hover {
+  box-shadow: var(--wc-shadow-lg);
+  transform: translateY(-4px);
+  border-color: var(--wc-primary);
+}
+
+/* Investment Plan Cards */
+.brand-plan-card {
+  background: white;
+  border-radius: var(--wc-radius);
+  border: 2px solid var(--wc-gray-200);
+  padding: var(--wc-sp-5);
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-plan-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--wc-gradient-primary);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.brand-plan-card:hover::before {
+  transform: scaleX(1);
+}
+
+.brand-plan-card:hover {
+  border-color: var(--wc-primary);
+  box-shadow: var(--wc-shadow-lg);
+  transform: translateY(-8px);
+}
+
+.brand-plan-name {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--wc-gray-900);
+  margin-bottom: 0.5rem;
+}
+
+.brand-plan-roi {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: var(--wc-gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.25rem;
+}
+
+/* ------------------ Hero Sections ------------------ */
+.hero {
+  position: relative;
+  min-height: 56vh;
+  overflow: hidden;
+  margin-top: 0;
+  isolation: isolate;
+}
+
+.hero-bg,
+.hero-picture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--wc-gradient-hero);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  color: white;
+  padding: 6rem 0 5rem;
+}
+
+.hero--mesh::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--wc-gradient-mesh);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ------------------ Status Badges ------------------ */
+.brand-badge,
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.brand-badge-pending,
+.badge-pending {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.brand-badge-approved,
+.badge-approved {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.brand-badge-rejected,
+.badge-rejected {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* ------------------ Grid System ------------------ */
+.grid {
+  display: grid;
+  gap: var(--wc-sp-3);
+}
+
+.grid-1 { grid-template-columns: 1fr; }
+.grid-2 { grid-template-columns: 1fr; }
+.grid-3 { grid-template-columns: 1fr; }
+.grid-4 { grid-template-columns: 1fr; }
+
+@media (min-width: 768px) {
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ------------------ Images & Media ------------------ */
+img, video, canvas, svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.img-cover {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: var(--wc-radius);
+  box-shadow: var(--wc-shadow);
+}
+
+/* ------------------ Footer ------------------ */
+.brand-footer {
+  background: linear-gradient(to bottom, #1f2937 0%, #111827 100%);
+  color: #d1d5db;
+  padding: 3rem 0 1.5rem;
+}
+
+.brand-footer-link {
+  color: #9ca3af;
+  transition: color 0.2s ease;
+  text-decoration: none;
+}
+
+.brand-footer-link:hover {
+  color: var(--wc-accent);
+}
+
+/* ------------------ Utility Classes ------------------ */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.hidden { display: none; }
+.block { display: block; }
+.flex { display: flex; }
+.grid { display: grid; }
+
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+
+.mt-0 { margin-top: 0; }
+.mb-0 { margin-bottom: 0; }
+.pt-0 { padding-top: 0; }
+.pb-0 { padding-bottom: 0; }
+
+.mx-auto { margin-inline: auto; }
+.text-muted { color: var(--wc-gray-500); }
+
+/* Brand color utilities */
+.text-primary { color: var(--wc-primary); }
+.text-secondary { color: var(--wc-secondary); }
+.text-accent { color: var(--wc-accent); }
+.text-success { color: var(--wc-success); }
+.text-error { color: var(--wc-error); }
+
+.bg-primary { background-color: var(--wc-primary); }
+.bg-secondary { background-color: var(--wc-secondary); }
+.bg-accent { background-color: var(--wc-accent); }
+
+.gradient-primary { background: var(--wc-gradient-primary); }
+.text-gradient {
+  background: var(--wc-gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ------------------ Animations ------------------ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.animate-fade-in { animation: fadeIn 0.5s ease-out; }
+.animate-slide-down { animation: slideDown 0.6s ease-out; }
+.animate-pulse { animation: pulse 2s infinite; }
+
+/* ------------------ Responsive Design ------------------ */
+@media (max-width: 768px) {
+  .brand-navbar {
+    padding: 1rem 0.5rem;
+  }
+  
+  .nav-shell {
+    padding: 0.75rem 1rem;
+    border-radius: 1.25rem;
+  }
+  
+  .brand-logo {
+    height: 44px;
+    max-width: 44px;
+  }
+  
+  .brand-plan-roi {
+    font-size: 2rem;
+  }
+  
+  .hero-content {
+    padding: 4rem 0 3rem;
+  }
+}
+
+/* ------------------ Focus & Accessibility ------------------ */
+:focus-visible {
+  outline: 3px solid var(--wc-accent);
+  outline-offset: 2px;
+}
+
+/* ------------------ Print Styles ------------------ */
+@media print {
+  .brand-navbar,
+  .brand-footer,
+  .hero {
+    display: none !important;
+  }
+  
+  section {
+    padding: 1rem 0;
+  }
+  
+  .card {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+}
+
+/* Legacy compatibility for existing classes */
+.section, .panel, .widget, .box {
+  max-width: 100% !important;
+}
+
+/* UI regression support */
+.ui-regression body,
+body.ui-regression {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--wc-gray-50);
+}
+
+.ui-regression .main-container,
+body.ui-regression .main-container {
+  width: min(100%, 420px);
+  max-height: 92dvh;
+  overflow-y: auto;
+  background: white;
+  border-radius: var(--wc-radius);
+  box-shadow: var(--wc-shadow-lg);
+  padding: 20px;
+}
+
+.ui-regression .main-container img,
+body.ui-regression .main-container img {
+  width: 100%;
+  height: clamp(160px, 35dvh, 280px);
+  object-fit: cover;
+  border-radius: var(--wc-radius-sm);
+  margin-bottom: 10px;
+}

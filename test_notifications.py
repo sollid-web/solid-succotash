@@ -3,6 +3,7 @@ Test script to demonstrate the notification system
 Run this from Django shell: python manage.py shell < test_notifications.py
 """
 
+
 from django.contrib.auth import get_user_model
 
 from users.notification_service import *  # noqa: F401,F403 (script-style usage)
@@ -67,7 +68,7 @@ if __name__ == "__main__":
     print("\n📬 Recent Notifications:")
     print("-" * 60)
     for notif in notifications[:5]:
-        status = "🔴 UNREAD" if not notif.is_read else "✅ READ"
+        status = "✅ READ" if notif.is_read else "🔴 UNREAD"
         print(f"\n{status} | {notif.priority.upper()} Priority")
         print(f"Title: {notif.title}")
         print(f"Type: {notif.get_notification_type_display()}")
@@ -76,8 +77,7 @@ if __name__ == "__main__":
 
     # Test marking as read (avoid filtering after slicing by using base queryset again)
     base_qs = get_user_notifications(user)
-    first_unread = base_qs.filter(is_read=False).first()
-    if first_unread:
+    if first_unread := base_qs.filter(is_read=False).first():
         print("\n" + "=" * 60)
         print("TEST: Mark Notification as Read")
         print("=" * 60)

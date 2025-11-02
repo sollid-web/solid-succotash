@@ -93,36 +93,7 @@ class TransactionCreationValidationTests(TestCase):
         )
 
 
-from django.test import TestCase
-
-# Create your tests here.
 
 
-class TransactionsViewSmokeTests(TestCase):
-    def setUp(self):
-        self.client = Client()
-        User = get_user_model()
-        self.user = User.objects.create_user(
-            username="txviewuser", email="txview@example.com", password="pass12345"
-        )
-        # Fund wallet to allow creating a withdrawal via service layer
-        wallet = self.user.wallet
-        wallet.balance = Decimal("500")
-        wallet.save(update_fields=["balance"])
-        # create a few transactions for the user
-        create_transaction(self.user, "deposit", 120, "seed dep")
-        create_transaction(self.user, "withdrawal", 20, "seed wd")
-
-    def test_transactions_requires_auth(self):
-        resp = self.client.get(reverse("transactions_list"))
-        # login_required should redirect to login
-        self.assertIn(resp.status_code, (301, 302))
-
-    def test_transactions_page_renders_for_user(self):
-        self.client.login(username="txviewuser", password="pass12345")
-        resp = self.client.get(reverse("transactions_list"))
-        self.assertEqual(resp.status_code, 200)
-        self.assertContains(resp, "Transactions")
-        # entries present
-        self.assertContains(resp, "seed dep")
-        self.assertContains(resp, "seed wd")
+# Template-based view tests removed - all transaction functionality now available via API
+# See api/views.py for TransactionViewSet and api/tests.py for API tests

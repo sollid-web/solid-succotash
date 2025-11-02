@@ -52,83 +52,54 @@ class AgreementPDFViewTests(TestCase):
         self.assertEqual(resp.status_code, 404)
 
 
-class AgreementAcceptanceViewTests(TestCase):
+class AgreementAPITests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.user = User.objects.create_user(
-            username="accuser", email="acc@example.com", password="pass12345"
+            username="agreement_api_user", email="apiuser@example.com", password="pass12345"
         )
         self.agreement = Agreement.objects.create(
-            title="Privacy Policy",
-            slug="privacy-policy",
+            title="API Terms",
+            slug="api-terms",
             version="1.0.0",
-            body="A.\n\nB.",
+            body="Line 1.\n\nLine 2.",
             effective_date=timezone.now().date(),
             is_active=True,
         )
         self.client = Client()
 
-    def test_view_requires_login(self):
-        url = reverse("agreement_view", args=[self.agreement.pk])
-        # Normalize expected redirect (could be 302 to login). Follow = False to capture initial.
-        resp = self.client.get(url, follow=False)
-        self.assertIn(resp.status_code, (301, 302))
-
-    def test_accept_once(self):
-        self.client.force_login(self.user)
-        url = reverse("agreement_view", args=[self.agreement.pk])
-        # Initial GET (no acceptance yet)
-        resp = self.client.get(url)
+    def test_list_agreements_public(self):
+        resp = self.client.get("/api/agreements/")
         self.assertEqual(resp.status_code, 200)
-        self.assertContains(resp, "I Agree")
+        payload = resp.json()
+        self.assertTrue(isinstance(payload, list))
+        self.assertGreaterEqual(len(payload), 1)
+
+    def test_accept_requires_authentication(self):
+        resp = self.client.post(f"/api/agreements/{self.agreement.pk}/accept/")
+        self.assertEqual(resp.status_code, 403)
+
+    def test_accept_agreement(self):
         from .models import UserAgreementAcceptance
 
-        self.assertFalse(
-            UserAgreementAcceptance.objects.filter(
-                user=self.user, agreement=self.agreement
-            ).exists()
-        )
-
-        # POST to accept (idempotent creation)
+        self.client.force_login(self.user)
+        url = f"/api/agreements/{self.agreement.pk}/accept/"
         resp = self.client.post(url)
-        self.assertIn(resp.status_code, (302, 301))  # redirect after acceptance
-        self.assertTrue(
-            UserAgreementAcceptance.objects.filter(
-                user=self.user, agreement=self.agreement
-            ).exists()
-        )
+        self.assertEqual(resp.status_code, 201)
+        data = resp.json()
+        self.assertTrue(data["accepted"])
+        self.assertIsNotNone(data["accepted_at"])
 
-        # GET again should show accepted notice and no button
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-        self.assertContains(resp, "You accepted this agreement")
-        self.assertNotContains(resp, "I Agree")
+        acceptance = UserAgreementAcceptance.objects.get(user=self.user, agreement=self.agreement)
+        self.assertEqual(acceptance.agreement_version, self.agreement.version)
 
-        # Second POST should not create duplicate
-        resp2 = self.client.post(url)
-        self.assertIn(resp2.status_code, (302, 301))
+        # Subsequent acceptance is idempotent (200 OK)
+        resp_repeat = self.client.post(url)
+        self.assertEqual(resp_repeat.status_code, 200)
         self.assertEqual(
-            UserAgreementAcceptance.objects.filter(
-                user=self.user, agreement=self.agreement
-            ).count(),
+            UserAgreementAcceptance.objects.filter(user=self.user, agreement=self.agreement).count(),
             1,
         )
-
-    def test_pdf_success(self):
-        self.client.force_login(self.user)
-        url = reverse("agreement_pdf", args=[self.agreement.pk])
-        resp = self.client.get(url, follow=True)
-        self.assertEqual(resp.status_code, 200)
-        # Accept either real PDF or graceful text fallback if ReportLab not available
-        self.assertIn(resp["Content-Type"], ["application/pdf", "text/plain"])
-
-    def test_inactive_agreement_404(self):
-        self.client.force_login(self.user)
-        self.agreement.is_active = False
-        self.agreement.save()
-        url = reverse("agreement_pdf", args=[self.agreement.pk])
-        resp = self.client.get(url, follow=True)
-        self.assertEqual(resp.status_code, 404)
 
 
 from decimal import Decimal
@@ -374,71 +345,6 @@ class InvestmentServiceTests(TestCase):
             approve_investment(investment, self.admin_user, "Should fail due to balance")
 
 
-class ViewTests(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.user = User.objects.create_user(
-            username="testuser", email="test@example.com", password="testpass123"
-        )
-
-    def assertBaseStylesPresent(self, response):
-        self.assertContains(response, 'href="/static/css/base.css"')
-        self.assertContains(response, 'href="/static/css/brand.css"')
-
-    def assertChatWidgetPresent(self, response, *, authenticated: bool):
-        flag = "true" if authenticated else "false"
-        self.assertContains(response, 'id="chat-widget"')
-        self.assertContains(response, f'data-user-authenticated="{flag}"')
-
-    def test_home_page(self):
-        """Test home page loads"""
-        response = self.client.get(reverse("home"))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "WolvCapital")
-        self.assertBaseStylesPresent(response)
-
-
-class DashboardTotalsTests(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.user = get_user_model().objects.create_user(
-            username="dashuser", email="dash@example.com", password="pass12345"
-        )
-        self.admin = get_user_model().objects.create_user(
-            username="dashadmin",
-            email="dashadmin@example.com",
-            password="adminpass",
-            is_staff=True,
-        )
-
-    def test_dashboard_totals_only_approved(self):
-        # Create and approve a deposit (credits wallet)
-        dep1 = create_transaction(user=self.user, tx_type="deposit", amount=200, reference="dep1")
-        approve_transaction(dep1, self.admin, notes="ok")
-
-        # Create and approve a withdrawal (debited from credited funds)
-        wd1 = create_transaction(user=self.user, tx_type="withdrawal", amount=50, reference="wd1")
-        approve_transaction(wd1, self.admin, notes="ok")
-
-        # Create a pending deposit (should NOT count)
-        create_transaction(user=self.user, tx_type="deposit", amount=75, reference="dep2")
-
-        # Create and reject a withdrawal (should NOT count)
-        wd2 = create_transaction(user=self.user, tx_type="withdrawal", amount=25, reference="wd2")
-        from transactions.services import reject_transaction
-
-        reject_transaction(wd2, self.admin, notes="no")
-
-        # Login and load dashboard
-        self.client.login(username="dashuser", password="pass12345")
-        resp = self.client.get(reverse("dashboard"))
-        self.assertEqual(resp.status_code, 200)
-
-        # Validate context totals reflect only approved transactions
-        self.assertIn("total_deposits", resp.context)
-        self.assertIn("total_withdrawals", resp.context)
-        self.assertEqual(resp.context["total_deposits"], Decimal("200"))
-        self.assertEqual(resp.context["total_withdrawals"], Decimal("50"))
 
 
 class ManagementCommandTests(TestCase):
@@ -498,10 +404,9 @@ class AgreementIntegrityTests(TestCase):
         self.client.force_login(self.user)
 
     def test_acceptance_hash_and_version(self):
-        url = reverse("agreement_view", args=[self.agreement.pk])
-        # Trigger acceptance
+        url = f"/api/agreements/{self.agreement.pk}/accept/"
         resp = self.client.post(url)
-        self.assertIn(resp.status_code, (301, 302))
+        self.assertEqual(resp.status_code, 201)
         from .models import UserAgreementAcceptance
 
         acc = UserAgreementAcceptance.objects.get(user=self.user, agreement=self.agreement)
@@ -522,35 +427,8 @@ class HealthAndLoggingTests(TestCase):
     def test_request_id_header(self):
         # Ensure middleware assigns X-Request-ID header on any request
         client = Client()
-        resp = client.get(reverse("home"))
+        resp = client.get(reverse("healthz"))
         self.assertEqual(resp.status_code, 200)
         self.assertIn("X-Request-ID", resp.headers)
         self.assertTrue(len(resp.headers["X-Request-ID"]) > 10)
 
-
-class PublicPagesSmokeTests(TestCase):
-    def setUp(self):
-        self.client = Client()
-
-    def test_virtual_card_page_renders(self):
-        resp = self.client.get(reverse("virtual_card"))
-        self.assertEqual(resp.status_code, 200)
-        self.assertContains(resp, "WolvCapital Virtual Visa")
-
-    def test_plans_page_renders_with_plan(self):
-        # Ensure at least one plan exists
-        from decimal import Decimal
-
-        from investments.models import InvestmentPlan
-
-        plan = InvestmentPlan.objects.create(
-            name="Smoke Pioneer",
-            description="Smoke test plan",
-            daily_roi=Decimal("1.00"),
-            duration_days=14,
-            min_amount=Decimal("100"),
-            max_amount=Decimal("999"),
-        )
-        resp = self.client.get(reverse("plans"))
-        self.assertEqual(resp.status_code, 200)
-        self.assertContains(resp, plan.name)

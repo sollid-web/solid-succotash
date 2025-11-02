@@ -30,14 +30,14 @@ class NotificationViewsTests(TestCase):
         self.client.login(username="notifuser", password="pass12345")
 
     def test_mark_notification_read(self):
-        url = reverse("mark_notification_read", args=[self.n1.id])
+        url = reverse("api-notifications-mark-read", args=[self.n1.id])
         resp = self.client.post(url)
         self.assertEqual(resp.status_code, 200)
         self.n1.refresh_from_db()
         self.assertTrue(self.n1.is_read)
 
     def test_mark_all_read(self):
-        url = reverse("mark_all_read")
+        url = reverse("api-notifications-mark-all-read")
         resp = self.client.post(url)
         self.assertEqual(resp.status_code, 200)
         self.n1.refresh_from_db()
@@ -45,7 +45,7 @@ class NotificationViewsTests(TestCase):
         self.assertTrue(self.n1.is_read and self.n2.is_read)
 
     def test_unread_count(self):
-        url = reverse("unread_count")
+        url = reverse("api-notifications-unread-count")
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, 200)
         data = resp.json()

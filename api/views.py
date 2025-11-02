@@ -1,3 +1,5 @@
+import hashlib
+
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status, viewsets
@@ -6,6 +8,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from core.models import Agreement, SupportRequest, UserAgreementAcceptance
 from investments.models import InvestmentPlan, UserInvestment
 from investments.services import (
     approve_investment,
@@ -18,16 +21,55 @@ from transactions.services import (
     create_transaction,
     reject_transaction,
 )
-from users.models import UserWallet
+from users.models import Profile, UserNotification, UserWallet
+from users.notification_service import (
+    mark_all_read as service_mark_all_read,
+    mark_notification_read as service_mark_notification_read,
+)
 
 from .serializers import (
+    AgreementSerializer,
     AdminTransactionSerializer,
     AdminUserInvestmentSerializer,
+    EmailPreferencesSerializer,
     InvestmentPlanSerializer,
     TransactionSerializer,
     UserInvestmentSerializer,
+    UserNotificationSerializer,
     UserWalletSerializer,
 )
+
+
+class AgreementViewSet(viewsets.ReadOnlyModelViewSet):
+    """Expose active legal agreements and handle user acceptance."""
+
+    queryset = Agreement.objects.filter(is_active=True).order_by("-effective_date", "-created_at")
+    serializer_class = AgreementSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    @action(detail=True, methods=["post"], permission_classes=[permissions.IsAuthenticated])
+    def accept(self, request, pk=None):
+        agreement = self.get_object()
+        user = request.user
+
+        acceptance, created = UserAgreementAcceptance.objects.get_or_create(
+            user=user,
+            agreement=agreement,
+            defaults={
+                "ip_address": (request.META.get("HTTP_X_FORWARDED_FOR", "").split(",")[0] or request.META.get("REMOTE_ADDR")),
+                "user_agent": request.META.get("HTTP_USER_AGENT", ""),
+                "agreement_hash": hashlib.sha256(agreement.body.encode("utf-8")).hexdigest(),
+                "agreement_version": agreement.version,
+            },
+        )
+
+        if not created and acceptance.agreement_hash == "":
+            acceptance.agreement_hash = hashlib.sha256(agreement.body.encode("utf-8")).hexdigest()
+            acceptance.agreement_version = agreement.version
+            acceptance.save(update_fields=["agreement_hash", "agreement_version"])
+
+        serializer = self.get_serializer(agreement, context={**self.get_serializer_context(), "request": request})
+        return Response(serializer.data, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
 
 
 class InvestmentPlanViewSet(viewsets.ReadOnlyModelViewSet):
@@ -170,3 +212,143 @@ class AdminUserInvestmentViewSet(viewsets.ModelViewSet):
 
         kwargs["partial"] = partial
         return super().update(request, *args, **kwargs)
+
+
+class SupportRequestView(APIView):
+    """Endpoint for submitting support requests from the frontend."""
+
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        payload = request.data or {}
+
+        message = (payload.get("message") or "").strip()
+        if not message:
+            return Response({"error": "Support message cannot be empty."}, status=status.HTTP_400_BAD_REQUEST)
+
+        topic = (payload.get("topic") or "").strip()
+        source_url = (payload.get("source_url") or request.META.get("HTTP_REFERER") or "").strip()
+        contact_email = (payload.get("contact_email") or "").strip()
+        full_name = (payload.get("full_name") or "").strip()
+        current_user = request.user if request.user.is_authenticated else None
+
+        if current_user:
+            if not contact_email:
+                contact_email = current_user.email or ""
+            if not full_name:
+                profile_name = getattr(getattr(current_user, "profile", None), "full_name", "")
+                full_name = current_user.get_full_name() or profile_name or current_user.email
+        elif not contact_email:
+            return Response(
+                {"error": "Please include an email so our team can respond."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        forwarded_for = (request.META.get("HTTP_X_FORWARDED_FOR") or "").split(",")
+        ip_address = (
+            forwarded_for[0].strip()
+            if forwarded_for and forwarded_for[0].strip()
+            else request.META.get("REMOTE_ADDR")
+        )
+
+        support_request = SupportRequest.objects.create(
+            user=current_user,
+            full_name=full_name,
+            contact_email=contact_email,
+            topic=topic,
+            source_url=source_url,
+            message=message,
+            ip_address=ip_address,
+            user_agent=request.META.get("HTTP_USER_AGENT", ""),
+        )
+
+        return Response(
+            {
+                "status": "received",
+                "reference": str(support_request.pk),
+                "detail": "Our support team will review and respond shortly.",
+            },
+            status=status.HTTP_201_CREATED,
+        )
+
+
+class UserNotificationViewSet(viewsets.GenericViewSet):
+    """User notification endpoints for list and state updates."""
+
+    serializer_class = UserNotificationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return UserNotification.objects.filter(user=self.request.user).order_by("-created_at")
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        unread_only = (request.query_params.get("unread_only") or "").lower() in {"1", "true", "yes"}
+        if unread_only:
+            queryset = queryset.filter(is_read=False)
+
+        limit_param = request.query_params.get("limit")
+        if limit_param:
+            try:
+                limit_value = int(limit_param)
+                if limit_value > 0:
+                    queryset = queryset[:limit_value]
+            except ValueError:
+                pass
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        notification = get_object_or_404(self.get_queryset(), pk=pk)
+        serializer = self.get_serializer(notification)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=["post"], url_path="mark-read")
+    def mark_read(self, request, pk=None):
+        updated = service_mark_notification_read(pk, request.user)
+        if updated is None:
+            return Response({"error": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(updated)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=["post"], url_path="mark-all-read")
+    def mark_all_read(self, request):
+        updated_count = service_mark_all_read(request.user)
+        return Response({"updated": updated_count})
+
+    @action(detail=False, methods=["get"], url_path="unread-count")
+    def unread_count(self, request):
+        count = self.get_queryset().filter(is_read=False).count()
+        return Response({"count": count})
+
+
+class EmailPreferencesView(APIView):
+    """Read and update the authenticated user's email notification preferences."""
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def _get_profile(self, request):
+        profile, _ = Profile.objects.get_or_create(user=request.user)
+        return profile
+
+    def get(self, request):
+        profile = self._get_profile(request)
+        serializer = EmailPreferencesSerializer(profile)
+        return Response(serializer.data)
+
+    def put(self, request):
+        profile = self._get_profile(request)
+        serializer = EmailPreferencesSerializer(profile, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def patch(self, request):
+        profile = self._get_profile(request)
+        serializer = EmailPreferencesSerializer(profile, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)

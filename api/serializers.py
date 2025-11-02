@@ -1,8 +1,55 @@
 from rest_framework import serializers
 
+from core.models import Agreement, UserAgreementAcceptance
 from investments.models import InvestmentPlan, UserInvestment
 from transactions.models import Transaction
-from users.models import UserWallet
+from users.models import Profile, UserNotification, UserWallet
+
+
+class AgreementSerializer(serializers.ModelSerializer):
+    accepted = serializers.SerializerMethodField()
+    accepted_at = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Agreement
+        fields = [
+            "id",
+            "title",
+            "slug",
+            "version",
+            "body",
+            "effective_date",
+            "is_active",
+            "accepted",
+            "accepted_at",
+        ]
+        read_only_fields = fields
+
+    def _get_user(self):
+        request = self.context.get("request")
+        user = getattr(request, "user", None)
+        return user if user and user.is_authenticated else None
+
+    def _get_acceptance(self, obj) -> UserAgreementAcceptance | None:
+        user = self._get_user()
+        if not user:
+            return None
+
+        cache = self.context.setdefault("_acceptance_cache", {})
+        cache_key = (user.pk, obj.pk)
+        if cache_key in cache:
+            return cache[cache_key]
+
+        acceptance = UserAgreementAcceptance.objects.filter(user=user, agreement=obj).first()
+        cache[cache_key] = acceptance
+        return acceptance
+
+    def get_accepted(self, obj):
+        return self._get_acceptance(obj) is not None
+
+    def get_accepted_at(self, obj):
+        acceptance = self._get_acceptance(obj)
+        return acceptance.accepted_at if acceptance else None
 
 
 class InvestmentPlanSerializer(serializers.ModelSerializer):
@@ -143,4 +190,51 @@ class AdminUserInvestmentSerializer(serializers.ModelSerializer):
             "amount",
             "created_at",
             "total_return",
+        ]
+
+
+class UserNotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserNotification
+        fields = [
+            "id",
+            "notification_type",
+            "title",
+            "message",
+            "action_url",
+            "entity_type",
+            "entity_id",
+            "priority",
+            "is_read",
+            "read_at",
+            "created_at",
+            "expires_at",
+        ]
+        read_only_fields = [
+            "id",
+            "notification_type",
+            "title",
+            "message",
+            "action_url",
+            "entity_type",
+            "entity_id",
+            "priority",
+            "read_at",
+            "created_at",
+            "expires_at",
+        ]
+
+
+class EmailPreferencesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = [
+            "email_notifications_enabled",
+            "email_welcome",
+            "email_transactions",
+            "email_investments",
+            "email_roi_payouts",
+            "email_wallet_updates",
+            "email_security_alerts",
+            "email_marketing",
         ]

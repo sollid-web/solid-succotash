@@ -4,7 +4,9 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework.test import APIClient
 
+from core.models import SupportRequest
 from investments.models import InvestmentPlan, UserInvestment
+from users.models import UserNotification
 
 
 class PublicPlansAPITests(TestCase):
@@ -88,6 +90,99 @@ class AdminInvestmentsAPITests(TestCase):
         self.assertNotEqual(resp.status_code, 200)
 
 
-from django.test import TestCase
+class SupportRequestAPITests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
 
-# Create your tests here.
+    def test_support_request_requires_contact_email(self):
+        resp = self.client.post("/api/support/", {"message": "Need assistance"}, format="json")
+        self.assertEqual(resp.status_code, 400)
+
+    def test_support_request_success(self):
+        payload = {
+            "message": "Unable to locate payout report",
+            "contact_email": "investor@example.com",
+            "topic": "reports",
+        }
+        resp = self.client.post("/api/support/", payload, format="json")
+        self.assertEqual(resp.status_code, 201)
+        data = resp.json()
+        self.assertIn("reference", data)
+        self.assertTrue(SupportRequest.objects.filter(pk=data["reference"]).exists())
+
+
+class NotificationAPITests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.user = User.objects.create_user(
+            username="notif_api_user", email="notif@example.com", password="pass12345"
+        )
+        self.other = User.objects.create_user(
+            username="notif_api_other", email="notif_other@example.com", password="pass12345"
+        )
+        self.client = APIClient()
+        UserNotification.objects.create(
+            user=self.user,
+            notification_type="system_alert",
+            title="Alert",
+            message="System upgraded",
+        )
+        self.notification = UserNotification.objects.create(
+            user=self.user,
+            notification_type="welcome",
+            title="Welcome",
+            message="Hello",
+        )
+        UserNotification.objects.create(
+            user=self.other,
+            notification_type="system_alert",
+            title="Other",
+            message="Hidden",
+        )
+
+    def test_list_notifications_scoped_to_user(self):
+        self.client.login(username="notif_api_user", password="pass12345")
+        resp = self.client.get("/api/notifications/")
+        self.assertEqual(resp.status_code, 200)
+        payload = resp.json()
+        # User has 2 manually created notifications + 1 auto-created welcome notification
+        self.assertEqual(len(payload), 3)
+        # Verify only this user's notifications are returned (not 'other' user's)
+        titles = [n["title"] for n in payload]
+        self.assertIn("Alert", titles)
+        self.assertIn("Welcome", titles)
+        self.assertNotIn("Other", titles)
+
+    def test_mark_read_via_api(self):
+        self.client.login(username="notif_api_user", password="pass12345")
+        resp = self.client.post(f"/api/notifications/{self.notification.pk}/mark-read/")
+        self.assertEqual(resp.status_code, 200)
+        self.notification.refresh_from_db()
+        self.assertTrue(self.notification.is_read)
+
+
+class EmailPreferencesAPITests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.user = User.objects.create_user(
+            username="prefs_user", email="prefs@example.com", password="pass12345"
+        )
+        self.client = APIClient()
+        self.client.login(username="prefs_user", password="pass12345")
+
+    def test_get_preferences(self):
+        resp = self.client.get("/api/profile/email-preferences/")
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertIn("email_notifications_enabled", data)
+
+    def test_update_preferences(self):
+        resp = self.client.patch(
+            "/api/profile/email-preferences/",
+            {"email_notifications_enabled": False, "email_security_alerts": False},
+            format="json",
+        )
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertFalse(data["email_notifications_enabled"])
+        self.assertFalse(data["email_security_alerts"])

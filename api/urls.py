@@ -4,9 +4,15 @@ from rest_framework.routers import DefaultRouter
 from . import views
 
 router = DefaultRouter()
+router.register(r"agreements", views.AgreementViewSet, basename="api-agreements")
 router.register(r"investments", views.UserInvestmentViewSet, basename="api-investments")
 router.register(r"transactions", views.TransactionViewSet, basename="api-transactions")
 router.register(r"plans", views.InvestmentPlanViewSet, basename="api-plans")
+router.register(
+    r"notifications",
+    views.UserNotificationViewSet,
+    basename="api-notifications",
+)
 
 # Admin endpoints
 router.register(
@@ -23,4 +29,10 @@ router.register(
 urlpatterns = [
     path("", include(router.urls)),
     path("wallet/", views.WalletView.as_view(), name="api-wallet"),
+    path("support/", views.SupportRequestView.as_view(), name="api-support"),
+    path(
+        "profile/email-preferences/",
+        views.EmailPreferencesView.as_view(),
+        name="api-email-preferences",
+    ),
 ]

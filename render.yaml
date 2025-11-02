@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: wolvcapital
+    name: wolvcapital-api
     runtime: python
     healthCheckPath: /healthz/
     buildCommand: |
@@ -23,6 +23,15 @@ services:
         fromDatabase:
           name: wolvcapital-db
           property: connectionString
+      - key: CORS_ALLOWED_ORIGINS
+        # Production domains
+        value: "https://wolvcapital.com,https://www.wolvcapital.com,https://api.wolvcapital.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        # Must match CORS_ALLOWED_ORIGINS
+        value: "https://wolvcapital.com,https://www.wolvcapital.com,https://api.wolvcapital.com"
+      - key: ALLOWED_HOSTS
+        # Custom domain + Render default URL
+        value: "api.wolvcapital.com,wolvcapital-api.onrender.com"
 
 databases:
   - name: wolvcapital-db

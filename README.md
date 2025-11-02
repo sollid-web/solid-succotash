@@ -1,6 +1,26 @@
 # WolvCapital - Professional Investment Platform
 
-WolvCapital is a Django 5 investment platform where every financial action requires human oversight. Automated services calculate returns and enforce business rules, while administrators approve or reject all transactions and investments.
+WolvCapital is a Django 5 + Next.js investment platform with a decoupled architecture:
+- **Backend (Django)**: REST API with manual approval workflows
+- **Frontend (Next.js)**: Modern React-based user interface
+
+Every financial action requires human oversight. Automated services calculate returns and enforce business rules, while administrators approve or reject all transactions and investments.
+
+## Architecture
+
+```
+┌─────────────────────┐      ┌─────────────────────┐
+│   Next.js Frontend  │─────▶│   Django REST API   │
+│   (Vercel)          │ HTTPS │   (Render)          │
+│   Port 3000         │◀─────│   Port 8000         │
+└─────────────────────┘      └──────────┬──────────┘
+                                        │
+                                        ▼
+                             ┌──────────────────────┐
+                             │   PostgreSQL         │
+                             │   (Render Managed)   │
+                             └──────────────────────┘
+```
 
 ## Key Features
 
@@ -26,69 +46,110 @@ WolvCapital is a Django 5 investment platform where every financial action requi
 
 ## Technology Stack
 
+### Backend (Django)
 - Python 3.12 and Django 5.0
-- PostgreSQL (Render ready) with SQLite fallback for local development
-- Django REST Framework for API endpoints
-- Tailwind CSS and custom branding assets
+- Django REST Framework 3.15.2
+- PostgreSQL (Render ready) with SQLite fallback
+- django-cors-headers for CORS support
 - WhiteNoise for static file serving
-- Dockerfile and `render.yaml` for deployment on Render.com
+- Deployed on Render.com
+
+### Frontend (Next.js)
+- Next.js 14.2 with React 18.3
+- TypeScript for type safety
+- Tailwind CSS for styling
+- Deployed on Vercel
 
 ## Getting Started
 
 ### Local Development
 
-1. **Clone and Install**
+1. **Clone and Install Backend**
+
    ```bash
    git clone <repository-url>
    cd solid-succotash
    python -m venv venv
-   venv\Scripts\activate  # Use source venv/bin/activate on macOS/Linux
+   source venv/bin/activate  # Use venv\Scripts\activate on Windows
    pip install -r requirements.txt
    ```
+
 2. **Configure Environment**
+
    ```bash
-   copy .env.example .env
-   # Populate .env with local settings and secrets
+   cp .env.example .env
+   # Edit .env with local settings
    ```
+
 3. **Bootstrap Database**
+
    ```bash
    python manage.py migrate
    python manage.py seed_plans
-   ```
-4. **Create an Administrator**
-   ```bash
    python manage.py createsuperuser
    ```
-5. **Run the Server**
+
+4. **Run Django API Backend**
+
    ```bash
    python manage.py runserver
    ```
+   
+   Backend API runs on `http://localhost:8000`
+   - Health check: http://localhost:8000/healthz/
+   - Admin panel: http://localhost:8000/admin/
+   - API docs: http://localhost:8000/api/
 
-Visit `http://localhost:8000` to access the dashboard. Promote additional admins using management commands or the Django Admin.
+5. **Install and Run Next.js Frontend**
 
-### Render Deployment
-
-1. Provision a PostgreSQL database and capture the `DATABASE_URL`.
-2. Set required environment variables (`SECRET_KEY`, `DATABASE_URL`, `ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS`, etc.) in the Render dashboard.
-3. Deploy using the provided `render.yaml` or Dockerfile.
-4. After the first deploy, run the setup commands via the Render shell:
    ```bash
-   python manage.py migrate
-   python manage.py seed_plans
-   python manage.py createsuperuser
+   cd frontend
+   npm install
+   npm run dev
    ```
+   
+   Frontend runs on `http://localhost:3000`
+
+Visit `http://localhost:3000` for the user interface.
+
+### Production Deployment
+
+We recommend deploying with:
+- **Django Backend** → Render.com
+- **Next.js Frontend** → Vercel
+
+See detailed deployment guides:
+- **Full Guide**: `DEPLOYMENT_GUIDE_RENDER_VERCEL.md`
+- **Quick Reference**: `DEPLOYMENT_QUICK_REFERENCE.md`
+
+#### Quick Deploy Steps
+
+**Backend to Render**:
+1. Create PostgreSQL database on Render
+2. Create web service from GitHub
+3. Set environment variables (DATABASE_URL, SECRET_KEY, CORS_ALLOWED_ORIGINS)
+4. Run migrations via Render shell
+
+**Frontend to Vercel**:
+```bash
+cd frontend
+vercel --prod
+```
+
+**Update CORS**: After frontend deploys, update Django's `CORS_ALLOWED_ORIGINS` with your Vercel URL.
 
 ## Project Layout
 
 ```text
 wolvcapital/
-├── api/              # REST endpoints for users and admins
-├── core/             # Public pages, dashboard views, forms, templates
+├── api/              # REST API endpoints for users and admins
+├── core/             # Health checks, PDF exports, email service
 ├── investments/      # Investment models, services, management commands
 ├── transactions/     # Deposit and withdrawal workflows with notifications
 ├── users/            # Profiles, wallets, notification services
-├── templates/        # Django template hierarchy (Tailwind-based)
-├── static/           # CSS, JS, and image assets
+├── templates/        # Django email templates
+├── static/           # Placeholder static directory (frontend assets live in Next.js)
+├── frontend/         # Next.js application for the customer experience
 ├── wolvcapital/      # Project settings, URLs, ASGI/WSGI entry points
 ├── manage.py         # Django management entry point
 ├── Dockerfile        # Container build instructions

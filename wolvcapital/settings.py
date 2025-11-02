@@ -32,6 +32,21 @@ CUSTOM_DOMAIN = os.getenv("CUSTOM_DOMAIN")  # optional, supports comma-separated
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "testserver"]
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000"]
 
+DEFAULT_CORS_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+cors_origins_env = os.getenv("CORS_ALLOWED_ORIGINS", "")
+if cors_origins_env:
+    CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins_env.split(",") if origin.strip()]
+else:
+    CORS_ALLOWED_ORIGINS = DEFAULT_CORS_ORIGINS.copy()
+
+for origin in DEFAULT_CORS_ORIGINS:
+    if origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(origin)
+
 # --- GitHub Codespaces support ---
 CODESPACES_DOMAIN = os.getenv("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN")
 IN_CODESPACES = bool(CODESPACES_DOMAIN or os.getenv("CODESPACES") or os.getenv("GITHUB_CODESPACES"))
@@ -76,6 +91,8 @@ if CUSTOM_DOMAIN:
             https_origin = f"https://{host}"
             if https_origin not in CSRF_TRUSTED_ORIGINS:
                 CSRF_TRUSTED_ORIGINS.append(https_origin)
+            if https_origin not in CORS_ALLOWED_ORIGINS:
+                CORS_ALLOWED_ORIGINS.append(https_origin)
 
 extra_hosts = os.getenv("ALLOWED_HOSTS_EXTRA", "")
 if extra_hosts:
@@ -84,6 +101,23 @@ if extra_hosts:
 extra_origins = os.getenv("CSRF_TRUSTED_ORIGINS_EXTRA", "")
 if extra_origins:
     CSRF_TRUSTED_ORIGINS += [o.strip() for o in extra_origins.split(",") if o.strip()]
+
+extra_cors = os.getenv("CORS_ALLOWED_ORIGINS_EXTRA", "")
+if extra_cors:
+    CORS_ALLOWED_ORIGINS += [o.strip() for o in extra_cors.split(",") if o.strip()]
+
+CORS_ALLOWED_ORIGIN_REGEXES: list[str] = []
+
+if IN_CODESPACES:
+    cors_codespaces_origin = f"https://{CODESPACES_DOMAIN}" if CODESPACES_DOMAIN else None
+    if cors_codespaces_origin and cors_codespaces_origin not in CORS_ALLOWED_ORIGINS:
+        CORS_ALLOWED_ORIGINS.append(cors_codespaces_origin)
+    CORS_ALLOWED_ORIGIN_REGEXES.append(r"^https://.*\\.app\\.github\\.dev$")
+
+CORS_ALLOWED_ORIGINS = list(dict.fromkeys(CORS_ALLOWED_ORIGINS))
+CSRF_TRUSTED_ORIGINS = list(dict.fromkeys(CSRF_TRUSTED_ORIGINS))
+
+CORS_ALLOW_CREDENTIALS = True
 
 # Trust Render's TLS termination
 USE_X_FORWARDED_HOST = True
@@ -102,6 +136,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     # Third-party
     "whitenoise.runserver_nostatic",
+    "corsheaders",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -116,6 +151,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "wolvcapital.middleware.RequestIDMiddleware",
     "django.middleware.common.CommonMiddleware",

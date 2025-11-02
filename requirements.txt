@@ -7,3 +7,4 @@ psycopg2-binary==2.9.10
 pillow==10.4.0
 gunicorn==22.0.0
 dj-database-url==2.1.0
+django-cors-headers==4.4.0

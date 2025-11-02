@@ -1,12 +1,3 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView
-
-from .models import Transaction
-
-
-@login_required
-def list_transactions(request):
-    transactions = Transaction.objects.filter(user=request.user).order_by("-created_at")
-    return render(request, "transactions/list.html", {"transactions": transactions})
+# Transactions are exposed via the REST API at /api/transactions/
+# See api.views.TransactionViewSet for the user API
+# See api.views.AdminTransactionViewSet for the admin API

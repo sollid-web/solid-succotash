@@ -1,19 +1,19 @@
 """
 URLs for users app
-"""
 
-from django.urls import path
-from . import views
+All user-facing routes have been migrated to REST API endpoints at /api/.
+This app no longer serves template-based views.
+
+API Routes (see api/urls.py):
+- /api/notifications/ - List, mark read, get unread count
+- /api/profile/email-preferences/ - Manage email preferences
+"""
 
 app_name = 'users'
 
 urlpatterns = [
-    # Notifications
-    path('notifications/', views.NotificationListView.as_view(), name='notifications'),
-    path('notifications/mark-read/<uuid:notification_id>/', views.mark_notification_read, name='mark_notification_read'),
-    path('notifications/mark-all-read/', views.mark_all_read, name='mark_all_read'),
-    path('notifications/unread-count/', views.get_unread_count, name='unread_count'),
-    
-    # Email preferences
-    path('email-preferences/', views.email_preferences, name='email_preferences'),
+    # All routes migrated to /api/ - see api/urls.py
+    # - /api/notifications/ (list, mark-read, mark-all-read, unread-count)
+    # - /api/profile/email-preferences/
 ]
+

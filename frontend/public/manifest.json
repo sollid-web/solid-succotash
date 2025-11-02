@@ -1,0 +1,16 @@
+{
+  "name": "WolvCapital",
+  "short_name": "WolvCapital",
+  "description": "Professional Investment Platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b2f6b",
+  "theme_color": "#0b2f6b",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

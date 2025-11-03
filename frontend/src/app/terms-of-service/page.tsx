@@ -1,8 +1,19 @@
+import Head from 'next/head';
 import Link from 'next/link'
 
 export default function TermsOfServicePage() {
   return (
-    <div className="min-h-screen bg-white">
+    <>
+      <Head>
+        <title>Terms of Service · WolvCapital</title>
+        <meta name="description" content="Review WolvCapital’s Terms of Service — clear policies governing account use, investment participation, and withdrawal conditions." />
+        <meta name="keywords" content="terms of service, investment agreement, user policies, participation rules, WolvCapital" />
+        <meta property="og:title" content="WolvCapital Terms of Service" />
+        <meta property="og:description" content="Read WolvCapital's user participation and investment policy agreements." />
+        <meta property="og:image" content="/img/wolvcapital-terms-of-service.jpg" />
+        <meta name="robots" content="index, follow" />
+      </Head>
+
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
         <div className="container mx-auto px-4 lg:px-8">
@@ -142,6 +153,6 @@ export default function TermsOfServicePage() {
           </div>
         </div>
       </footer>
-    </div>
+    </>
   )
 }

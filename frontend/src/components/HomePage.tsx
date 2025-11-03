@@ -3,10 +3,25 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import FlipVisaCard from './FlipVisaCard'
+import Head from 'next/head';
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
+      <Head>
+        <title>WolvCapital · Digital Investment Platform</title>
+        <meta name="description" content="WolvCapital is a trusted digital investment platform offering crypto-based and ROI-driven financial opportunities with transparency, security, and expert oversight." />
+        <meta name="keywords" content="digital investment platform, crypto ROI, secure investments, fintech growth, WolvCapital" />
+        <meta property="og:title" content="WolvCapital · Digital Investment Platform" />
+        <meta property="og:description" content="Trusted crypto-based investment platform offering transparency and real returns." />
+        <meta property="og:image" content="/img/wolvcapital-digital-investment-platform.jpg" />
+        <meta property="og:type" content="website" />
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="WolvCapital Ltd" />
+        <meta name="theme-color" content="#0b2f6b" />
+        <meta property="og:site_name" content="WolvCapital" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
         <div className="container mx-auto px-4 lg:px-8">

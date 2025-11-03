@@ -1,8 +1,19 @@
+import Head from 'next/head';
 import Link from 'next/link'
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <>
+      <Head>
+        <title>About Us · WolvCapital Investment Team</title>
+        <meta name="description" content="Meet the WolvCapital investment team — experienced professionals dedicated to creating secure and profitable investment strategies for global clients." />
+        <meta name="keywords" content="investment team, asset management firm, financial expertise, WolvCapital professionals" />
+        <meta property="og:title" content="About Us · WolvCapital Investment Team" />
+        <meta property="og:description" content="Meet the trusted WolvCapital investment professionals powering global financial growth." />
+        <meta property="og:image" content="/img/wolvcapital-investment-team.jpg" />
+        <meta name="robots" content="index, follow" />
+      </Head>
+
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
         <div className="container mx-auto px-4 lg:px-8">
@@ -174,6 +185,6 @@ export default function AboutPage() {
           </div>
         </div>
       </footer>
-    </div>
+    </>
   )
 }

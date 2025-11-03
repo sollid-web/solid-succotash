@@ -29,7 +29,7 @@ export default function RiskDisclosurePage() {
             <div className="mx-auto lg:mx-0">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-gray-200">
                 <Image
-                  src="/img/wolvcapital-risk-disclosure.jpg"
+                  src="/images/legal/wolvcapital-risk-disclosure.jpg"
                   alt="Professional reviewing investment risk analysis with WolvCapital platform"
                   width={480}
                   height={720}

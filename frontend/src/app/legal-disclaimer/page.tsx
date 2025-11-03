@@ -29,7 +29,7 @@ export default function LegalDisclaimerPage() {
             <div className="mx-auto lg:mx-0">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-gray-200">
                 <Image
-                  src="/img/wolvcapital-legal-disclaimer.jpg"
+                  src="/images/legal/wolvcapital-legal-disclaimer.jpg"
                   alt="Legal practitioner signing official WolvCapital disclaimer documents"
                   width={480}
                   height={720}

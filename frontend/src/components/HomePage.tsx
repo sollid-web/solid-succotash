@@ -92,7 +92,7 @@ export default function HomePage() {
 
             <div className="relative hidden lg:block">
               <div className="relative w-full h-[600px] rounded-3xl overflow-hidden shadow-2xl">
-                <Image src="/images/hero-crypto-abstract-xl.jpg" alt="Secure blockchain operations" fill className="object-cover" priority sizes="50vw" />
+                <Image src="/img/wolvcapital-home-hero-image.jpg" alt="WolvCapital professional investment platform" fill className="object-cover" priority sizes="50vw" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0b2f6b]/80 to-transparent"></div>
                 <div className="absolute bottom-8 left-8 right-8 bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
                   <div className="flex items-center justify-between">

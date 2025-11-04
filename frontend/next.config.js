@@ -18,7 +18,12 @@ const nextConfig = {
   },
   // Avoid conflicts with Django static files
   distDir: '.next',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/frontend' : '',
+  // IMPORTANT: Do not use assetPrefix on Vercel for root-domain deployments.
+  // Setting an assetPrefix like "/frontend" forces Next.js to look for
+  // assets at /frontend/_next/... which causes 404s for CSS/JS on Vercel
+  // unless you also serve the site under that subpath with proper rewrites.
+  // This was causing broken styles and odd rendering in production.
+  assetPrefix: '',
 }
 
 module.exports = nextConfig

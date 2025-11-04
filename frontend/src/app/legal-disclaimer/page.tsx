@@ -1,20 +1,30 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import Head from 'next/head';
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Legal Disclaimer · WolvCapital',
+  description:
+    'Read WolvCapital’s official legal disclaimer outlining investment terms, risk responsibilities, and service conditions for all users.',
+  keywords: ['investment disclaimer', 'compliance', 'investor terms', 'platform conditions', 'WolvCapital legal'],
+  openGraph: {
+    title: 'WolvCapital Legal Disclaimer',
+    description: 'Official investment disclaimer and compliance notice by WolvCapital Ltd.',
+    images: [
+      // Use a known-present image to avoid 404s in previews
+      {
+        url: '/images/hero-crypto-abstract-xl.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'WolvCapital Professional Investment Platform',
+      },
+    ],
+  },
+  robots: { index: true, follow: true },
+}
 
 export default function LegalDisclaimerPage() {
   return (
-    <>
-      <Head>
-        <title>Legal Disclaimer · WolvCapital</title>
-        <meta name="description" content="Read WolvCapital’s official legal disclaimer outlining investment terms, risk responsibilities, and service conditions for all users." />
-        <meta name="keywords" content="investment disclaimer, compliance, investor terms, platform conditions, WolvCapital legal" />
-        <meta property="og:title" content="WolvCapital Legal Disclaimer" />
-        <meta property="og:description" content="Official investment disclaimer and compliance notice by WolvCapital Ltd." />
-        <meta property="og:image" content="/img/wolvcapital-legal-disclaimer-document.jpg" />
-        <meta name="robots" content="index, follow" />
-      </Head>
-
       <div className="min-h-screen bg-white">
         <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
           <div className="container mx-auto px-4 lg:px-8">
@@ -126,6 +136,5 @@ export default function LegalDisclaimerPage() {
           </div>
         </section>
       </div>
-    </>
   )
 }

@@ -1,3 +1,60 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wolvcapital"
+version = "1.0.0"
+description = "Django investment platform with manual approval workflows"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "Django==5.0.7",
+    "django-allauth==0.57.0",
+    "django-environ==0.11.2",
+    "djangorestframework==3.14.0",
+    "gunicorn==21.2.0",
+    "whitenoise==6.5.0",
+    "psycopg2-binary==2.9.7",
+    "pillow==10.0.0",
+    "django-cors-headers==4.2.0",
+    "django-extensions==3.2.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==7.4.0",
+    "pytest-django==4.5.2",
+    "black==23.7.0",
+    "isort==5.12.0",
+    "flake8==6.0.0",
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+  | migrations
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+skip = ["migrations"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py312"
@@ -70,24 +127,3 @@ files = [
   "investments/services.py",
   "core/views.py",
 ]
-
-[tool.ruff.lint.isort]
-known-first-party = ["wolvcapital", "core", "users", "transactions", "investments", "api"]
-section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
-
-[tool.black]
-line-length = 100
-target-version = ['py312']
-exclude = '''
-/(
-    \.git
-  | __pycache__
-  | migrations
-  | static
-  | staticfiles
-  | \.venv
-)/
-'''
-
-[tool.django-stubs]
-django_settings_module = "wolvcapital.settings"

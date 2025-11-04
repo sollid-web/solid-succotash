@@ -10,8 +10,9 @@ export default function SignupPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // In production, this would redirect to Django backend: http://localhost:8000/accounts/signup/
-    window.location.href = `http://localhost:8000/accounts/signup/?email=${encodeURIComponent(email)}`
+    // Use environment variable for API URL
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    window.location.href = `${apiBase}/accounts/signup/?email=${encodeURIComponent(email)}`;
   }
 
   return (

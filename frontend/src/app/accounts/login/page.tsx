@@ -9,8 +9,9 @@ export default function LoginPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // In production, this would redirect to Django backend: http://localhost:8000/accounts/login/
-    window.location.href = `http://localhost:8000/accounts/login/?email=${encodeURIComponent(email)}`
+    // Use environment variable for API URL
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    window.location.href = `${apiBase}/accounts/login/?email=${encodeURIComponent(email)}`;
   }
 
   return (
@@ -63,7 +64,7 @@ export default function LoginPage() {
                 <input type="checkbox" className="w-4 h-4 text-[#2563eb] border-gray-300 rounded focus:ring-[#2563eb]" />
                 <span className="ml-2 text-sm text-gray-700">Remember me</span>
               </label>
-              <a href="http://localhost:8000/accounts/password/reset/" className="text-sm text-[#2563eb] hover:text-[#1d4ed8] font-semibold transition">Forgot password?</a>
+              <a href={(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000') + '/accounts/password/reset/'} className="text-sm text-[#2563eb] hover:text-[#1d4ed8] font-semibold transition">Forgot password?</a>
             </div>
 
             <button 

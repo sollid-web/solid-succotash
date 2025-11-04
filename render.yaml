@@ -1,7 +1,7 @@
 services:
   - type: web
     name: wolvcapital-api
-    runtime: python
+    runtime: python3
     healthCheckPath: /healthz/
     buildCommand: |
       pip install --upgrade pip

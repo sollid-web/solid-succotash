@@ -6,12 +6,44 @@ import Link from 'next/link'
 export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Use environment variable for API URL
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    window.location.href = `${apiBase}/accounts/login/?email=${encodeURIComponent(email)}`;
+    setError('')
+    setLoading(true)
+
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+
+    try {
+      const response = await fetch(`${apiBase}/api/auth/login/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Important for session cookies
+        body: JSON.stringify({ email, password }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        // Store token if provided
+        if (data.token) {
+          localStorage.setItem('authToken', data.token)
+        }
+        // Redirect to dashboard or home
+        window.location.href = '/dashboard'
+      } else {
+        setError(data.error || 'Login failed. Please try again.')
+      }
+    } catch (err) {
+      setError('Network error. Please check your connection and try again.')
+      console.error('Login error:', err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -31,6 +63,12 @@ export default function LoginPage() {
         <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-10">
           <h1 className="text-3xl font-bold text-[#0b2f6b] mb-2 text-center">Welcome Back</h1>
           <p className="text-gray-600 text-center mb-8">Sign in to access your investment dashboard</p>
+
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+              <p className="text-sm text-red-600 text-center">{error}</p>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -69,9 +107,10 @@ export default function LoginPage() {
 
             <button 
               type="submit"
-              className="w-full bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all duration-300 hover:scale-105"
+              disabled={loading}
+              className="w-full bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Sign In
+              {loading ? 'Signing In...' : 'Sign In'}
             </button>
           </form>
 

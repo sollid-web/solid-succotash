@@ -145,6 +145,8 @@ INSTALLED_APPS = [
     # Third-party
     "whitenoise.runserver_nostatic",
     "corsheaders",
+    "rest_framework",
+    "rest_framework.authtoken",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -155,6 +157,19 @@ INSTALLED_APPS = [
     "transactions",
     "api",
 ]
+
+# ------------------------------------------------------------------
+# REST Framework Configuration
+# ------------------------------------------------------------------
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ],
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

@@ -35,4 +35,8 @@ urlpatterns = [
         views.EmailPreferencesView.as_view(),
         name="api-email-preferences",
     ),
+    # Authentication endpoints
+    path("auth/login/", views.login_view, name="api-login"),
+    path("auth/logout/", views.logout_view, name="api-logout"),
+    path("auth/me/", views.current_user_view, name="api-current-user"),
 ]

@@ -29,9 +29,27 @@ services:
       - key: CSRF_TRUSTED_ORIGINS
         # Must match CORS_ALLOWED_ORIGINS
         value: "https://wolvcapital.com,https://www.wolvcapital.com,https://api.wolvcapital.com"
+      - key: CUSTOM_DOMAIN
+        # Inform Django about custom hostnames (API + public site)
+        value: "wolvcapital.com,api.wolvcapital.com"
       - key: ALLOWED_HOSTS
         # Custom domain + Render default URL
         value: "api.wolvcapital.com,wolvcapital-api.onrender.com"
+      - key: DEFAULT_FROM_EMAIL
+        value: "WolvCapital <noreply@wolvcapital.com>"
+      - key: EMAIL_HOST
+        # Set to your SMTP provider host (e.g., smtp.sendgrid.net)
+        sync: false
+      - key: EMAIL_HOST_USER
+        # SMTP username for noreply mailbox
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        # SMTP password or API key for noreply mailbox
+        sync: false
+      - key: EMAIL_USE_TLS
+        value: "true"
+      - key: EMAIL_PORT
+        value: "587"
 
 databases:
   - name: wolvcapital-db

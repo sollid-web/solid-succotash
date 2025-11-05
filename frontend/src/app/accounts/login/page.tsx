@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 
 export default function LoginPage() {
@@ -9,12 +9,31 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
+  // Compute API base once and normalize (no trailing slash)
+  const apiBase = useMemo(() => {
+    const raw = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+    return raw.replace(/\/$/, '')
+  }, [])
+
+  // Proactive diagnostics in production: surface misconfiguration early
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const isProdLike = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
+      if (isProdLike && !process.env.NEXT_PUBLIC_API_URL) {
+        setError('Configuration error: API URL is not set. Please set NEXT_PUBLIC_API_URL in Vercel and redeploy.')
+      }
+      // Optional lightweight health check
+      fetch(`${apiBase}/healthz/`, { method: 'GET' }).catch(() => {
+        // Don't override an existing error, only hint if empty
+        setError(prev => prev || 'Network error. Please check your connection and try again.')
+      })
+    }
+  }, [apiBase])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     setLoading(true)
-
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
     try {
       const response = await fetch(`${apiBase}/api/auth/login/`, {

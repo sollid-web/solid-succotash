@@ -38,13 +38,11 @@ services:
       - key: DEFAULT_FROM_EMAIL
         value: "WolvCapital <noreply@wolvcapital.com>"
       - key: EMAIL_HOST
-        # Set to your SMTP provider host (e.g., smtp.sendgrid.net)
-        sync: false
+        value: "smtp.sendgrid.net"
       - key: EMAIL_HOST_USER
-        # SMTP username for noreply mailbox
-        sync: false
+        value: "apikey"  # SendGrid requires the literal string 'apikey'
       - key: EMAIL_HOST_PASSWORD
-        # SMTP password or API key for noreply mailbox
+        # Store your SendGrid API key (e.g., SG.XXXX). Set in Render dashboard.
         sync: false
       - key: EMAIL_USE_TLS
         value: "true"

@@ -41,6 +41,9 @@ services:
       - key: ADMIN_SITE_URL
         # Backend/admin domain for staff tools
         value: "https://api.wolvcapital.com"
+      - key: FRONTEND_URL
+        # Next.js frontend domain for Django redirects
+        value: "https://wolvcapital.com"
       - key: DEFAULT_FROM_EMAIL
         value: "WolvCapital <noreply@wolvcapital.com>"
       - key: EMAIL_HOST

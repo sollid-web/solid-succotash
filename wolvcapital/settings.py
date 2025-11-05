@@ -344,10 +344,13 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-# Explicit login/logout redirect flow
-LOGIN_URL = "/login/"
-LOGIN_REDIRECT_URL = "/dashboard/"
-LOGOUT_REDIRECT_URL = "/"
+# Frontend URLs (Next.js handles all user-facing pages)
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+
+# Redirect to frontend after Django admin/allauth operations
+LOGIN_URL = f"{FRONTEND_URL}/accounts/login"
+LOGIN_REDIRECT_URL = f"{FRONTEND_URL}/dashboard"
+LOGOUT_REDIRECT_URL = FRONTEND_URL
 
 SITE_ID = 1
 ACCOUNT_EMAIL_REQUIRED = True

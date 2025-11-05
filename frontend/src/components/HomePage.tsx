@@ -89,7 +89,22 @@ export default function HomePage() {
                 </Link>
               </div>
             </div>
+            {/* Mobile hero image (visible on small/medium screens) */}
+            <div className="relative block lg:hidden">
+              <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-2xl overflow-hidden shadow-xl">
+                <Image
+                  src="/images/wolvcapital-home-hero-image.jpg"
+                  alt="WolvCapital professional investment platform"
+                  fill
+                  className="object-cover"
+                  priority
+                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0b2f6b]/70 to-transparent" />
+              </div>
+            </div>
 
+            {/* Desktop hero image (visible on large screens and up) */}
             <div className="relative hidden lg:block">
               <div className="relative w-full h-[600px] rounded-3xl overflow-hidden shadow-2xl">
                 <Image src="/images/wolvcapital-home-hero-image.jpg" alt="WolvCapital professional investment platform" fill className="object-cover" priority sizes="50vw" />

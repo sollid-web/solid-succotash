@@ -91,6 +91,11 @@ class EmailService:
                 'current_year': timezone.now().year,
                 'brand_config': getattr(settings, 'BRAND', {}),
                 'site_url': getattr(settings, 'PUBLIC_SITE_URL', getattr(settings, 'SITE_URL', 'https://wolvcapital.com')),
+                'admin_site_url': getattr(
+                    settings,
+                    'ADMIN_SITE_URL',
+                    getattr(settings, 'SITE_URL', 'https://wolvcapital.com'),
+                ),
             })
             
             # Render HTML template
@@ -368,6 +373,11 @@ class EmailService:
             'message': message,
             'timestamp': timezone.now(),
             'admin_url': '/admin/',
+            'admin_site_url': getattr(
+                settings,
+                'ADMIN_SITE_URL',
+                getattr(settings, 'SITE_URL', 'https://wolvcapital.com'),
+            ),
         }
         
         return cls.send_templated_email(

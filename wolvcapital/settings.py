@@ -343,6 +343,8 @@ if not SITE_URL:
     else:
         SITE_URL = PUBLIC_SITE_URL
 
+ADMIN_SITE_URL = os.getenv("ADMIN_SITE_URL", SITE_URL)
+
 # ------------------------------------------------------------------
 # I18N / TZ
 # ------------------------------------------------------------------

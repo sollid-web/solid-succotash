@@ -39,4 +39,8 @@ urlpatterns = [
     path("auth/login/", views.login_view, name="api-login"),
     path("auth/logout/", views.logout_view, name="api-logout"),
     path("auth/me/", views.current_user_view, name="api-current-user"),
+    # Token management endpoints
+    path("auth/token/generate/", views.token_generate_view, name="api-token-generate"),
+    path("auth/token/refresh/", views.token_refresh_view, name="api-token-refresh"),
+    path("auth/token/verify/", views.token_verify_view, name="api-token-verify"),
 ]

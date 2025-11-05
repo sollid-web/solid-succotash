@@ -356,10 +356,13 @@ class EmailPreferencesView(APIView):
         return Response(serializer.data)
 
 
-@api_view(["POST"])
+@api_view(["POST", "OPTIONS"])
 @permission_classes([permissions.AllowAny])
 def login_view(request):
     """API endpoint for user login."""
+    if request.method == "OPTIONS":
+        return Response(status=status.HTTP_200_OK)
+    
     email = request.data.get("email")
     password = request.data.get("password")
 
@@ -420,4 +423,78 @@ def current_user_view(request):
         "last_name": user.last_name,
         "is_staff": user.is_staff,
         "is_superuser": user.is_superuser,
+    })
+
+
+@api_view(["POST"])
+@permission_classes([permissions.AllowAny])
+def token_generate_view(request):
+    """Generate a new authentication token for a user."""
+    email = request.data.get("email")
+    password = request.data.get("password")
+
+    if not email or not password:
+        return Response(
+            {"error": "Email and password are required."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Authenticate user
+    user = authenticate(request, username=email, password=password)
+
+    if user is not None:
+        # Delete old token and create a new one
+        Token.objects.filter(user=user).delete()
+        token = Token.objects.create(user=user)
+        
+        return Response({
+            "token": token.key,
+            "user": {
+                "id": user.id,
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+            }
+        })
+    else:
+        return Response(
+            {"error": "Invalid email or password."},
+            status=status.HTTP_401_UNAUTHORIZED
+        )
+
+
+@api_view(["POST"])
+@permission_classes([permissions.IsAuthenticated])
+def token_refresh_view(request):
+    """Refresh (regenerate) the authentication token for the current user."""
+    user = request.user
+    
+    # Delete old token and create a new one
+    Token.objects.filter(user=user).delete()
+    token = Token.objects.create(user=user)
+    
+    return Response({
+        "token": token.key,
+        "user": {
+            "id": user.id,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+        }
+    })
+
+
+@api_view(["POST"])
+@permission_classes([permissions.IsAuthenticated])
+def token_verify_view(request):
+    """Verify that the current token is valid."""
+    user = request.user
+    return Response({
+        "valid": True,
+        "user": {
+            "id": user.id,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+        }
     })

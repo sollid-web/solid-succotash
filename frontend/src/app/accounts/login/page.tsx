@@ -33,7 +33,7 @@ export default function LoginPage() {
         if (data.token) {
           localStorage.setItem('authToken', data.token)
         }
-        // Redirect to dashboard or home
+        // Redirect to dashboard
         window.location.href = '/dashboard'
       } else {
         setError(data.error || 'Login failed. Please try again.')

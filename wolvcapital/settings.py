@@ -94,9 +94,17 @@ if CUSTOM_DOMAIN:
             if https_origin not in CORS_ALLOWED_ORIGINS:
                 CORS_ALLOWED_ORIGINS.append(https_origin)
 
+env_allowed_hosts = os.getenv("ALLOWED_HOSTS", "")
+if env_allowed_hosts:
+    ALLOWED_HOSTS += [h.strip() for h in env_allowed_hosts.split(",") if h.strip()]
+
 extra_hosts = os.getenv("ALLOWED_HOSTS_EXTRA", "")
 if extra_hosts:
     ALLOWED_HOSTS += [h.strip() for h in extra_hosts.split(",") if h.strip()]
+
+env_csrf_origins = os.getenv("CSRF_TRUSTED_ORIGINS", "")
+if env_csrf_origins:
+    CSRF_TRUSTED_ORIGINS += [o.strip() for o in env_csrf_origins.split(",") if o.strip()]
 
 extra_origins = os.getenv("CSRF_TRUSTED_ORIGINS_EXTRA", "")
 if extra_origins:

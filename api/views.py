@@ -12,11 +12,7 @@ from rest_framework.views import APIView
 
 from core.models import Agreement, SupportRequest, UserAgreementAcceptance
 from investments.models import InvestmentPlan, UserInvestment
-from investments.services import (
-    approve_investment,
-    create_investment,
-    reject_investment,
-)
+from investments.services import approve_investment, create_investment, reject_investment
 from transactions.models import Transaction
 from transactions.services import (
     approve_transaction,
@@ -362,7 +358,7 @@ def login_view(request):
     """API endpoint for user login."""
     if request.method == "OPTIONS":
         return Response(status=status.HTTP_200_OK)
-    
+
     email = request.data.get("email")
     password = request.data.get("password")
 
@@ -379,7 +375,7 @@ def login_view(request):
         login(request, user)
         # Create or get token for the user
         token, created = Token.objects.get_or_create(user=user)
-        
+
         return Response({
             "success": True,
             "token": token.key,
@@ -406,7 +402,7 @@ def logout_view(request):
         request.user.auth_token.delete()
     except (AttributeError, Token.DoesNotExist):
         pass
-    
+
     logout(request)
     return Response({"success": True, "message": "Logged out successfully."})
 
@@ -446,7 +442,7 @@ def token_generate_view(request):
         # Delete old token and create a new one
         Token.objects.filter(user=user).delete()
         token = Token.objects.create(user=user)
-        
+
         return Response({
             "token": token.key,
             "user": {
@@ -468,11 +464,11 @@ def token_generate_view(request):
 def token_refresh_view(request):
     """Refresh (regenerate) the authentication token for the current user."""
     user = request.user
-    
+
     # Delete old token and create a new one
     Token.objects.filter(user=user).delete()
     token = Token.objects.create(user=user)
-    
+
     return Response({
         "token": token.key,
         "user": {

@@ -39,7 +39,9 @@ class Command(BaseCommand):
 
         # Check site URL for email templates
         site_url = getattr(settings, 'SITE_URL', 'Not set')
-        self.stdout.write(f"Site URL: {site_url}")
+        public_site_url = getattr(settings, 'PUBLIC_SITE_URL', 'Not set')
+        self.stdout.write(f"Site URL (backend): {site_url}")
+        self.stdout.write(f"Public Site URL (emails): {public_site_url}")
 
         # Test email connection
         self.stdout.write("\n🔗 Testing email connection...")

@@ -35,6 +35,9 @@ services:
       - key: ALLOWED_HOSTS
         # Custom domain + Render default URL
         value: "api.wolvcapital.com,wolvcapital-api.onrender.com"
+      - key: PUBLIC_SITE_URL
+        # Frontend domain used in customer-facing emails
+        value: "https://wolvcapital.com"
       - key: DEFAULT_FROM_EMAIL
         value: "WolvCapital <noreply@wolvcapital.com>"
       - key: EMAIL_HOST

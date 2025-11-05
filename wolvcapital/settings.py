@@ -331,12 +331,17 @@ EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "30"))
 # Email subject prefix
 EMAIL_SUBJECT_PREFIX = os.getenv("EMAIL_SUBJECT_PREFIX", "[WolvCapital] ")
 
-# Site URL for email templates
-SITE_URL = os.getenv("SITE_URL", "https://wolvcapital.com")
-if RENDER_EXTERNAL_URL:
-    SITE_URL = RENDER_EXTERNAL_URL
-elif IN_CODESPACES and CODESPACES_DOMAIN:
-    SITE_URL = f"https://{os.getenv('GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN', '')}"
+# Base URLs for backend and public-facing site
+PUBLIC_SITE_URL = os.getenv("PUBLIC_SITE_URL", "https://wolvcapital.com")
+
+SITE_URL = os.getenv("SITE_URL")
+if not SITE_URL:
+    if RENDER_EXTERNAL_URL:
+        SITE_URL = RENDER_EXTERNAL_URL
+    elif IN_CODESPACES and CODESPACES_DOMAIN:
+        SITE_URL = f"https://{os.getenv('GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN', '')}"
+    else:
+        SITE_URL = PUBLIC_SITE_URL
 
 # ------------------------------------------------------------------
 # I18N / TZ

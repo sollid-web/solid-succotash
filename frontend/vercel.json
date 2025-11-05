@@ -1,7 +1,4 @@
 {
-  "build": {
-    "env": {
-      "NEXT_PUBLIC_API_URL": "https://api.wolvcapital.com"
-    }
-  }
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs"
 }

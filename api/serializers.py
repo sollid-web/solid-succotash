@@ -1,3 +1,5 @@
+from decimal import Decimal
+from django.db.models import Sum
 from rest_framework import serializers
 
 from core.models import Agreement, UserAgreementAcceptance
@@ -131,10 +133,33 @@ class TransactionSerializer(serializers.ModelSerializer):
 
 
 class UserWalletSerializer(serializers.ModelSerializer):
+    total_deposits = serializers.SerializerMethodField()
+    total_withdrawals = serializers.SerializerMethodField()
+
     class Meta:
         model = UserWallet
-        fields = ["balance", "updated_at"]
-        read_only_fields = ["balance", "updated_at"]
+        fields = ["balance", "total_deposits", "total_withdrawals", "updated_at"]
+        read_only_fields = ["balance", "total_deposits", "total_withdrawals", "updated_at"]
+
+    def get_total_deposits(self, obj):
+        from transactions.models import Transaction
+        total = (
+            Transaction.objects.filter(
+                user=obj.user, tx_type="deposit", status="approved"
+            ).aggregate(total=Sum("amount"))["total"]
+            or Decimal("0.00")
+        )
+        return total
+
+    def get_total_withdrawals(self, obj):
+        from transactions.models import Transaction
+        total = (
+            Transaction.objects.filter(
+                user=obj.user, tx_type="withdrawal", status="approved"
+            ).aggregate(total=Sum("amount"))["total"]
+            or Decimal("0.00")
+        )
+        return total
 
 
 class AdminTransactionSerializer(serializers.ModelSerializer):

@@ -12,8 +12,39 @@ interface UserData {
   is_superuser: boolean
 }
 
+interface WalletData {
+  balance: string
+  total_deposits: string
+  total_withdrawals: string
+}
+
+interface Investment {
+  id: number
+  plan_name: string
+  amount: string
+  status: string
+  created_at: string
+  expected_return: string
+}
+
+interface Transaction {
+  id: string
+  tx_type: 'deposit' | 'withdrawal'
+  amount: string
+  reference: string
+  payment_method: string
+  tx_hash: string
+  wallet_address_used: string
+  status: 'pending' | 'approved' | 'rejected'
+  created_at: string
+  updated_at: string
+}
+
 export default function DashboardPage() {
   const [user, setUser] = useState<UserData | null>(null)
+  const [wallet, setWallet] = useState<WalletData | null>(null)
+  const [investments, setInvestments] = useState<Investment[]>([])
+  const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -23,7 +54,8 @@ export default function DashboardPage() {
       const token = localStorage.getItem('authToken')
 
       try {
-        const response = await fetch(`${apiBase}/api/auth/me/`, {
+        // Fetch user info
+        const userResponse = await fetch(`${apiBase}/api/auth/me/`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -32,9 +64,54 @@ export default function DashboardPage() {
           credentials: 'include',
         })
 
-        if (response.ok) {
-          const data = await response.json()
-          setUser(data)
+        if (userResponse.ok) {
+          const userData = await userResponse.json()
+          setUser(userData)
+
+          // Fetch wallet data
+          const walletResponse = await fetch(`${apiBase}/api/wallet/`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Token ${token}`,
+            },
+            credentials: 'include',
+          })
+
+          if (walletResponse.ok) {
+            const walletData = await walletResponse.json()
+            setWallet(walletData)
+          }
+
+          // Fetch investments
+          const investmentsResponse = await fetch(`${apiBase}/api/investments/`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Token ${token}`,
+            },
+            credentials: 'include',
+          })
+
+          if (investmentsResponse.ok) {
+            const investmentsData = await investmentsResponse.json()
+            setInvestments(investmentsData)
+          }
+
+          // Fetch transactions (recent)
+          const txResponse = await fetch(`${apiBase}/api/transactions/`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Token ${token}`,
+            },
+            credentials: 'include',
+          })
+
+          if (txResponse.ok) {
+            const txData: Transaction[] = await txResponse.json()
+            setTransactions(Array.isArray(txData) ? txData.slice(0, 5) : [])
+          }
         } else {
           setError('Please log in to access the dashboard')
           // Redirect to login after a delay
@@ -139,45 +216,134 @@ export default function DashboardPage() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           <div className="bg-white rounded-2xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-gray-600 font-semibold">Total Investment</h3>
-              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <h3 className="text-gray-600 font-semibold text-sm">Total Investment</h3>
+                <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
             </div>
-            <p className="text-3xl font-bold text-gray-800">$0.00</p>
-            <p className="text-sm text-gray-500 mt-2">No active investments yet</p>
+              <p className="text-2xl font-bold text-gray-800">
+              ${investments.reduce((sum, inv) => sum + parseFloat(inv.amount || '0'), 0).toFixed(2)}
+            </p>
+              <p className="text-xs text-gray-500 mt-2">
+                {investments.length} active
+            </p>
           </div>
 
           <div className="bg-white rounded-2xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-gray-600 font-semibold">Total Returns</h3>
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                <h3 className="text-gray-600 font-semibold text-sm">Wallet Balance</h3>
+                <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                  <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                 </svg>
               </div>
             </div>
-            <p className="text-3xl font-bold text-gray-800">$0.00</p>
-            <p className="text-sm text-gray-500 mt-2">+0.00% this month</p>
+              <p className="text-2xl font-bold text-gray-800">
+              ${wallet ? parseFloat(wallet.balance || '0').toFixed(2) : '0.00'}
+            </p>
+              <p className="text-xs text-gray-500 mt-2">Available</p>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-lg p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-gray-600 font-semibold text-sm">Total Deposits</h3>
+                <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                  <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                  </svg>
+                </div>
+              </div>
+              <p className="text-2xl font-bold text-emerald-600">
+                ${wallet ? parseFloat(wallet.total_deposits || '0').toFixed(2) : '0.00'}
+              </p>
+              <p className="text-xs text-gray-500 mt-2">All time</p>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-lg p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-gray-600 font-semibold text-sm">Total Withdrawals</h3>
+                <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
+                  <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                  </svg>
+                </div>
+              </div>
+              <p className="text-2xl font-bold text-orange-600">
+                ${wallet ? parseFloat(wallet.total_withdrawals || '0').toFixed(2) : '0.00'}
+              </p>
+              <p className="text-xs text-gray-500 mt-2">All time</p>
           </div>
 
           <div className="bg-white rounded-2xl shadow-lg p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-gray-600 font-semibold">Active Plans</h3>
-              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <h3 className="text-gray-600 font-semibold text-sm">Active Plans</h3>
+                <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                  <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
             </div>
-            <p className="text-3xl font-bold text-gray-800">0</p>
-            <p className="text-sm text-gray-500 mt-2">Start investing today</p>
+              <p className="text-2xl font-bold text-gray-800">{investments.length}</p>
+              <p className="text-xs text-gray-500 mt-2">Investments</p>
           </div>
+        </div>
+
+        {/* Recent Transactions */}
+        <div className="bg-white rounded-3xl shadow-xl p-8 mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-800">Recent Transactions</h2>
+            <Link href="/transactions" className="text-[#2563eb] text-sm hover:underline">View all</Link>
+          </div>
+
+          {transactions.length === 0 ? (
+            <p className="text-gray-500 text-sm">No transactions yet.</p>
+          ) : (
+            <div className="overflow-x-auto -mx-2 sm:mx-0">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead>
+                  <tr>
+                    <th className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                    <th className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
+                    <th className="px-2 sm:px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                    <th className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-100">
+                  {transactions.map((tx) => (
+                    <tr key={tx.id}>
+                      <td className="px-2 sm:px-4 py-3 text-sm text-gray-700">{new Date(tx.created_at).toLocaleDateString()}</td>
+                      <td className="px-2 sm:px-4 py-3 text-sm capitalize">
+                        <span className={tx.tx_type === 'deposit' ? 'text-emerald-600' : 'text-orange-600'}>
+                          {tx.tx_type}
+                        </span>
+                      </td>
+                      <td className="px-2 sm:px-4 py-3 text-sm text-gray-600">{tx.payment_method}</td>
+                      <td className="px-2 sm:px-4 py-3 text-sm text-gray-900 text-right">${parseFloat(tx.amount || '0').toFixed(2)}</td>
+                      <td className="px-2 sm:px-4 py-3 text-sm">
+                        <span
+                          className={
+                            tx.status === 'approved'
+                              ? 'px-2 py-1 rounded-full text-xs bg-emerald-100 text-emerald-700'
+                              : tx.status === 'pending'
+                              ? 'px-2 py-1 rounded-full text-xs bg-amber-100 text-amber-700'
+                              : 'px-2 py-1 rounded-full text-xs bg-rose-100 text-rose-700'
+                          }
+                        >
+                          {tx.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
         {/* Quick Actions */}

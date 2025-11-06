@@ -51,9 +51,15 @@ export default function LoginPage() {
         // Store token if provided
         if (data.token) {
           localStorage.setItem('authToken', data.token)
+          // Also set a cookie so middleware can protect routes (non-HttpOnly client cookie)
+          const maxAgeDays = 1
+          const maxAge = maxAgeDays * 24 * 60 * 60
+          document.cookie = `authToken=${data.token}; Max-Age=${maxAge}; Path=/; SameSite=Lax; Secure`
         }
-        // Redirect to dashboard
-        window.location.href = '/dashboard'
+        // Redirect to dashboard (support return path)
+        const params = new URLSearchParams(window.location.search)
+        const nextPath = params.get('next') || '/dashboard'
+        window.location.href = nextPath
       } else {
         setError(data.error || 'Login failed. Please try again.')
       }

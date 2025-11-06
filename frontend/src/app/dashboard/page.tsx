@@ -147,6 +147,8 @@ export default function DashboardPage() {
       console.error('Logout error:', err)
     } finally {
       localStorage.removeItem('authToken')
+      // Clear the client cookie used by middleware
+      document.cookie = 'authToken=; Max-Age=0; Path=/; SameSite=Lax; Secure'
       window.location.href = '/accounts/login'
     }
   }

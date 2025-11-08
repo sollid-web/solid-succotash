@@ -1,0 +1,8 @@
+PLACEHOLDER - Replace with actual image
+
+This file should be replaced with:
+- Image 3 from attachments (Man in suit with arms crossed in office)
+- Filename: welcome-desktop.jpg
+- Optimal dimensions: 1920x1080px (landscape, 16:9 ratio)
+- Format: JPEG, optimized for web (<300KB)
+- Used on: Homepage hero (desktop only, ≥1024px)

@@ -1,5 +1,6 @@
 import Head from 'next/head';
-import Link from 'next/link'
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function ContactPage() {
   return (
@@ -51,6 +52,37 @@ export default function ContactPage() {
         {/* Content */}
         <section className="py-24 bg-white">
           <div className="container mx-auto px-4 lg:px-8">
+            {/* Office Location Map */}
+            <div className="mb-16">
+              <div className="text-center mb-8">
+                <h2 className="text-4xl font-bold text-[#0b2f6b] mb-4">Our Registered Office</h2>
+                <p className="text-xl text-gray-600">London, United Kingdom</p>
+              </div>
+              <div className="relative w-full aspect-[16/9] md:aspect-[21/9] lg:aspect-[2/1] max-w-5xl mx-auto rounded-2xl overflow-hidden shadow-2xl">
+                <Image
+                  src="/images/office-location-map.jpg"
+                  alt="WolvCapital Registered Office - London, United Kingdom"
+                  fill
+                  className="object-cover object-center"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                  priority
+                />
+              </div>
+            </div>
+
+            {/* Welcome Image - Mobile View */}
+            <div className="mb-16 lg:hidden">
+              <div className="relative w-full aspect-[3/4] sm:aspect-[4/5] rounded-2xl overflow-hidden shadow-xl">
+                <Image
+                  src="/images/welcome-mobile.jpg"
+                  alt="Welcome to WolvCapital - Your trusted partner in digital investment solutions"
+                  fill
+                  className="object-cover object-center"
+                  sizes="100vw"
+                />
+              </div>
+            </div>
+
             <div className="grid lg:grid-cols-2 gap-16 max-w-6xl mx-auto">
               {/* Contact Info */}
               <div>

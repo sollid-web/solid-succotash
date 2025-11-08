@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-label="WolvCapital mobile hero image" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1">
+      <stop offset="0%" stop-color="#0b2f6b"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="#f8fafc"/>
+  <rect x="0" y="0" width="100%" height="480" fill="url(#g1)"/>
+  <g transform="translate(40,520)">
+    <rect x="0" y="0" width="820" height="560" rx="28" fill="#ffffff" opacity="0.98"/>
+    <text x="60" y="120" font-size="48" fill="#0b2f6b" font-weight="700">Welcome to</text>
+    <text x="60" y="200" font-size="72" fill="#0b2f6b" font-weight="800">WolvCapital</text>
+    <text x="60" y="280" font-size="20" fill="#4b5563">A mobile-optimized investment platform for cryptocurrency-based financial services</text>
+    <rect x="60" y="340" width="220" height="56" rx="12" fill="#0b2f6b"/>
+    <text x="170" y="378" font-size="18" fill="#ffffff" text-anchor="middle" font-weight="700">Get Started</text>
+  </g>
+</svg>

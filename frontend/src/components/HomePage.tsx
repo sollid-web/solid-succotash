@@ -37,99 +37,34 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-[#071d42] via-[#0b2f6b] to-[#1d4ed8] overflow-hidden pt-20">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(255,255,255,0.2)_0%,transparent_50%),radial-gradient(circle_at_75%_75%,rgba(255,255,255,0.15)_0%,transparent_50%)]"></div>
-        </div>
-
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse [animation-delay:1s]"></div>
-        </div>
-
-        <div className="container mx-auto px-4 lg:px-8 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-white space-y-8">
-              <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-sm font-semibold">INSTITUTIONAL-GRADE DIGITAL INVESTING</span>
-              </div>
-
-              <h1 className="text-5xl lg:text-7xl font-extrabold leading-tight">
-                Secure crypto banking,
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#fde047] to-[#facc15]"> audited ROI programs</span>
-              </h1>
-
-              <p className="text-xl lg:text-2xl text-gray-200 leading-relaxed max-w-2xl">
-                Where institutional discipline meets crypto innovation. Every investment decision blends transparent data, audited reporting, and manual verification.
-              </p>
-
-              <div className="flex flex-wrap gap-4 text-sm font-semibold">
-                <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20">
-                  <span className="text-gray-300">BITCOIN</span> <span className="text-green-400">+2.4%</span>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20">
-                  <span className="text-gray-300">ETHEREUM</span> <span className="text-green-400">+1.8%</span>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20">
-                  <span className="text-gray-300">USDT</span> <span className="text-blue-400">Stable</span>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20">
-                  <span className="text-gray-300">VIRTUAL CARDS</span> <span className="text-[#fde047]">24/7 issue</span>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-4 pt-4">
-                <Link href="/accounts/signup" className="bg-gradient-to-r from-[#fde047] to-[#facc15] text-[#0b2f6b] px-10 py-4 rounded-full text-lg font-bold hover:shadow-2xl transition-all duration-300 hover:scale-105">
-                  Open an account
-                </Link>
-                <Link href="/plans" className="bg-white/10 backdrop-blur-sm text-white px-10 py-4 rounded-full text-lg font-bold border-2 border-white/30 hover:bg-white/20 transition-all duration-300">
-                  View investment plans
-                </Link>
-              </div>
-            </div>
-            {/* Mobile hero image (visible on small/medium screens) */}
-            <div className="relative block lg:hidden">
-              <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-2xl overflow-hidden shadow-xl">
-                <Image
-                  src="/images/wolvcapital-home-hero-image.jpg"
-                  alt="WolvCapital professional investment platform"
-                  fill
-                  className="object-cover"
-                  priority
-                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0b2f6b]/70 to-transparent" />
-              </div>
-            </div>
-
-            {/* Desktop hero image (visible on large screens and up) */}
-            <div className="relative hidden lg:block">
-              <div className="relative w-full h-[600px] rounded-3xl overflow-hidden shadow-2xl">
-                <Image src="/images/wolvcapital-home-hero-image.jpg" alt="WolvCapital professional investment platform" fill className="object-cover" priority sizes="50vw" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0b2f6b]/80 to-transparent"></div>
-                <div className="absolute bottom-8 left-8 right-8 bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-sm text-gray-500 font-medium">Total Value Locked</div>
-                      <div className="text-3xl font-bold text-[#0b2f6b]">$24.8M+</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm text-gray-500 font-medium">Active Investors</div>
-                      <div className="text-3xl font-bold text-[#0b2f6b]">12,450+</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+      {/* Hero Section - Welcome Image */}
+      <section className="pt-20">
+        {/* Mobile - Image 2 (woman with laptop) */}
+        <div className="block lg:hidden">
+          <div className="relative w-full aspect-[3/4] sm:aspect-[4/5] md:aspect-[16/9]">
+            <Image
+              src="/images/welcome-mobile.svg"
+              alt="Welcome to WolvCapital - Your trusted partner in digital investment solutions"
+              fill
+              className="object-cover object-center"
+              priority
+              sizes="100vw"
+            />
           </div>
         </div>
 
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-          </svg>
+        {/* Desktop - Image 3 (man in office) */}
+        <div className="hidden lg:block">
+          <div className="relative w-full h-screen">
+            <Image
+              src="/images/welcome-desktop.svg"
+              alt="Welcome to WolvCapital - A digital investment platform for cryptocurrency-based financial services"
+              fill
+              className="object-cover object-center"
+              priority
+              sizes="100vw"
+            />
+          </div>
         </div>
       </section>
 
@@ -374,7 +309,7 @@ export default function HomePage() {
             </div>
             <div>
               <h3 className="text-xl font-bold mb-4">WolvCapital</h3>
-              <p className="text-gray-300 text-sm leading-relaxed">Secure crypto banking, audited ROI programs, and virtual cards—all governed by a human approval loop.</p>
+              <p className="text-gray-300 text-sm leading-relaxed">Trusted digital investment platform delivering audited returns, robust controls, and premium virtual cards.</p>
             </div>
           </div>
           <div className="border-t border-gray-700 pt-8 text-center text-gray-400">

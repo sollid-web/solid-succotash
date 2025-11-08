@@ -1,0 +1,8 @@
+PLACEHOLDER - Replace with actual image
+
+This file should be replaced with:
+- Image 2 from attachments (Woman in beige blazer at desk with laptop)
+- Filename: welcome-mobile.jpg
+- Optimal dimensions: 768x1024px (portrait, 3:4 ratio)
+- Format: JPEG, optimized for web (<300KB)
+- Used on: Homepage hero (mobile), Contact page (mobile)

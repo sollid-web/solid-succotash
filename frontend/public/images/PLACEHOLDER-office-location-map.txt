@@ -1,0 +1,8 @@
+PLACEHOLDER - Replace with actual image
+
+This file should be replaced with:
+- Image 1 from attachments (Map showing "Registered Office - London, United Kingdom")
+- Filename: office-location-map.jpg
+- Optimal dimensions: 1200x600px (landscape)
+- Format: JPEG, optimized for web (<300KB)
+- Used on: Contact page (embedded map section)

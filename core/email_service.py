@@ -83,7 +83,6 @@ class EmailService:
         if user and email_type and not cls._should_send_email(user, email_type):
             logger.info(f"Email {email_type} skipped for user {user.email} due to preferences")
             return True  # Not an error, user opted out
-        
         try:
             # Add common context variables
             context.update({

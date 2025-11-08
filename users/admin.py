@@ -1,5 +1,7 @@
+import csv
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.http import HttpResponse
 
 from .models import Profile, User, UserNotification, UserWallet
 
@@ -37,6 +39,57 @@ class UserAdmin(BaseUserAdmin):
     )
     search_fields = ("email", "first_name", "last_name", "profile__full_name")
     ordering = ("-date_joined",)
+    actions = ["export_emails_csv", "export_users_csv"]
+
+    def export_emails_csv(self, request, queryset):
+        """Export just email addresses"""
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="user_emails.csv"'
+        
+        writer = csv.writer(response)
+        writer.writerow(['Email'])
+        
+        for user in queryset:
+            writer.writerow([user.email])
+        
+        self.message_user(request, f"{queryset.count()} email(s) exported.")
+        return response
+    
+    export_emails_csv.short_description = "Export email addresses (CSV)"
+
+    def export_users_csv(self, request, queryset):
+        """Export full user details"""
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="users_export.csv"'
+        
+        writer = csv.writer(response)
+        writer.writerow(['Email', 'First Name', 'Last Name', 'Role', 'Balance', 'Date Joined', 'Active'])
+        
+        for user in queryset:
+            try:
+                role = user.profile.role
+            except Profile.DoesNotExist:
+                role = "N/A"
+            
+            try:
+                balance = user.wallet.balance
+            except UserWallet.DoesNotExist:
+                balance = "0"
+            
+            writer.writerow([
+                user.email,
+                user.first_name,
+                user.last_name,
+                role,
+                balance,
+                user.date_joined.strftime('%Y-%m-%d'),
+                user.is_active
+            ])
+        
+        self.message_user(request, f"{queryset.count()} user(s) exported.")
+        return response
+    
+    export_users_csv.short_description = "Export user details (CSV)"
 
     def get_role(self, obj):
         try:

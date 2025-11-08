@@ -1,10 +1,11 @@
 from decimal import Decimal
+
 from django.db.models import Sum
 from rest_framework import serializers
 
 from core.models import Agreement, UserAgreementAcceptance
 from investments.models import InvestmentPlan, UserInvestment
-from transactions.models import Transaction, CryptocurrencyWallet
+from transactions.models import CryptocurrencyWallet, Transaction
 from users.models import Profile, UserNotification, UserWallet
 
 

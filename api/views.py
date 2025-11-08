@@ -12,25 +12,29 @@ from rest_framework.views import APIView
 
 from core.models import Agreement, SupportRequest, UserAgreementAcceptance
 from investments.models import InvestmentPlan, UserInvestment
-from investments.services import approve_investment, create_investment, reject_investment
-from transactions.models import Transaction, CryptocurrencyWallet
+from investments.services import (
+    approve_investment,
+    create_investment,
+    reject_investment,
+)
+from transactions.models import CryptocurrencyWallet, Transaction
 from transactions.services import (
     approve_transaction,
     create_transaction,
     reject_transaction,
 )
 from users.models import Profile, UserNotification, UserWallet
+from users.notification_service import mark_all_read as service_mark_all_read
 from users.notification_service import (
-    mark_all_read as service_mark_all_read,
     mark_notification_read as service_mark_notification_read,
 )
 
 from .serializers import (
-    AgreementSerializer,
     AdminTransactionSerializer,
     AdminUserInvestmentSerializer,
-    EmailPreferencesSerializer,
+    AgreementSerializer,
     CryptocurrencyWalletSerializer,
+    EmailPreferencesSerializer,
     InvestmentPlanSerializer,
     TransactionSerializer,
     UserInvestmentSerializer,

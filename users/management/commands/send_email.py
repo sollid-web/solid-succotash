@@ -9,6 +9,7 @@ Usage:
 
 from django.core.mail import send_mail
 from django.core.management.base import BaseCommand
+
 from users.models import User
 
 
@@ -54,49 +55,49 @@ class Command(BaseCommand):
         subject = options['subject']
         message = options['message']
         from_email = options['from_email']
-        
+
         recipients = []
-        
+
         # Determine recipients
         if options['to']:
             recipients = [options['to']]
             self.stdout.write(f"Sending to single recipient: {options['to']}")
-        
+
         elif options['to_all_users']:
             recipients = list(User.objects.filter(is_active=True).values_list('email', flat=True))
             self.stdout.write(f"Sending to all {len(recipients)} active users")
-        
+
         elif options['to_file']:
             try:
-                with open(options['to_file'], 'r') as f:
+                with open(options['to_file']) as f:
                     recipients = [line.strip() for line in f if line.strip()]
                 self.stdout.write(f"Loaded {len(recipients)} email(s) from {options['to_file']}")
             except FileNotFoundError:
                 self.stdout.write(self.style.ERROR(f"File not found: {options['to_file']}"))
                 return
-        
+
         else:
             self.stdout.write(self.style.ERROR("Please specify recipients using --to, --to-all-users, or --to-file"))
             return
-        
+
         if not recipients:
             self.stdout.write(self.style.WARNING("No recipients found"))
             return
-        
+
         # Confirm before sending
         self.stdout.write(self.style.WARNING(f"\nAbout to send email to {len(recipients)} recipient(s):"))
         self.stdout.write(f"Subject: {subject}")
         self.stdout.write(f"Message: {message[:100]}...")
-        
+
         confirm = input("\nProceed? (yes/no): ")
         if confirm.lower() != 'yes':
             self.stdout.write(self.style.WARNING("Email sending cancelled"))
             return
-        
+
         # Send emails
         success_count = 0
         failed = []
-        
+
         for email in recipients:
             try:
                 send_mail(
@@ -111,10 +112,10 @@ class Command(BaseCommand):
             except Exception as e:
                 failed.append((email, str(e)))
                 self.stdout.write(self.style.ERROR(f"✗ Failed to send to {email}: {e}"))
-        
+
         # Summary
         self.stdout.write(self.style.SUCCESS(f"\n✅ Successfully sent {success_count} email(s)"))
-        
+
         if failed:
             self.stdout.write(self.style.ERROR(f"❌ Failed to send {len(failed)} email(s):"))
             for email, error in failed:

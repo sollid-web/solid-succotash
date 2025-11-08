@@ -1,7 +1,15 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+
+interface CompanyWallet {
+  currency: string
+  wallet_address: string
+  network: string
+  is_active: boolean
+  updated_at: string
+}
 
 export default function DepositPage() {
   const apiBase = useMemo(() => (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, ''), [])
@@ -13,6 +21,23 @@ export default function DepositPage() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
+  const [companyWallets, setCompanyWallets] = useState<CompanyWallet[]>([])
+  const [showWallets, setShowWallets] = useState(false)
+
+  useEffect(() => {
+    const loadWallets = async () => {
+      try {
+        const res = await fetch(`${apiBase}/api/crypto-wallets/`)
+        if (res.ok) {
+          const data = await res.json()
+          setCompanyWallets(Array.isArray(data) ? data : [])
+        }
+      } catch (e) {
+        console.warn('Failed to load company wallets', e)
+      }
+    }
+    loadWallets()
+  }, [apiBase])
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -82,6 +107,34 @@ export default function DepositPage() {
               <option value="USDC">USD Coin (USDC)</option>
               <option value="ETH">Ethereum (ETH)</option>
             </select>
+            {['BTC','USDT','USDC','ETH'].includes(method) && (
+              <div className="mt-3 space-y-3">
+                <button type="button" onClick={() => setShowWallets(!showWallets)} className="text-xs text-[#2563eb] underline">
+                  {showWallets ? 'Hide' : 'Show'} Company {method} Deposit Info
+                </button>
+                {showWallets && (
+                  <div className="rounded-xl border-2 border-blue-100 p-3 bg-blue-50/50">
+                    {companyWallets.filter(w => w.currency === method).map(w => (
+                      <div key={w.currency} className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-semibold text-gray-700">Address:</span>
+                          <button type="button" onClick={() => { navigator.clipboard.writeText(w.wallet_address); setMessage(`${w.currency} address copied.`) }} className="text-xs text-[#2563eb] underline">Copy</button>
+                        </div>
+                        <div className="font-mono text-xs break-all select-all">{w.wallet_address}</div>
+                        {w.network && <div className="text-[10px] text-gray-500">Network: {w.network}</div>}
+                        <div className="pt-2 flex items-center space-x-4">
+                          <QRCode address={w.wallet_address} />
+                          <CryptoIcon currency={w.currency} />
+                        </div>
+                      </div>
+                    ))}
+                    {companyWallets.filter(w => w.currency === method).length === 0 && (
+                      <div className="text-xs text-gray-500">No active {method} wallet configured.</div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -107,4 +160,26 @@ export default function DepositPage() {
       </form>
     </div>
   )
+}
+
+function QRCode({ address }: { address: string }) {
+  // Lightweight inline QR generation via third-party API placeholder (could be replaced with local lib)
+  const src = `https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(address)}`
+  return (
+    <img
+      src={src}
+      alt="Wallet address QR code"
+      className="w-20 h-20 rounded-lg border border-gray-200 bg-white"
+      loading="lazy"
+    />
+  )
+}
+
+function CryptoIcon({ currency }: { currency: string }) {
+  const base = 'w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white'
+  if (currency === 'BTC') return <div className={`${base} bg-orange-500`}>BTC</div>
+  if (currency === 'ETH') return <div className={`${base} bg-gray-700`}>ETH</div>
+  if (currency === 'USDT') return <div className={`${base} bg-green-600`}>USDT</div>
+  if (currency === 'USDC') return <div className={`${base} bg-blue-600`}>USDC</div>
+  return <div className={`${base} bg-gray-400`}>{currency}</div>
 }

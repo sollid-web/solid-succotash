@@ -8,6 +8,7 @@ router.register(r"agreements", views.AgreementViewSet, basename="api-agreements"
 router.register(r"investments", views.UserInvestmentViewSet, basename="api-investments")
 router.register(r"transactions", views.TransactionViewSet, basename="api-transactions")
 router.register(r"plans", views.InvestmentPlanViewSet, basename="api-plans")
+router.register(r"crypto-wallets", views.CryptoWalletViewSet, basename="api-crypto-wallets")
 router.register(
     r"notifications",
     views.UserNotificationViewSet,

@@ -74,7 +74,7 @@ export default function FlipVisaCard() {
               <div className="flex justify-between items-end">
                 <div>
                   <div className="text-blue-200 text-xs mb-1">Card Holder</div>
-                  <div className="text-white font-semibold text-sm">YOUR NAME</div>
+                  <div className="text-white font-semibold text-sm">-----</div>
                 </div>
                 <div>
                   <div className="text-blue-200 text-xs mb-1">Expires</div>

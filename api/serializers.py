@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from core.models import Agreement, UserAgreementAcceptance
 from investments.models import InvestmentPlan, UserInvestment
-from transactions.models import Transaction
+from transactions.models import Transaction, CryptocurrencyWallet
 from users.models import Profile, UserNotification, UserWallet
 
 
@@ -263,3 +263,18 @@ class EmailPreferencesSerializer(serializers.ModelSerializer):
             "email_security_alerts",
             "email_marketing",
         ]
+
+
+class CryptocurrencyWalletSerializer(serializers.ModelSerializer):
+    """Public serializer exposing company crypto deposit addresses."""
+
+    class Meta:
+        model = CryptocurrencyWallet
+        fields = [
+            "currency",
+            "wallet_address",
+            "network",
+            "is_active",
+            "updated_at",
+        ]
+        read_only_fields = fields

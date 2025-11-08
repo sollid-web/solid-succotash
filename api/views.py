@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 from core.models import Agreement, SupportRequest, UserAgreementAcceptance
 from investments.models import InvestmentPlan, UserInvestment
 from investments.services import approve_investment, create_investment, reject_investment
-from transactions.models import Transaction
+from transactions.models import Transaction, CryptocurrencyWallet
 from transactions.services import (
     approve_transaction,
     create_transaction,
@@ -30,6 +30,7 @@ from .serializers import (
     AdminTransactionSerializer,
     AdminUserInvestmentSerializer,
     EmailPreferencesSerializer,
+    CryptocurrencyWalletSerializer,
     InvestmentPlanSerializer,
     TransactionSerializer,
     UserInvestmentSerializer,
@@ -494,3 +495,11 @@ def token_verify_view(request):
             "last_name": user.last_name,
         }
     })
+
+
+class CryptoWalletViewSet(viewsets.ReadOnlyModelViewSet):
+    """Public listing of active company cryptocurrency deposit addresses."""
+
+    queryset = CryptocurrencyWallet.objects.filter(is_active=True).order_by("currency")
+    serializer_class = CryptocurrencyWalletSerializer
+    permission_classes = [permissions.AllowAny]

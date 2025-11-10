@@ -6,12 +6,12 @@ export default function ContactPage() {
   return (
     <>
       <Head>
-        <title>Contact WolvCapital · Registered Office in London</title>
-        <meta name="description" content="Contact WolvCapital Ltd — registered investment management firm headquartered in London, UK. Get in touch with our compliance and support team." />
-        <meta name="keywords" content="contact WolvCapital, office location London, registered investment firm, investment support" />
+        <title>Contact WolvCapital · Registered Office in the United States</title>
+        <meta name="description" content="Contact WolvCapital Ltd — registered investment management firm headquartered in the United States. Get in touch with our compliance and support team." />
+        <meta name="keywords" content="contact WolvCapital, office location United States, registered investment firm, investment support" />
         <meta property="og:title" content="WolvCapital · Contact & Office Location" />
-        <meta property="og:description" content="Get in touch with WolvCapital's legal and support offices in London, UK." />
-        <meta property="og:image" content="/img/wolvcapital-office-location-london.jpg" />
+        <meta property="og:description" content="Get in touch with WolvCapital's legal and support offices in the United States." />
+        <meta property="og:image" content="/images/office-location-map.jpg" />
         <meta name="robots" content="index, follow" />
       </Head>
       <div className="min-h-screen bg-white">
@@ -56,12 +56,12 @@ export default function ContactPage() {
             <div className="mb-16">
               <div className="text-center mb-8">
                 <h2 className="text-4xl font-bold text-[#0b2f6b] mb-4">Our Registered Office</h2>
-                <p className="text-xl text-gray-600">London, United Kingdom</p>
+                <p className="text-xl text-gray-600">United States</p>
               </div>
               <div className="relative w-full aspect-[16/9] md:aspect-[21/9] lg:aspect-[2/1] max-w-5xl mx-auto rounded-2xl overflow-hidden shadow-2xl">
                 <Image
                   src="/images/office-location-map.jpg"
-                  alt="WolvCapital Registered Office - London, United Kingdom"
+                  alt="WolvCapital Registered Office - United States"
                   fill
                   className="object-cover object-center"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
@@ -249,3 +249,4 @@ export default function ContactPage() {
     </>
   )
 }
+

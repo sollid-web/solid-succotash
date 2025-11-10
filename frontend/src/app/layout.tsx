@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Inter } from 'next/font/google'
+import TawkToChat from '@/components/TawkToChat'
 
 const inter = Inter({ subsets: ['latin'], weight: [
   '300', '400', '500', '600', '700', '800', '900'
@@ -56,6 +57,7 @@ export default function RootLayout({
           {children}
         </main>
         {/* Global Footer would go here */}
+        <TawkToChat />
       </body>
     </html>
   )

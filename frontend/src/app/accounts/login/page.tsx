@@ -8,11 +8,27 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [signupSuccess, setSignupSuccess] = useState(false)
 
   // Compute API base once and normalize (no trailing slash)
   const apiBase = useMemo(() => {
     const raw = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
     return raw.replace(/\/$/, '')
+  }, [])
+
+  // Check for signup success parameter and show success message
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      if (params.get('signup') === 'success') {
+        setSignupSuccess(true)
+        // Clear the URL parameter after 5 seconds
+        setTimeout(() => {
+          const newUrl = window.location.pathname
+          window.history.replaceState({}, '', newUrl)
+        }, 5000)
+      }
+    }
   }, [])
 
   // Proactive diagnostics in production: surface misconfiguration early
@@ -88,6 +104,20 @@ export default function LoginPage() {
         <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-10">
           <h1 className="text-3xl font-bold text-[#0b2f6b] mb-2 text-center">Welcome Back</h1>
           <p className="text-gray-600 text-center mb-8">Sign in to access your investment dashboard</p>
+
+          {signupSuccess && (
+            <div className="mb-6 p-4 bg-emerald-50 border-2 border-emerald-200 rounded-xl">
+              <div className="flex items-start space-x-3">
+                <svg className="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div>
+                  <p className="text-sm font-bold text-emerald-800 mb-1">Account Created Successfully!</p>
+                  <p className="text-sm text-emerald-700">Please sign in with your credentials to access your dashboard.</p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">

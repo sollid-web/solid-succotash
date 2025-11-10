@@ -362,6 +362,11 @@ ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 
+# Security: Prevent auto-login after signup - require explicit login
+# This ensures users must sign in with credentials after account creation
+ACCOUNT_LOGIN_ON_SIGNUP = False
+ACCOUNT_SIGNUP_REDIRECT_URL = f"{FRONTEND_URL}/accounts/login?signup=success"
+
 # ------------------------------------------------------------------
 # Email Configuration
 # ------------------------------------------------------------------

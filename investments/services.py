@@ -79,7 +79,7 @@ def approve_investment(
 
     # Send email notification
     from core.email_service import EmailService
-    
+
     EmailService.send_investment_notification(investment, 'approved', notes)
 
     return investment
@@ -122,7 +122,7 @@ def reject_investment(
 
     # Send email notification
     from core.email_service import EmailService
-    
+
     EmailService.send_investment_notification(investment, 'rejected', notes)
 
     return investment
@@ -173,7 +173,7 @@ def create_investment(user: User, plan: InvestmentPlan, amount: float) -> UserIn
 
     # Send email notification for investment creation
     from core.email_service import EmailService
-    
+
     EmailService.send_investment_notification(investment, 'created')
 
     return investment

@@ -5,13 +5,12 @@ Centralized email sending functionality with templates for all notifications
 
 import logging
 from decimal import Decimal
-from typing import Dict, List, Optional, Union
 
 from django.conf import settings
-from django.core.mail import EmailMultiAlternatives, send_mail
-from django.template.loader import get_template, render_to_string
-from django.utils import timezone
 from django.contrib.auth import get_user_model
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -51,12 +50,12 @@ class EmailService:
     def send_templated_email(
         cls,
         template_name: str,
-        to_emails: Union[str, List[str]],
-        context: Dict,
+        to_emails: str | list[str],
+        context: dict,
         subject: str,
-        from_email: Optional[str] = None,
-        email_type: Optional[str] = None,
-        user: Optional[User] = None
+        from_email: str | None = None,
+        email_type: str | None = None,
+        user: User | None = None
     ) -> bool:
         """
         Send an email using HTML and text templates
@@ -105,7 +104,7 @@ class EmailService:
             text_template = f'emails/{template_name}.txt'
             try:
                 text_content = render_to_string(text_template, context)
-            except:
+            except Exception:
                 # Generate basic text from HTML if text template doesn't exist
                 text_content = cls._html_to_text(html_content)
 
@@ -357,7 +356,7 @@ class EmailService:
         )
 
     @classmethod
-    def send_admin_alert(cls, subject: str, message: str, admin_emails: List[str] = None) -> bool:
+    def send_admin_alert(cls, subject: str, message: str, admin_emails: list[str] = None) -> bool:
         """Send alert to administrators"""
         if admin_emails is None:
             # Get all admin users
@@ -404,7 +403,7 @@ class EmailService:
 
 
 # Convenience function for quick email sending
-def send_email(template_name: str, to_emails: Union[str, List[str]], context: Dict, subject: str, **kwargs) -> bool:
+def send_email(template_name: str, to_emails: str | list[str], context: dict, subject: str, **kwargs) -> bool:
     """
     Quick wrapper function for sending templated emails
     """

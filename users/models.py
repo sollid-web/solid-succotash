@@ -25,14 +25,14 @@ class Profile(models.Model):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default="user")
     full_name = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
-    
+
     # Email preferences
     email_notifications_enabled = models.BooleanField(
         default=True, help_text="Master toggle for all email notifications"
     )
     email_welcome = models.BooleanField(default=True, help_text="Welcome emails")
     email_transactions = models.BooleanField(default=True, help_text="Transaction notifications")
-    email_investments = models.BooleanField(default=True, help_text="Investment notifications") 
+    email_investments = models.BooleanField(default=True, help_text="Investment notifications")
     email_roi_payouts = models.BooleanField(default=True, help_text="ROI payout notifications")
     email_wallet_updates = models.BooleanField(default=True, help_text="Wallet credit/debit notifications")
     email_security_alerts = models.BooleanField(default=True, help_text="Security alerts")
@@ -47,11 +47,11 @@ class Profile(models.Model):
         if not self.email_notifications_enabled:
             return {key: False for key in [
                 'welcome', 'transaction_created', 'transaction_approved', 'transaction_rejected',
-                'investment_created', 'investment_approved', 'investment_rejected', 
+                'investment_created', 'investment_approved', 'investment_rejected',
                 'investment_completed', 'roi_payout', 'wallet_credited', 'wallet_debited',
                 'security_alert', 'marketing'
             ]}
-        
+
         return {
             'welcome': self.email_welcome,
             'transaction_created': self.email_transactions,

@@ -75,7 +75,7 @@ def approve_transaction(txn: Transaction, admin_user: User, notes: str = "") -> 
 
     # Send email notification
     from core.email_service import EmailService
-    
+
     EmailService.send_transaction_notification(txn, 'approved', notes)
 
     return txn
@@ -124,7 +124,7 @@ def reject_transaction(txn: Transaction, admin_user: User, notes: str = "") -> T
 
     # Send email notification
     from core.email_service import EmailService
-    
+
     EmailService.send_transaction_notification(txn, 'rejected', notes)
 
     return txn

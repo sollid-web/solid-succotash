@@ -2,9 +2,9 @@
 Check email configuration management command
 """
 
-from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.core import mail
+from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
@@ -61,7 +61,7 @@ class Command(BaseCommand):
         self.stdout.write("\n📧 Checking email templates...")
         try:
             from django.template.loader import get_template
-            
+
             templates_to_check = [
                 'emails/base_email.html',
                 'emails/welcome.html',
@@ -69,14 +69,14 @@ class Command(BaseCommand):
                 'emails/investment_approved.html',
                 'emails/test_email.html'
             ]
-            
+
             for template_name in templates_to_check:
                 try:
                     get_template(template_name)
                     self.stdout.write(f"✅ {template_name}")
-                except:
+                except Exception:
                     self.stdout.write(f"❌ {template_name} (missing)")
-                    
+
         except Exception as e:
             self.stdout.write(
                 self.style.ERROR(f"❌ Template check failed: {str(e)}")
@@ -96,7 +96,7 @@ class Command(BaseCommand):
                     "✅ Using SMTP email backend (production ready)"
                 )
             )
-        
+
         self.stdout.write(
             "\n💡 To send a test email, use: python manage.py send_test_email --to your@email.com"
         )

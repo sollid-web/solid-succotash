@@ -37,33 +37,43 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* Hero Section - Welcome Image */}
-      <section className="pt-20">
-        {/* Mobile - Image 2 (woman with laptop) */}
-        <div className="block lg:hidden">
-          <div className="relative w-full aspect-[3/4] sm:aspect-[4/5] md:aspect-[16/9]">
-            <Image
-              src="/images/welcome-mobile.svg"
-              alt="Welcome to WolvCapital - Your trusted partner in digital investment solutions"
-              fill
-              className="object-cover object-center"
-              priority
-              sizes="100vw"
-            />
-          </div>
+      {/* Hero Section with Background Image and Text Overlay */}
+      <section className="relative pt-20 min-h-screen flex items-center">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          {/* Mobile and Desktop - Using same hero image */}
+          <Image
+            src="/images/wolvcapital-hero-welcome-desktop.jpg"
+            alt="Welcome to WolvCapital - Professional Investment Platform"
+            fill
+            className="object-cover object-center"
+            priority
+            quality={90}
+          />
+          {/* Gradient Overlay for Text Readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0b2f6b]/90 via-[#0b2f6b]/70 to-[#2563eb]/50" />
         </div>
 
-        {/* Desktop - Image 3 (man in office) */}
-        <div className="hidden lg:block">
-          <div className="relative w-full h-screen">
-            <Image
-              src="/images/welcome-desktop.svg"
-              alt="Welcome to WolvCapital - A digital investment platform for cryptocurrency-based financial services"
-              fill
-              className="object-cover object-center"
-              priority
-              sizes="100vw"
-            />
+        {/* Content Overlay */}
+        <div className="container mx-auto px-4 lg:px-8 relative z-10">
+          <div className="max-w-3xl">
+            <h1 className="text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+              Welcome to
+              <span className="block mt-2 bg-gradient-to-r from-blue-200 to-blue-100 bg-clip-text text-transparent">
+                WolvCapital
+              </span>
+            </h1>
+            
+            <p className="text-xl lg:text-2xl text-blue-100 mb-8 max-w-2xl leading-relaxed">
+              A digital investment platform for cryptocurrency-based financial services
+            </p>
+
+            <Link
+              href="/accounts/signup"
+              className="inline-block bg-white text-[#0b2f6b] px-10 py-4 rounded-full text-lg font-bold hover:bg-blue-50 transition-all transform hover:scale-105 shadow-2xl"
+            >
+              Get Started
+            </Link>
           </div>
         </div>
       </section>

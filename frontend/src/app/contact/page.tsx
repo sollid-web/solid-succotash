@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import Image from 'next/image';
+
+import officeMap from '@/public/images/office-location-map.jpg';
 
 export default function ContactPage() {
   return (
@@ -60,8 +61,8 @@ export default function ContactPage() {
               </div>
               <div className="relative w-full aspect-[16/9] md:aspect-[21/9] lg:aspect-[2/1] max-w-5xl mx-auto rounded-2xl overflow-hidden shadow-2xl">
                 <Image
-                  src="/images/office-location-map.jpg"
-                  alt="WolvCapital Registered Office - United States"
+                  src={officeMap}
+                  alt="WolvCapital Registered Office – United States (Map)"
                   fill
                   className="object-cover object-center"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
@@ -249,4 +250,5 @@ export default function ContactPage() {
     </>
   )
 }
+
 

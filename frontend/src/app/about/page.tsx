@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link'
+import FaqAccordion from '@/components/FaqAccordion'
 
 export default function AboutPage() {
   return (
@@ -135,6 +136,13 @@ export default function AboutPage() {
                   <span>Real human oversight for every money-moving operation</span>
                 </li>
               </ul>
+            </div>
+
+            <div>
+              <h2 className="text-4xl font-bold text-[#0b2f6b] mb-6">Frequently Asked Questions</h2>
+              <div className="max-w-3xl">
+                <FaqAccordion />
+              </div>
             </div>
 
             <div className="bg-gradient-to-br from-[#0b2f6b] to-[#1d4ed8] text-white rounded-3xl p-12 text-center">

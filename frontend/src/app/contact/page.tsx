@@ -1,75 +1,63 @@
-import Head from 'next/head';
-import Link from 'next/link';
-\n
+"use client"
+import Head from 'next/head'
+import Link from 'next/link'
+import Image from 'next/image'
+import dynamic from 'next/dynamic'
+
+const MapWithOverlay = dynamic(() => import('@/components/MapWithOverlay'), { ssr: false })
+
 export default function ContactPage() {
   return (
     <>
       <Head>
-        <title>Contact WolvCapital · Registered Office in the United States</title>
-        <meta name="description" content="Contact WolvCapital Ltd — registered investment management firm headquartered in the United States. Get in touch with our compliance and support team." />
-        <meta name="keywords" content="contact WolvCapital, office location United States, registered investment firm, investment support" />
-        <meta property="og:title" content="WolvCapital · Contact & Office Location" />
-        <meta property="og:description" content="Get in touch with WolvCapital's legal and support offices in the United States." />
-        <meta property="og:image" content="/images/office-location-map.jpg" />
+        <title>Contact WolvCapital · U.S. Digital Investment Platform</title>
+        <meta
+          name="description"
+          content="Contact WolvCapital, a U.S. regulated digital investment platform. Connect with our compliance and investor support teams for secure investment returns and cryptocurrency investment opportunities."
+        />
+        <meta
+          name="keywords"
+          content="digital investment platform, U.S. fintech company, secure investment returns, cryptocurrency investment, regulated financial platform, WolvCapital contact"
+        />
+        <meta property="og:title" content="Contact WolvCapital · U.S. Digital Investment Platform" />
+        <meta property="og:description" content="Contact WolvCapital’s compliance and investor support teams in the United States." />
+        <meta property="og:image" content="/images/office-location-map-og.jpg" />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
         <meta name="robots" content="index, follow" />
       </Head>
       <div className="min-h-screen bg-white">
-        {/* Navigation */}
-        <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
+  <section className="pt-32 pb-16 bg-gradient-to-br from-[#0b2f6b] to-[#1d4ed8] text-white text-center">
           <div className="container mx-auto px-4 lg:px-8">
-            <div className="flex items-center justify-between h-20">
-              <Link href="/" className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-lg flex items-center justify-center">
-                  <span className="text-2xl font-bold text-white">W</span>
-                </div>
-                <span className="text-2xl font-bold text-[#0b2f6b]">WolvCapital</span>
-              </Link>
-              
-              <div className="hidden md:flex items-center space-x-8">
-                <Link href="/" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">Home</Link>
-                <Link href="/plans" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">Plans</Link>
-                <Link href="/about" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">About</Link>
-                <Link href="/contact" className="text-[#0b2f6b] font-semibold">Contact</Link>
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <Link href="/accounts/login" className="text-[#0b2f6b] font-semibold hover:text-[#2563eb] transition">Login</Link>
-                <Link href="/accounts/signup" className="bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-6 py-2.5 rounded-full font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105">Sign Up</Link>
-              </div>
-            </div>
-          </div>
-        </nav>
-
-        {/* Hero */}
-        <section className="pt-32 pb-16 bg-gradient-to-br from-[#0b2f6b] to-[#1d4ed8] text-white">
-          <div className="container mx-auto px-4 lg:px-8 text-center">
-            <h1 className="text-5xl lg:text-6xl font-extrabold mb-6">Get In Touch</h1>
-            <p className="text-xl text-gray-200 max-w-3xl mx-auto">Have questions? Our support team is available 24/7 to assist you</p>
+            <h1 className="text-5xl lg:text-6xl font-extrabold mb-6">Contact WolvCapital</h1>
+            <p className="text-xl text-gray-200 max-w-3xl mx-auto">
+              WolvCapital is a U.S. regulated digital investment platform. For compliance, account inquiries, or partnership
+              discussions, please contact our investor support and compliance teams below.
+            </p>
           </div>
         </section>
-
-        {/* Content */}
-        <section className="py-24 bg-white">
+  {/* Live transactions ticker removed per request (no banner after header) */}
+  <section className="py-24 bg-white">
           <div className="container mx-auto px-4 lg:px-8">
-            {/* Office Location Map */}
             <div className="mb-16">
               <div className="text-center mb-8">
-                <h2 className="text-4xl font-bold text-[#0b2f6b] mb-4">Our Registered Office</h2>
-                <p className="text-xl text-gray-600">United States</p>
+                <h2 className="text-4xl font-bold text-[#0b2f6b] mb-4">Registered Office</h2>
+                <p className="text-xl text-gray-600">
+                  516 High St, Palo Alto, CA 94301, United States
+                  <br />
+                  WolvCapital’s principal office is located in Palo Alto, California. All regulatory correspondence and investor
+                  communications are managed through this location in accordance with U.S. financial regulations.
+                </p>
               </div>
-              <div className="relative w-full aspect-[16/9] md:aspect-[21/9] lg:aspect-[2/1] max-w-5xl mx-auto rounded-2xl overflow-hidden shadow-2xl">
-                <Image
-                  src="/images/office-location-map.jpg"
-                  alt="WolvCapital Registered Office – United States (Map)"
-                  fill
-                  className="object-cover object-center"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
-                  priority
-                />
-              </div>
+              <MapWithOverlay
+                query="516 High St, Palo Alto, CA 94301, United States"
+                overlayWebp="/images/office-location-map.webp"
+                overlayFallback="/images/office-location-map.jpg"
+                title="WolvCapital Registered Office — United States"
+              />
             </div>
 
-            {/* Welcome Image - Mobile View */}
             <div className="mb-16 lg:hidden">
               <div className="relative w-full aspect-[3/4] sm:aspect-[4/5] rounded-2xl overflow-hidden shadow-xl">
                 <Image
@@ -83,10 +71,8 @@ export default function ContactPage() {
             </div>
 
             <div className="grid lg:grid-cols-2 gap-16 max-w-6xl mx-auto">
-              {/* Contact Info */}
               <div>
                 <h2 className="text-4xl font-bold text-[#0b2f6b] mb-8">Contact Information</h2>
-                
                 <div className="space-y-8">
                   <div className="flex items-start space-x-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-xl flex items-center justify-center flex-shrink-0">
@@ -97,10 +83,9 @@ export default function ContactPage() {
                     <div>
                       <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">Email Support</h3>
                       <p className="text-gray-700 text-lg">support@wolvcapital.com</p>
-                      <p className="text-gray-600 mt-1">We typically respond within 24 hours</p>
+                      <p className="text-gray-600 mt-1">Our compliance and investor support teams respond to all inquiries within one business day.</p>
                     </div>
                   </div>
-
                   <div className="flex items-start space-x-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl flex items-center justify-center flex-shrink-0">
                       <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -109,11 +94,10 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-purple-700 mb-2">Business Hours</h3>
-                      <p className="text-gray-700 text-lg">24/7 Support Available</p>
-                      <p className="text-gray-600 mt-1">Round-the-clock assistance for all your needs</p>
+                      <p className="text-gray-700 text-lg">Monday–Friday, 9:00 AM–6:00 PM Pacific Time</p>
+                      <p className="text-gray-600 mt-1">Investor support is available outside business hours for urgent account matters.</p>
                     </div>
                   </div>
-
                   <div className="flex items-start space-x-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-green-600 to-green-700 rounded-xl flex items-center justify-center flex-shrink-0">
                       <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -122,90 +106,40 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-green-700 mb-2">Live Chat</h3>
-                      <p className="text-gray-700 text-lg">Available for account holders</p>
-                      <p className="text-gray-600 mt-1">Login to access live chat support</p>
+                      <p className="text-gray-700 text-lg">Secure live chat is available via your dashboard after login.</p>
+                      <p className="text-gray-600 mt-1">All conversations are encrypted and monitored for regulatory compliance.</p>
                     </div>
                   </div>
                 </div>
-
-                <div className="mt-12 p-8 bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl">
-                  <h3 className="text-2xl font-bold text-[#0b2f6b] mb-4">Frequently Asked Questions</h3>
-                  <p className="text-gray-700 mb-4">Before contacting us, you might find answers in our FAQ section.</p>
-                  <Link href="/about" className="inline-flex items-center text-[#2563eb] font-semibold hover:text-[#1d4ed8] transition">
-                    View FAQ
-                    <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </Link>
-                </div>
               </div>
 
-              {/* Contact Form */}
               <div>
-                <h2 className="text-4xl font-bold text-[#0b2f6b] mb-8">Send Us a Message</h2>
-                
+                <h2 className="text-4xl font-bold text-[#0b2f6b] mb-8">Contact Form</h2>
                 <form className="space-y-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-bold text-gray-700 mb-2">Full Name *</label>
-                    <input 
-                      type="text" 
-                      id="name" 
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#2563eb] focus:outline-none transition"
-                      placeholder="John Doe"
-                      required
-                    />
+                    <input id="name" type="text" className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#2563eb] focus:outline-none transition" placeholder="John Doe" required />
                   </div>
-
                   <div>
                     <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2">Email Address *</label>
-                    <input 
-                      type="email" 
-                      id="email" 
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#2563eb] focus:outline-none transition"
-                      placeholder="john@example.com"
-                      required
-                    />
+                    <input id="email" type="email" className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#2563eb] focus:outline-none transition" placeholder="john@example.com" required />
                   </div>
-
                   <div>
                     <label htmlFor="subject" className="block text-sm font-bold text-gray-700 mb-2">Subject *</label>
-                    <input 
-                      type="text" 
-                      id="subject" 
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#2563eb] focus:outline-none transition"
-                      placeholder="How can we help?"
-                      required
-                    />
+                    <input id="subject" type="text" className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#2563eb] focus:outline-none transition" placeholder="Account inquiry, compliance, or partnership" required />
                   </div>
-
                   <div>
                     <label htmlFor="message" className="block text-sm font-bold text-gray-700 mb-2">Message *</label>
-                    <textarea 
-                      id="message" 
-                      rows={6}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#2563eb] focus:outline-none transition resize-none"
-                      placeholder="Tell us more about your inquiry..."
-                      required
-                    />
+                    <textarea id="message" rows={6} className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#2563eb] focus:outline-none transition resize-none" placeholder="Please provide details regarding your inquiry." required />
                   </div>
-
-                  <button 
-                    type="submit"
-                    className="w-full bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all duration-300 hover:scale-105"
-                  >
-                    Send Message
-                  </button>
-
-                  <p className="text-sm text-gray-600 text-center">
-                    * All fields are required. We'll respond within 24 hours.
-                  </p>
+                  <button type="submit" className="w-full bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">Submit</button>
+                  <p className="text-sm text-gray-600 text-center">All fields are required. Your information is handled in accordance with our privacy policy.</p>
                 </form>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Footer */}
         <footer className="bg-[#071d42] text-white py-16">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="grid md:grid-cols-4 gap-8 mb-12">
@@ -216,6 +150,7 @@ export default function ContactPage() {
                   <li><Link href="/plans" className="text-gray-300 hover:text-white transition">Investment Plans</Link></li>
                   <li><Link href="/about" className="text-gray-300 hover:text-white transition">About Us</Link></li>
                   <li><Link href="/contact" className="text-gray-300 hover:text-white transition">Contact</Link></li>
+                  <li><Link href="/faq" className="text-gray-300 hover:text-white transition">FAQ</Link></li>
                 </ul>
               </div>
               <div>
@@ -231,16 +166,19 @@ export default function ContactPage() {
                 <h3 className="text-xl font-bold mb-4">Contact Info</h3>
                 <ul className="space-y-2 text-gray-300">
                   <li>support@wolvcapital.com</li>
-                  <li>24/7 Support</li>
+                  <li>Compliance & Investor Support</li>
                 </ul>
               </div>
               <div>
                 <h3 className="text-xl font-bold mb-4">WolvCapital</h3>
-                <p className="text-gray-300 text-sm leading-relaxed">Secure crypto banking, audited ROI programs, and virtual cards—all governed by a human approval loop.</p>
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  WolvCapital is a U.S. regulated digital investment platform providing secure investment returns, robust
+                  compliance controls, and premium virtual card solutions for professional and institutional clients.
+                </p>
               </div>
             </div>
             <div className="border-t border-gray-700 pt-8 text-center text-gray-400">
-              <p>© 2025 WolvCapital Invest. All rights reserved.</p>
+              <p>© 2025 WolvCapital. All rights reserved.</p>
             </div>
           </div>
         </footer>
@@ -248,7 +186,3 @@ export default function ContactPage() {
     </>
   )
 }
-
-
-
-

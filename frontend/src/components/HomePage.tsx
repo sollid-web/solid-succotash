@@ -6,7 +6,7 @@ import FlipVisaCard from './FlipVisaCard'
 import { useTranslation } from '@/i18n/TranslationProvider'
 import ReviewsRotator from '@/components/ReviewsRotator'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
-// NavBar now rendered globally in layout
+// NavBar and any live transaction banners are intentionally omitted for a cleaner, faster initial render.
 
 export default function HomePage() {
   const { t } = useTranslation()
@@ -53,7 +53,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Live updates removed per request */}
+  {/* Live transactions ticker removed per request (performance + visual focus) */}
 
       {/* Features Section */}
       <section className="py-24 bg-gray-50">

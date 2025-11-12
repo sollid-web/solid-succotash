@@ -1,136 +1,404 @@
-'use client'
+"use client";
+import { useMemo, useState } from "react";
 
-import { useState } from 'react'
+type FlipVisaCardProps = {
+  maxWidth?: number; // px
+  aspectWidth?: number; // for aspect-ratio numerator (default 480)
+  aspectHeight?: number; // for aspect-ratio denominator (default 300)
+  animationMs?: number;
+  perspective?: number; // px
+  borderRadius?: number; // px
+  shadow?: string; // CSS box-shadow value
+  initialFlipped?: boolean;
+};
 
-export default function FlipVisaCard() {
-  const [isFlipped, setIsFlipped] = useState(false)
+export default function FlipVisaCard({
+  maxWidth = 480,
+  aspectWidth = 480,
+  aspectHeight = 300,
+  animationMs = 800,
+  perspective = 1000,
+  borderRadius = 20,
+  shadow = "0 10px 25px rgba(0, 0, 0, 0.3)",
+  initialFlipped = false,
+}: FlipVisaCardProps) {
+  const [flipped, setFlipped] = useState<boolean>(initialFlipped);
+  const aspectCSS = useMemo(() => `${aspectWidth} / ${aspectHeight}`, [aspectWidth, aspectHeight]);
 
-  const handleFlip = () => {
-    setIsFlipped(!isFlipped)
-  }
+  const cssVars = useMemo(
+    () => ({
+      // styled-jsx variables
+      ['--max-width' as any]: `${maxWidth}px`,
+      ['--aspect' as any]: aspectCSS,
+      ['--duration' as any]: `${animationMs}ms`,
+      ['--perspective' as any]: `${perspective}px`,
+      ['--radius' as any]: `${borderRadius}px`,
+      ['--shadow' as any]: shadow,
+    }),
+    [maxWidth, aspectCSS, animationMs, perspective, borderRadius, shadow]
+  );
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      handleFlip()
+      e.preventDefault();
+      setFlipped((f) => !f);
     }
-  }
+  };
 
   return (
-    <div className="flex items-center justify-center py-12">
-      <div
-        className="relative w-full max-w-sm h-56 cursor-pointer perspective-1000"
-        onClick={handleFlip}
-        onKeyDown={handleKeyDown}
-        tabIndex={0}
-        role="button"
-        aria-label={isFlipped ? "Click to flip card to front" : "Click to flip card to back"}
-      >
-        <div
-          className={`relative w-full h-full transition-transform duration-700 transform-style-preserve-3d ${
-            isFlipped ? 'rotate-y-180' : ''
-          }`}
-          style={{
-            transformStyle: 'preserve-3d',
-            transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)'
-          }}
-        >
-          {/* Front */}
-          <div
-            className="absolute w-full h-full rounded-2xl shadow-2xl p-6 flex flex-col justify-between"
-            style={{
-              backfaceVisibility: 'hidden',
-              WebkitBackfaceVisibility: 'hidden',
-              background: 'linear-gradient(135deg, #0b2f6b 0%, #1d4ed8 50%, #2563eb 100%)'
-            }}
-          >
-            <div className="flex justify-between items-start">
-              <div className="space-y-1">
-                <div className="text-white font-bold text-lg tracking-wide">WOLVCAPITAL LTD</div>
-                <div className="text-blue-200 text-xs">Premium Banking</div>
-              </div>
-              <div className="flex space-x-2">
-                <svg width="30" height="22" viewBox="0 0 30 22" fill="none">
-                  <rect width="30" height="22" rx="4" fill="#FFD700" fillOpacity="0.9"/>
-                  <rect x="2" y="4" width="6" height="4" rx="1" fill="#DAA520"/>
-                  <rect x="2" y="10" width="6" height="4" rx="1" fill="#DAA520"/>
-                  <rect x="10" y="4" width="6" height="4" rx="1" fill="#DAA520"/>
-                  <rect x="10" y="10" width="6" height="4" rx="1" fill="#DAA520"/>
-                  <rect x="18" y="4" width="6" height="4" rx="1" fill="#DAA520"/>
-                  <rect x="18" y="10" width="6" height="4" rx="1" fill="#DAA520"/>
-                </svg>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="10" stroke="white" strokeWidth="2" fill="none"/>
-                  <path d="M8 12 C8 12, 10 8, 12 8 C14 8, 16 12, 16 12 C16 12, 14 16, 12 16 C10 16, 8 12, 8 12Z" fill="white" fillOpacity="0.3"/>
-                  <circle cx="12" cy="12" r="3" fill="white" fillOpacity="0.5"/>
-                </svg>
-              </div>
+    <>
+      <style jsx>{`
+        .flip-card { perspective: var(--perspective); max-width: var(--max-width); width: 100%; }
+        .flip-outer { position: relative; width: 100%; aspect-ratio: var(--aspect); }
+        .flip-inner {
+          position: absolute; inset: 0;
+          transform-style: preserve-3d;
+          transition: transform var(--duration) ease;
+          cursor: pointer;
+        }
+        .is-flipped { transform: rotateY(180deg); }
+        .flip-face {
+          position: absolute; inset: 0;
+          backface-visibility: hidden;
+          border-radius: var(--radius);
+          overflow: hidden;
+          box-shadow: var(--shadow);
+        }
+        .flip-back { transform: rotateY(180deg); }
+      `}</style>
+
+      <div className="w-full flex items-center justify-center">
+        <div className="flip-card" style={cssVars as React.CSSProperties}>
+          <div className="flip-outer">
+            <div
+              className={`flip-inner ${flipped ? 'is-flipped' : ''}`}
+              role="button"
+              aria-pressed={flipped}
+              aria-label="Interactive virtual Visa card. Press to flip."
+              tabIndex={0}
+              onClick={() => setFlipped((f) => !f)}
+              onKeyDown={onKeyDown}
+            >
+            {/* FRONT */}
+            <div className="flip-face" role="img" aria-label="Front of virtual Visa card">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300">
+                <defs>
+                  <linearGradient id="bgGradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#1E5DF7" />
+                    <stop offset="100%" stopColor="#0A34B0" />
+                  </linearGradient>
+                  <linearGradient id="chipGradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#D4AF37" />
+                    <stop offset="100%" stopColor="#B8860B" />
+                  </linearGradient>
+                  <linearGradient id="metallicText" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#E0E0E0" />
+                    <stop offset="50%" stopColor="#B0B0B0" />
+                    <stop offset="100%" stopColor="#F5F5F5" />
+                  </linearGradient>
+                  <linearGradient id="visaGradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#1A1F71" />
+                    <stop offset="100%" stopColor="#F7B600" />
+                  </linearGradient>
+                </defs>
+
+                <rect width="480" height="300" rx="20" fill="url(#bgGradient)" />
+
+                {/* Metallic WOLVCAPITAL Text */}
+                <text
+                  x="20"
+                  y="40"
+                  fill="url(#metallicText)"
+                  fontSize="22"
+                  fontFamily="Arial"
+                  fontWeight="bold"
+                  stroke="black"
+                  strokeOpacity="0.3"
+                  strokeWidth="0.4"
+                >
+                  WOLVCAPITAL LTD
+                </text>
+
+                {/* Chip */}
+                <g transform="translate(40,90)">
+                  <rect width="60" height="50" rx="6" fill="url(#chipGradient)" stroke="black" strokeWidth="1.2" />
+                  <line x1="10" y1="0" x2="10" y2="50" stroke="black" strokeWidth="0.8" />
+                  <line x1="30" y1="0" x2="30" y2="50" stroke="black" strokeWidth="0.8" />
+                  <line x1="50" y1="0" x2="50" y2="50" stroke="black" strokeWidth="0.8" />
+                  <line x1="0" y1="15" x2="60" y2="15" stroke="black" strokeWidth="0.8" />
+                  <line x1="0" y1="35" x2="60" y2="35" stroke="black" strokeWidth="0.8" />
+                </g>
+
+                {/* Contactless Icon */}
+                <path d="M120 95 q10 10 0 20 M130 90 q20 20 0 40 M140 85 q30 30 0 60" stroke="white" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+
+                {/* Card Number */}
+                <text
+                  x="40"
+                  y="190"
+                  fill="url(#metallicText)"
+                  fontSize="22"
+                  fontFamily="Courier New"
+                  fontWeight="bold"
+                  stroke="black"
+                  strokeOpacity="0.4"
+                  strokeWidth="0.5"
+                >
+                  4532 **** **** 7891
+                </text>
+
+                {/* Cardholder & Expiry */}
+                <text
+                  x="40"
+                  y="225"
+                  fill="url(#metallicText)"
+                  fontSize="14"
+                  fontFamily="Arial"
+                  fontWeight="bold"
+                  stroke="black"
+                  strokeOpacity="0.3"
+                  strokeWidth="0.4"
+                >
+                  CARD HOLDER
+                </text>
+                <text
+                  x="300"
+                  y="225"
+                  fill="url(#metallicText)"
+                  fontSize="14"
+                  fontFamily="Arial"
+                  fontWeight="bold"
+                  stroke="black"
+                  strokeOpacity="0.3"
+                  strokeWidth="0.4"
+                >
+                  12/28
+                </text>
+
+                {/* Visa Logo */}
+                <text x="350" y="270" fill="url(#visaGradient)" fontSize="38" fontFamily="Arial Black" fontWeight="bold">
+                  VISA
+                </text>
+              </svg>
             </div>
 
-            <div className="mt-6">
-              <div className="text-white font-mono text-xl tracking-wider mb-4">
-                4532  ****  ****  7891
-              </div>
-              <div className="flex justify-between items-end">
-                <div>
-                  <div className="text-blue-200 text-xs mb-1">Card Holder</div>
-                  <div className="text-white font-semibold text-sm">-----</div>
-                </div>
-                <div>
-                  <div className="text-blue-200 text-xs mb-1">Expires</div>
-                  <div className="text-white font-semibold text-sm">12/28</div>
-                </div>
-                <svg width="50" height="16" viewBox="0 0 50 16" fill="none">
-                  <text x="0" y="12" fill="white" fontSize="14" fontWeight="bold" fontFamily="Arial">VISA</text>
-                </svg>
-              </div>
+            {/* BACK */}
+            <div className="flip-face flip-back" role="img" aria-label="Back of virtual Visa card">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300">
+                <rect width="480" height="300" rx="20" fill="url(#bgGradient)" />
+                <rect x="0" y="40" width="480" height="50" fill="black" />
+                <rect x="30" y="130" width="420" height="50" fill="white" />
+                <text x="400" y="160" fill="black" fontSize="22" fontFamily="Courier New" fontWeight="bold">***</text>
+                <text x="30" y="220" fill="white" fontSize="12" fontFamily="Arial" fontWeight="bold">
+                  WolvCapital Ltd · Customer Support +1-800-000-0000 · www.wolvcapital.com
+                </text>
+                <circle cx="420" cy="240" r="20" fill="url(#metallicText)" opacity="0.6" />
+              </svg>
+            </div>
             </div>
           </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
 
-          {/* Back */}
-          <div
-            className="absolute w-full h-full rounded-2xl shadow-2xl overflow-hidden"
-            style={{
-              backfaceVisibility: 'hidden',
-              WebkitBackfaceVisibility: 'hidden',
-              transform: 'rotateY(180deg)',
-              background: 'linear-gradient(135deg, #0b2f6b 0%, #1d4ed8 50%, #2563eb 100%)'
-            }}
-          >
-            <div className="w-full h-10 bg-black mt-6"></div>
-            <div className="px-6 mt-6">
-              <div className="bg-white/20 h-10 rounded flex items-center justify-end px-4">
-                <span className="text-white font-mono text-sm">***</span>
-              </div>
-              <div className="mt-4 flex justify-between items-end">
-                <div>
-                  <div className="text-blue-200 text-xs mb-1">Security Code</div>
-                  <div className="text-white text-sm">See above</div>
-                </div>
-                <div className="text-blue-200 text-xs text-right">
-                  <div>For customer service:</div>
-                  <div className="text-white font-semibold">support@wolvcapital.com</div>
-                </div>
-              </div>
-              <div className="mt-6 text-center">
-                <div className="text-blue-200 text-xs">wolvcapital.com</div>
-              </div>
+"use client";
+import { useEffect } from "react";
+
+export default function FlipCard() {
+  useEffect(() => {
+    const card = document.getElementById("flipCard");
+    if (card) {
+      card.addEventListener("click", () => {
+        card.classList.toggle("is-flipped");
+      });
+    }
+  }, []);
+
+  return (
+    <>
+      <style jsx>{`
+        .flip-card {
+          perspective: 1000px;
+        }
+        .flip-inner {
+          position: relative;
+          width: 480px;
+          height: 300px;
+          transform-style: preserve-3d;
+          transition: transform 0.8s ease;
+          cursor: pointer;
+        }
+        .is-flipped {
+          transform: rotateY(180deg);
+        }
+        .flip-face {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          backface-visibility: hidden;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+        }
+        .flip-back {
+          transform: rotateY(180deg);
+        }
+      `}</style>
+
+      <div className="flex items-center justify-center min-h-screen bg-neutral-900">
+        <div className="flip-card">
+          <div id="flipCard" className="flip-inner">
+            {/* FRONT */}
+            <div className="flip-face">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300">
+                <defs>
+                  <linearGradient id="bgGradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#1E5DF7" />
+                    <stop offset="100%" stopColor="#0A34B0" />
+                  </linearGradient>
+                  <linearGradient id="chipGradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#D4AF37" />
+                    <stop offset="100%" stopColor="#B8860B" />
+                  </linearGradient>
+                  <linearGradient id="metallicText" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#E0E0E0" />
+                    <stop offset="50%" stopColor="#B0B0B0" />
+                    <stop offset="100%" stopColor="#F5F5F5" />
+                  </linearGradient>
+                  <linearGradient id="visaGradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#1A1F71" />
+                    <stop offset="100%" stopColor="#F7B600" />
+                  </linearGradient>
+                </defs>
+
+                <rect width="480" height="300" rx="20" fill="url(#bgGradient)" />
+
+                {/* Metallic WOLVCAPITAL Text */}
+                <text
+                  x="20"
+                  y="40"
+                  fill="url(#metallicText)"
+                  fontSize="22"
+                  fontFamily="Arial"
+                  fontWeight="bold"
+                  stroke="black"
+                  strokeOpacity="0.3"
+                  strokeWidth="0.4"
+                >
+                  WOLVCAPITAL LTD
+                </text>
+
+                {/* Chip */}
+                <g transform="translate(40,90)">
+                  <rect
+                    width="60"
+                    height="50"
+                    rx="6"
+                    fill="url(#chipGradient)"
+                    stroke="black"
+                    strokeWidth="1.2"
+                  />
+                  <line x1="10" y1="0" x2="10" y2="50" stroke="black" strokeWidth="0.8" />
+                  <line x1="30" y1="0" x2="30" y2="50" stroke="black" strokeWidth="0.8" />
+                  <line x1="50" y1="0" x2="50" y2="50" stroke="black" strokeWidth="0.8" />
+                  <line x1="0" y1="15" x2="60" y2="15" stroke="black" strokeWidth="0.8" />
+                  <line x1="0" y1="35" x2="60" y2="35" stroke="black" strokeWidth="0.8" />
+                </g>
+
+                {/* Contactless Icon */}
+                <path
+                  d="M120 95 q10 10 0 20 M130 90 q20 20 0 40 M140 85 q30 30 0 60"
+                  stroke="white"
+                  strokeWidth="2.5"
+                  fill="none"
+                  strokeLinecap="round"
+                />
+
+                {/* Card Number */}
+                <text
+                  x="40"
+                  y="190"
+                  fill="url(#metallicText)"
+                  fontSize="22"
+                  fontFamily="Courier New"
+                  fontWeight="bold"
+                  stroke="black"
+                  strokeOpacity="0.4"
+                  strokeWidth="0.5"
+                >
+                  4532 **** **** 7891
+                </text>
+
+                {/* Cardholder & Expiry */}
+                <text
+                  x="40"
+                  y="225"
+                  fill="url(#metallicText)"
+                  fontSize="14"
+                  fontFamily="Arial"
+                  fontWeight="bold"
+                  stroke="black"
+                  strokeOpacity="0.3"
+                  strokeWidth="0.4"
+                >
+                  CARD HOLDER
+                </text>
+                <text
+                  x="300"
+                  y="225"
+                  fill="url(#metallicText)"
+                  fontSize="14"
+                  fontFamily="Arial"
+                  fontWeight="bold"
+                  stroke="black"
+                  strokeOpacity="0.3"
+                  strokeWidth="0.4"
+                >
+                  12/28
+                </text>
+
+                {/* Visa Logo */}
+                <text
+                  x="350"
+                  y="270"
+                  fill="url(#visaGradient)"
+                  fontSize="38"
+                  fontFamily="Arial Black"
+                  fontWeight="bold"
+                >
+                  VISA
+                </text>
+              </svg>
+            </div>
+
+            {/* BACK */}
+            <div className="flip-face flip-back">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300">
+                <rect width="480" height="300" rx="20" fill="url(#bgGradient)" />
+                <rect x="0" y="40" width="480" height="50" fill="black" />
+                <rect x="30" y="130" width="420" height="50" fill="white" />
+                <text x="400" y="160" fill="black" fontSize="22" fontFamily="Courier New" fontWeight="bold">
+                  ***
+                </text>
+                <text
+                  x="30"
+                  y="220"
+                  fill="white"
+                  fontSize="12"
+                  fontFamily="Arial"
+                  fontWeight="bold"
+                >
+                  WolvCapital Ltd · Customer Support +1-800-000-0000 · www.wolvcapital.com
+                </text>
+                <circle cx="420" cy="240" r="20" fill="url(#metallicText)" opacity="0.6" />
+              </svg>
             </div>
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        .perspective-1000 {
-          perspective: 1000px;
-        }
-        .transform-style-preserve-3d {
-          transform-style: preserve-3d;
-        }
-        .rotate-y-180 {
-          transform: rotateY(180deg);
-        }
-      `}</style>
-    </div>
-  )
+    </>
+  );
 }

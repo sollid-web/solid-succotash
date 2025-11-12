@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { Inter } from 'next/font/google'
 import TawkToChat from '@/components/TawkToChat'
+import { TranslationProvider } from '@/i18n/TranslationProvider'
+import NavBar from '@/components/NavBar'
 
 const inter = Inter({ subsets: ['latin'], weight: [
   '300', '400', '500', '600', '700', '800', '900'
@@ -52,12 +54,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${inter.className} font-brand antialiased bg-gray-50 text-gray-900`}>
-        {/* Global Navigation would go here */}
-        <main className="min-h-screen">
-          {children}
-        </main>
-        {/* Global Footer would go here */}
-        <TawkToChat />
+        <TranslationProvider>
+          <NavBar />
+          <main className="min-h-screen pt-20">{/* offset for fixed navbar */}
+            {children}
+          </main>
+          <TawkToChat />
+        </TranslationProvider>
       </body>
     </html>
   )

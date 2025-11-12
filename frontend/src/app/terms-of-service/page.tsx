@@ -5,13 +5,13 @@ export default function TermsOfServicePage() {
   return (
     <>
       <Head>
-        <title>Terms of Service · WolvCapital</title>
-        <meta name="description" content="Review WolvCapital’s Terms of Service — clear policies governing account use, investment participation, and withdrawal conditions." />
-        <meta name="keywords" content="terms of service, investment agreement, user policies, participation rules, WolvCapital" />
-        <meta property="og:title" content="WolvCapital Terms of Service" />
-        <meta property="og:description" content="Read WolvCapital's user participation and investment policy agreements." />
-        <meta property="og:image" content="/img/wolvcapital-terms-of-service.jpg" />
-        <meta name="robots" content="index, follow" />
+  <title>Terms of Service · WolvCapital Digital Investment Platform</title>
+  <meta name="description" content="Review WolvCapital’s Terms of Service for secure investment returns, cryptocurrency investment opportunities, and U.S. regulatory compliance." />
+  <meta name="keywords" content="digital investment platform, U.S. fintech company, secure investment returns, cryptocurrency investment, regulated financial platform, terms of service, WolvCapital" />
+  <meta property="og:title" content="WolvCapital Terms of Service · U.S. Digital Investment Platform" />
+  <meta property="og:description" content="Read WolvCapital's user participation, investment, and compliance policy agreements." />
+  <meta property="og:image" content="/img/wolvcapital-terms-of-service.jpg" />
+  <meta name="robots" content="index, follow" />
       </Head>
 
       {/* Navigation */}
@@ -52,7 +52,7 @@ export default function TermsOfServicePage() {
       <section className="py-24 bg-white">
         <div className="container mx-auto px-4 lg:px-8 max-w-4xl prose prose-lg">
           <p className="text-xl text-gray-700 mb-8 leading-relaxed">
-            Welcome to WolvCapital. By accessing or using our services, you agree to be bound by these Terms of Service. Please read them carefully before using the platform.
+            Welcome to WolvCapital, a U.S. regulated digital investment platform. By accessing or using our services, you agree to be bound by these Terms of Service. Please read them carefully before using the platform. All financial operations are subject to U.S. regulatory standards and compliance review.
           </p>
 
           <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">1. Eligibility</h2>
@@ -75,12 +75,12 @@ export default function TermsOfServicePage() {
 
           <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">3. Investment Risks</h2>
           <p className="text-gray-700 leading-relaxed">
-            All investments carry inherent risk. You acknowledge that investment returns are not guaranteed, digital asset values can decline rapidly, and you may lose some or all of your invested capital. Please review our <Link href="/risk-disclosure" className="text-[#2563eb] hover:underline font-semibold">Risk Disclosure</Link> before investing.
+            All investments carry inherent risk. You acknowledge that investment returns are not guaranteed, digital asset values can decline rapidly, and you may lose some or all of your invested capital. WolvCapital does not provide any guarantee of performance. Please review our <Link href="/risk-disclosure" className="text-[#2563eb] hover:underline font-semibold">Risk Disclosure</Link> before investing.
           </p>
 
           <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">4. Manual Approval Process</h2>
           <p className="text-gray-700 leading-relaxed">
-            All financial transactions undergo manual off-chain review by our compliance team. Processing times typically range from 24-72 hours. Transactions may be delayed or rejected if they do not meet our compliance standards.
+            All financial transactions undergo manual off-chain review by our compliance team. Processing times typically range from 24-72 hours. Transactions may be delayed or rejected if they do not meet our compliance standards or U.S. regulatory requirements.
           </p>
 
           <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">5. Fees</h2>
@@ -94,12 +94,12 @@ export default function TermsOfServicePage() {
 
           <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">6. Limitation of Liability</h2>
           <p className="text-gray-700 leading-relaxed">
-            To the fullest extent permitted by law, WolvCapital is not liable for losses arising from market volatility, investment performance, or user negligence. Our total liability shall not exceed the amount of fees paid by you in the 12 months preceding the claim.
+            To the fullest extent permitted by law, WolvCapital is not liable for losses arising from market volatility, investment performance, or user negligence. Our total liability shall not exceed the amount of fees paid by you in the 12 months preceding the claim. All services are provided in accordance with applicable U.S. financial regulations.
           </p>
 
           <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">7. Governing Law</h2>
           <p className="text-gray-700 leading-relaxed">
-            These Terms of Service are governed by the laws of the United Kingdom. Any disputes shall be resolved in UK courts unless otherwise required by mandatory consumer protection laws in your jurisdiction.
+            These Terms of Service are governed by the laws of the United States. Any disputes shall be resolved in courts located in the United States unless otherwise required by mandatory consumer protection laws in your jurisdiction. WolvCapital complies with all applicable SEC, CFTC, and CCPA requirements.
           </p>
 
           <div className="bg-blue-50 border-l-4 border-blue-500 p-6 mt-12 rounded-r-lg">
@@ -108,7 +108,7 @@ export default function TermsOfServicePage() {
               By creating an account and using WolvCapital's services, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service, our{' '}
               <Link href="/legal-disclaimer" className="text-blue-600 hover:underline font-semibold">Legal Disclaimer</Link>,{' '}
               <Link href="/risk-disclosure" className="text-blue-600 hover:underline font-semibold">Risk Disclosure</Link>, and{' '}
-              <Link href="/privacy" className="text-blue-600 hover:underline font-semibold">Privacy Policy</Link>.
+              <Link href="/privacy" className="text-blue-600 hover:underline font-semibold">Privacy Policy</Link>. All policies are designed to meet U.S. financial and data protection standards.
             </p>
           </div>
         </div>
@@ -145,11 +145,11 @@ export default function TermsOfServicePage() {
             </div>
             <div>
               <h3 className="text-xl font-bold mb-4">WolvCapital</h3>
-              <p className="text-gray-300 text-sm leading-relaxed">Secure crypto banking, audited ROI programs, and virtual cards—all governed by a human approval loop.</p>
+              <p className="text-gray-300 text-sm leading-relaxed">U.S. regulated digital investment platform delivering secure investment workflows, manual compliance reviews, and premium virtual card solutions for professional and institutional clients.</p>
             </div>
           </div>
           <div className="border-t border-gray-700 pt-8 text-center text-gray-400">
-            <p>© 2025 WolvCapital Invest. All rights reserved.</p>
+            <p>© 2025 WolvCapital. All rights reserved.</p>
           </div>
         </div>
       </footer>

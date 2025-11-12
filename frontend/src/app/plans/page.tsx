@@ -13,14 +13,12 @@ export default function PlansPage() {
               </div>
               <span className="text-2xl font-bold text-[#0b2f6b]">WolvCapital</span>
             </Link>
-            
             <div className="hidden md:flex items-center space-x-8">
               <Link href="/" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">Home</Link>
               <Link href="/plans" className="text-[#0b2f6b] font-semibold">Plans</Link>
               <Link href="/about" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">About</Link>
               <Link href="/contact" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">Contact</Link>
             </div>
-
             <div className="flex items-center space-x-4">
               <Link href="/accounts/login" className="text-[#0b2f6b] font-semibold hover:text-[#2563eb] transition">Login</Link>
               <Link href="/accounts/signup" className="bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-6 py-2.5 rounded-full font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105">Sign Up</Link>
@@ -33,7 +31,7 @@ export default function PlansPage() {
       <section className="pt-32 pb-16 bg-gradient-to-br from-[#0b2f6b] to-[#1d4ed8] text-white">
         <div className="container mx-auto px-4 lg:px-8 text-center">
           <h1 className="text-5xl lg:text-6xl font-extrabold mb-6">Investment Plans</h1>
-          <p className="text-xl text-gray-200 max-w-3xl mx-auto">Choose from our carefully crafted investment plans designed to meet different risk tolerances and investment goals</p>
+          <p className="text-xl text-gray-200 max-w-3xl mx-auto">Explore WolvCapital’s professionally structured investment plans, designed for secure investment returns and compliant with U.S. financial regulations. Select a plan that aligns with your risk tolerance and financial objectives.</p>
         </div>
       </section>
 
@@ -68,7 +66,7 @@ export default function PlansPage() {
                     <span className="font-bold text-green-600">90%</span>
                   </div>
                 </div>
-                <p className="text-gray-600 text-sm mb-6 leading-relaxed">Entry-level investment plan perfect for beginners. Low risk with steady returns over 3 months.</p>
+                <p className="text-gray-600 text-sm mb-6 leading-relaxed">Entry-level plan for new investors seeking secure digital asset growth over a three-month period. All investments are subject to compliance review and audit.</p>
                 <Link href="/accounts/signup" className="block w-full bg-gradient-to-r from-[#0b2f6b] to-[#2563eb] text-white text-center py-3 rounded-full font-bold hover:shadow-lg transition-all duration-300 group-hover:scale-105">Get Started</Link>
               </div>
             </div>
@@ -103,7 +101,7 @@ export default function PlansPage() {
                     <span className="font-bold text-green-600">188%</span>
                   </div>
                 </div>
-                <p className="text-gray-600 text-sm mb-6 leading-relaxed">Intermediate plan for growing portfolios over 5 months.</p>
+                <p className="text-gray-600 text-sm mb-6 leading-relaxed">Balanced plan for investors seeking portfolio growth and consistent returns over five months. All performance is subject to transparent audit and regulatory standards.</p>
                 <Link href="/accounts/signup" className="block w-full bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] text-white text-center py-3 rounded-full font-bold hover:shadow-lg transition-all duration-300 group-hover:scale-105">Get Started</Link>
               </div>
             </div>
@@ -135,7 +133,7 @@ export default function PlansPage() {
                     <span className="font-bold text-green-600">270%</span>
                   </div>
                 </div>
-                <p className="text-gray-600 text-sm mb-6 leading-relaxed">Advanced plan with higher allocation over 6 months.</p>
+                <p className="text-gray-600 text-sm mb-6 leading-relaxed">Advanced plan for experienced investors seeking higher allocations and extended growth over six months. All investments are reviewed for compliance and regulatory standards.</p>
                 <Link href="/accounts/signup" className="block w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white text-center py-3 rounded-full font-bold hover:shadow-lg transition-all duration-300 group-hover:scale-105">Get Started</Link>
               </div>
             </div>
@@ -171,7 +169,7 @@ export default function PlansPage() {
                     <span className="font-bold text-green-600">730%</span>
                   </div>
                 </div>
-                <p className="text-gray-600 text-sm mb-6 leading-relaxed">Premium annual plan for high-net-worth investors.</p>
+                <p className="text-gray-600 text-sm mb-6 leading-relaxed">Exclusive annual plan for high-net-worth and institutional clients seeking premium digital investment opportunities. All activity is subject to comprehensive compliance oversight.</p>
                 <Link href="/accounts/signup" className="block w-full bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-white text-center py-3 rounded-full font-bold hover:shadow-lg transition-all duration-300 group-hover:scale-105">Get Started</Link>
               </div>
             </div>
@@ -205,16 +203,16 @@ export default function PlansPage() {
               <h3 className="text-xl font-bold mb-4">Contact Info</h3>
               <ul className="space-y-2 text-gray-300">
                 <li>support@wolvcapital.com</li>
-                <li>24/7 Support</li>
+                <li>Compliance & Investor Support</li>
               </ul>
             </div>
             <div>
               <h3 className="text-xl font-bold mb-4">WolvCapital</h3>
-              <p className="text-gray-300 text-sm leading-relaxed">Secure crypto banking, audited ROI programs, and virtual cards—all governed by a human approval loop.</p>
+              <p className="text-gray-300 text-sm leading-relaxed">WolvCapital is a U.S. regulated digital investment platform providing secure investment returns, robust compliance controls, and premium virtual card solutions for professional and institutional clients.</p>
             </div>
           </div>
           <div className="border-t border-gray-700 pt-8 text-center text-gray-400">
-            <p>© 2025 WolvCapital Invest. All rights reserved.</p>
+            <p>© 2025 WolvCapital. All rights reserved.</p>
           </div>
         </div>
       </footer>

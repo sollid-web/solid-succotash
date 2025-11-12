@@ -6,7 +6,7 @@ To complete the homepage and contact page updates, add these 3 images to the `fr
 
 ### 1. Office Location Map
 - **Filename:** `office-location-map.jpg`
-- **Source:** Image 1 (map with "Registered Office - London, United Kingdom")
+- **Source:** Image 1 (map with "Registered Office - United States")
 - **Location:** `/public/images/office-location-map.jpg`
 - **Used on:** Contact page (embedded map section)
 - **Dimensions:** Optimize for 1200x600px or similar landscape aspect ratio

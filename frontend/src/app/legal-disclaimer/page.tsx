@@ -3,20 +3,27 @@ import Image from 'next/image'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Legal Disclaimer · WolvCapital',
+  title: 'Legal Disclaimer · WolvCapital Digital Investment Platform',
   description:
-    'Read WolvCapital’s official legal disclaimer outlining investment terms, risk responsibilities, and service conditions for all users.',
-  keywords: ['investment disclaimer', 'compliance', 'investor terms', 'platform conditions', 'WolvCapital legal'],
+    'Read WolvCapital’s official legal disclaimer for secure investment returns, cryptocurrency investment opportunities, and U.S. regulatory compliance.',
+  keywords: [
+    'digital investment platform',
+    'U.S. fintech company',
+    'secure investment returns',
+    'cryptocurrency investment',
+    'regulated financial platform',
+    'legal disclaimer',
+    'WolvCapital'
+  ],
   openGraph: {
-    title: 'WolvCapital Legal Disclaimer',
-    description: 'Official investment disclaimer and compliance notice by WolvCapital Ltd.',
+    title: 'WolvCapital Legal Disclaimer · U.S. Digital Investment Platform',
+    description: 'Official investment disclaimer and compliance notice by WolvCapital, a U.S. regulated platform.',
     images: [
-      // Use a known-present image to avoid 404s in previews
       {
         url: '/images/hero-crypto-abstract-xl.jpg',
         width: 1200,
         height: 630,
-        alt: 'WolvCapital Professional Investment Platform',
+        alt: 'WolvCapital digital investment platform legal disclaimer',
       },
     ],
   },
@@ -42,7 +49,7 @@ export default function LegalDisclaimerPage() {
         <section className="pt-32 pb-16 bg-gray-50">
           <div className="container mx-auto px-4 lg:px-8 max-w-6xl">
             <div className="text-center mb-12">
-              <h1 className="text-4xl lg:text-5xl font-bold text-[#0b2f6b] mb-4">Legal Disclaimer</h1>
+              <h1 className="text-5xl lg:text-6xl font-extrabold text-[#0b2f6b] mb-4">Legal Disclaimer</h1>
               <p className="text-gray-600">Last updated: November 2025</p>
             </div>
 
@@ -67,9 +74,9 @@ export default function LegalDisclaimerPage() {
 
               {/* Intro Content */}
               <div className="bg-white rounded-2xl p-8 shadow-lg">
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">Important Notice</h2>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">Important Notice</h2>
                 <p className="text-lg text-gray-700 leading-relaxed">
-                  WolvCapital is a digital investment platform offering cryptocurrency-based financial services. By accessing or using our services, you acknowledge and agree to the following terms and conditions.
+                  WolvCapital is a U.S. regulated digital investment platform offering cryptocurrency-based financial services. By accessing or using our services, you acknowledge and agree to the following terms and conditions, which are designed to meet U.S. financial and data protection standards.
                 </p>
               </div>
             </div>
@@ -80,15 +87,15 @@ export default function LegalDisclaimerPage() {
               </p>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">No Guarantee of Returns</h2>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">No Guarantee of Returns</h2>
                 <p className="text-gray-700">
-                  Investment returns are subject to market conditions and platform performance. Past performance does not guarantee future results. All investments carry inherent risk, and you may receive back less than your original investment amount.
+                  Investment returns are subject to market conditions and platform performance. Past performance does not guarantee future results. All investments carry inherent risk, and you may receive back less than your original investment amount. WolvCapital does not provide any guarantee of performance.
                 </p>
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">User Responsibility</h2>
-                <p className="text-gray-700 mb-3">Users must ensure the accuracy of their account information and maintain the confidentiality of their credentials. You are solely responsible for:</p>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">User Responsibility</h2>
+                <p className="text-gray-700 mb-3">Users must ensure the accuracy of their account information and maintain the confidentiality of their credentials. You are solely responsible for compliance with all applicable laws and regulations in your jurisdiction:</p>
                 <ul className="list-disc pl-6 space-y-2 text-gray-700">
                   <li>Maintaining the security of your account credentials</li>
                   <li>Providing accurate and up-to-date personal information</li>
@@ -98,8 +105,8 @@ export default function LegalDisclaimerPage() {
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">Service Availability</h2>
-                <p className="text-gray-700 mb-3">Platform features are subject to availability and approval. Service interruptions may occur due to:</p>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">Service Availability</h2>
+                <p className="text-gray-700 mb-3">Platform features are subject to availability and approval. Service interruptions may occur due to regulatory requirements, compliance reviews, or operational constraints:</p>
                 <ul className="list-disc pl-6 space-y-2 text-gray-700">
                   <li>Scheduled maintenance and system upgrades</li>
                   <li>Technical difficulties or security concerns</li>
@@ -109,23 +116,23 @@ export default function LegalDisclaimerPage() {
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">Manual Review Process</h2>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">Manual Review Process</h2>
                 <p className="text-gray-700">
-                  All transactions undergo manual off-chain review for security purposes. Processing times typically range from 24-72 hours but may vary during high-volume periods.
+                  All transactions undergo manual off-chain review for security and regulatory compliance purposes. Processing times typically range from 24-72 hours but may vary during high-volume periods or additional compliance checks.
                 </p>
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">Limitation of Liability</h2>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">Limitation of Liability</h2>
                 <p className="text-gray-700">
-                  WolvCapital shall not be liable for any direct, indirect, incidental, or consequential damages arising from your use of the platform, investment losses, or service interruptions.
+                  WolvCapital shall not be liable for any direct, indirect, incidental, or consequential damages arising from your use of the platform, investment losses, or service interruptions. All services are provided in accordance with applicable U.S. financial regulations.
                 </p>
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">Contact Information</h2>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">Contact Information</h2>
                 <p className="text-gray-700">
-                  If you have any questions about this Legal Disclaimer, please contact us at <a href="mailto:legal@wolvcapital.com" className="text-blue-600 hover:underline">legal@wolvcapital.com</a>.
+                  If you have any questions about this Legal Disclaimer, please contact us at <a href="mailto:legal@wolvcapital.com" className="text-blue-600 hover:underline">legal@wolvcapital.com</a>. All communications are handled in accordance with U.S. regulatory requirements.
                 </p>
               </div>
             </div>

@@ -5,13 +5,13 @@ export default function PrivacyPolicyPage() {
   return (
     <>
       <Head>
-        <title>Privacy Policy · WolvCapital</title>
-        <meta name="description" content="Understand how WolvCapital protects user data and personal information through transparent privacy and cybersecurity practices." />
-        <meta name="keywords" content="privacy policy, data protection, GDPR compliance, cybersecurity, WolvCapital" />
-        <meta property="og:title" content="WolvCapital Privacy Policy" />
-        <meta property="og:description" content="Learn about WolvCapital’s user data protection and privacy practices." />
-        <meta property="og:image" content="/img/wolvcapital-privacy-policy.jpg" />
-        <meta name="robots" content="index, follow" />
+  <title>Privacy Policy · WolvCapital Digital Investment Platform</title>
+  <meta name="description" content="Review WolvCapital’s privacy policy for secure investment returns, cryptocurrency investment opportunities, and U.S. regulatory compliance." />
+  <meta name="keywords" content="digital investment platform, U.S. fintech company, secure investment returns, cryptocurrency investment, regulated financial platform, privacy policy, WolvCapital" />
+  <meta property="og:title" content="WolvCapital Privacy Policy · U.S. Digital Investment Platform" />
+  <meta property="og:description" content="Learn about WolvCapital’s user data protection and privacy practices, compliant with U.S. financial regulations." />
+  <meta property="og:image" content="/img/wolvcapital-privacy-policy.jpg" />
+  <meta name="robots" content="index, follow" />
       </Head>
 
       <div className="min-h-screen bg-white">
@@ -31,17 +31,17 @@ export default function PrivacyPolicyPage() {
         <section className="pt-32 pb-16">
           <div className="container mx-auto px-4 lg:px-8 max-w-4xl">
             <div className="text-center mb-12">
-              <h1 className="text-4xl lg:text-5xl font-bold text-[#0b2f6b] mb-4">Privacy Policy</h1>
-              <p className="text-gray-600">Effective Date: October 2025</p>
+              <h1 className="text-5xl lg:text-6xl font-extrabold text-[#0b2f6b] mb-4">Privacy Policy</h1>
+              <p className="text-gray-600">Effective Date: October 2025. WolvCapital complies with all applicable U.S. financial and data protection regulations.</p>
             </div>
 
             <div className="prose max-w-none space-y-8">
               <p className="text-lg text-gray-700">
-                At WolvCapital, we respect your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, store, and protect your information when you use our services.
+                At WolvCapital, we respect your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, store, and protect your information when you use our services, in accordance with U.S. financial and data protection regulations.
               </p>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">1. Information We Collect</h2>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">1. Information We Collect</h2>
                 <h3 className="text-xl font-semibold text-gray-800 mb-3">Personal Data</h3>
                 <ul className="list-disc pl-6 space-y-2 text-gray-700 mb-4">
                   <li><strong>Identity Information:</strong> Full name, date of birth, nationality, and government-issued identification</li>
@@ -66,7 +66,7 @@ export default function PrivacyPolicyPage() {
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">2. How We Use Your Data</h2>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">2. How We Use Your Data</h2>
                 <ul className="list-disc pl-6 space-y-2 text-gray-700">
                   <li><strong>Service Provision:</strong> To provide our digital investment platform and process transactions</li>
                   <li><strong>Compliance:</strong> To comply with AML and KYC requirements</li>
@@ -77,8 +77,8 @@ export default function PrivacyPolicyPage() {
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">3. Data Sharing</h2>
-                <p className="text-gray-700 mb-3"><strong>We do not sell your personal data.</strong> However, we may share your information with:</p>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">3. Data Sharing</h2>
+                <p className="text-gray-700 mb-3"><strong>We do not sell your personal data.</strong> However, we may share your information with service providers and legal authorities in accordance with U.S. financial and data protection regulations:</p>
                 <ul className="list-disc pl-6 space-y-2 text-gray-700">
                   <li><strong>Service Providers:</strong> Payment processors, identity verification partners, cloud hosting providers</li>
                   <li><strong>Legal Authorities:</strong> When required by law or legal process</li>
@@ -87,7 +87,7 @@ export default function PrivacyPolicyPage() {
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">4. Data Security</h2>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">4. Data Security</h2>
                 <ul className="list-disc pl-6 space-y-2 text-gray-700">
                   <li><strong>Encryption:</strong> End-to-end encryption for data transmission and storage</li>
                   <li><strong>Secure Authentication:</strong> Multi-factor authentication and secure password requirements</li>
@@ -97,7 +97,7 @@ export default function PrivacyPolicyPage() {
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">5. Data Retention</h2>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">5. Data Retention</h2>
                 <ul className="list-disc pl-6 space-y-2 text-gray-700">
                   <li><strong>Active Accounts:</strong> Data retained for the duration of your account relationship</li>
                   <li><strong>Closed Accounts:</strong> Personal and financial data retained for 7 years to comply with financial regulations</li>
@@ -106,7 +106,7 @@ export default function PrivacyPolicyPage() {
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">6. Your Rights</h2>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">6. Your Rights</h2>
                 <ul className="list-disc pl-6 space-y-2 text-gray-700">
                   <li><strong>Access:</strong> Request a copy of the personal data we hold about you</li>
                   <li><strong>Correction:</strong> Request correction of inaccurate or incomplete information</li>
@@ -119,7 +119,7 @@ export default function PrivacyPolicyPage() {
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">7. Contact</h2>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">7. Contact</h2>
                 <ul className="list-disc pl-6 space-y-2 text-gray-700">
                   <li><strong>Email:</strong> <a href="mailto:privacy@wolvcapital.com" className="text-blue-600 hover:underline">privacy@wolvcapital.com</a></li>
                   <li><strong>General Support:</strong> <a href="mailto:support@wolvcapital.com" className="text-blue-600 hover:underline">support@wolvcapital.com</a></li>
@@ -129,7 +129,7 @@ export default function PrivacyPolicyPage() {
               <div className="bg-green-50 border border-green-200 rounded-xl p-6 mt-8">
                 <h3 className="text-lg font-bold text-green-800 mb-2">Your Privacy Matters</h3>
                 <p className="text-green-700">
-                  WolvCapital is committed to transparency and data protection. If you have any questions about how we handle your personal information, please don't hesitate to reach out.
+                  WolvCapital is committed to transparency and data protection. If you have any questions about how we handle your personal information, please contact us. All communications are handled in accordance with U.S. financial and data protection regulations.
                 </p>
               </div>
             </div>

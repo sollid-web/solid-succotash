@@ -213,7 +213,7 @@ export default function DashboardPage() {
             Welcome back, {user?.first_name || user?.email}!
           </h1>
           <p className="text-xl opacity-90">
-            Here's your investment dashboard overview
+            Your secure investment dashboard overview
           </p>
         </div>
 
@@ -359,7 +359,7 @@ export default function DashboardPage() {
                 </svg>
               </div>
               <h3 className="font-bold text-gray-800 mb-2">New Investment</h3>
-              <p className="text-sm text-gray-600">Select a plan and amount</p>
+              <p className="text-sm text-gray-600">Select a compliant investment plan and amount</p>
             </Link>
 
             <Link href="/dashboard/deposit" className="p-6 border-2 border-gray-200 rounded-2xl hover:border-[#2563eb] hover:shadow-lg transition text-center group">
@@ -369,7 +369,7 @@ export default function DashboardPage() {
                 </svg>
               </div>
               <h3 className="font-bold text-gray-800 mb-2">Deposit</h3>
-              <p className="text-sm text-gray-600">Fund your wallet</p>
+              <p className="text-sm text-gray-600">Fund your wallet securely</p>
             </Link>
 
             <Link href="/dashboard/withdraw" className="p-6 border-2 border-gray-200 rounded-2xl hover:border-[#2563eb] hover:shadow-lg transition text-center group">
@@ -379,7 +379,7 @@ export default function DashboardPage() {
                 </svg>
               </div>
               <h3 className="font-bold text-gray-800 mb-2">Withdraw</h3>
-              <p className="text-sm text-gray-600">Request a payout</p>
+              <p className="text-sm text-gray-600">Request a payout (subject to compliance review)</p>
             </Link>
 
             <Link href="/dashboard/support" className="p-6 border-2 border-gray-200 rounded-2xl hover:border-[#2563eb] hover:shadow-lg transition text-center group">
@@ -389,7 +389,7 @@ export default function DashboardPage() {
                 </svg>
               </div>
               <h3 className="font-bold text-gray-800 mb-2">Support</h3>
-              <p className="text-sm text-gray-600">Get help from our team</p>
+              <p className="text-sm text-gray-600">Get help from our compliance and investor support teams</p>
             </Link>
           </div>
         </div>

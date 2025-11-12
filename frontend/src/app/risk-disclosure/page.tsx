@@ -6,13 +6,13 @@ export default function RiskDisclosurePage() {
   return (
     <>
       <Head>
-        <title>Risk Disclosure · WolvCapital</title>
-        <meta name="description" content="Learn about WolvCapital’s investment risk disclosures — transparency and awareness for responsible investors in cryptocurrency markets." />
-        <meta name="keywords" content="risk disclosure, crypto volatility, transparency, responsible investing, WolvCapital" />
-        <meta property="og:title" content="WolvCapital Risk Disclosure" />
-        <meta property="og:description" content="Understand the investment risks and disclosures provided by WolvCapital." />
-        <meta property="og:image" content="/img/wolvcapital-risk-disclosure-statement.jpg" />
-        <meta name="robots" content="index, follow" />
+  <title>Risk Disclosure · WolvCapital Digital Investment Platform</title>
+  <meta name="description" content="Review WolvCapital’s risk disclosure for secure investment returns, cryptocurrency investment opportunities, and U.S. regulatory compliance." />
+  <meta name="keywords" content="digital investment platform, U.S. fintech company, secure investment returns, cryptocurrency investment, regulated financial platform, risk disclosure, WolvCapital" />
+  <meta property="og:title" content="WolvCapital Risk Disclosure · U.S. Digital Investment Platform" />
+  <meta property="og:description" content="Understand the investment risks and disclosures provided by WolvCapital, a U.S. regulated platform." />
+  <meta property="og:image" content="/img/wolvcapital-risk-disclosure-statement.jpg" />
+  <meta name="robots" content="index, follow" />
       </Head>
 
       <div className="min-h-screen bg-white">
@@ -32,8 +32,8 @@ export default function RiskDisclosurePage() {
         <section className="pt-32 pb-16 bg-gray-50">
           <div className="container mx-auto px-4 lg:px-8 max-w-6xl">
             <div className="text-center mb-12">
-              <h1 className="text-4xl lg:text-5xl font-bold text-[#0b2f6b] mb-4">Risk Disclosure</h1>
-              <p className="text-xl text-gray-600">Important information about cryptocurrency and investment risks</p>
+              <h1 className="text-5xl lg:text-6xl font-extrabold text-[#0b2f6b] mb-4">Risk Disclosure</h1>
+              <p className="text-xl text-gray-600">Important information about cryptocurrency and investment risks. All investments are subject to U.S. regulatory standards and compliance review.</p>
             </div>
 
             <div className="grid lg:grid-cols-[420px_1fr] gap-12 items-start mb-12">
@@ -75,22 +75,22 @@ export default function RiskDisclosurePage() {
               </p>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">Market Volatility</h2>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">Market Volatility</h2>
                 <p className="text-gray-700">
-                  Cryptocurrency markets are highly volatile. Prices may fluctuate rapidly and unpredictably, resulting in potential substantial gains or losses.
+                  Cryptocurrency markets are highly volatile. Prices may fluctuate rapidly and unpredictably, resulting in potential substantial gains or losses. WolvCapital does not provide any guarantee of performance.
                 </p>
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">Regulatory Uncertainty</h2>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">Regulatory Uncertainty</h2>
                 <p className="text-gray-700">
-                  The legal and regulatory framework for digital assets is evolving and varies by jurisdiction. Changes in laws or enforcement actions may impact platform operations or asset values.
+                  The legal and regulatory framework for digital assets is evolving and varies by jurisdiction. Changes in laws or enforcement actions may impact platform operations or asset values. WolvCapital complies with all applicable U.S. financial regulations.
                 </p>
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">Security Risks</h2>
-                <p className="text-gray-700 mb-3">While WolvCapital employs advanced security measures, potential risks include:</p>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">Security Risks</h2>
+                <p className="text-gray-700 mb-3">While WolvCapital employs advanced security measures and manual review, potential risks include:</p>
                 <ul className="list-disc pl-6 space-y-2 text-gray-700">
                   <li>Cybersecurity attacks and data breaches</li>
                   <li>Technical vulnerabilities in blockchain protocols</li>
@@ -100,15 +100,15 @@ export default function RiskDisclosurePage() {
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">Liquidity Risk</h2>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">Liquidity Risk</h2>
                 <p className="text-gray-700">
                   Certain assets or investment plans may have limited liquidity. Market conditions or platform policies may impact the availability of funds when needed.
                 </p>
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">Manual Review Process</h2>
-                <p className="text-gray-700 mb-3">Our manual off-chain approval process introduces specific risks:</p>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">Manual Review Process</h2>
+                <p className="text-gray-700 mb-3">Our manual off-chain approval process introduces specific risks and is designed to meet U.S. regulatory standards:</p>
                 <ul className="list-disc pl-6 space-y-2 text-gray-700">
                   <li>Processing delays of 24-72 hours or longer</li>
                   <li>Potential for human error in transaction review</li>
@@ -118,15 +118,15 @@ export default function RiskDisclosurePage() {
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">No Financial Advice</h2>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">No Financial Advice</h2>
                 <p className="text-gray-700">
-                  Information provided on the platform does not constitute financial, legal, or investment advice. Users should conduct their own research and consult qualified professionals before making investment decisions.
+                  Information provided on the platform does not constitute financial, legal, or investment advice. Users should conduct their own research and consult qualified professionals before making investment decisions. WolvCapital does not provide any guarantee of performance or investment advice.
                 </p>
               </div>
 
               <div>
-                <h2 className="text-2xl font-bold text-[#0b2f6b] mb-4">Your Acknowledgment</h2>
-                <p className="text-gray-700 mb-3">By participating in WolvCapital's services, you agree that:</p>
+                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">Your Acknowledgment</h2>
+                <p className="text-gray-700 mb-3">By participating in WolvCapital's services, you agree that all investments are subject to U.S. regulatory standards and compliance review:</p>
                 <ul className="list-disc pl-6 space-y-2 text-gray-700">
                   <li>You understand the high-risk nature of cryptocurrency investments</li>
                   <li>You are investing only funds you can afford to lose entirely</li>

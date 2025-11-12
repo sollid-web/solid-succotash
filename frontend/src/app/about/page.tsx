@@ -5,13 +5,13 @@ export default function AboutPage() {
   return (
     <>
       <Head>
-        <title>About Us · WolvCapital Investment Team</title>
-        <meta name="description" content="Meet the WolvCapital investment team — experienced professionals dedicated to creating secure and profitable investment strategies for global clients." />
-        <meta name="keywords" content="investment team, asset management firm, financial expertise, WolvCapital professionals" />
-        <meta property="og:title" content="About Us · WolvCapital Investment Team" />
-        <meta property="og:description" content="Meet the trusted WolvCapital investment professionals powering global financial growth." />
-        <meta property="og:image" content="/img/wolvcapital-investment-team.jpg" />
-        <meta name="robots" content="index, follow" />
+  <title>About WolvCapital · U.S. Digital Investment Platform</title>
+  <meta name="description" content="Discover WolvCapital, a U.S. regulated digital investment platform led by experienced professionals. Learn about our commitment to secure investment returns, compliance, and transparent cryptocurrency investment opportunities." />
+  <meta name="keywords" content="digital investment platform, U.S. fintech company, secure investment returns, cryptocurrency investment, regulated financial platform, WolvCapital team" />
+  <meta property="og:title" content="About WolvCapital · U.S. Digital Investment Platform" />
+  <meta property="og:description" content="Meet the WolvCapital team—trusted U.S. professionals delivering secure, compliant investment management." />
+  <meta property="og:image" content="/img/wolvcapital-investment-team.jpg" />
+  <meta name="robots" content="index, follow" />
       </Head>
 
       {/* Navigation */}
@@ -44,7 +44,7 @@ export default function AboutPage() {
       <section className="pt-32 pb-16 bg-gradient-to-br from-[#0b2f6b] to-[#1d4ed8] text-white">
         <div className="container mx-auto px-4 lg:px-8 text-center">
           <h1 className="text-5xl lg:text-6xl font-extrabold mb-6">About WolvCapital</h1>
-          <p className="text-xl text-gray-200 max-w-3xl mx-auto">Building the future of secure, transparent, and human-reviewed investment management</p>
+          <p className="text-xl text-gray-200 max-w-3xl mx-auto">WolvCapital is a U.S. regulated digital investment platform dedicated to secure investment returns, transparent operations, and rigorous human oversight. Our mission is to deliver compliant cryptocurrency investment opportunities for institutional and individual investors.</p>
         </div>
       </section>
 
@@ -55,12 +55,12 @@ export default function AboutPage() {
             <div>
               <h2 className="text-4xl font-bold text-[#0b2f6b] mb-6">Our Mission</h2>
               <p className="text-lg text-gray-700 leading-relaxed">
-                WolvCapital is dedicated to providing secure, transparent, and profitable investment opportunities in the digital asset space. We combine cutting-edge technology with traditional financial safeguards to ensure every investment is protected and every transaction is verified.
+                WolvCapital’s mission is to provide secure, transparent, and compliant investment opportunities in the digital asset sector. We integrate advanced technology with proven financial safeguards, ensuring every investment is protected and every transaction is subject to manual review by our compliance team.
               </p>
             </div>
 
             <div>
-              <h2 className="text-4xl font-bold text-[#0b2f6b] mb-6">Why Choose Us</h2>
+              <h2 className="text-4xl font-bold text-[#0b2f6b] mb-6">Why Choose WolvCapital</h2>
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl shadow-lg">
                   <div className="w-16 h-16 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-xl flex items-center justify-center mb-4">
@@ -68,8 +68,8 @@ export default function AboutPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-bold text-[#0b2f6b] mb-3">Manual Security</h3>
-                  <p className="text-gray-700">Every transaction requires human admin approval. No automated withdrawals, ensuring maximum security for your funds.</p>
+                  <h3 className="text-2xl font-bold text-[#0b2f6b] mb-3">Human Oversight</h3>
+                  <p className="text-gray-700">All financial transactions require manual approval by our compliance team. Automated withdrawals are not permitted, ensuring maximum security and regulatory compliance for your assets.</p>
                 </div>
 
                 <div className="bg-gradient-to-br from-purple-50 to-white p-8 rounded-2xl shadow-lg">
@@ -78,8 +78,8 @@ export default function AboutPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-bold text-purple-700 mb-3">Verified Returns</h3>
-                  <p className="text-gray-700">Transparent, audited ROI calculations. Daily returns deposited after manual verification by our admin team.</p>
+                  <h3 className="text-2xl font-bold text-purple-700 mb-3">Audited Performance</h3>
+                  <p className="text-gray-700">All investment returns are calculated transparently and deposited only after manual verification by our compliance team. Performance is subject to audit and regulatory review.</p>
                 </div>
 
                 <div className="bg-gradient-to-br from-green-50 to-white p-8 rounded-2xl shadow-lg">
@@ -88,8 +88,8 @@ export default function AboutPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-bold text-green-700 mb-3">Virtual Cards</h3>
-                  <p className="text-gray-700">Seamless spending with virtual debit cards linked to your wallet. Spend your returns instantly, anywhere.</p>
+                  <h3 className="text-2xl font-bold text-green-700 mb-3">Virtual Card Solutions</h3>
+                  <p className="text-gray-700">Access secure virtual debit cards linked to your WolvCapital wallet. Spend your investment returns globally, with robust compliance and security controls.</p>
                 </div>
 
                 <div className="bg-gradient-to-br from-amber-50 to-white p-8 rounded-2xl shadow-lg">
@@ -98,8 +98,8 @@ export default function AboutPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-bold text-amber-700 mb-3">24/7 Support</h3>
-                  <p className="text-gray-700">Round-the-clock customer support and account management. We're here to help whenever you need us.</p>
+                  <h3 className="text-2xl font-bold text-amber-700 mb-3">Dedicated Support</h3>
+                  <p className="text-gray-700">Our compliance and client support teams are available to assist you with account management and investment inquiries. We prioritize responsive, professional service for all clients.</p>
                 </div>
               </div>
             </div>
@@ -107,40 +107,40 @@ export default function AboutPage() {
             <div>
               <h2 className="text-4xl font-bold text-[#0b2f6b] mb-6">Our Approach</h2>
               <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                Unlike traditional automated platforms, WolvCapital prioritizes security and transparency through human oversight. Every deposit, withdrawal, and investment requires manual approval from our verified admin team. This approach ensures:
+                WolvCapital prioritizes security and transparency through rigorous human oversight. Every deposit, withdrawal, and investment is manually approved by our compliance team, ensuring:
               </p>
               <ul className="space-y-4 text-lg text-gray-700">
                 <li className="flex items-start">
                   <svg className="w-6 h-6 text-green-600 mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span>Protection against unauthorized transactions and fraud</span>
+                  <span>Protection against unauthorized transactions and financial fraud</span>
                 </li>
                 <li className="flex items-start">
                   <svg className="w-6 h-6 text-green-600 mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span>Complete audit trail for all financial operations</span>
+                  <span>Comprehensive audit trail for all financial operations</span>
                 </li>
                 <li className="flex items-start">
                   <svg className="w-6 h-6 text-green-600 mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span>Verified ROI calculations before wallet crediting</span>
+                  <span>Verified investment returns before wallet crediting</span>
                 </li>
                 <li className="flex items-start">
                   <svg className="w-6 h-6 text-green-600 mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span>Real human oversight on every money-moving operation</span>
+                  <span>Real human oversight for every money-moving operation</span>
                 </li>
               </ul>
             </div>
 
             <div className="bg-gradient-to-br from-[#0b2f6b] to-[#1d4ed8] text-white rounded-3xl p-12 text-center">
-              <h2 className="text-4xl font-bold mb-6">Ready to Get Started?</h2>
-              <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">Join thousands of investors who trust WolvCapital with their digital assets</p>
-              <Link href="/accounts/signup" className="inline-block bg-white text-[#0b2f6b] px-12 py-4 rounded-full font-bold text-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">Create Your Account</Link>
+              <h2 className="text-4xl font-bold mb-6">Ready to Invest Securely?</h2>
+              <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">Join a growing community of investors who trust WolvCapital, a U.S. regulated digital investment platform, for secure investment returns and transparent portfolio management.</p>
+              <Link href="/accounts/signup" className="inline-block bg-white text-[#0b2f6b] px-12 py-4 rounded-full font-bold text-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">Open Account</Link>
             </div>
           </div>
         </div>
@@ -177,11 +177,11 @@ export default function AboutPage() {
             </div>
             <div>
               <h3 className="text-xl font-bold mb-4">WolvCapital</h3>
-              <p className="text-gray-300 text-sm leading-relaxed">Secure crypto banking, audited ROI programs, and virtual cards—all governed by a human approval loop.</p>
+              <p className="text-gray-300 text-sm leading-relaxed">WolvCapital is a U.S. regulated digital investment platform providing secure investment returns, robust compliance controls, and premium virtual card solutions for professional and institutional clients.</p>
             </div>
           </div>
           <div className="border-t border-gray-700 pt-8 text-center text-gray-400">
-            <p>© 2025 WolvCapital Invest. All rights reserved.</p>
+            <p>© 2025 WolvCapital. All rights reserved.</p>
           </div>
         </div>
       </footer>

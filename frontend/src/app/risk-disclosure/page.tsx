@@ -50,35 +50,15 @@ export default function RiskDisclosurePage() {
 
             {/* End hero banner */}
 
-            <div className="grid lg:grid-cols-[420px_1fr] gap-12 items-start mb-12">
-              {/* Risk Disclosure Image */}
-              <div className="mx-auto lg:mx-0">
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-gray-200">
-                  <Image
-                    src="/images/legal/risk-disclosure-hero.jpg"
-                    alt="Professional reviewing investment risk analysis with WolvCapital platform"
-                    width={480}
-                    height={720}
-                    priority
-                    sizes="(min-width: 1024px) 420px, 90vw"
-                    className="w-full h-auto object-cover animate-fadeIn"
-                  />
-                </div>
-                <p className="text-sm text-gray-500 text-center mt-4 italic">
-                  Understanding risks is essential for informed investment decisions
-                </p>
-              </div>
-
-              {/* Warning Banner */}
-              <div className="bg-red-50 border-l-4 border-red-400 p-6 rounded-xl">
-                <div className="flex items-start">
-                  <svg className="w-6 h-6 text-red-400 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                  </svg>
-                  <div>
-                    <h3 className="text-lg font-bold text-red-800 mb-2">High Risk Investment Warning</h3>
-                    <p className="text-red-700">Investing in cryptocurrencies and digital assets involves significant risk. Never invest money you cannot afford to lose.</p>
-                  </div>
+            {/* Warning Banner */}
+            <div className="bg-red-50 border-l-4 border-red-400 p-6 rounded-xl mb-12">
+              <div className="flex items-start">
+                <svg className="w-6 h-6 text-red-400 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                <div>
+                  <h3 className="text-lg font-bold text-red-800 mb-2">High Risk Investment Warning</h3>
+                  <p className="text-red-700">Investing in cryptocurrencies and digital assets involves significant risk. Never invest money you cannot afford to lose.</p>
                 </div>
               </div>
             </div>

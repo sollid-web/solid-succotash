@@ -56,15 +56,14 @@ export default function LegalDisclaimerPage() {
             <div className="grid lg:grid-cols-[420px_1fr] gap-12 items-start mb-12">
               {/* Legal Image */}
               <div className="mx-auto lg:mx-0">
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-gray-200">
+                <div className="relative w-full max-w-[480px] aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl border-2 border-gray-200 mx-auto">
                   <Image
                     src="/images/legal/wolvcapital-legal-disclaimer.jpg"
                     alt="Legal practitioner signing official WolvCapital disclaimer documents"
-                    width={480}
-                    height={720}
+                    fill
                     priority
-                    sizes="(min-width: 1024px) 420px, 90vw"
-                    className="w-full h-auto object-cover animate-fadeIn"
+                    className="object-cover object-center animate-fadeIn"
+                    sizes="100vw"
                   />
                 </div>
                 <p className="text-sm text-gray-500 text-center mt-4 italic">

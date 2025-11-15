@@ -37,14 +37,14 @@ export default function ContactPage() {
               discussions, please contact our investor support and compliance teams below.
             </p>
             <div className="mt-8 flex justify-center">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20">
+              <div className="relative w-full max-w-[480px] aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 mx-auto">
                 <Image
                   src="/images/contact-hero.jpg"
                   alt="Contact WolvCapital — investor support and compliance"
-                  width={1200}
-                  height={630}
+                  fill
                   priority
-                  className="w-full h-auto"
+                  className="object-cover object-center"
+                  sizes="100vw"
                 />
               </div>
             </div>

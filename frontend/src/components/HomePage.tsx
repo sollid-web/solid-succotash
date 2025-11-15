@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import FlipVisaCard from './FlipVisaCard'
+import FlipCard from './FlipCard'
 import { useTranslation } from '@/i18n/TranslationProvider'
 import ReviewsRotator from '@/components/ReviewsRotator'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
@@ -19,7 +19,7 @@ export default function HomePage() {
         <div className="absolute inset-0 z-0">
           {/* Mobile and Desktop - Using same hero image */}
           <Image
-            src="/images/wolvcapital-hero-welcome-desktop.jpg"
+            src="/images/home-hero.jpg"
             alt="WolvCapital digital investment platform hero image, U.S. fintech company"
             fill
             className="object-cover object-center"
@@ -101,7 +101,7 @@ export default function HomePage() {
               <h3 className="text-3xl font-bold text-[#0b2f6b] mb-3">Preview Our Virtual Card Experience</h3>
               <p className="text-gray-600">Click or tap the card below to view both sides. WolvCapital virtual cards are designed for secure, compliant digital asset spending.</p>
             </div>
-            <FlipVisaCard />
+            <FlipCard />
             {/* Reviews carousel placed below the Visa card */}
             <div className="mt-12">
               <ReviewsRotator />

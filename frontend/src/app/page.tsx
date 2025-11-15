@@ -11,7 +11,7 @@ export const metadata: Metadata = {
       'Trusted crypto-based investment platform offering transparency and real returns.',
     images: [
       {
-        url: '/images/hero-crypto-abstract-xl.jpg',
+         url: '/images/home-og.jpg',
         width: 1200,
         height: 630,
         alt: 'WolvCapital Professional Investment Platform',
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: 'WolvCapital · Digital Investment Platform',
     description:
       'Trusted crypto-based investment platform offering transparency and real returns.',
-    images: ['/images/hero-crypto-abstract-xl.jpg'],
+     images: ['/images/home-og.jpg'],
   },
 }
 

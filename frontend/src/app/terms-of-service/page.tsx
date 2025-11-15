@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function TermsOfServicePage() {
   return (
@@ -10,7 +11,7 @@ export default function TermsOfServicePage() {
   <meta name="keywords" content="digital investment platform, U.S. fintech company, secure investment returns, cryptocurrency investment, regulated financial platform, terms of service, WolvCapital" />
   <meta property="og:title" content="WolvCapital Terms of Service · U.S. Digital Investment Platform" />
   <meta property="og:description" content="Read WolvCapital's user participation, investment, and compliance policy agreements." />
-  <meta property="og:image" content="/img/wolvcapital-terms-of-service.jpg" />
+   <meta property="og:image" content="/images/legal/legal-terms-og.jpg" />
   <meta name="robots" content="index, follow" />
       </Head>
 
@@ -45,6 +46,18 @@ export default function TermsOfServicePage() {
         <div className="container mx-auto px-4 lg:px-8 text-center">
           <h1 className="text-5xl lg:text-6xl font-extrabold mb-6">Terms of Service</h1>
           <p className="text-xl text-gray-200">Effective Date: October 2025</p>
+          <div className="mt-8 flex justify-center">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20">
+              <Image
+                 src="/images/legal/legal-terms-hero.jpg"
+                alt="WolvCapital Terms of Service — participation and compliance"
+                width={1200}
+                height={630}
+                priority
+                className="w-full h-auto"
+              />
+            </div>
+          </div>
         </div>
       </section>
 

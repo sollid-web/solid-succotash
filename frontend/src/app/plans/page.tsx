@@ -1,8 +1,18 @@
 import Link from 'next/link'
+import Image from 'next/image'
+import Head from 'next/head'
 
 export default function PlansPage() {
   return (
     <div className="min-h-screen bg-white">
+      <Head>
+        <title>Investment Plans · WolvCapital Digital Investment Platform</title>
+        <meta name="description" content="Explore professionally structured investment plans by WolvCapital. Secure, compliant, and subject to manual review." />
+        <meta property="og:title" content="Investment Plans · WolvCapital" />
+        <meta property="og:description" content="Discover WolvCapital’s secure, audited investment plans." />
+        <meta property="og:image" content="/images/pages/plans-og.jpg" />
+        <meta name="robots" content="index, follow" />
+      </Head>
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
         <div className="container mx-auto px-4 lg:px-8">
@@ -32,6 +42,18 @@ export default function PlansPage() {
         <div className="container mx-auto px-4 lg:px-8 text-center">
           <h1 className="text-5xl lg:text-6xl font-extrabold mb-6">Investment Plans</h1>
           <p className="text-xl text-gray-200 max-w-3xl mx-auto">Explore WolvCapital’s professionally structured investment plans, designed for secure investment returns and compliant with U.S. financial regulations. Select a plan that aligns with your risk tolerance and financial objectives.</p>
+          <div className="mt-8 flex justify-center">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20">
+              <Image
+                src="/images/pages/plans-hero.jpg"
+                alt="WolvCapital Investment Plans — compliant, manually reviewed"
+                width={1200}
+                height={630}
+                priority
+                className="w-full h-auto"
+              />
+            </div>
+          </div>
         </div>
       </section>
 

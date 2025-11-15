@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: 'WolvCapital',
     images: [
       {
-        url: '/images/hero-crypto-abstract-xl.jpg',
+        url: '/images/home-og.jpg',
         width: 1200,
         height: 630,
         alt: 'WolvCapital Professional Investment Platform',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'WolvCapital - Professional Investment Platform',
     description: 'Professional investment platform with secure deposits, real-time tracking, and verified withdrawals.',
-    images: ['/images/hero-crypto-abstract-xl.jpg'],
+    images: ['/images/home-og.jpg'],
   },
   icons: {
     icon: '/favicon.ico',

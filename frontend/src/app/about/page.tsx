@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link'
+import Image from 'next/image'
 import FaqAccordion from '@/components/FaqAccordion'
 
 export default function AboutPage() {
@@ -11,7 +12,7 @@ export default function AboutPage() {
   <meta name="keywords" content="digital investment platform, U.S. fintech company, secure investment returns, cryptocurrency investment, regulated financial platform, WolvCapital team" />
   <meta property="og:title" content="About WolvCapital · U.S. Digital Investment Platform" />
   <meta property="og:description" content="Meet the WolvCapital team—trusted U.S. professionals delivering secure, compliant investment management." />
-  <meta property="og:image" content="/img/wolvcapital-investment-team.jpg" />
+    <meta property="og:image" content="/images/about-og.jpg" />
   <meta name="robots" content="index, follow" />
       </Head>
 
@@ -46,6 +47,18 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 lg:px-8 text-center">
           <h1 className="text-5xl lg:text-6xl font-extrabold mb-6">About WolvCapital</h1>
           <p className="text-xl text-gray-200 max-w-3xl mx-auto">WolvCapital is a U.S. regulated digital investment platform dedicated to secure investment returns, transparent operations, and rigorous human oversight. Our mission is to deliver compliant cryptocurrency investment opportunities for institutional and individual investors.</p>
+          <div className="mt-8 flex justify-center">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20">
+                <Image
+                  src="/images/home-hero.jpg"
+                alt="About WolvCapital — U.S. regulated digital investment platform"
+                width={1200}
+                height={630}
+                priority
+                className="w-full h-auto"
+              />
+            </div>
+          </div>
         </div>
       </section>
 

@@ -11,7 +11,7 @@ export default function RiskDisclosurePage() {
   <meta name="keywords" content="digital investment platform, U.S. fintech company, secure investment returns, cryptocurrency investment, regulated financial platform, risk disclosure, WolvCapital" />
   <meta property="og:title" content="WolvCapital Risk Disclosure · U.S. Digital Investment Platform" />
   <meta property="og:description" content="Understand the investment risks and disclosures provided by WolvCapital, a U.S. regulated platform." />
-  <meta property="og:image" content="/img/wolvcapital-risk-disclosure-statement.jpg" />
+  <meta property="og:image" content="/images/legal/wolvcapital-risk-disclosure.jpg" />
   <meta name="robots" content="index, follow" />
       </Head>
 
@@ -31,17 +31,31 @@ export default function RiskDisclosurePage() {
 
         <section className="pt-32 pb-16 bg-gray-50">
           <div className="container mx-auto px-4 lg:px-8 max-w-6xl">
+            <div className="mt-8 mb-12 flex justify-center">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20">
+                <Image
+                  src="/images/legal/risk-disclosure-hero.jpg"
+                  alt="WolvCapital Risk Disclosure — investment risk overview"
+                  width={1200}
+                  height={630}
+                  priority
+                  className="w-full h-auto"
+                />
+              </div>
+            </div>
             <div className="text-center mb-12">
               <h1 className="text-5xl lg:text-6xl font-extrabold text-[#0b2f6b] mb-4">Risk Disclosure</h1>
               <p className="text-xl text-gray-600">Important information about cryptocurrency and investment risks. All investments are subject to U.S. regulatory standards and compliance review.</p>
             </div>
+
+            {/* End hero banner */}
 
             <div className="grid lg:grid-cols-[420px_1fr] gap-12 items-start mb-12">
               {/* Risk Disclosure Image */}
               <div className="mx-auto lg:mx-0">
                 <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-gray-200">
                   <Image
-                    src="/images/legal/wolvcapital-risk-disclosure.jpg"
+                    src="/images/legal/risk-disclosure-hero.jpg"
                     alt="Professional reviewing investment risk analysis with WolvCapital platform"
                     width={480}
                     height={720}

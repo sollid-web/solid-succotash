@@ -21,11 +21,12 @@ export default function ContactPage() {
         />
         <meta property="og:title" content="Contact WolvCapital · U.S. Digital Investment Platform" />
         <meta property="og:description" content="Contact WolvCapital’s compliance and investor support teams in the United States." />
-        <meta property="og:image" content="/images/office-location-map-og.jpg" />
+        
         <meta property="og:image:type" content="image/jpeg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta name="robots" content="index, follow" />
+        <meta property="og:image" content="/images/contact-og.jpg" />
       </Head>
       <div className="min-h-screen bg-white">
   <section className="pt-32 pb-16 bg-gradient-to-br from-[#0b2f6b] to-[#1d4ed8] text-white text-center">
@@ -35,6 +36,18 @@ export default function ContactPage() {
               WolvCapital is a U.S. regulated digital investment platform. For compliance, account inquiries, or partnership
               discussions, please contact our investor support and compliance teams below.
             </p>
+            <div className="mt-8 flex justify-center">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20">
+                <Image
+                  src="/images/contact-hero.jpg"
+                  alt="Contact WolvCapital — investor support and compliance"
+                  width={1200}
+                  height={630}
+                  priority
+                  className="w-full h-auto"
+                />
+              </div>
+            </div>
           </div>
         </section>
   {/* Live transactions ticker removed per request (no banner after header) */}

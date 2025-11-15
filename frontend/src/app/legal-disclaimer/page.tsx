@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     description: 'Official investment disclaimer and compliance notice by WolvCapital, a U.S. regulated platform.',
     images: [
       {
-        url: '/images/hero-crypto-abstract-xl.jpg',
+        url: '/images/legal/wolvcapital-legal-disclaimer.jpg',
         width: 1200,
         height: 630,
         alt: 'WolvCapital digital investment platform legal disclaimer',

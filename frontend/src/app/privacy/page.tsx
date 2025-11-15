@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function PrivacyPolicyPage() {
   return (
@@ -33,11 +34,13 @@ export default function PrivacyPolicyPage() {
             <div className="text-center mb-12">
               <div className="flex flex-col items-center mb-8">
                 <div className="relative w-full max-w-[480px] aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl border-2 border-gray-200 mx-auto">
-                  <img
+                  <Image
                     src="/images/legal/wolvcapital-privacy-policy.jpg"
                     alt="WolvCapital Privacy and Investment Data Protection"
-                    className="w-full h-auto object-cover object-center"
-                    style={{ maxHeight: '320px' }}
+                    fill
+                    priority
+                    className="object-cover object-center"
+                    sizes="100vw"
                   />
                 </div>
                 <p className="text-sm text-gray-500 text-center mt-4 italic">

@@ -10,7 +10,7 @@ export default function PrivacyPolicyPage() {
   <meta name="keywords" content="digital investment platform, U.S. fintech company, secure investment returns, cryptocurrency investment, regulated financial platform, privacy policy, WolvCapital" />
   <meta property="og:title" content="WolvCapital Privacy Policy · U.S. Digital Investment Platform" />
   <meta property="og:description" content="Learn about WolvCapital’s user data protection and privacy practices, compliant with U.S. financial regulations." />
-  <meta property="og:image" content="/img/wolvcapital-privacy-policy.jpg" />
+  <meta property="og:image" content="/images/legal/wolvcapital-privacy-policy.jpg" />
   <meta name="robots" content="index, follow" />
       </Head>
 

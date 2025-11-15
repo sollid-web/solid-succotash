@@ -1,4 +1,5 @@
-You are a senior U.S.-based financial writer, legal content editor, and SEO strategist working for WolvCapital — an American digital investment and cryptocurrency platform.
+C
+
 
 Your task is to rewrite and polish all content across this project (including legal, marketing, and dashboard pages) into professional, compliant, and SEO-optimized American English suitable for a licensed investment platform.
 

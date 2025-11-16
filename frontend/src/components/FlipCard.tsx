@@ -56,13 +56,13 @@ export default function FlipCard({
         .flip-back { transform: rotateY(180deg); }
       `}</style>
 
-      <div className="flip-card" style={cssVars as React.CSSProperties}>
+      <div className="flip-card cursor-pointer" style={cssVars as React.CSSProperties}>
         <div className="flip-outer">
           <div
             className={`flip-inner ${flipped ? 'is-flipped' : ''}`}
             role="button"
             aria-pressed={flipped}
-            aria-label="Interactive virtual Visa card. Press to flip."
+            aria-label={flipped ? "Click to flip card to front" : "Click to flip card to back"}
             tabIndex={0}
             onClick={() => setFlipped((f) => !f)}
             onKeyDown={onKeyDown}
@@ -93,6 +93,18 @@ export default function FlipCard({
               </svg>
             </div>
             <div className="flip-face flip-back" role="img" aria-label="Back of virtual Visa card">
+              <div style={{ position: 'relative', zIndex: 2, color: '#fff', fontWeight: 'bold', fontSize: 18, padding: '16px 24px 0 24px' }}>
+                Security Code
+              </div>
+              <div style={{ position: 'relative', zIndex: 2, color: '#fff', fontSize: 14, padding: '8px 24px 0 24px' }}>
+                See above
+              </div>
+              <div style={{ position: 'relative', zIndex: 2, color: '#fff', fontSize: 14, padding: '8px 24px 0 24px' }}>
+                For customer service:
+              </div>
+              <div style={{ position: 'relative', zIndex: 2, color: '#fff', fontSize: 14, padding: '8px 24px 0 24px' }}>
+                support@wolvcapital.com
+              </div>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300">
                 <rect width="480" height="300" rx="20" fill="url(#bgGradient)" />
                 <rect x="0" y="40" width="480" height="50" fill="black" />

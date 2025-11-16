@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function PrivacyPolicyPage() {
   return (
@@ -31,6 +32,21 @@ export default function PrivacyPolicyPage() {
         <section className="pt-32 pb-16">
           <div className="container mx-auto px-4 lg:px-8 max-w-4xl">
             <div className="text-center mb-12">
+              <div className="flex flex-col items-center mb-8">
+                <div className="relative w-full max-w-[480px] aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl border-2 border-gray-200 mx-auto">
+                  <Image
+                    src="/images/legal/wolvcapital-privacy-policy.jpg"
+                    alt="WolvCapital Privacy and Investment Data Protection"
+                    fill
+                    priority
+                    className="object-cover object-center"
+                    sizes="100vw"
+                  />
+                </div>
+                <p className="text-sm text-gray-500 text-center mt-4 italic">
+                  Investment data is protected by strict privacy policies and U.S. financial regulations.
+                </p>
+              </div>
               <h1 className="text-5xl lg:text-6xl font-extrabold text-[#0b2f6b] mb-4">Privacy Policy</h1>
               <p className="text-gray-600">Effective Date: October 2025. WolvCapital complies with all applicable U.S. financial and data protection regulations.</p>
             </div>

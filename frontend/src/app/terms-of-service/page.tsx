@@ -47,14 +47,14 @@ export default function TermsOfServicePage() {
           <h1 className="text-5xl lg:text-6xl font-extrabold mb-6">Terms of Service</h1>
           <p className="text-xl text-gray-200">Effective Date: October 2025</p>
           <div className="mt-8 flex justify-center">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20">
+            <div className="relative w-full max-w-[480px] aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 mx-auto flex items-center justify-center">
               <Image
-                 src="/images/legal/legal-terms-hero.jpg"
+                src="/images/legal/legal-terms-hero.jpg"
                 alt="WolvCapital Terms of Service — participation and compliance"
-                width={1200}
-                height={630}
+                fill
                 priority
-                className="w-full h-auto"
+                className="object-cover object-center"
+                sizes="100vw"
               />
             </div>
           </div>

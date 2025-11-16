@@ -48,16 +48,16 @@ export default function AboutPage() {
           <h1 className="text-5xl lg:text-6xl font-extrabold mb-6">About WolvCapital</h1>
           <p className="text-xl text-gray-200 max-w-3xl mx-auto">WolvCapital is a U.S. regulated digital investment platform dedicated to secure investment returns, transparent operations, and rigorous human oversight. Our mission is to deliver compliant cryptocurrency investment opportunities for institutional and individual investors.</p>
           <div className="mt-8 flex justify-center">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20">
-                <Image
-                  src="/images/home-hero.jpg"
-                alt="About WolvCapital — U.S. regulated digital investment platform"
-                width={1200}
-                height={630}
-                priority
-                className="w-full h-auto"
-              />
-            </div>
+              <div className="relative w-full max-w-[480px] aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 mx-auto flex items-center justify-center">
+                  <Image
+                    src="/images/home-hero.jpg"
+                    alt="WolvCapital About Hero"
+                    fill
+                    priority
+                    className="object-cover object-center"
+                    sizes="100vw"
+                  />
+              </div>
           </div>
         </div>
       </section>

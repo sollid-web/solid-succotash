@@ -1,30 +1,17 @@
 'use client'
 
-import { useEffect } from 'react'
+import Script from 'next/script'
 
 export default function TawkToChat() {
-  useEffect(() => {
-    // Load Tawk.to script
-    const script = document.createElement('script')
-    script.async = true
-    script.src = 'https://embed.tawk.to/6910c11e3239d4195bd86428/1j9kn4okn'
-    script.charset = 'UTF-8'
-    script.setAttribute('crossorigin', '*')
-    
-    const firstScript = document.getElementsByTagName('script')[0]
-    if (firstScript && firstScript.parentNode) {
-      firstScript.parentNode.insertBefore(script, firstScript)
-    }
+  const propertyId = '6910bc388e8c101957916042'
+  const widgetId = '1j9klug1o'
 
-    // Cleanup function
-    return () => {
-      // Remove Tawk.to widget on unmount
-      const tawkWidget = document.getElementById('tawk-bubble')
-      if (tawkWidget) {
-        tawkWidget.remove()
-      }
-    }
-  }, [])
-
-  return null
+  return (
+    <Script
+      id="tawkto-widget-src"
+      strategy="afterInteractive"
+      src={`https://embed.tawk.to/${propertyId}/${widgetId}`}
+      crossOrigin="anonymous"
+    />
+  )
 }

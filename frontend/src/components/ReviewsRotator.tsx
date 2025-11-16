@@ -139,21 +139,25 @@ function Stars({ n }: { n: number }) {
 
 export default function ReviewsRotator({ intervalMs = 5000 }: { intervalMs?: number }) {
   const [idx, setIdx] = useState(0);
-  const timer = useRef<NodeJS.Timeout | null>(null);
   const [fade, setFade] = useState(true);
+  const timer = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    setFade(true); // Always show first review immediately
     timer.current = setInterval(() => {
       setFade(false);
       setTimeout(() => {
         setIdx((i) => (i + 1) % REVIEWS.length);
         setFade(true);
-      }, 250); // brief fade-out before showing next
+      }, 250);
     }, intervalMs);
-    return () => { if (timer.current) clearInterval(timer.current); };
+    return () => {
+      if (timer.current) clearInterval(timer.current);
+    };
   }, [intervalMs]);
 
-  const r = REVIEWS[idx];
+  // Defensive: If idx is out of bounds, reset to 0
+  const r = REVIEWS[idx] || REVIEWS[0];
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white/80 backdrop-blur p-6 md:p-8 shadow-sm">

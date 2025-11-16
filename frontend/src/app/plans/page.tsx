@@ -57,10 +57,10 @@ export default function PlansPage() {
           <div className="mt-8 flex justify-center">
             <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 w-full max-w-[600px] mx-auto flex items-center justify-center">
               <Image
-                src="/images/legal/plans-hero.jpg"
+                src="/images/plans-hero.jpg"
                 alt="WolvCapital Investment Plans — compliant, manually reviewed"
-                width={1200}
-                height={630}
+                width={1152}
+                height={768}
                 priority
                 className="w-full h-auto object-cover object-center max-h-[300px] sm:max-h-[400px] md:max-h-[500px] lg:max-h-[630px]"
               />

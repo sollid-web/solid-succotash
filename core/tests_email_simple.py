@@ -1,44 +1,35 @@
-def add_arguments(self, parser):
-    parser.add_argument(
-        "--to",
-        type=str,
-        required=True,
-        help="Email address to send test email to",
-    )
-    parser.add_argument(
-        "--type",
-        type=str,
-        default="test",
-        choices=["test", "welcome", "transaction", "investment"],
-        help="Type of test email to send",
-    )
+import os
+import django
 
-def handle(self, *args, **options):
-    to_email = options["to"]
-    email_type = options["type"]
+# --- Setup Django environment for standalone execution ---
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wolvcapital.settings")
+django.setup()
+# --------------------------------------------------------
 
-    self.stdout.write(f"Sending {email_type} test email to {to_email}...")
+from decimal import Decimal
+from django.contrib.auth.models import User
 
+from core.services.email_service import EmailService
+from transactions.models import Transaction
+from investments.models import InvestmentPlan, UserInvestment
+
+
+def send_test_email_for_tests(email_type: str, to_email: str) -> bool:
     try:
         if email_type == "test":
-            success = EmailService.send_test_email(to_email)
+            return EmailService.send_test_email(to_email)
 
         elif email_type == "welcome":
-            # Create or get a test user
             user, _ = User.objects.get_or_create(
                 email=to_email, defaults={"username": to_email}
             )
-            success = EmailService.send_welcome_email(user)
+            return EmailService.send_welcome_email(user)
 
         elif email_type == "transaction":
-            # Mock transaction for testing
-            from transactions.models import Transaction
-
             user, _ = User.objects.get_or_create(
                 email=to_email, defaults={"username": to_email}
             )
 
-            # Create a mock transaction (not saved to DB)
             transaction = Transaction(
                 user=user,
                 tx_type="deposit",
@@ -49,19 +40,15 @@ def handle(self, *args, **options):
             )
             transaction.id = "test-transaction-id"
 
-            success = EmailService.send_transaction_notification(
+            return EmailService.send_transaction_notification(
                 transaction, "approved", "Test admin notes"
             )
 
         elif email_type == "investment":
-            # Mock investment for testing
-            from investments.models import InvestmentPlan, UserInvestment
-
             user, _ = User.objects.get_or_create(
                 email=to_email, defaults={"username": to_email}
             )
 
-            # Get or create a test plan
             plan, _ = InvestmentPlan.objects.get_or_create(
                 name="Test Plan",
                 defaults={
@@ -72,7 +59,6 @@ def handle(self, *args, **options):
                 },
             )
 
-            # Create a mock investment (not saved to DB)
             investment = UserInvestment(
                 user=user,
                 plan=plan,
@@ -81,23 +67,26 @@ def handle(self, *args, **options):
             )
             investment.id = "test-investment-id"
 
-            success = EmailService.send_investment_notification(
+            return EmailService.send_investment_notification(
                 investment, "approved", "Test admin notes"
             )
 
-        else:
-            success = False
-
-        if success:
-            self.stdout.write(
-                self.style.SUCCESS(f"✅ Test email sent successfully to {to_email}")
-            )
-        else:
-            self.stdout.write(
-                self.style.ERROR(f"❌ Failed to send test email to {to_email}")
-            )
+        return False
 
     except Exception as e:
-        self.stdout.write(
-            self.style.ERROR(f"❌ Error sending test email: {str(e)}")
-        )
+        print(f"ERROR: {e}")
+        return False
+
+
+if __name__ == "__main__":
+    import sys
+
+    if len(sys.argv) < 3:
+        print("Usage: python core/tests_email_simple.py <type> <email>")
+        sys.exit(1)
+
+    email_type = sys.argv[1]
+    email = sys.argv[2]
+
+    ok = send_test_email_for_tests(email_type, email)
+    print("Success" if ok else "Failed")

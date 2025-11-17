@@ -48,6 +48,7 @@ export default function LegalDisclaimerPage() {
           </nav>
 
           <section className="pt-32 pb-16 relative overflow-hidden">
+            {/* Hero Background Image */}
             <div className="absolute inset-0 w-full h-full pointer-events-none select-none">
               <Image
                 src="/images/legal/wolvcapital-legal-disclaimer.jpg"
@@ -59,6 +60,25 @@ export default function LegalDisclaimerPage() {
               />
             </div>
             <div className="relative z-10 container mx-auto px-4 lg:px-8 max-w-6xl">
+              {/* Enhanced Legal Disclaimer Image Card */}
+              <div className="w-full flex flex-col items-center justify-center mb-8 mt-2">
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-blue-200 ring-4 ring-blue-100/40 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg w-full">
+                  <Image
+                    src="/images/legal/wolvcapital-legal-disclaimer.jpg"
+                    alt="WolvCapital Legal Disclaimer Document Signing"
+                    width={480}
+                    height={720}
+                    priority
+                    className="object-cover object-center w-full h-auto"
+                  />
+                  {/* Credibility Badge */}
+                  <div className="absolute top-4 left-4 bg-gradient-to-r from-[#0b2f6b] to-[#2563eb] text-white px-4 py-1 rounded-full shadow-lg text-xs font-bold tracking-wide flex items-center gap-2">
+                    <svg className="w-4 h-4 text-white mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                    Verified Legal Document
+                  </div>
+                </div>
+                <p className="text-sm text-gray-600 text-center mt-4 italic max-w-md">Signed and reviewed by legal counsel. All platform operations are subject to U.S. regulatory compliance and audit.</p>
+              </div>
               <div className="text-center mb-12">
                 <h1 className="text-5xl lg:text-6xl font-extrabold text-[#0b2f6b] mb-4 drop-shadow-lg">Legal Disclaimer</h1>
                 <p className="text-gray-600 font-medium drop-shadow">Last updated: November 2025</p>

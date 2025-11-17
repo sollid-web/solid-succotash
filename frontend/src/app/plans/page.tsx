@@ -24,7 +24,6 @@ export const metadata: Metadata = {
 export default function PlansPage() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Page metadata moved to Next.js Metadata API */}
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
         <div className="container mx-auto px-4 lg:px-8">
@@ -49,25 +48,39 @@ export default function PlansPage() {
         </div>
       </nav>
 
-      {/* Hero */}
+      {/* Hero Section with Background Image */}
       <section className="pt-32 pb-16 bg-gradient-to-br from-[#0b2f6b] to-[#1d4ed8] text-white">
         <div className="container mx-auto px-4 lg:px-8 text-center">
-          <h1 className="text-5xl lg:text-6xl font-extrabold mb-6">Investment Plans</h1>
-          <p className="text-xl text-gray-200 max-w-3xl mx-auto">Explore WolvCapital’s professionally structured investment plans, designed for secure investment returns and compliant with U.S. financial regulations. Select a plan that aligns with your risk tolerance and financial objectives.</p>
-          <div className="mt-8 flex justify-center">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 w-full max-w-[600px] mx-auto flex items-center justify-center">
-              <Image
-                src="/images/plans-hero.jpg"
-                alt="WolvCapital Investment Plans — compliant, manually reviewed"
-                width={1152}
-                height={768}
-                priority
-                className="w-full h-auto object-cover object-center max-h-[300px] sm:max-h-[400px] md:max-h-[500px] lg:max-h-[630px]"
-              />
+          <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 w-full max-w-[600px] mx-auto flex items-center justify-center mb-8">
+            <Image
+              src="/images/plans-hero.jpg"
+              alt="WolvCapital Investment Plans Hero"
+              width={1152}
+              height={768}
+              priority
+              className="w-full h-auto object-cover object-center max-h-[300px] sm:max-h-[400px] md:max-h-[500px] lg:max-h-[630px]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-white/0 z-10" />
+            <div className="relative z-20 w-full text-center px-4">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white drop-shadow-lg mb-2">Investment Plans</h1>
+              <p className="text-lg sm:text-xl md:text-2xl text-white/90 drop-shadow-md">Choose a plan that matches your goals – designed with transparency.</p>
             </div>
           </div>
+          <p className="text-xl text-gray-200 max-w-3xl mx-auto">Explore WolvCapital’s professionally structured investment plans, designed for secure investment returns and compliant with U.S. financial regulations. Select a plan that aligns with your risk tolerance and financial objectives.</p>
         </div>
       </section>
+
+      {/* OG Image Display Below Hero */}
+      <div className="w-full flex justify-center items-center mb-8">
+        <Image
+          src="/images/og/plans-og.jpg"
+          alt="WolvCapital Investment Plans – OpenGraph image"
+          width={1200}
+          height={630}
+          priority
+          className="rounded-2xl shadow-xl w-full max-w-2xl h-auto object-cover object-center border-4 border-blue-100"
+        />
+      </div>
 
       {/* Plans */}
       <section className="py-24 bg-white">

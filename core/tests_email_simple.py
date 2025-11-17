@@ -1,5 +1,30 @@
+<<<<<<< HEAD
 import os
 import django
+=======
+# --- Added by tools/fix_imports.py: missing imports detected by ruff ---
+from decimal import Decimal
+
+from django.contrib.auth.models import User
+
+from core.services.email_service import EmailService
+
+
+def add_arguments(self, parser):
+    parser.add_argument(
+        "--to",
+        type=str,
+        required=True,
+        help="Email address to send test email to",
+    )
+    parser.add_argument(
+        "--type",
+        type=str,
+        default="test",
+        choices=["test", "welcome", "transaction", "investment"],
+        help="Type of test email to send",
+    )
+>>>>>>> b62b52f (WIP: local changes)
 
 # --- Setup Django environment for standalone execution ---
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wolvcapital.settings")

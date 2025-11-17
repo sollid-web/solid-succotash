@@ -241,6 +241,30 @@ export default function DashboardPage() {
           <p className="text-base sm:text-xl opacity-90">Your secure investment dashboard overview</p>
         </section>
 
+        {/* Wallet Summary Section */}
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-4">
+          <div className="bg-white rounded-2xl shadow p-6 flex flex-col items-start">
+            <span className="text-xs font-semibold text-gray-500 mb-1">Current Balance</span>
+            <span className="text-3xl font-bold text-[#2563eb]">${wallet ? parseFloat(wallet.balance || '0').toFixed(2) : '0.00'}</span>
+            <span className="text-xs text-gray-400 mt-2">Available funds</span>
+          </div>
+          <div className="bg-white rounded-2xl shadow p-6 flex flex-col items-start">
+            <span className="text-xs font-semibold text-gray-500 mb-1">Total Deposits</span>
+            <span className="text-3xl font-bold text-emerald-600">${wallet ? parseFloat(wallet.total_deposits || '0').toFixed(2) : '0.00'}</span>
+            <span className="text-xs text-gray-400 mt-2">Approved deposits</span>
+          </div>
+          <div className="bg-white rounded-2xl shadow p-6 flex flex-col items-start">
+            <span className="text-xs font-semibold text-gray-500 mb-1">Total Withdrawals</span>
+            <span className="text-3xl font-bold text-orange-600">${wallet ? parseFloat(wallet.total_withdrawals || '0').toFixed(2) : '0.00'}</span>
+            <span className="text-xs text-gray-400 mt-2">Approved withdrawals</span>
+          </div>
+          <div className="bg-white rounded-2xl shadow p-6 flex flex-col items-start">
+            <span className="text-xs font-semibold text-gray-500 mb-1">Total Invested</span>
+            <span className="text-3xl font-bold text-[#0b2f6b]">${investments ? investments.filter(inv => inv.status === 'approved').reduce((sum, inv) => sum + parseFloat(inv.amount || '0'), 0).toFixed(2) : '0.00'}</span>
+            <span className="text-xs text-gray-400 mt-2">Active investments</span>
+          </div>
+        </section>
+
         {/* Recent Transactions Section */}
         <section className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 flex flex-col gap-4">
           <div className="flex items-center justify-between mb-2 sm:mb-6">

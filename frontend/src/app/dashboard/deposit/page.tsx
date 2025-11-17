@@ -124,91 +124,84 @@ export default function DepositPage() {
             </select>
             {['BTC','USDT','USDC','ETH'].includes(method) && (
               <div className="mt-3 space-y-3">
-                <button type="button" onClick={() => setShowWallets(!showWallets)} className="text-xs text-[#2563eb] underline hover:text-[#1d4ed8] transition">
-                  {showWallets ? 'Hide' : 'Show'} Company {method} Deposit Address
-                </button>
-                {showWallets && (
-                  <div className="rounded-xl border-2 border-blue-200 p-4 bg-gradient-to-br from-blue-50 to-indigo-50">
-                    {companyWallets.filter(w => w.currency === method && w.is_active).map(w => (
-                      <div key={w.currency} className="space-y-4">
-                        <div className="flex items-center justify-between pb-2 border-b border-blue-200">
-                          <div className="flex items-center space-x-2">
-                            <CryptoIcon currency={w.currency} />
-                            <span className="text-sm font-bold text-gray-800">{w.currency} Deposit Address</span>
-                          </div>
-                          {w.network && <span className="text-xs font-semibold text-gray-600 bg-white px-2 py-1 rounded-lg">Network: {w.network}</span>}
+                {/* Always show company wallet address for selected crypto method */}
+                <div className="rounded-xl border-2 border-blue-200 p-4 bg-gradient-to-br from-blue-50 to-indigo-50">
+                  {companyWallets.filter(w => w.currency === method && w.is_active).map(w => (
+                    <div key={w.currency} className="space-y-4">
+                      <div className="flex items-center justify-between pb-2 border-b border-blue-200">
+                        <div className="flex items-center space-x-2">
+                          <CryptoIcon currency={w.currency} />
+                          <span className="text-sm font-bold text-gray-800">{w.currency} Deposit Address</span>
                         </div>
-                        
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Wallet Address</span>
-                          </div>
-                          <div className="relative group">
-                            <div className="font-mono text-xs break-all bg-white border-2 border-gray-200 rounded-lg p-3 pr-20 hover:border-blue-300 transition">
-                              {w.wallet_address}
-                            </div>
-                            <button 
-                              type="button" 
-                              onClick={() => copyToClipboard(w.wallet_address, `${w.currency} address`)}
-                              className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] text-white px-4 py-2 rounded-lg text-xs font-semibold hover:shadow-lg transition-all duration-200 hover:scale-105 flex items-center space-x-1"
-                            >
-                              {copiedAddress === w.wallet_address ? (
-                                <>
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                  </svg>
-                                  <span>Copied!</span>
-                                </>
-                              ) : (
-                                <>
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                  </svg>
-                                  <span>Copy</span>
-                                </>
-                              )}
-                            </button>
-                          </div>
+                        {w.network && <span className="text-xs font-semibold text-gray-600 bg-white px-2 py-1 rounded-lg">Network: {w.network}</span>}
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Wallet Address</span>
                         </div>
-
-                        <div className="flex items-center justify-center pt-3 pb-1">
-                          <div className="text-center">
-                            <QRCode address={w.wallet_address} />
-                            <p className="text-[10px] text-gray-500 mt-2">Scan QR to copy address</p>
+                        <div className="relative group">
+                          <div className="font-mono text-xs break-all bg-white border-2 border-gray-200 rounded-lg p-3 pr-20 hover:border-blue-300 transition">
+                            {w.wallet_address}
                           </div>
-                        </div>
-
-                        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 space-y-1">
-                          <div className="flex items-start space-x-2">
-                            <svg className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                            </svg>
-                            <div className="text-xs text-amber-800">
-                              <p className="font-semibold">Important:</p>
-                              <ul className="list-disc list-inside mt-1 space-y-1">
-                                <li>Only send {w.currency} to this address</li>
-                                <li>Verify the network is {w.network || 'correct'} before sending</li>
-                                <li>Double-check the address before confirming transaction</li>
-                                <li>Deposits require manual approval (24-72 hours)</li>
-                              </ul>
-                            </div>
-                          </div>
+                          <button 
+                            type="button" 
+                            onClick={() => copyToClipboard(w.wallet_address, `${w.currency} address`)}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] text-white px-4 py-2 rounded-lg text-xs font-semibold hover:shadow-lg transition-all duration-200 hover:scale-105 flex items-center space-x-1"
+                          >
+                            {copiedAddress === w.wallet_address ? (
+                              <>
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                                <span>Copied!</span>
+                              </>
+                            ) : (
+                              <>
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                                <span>Copy</span>
+                              </>
+                            )}
+                          </button>
                         </div>
                       </div>
-                    ))}
-                    {companyWallets.filter(w => w.currency === method && w.is_active).length === 0 && (
-                      <div className="text-center py-4">
-                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-2">
-                          <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      <div className="flex items-center justify-center pt-3 pb-1">
+                        <div className="text-center">
+                          <QRCode address={w.wallet_address} />
+                          <p className="text-[10px] text-gray-500 mt-2">Scan QR to copy address</p>
+                        </div>
+                      </div>
+                      <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 space-y-1">
+                        <div className="flex items-start space-x-2">
+                          <svg className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                           </svg>
+                          <div className="text-xs text-amber-800">
+                            <p className="font-semibold">Important:</p>
+                            <ul className="list-disc list-inside mt-1 space-y-1">
+                              <li>Only send {w.currency} to this address</li>
+                              <li>Verify the network is {w.network || 'correct'} before sending</li>
+                              <li>Double-check the address before confirming transaction</li>
+                              <li>Deposits require manual approval (24-72 hours)</li>
+                            </ul>
+                          </div>
                         </div>
-                        <p className="text-sm text-gray-600 font-medium">No active {method} wallet configured</p>
-                        <p className="text-xs text-gray-500 mt-1">Please contact support for deposit information</p>
                       </div>
-                    )}
-                  </div>
-                )}
+                    </div>
+                  ))}
+                  {companyWallets.filter(w => w.currency === method && w.is_active).length === 0 && (
+                    <div className="text-center py-4">
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-2">
+                        <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <p className="text-sm text-gray-600 font-medium">No active {method} wallet configured</p>
+                      <p className="text-xs text-gray-500 mt-1">Please contact support for deposit information</p>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>

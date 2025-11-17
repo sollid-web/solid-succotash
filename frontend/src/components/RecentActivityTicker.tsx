@@ -65,9 +65,9 @@ function generateRandomActivity(plans: string[], prev?: Activity | null): Activi
   if (roll < 0.15) type = "plan";
   else if (roll < 0.35) type = "withdrawal";
   else type = "deposit";
-  let amount;
-  let plan;
-  let message;
+  let amount: number | undefined;
+  let plan: string | undefined;
+  let message: string;
   if (type === "deposit") {
     amount = pickRandom(AMOUNTS);
     message = `${name} from ${country.name} just deposited $${amount.toLocaleString()}`;
@@ -80,16 +80,6 @@ function generateRandomActivity(plans: string[], prev?: Activity | null): Activi
     message = `${name} ${pickRandom(verbs)} ${plan}`;
   }
   const timeAgo = pickRandom(TIME_AGO_OPTIONS);
-  if (
-    prev &&
-    prev.type === type &&
-    prev.countryCode === country.code &&
-    prev.name === name &&
-    prev.amount === amount &&
-    prev.plan === plan
-  ) {
-    return generateRandomActivity(plans, prev);
-  }
   return {
     id: GLOBAL_ID++,
     name,

@@ -217,24 +217,9 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      {/* Activation Notice */}
-      {!activated && (
-        <div className="max-w-2xl mx-auto mt-8 mb-8">
-          <div className="bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white rounded-3xl shadow-2xl p-8 text-center border-4 border-[#2563eb]">
-            <div className="flex items-center justify-center mb-4">
-              <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M12 20a8 8 0 100-16 8 8 0 000 16z" />
-              </svg>
-            </div>
-            <h2 className="text-2xl font-bold mb-2">Account Activation Required</h2>
-            <p className="text-lg mb-4">To activate your new account, please make a deposit of at least <span className="font-bold">${MIN_DEPOSIT.toFixed(2)}</span> (the minimum for our lowest investment plan). Account activation is mandatory before you can perform any platform activities, even if your previous balance has been credited by an admin.</p>
-            <Link href="/dashboard/deposit" className="inline-block bg-white text-[#0b2f6b] px-8 py-3 rounded-full font-bold text-lg hover:shadow-xl transition-all duration-300 hover:scale-105 mt-2">Make a Deposit</Link>
-          </div>
-        </div>
-      )}
 
-      {/* Main Content (disabled if not activated) */}
-      <main className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-8 ${!activated ? 'pointer-events-none opacity-50 select-none' : ''}`}>
+      {/* Main Content (always visible, activation only restricts actions) */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-8">
         {/* Welcome Section */}
         <section className="bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] rounded-3xl shadow-xl p-6 sm:p-8 text-white mb-4 sm:mb-8">
           <h1 className="text-2xl sm:text-4xl font-bold mb-2">Welcome back, {user?.first_name || user?.email}!</h1>

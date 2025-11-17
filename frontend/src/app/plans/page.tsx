@@ -1,6 +1,8 @@
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import type { Metadata } from 'next'
+const RecentActivityTicker = dynamic(() => import('../../components/RecentActivityTicker'), { ssr: false })
 
 export const metadata: Metadata = {
   title: 'Investment Plans · WolvCapital Digital Investment Platform',
@@ -23,7 +25,7 @@ export const metadata: Metadata = {
 
 export default function PlansPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white relative">
       {/* Navigation */}
       <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
         <div className="container mx-auto px-4 lg:px-8">
@@ -48,8 +50,8 @@ export default function PlansPage() {
         </div>
       </nav>
 
-      {/* Hero Section with Full-Width Background Image */}
-      <section className="relative w-full h-[320px] sm:h-[400px] md:h-[500px] lg:h-[630px] flex items-center justify-center mb-8 mt-24 overflow-hidden rounded-3xl shadow-xl">
+      {/* Hero Section with Full-Page Background Image */}
+      <section className="relative w-full min-h-[320px] sm:min-h-[400px] md:min-h-[500px] lg:min-h-[630px] flex items-center justify-center mb-8 mt-24 overflow-hidden rounded-3xl shadow-xl">
         <Image
           src="/images/plans-hero.jpg"
           alt="WolvCapital Investment Plans Hero"
@@ -58,12 +60,15 @@ export default function PlansPage() {
           className="object-cover object-center w-full h-full absolute inset-0 z-0"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-white/0 z-10" />
-        <div className="relative z-20 w-full text-center px-4">
+        <div className="relative z-20 w-full text-center px-4 py-12 sm:py-20">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white drop-shadow-lg mb-2">Investment Plans</h1>
           <p className="text-lg sm:text-xl md:text-2xl text-white/90 drop-shadow-md">Choose a plan that matches your goals – designed with transparency.</p>
           <p className="text-base sm:text-lg md:text-xl text-white/80 mt-2 max-w-2xl mx-auto">Explore WolvCapital’s professionally structured investment plans, designed for secure investment returns and compliant with U.S. financial regulations. Select a plan that aligns with your risk tolerance and financial objectives.</p>
         </div>
       </section>
+
+      {/* Recent Activity Ticker */}
+      <RecentActivityTicker plans={["Pioneer", "Vanguard", "Horizon", "Summit"]} />
 
       {/* OG Image Display Below Hero */}
       <div className="w-full flex justify-center items-center mb-8">

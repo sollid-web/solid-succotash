@@ -33,19 +33,21 @@ export default function PrivacyPolicyPage() {
           <div className="container mx-auto px-4 lg:px-8 max-w-4xl">
             <div className="text-center mb-12">
               <div className="flex flex-col items-center mb-8">
-                <div className="relative w-full max-w-[480px] aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl border-2 border-gray-200 mx-auto">
+                {/* Privacy OG Image as Hero Background */}
+                <section className="relative w-full h-[320px] sm:h-[400px] md:h-[500px] lg:h-[630px] flex items-center justify-center mb-8 mt-4 overflow-hidden rounded-3xl shadow-xl">
                   <Image
-                    src="/images/legal/wolvcapital-privacy-policy.jpg"
-                    alt="WolvCapital Privacy and Investment Data Protection"
+                    src="/images/legal/privacy-og.jpg"
+                    alt="WolvCapital Privacy Policy OpenGraph image"
                     fill
                     priority
-                    className="object-cover object-center"
-                    sizes="100vw"
+                    className="object-cover object-center w-full h-full absolute inset-0 z-0"
                   />
-                </div>
-                <p className="text-sm text-gray-500 text-center mt-4 italic">
-                  Investment data is protected by strict privacy policies and U.S. financial regulations.
-                </p>
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-white/0 z-10" />
+                  <div className="relative z-20 w-full text-center px-4">
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white drop-shadow-lg mb-2">Privacy Policy</h1>
+                    <p className="text-lg sm:text-xl md:text-2xl text-white/90 drop-shadow-md">Investment data is protected by strict privacy policies and U.S. financial regulations.</p>
+                  </div>
+                </section>
               </div>
               <h1 className="text-5xl lg:text-6xl font-extrabold text-[#0b2f6b] mb-4">Privacy Policy</h1>
               <p className="text-gray-600">Effective Date: October 2025. WolvCapital complies with all applicable U.S. financial and data protection regulations.</p>

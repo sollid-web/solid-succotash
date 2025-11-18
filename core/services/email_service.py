@@ -1,0 +1,23 @@
+"""Safe EmailService stub for now."""
+from typing import Any
+
+class EmailService:
+    @staticmethod
+    def send_test_email(to_email: str) -> bool:
+        print(f"[EmailService stub] send_test_email -> {to_email}")
+        return True
+
+    @staticmethod
+    def send_welcome_email(user: Any) -> bool:
+        print(f"[EmailService stub] send_welcome_email -> {getattr(user, 'email', None)}")
+        return True
+
+    @staticmethod
+    def send_transaction_notification(transaction: Any, status: str, admin_notes: str = "") -> bool:
+        print(f"[EmailService stub] send_transaction_notification -> {status}")
+        return True
+
+    @staticmethod
+    def send_investment_notification(investment: Any, status: str, admin_notes: str = "") -> bool:
+        print(f"[EmailService stub] send_investment_notification -> {status}")
+        return True

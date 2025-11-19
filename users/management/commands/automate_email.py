@@ -20,7 +20,7 @@ class Command(BaseCommand):
 
             batch_size = 1000
             seen_emails = set()
-            qs = User.objects.filter(is_active=True, email__isnull=False).order_by('id')
+            qs = User.objects.filter(is_active=True, email__isnull=False).select_related('profile').order_by('id')
             last_id = None
             while True:
                 batch = qs
@@ -39,11 +39,11 @@ class Command(BaseCommand):
                     except ValidationError:
                         continue
                     seen_emails.add(email)
-                    unread = UserNotification.objects.filter(user=u, is_read=False)
-                    if unread.exists():
+                    unread_list = list(UserNotification.objects.filter(user=u, is_read=False)[:10])
+                    if unread_list:
                         subject = "WolvCapital Daily Summary"
                         template = "digest"
-                        context = {"unread_count": unread.count(), "notifications": unread[:10], "action_url": "/dashboard/"}
+                        context = {"unread_count": len(unread_list), "notifications": unread_list, "action_url": "/dashboard/"}
                         send_email_notification(u, subject, template, context)
             self.stdout.write("Digests sent.")
         if options["retry-failures"]:

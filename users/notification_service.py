@@ -105,7 +105,8 @@ def create_user_notification(user, notification_type, title, message, priority="
 def notify_welcome(user, send_email=True):
     title = "Welcome to WolvCapital"
     message = f"Hello {user.get_full_name() or user.email}, welcome to WolvCapital!"
-    return create_user_notification(user, "welcome", title, message, priority="low", action_url=reverse("dashboard"), send_email=send_email)
+    action_url = reverse("dashboard")
+    return create_user_notification(user, "welcome", title, message, priority="low", action_url=action_url, send_email=send_email)
 
 def notify_wallet_credited(user, amount, reason=None, send_email=True):
     title = f"Wallet credited: ${amount:.2f}"

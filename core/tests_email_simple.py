@@ -3,10 +3,10 @@
 Standalone helper to exercise EmailService for manual testing.
 
 Usage:
-  python .\\core\tests_email_simple.py --to someone@example.com --type test
-  python .\\core\tests_email_simple.py --to someone@example.com --type welcome
-  python .\\core\tests_email_simple.py --to someone@example.com --type transaction
-  python .\\core\tests_email_simple.py --to someone@example.com --type investment
+  python .\core\tests_email_simple.py --to someone@example.com --type test
+  python .\core\tests_email_simple.py --to someone@example.com --type welcome
+  python .\core\tests_email_simple.py --to someone@example.com --type transaction
+  python .\core\tests_email_simple.py --to someone@example.com --type investment
 """
 from __future__ import annotations
 
@@ -15,25 +15,19 @@ import os
 import sys
 from decimal import Decimal
 
-# --- Setup Django environment for standalone execution ---
+from django.contrib.auth.models import User
+from core.services.email_service import EmailService
+
+# Import models for mock objects
+from investments.models import InvestmentPlan, UserInvestment
+from transactions.models import Transaction
+
+# Set up Django environment
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wolvcapital.settings")
 import django  # noqa: E402
-
-django.setup()  # noqa: E402
-
-from django.contrib.auth import get_user_model  # noqa: E402
-
-from core.services.email_service import EmailService  # noqa: E402
-from investments.models import InvestmentPlan, UserInvestment  # noqa: E402
-from transactions.models import Transaction  # noqa: E402
-
-User = get_user_model()
-
+django.setup()
 
 def run_email_test(to_email: str, email_type: str) -> bool:
-    """Run the requested test email type; returns True on success."""
-    print(f"Sending {email_type} test email to {to_email}...")
-
     if email_type == "test":
         return EmailService.send_test_email(to_email)
 

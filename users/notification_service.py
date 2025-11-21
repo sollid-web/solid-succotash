@@ -1,9 +1,11 @@
 import threading
 import logging
+from datetime import timedelta
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, get_connection
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.utils import timezone
 from django.urls import reverse
 
 from .models import UserNotification
@@ -42,11 +44,13 @@ def send_email_notification(user, subject, template_name, context=None, from_ema
 
     try:
         html_message = render_to_string(f"email/{template_name}.html", {"user": user, **context})
-    except Exception:
+    except Exception as exc:
+        logger.exception("Failed to render HTML email template 'email/%s.html' for user %s: %s", template_name, getattr(user, "id", None), exc)
         html_message = ""
     try:
         text_message = render_to_string(f"email/{template_name}.txt", {"user": user, **context})
-    except Exception:
+    except Exception as exc:
+        logger.exception("Failed to render text email template 'email/%s.txt' for user %s: %s", template_name, getattr(user, "id", None), exc)
         # fallback to strip HTML if text template missing
         text_message = strip_tags(html_message) if html_message else ""
 
@@ -70,19 +74,30 @@ def _send_email_in_background(*args, **kwargs):
     t.start()
     return t
 
-def create_user_notification(user, notification_type, title, message, priority="low", action_url=None, expires_in_days=None, send_email=True, template_name=None):
+def create_user_notification(user, notification_type, title, message, priority="medium", action_url=None, entity_type=None, entity_id=None, expires_in_days=None, send_email=True, template_name=None):
     """
     Create a DB notification and optionally send an email.
     - notification_type: used for categorization and selecting a template (convention: template name == notification_type)
+    - entity_type: optional entity type (e.g., 'transaction', 'investment') for tracking
+    - entity_id: optional entity ID for tracking
+    - expires_in_days: optional number of days after which the notification expires
     - template_name: optional override for email template filename
     """
+    # Calculate expiration date if specified
+    expires_at = None
+    if expires_in_days:
+        expires_at = timezone.now() + timedelta(days=expires_in_days)
+    
     notif = UserNotification.objects.create(
         user=user,
         notification_type=notification_type,
         title=title,
         message=message,
         priority=priority,
-        action_url=action_url,
+        action_url=action_url or "",
+        entity_type=entity_type or "",
+        entity_id=entity_id or "",
+        expires_at=expires_at,
     )
 
     if send_email:
@@ -93,12 +108,8 @@ def create_user_notification(user, notification_type, title, message, priority="
             "action_url": action_url,
             "notification": notif,
         }
-        try:
-            # If Celery is used in production, replace this with a Celery task invocation
-            _send_email_in_background(user, title, template, context)
-        except Exception:
-            # fallback to sync send
-            send_email_notification(user, title, template, context)
+        # If Celery is used in production, replace this with a Celery task invocation
+        _send_email_in_background(user, title, template, context)
 
     return notif
 
@@ -112,7 +123,177 @@ def notify_wallet_credited(user, amount, reason=None, send_email=True):
     title = f"Wallet credited: ${amount:.2f}"
     reason_text = f" Reason: {reason}" if reason else ""
     message = f"Your wallet was credited with ${amount:.2f}.{reason_text}"
-    return create_user_notification(user, "wallet_credited", title, message, priority="low", action_url=reverse("wallet"), send_email=send_email)
+    return create_user_notification(user, "wallet_credited", title, message, priority="low", action_url=reverse("dashboard"), send_email=send_email)
 
-# If your repo already has other helper functions (get_user_notifications, get_unread_count, mark_notification_read),
-# ensure they're preserved or merged with the above implementation.
+
+# Transaction notification functions
+def notify_deposit_approved(user, transaction, notes="", send_email=True):
+    """Notify user that their deposit was approved"""
+    title = f"Deposit Approved: ${transaction.amount:.2f}"
+    message = f"Your deposit of ${transaction.amount:.2f} has been approved and credited to your wallet."
+    if notes:
+        message += f" Note: {notes}"
+    return create_user_notification(
+        user,
+        "deposit_approved",
+        title,
+        message,
+        priority="medium",
+        action_url=reverse("dashboard"),
+        entity_type="transaction",
+        entity_id=str(transaction.id),
+        send_email=send_email,
+    )
+
+
+def notify_deposit_rejected(user, transaction, notes="", send_email=True):
+    """Notify user that their deposit was rejected"""
+    title = f"Deposit Rejected: ${transaction.amount:.2f}"
+    message = f"Your deposit of ${transaction.amount:.2f} has been rejected."
+    if notes:
+        message += f" Reason: {notes}"
+    return create_user_notification(
+        user,
+        "deposit_rejected",
+        title,
+        message,
+        priority="high",
+        action_url=reverse("dashboard"),
+        entity_type="transaction",
+        entity_id=str(transaction.id),
+        send_email=send_email,
+    )
+
+
+def notify_withdrawal_approved(user, transaction, notes="", send_email=True):
+    """Notify user that their withdrawal was approved"""
+    title = f"Withdrawal Approved: ${transaction.amount:.2f}"
+    message = f"Your withdrawal of ${transaction.amount:.2f} has been approved and processed."
+    if notes:
+        message += f" Note: {notes}"
+    return create_user_notification(
+        user,
+        "withdrawal_approved",
+        title,
+        message,
+        priority="medium",
+        action_url=reverse("dashboard"),
+        entity_type="transaction",
+        entity_id=str(transaction.id),
+        send_email=send_email,
+    )
+
+
+def notify_withdrawal_rejected(user, transaction, notes="", send_email=True):
+    """Notify user that their withdrawal was rejected"""
+    title = f"Withdrawal Rejected: ${transaction.amount:.2f}"
+    message = f"Your withdrawal request of ${transaction.amount:.2f} has been rejected."
+    if notes:
+        message += f" Reason: {notes}"
+    return create_user_notification(
+        user,
+        "withdrawal_rejected",
+        title,
+        message,
+        priority="high",
+        action_url=reverse("dashboard"),
+        entity_type="transaction",
+        entity_id=str(transaction.id),
+        send_email=send_email,
+    )
+
+
+# Investment notification functions
+def notify_investment_approved(user, investment, notes="", send_email=True):
+    """Notify user that their investment was approved"""
+    title = f"Investment Approved: ${investment.amount:.2f}"
+    message = f"Your investment of ${investment.amount:.2f} in the {investment.plan.name} plan has been approved."
+    if notes:
+        message += f" Note: {notes}"
+    return create_user_notification(
+        user,
+        "investment_approved",
+        title,
+        message,
+        priority="medium",
+        action_url=reverse("dashboard"),
+        entity_type="investment",
+        entity_id=str(investment.id),
+        send_email=send_email,
+    )
+
+
+def notify_investment_rejected(user, investment, notes="", send_email=True):
+    """Notify user that their investment was rejected"""
+    title = f"Investment Rejected: ${investment.amount:.2f}"
+    message = f"Your investment request of ${investment.amount:.2f} for the {investment.plan.name} plan has been rejected."
+    if notes:
+        message += f" Reason: {notes}"
+    return create_user_notification(
+        user,
+        "investment_rejected",
+        title,
+        message,
+        priority="high",
+        action_url=reverse("dashboard"),
+        entity_type="investment",
+        entity_id=str(investment.id),
+        send_email=send_email,
+    )
+
+
+def notify_wallet_debited(user, amount, reason="", send_email=True):
+    """Notify user that their wallet was debited"""
+    title = f"Wallet debited: ${amount:.2f}"
+    message = f"Your wallet was debited ${amount:.2f}."
+    if reason:
+        message += f" Reason: {reason}"
+    return create_user_notification(
+        user,
+        "wallet_debited",
+        title,
+        message,
+        priority="low",
+        action_url=reverse("dashboard"),
+        send_email=send_email,
+    )
+
+
+# Utility functions for managing notifications
+def get_user_notifications(user, limit=None):
+    """Get all notifications for a user, optionally limited"""
+    qs = UserNotification.objects.filter(user=user).order_by("-created_at")
+    if limit:
+        qs = qs[:limit]
+    return qs
+
+
+def get_unread_count(user):
+    """Get count of unread notifications for a user"""
+    return UserNotification.objects.filter(user=user, is_read=False).count()
+
+
+def mark_notification_read(notification_id, user):
+    """Mark a specific notification as read"""
+    try:
+        notification = UserNotification.objects.get(id=notification_id, user=user)
+        notification.mark_as_read()
+        return True
+    except UserNotification.DoesNotExist:
+        return False
+
+
+def mark_all_read(user):
+    """Mark all notifications as read for a user"""
+    count = UserNotification.objects.filter(user=user, is_read=False).update(
+        is_read=True, read_at=timezone.now()
+    )
+    return count
+
+
+def delete_expired_notifications():
+    """Delete all expired notifications"""
+    count, _ = UserNotification.objects.filter(
+        expires_at__isnull=False, expires_at__lt=timezone.now()
+    ).delete()
+    return count

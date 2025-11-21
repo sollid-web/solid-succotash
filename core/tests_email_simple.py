@@ -1,23 +1,32 @@
+#!/usr/bin/env python3
+"""
+Standalone helper to exercise EmailService for manual testing.
+
+Usage:
+  python .\\core\tests_email_simple.py --to someone@example.com --type test
+  python .\\core\tests_email_simple.py --to someone@example.com --type welcome
+  python .\\core\tests_email_simple.py --to someone@example.com --type transaction
+  python .\\core\tests_email_simple.py --to someone@example.com --type investment
+"""
 from __future__ import annotations
 
 import argparse
 import os
 import sys
 from decimal import Decimal
-from typing import Any
 
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
+
 from core.services.email_service import EmailService
 
 # Import models for mock objects
 from investments.models import InvestmentPlan, UserInvestment
 from transactions.models import Transaction
 
-User: Any = get_user_model()
-
 # Set up Django environment
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wolvcapital.settings")
 import django  # noqa: E402
+
 django.setup()
 
 def run_email_test(to_email: str, email_type: str) -> bool:

@@ -3,13 +3,9 @@
     "github.copilot.chat.reviewSelection.instructions": [
 
     ],
-    "github.copilot.enable": {
-        "scminput": true,
-        "markdown": true,
-        "plaintext": true
-    },
     "editor.defaultFormatter": "ms-vscode.powershell",
     "github.copilot.chat.newWorkspaceCreation.enabled": true,
     "github.copilot.chat.newWorkspace.useContext7": true,
     "files.autoSaveWorkspaceFilesOnly": true
+    // No markdownlint schema references present
 }

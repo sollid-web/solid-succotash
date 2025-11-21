@@ -1,11 +1,12 @@
-"""
-WolvCapital Email Service
-Centralized email sending functionality with templates for all notifications
-"""
+# core/services/email_service.py
 from __future__ import annotations
+
 import logging
+import re
 from decimal import Decimal
-from typing import Any, Iterable, Sequence, Union
+from typing import Any
+
+from collections.abc import Sequence
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.mail import EmailMultiAlternatives
@@ -13,13 +14,16 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 
 logger = logging.getLogger(__name__)
-User = get_user_model()
+# runtime reference to the actual User model class (use a different name so mypy does not confuse the runtime variable with a type name)
+UserModel: Any = get_user_model()
+
 
 class EmailService:
     """
-    Centralized email service for WolvCapital platform
-    Handles all email sending with HTML/text templates
+    Centralized email service for WolvCapital platform.
+    Handles templated HTML/text emails and user preference checks.
     """
+
     DEFAULT_FROM_EMAIL = getattr(settings, "DEFAULT_FROM_EMAIL", "noreply@wolvcapital.com")
     BRAND_NAME = getattr(settings, "BRAND", {}).get("name", "WolvCapital")
     EMAIL_TYPES = {
@@ -46,20 +50,14 @@ class EmailService:
     def send_templated_email(
         cls,
         template_name: str,
-        to_emails: Union[str, Sequence[str]],
+        to_emails: str | Sequence[str],
         context: dict,
         subject: str,
-        from_email: Union[str, None] = None,
-        email_type: Union[str, None] = None,
+        from_email: str | None = None,
+        email_type: str | None = None,
         user: Any = None,
     ) -> bool:
-        """
-        Send an email using HTML and text templates.
-
-        - template_name: base template filename (without extension) under templates/emails/
-        - to_emails: single email or iterable of emails
-        - context: template context (will be copied to avoid mutation)
-        """
+        """Send HTML + text email using templates."""
         if isinstance(to_emails, str):
             recipients: list[str] = [to_emails]
         else:
@@ -72,25 +70,33 @@ class EmailService:
         if from_email is None:
             from_email = cls.DEFAULT_FROM_EMAIL
 
-        # Respect user preferences if provided
+        # Respect user preferences
         if user and email_type and not cls._should_send_email(user, email_type):
-            logger.info("Email %s skipped for user %s due to preferences", email_type, getattr(user, "email", None))
-            return True  # not an error: user opted out
+            logger.info(
+                "Email %s skipped for user %s due to preferences",
+                email_type,
+                getattr(user, "email", None),
+            )
+            return True  # not failure
 
         try:
-            # Build a new context to avoid mutating caller's dict
-            full_context = {**context}
-            full_context.update(
-                {
-                    "brand_name": cls.BRAND_NAME,
-                    "current_year": timezone.now().year,
-                    "brand_config": getattr(settings, "BRAND", {}),
-                    "site_url": getattr(settings, "PUBLIC_SITE_URL", getattr(settings, "SITE_URL", "https://wolvcapital.com")),
-                    "admin_site_url": getattr(settings, "ADMIN_SITE_URL", getattr(settings, "SITE_URL", "https://wolvcapital.com")),
-                }
-            )
+            full_context = {
+                **context,
+                "brand_name": cls.BRAND_NAME,
+                "current_year": timezone.now().year,
+                "brand_config": getattr(settings, "BRAND", {}),
+                "site_url": getattr(
+                    settings,
+                    "PUBLIC_SITE_URL",
+                    getattr(settings, "SITE_URL", "https://wolvcapital.com"),
+                ),
+                "admin_site_url": getattr(
+                    settings,
+                    "ADMIN_SITE_URL",
+                    getattr(settings, "SITE_URL", "https://wolvcapital.com"),
+                ),
+            }
 
-            # Render templates
             html_template = f"emails/{template_name}.html"
             html_content = render_to_string(html_template, full_context)
 
@@ -100,49 +106,42 @@ class EmailService:
             except Exception:
                 text_content = cls._html_to_text(html_content)
 
-            # Prepare and send message
-            msg = EmailMultiAlternatives(subject=subject, body=text_content, from_email=from_email, to=recipients)
+            msg = EmailMultiAlternatives(
+                subject=subject,
+                body=text_content,
+                from_email=from_email,
+                to=recipients,
+            )
             msg.attach_alternative(html_content, "text/html")
-            sent_count = msg.send(fail_silently=False)
 
-            if sent_count and sent_count > 0:
-                logger.info("Email sent: %s -> %s", email_type, recipients)
-                return True
+            sent = msg.send(fail_silently=False)
+            return sent > 0
 
-            logger.error("Email not sent (0 recipients): %s -> %s", email_type, recipients)
-            return False
-
-        except Exception as exc:  # pragma: no cover - integration behavior
-            # Avoid logging sensitive payload; log the error and metadata only
-            logger.exception("Error sending email %s to %s: %s", email_type, recipients, exc)
+        except Exception as exc:
+            logger.exception("Error sending email %s -> %s: %s", email_type, recipients, exc)
             return False
 
     @classmethod
-    def _should_send_email(cls, user, email_type: str) -> bool:
-        """
-        Placeholder for checking user preferences.
-        Implement lookup against a profile or preferences table.
-        """
+    def _should_send_email(cls, user: Any, email_type: str) -> bool:
+        """Check user notification preferences."""
         if hasattr(user, "profile") and hasattr(user.profile, "email_preferences"):
-            preferences = user.profile.email_preferences
-            return preferences.get(email_type, True)
+            return user.profile.email_preferences.get(email_type, True)
         return True
 
     @classmethod
     def _html_to_text(cls, html_content: str) -> str:
-        import re
-
         text = re.sub(r"<[^>]+>", "", html_content)
-        text = re.sub(r"\s+", " ", text).strip()
-        return text
-
-    # Convenience wrappers
+        return re.sub(r"\s+", " ", text).strip()
     @classmethod
-    def send_welcome_email(cls, user) -> bool:
-        context = {"user": user, "dashboard_url": "/dashboard/", "plans_url": "/plans/"}
+    def send_welcome_email(cls, user: Any) -> bool:
+        context = {
+            "user": user,
+            "dashboard_url": "/dashboard/",
+            "plans_url": "/plans/",
+        }
         return cls.send_templated_email(
-            template_name="welcome",
-            to_emails=user.email,
+            "welcome",
+            to_emails=getattr(user, "email", ""),
             context=context,
             subject=f"Welcome to {cls.BRAND_NAME}!",
             email_type=cls.EMAIL_TYPES["WELCOME"],
@@ -151,7 +150,8 @@ class EmailService:
 
     @classmethod
     def send_transaction_notification(cls, transaction: Any, status: str, admin_notes: str = "") -> bool:
-        user = transaction.user
+        user = getattr(transaction, "user", None)
+
         if status == "created":
             template = "transaction_created"
             subject = f"Transaction Submitted - {cls.BRAND_NAME}"
@@ -167,26 +167,26 @@ class EmailService:
         else:
             logger.warning("Unknown transaction status: %s", status)
             return False
-        context = {"user": user, "transaction": transaction, "admin_notes": admin_notes, "dashboard_url": "/dashboard/"}
-        return cls.send_templated_email(template_name=template, to_emails=user.email, context=context, subject=subject, email_type=email_type, user=user)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        context = {
+            "user": user,
+            "transaction": transaction,
+            "admin_notes": admin_notes,
+            "dashboard_url": "/dashboard/",
+        }
+        return cls.send_templated_email(
+            template,
+            to_emails=getattr(user, "email", ""),
+            context=context,
+            subject=subject,
+            email_type=email_type,
+            user=user,
+        )
 
     @classmethod
-    def send_investment_notification(cls, investment, status: str, admin_notes: str = "") -> bool:
-        user = investment.user
+    def send_investment_notification(cls, investment: Any, status: str, admin_notes: str = "") -> bool:
+        user = getattr(investment, "user", None)
+
         if status == "created":
             template = "investment_created"
             subject = f"Investment Submitted - {cls.BRAND_NAME}"
@@ -207,71 +207,35 @@ class EmailService:
             logger.warning("Unknown investment status: %s", status)
             return False
 
-        context = {"user": user, "investment": investment, "admin_notes": admin_notes, "dashboard_url": "/dashboard/"}
-        return cls.send_templated_email(template_name=template, to_emails=user.email, context=context, subject=subject, email_type=email_type, user=user)
+        context = {
+            "user": user,
+            "investment": investment,
+            "admin_notes": admin_notes,
+            "dashboard_url": "/dashboard/",
+        }
+        return cls.send_templated_email(
+            template,
+            to_emails=getattr(user, "email", ""),
+            context=context,
+            subject=subject,
+            email_type=email_type,
+            user=user,
+        )
 
     @classmethod
-    def send_roi_payout_notification(cls, user, amount: Decimal, investment, payout_date) -> bool:
-        context = {"user": user, "amount": amount, "investment": investment, "payout_date": payout_date, "dashboard_url": "/dashboard/"}
-        return cls.send_templated_email(template_name="roi_payout", to_emails=user.email, context=context, subject=f"ROI Payout Received - {cls.BRAND_NAME}", email_type=cls.EMAIL_TYPES["ROI_PAYOUT"], user=user)
-
-    @classmethod
-    def send_wallet_notification(cls, user, amount: Decimal, action: str, reason: str = "") -> bool:
-        if action == "credited":
-            template = "wallet_credited"
-            subject = f"Wallet Credited - {cls.BRAND_NAME}"
-            email_type = cls.EMAIL_TYPES["WALLET_CREDITED"]
-        elif action == "debited":
-            template = "wallet_debited"
-            subject = f"Wallet Debited - {cls.BRAND_NAME}"
-            email_type = cls.EMAIL_TYPES["WALLET_DEBITED"]
-        else:
-            logger.warning("Unknown wallet action: %s", action)
-            return False
-
-        context = {"user": user, "amount": amount, "reason": reason, "dashboard_url": "/dashboard/"}
-        return cls.send_templated_email(template_name=template, to_emails=user.email, context=context, subject=subject, email_type=email_type, user=user)
-
-    @classmethod
-    def send_virtual_card_notification(cls, user, card, status: str, admin_notes: str = "") -> bool:
-        if status == "approved":
-            template = "card_approved"
-            subject = f"Virtual Card Approved - {cls.BRAND_NAME}"
-            email_type = cls.EMAIL_TYPES["CARD_APPROVED"]
-        elif status == "rejected":
-            template = "card_rejected"
-            subject = f"Virtual Card Rejected - {cls.BRAND_NAME}"
-            email_type = cls.EMAIL_TYPES["CARD_REJECTED"]
-        else:
-            logger.warning("Unknown card status: %s", status)
-            return False
-
-        context = {"user": user, "card": card, "admin_notes": admin_notes, "dashboard_url": "/dashboard/"}
-        return cls.send_templated_email(template_name=template, to_emails=user.email, context=context, subject=subject, email_type=email_type, user=user)
-
-    @classmethod
-    def send_security_alert(cls, user, alert_type: str, details: str) -> bool:
-        context = {"user": user, "alert_type": alert_type, "details": details, "timestamp": timezone.now(), "dashboard_url": "/dashboard/"}
-        return cls.send_templated_email(template_name="security_alert", to_emails=user.email, context=context, subject=f"Security Alert - {cls.BRAND_NAME}", email_type=cls.EMAIL_TYPES["SECURITY_ALERT"], user=user)
-
-    @classmethod
-    def send_admin_alert(cls, subject: str, message: str, admin_emails: Union[Sequence[str], None] = None) -> bool:
-        if admin_emails is None:
-            admin_users = User.objects.filter(is_staff=True, is_active=True)
-            admin_emails = [u.email for u in admin_users if u.email]
-
-        if not admin_emails:
-            logger.warning("No admin emails found for alert")
-            return False
-
-        context = {"message": message, "timestamp": timezone.now(), "admin_url": "/admin/", "admin_site_url": getattr(settings, "ADMIN_SITE_URL", getattr(settings, "SITE_URL", "https://wolvcapital.com"))}
-        return cls.send_templated_email(template_name="admin_alert", to_emails=admin_emails, context=context, subject=f"[ADMIN ALERT] {subject} - {cls.BRAND_NAME}", email_type=cls.EMAIL_TYPES["ADMIN_ALERT"])
-
-    @classmethod
-    def send_test_email(cls, to_email: str) -> bool:
-        context = {"test_timestamp": timezone.now()}
-        return cls.send_templated_email(template_name="test_email", to_emails=to_email, context=context, subject=f"Test Email - {cls.BRAND_NAME}", email_type="test")
-
-
-def send_email(template_name: str, to_emails: Union[str, Sequence[str]], context: dict, subject: str, **kwargs) -> bool:
-    return EmailService.send_templated_email(template_name=template_name, to_emails=to_emails, context=context, subject=subject, **kwargs)
+    def send_roi_payout_notification(cls, user: Any, amount: Decimal, investment: Any, payout_date) -> bool:
+        context = {
+            "user": user,
+            "amount": amount,
+            "investment": investment,
+            "payout_date": payout_date,
+            "dashboard_url": "/dashboard/",
+        }
+        return cls.send_templated_email(
+            "roi_payout",
+            to_emails=getattr(user, "email", ""),
+            context=context,
+            subject=f"ROI Payout Credited - {cls.BRAND_NAME}",
+            email_type=cls.EMAIL_TYPES["ROI_PAYOUT"],
+            user=user,
+        )

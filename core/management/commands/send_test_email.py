@@ -1,14 +1,15 @@
 from decimal import Decimal
-from django.contrib.auth.models import User
 
-# Correct relative import for EmailService (core/services/email_service.py)
-from ...services.email_service import EmailService
+from django.contrib.auth.models import User
+from django.core.management.base import BaseCommand
+
+from investments.models import InvestmentPlan, UserInvestment
 
 # Correct absolute imports for models in other apps
 from transactions.models import Transaction
-from investments.models import InvestmentPlan, UserInvestment
 
-from django.core.management.base import BaseCommand
+# Correct relative import for EmailService (core/services/email_service.py)
+from ...services.email_service import EmailService
 
 
 class Command(BaseCommand):

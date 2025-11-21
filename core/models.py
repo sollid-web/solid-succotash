@@ -15,32 +15,32 @@ class SupportRequest(models.Model):
         (STATUS_RESOLVED, "Resolved"),
     ]
 
-    user = models.ForeignKey(
+    user: models.ForeignKey = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="support_requests",
     )
-    full_name = models.CharField(max_length=255, blank=True)
-    contact_email = models.EmailField(blank=True)
-    topic = models.CharField(max_length=120, blank=True)
-    source_url = models.CharField(max_length=255, blank=True)
-    message = models.TextField()
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_PENDING)
-    admin_notes = models.TextField(blank=True)
-    handled_by = models.ForeignKey(
+    full_name: models.CharField = models.CharField(max_length=255, blank=True)
+    contact_email: models.EmailField = models.EmailField(blank=True)
+    topic: models.CharField = models.CharField(max_length=120, blank=True)
+    source_url: models.CharField = models.CharField(max_length=255, blank=True)
+    message: models.TextField = models.TextField()
+    status: models.CharField = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_PENDING)
+    admin_notes: models.TextField = models.TextField(blank=True)
+    handled_by: models.ForeignKey = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="handled_support_requests",
     )
-    responded_at = models.DateTimeField(null=True, blank=True)
-    ip_address = models.GenericIPAddressField(null=True, blank=True)
-    user_agent = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    responded_at: models.DateTimeField = models.DateTimeField(null=True, blank=True)
+    ip_address: models.GenericIPAddressField = models.GenericIPAddressField(null=True, blank=True)
+    user_agent: models.TextField = models.TextField(blank=True)
+    created_at: models.DateTimeField = models.DateTimeField(auto_now_add=True)
+    updated_at: models.DateTimeField = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["-created_at"]
@@ -52,14 +52,14 @@ class SupportRequest(models.Model):
 class Agreement(models.Model):
     """Versioned legal agreement presented to end users."""
 
-    title = models.CharField(max_length=255)
-    slug = models.SlugField(help_text="Stable identifier used in links and lookups.")
-    version = models.CharField(max_length=20, help_text="Semantic version label, e.g., 1.0.0")
-    body = models.TextField(help_text="Markdown/plain-text body rendered for the user.")
-    effective_date = models.DateField(default=timezone.now)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    title: models.CharField = models.CharField(max_length=255)
+    slug: models.SlugField = models.SlugField(help_text="Stable identifier used in links and lookups.")
+    version: models.CharField = models.CharField(max_length=20, help_text="Semantic version label, e.g., 1.0.0")
+    body: models.TextField = models.TextField(help_text="Markdown/plain-text body rendered for the user.")
+    effective_date: models.DateField = models.DateField(default=timezone.now)
+    is_active: models.BooleanField = models.BooleanField(default=True)
+    created_at: models.DateTimeField = models.DateTimeField(auto_now_add=True)
+    updated_at: models.DateTimeField = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["-effective_date", "-created_at"]
@@ -80,17 +80,17 @@ class Agreement(models.Model):
 class UserAgreementAcceptance(models.Model):
     """Tracks that a user accepted a specific agreement version."""
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    agreement = models.ForeignKey(Agreement, on_delete=models.CASCADE)
-    accepted_at = models.DateTimeField(auto_now_add=True)
-    ip_address = models.GenericIPAddressField(null=True, blank=True)
-    user_agent = models.TextField(blank=True)
-    agreement_hash = models.CharField(
+    user: models.ForeignKey = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    agreement: models.ForeignKey = models.ForeignKey(Agreement, on_delete=models.CASCADE)
+    accepted_at: models.DateTimeField = models.DateTimeField(auto_now_add=True)
+    ip_address: models.GenericIPAddressField = models.GenericIPAddressField(null=True, blank=True)
+    user_agent: models.TextField = models.TextField(blank=True)
+    agreement_hash: models.CharField = models.CharField(
         max_length=64,
         blank=True,
         help_text="SHA256 hash of agreement body at acceptance time",
     )
-    agreement_version = models.CharField(
+    agreement_version: models.CharField = models.CharField(
         max_length=20,
         blank=True,
         help_text="Version string captured at acceptance time",

@@ -19,24 +19,24 @@ class Profile(models.Model):
         ("admin", "Admin"),
     ]
 
-    user = models.OneToOneField(
+    user: models.OneToOneField = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
     )
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default="user")
-    full_name = models.CharField(max_length=255, blank=True)
-    created_at = models.DateTimeField(default=timezone.now)
+    role: models.CharField = models.CharField(max_length=10, choices=ROLE_CHOICES, default="user")
+    full_name: models.CharField = models.CharField(max_length=255, blank=True)
+    created_at: models.DateTimeField = models.DateTimeField(default=timezone.now)
 
     # Email preferences
-    email_notifications_enabled = models.BooleanField(
+    email_notifications_enabled: models.BooleanField = models.BooleanField(
         default=True, help_text="Master toggle for all email notifications"
     )
-    email_welcome = models.BooleanField(default=True, help_text="Welcome emails")
-    email_transactions = models.BooleanField(default=True, help_text="Transaction notifications")
-    email_investments = models.BooleanField(default=True, help_text="Investment notifications")
-    email_roi_payouts = models.BooleanField(default=True, help_text="ROI payout notifications")
-    email_wallet_updates = models.BooleanField(default=True, help_text="Wallet credit/debit notifications")
-    email_security_alerts = models.BooleanField(default=True, help_text="Security alerts")
-    email_marketing = models.BooleanField(default=False, help_text="Marketing and promotional emails")
+    email_welcome: models.BooleanField = models.BooleanField(default=True, help_text="Welcome emails")
+    email_transactions: models.BooleanField = models.BooleanField(default=True, help_text="Transaction notifications")
+    email_investments: models.BooleanField = models.BooleanField(default=True, help_text="Investment notifications")
+    email_roi_payouts: models.BooleanField = models.BooleanField(default=True, help_text="ROI payout notifications")
+    email_wallet_updates: models.BooleanField = models.BooleanField(default=True, help_text="Wallet credit/debit notifications")
+    email_security_alerts: models.BooleanField = models.BooleanField(default=True, help_text="Security alerts")
+    email_marketing: models.BooleanField = models.BooleanField(default=False, help_text="Marketing and promotional emails")
 
     def __str__(self):
         return f"{self.user.email} - {self.role}"
@@ -73,11 +73,11 @@ class Profile(models.Model):
 
 
 class UserWallet(models.Model):
-    user = models.OneToOneField(
+    user: models.OneToOneField = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="wallet"
     )
-    balance = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
-    updated_at = models.DateTimeField(auto_now=True)
+    balance: models.DecimalField = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
+    updated_at: models.DateTimeField = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.user.email} - ${self.balance}"
@@ -112,27 +112,27 @@ class UserNotification(models.Model):
         ("high", "High"),
     ]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(
+    id: models.UUIDField = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user: models.ForeignKey = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notifications"
     )
-    notification_type = models.CharField(max_length=30, choices=NOTIFICATION_TYPES)
-    title = models.CharField(max_length=200)
-    message = models.TextField()
-    action_url = models.CharField(
+    notification_type: models.CharField = models.CharField(max_length=30, choices=NOTIFICATION_TYPES)
+    title: models.CharField = models.CharField(max_length=200)
+    message: models.TextField = models.TextField()
+    action_url: models.CharField = models.CharField(
         max_length=255, blank=True, help_text="URL for user to take action"
     )
-    entity_type = models.CharField(
+    entity_type: models.CharField = models.CharField(
         max_length=20, blank=True, help_text="e.g., 'transaction', 'investment'"
     )
-    entity_id = models.CharField(
+    entity_id: models.CharField = models.CharField(
         max_length=100, blank=True, help_text="UUID or ID of related entity"
     )
-    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default="medium")
-    is_read = models.BooleanField(default=False)
-    read_at = models.DateTimeField(null=True, blank=True)
-    created_at = models.DateTimeField(default=timezone.now)
-    expires_at = models.DateTimeField(
+    priority: models.CharField = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default="medium")
+    is_read: models.BooleanField = models.BooleanField(default=False)
+    read_at: models.DateTimeField = models.DateTimeField(null=True, blank=True)
+    created_at: models.DateTimeField = models.DateTimeField(default=timezone.now)
+    expires_at: models.DateTimeField = models.DateTimeField(
         null=True, blank=True, help_text="Auto-delete after this date"
     )
 

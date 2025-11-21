@@ -9,9 +9,9 @@ User = get_user_model()
 
 
 class InvestmentPlan(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    description = models.TextField()
-    daily_roi = models.DecimalField(
+    name: models.CharField = models.CharField(max_length=100, unique=True)
+    description: models.TextField = models.TextField()
+    daily_roi: models.DecimalField = models.DecimalField(
         max_digits=5,
         decimal_places=2,
         validators=[
@@ -20,10 +20,10 @@ class InvestmentPlan(models.Model):
         ],
         help_text="Daily ROI percentage (0.00-2.00)",
     )
-    duration_days = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    min_amount = models.DecimalField(max_digits=12, decimal_places=2)
-    max_amount = models.DecimalField(max_digits=12, decimal_places=2)
-    created_at = models.DateTimeField(default=timezone.now)
+    duration_days: models.PositiveIntegerField = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    min_amount: models.DecimalField = models.DecimalField(max_digits=12, decimal_places=2)
+    max_amount: models.DecimalField = models.DecimalField(max_digits=12, decimal_places=2)
+    created_at: models.DateTimeField = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.name} - {self.daily_roi}% daily"
@@ -32,13 +32,13 @@ class InvestmentPlan(models.Model):
         db_table = "investments_plan"
         constraints = [
             models.CheckConstraint(
-                check=models.Q(daily_roi__gte=Decimal("0.00"))
+                check: models.Q = models.Q(daily_roi__gte=Decimal("0.00"))
                 & models.Q(daily_roi__lte=Decimal("2.00")),
                 name="valid_daily_roi",
             ),
             models.CheckConstraint(check=models.Q(duration_days__gt=0), name="positive_duration"),
             models.CheckConstraint(
-                check=models.Q(min_amount__lte=models.F("max_amount")),
+                check: models.Q = models.Q(min_amount__lte=models.F("max_amount")),
                 name="min_amount_lte_max_amount",
             ),
         ]
@@ -56,17 +56,17 @@ class UserInvestment(models.Model):
         ("completed", "Completed"),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="investments")
-    plan = models.ForeignKey(
+    user: models.ForeignKey = models.ForeignKey(User, on_delete=models.CASCADE, related_name="investments")
+    plan: models.ForeignKey = models.ForeignKey(
         InvestmentPlan, on_delete=models.CASCADE, related_name="user_investments"
     )
-    amount = models.DecimalField(
+    amount: models.DecimalField = models.DecimalField(
         max_digits=12, decimal_places=2, validators=[MinValueValidator(Decimal("0.00"))]
     )
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
-    started_at = models.DateTimeField(null=True, blank=True)
-    ends_at = models.DateTimeField(null=True, blank=True)
-    created_at = models.DateTimeField(default=timezone.now)
+    status: models.CharField = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    started_at: models.DateTimeField = models.DateTimeField(null=True, blank=True)
+    ends_at: models.DateTimeField = models.DateTimeField(null=True, blank=True)
+    created_at: models.DateTimeField = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.user.email} - {self.plan.name} - ${self.amount}"
@@ -97,14 +97,14 @@ class UserInvestment(models.Model):
 class DailyRoiPayout(models.Model):
     """Tracks ROI payout calculations on a per-day basis."""
 
-    investment = models.ForeignKey(
+    investment: models.ForeignKey = models.ForeignKey(
         UserInvestment,
         on_delete=models.CASCADE,
         related_name="daily_payouts",
     )
-    payout_date = models.DateField()
-    amount = models.DecimalField(max_digits=12, decimal_places=2)
-    created_at = models.DateTimeField(auto_now_add=True)
+    payout_date: models.DateField = models.DateField()
+    amount: models.DecimalField = models.DecimalField(max_digits=12, decimal_places=2)
+    created_at: models.DateTimeField = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ("investment", "payout_date")

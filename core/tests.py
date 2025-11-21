@@ -77,7 +77,8 @@ class AgreementAPITests(TestCase):
 
     def test_accept_requires_authentication(self):
         resp = self.client.post(f"/api/agreements/{self.agreement.pk}/accept/")
-        self.assertEqual(resp.status_code, 403)
+        # DRF returns 401 Unauthorized for unauthenticated requests with IsAuthenticated
+        self.assertEqual(resp.status_code, 401)
 
     def test_accept_agreement(self):
         from .models import UserAgreementAcceptance

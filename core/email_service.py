@@ -101,7 +101,7 @@ class EmailService:
             try:
                 text_content = render_to_string(text_template, full_context)
             except Exception:
-                text_content = cls._html_to_text(html_content)
+                text_content = cls._html_to_text(html_content)  # type: ignore[assignment]
 
             # Prepare and send message
             msg = EmailMultiAlternatives(subject=subject, body=text_content, from_email=from_email, to=recipients)
@@ -261,7 +261,7 @@ class EmailService:
     def send_admin_alert(cls, subject: str, message: str, admin_emails: Sequence[str] | None = None) -> bool:
         if admin_emails is None:
             admin_users = User.objects.filter(is_staff=True, is_active=True)
-            admin_emails = [u.email for u in admin_users if u.email]
+            admin_emails = [getattr(u, "email", "") for u in admin_users if getattr(u, "email", "")]
 
         if not admin_emails:
             logger.warning("No admin emails found for alert")

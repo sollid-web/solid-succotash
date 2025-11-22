@@ -33,6 +33,8 @@ jobs:
       - name: Type check (mypy)
         env:
           DJANGO_SETTINGS_MODULE: wolvcapital.settings
+          SECRET_KEY: test-secret-key-for-ci-only-not-production-use
+          DEBUG: True
         run: |
           python -m mypy core || true
           python -m mypy -p core
@@ -40,5 +42,7 @@ jobs:
       - name: Run tests
         env:
           DJANGO_SETTINGS_MODULE: wolvcapital.settings
+          SECRET_KEY: test-secret-key-for-ci-only-not-production-use
+          DEBUG: True
         run: |
           python manage.py test -v 2

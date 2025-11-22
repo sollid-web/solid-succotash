@@ -21,8 +21,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         }
 
         // Verify token with backend
-        const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '');
-        const response = await fetch(`${apiBase}/api/user/profile/`, {
+        const apiBase = typeof window !== 'undefined' && window.location.hostname === 'wolvcapital.com'
+          ? 'https://api.wolvcapital.com'
+          : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '');
+        
+        const response = await fetch(`${apiBase}/api/auth/me/`, {
           headers: {
             'Authorization': `Token ${token}`,
             'Content-Type': 'application/json'
@@ -54,7 +57,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const handleLogout = async () => {
     try {
       const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-      const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '');
+      const apiBase = typeof window !== 'undefined' && window.location.hostname === 'wolvcapital.com'
+        ? 'https://api.wolvcapital.com'
+        : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '');
       
       // API logout
       await fetch(`${apiBase}/api/auth/logout/`, {
@@ -108,11 +113,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <div className="flex items-center gap-4">
             <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-lg">
               <div className="w-8 h-8 bg-[#2563eb] rounded-full flex items-center justify-center text-white text-sm font-semibold">
-                {user?.full_name?.charAt(0) || user?.email?.charAt(0) || 'U'}
+                {user?.first_name?.charAt(0) || user?.last_name?.charAt(0) || user?.email?.charAt(0) || 'U'}
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-900">
-                  {user?.full_name || (user?.email ? user.email.split('@')[0] : 'User')}
+                  {user?.first_name || user?.last_name ? `${user.first_name || ''} ${user.last_name || ''}`.trim() : (user?.email ? user.email.split('@')[0] : 'User')}
                 </p>
                 <p className="text-xs text-gray-500">Dashboard</p>
               </div>

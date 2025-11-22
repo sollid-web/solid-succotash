@@ -12,6 +12,11 @@ export default function LoginPage() {
 
   // Compute API base once and normalize (no trailing slash)
   const apiBase = useMemo(() => {
+    // Production API URL for wolvcapital.com
+    if (typeof window !== 'undefined' && window.location.hostname === 'wolvcapital.com') {
+      return 'https://api.wolvcapital.com'
+    }
+    // Development or other environments
     const raw = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
     return raw.replace(/\/$/, '')
   }, [])
@@ -157,7 +162,7 @@ export default function LoginPage() {
                 <input type="checkbox" className="w-4 h-4 text-[#2563eb] border-gray-300 rounded focus:ring-[#2563eb]" />
                 <span className="ml-2 text-sm text-gray-700">Remember me</span>
               </label>
-              <a href={(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000') + '/accounts/password/reset/'} className="text-sm text-[#2563eb] hover:text-[#1d4ed8] font-semibold transition">Forgot password?</a>
+              <a href={`${apiBase}/accounts/password/reset/`} className="text-sm text-[#2563eb] hover:text-[#1d4ed8] font-semibold transition">Forgot password?</a>
             </div>
 
             <button 

@@ -10,9 +10,11 @@ export default function SignupPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Use environment variable for API URL
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    window.location.href = `${apiBase}/accounts/signup/?email=${encodeURIComponent(email)}`;
+    // Use correct API URL for production
+    const apiBase = typeof window !== 'undefined' && window.location.hostname === 'wolvcapital.com'
+      ? 'https://api.wolvcapital.com'
+      : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')
+    window.location.href = `${apiBase}/accounts/signup/?email=${encodeURIComponent(email)}`
   }
 
   return (

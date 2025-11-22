@@ -11,8 +11,6 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils import timezone
 
- 
-
 logger = logging.getLogger(__name__)
 UserModel: Any = get_user_model()
 

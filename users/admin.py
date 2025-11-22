@@ -56,7 +56,7 @@ class UserAdmin(BaseUserAdmin):
 
         self.message_user(request, f"{queryset.count()} email(s) exported.")
         return response
-    
+
 
     @admin.action(description="Export user details (CSV)")
     def export_users_csv(self, request, queryset):
@@ -90,7 +90,7 @@ class UserAdmin(BaseUserAdmin):
 
         self.message_user(request, f"{queryset.count()} user(s) exported.")
         return response
-    
+
 
     @admin.display(description="Role")
     def get_role(self, obj):
@@ -98,7 +98,7 @@ class UserAdmin(BaseUserAdmin):
             return obj.profile.role
         except Profile.DoesNotExist:
             return "No Profile"
-    
+
 
     @admin.display(description="Wallet Balance")
     def get_balance(self, obj):
@@ -106,7 +106,7 @@ class UserAdmin(BaseUserAdmin):
             return f"${obj.wallet.balance}"
         except UserWallet.DoesNotExist:
             return "No Wallet"
-    
+
 
 
 @admin.register(Profile)
@@ -169,13 +169,13 @@ class UserNotificationAdmin(admin.ModelAdmin):
     def mark_as_read(self, request, queryset):
         count = queryset.update(is_read=True)
         self.message_user(request, f"{count} notification(s) marked as read.")
-    
+
 
     @admin.action(description="Mark selected notifications as unread")
     def mark_as_unread(self, request, queryset):
         count = queryset.update(is_read=False, read_at=None)
         self.message_user(request, f"{count} notification(s) marked as unread.")
-    
+
 
 
 # Re-register UserAdmin

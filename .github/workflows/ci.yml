@@ -26,9 +26,9 @@ jobs:
 
       - name: Lint (Ruff)
         run: |
-          python -m ruff check . --exit-zero    # always exit 0, never fail workflow
-          python -m ruff check . --fix
-          python -m ruff check . --exit-zero
+          python -m ruff check . --extend-ignore E402 --exit-zero    # allow module imports after setup
+          python -m ruff check . --extend-ignore E402 --fix
+          python -m ruff check . --extend-ignore E402 --exit-zero
 
       - name: Type check (mypy)
         env:

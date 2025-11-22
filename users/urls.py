@@ -9,11 +9,11 @@ API Routes (see api/urls.py):
 - /api/profile/email-preferences/ - Manage email preferences
 """
 
+from typing import Any
+
 app_name = 'users'
 
-from typing import List, Any
-
-urlpatterns: List[Any] = [
+urlpatterns: list[Any] = [
     # All routes migrated to /api/ - see api/urls.py
     # - /api/notifications/ (list, mark-read, mark-all-read, unread-count)
     # - /api/profile/email-preferences/

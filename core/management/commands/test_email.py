@@ -1,9 +1,9 @@
 """Management command to test email sending"""
-from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from core.email_service import EmailService
+from django.core.management.base import BaseCommand
 
+from core.email_service import EmailService
 
 User = get_user_model()
 
@@ -57,7 +57,7 @@ class Command(BaseCommand):
         self.stdout.write(f'EMAIL_USE_TLS: {getattr(settings, "EMAIL_USE_TLS", "Not set")}')
         self.stdout.write(f'EMAIL_HOST_USER: {getattr(settings, "EMAIL_HOST_USER", "Not set")}')
         self.stdout.write(f'DEFAULT_FROM_EMAIL: {settings.DEFAULT_FROM_EMAIL}')
-        
+
         if 'console' in settings.EMAIL_BACKEND.lower():
             self.stdout.write(self.style.WARNING('\n⚠ Using console backend - emails will print to console'))
         elif 'filebased' in settings.EMAIL_BACKEND.lower():
@@ -65,7 +65,7 @@ class Command(BaseCommand):
 
     def test_welcome_email(self, email):
         """Test welcome email"""
-        self.stdout.write(self.style.WARNING(f'\n\nTESTING WELCOME EMAIL'))
+        self.stdout.write(self.style.WARNING('\n\nTESTING WELCOME EMAIL'))
         self.stdout.write(self.style.WARNING('-'*60))
         self.stdout.write(f'Recipient: {email}')
 
@@ -80,17 +80,17 @@ class Command(BaseCommand):
                     def __init__(self, email):
                         self.email = email
                         self.username = email.split('@')[0]
-                    
+
                     def get_full_name(self):
                         return 'Test User'
-                    
+
                     class profile:
                         email_preferences = {}
-                
+
                 user = MockUser(email)
 
             result = EmailService.send_welcome_email(user)
-            
+
             if result:
                 self.stdout.write(self.style.SUCCESS('✓ Welcome email sent successfully!'))
             else:
@@ -103,7 +103,7 @@ class Command(BaseCommand):
 
     def test_transaction_email(self, email):
         """Test transaction notification"""
-        self.stdout.write(self.style.WARNING(f'\n\nTESTING TRANSACTION EMAIL'))
+        self.stdout.write(self.style.WARNING('\n\nTESTING TRANSACTION EMAIL'))
         self.stdout.write(self.style.WARNING('-'*60))
         self.stdout.write(f'Recipient: {email}')
 
@@ -115,27 +115,27 @@ class Command(BaseCommand):
                     self.amount = 1000.00
                     self.reference = 'TEST-12345'
                     self.created_at = None
-                    
+
                     class user:
                         def __init__(self, email):
                             self.email = email
                             self.username = email.split('@')[0]
-                        
+
                         def get_full_name(self):
                             return 'Test User'
-                        
+
                         class profile:
                             email_preferences = {}
-                    
+
                     self.user = user(email)
 
             transaction = MockTransaction(email)
             result = EmailService.send_transaction_notification(
-                transaction, 
-                status='approved', 
+                transaction,
+                status='approved',
                 admin_notes='Test approval'
             )
-            
+
             if result:
                 self.stdout.write(self.style.SUCCESS('✓ Transaction email sent successfully!'))
             else:

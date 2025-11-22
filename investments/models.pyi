@@ -1,7 +1,8 @@
-from typing import Optional
-from decimal import Decimal
 from datetime import datetime
+from decimal import Decimal
+
 from django.contrib.auth.models import User
+from django.db import models
 
 class InvestmentPlan(models.Model):
     name: str
@@ -18,8 +19,8 @@ class UserInvestment(models.Model):
     plan: InvestmentPlan
     amount: Decimal
     status: str
-    started_at: Optional[datetime]
-    ends_at: Optional[datetime]
+    started_at: datetime | None
+    ends_at: datetime | None
     created_at: datetime
 
 class DailyRoiPayout(models.Model):

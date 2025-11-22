@@ -1,9 +1,10 @@
-from typing import Optional
 from datetime import datetime
+
 from django.contrib.auth.models import User
+from django.db import models
 
 class SupportRequest(models.Model):
-    user: Optional[User]
+    user: User | None
     full_name: str
     contact_email: str
     topic: str
@@ -11,9 +12,9 @@ class SupportRequest(models.Model):
     message: str
     status: str
     admin_notes: str
-    handled_by: Optional[User]
-    responded_at: Optional[datetime]
-    ip_address: Optional[str]
+    handled_by: User | None
+    responded_at: datetime | None
+    ip_address: str | None
     user_agent: str
     created_at: datetime
     updated_at: datetime
@@ -32,7 +33,7 @@ class UserAgreementAcceptance(models.Model):
     user: User
     agreement: Agreement
     accepted_at: datetime
-    ip_address: Optional[str]
+    ip_address: str | None
     user_agent: str
     agreement_hash: str
     agreement_version: str

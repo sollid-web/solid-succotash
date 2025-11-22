@@ -1,14 +1,15 @@
-from typing import Optional
+import uuid
 from datetime import datetime
 from decimal import Decimal
-import uuid
+
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 class User(AbstractUser):
     pass
 
 class Profile(models.Model):
-    user: Optional[AbstractUser]
+    user: AbstractUser | None
     role: str
     full_name: str
     created_at: datetime
@@ -22,13 +23,13 @@ class Profile(models.Model):
     email_marketing: bool
 
 class UserWallet(models.Model):
-    user: Optional[AbstractUser]
+    user: AbstractUser | None
     balance: Decimal
     updated_at: datetime
 
 class UserNotification(models.Model):
     id: uuid.UUID
-    user: Optional[AbstractUser]
+    user: AbstractUser | None
     notification_type: str
     title: str
     message: str
@@ -37,6 +38,6 @@ class UserNotification(models.Model):
     entity_id: str
     priority: str
     is_read: bool
-    read_at: Optional[datetime]
+    read_at: datetime | None
     created_at: datetime
-    expires_at: Optional[datetime]
+    expires_at: datetime | None

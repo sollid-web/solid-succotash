@@ -264,71 +264,119 @@ export default function DashboardPage() {
           <div className="bg-white rounded-3xl shadow-xl p-8">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-800">Your Virtual Card</h2>
-              <div className="px-3 py-1 bg-emerald-100 text-emerald-600 rounded-full text-sm font-semibold">
-                Active
+              <div className="px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-sm font-semibold">
+                Inactive
               </div>
             </div>
-            <p className="text-gray-600 mb-6">Your WolvCapital virtual Visa card - Click to flip and view details</p>
+            <p className="text-gray-600 mb-6">Activate your WolvCapital virtual Visa card for global transactions</p>
             
-            <div className="flex justify-center mb-6">
-              <FlipCard 
-                maxWidth={360}
-                aspectWidth={480}
-                aspectHeight={300}
-                animationMs={800}
-                initialFlipped={false}
-              />
+            <div className="flex justify-center mb-6 relative">
+              <div className="relative">
+                <FlipCard 
+                  maxWidth={360}
+                  aspectWidth={480}
+                  aspectHeight={300}
+                  animationMs={800}
+                  initialFlipped={false}
+                />
+                {/* Overlay for inactive state */}
+                <div className="absolute inset-0 bg-black bg-opacity-50 rounded-3xl flex items-center justify-center">
+                  <div className="text-center">
+                    <svg className="w-16 h-16 text-white mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <p className="text-white font-semibold text-lg">Card Locked</p>
+                    <p className="text-white text-sm opacity-90">Purchase to activate</p>
+                  </div>
+                </div>
+              </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-4 text-center">
+            <div className="grid grid-cols-2 gap-4 text-center mb-6">
               <div className="p-3 bg-blue-50 rounded-xl">
                 <p className="text-sm text-gray-600">Monthly Limit</p>
                 <p className="text-lg font-bold text-blue-600">$50,000</p>
               </div>
               <div className="p-3 bg-green-50 rounded-xl">
-                <p className="text-sm text-gray-600">Available</p>
-                <p className="text-lg font-bold text-green-600">${wallet ? (50000 - parseFloat(wallet.total_withdrawals || '0')).toFixed(0) : '50,000'}</p>
+                <p className="text-sm text-gray-600">Activation Fee</p>
+                <p className="text-lg font-bold text-green-600">$1,000</p>
               </div>
             </div>
+
+            <Link
+              href="/dashboard/purchase-card"
+              className="w-full bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 flex items-center justify-center space-x-2"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+              </svg>
+              <span>Purchase Card - $1,000</span>
+            </Link>
           </div>
 
-          {/* Card Actions */}
+          {/* Card Benefits */}
           <div className="bg-white rounded-3xl shadow-xl p-8">
-            <h3 className="text-xl font-bold text-gray-800 mb-6">Card Management</h3>
+            <h3 className="text-xl font-bold text-gray-800 mb-6">Premium Card Benefits</h3>
             
-            <div className="space-y-4">
-              <div className="p-4 border border-gray-200 rounded-xl">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-semibold text-gray-800">Card Status</h4>
-                    <p className="text-sm text-gray-600">Your card is active and ready to use</p>
-                  </div>
-                  <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+            <div className="space-y-6">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-1">Global Transactions</h4>
+                  <p className="text-sm text-gray-600">Make purchases worldwide with instant processing and competitive exchange rates</p>
                 </div>
               </div>
               
-              <div className="p-4 border border-gray-200 rounded-xl">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-semibold text-gray-800">Security</h4>
-                    <p className="text-sm text-gray-600">Enhanced fraud protection enabled</p>
-                  </div>
-                  <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-1">Unlimited Withdrawals</h4>
+                  <p className="text-sm text-gray-600">Access your funds anytime with no withdrawal limits or restrictions</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                 </div>
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-1">Account Upgrade</h4>
+                  <p className="text-sm text-gray-600">Unlock premium features and higher investment limits with card activation</p>
+                </div>
               </div>
               
-              <div className="grid grid-cols-2 gap-3 mt-6">
-                <Link
-                  href="/dashboard/transactions"
-                  className="bg-[#2563eb] text-white px-4 py-3 rounded-xl font-semibold text-center hover:bg-[#1d4ed8] transition"
-                >
-                  View Transactions
-                </Link>
-                <button className="bg-gray-100 text-gray-700 px-4 py-3 rounded-xl font-semibold hover:bg-gray-200 transition">
-                  Card Settings
-                </button>
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-800 mb-1">Instant Processing</h4>
+                  <p className="text-sm text-gray-600">Lightning-fast transactions for seamless online purchases and payments</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-100">
+              <div className="flex items-center space-x-3">
+                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+                <div>
+                  <p className="font-semibold text-blue-900">Premium Member Exclusive</p>
+                  <p className="text-sm text-blue-700">Join our elite members with enhanced privileges</p>
+                </div>
               </div>
             </div>
           </div>

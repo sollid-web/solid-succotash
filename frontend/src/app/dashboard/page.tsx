@@ -258,6 +258,160 @@ export default function DashboardPage() {
           </div>
         </section>
 
+        {/* Active Investment Plans Section */}
+        <section className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-800">Active Investment Plans</h2>
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-gray-500">
+                {investments ? investments.filter(inv => inv.status === 'approved').length : 0} active
+              </span>
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            </div>
+          </div>
+          
+          {investments && investments.filter(inv => inv.status === 'approved').length > 0 ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {investments.filter(inv => inv.status === 'approved').map((investment) => {
+                const startDate = investment.started_at ? new Date(investment.started_at) : null
+                const endDate = investment.ends_at ? new Date(investment.ends_at) : null
+                const now = new Date()
+                const daysLeft = endDate ? Math.max(0, Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))) : 0
+                const totalDays = investment.duration_days || 0
+                const daysElapsed = totalDays - daysLeft
+                const progressPercentage = totalDays > 0 ? Math.min(100, (daysElapsed / totalDays) * 100) : 0
+                const dailyReturn = (parseFloat(investment.amount || '0') * parseFloat(investment.daily_roi || '0')) / 100
+                const totalEarned = dailyReturn * daysElapsed
+                const isCompleted = daysLeft === 0 && endDate && now >= endDate
+                
+                return (
+                  <div key={investment.id} className="border-2 border-gray-100 rounded-2xl p-6 hover:border-blue-200 transition-all duration-300 hover:shadow-lg">
+                    {/* Investment Header */}
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-800 mb-1">{investment.plan_name}</h3>
+                        <div className="flex items-center space-x-2">
+                          <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                            isCompleted 
+                              ? 'bg-green-100 text-green-700' 
+                              : 'bg-blue-100 text-blue-700'
+                          }`}>
+                            {isCompleted ? 'Completed' : 'Active'}
+                          </span>
+                          <span className="text-sm text-gray-500">
+                            {investment.daily_roi}% daily ROI
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-gray-500">Investment Amount</p>
+                        <p className="text-2xl font-bold text-gray-800">${parseFloat(investment.amount || '0').toLocaleString()}</p>
+                      </div>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="mb-4">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-gray-600">Progress</span>
+                        <span className="text-sm text-gray-500">{daysElapsed}/{totalDays} days</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-3">
+                        <div 
+                          className={`h-3 rounded-full transition-all duration-300 ${
+                            isCompleted ? 'bg-green-500' : 'bg-blue-500'
+                          }`}
+                          style={{ width: `${progressPercentage}%` }}
+                        ></div>
+                      </div>
+                      <div className="flex justify-between mt-2 text-sm">
+                        <span className="text-gray-500">
+                          Started: {startDate ? startDate.toLocaleDateString() : 'N/A'}
+                        </span>
+                        <span className={`font-medium ${isCompleted ? 'text-green-600' : 'text-blue-600'}`}>
+                          {isCompleted ? 'Completed' : `${daysLeft} days left`}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Financial Details Grid */}
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div className="bg-green-50 rounded-xl p-4 text-center">
+                        <p className="text-sm text-gray-600 mb-1">Total Earned</p>
+                        <p className="text-lg font-bold text-green-600">
+                          ${totalEarned.toFixed(2)}
+                        </p>
+                        <p className="text-xs text-green-500">
+                          ${dailyReturn.toFixed(2)}/day
+                        </p>
+                      </div>
+                      <div className="bg-blue-50 rounded-xl p-4 text-center">
+                        <p className="text-sm text-gray-600 mb-1">Expected Total</p>
+                        <p className="text-lg font-bold text-blue-600">
+                          ${parseFloat(investment.total_return || investment.expected_return || '0').toFixed(2)}
+                        </p>
+                        <p className="text-xs text-blue-500">
+                          At completion
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Investment Details */}
+                    <div className="border-t border-gray-100 pt-4">
+                      <div className="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                          <p className="text-xs text-gray-500 mb-1">Duration</p>
+                          <p className="text-sm font-semibold text-gray-700">{totalDays} days</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-500 mb-1">Daily ROI</p>
+                          <p className="text-sm font-semibold text-gray-700">{investment.daily_roi}%</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-500 mb-1">End Date</p>
+                          <p className="text-sm font-semibold text-gray-700">
+                            {endDate ? endDate.toLocaleDateString() : 'N/A'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Action Button */}
+                    {isCompleted && (
+                      <div className="mt-4 pt-4 border-t border-gray-100">
+                        <div className="flex items-center justify-center space-x-2 text-green-600">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <span className="text-sm font-semibold">Investment Completed</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+                <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2-2V7a2 2 0 012-2h2a2 2 0 002 2v2a2 2 0 002 2h2a2 2 0 012-2V7a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 00-2 2h-2a2 2 0 00-2 2v6a2 2 0 01-2 2H9z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-700 mb-2">No Active Investments</h3>
+              <p className="text-gray-500 mb-6">You don't have any active investment plans yet. Start investing today!</p>
+              <Link
+                href="/dashboard/new-investment"
+                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Start Your First Investment
+              </Link>
+            </div>
+          )}
+        </section>
+
         {/* Virtual Card Section */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Virtual Card Display */}

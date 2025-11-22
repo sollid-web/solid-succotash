@@ -161,36 +161,6 @@ export default function KYCPage() {
           </div>
         )
 
-      case 2: // Phone Number
-        return (
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone Number
-                </label>
-                <div className="flex space-x-3">
-                  <select className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <option>+1</option>
-                    <option>+44</option>
-                    <option>+47</option>
-                    <option>+49</option>
-                  </select>
-                  <input
-                    type="tel"
-                    id="phone"
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Enter your phone number"
-                  />
-                </div>
-              </div>
-              <button className="w-full bg-[#2563eb] text-white py-3 rounded-lg hover:bg-[#1d4ed8] transition font-semibold">
-                Send Verification Code
-              </button>
-            </div>
-          </div>
-        )
-
       case 2: // Personal Information
         return (
           <div className="space-y-6">

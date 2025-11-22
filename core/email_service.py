@@ -18,12 +18,17 @@ from django.utils import timezone
 logger = logging.getLogger(__name__)
 User = get_user_model()
 
+
 class EmailService:
     """
     Centralized email service for WolvCapital platform
     Handles all email sending with HTML/text templates
     """
-    DEFAULT_FROM_EMAIL = getattr(settings, "DEFAULT_FROM_EMAIL", "noreply@wolvcapital.com")
+    DEFAULT_FROM_EMAIL = getattr(
+        settings,
+        "DEFAULT_FROM_EMAIL",
+        "noreply@wolvcapital.com",
+    )
     BRAND_NAME = getattr(settings, "BRAND", {}).get("name", "WolvCapital")
     EMAIL_TYPES = {
         "WELCOME": "welcome",
@@ -56,12 +61,12 @@ class EmailService:
         email_type: str | None = None,
         user: Any = None,
     ) -> bool:
-        """
-        Send an email using HTML and text templates.
+        """Send an email using HTML and text templates.
 
-        - template_name: base template filename (without extension) under templates/emails/
-        - to_emails: single email or iterable of emails
-        - context: template context (will be copied to avoid mutation)
+        Args:
+            template_name: Base template name under templates/emails/.
+            to_emails: Single email or iterable of emails.
+            context: Template context (copied to avoid mutation).
         """
         if isinstance(to_emails, str):
             recipients: list[str] = [to_emails]
@@ -77,7 +82,11 @@ class EmailService:
 
         # Respect user preferences if provided
         if user and email_type and not cls._should_send_email(user, email_type):
-            logger.info("Email %s skipped for user %s due to preferences", email_type, getattr(user, "email", None))
+            logger.info(
+                "Email %s skipped for user %s due to preferences",
+                email_type,
+                getattr(user, "email", None),
+            )
             return True  # not an error: user opted out
 
         try:
@@ -88,8 +97,16 @@ class EmailService:
                     "brand_name": cls.BRAND_NAME,
                     "current_year": timezone.now().year,
                     "brand_config": getattr(settings, "BRAND", {}),
-                    "site_url": getattr(settings, "PUBLIC_SITE_URL", getattr(settings, "SITE_URL", "https://wolvcapital.com")),
-                    "admin_site_url": getattr(settings, "ADMIN_SITE_URL", getattr(settings, "SITE_URL", "https://wolvcapital.com")),
+                    "site_url": getattr(
+                        settings,
+                        "PUBLIC_SITE_URL",
+                        getattr(settings, "SITE_URL", "https://wolvcapital.com"),
+                    ),
+                    "admin_site_url": getattr(
+                        settings,
+                        "ADMIN_SITE_URL",
+                        getattr(settings, "SITE_URL", "https://wolvcapital.com"),
+                    ),
                 }
             )
 
@@ -101,10 +118,15 @@ class EmailService:
             try:
                 text_content: str = render_to_string(text_template, full_context)
             except Exception:
-                text_content = cls._html_to_text(html_content)  # type: ignore[assignment]
+                text_content = cls._html_to_text(html_content)
 
             # Prepare and send message
-            msg = EmailMultiAlternatives(subject=subject, body=text_content, from_email=from_email, to=recipients)
+            msg = EmailMultiAlternatives(
+                subject=subject,
+                body=text_content,
+                from_email=from_email,
+                to=recipients,
+            )
             msg.attach_alternative(html_content, "text/html")
             sent_count = msg.send(fail_silently=False)
 
@@ -112,12 +134,21 @@ class EmailService:
                 logger.info("Email sent: %s -> %s", email_type, recipients)
                 return True
 
-            logger.error("Email not sent (0 recipients): %s -> %s", email_type, recipients)
+            logger.error(
+                "Email not sent (0 recipients): %s -> %s",
+                email_type,
+                recipients,
+            )
             return False
 
         except Exception as exc:  # pragma: no cover - integration behavior
             # Avoid logging sensitive payload; log the error and metadata only
-            logger.exception("Error sending email %s to %s: %s", email_type, recipients, exc)
+            logger.exception(
+                "Error sending email %s to %s: %s",
+                email_type,
+                recipients,
+                exc,
+            )
             return False
 
     @classmethod

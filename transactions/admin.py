@@ -49,6 +49,7 @@ class AdminNotificationAdmin(admin.ModelAdmin):
         ("Timestamps", {"fields": ("created_at",)}),
     )
 
+    @admin.display(description="Actions")
     def action_links(self, obj):
         """Display action links for the notification"""
         if obj.entity_type and obj.entity_id:
@@ -72,26 +73,22 @@ class AdminNotificationAdmin(admin.ModelAdmin):
                     pass
         return "-"
 
-    action_links.short_description = "Actions"
-
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("user", "resolved_by")
 
     actions = ["mark_as_read", "mark_as_resolved"]
 
+    @admin.action(description="Mark selected notifications as read")
     def mark_as_read(self, request, queryset):
         updated = queryset.update(is_read=True)
         self.message_user(request, f"{updated} notifications marked as read.")
 
-    mark_as_read.short_description = "Mark selected notifications as read"
-
+    @admin.action(description="Mark selected notifications as resolved")
     def mark_as_resolved(self, request, queryset):
         updated = queryset.update(
             is_resolved=True, resolved_by=request.user, resolved_at=timezone.now()
         )
         self.message_user(request, f"{updated} notifications marked as resolved.")
-
-    mark_as_resolved.short_description = "Mark selected notifications as resolved"
 
 
 @admin.register(VirtualCard)
@@ -149,13 +146,13 @@ class VirtualCardAdmin(admin.ModelAdmin):
         ),
     )
 
+    @admin.display(description="Card Number")
     def masked_card_number(self, obj):
         return obj.get_masked_number()
 
-    masked_card_number.short_description = "Card Number"
-
     actions = ["approve_cards", "reject_cards", "generate_card_details"]
 
+    @admin.action(description="Approve selected virtual cards")
     def approve_cards(self, request, queryset):
         count = 0
         for card in queryset.filter(status="pending"):
@@ -169,8 +166,7 @@ class VirtualCardAdmin(admin.ModelAdmin):
 
         self.message_user(request, f"Successfully approved {count} virtual card(s)")
 
-    approve_cards.short_description = "Approve selected virtual cards"
-
+    @admin.action(description="Reject selected virtual cards")
     def reject_cards(self, request, queryset):
         count = 0
         for card in queryset.filter(status="pending"):
@@ -181,8 +177,7 @@ class VirtualCardAdmin(admin.ModelAdmin):
 
         self.message_user(request, f"Successfully rejected {count} virtual card(s)")
 
-    reject_cards.short_description = "Reject selected virtual cards"
-
+    @admin.action(description="Generate card details for approved cards")
     def generate_card_details(self, request, queryset):
         count = 0
         for card in queryset.filter(status__in=["approved", "active"]):
@@ -191,8 +186,6 @@ class VirtualCardAdmin(admin.ModelAdmin):
                 count += 1
 
         self.message_user(request, f"Generated card details for {count} card(s)")
-
-    generate_card_details.short_description = "Generate card details for approved cards"
 
 
 @admin.register(CryptocurrencyWallet)
@@ -217,14 +210,13 @@ class CryptocurrencyWalletAdmin(admin.ModelAdmin):
         ),
     )
 
+    @admin.display(description="Wallet Address")
     def display_wallet_address(self, obj):
         return format_html(
             '<span title="{}">{}<strong>...</strong></span>',
             obj.wallet_address,
             obj.wallet_address[:15],
         )
-
-    display_wallet_address.short_description = "Wallet Address"
 
 
 @admin.register(Transaction)
@@ -279,6 +271,9 @@ class TransactionAdmin(admin.ModelAdmin):
         ),
     )
 
+    @admin.action(
+        description="Approve selected transactions and update wallets"
+    )
     def approve_transactions(self, request, queryset):
         """Approve selected pending transactions and update user wallets"""
         approved_count = 0
@@ -305,8 +300,7 @@ class TransactionAdmin(admin.ModelAdmin):
         if failed_count > 0:
             messages.warning(request, f"Failed to approve {failed_count} transaction(s)")
 
-    approve_transactions.short_description = "Approve selected transactions and update wallets"
-
+    @admin.action(description="Reject selected transactions")
     def reject_transactions(self, request, queryset):
         """Reject selected pending transactions"""
         rejected_count = 0
@@ -329,8 +323,6 @@ class TransactionAdmin(admin.ModelAdmin):
 
         if failed_count > 0:
             messages.warning(request, f"Failed to reject {failed_count} transaction(s)")
-
-    reject_transactions.short_description = "Reject selected transactions"
 
     def save_model(self, request, obj, form, change):
         """Ensure manual status changes go through service layer so wallets stay accurate."""

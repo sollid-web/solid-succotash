@@ -33,21 +33,30 @@ def agreement_pdf(request, agreement_id: int):
     try:
         from .pdf_letterhead import build_pdf
     except Exception:  # pragma: no cover - environment specific
-        # In test or debug environments return 200 so tests can assert fallback
-        status_code = 200 if settings.DEBUG or getattr(settings, "TESTING", False) else 503
+        # In test/dev envs return 200 so tests can assert fallback deterministically
+        should_succeed = settings.DEBUG or getattr(settings, "TESTING", False)
+        status_code = 200 if should_succeed else 503
         return HttpResponse(
             "PDF generation temporarily unavailable (missing ReportLab).",
             status=status_code,
             content_type="text/plain",
         )
 
-    paragraphs = agreement.paragraphs() or ["(This agreement currently has no body content.)"]
+    paragraphs_fn = getattr(agreement, "paragraphs", None)
+    empty_paragraph = "(This agreement currently has no body content.)"
+    if callable(paragraphs_fn):
+        paragraphs = paragraphs_fn() or [empty_paragraph]
+    else:  # pragma: no cover - defensive fallback
+        paragraphs = [empty_paragraph]
 
     tmp = tempfile.NamedTemporaryFile(suffix=".pdf", delete=False)
     tmp_path = tmp.name
     tmp.close()
     try:
         build_pdf(tmp_path, paragraphs)
-        return FileResponse(open(tmp_path, "rb"), content_type="application/pdf")
+        return FileResponse(
+            open(tmp_path, "rb"),
+            content_type="application/pdf",
+        )
     finally:  # pragma: no branch - temporary file cleaned by OS
         logger.debug("Generated agreement PDF for %s", agreement_id)

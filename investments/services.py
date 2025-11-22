@@ -1,14 +1,14 @@
 from datetime import timedelta
 from decimal import Decimal
+from typing import cast
 
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.utils import timezone
 
 from transactions.models import AdminAuditLog
 from transactions.notifications import create_admin_notification
-from users.models import UserWallet
+from users.models import User, UserWallet
 
 from .models import InvestmentPlan, UserInvestment
 
@@ -23,11 +23,13 @@ def approve_investment(
     if investment.status != "pending":
         raise ValidationError("Can only approve pending investments")
 
+    investment_user = cast(User, investment.user)
+
     # Lock the user's wallet row to keep balances consistent during approval
     try:
-        wallet = UserWallet.objects.select_for_update().get(user=investment.user)
+        wallet = UserWallet.objects.select_for_update().get(user=investment_user)
     except UserWallet.DoesNotExist:
-        wallet = UserWallet.objects.create(user=investment.user)
+        wallet = UserWallet.objects.create(user=investment_user)
 
     investment_amount = (
         investment.amount
@@ -67,12 +69,12 @@ def approve_investment(
     # Send user notification (in-app)
     from users.notification_service import notify_investment_approved
 
-    notify_investment_approved(investment.user, investment, notes)
+    notify_investment_approved(investment_user, investment, notes)
 
     from users.notification_service import notify_wallet_debited
 
     notify_wallet_debited(
-        investment.user,
+        investment_user,
         investment_amount,
         reason=f"Investment approved for {investment.plan.name}",
     )
@@ -80,7 +82,7 @@ def approve_investment(
     # Send email notification
     from core.email_service import EmailService
 
-    EmailService.send_investment_notification(investment, 'approved', notes)
+    EmailService.send_investment_notification(investment, "approved", notes)
 
     return investment
 
@@ -94,6 +96,8 @@ def reject_investment(
     """
     if investment.status != "pending":
         raise ValidationError("Can only reject pending investments")
+
+    investment_user = cast(User, investment.user)
 
     # Update investment
     investment.status = "rejected"
@@ -118,12 +122,12 @@ def reject_investment(
     # Send user notification (in-app)
     from users.notification_service import notify_investment_rejected
 
-    notify_investment_rejected(investment.user, investment, notes)
+    notify_investment_rejected(investment_user, investment, notes)
 
     # Send email notification
     from core.email_service import EmailService
 
-    EmailService.send_investment_notification(investment, 'rejected', notes)
+    EmailService.send_investment_notification(investment, "rejected", notes)
 
     return investment
 
@@ -174,6 +178,6 @@ def create_investment(user: User, plan: InvestmentPlan, amount: float) -> UserIn
     # Send email notification for investment creation
     from core.email_service import EmailService
 
-    EmailService.send_investment_notification(investment, 'created')
+    EmailService.send_investment_notification(investment, "created")
 
     return investment

@@ -1,13 +1,18 @@
 # ---------- Render / Production Hardening ----------
+import importlib
 import os
+import sys
 from datetime import timedelta
 from pathlib import Path
+from types import ModuleType
+from typing import Any
 from urllib.parse import urlparse
 
 # dj-database-url is optional in some environments; try to import and fall back gracefully.
+dj_database_url: ModuleType | None
 try:
-    import dj_database_url
-except Exception:
+    dj_database_url = importlib.import_module("dj_database_url")
+except Exception:  # pragma: no cover - only relevant without dependency
     dj_database_url = None
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -17,19 +22,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ------------------------------------------------------------------
 DEBUG = os.getenv("DEBUG", "0") == "1"  # Default to False for production
 
-# Generate a secure secret key (50+ chars, high entropy)
-# CRITICAL: Never use default secret in production
-if not os.getenv("SECRET_KEY"):
-    if DEBUG:
-        default_secret = "wolvcapital-dev-only-secret-key-2025"
-    else:
-        raise ValueError(
-            "SECRET_KEY environment variable is required for production. "
-            "Generate one with: python -c 'import secrets; print(secrets.token_urlsafe(50))'"
-        )
-    SECRET_KEY = default_secret
+secret_env = os.getenv("SECRET_KEY")
+if secret_env:
+    SECRET_KEY = secret_env
+elif DEBUG:
+    SECRET_KEY = "wolvcapital-dev-only-secret-key-2025"
 else:
-    SECRET_KEY = os.getenv("SECRET_KEY")
+    raise ValueError(
+        "SECRET_KEY environment variable is required for production. "
+        "Generate one with: python -c 'import secrets; print(secrets.token_urlsafe(50))'"
+    )
 
 # Render injects this, e.g. https://solid-succotash-654g.onrender.com
 RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL")
@@ -271,7 +273,7 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+            "NAME": str(BASE_DIR / "db.sqlite3"),
         }
     }
 
@@ -281,7 +283,7 @@ else:
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [str(BASE_DIR / "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -306,14 +308,15 @@ WSGI_APPLICATION = "wolvcapital.wsgi.application"
 # Static & media
 # ------------------------------------------------------------------
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [str(BASE_DIR / "static")]
+STATIC_ROOT_PATH = BASE_DIR / "staticfiles"
 
 # Ensure STATIC_ROOT exists so whitenoise/tests don't warn about missing directory
-STATIC_ROOT.mkdir(parents=True, exist_ok=True)
+STATIC_ROOT_PATH.mkdir(parents=True, exist_ok=True)
+STATIC_ROOT = str(STATIC_ROOT_PATH)
 
 TESTING = any(arg in os.environ.get("PYTEST_CURRENT_TEST", "") for arg in ["::"]) or any(
-    c in " ".join(os.sys.argv) for c in ["test", "pytest"]
+    c in " ".join(sys.argv) for c in ["test", "pytest"]
 )
 
 if not DEBUG and not TESTING:
@@ -323,7 +326,7 @@ if not DEBUG and not TESTING:
     WHITENOISE_MANIFEST_STRICT = False
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = str(BASE_DIR / "media")
 
 # ------------------------------------------------------------------
 # Branding Configuration
@@ -471,7 +474,7 @@ class JsonFormatter:
 
 
 if LOG_FORMAT == "json" and not DEBUG:
-    SIMPLE_FORMATTER = {
+    SIMPLE_FORMATTER: dict[str, Any] = {
         "()": JsonFormatter,
     }
 else:

@@ -1,11 +1,10 @@
 from decimal import Decimal
 
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.utils import timezone
 
-from users.models import UserWallet
+from users.models import User, UserWallet
 
 from .models import AdminAuditLog, Transaction
 from .notifications import create_admin_notification

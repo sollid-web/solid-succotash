@@ -13,21 +13,22 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+import uuid
 from decimal import Decimal
-
-from django.contrib.auth.models import User
 
 from core.services.email_service import EmailService
 
 # Import models for mock objects
 from investments.models import InvestmentPlan, UserInvestment
 from transactions.models import Transaction
+from users.models import User
 
 # Set up Django environment
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wolvcapital.settings")
 import django  # noqa: E402
 
 django.setup()
+
 
 def run_email_test(to_email: str, email_type: str) -> bool:
     if email_type == "test":
@@ -48,7 +49,7 @@ def run_email_test(to_email: str, email_type: str) -> bool:
             reference="TEST-REF-001",
             status="approved",
         )
-        tx.id = "test-transaction-id"
+        tx.id = uuid.uuid4()
         return EmailService.send_transaction_notification(tx, "approved", "Test admin notes")
 
     if email_type == "investment":
@@ -67,7 +68,7 @@ def run_email_test(to_email: str, email_type: str) -> bool:
             amount=Decimal("500.00"),
             status="approved",
         )
-        inv.id = "test-investment-id"
+        inv.id = 0
         return EmailService.send_investment_notification(inv, "approved", "Test admin notes")
 
     print(f"Unknown email type: {email_type}")

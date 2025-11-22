@@ -17,18 +17,26 @@ class CryptocurrencyWallet(models.Model):
         ("ETH", "Ethereum"),
     ]
 
-    currency = models.CharField(max_length=10, choices=CRYPTO_CHOICES, unique=True)  # type: ignore[var-annotated]
-    wallet_address = models.CharField(
-        max_length=255, help_text="Wallet address for receiving deposits"
-    )  # type: ignore[var-annotated]
-    network = models.CharField(
-        max_length=50, blank=True, help_text="Network (e.g., ERC-20, TRC-20, BEP-20)"
-    )  # type: ignore[var-annotated]
-    is_active = models.BooleanField(
-        default=True, help_text="Whether this wallet is accepting deposits"
-    )  # type: ignore[var-annotated]
-    created_at = models.DateTimeField(default=timezone.now)  # type: ignore[var-annotated]
-    updated_at = models.DateTimeField(auto_now=True)  # type: ignore[var-annotated]
+    currency: models.CharField = models.CharField(
+        max_length=10,
+        choices=CRYPTO_CHOICES,
+        unique=True,
+    )
+    wallet_address: models.CharField = models.CharField(
+        max_length=255,
+        help_text="Wallet address for receiving deposits",
+    )
+    network: models.CharField = models.CharField(
+        max_length=50,
+        blank=True,
+        help_text="Network (e.g., ERC-20, TRC-20, BEP-20)",
+    )
+    is_active: models.BooleanField = models.BooleanField(
+        default=True,
+        help_text="Whether this wallet is accepting deposits",
+    )
+    created_at: models.DateTimeField = models.DateTimeField(default=timezone.now)
+    updated_at: models.DateTimeField = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.currency} - {self.wallet_address[:10]}..."
@@ -60,33 +68,51 @@ class Transaction(models.Model):
         ("rejected", "Rejected"),
     ]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  # type: ignore[var-annotated]
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="transactions")  # type: ignore[var-annotated]
-    tx_type = models.CharField(max_length=20, choices=TYPE_CHOICES)  # type: ignore[var-annotated]
-    payment_method = models.CharField(
-        max_length=20, choices=PAYMENT_METHOD_CHOICES, default="bank_transfer"
-    )  # type: ignore[var-annotated]
-    amount = models.DecimalField(
-        max_digits=12, decimal_places=2, validators=[MinValueValidator(Decimal("0.00"))]
-    )  # type: ignore[var-annotated]
-    reference = models.TextField(help_text="Reference number, notes, or proof of payment")  # type: ignore[var-annotated]
-    tx_hash = models.CharField(
-        max_length=255, blank=True, help_text="Cryptocurrency transaction hash"
-    )  # type: ignore[var-annotated]
-    wallet_address_used = models.CharField(
-        max_length=255, blank=True, help_text="Wallet address used for crypto deposit"
-    )  # type: ignore[var-annotated]
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")  # type: ignore[var-annotated]
-    notes = models.TextField(blank=True, help_text="Admin notes")  # type: ignore[var-annotated]
-    approved_by = models.ForeignKey(
+    id: models.UUIDField = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user: models.ForeignKey = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="transactions",
+    )
+    tx_type: models.CharField = models.CharField(max_length=20, choices=TYPE_CHOICES)
+    payment_method: models.CharField = models.CharField(
+        max_length=20,
+        choices=PAYMENT_METHOD_CHOICES,
+        default="bank_transfer",
+    )
+    amount: models.DecimalField = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal("0.00"))],
+    )
+    reference: models.TextField = models.TextField(
+        help_text="Reference number, notes, or proof of payment",
+    )
+    tx_hash: models.CharField = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Cryptocurrency transaction hash",
+    )
+    wallet_address_used: models.CharField = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="Wallet address used for crypto deposit",
+    )
+    status: models.CharField = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="pending",
+    )
+    notes: models.TextField = models.TextField(blank=True, help_text="Admin notes")
+    approved_by: models.ForeignKey = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="approved_transactions",
-    )  # type: ignore[var-annotated]
-    created_at = models.DateTimeField(default=timezone.now)  # type: ignore[var-annotated]
-    updated_at = models.DateTimeField(auto_now=True)  # type: ignore[var-annotated]
+    )
+    created_at: models.DateTimeField = models.DateTimeField(default=timezone.now)
+    updated_at: models.DateTimeField = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.user.email} - {self.tx_type} - ${self.amount} - {self.status}"
@@ -126,31 +152,53 @@ class VirtualCard(models.Model):
         ("expired", "Expired"),
     ]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  # type: ignore[var-annotated]
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="virtual_cards")  # type: ignore[var-annotated]
-    card_type = models.CharField(max_length=20, choices=CARD_TYPE_CHOICES, default="visa")  # type: ignore[var-annotated]
-    card_number = models.CharField(max_length=16, blank=True, help_text="Generated card number")  # type: ignore[var-annotated]
-    cardholder_name = models.CharField(max_length=100, blank=True)  # type: ignore[var-annotated]
-    expiry_month = models.CharField(max_length=2, blank=True)  # type: ignore[var-annotated]
-    expiry_year = models.CharField(max_length=2, blank=True)  # type: ignore[var-annotated]
-    cvv = models.CharField(max_length=3, blank=True)  # type: ignore[var-annotated]
-    balance = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))  # type: ignore[var-annotated]
-    purchase_amount = models.DecimalField(
-        max_digits=12, decimal_places=2, default=Decimal("1000.00")
-    )  # type: ignore[var-annotated]
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")  # type: ignore[var-annotated]
-    is_active = models.BooleanField(default=False)  # type: ignore[var-annotated]
-    approved_by = models.ForeignKey(
+    id: models.UUIDField = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user: models.ForeignKey = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="virtual_cards",
+    )
+    card_type: models.CharField = models.CharField(
+        max_length=20,
+        choices=CARD_TYPE_CHOICES,
+        default="visa",
+    )
+    card_number: models.CharField = models.CharField(
+        max_length=16,
+        blank=True,
+        help_text="Generated card number",
+    )
+    cardholder_name: models.CharField = models.CharField(max_length=100, blank=True)
+    expiry_month: models.CharField = models.CharField(max_length=2, blank=True)
+    expiry_year: models.CharField = models.CharField(max_length=2, blank=True)
+    cvv: models.CharField = models.CharField(max_length=3, blank=True)
+    balance: models.DecimalField = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=Decimal("0.00"),
+    )
+    purchase_amount: models.DecimalField = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=Decimal("1000.00"),
+    )
+    status: models.CharField = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="pending",
+    )
+    is_active: models.BooleanField = models.BooleanField(default=False)
+    approved_by: models.ForeignKey = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="approved_cards",
-    )  # type: ignore[var-annotated]
-    notes = models.TextField(blank=True, help_text="Admin notes")  # type: ignore[var-annotated]
-    created_at = models.DateTimeField(default=timezone.now)  # type: ignore[var-annotated]
-    updated_at = models.DateTimeField(auto_now=True)  # type: ignore[var-annotated]
-    expires_at = models.DateTimeField(null=True, blank=True)  # type: ignore[var-annotated]
+    )
+    notes: models.TextField = models.TextField(blank=True, help_text="Admin notes")
+    created_at: models.DateTimeField = models.DateTimeField(default=timezone.now)
+    updated_at: models.DateTimeField = models.DateTimeField(auto_now=True)
+    expires_at: models.DateTimeField = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.email} - {self.card_type} - {self.card_number[-4:] if self.card_number else 'Pending'}"
@@ -216,33 +264,38 @@ class AdminNotification(models.Model):
         ("urgent", "Urgent"),
     ]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  # type: ignore[var-annotated]
-    notification_type = models.CharField(max_length=30, choices=NOTIFICATION_TYPES)  # type: ignore[var-annotated]
-    title = models.CharField(max_length=200)  # type: ignore[var-annotated]
-    message = models.TextField()  # type: ignore[var-annotated]
-    user = models.ForeignKey(
+    id: models.UUIDField = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    notification_type: models.CharField = models.CharField(
+        max_length=30,
+        choices=NOTIFICATION_TYPES,
+    )
+    title: models.CharField = models.CharField(max_length=200)
+    message: models.TextField = models.TextField()
+    user: models.ForeignKey = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="admin_notifications",
         null=True,
         blank=True,
-    )  # type: ignore[var-annotated]
-    entity_type = models.CharField(
-        max_length=20, null=True, blank=True
-    )  # type: ignore[var-annotated]
-    entity_id = models.CharField(max_length=100, null=True, blank=True)  # type: ignore[var-annotated]
-    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default="medium")  # type: ignore[var-annotated]
-    is_read = models.BooleanField(default=False)  # type: ignore[var-annotated]
-    is_resolved = models.BooleanField(default=False)  # type: ignore[var-annotated]
-    resolved_by = models.ForeignKey(
+    )
+    entity_type: models.CharField = models.CharField(max_length=20, null=True, blank=True)
+    entity_id: models.CharField = models.CharField(max_length=100, null=True, blank=True)
+    priority: models.CharField = models.CharField(
+        max_length=10,
+        choices=PRIORITY_CHOICES,
+        default="medium",
+    )
+    is_read: models.BooleanField = models.BooleanField(default=False)
+    is_resolved: models.BooleanField = models.BooleanField(default=False)
+    resolved_by: models.ForeignKey = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="resolved_notifications",
-    )  # type: ignore[var-annotated]
-    resolved_at = models.DateTimeField(null=True, blank=True)  # type: ignore[var-annotated]
-    created_at = models.DateTimeField(default=timezone.now)  # type: ignore[var-annotated]
+    )
+    resolved_at: models.DateTimeField = models.DateTimeField(null=True, blank=True)
+    created_at: models.DateTimeField = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.title} - {self.priority} priority"
@@ -287,13 +340,17 @@ class AdminAuditLog(models.Model):
         ("create", "Create"),
     ]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  # type: ignore[var-annotated]
-    admin = models.ForeignKey(User, on_delete=models.CASCADE, related_name="audit_logs")  # type: ignore[var-annotated]
-    entity = models.CharField(max_length=20, choices=ENTITY_CHOICES)  # type: ignore[var-annotated]
-    entity_id = models.CharField(max_length=100)  # type: ignore[var-annotated]
-    action = models.CharField(max_length=20, choices=ACTION_CHOICES)  # type: ignore[var-annotated]
-    notes = models.TextField(blank=True)  # type: ignore[var-annotated]
-    created_at = models.DateTimeField(default=timezone.now)  # type: ignore[var-annotated]
+    id: models.UUIDField = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    admin: models.ForeignKey = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="audit_logs",
+    )
+    entity: models.CharField = models.CharField(max_length=20, choices=ENTITY_CHOICES)
+    entity_id: models.CharField = models.CharField(max_length=100)
+    action: models.CharField = models.CharField(max_length=20, choices=ACTION_CHOICES)
+    notes: models.TextField = models.TextField(blank=True)
+    created_at: models.DateTimeField = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"{self.admin.email} - {self.action} {self.entity} {self.entity_id}"

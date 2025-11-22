@@ -37,11 +37,11 @@ class UserInvestmentAdmin(admin.ModelAdmin):
     date_hierarchy = "created_at"
     actions = ["approve_investments", "reject_investments"]
 
+    @admin.display(description="Total Return")
     def total_return(self, obj):
         return f"${obj.total_return}"
 
-    total_return.short_description = "Total Return"
-
+    @admin.action(description="Approve selected investments")
     def approve_investments(self, request, queryset):
         approved = 0
         failed = 0
@@ -63,8 +63,8 @@ class UserInvestmentAdmin(admin.ModelAdmin):
         if failed:
             messages.warning(request, f"{failed} investment(s) could not be approved.")
 
-    approve_investments.short_description = "Approve selected investments"
 
+    @admin.action(description="Reject selected investments")
     def reject_investments(self, request, queryset):
         rejected = 0
         failed = 0
@@ -85,8 +85,6 @@ class UserInvestmentAdmin(admin.ModelAdmin):
             messages.success(request, f"Rejected {rejected} investment(s).")
         if failed:
             messages.warning(request, f"{failed} investment(s) could not be rejected.")
-
-    reject_investments.short_description = "Reject selected investments"
 
     def save_model(self, request, obj, form, change):
         """Ensure manual status edits trigger service logic for balance accuracy."""

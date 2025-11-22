@@ -1,9 +1,9 @@
-from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 from django.db import connection
 
 from investments.models import InvestmentPlan
 from transactions.models import CryptocurrencyWallet
+from users.models import User
 
 
 class Command(BaseCommand):
@@ -27,7 +27,7 @@ class Command(BaseCommand):
             if plans_count >= 4:
                 self.stdout.write(self.style.SUCCESS(f"✅ Investment plans: {plans_count} found"))
                 for plan in InvestmentPlan.objects.all():
-                    self.stdout.write(f"   - {plan.name}: {plan.roi_percentage}% daily")
+                    self.stdout.write(f"   - {plan.name}: {plan.daily_roi}% daily")
             else:
                 self.stdout.write(
                     self.style.WARNING(f"⚠️ Investment plans: Only {plans_count} found (expected 4)")

@@ -14,6 +14,7 @@ from django.contrib.auth import get_user_model
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils import timezone
+ 
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -95,11 +96,11 @@ class EmailService:
 
             # Render templates
             html_template = f"emails/{template_name}.html"
-            html_content = render_to_string(html_template, full_context)
+            html_content: str = render_to_string(html_template, full_context)
 
             text_template = f"emails/{template_name}.txt"
             try:
-                text_content = render_to_string(text_template, full_context)
+                text_content: str = render_to_string(text_template, full_context)
             except Exception:
                 text_content = cls._html_to_text(html_content)  # type: ignore[assignment]
 

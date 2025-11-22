@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
 from investments.models import InvestmentPlan, UserInvestment
@@ -14,6 +14,10 @@ from ...services.email_service import EmailService
 
 class Command(BaseCommand):
     help = "Send different types of test emails"
+    def __init__(self):
+        super().__init__()
+        self.User = get_user_model()
+
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -38,16 +42,24 @@ class Command(BaseCommand):
 
         try:
             if email_type == "test":
-                success = EmailService.send_test_email(to_email)
+                # Create a simple test using welcome email
+                class MockUser:
+                    email = to_email
+                    username = to_email.split('@')[0]
+                    def get_full_name(self):
+                        return 'Test User'
+                    class profile:
+                        email_preferences = {}
+                success = EmailService.send_welcome_email(MockUser())
 
             elif email_type == "welcome":
-                user, _ = User.objects.get_or_create(
+                user, _ = self.User.objects.get_or_create(
                     email=to_email, defaults={"username": to_email}
                 )
                 success = EmailService.send_welcome_email(user)
 
             elif email_type == "transaction":
-                user, _ = User.objects.get_or_create(
+                user, _ = self.User.objects.get_or_create(
                     email=to_email, defaults={"username": to_email}
                 )
 
@@ -66,7 +78,7 @@ class Command(BaseCommand):
                 )
 
             elif email_type == "investment":
-                user, _ = User.objects.get_or_create(
+                user, _ = self.User.objects.get_or_create(
                     email=to_email, defaults={"username": to_email}
                 )
 

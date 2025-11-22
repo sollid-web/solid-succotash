@@ -42,6 +42,7 @@ class UserAdmin(BaseUserAdmin):
     ordering = ("-date_joined",)
     actions = ["export_emails_csv", "export_users_csv"]
 
+    @admin.action(description="Export email addresses (CSV)")
     def export_emails_csv(self, request, queryset):
         """Export just email addresses"""
         response = HttpResponse(content_type='text/csv')
@@ -55,9 +56,9 @@ class UserAdmin(BaseUserAdmin):
 
         self.message_user(request, f"{queryset.count()} email(s) exported.")
         return response
+    
 
-    export_emails_csv.short_description = "Export email addresses (CSV)"
-
+    @admin.action(description="Export user details (CSV)")
     def export_users_csv(self, request, queryset):
         """Export full user details"""
         response = HttpResponse(content_type='text/csv')
@@ -89,24 +90,23 @@ class UserAdmin(BaseUserAdmin):
 
         self.message_user(request, f"{queryset.count()} user(s) exported.")
         return response
+    
 
-    export_users_csv.short_description = "Export user details (CSV)"
-
+    @admin.display(description="Role")
     def get_role(self, obj):
         try:
             return obj.profile.role
         except Profile.DoesNotExist:
             return "No Profile"
+    
 
-    get_role.short_description = "Role"
-
+    @admin.display(description="Wallet Balance")
     def get_balance(self, obj):
         try:
             return f"${obj.wallet.balance}"
         except UserWallet.DoesNotExist:
             return "No Wallet"
-
-    get_balance.short_description = "Wallet Balance"
+    
 
 
 @admin.register(Profile)
@@ -165,17 +165,17 @@ class UserNotificationAdmin(admin.ModelAdmin):
 
     actions = ["mark_as_read", "mark_as_unread"]
 
+    @admin.action(description="Mark selected notifications as read")
     def mark_as_read(self, request, queryset):
         count = queryset.update(is_read=True)
         self.message_user(request, f"{count} notification(s) marked as read.")
+    
 
-    mark_as_read.short_description = "Mark selected notifications as read"
-
+    @admin.action(description="Mark selected notifications as unread")
     def mark_as_unread(self, request, queryset):
         count = queryset.update(is_read=False, read_at=None)
         self.message_user(request, f"{count} notification(s) marked as unread.")
-
-    mark_as_unread.short_description = "Mark selected notifications as unread"
+    
 
 
 # Re-register UserAdmin

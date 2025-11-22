@@ -88,7 +88,7 @@ class Migration(migrations.Migration):
                 ),
                 ("is_read", models.BooleanField(default=False)),
                 ("read_at", models.DateTimeField(blank=True, null=True)),
-                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),  # type: ignore
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now)),
                 (
                     "expires_at",
                     models.DateTimeField(

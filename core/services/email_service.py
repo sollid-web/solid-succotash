@@ -11,9 +11,10 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils import timezone
 
-logger = logging.getLogger(__name__)
+ 
 
-User = get_user_model()
+logger = logging.getLogger(__name__)
+UserModel: Any = get_user_model()
 
 
 class EmailService:
@@ -60,15 +61,11 @@ class EmailService:
         ctx.setdefault("support_email", getattr(settings, "SUPPORT_EMAIL", None))
         ctx.setdefault("current_timestamp", timezone.now())
 
-        try:
-            text_body = render_to_string(f"emails/{template_name}.txt", ctx)
-        except Exception:
-            # text version is optional; fall back to HTML-only if missing
-            logger.info("Text template emails/%s.txt not found or failed to render", template_name)
-            text_body = ""
+        html_template = f"emails/{template_name}.html"
+        text_template = f"emails/{template_name}.txt"
 
         try:
-            html_body = render_to_string(f"emails/{template_name}.html", ctx)
+            html_content: str = render_to_string(html_template, ctx)
         except Exception as exc:
             logger.exception(
                 "Failed to render HTML template emails/%s.html: %s",
@@ -77,16 +74,23 @@ class EmailService:
             )
             return False
 
+        try:
+            text_content: str = render_to_string(text_template, ctx)
+        except Exception:
+            # text version is optional; fall back to HTML-only if missing
+            logger.info("Text template emails/%s.txt not found or failed to render", template_name)
+            text_content = ""
+
         if subject is None:
             subject = f"{cls.BRAND_NAME} notification"
 
         message = EmailMultiAlternatives(
             subject=subject,
-            body=text_body or html_body,
+            body=text_content or html_content,
             from_email=cls.DEFAULT_FROM_EMAIL,
             to=recipients,
         )
-        message.attach_alternative(html_body, "text/html")
+        message.attach_alternative(html_content, "text/html")
 
         try:
             sent = message.send(fail_silently=False)
@@ -121,10 +125,10 @@ class EmailService:
         return cls._send("test", to_email, context=context, subject=subject)
 
     @classmethod
-    def send_welcome_email(cls, user: User) -> bool:
+    def send_welcome_email(cls, user: Any) -> bool:
         context = {"user": user}
         subject = f"Welcome to {cls.BRAND_NAME}"
-        return cls._send("welcome", user.email, context=context, subject=subject)
+        return cls._send("welcome", getattr(user, "email", ""), context=context, subject=subject)
 
     @classmethod
     def send_transaction_notification(
@@ -134,7 +138,7 @@ class EmailService:
         admin_notes: str | None = None,
     ) -> bool:
         """Notify user when a transaction is created / approved / rejected."""
-        user = transaction.user
+        user = getattr(transaction, "user", None)
         status_normalized = (status or "").lower()
 
         if status_normalized == "created":
@@ -156,7 +160,7 @@ class EmailService:
             "admin_notes": admin_notes,
             "dashboard_url": "/dashboard/",
         }
-        return cls._send(template, user.email, context=context, subject=subject)
+        return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)
 
     @classmethod
     def send_investment_notification(
@@ -166,7 +170,7 @@ class EmailService:
         admin_notes: str | None = None,
     ) -> bool:
         """Notify user when an investment is created / approved / rejected / completed."""
-        user = investment.user
+        user = getattr(investment, "user", None)
         status_normalized = (status or "").lower()
 
         if status_normalized == "created":
@@ -191,4 +195,4 @@ class EmailService:
             "admin_notes": admin_notes,
             "dashboard_url": "/dashboard/",
         }
-        return cls._send(template, user.email, context=context, subject=subject)
+        return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)

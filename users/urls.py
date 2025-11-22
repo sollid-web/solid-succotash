@@ -11,7 +11,9 @@ API Routes (see api/urls.py):
 
 app_name = 'users'
 
-urlpatterns = [
+from typing import List, Any
+
+urlpatterns: List[Any] = [
     # All routes migrated to /api/ - see api/urls.py
     # - /api/notifications/ (list, mark-read, mark-all-read, unread-count)
     # - /api/profile/email-preferences/

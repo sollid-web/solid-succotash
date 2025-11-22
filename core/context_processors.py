@@ -2,7 +2,7 @@
 Context processor to make branding configuration available in all templates
 """
 
-from django.conf import settings  # type: ignore
+from django.conf import settings
 
 
 def brand_context(request):

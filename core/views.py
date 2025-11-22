@@ -31,7 +31,7 @@ def agreement_pdf(request, agreement_id: int):
         raise Http404 from exc
 
     try:
-        from .pdf_letterhead import build_pdf  # type: ignore
+        from .pdf_letterhead import build_pdf
     except Exception:  # pragma: no cover - environment specific
         # In test or debug environments return 200 so tests can assert fallback
         status_code = 200 if settings.DEBUG or getattr(settings, "TESTING", False) else 503

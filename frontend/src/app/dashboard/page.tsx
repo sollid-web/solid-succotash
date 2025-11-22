@@ -443,21 +443,17 @@ export default function DashboardPage() {
             <p className="text-gray-600 mb-6">Activate your WolvCapital virtual Visa card for global transactions</p>
             
             <div className="flex justify-center mb-6">
-              <div className="relative">
-                <div className="absolute -inset-4 bg-gradient-to-r from-[#0b2f6b]/30 via-[#2563eb]/30 to-[#1d4ed8]/20 blur-2xl rounded-[32px]"></div>
-                <div className="relative rounded-[28px] shadow-2xl border border-white/30 bg-white/10 backdrop-blur-sm">
-                  <FlipCard 
-                    maxWidth={420}
-                    aspectWidth={480}
-                    aspectHeight={300}
-                    animationMs={800}
-                    initialFlipped={false}
-                    className="px-3 py-3"
-                  />
-                </div>
-              </div>
+              <FlipCard 
+                maxWidth={480}
+                aspectWidth={480}
+                aspectHeight={300}
+                animationMs={800}
+                perspective={1200}
+                borderRadius={24}
+                shadow="0 12px 30px rgba(11,47,107,0.35)"
+              />
             </div>
-            <p className="text-sm text-gray-500 text-center mb-6">Preview the exact WolvCapital Visa card experience — purchase below to unlock real usage.</p>
+            <p className="text-sm text-gray-500 text-center mb-6">Tap to flip the WolvCapital Visa card preview — purchase below to unlock real usage.</p>
             
             <div className="grid grid-cols-2 gap-4 text-center mb-6">
               <div className="p-3 bg-blue-50 rounded-xl">

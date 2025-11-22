@@ -19,9 +19,19 @@ interface WalletData {
   total_withdrawals: string
 }
 
+interface InvestmentPlanDetails {
+  id: number
+  name: string
+  description?: string
+  daily_roi: string
+  duration_days: number
+  min_amount?: string
+  max_amount?: string
+}
+
 interface Investment {
   id: number
-  plan_name: string
+  plan_name?: string
   amount: string
   status: string
   created_at: string
@@ -29,8 +39,9 @@ interface Investment {
   ends_at: string
   expected_return: string
   total_return: string
-  daily_roi: string
-  duration_days: number
+  daily_roi?: string
+  duration_days?: number
+  plan?: InvestmentPlanDetails
 }
 
 interface Transaction {
@@ -276,12 +287,19 @@ export default function DashboardPage() {
                 const startDate = investment.started_at ? new Date(investment.started_at) : null
                 const endDate = investment.ends_at ? new Date(investment.ends_at) : null
                 const now = new Date()
+                const planName = investment.plan?.name ?? investment.plan_name ?? 'Investment Plan'
+                const totalDays = investment.plan?.duration_days ?? investment.duration_days ?? 0
+                const planDailyRoi = investment.plan?.daily_roi ?? investment.daily_roi ?? '0'
+                const numericDailyRoi = parseFloat(planDailyRoi || '0')
+                const investmentAmount = parseFloat(investment.amount || '0')
                 const daysLeft = endDate ? Math.max(0, Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))) : 0
-                const totalDays = investment.duration_days || 0
-                const daysElapsed = totalDays - daysLeft
+                const daysElapsed = Math.min(totalDays, Math.max(0, totalDays - daysLeft))
                 const progressPercentage = totalDays > 0 ? Math.min(100, (daysElapsed / totalDays) * 100) : 0
-                const dailyReturn = (parseFloat(investment.amount || '0') * parseFloat(investment.daily_roi || '0')) / 100
+                const dailyReturn = (investmentAmount * numericDailyRoi) / 100
                 const totalEarned = dailyReturn * daysElapsed
+                const expectedTotal = parseFloat(
+                  investment.total_return || investment.expected_return || '0'
+                ) || (investmentAmount + dailyReturn * totalDays)
                 const isCompleted = daysLeft === 0 && endDate && now >= endDate
                 
                 return (
@@ -289,7 +307,7 @@ export default function DashboardPage() {
                     {/* Investment Header */}
                     <div className="flex items-start justify-between mb-4">
                       <div>
-                        <h3 className="text-xl font-bold text-gray-800 mb-1">{investment.plan_name}</h3>
+                        <h3 className="text-xl font-bold text-gray-800 mb-1">{planName}</h3>
                         <div className="flex items-center space-x-2">
                           <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
                             isCompleted 
@@ -299,7 +317,7 @@ export default function DashboardPage() {
                             {isCompleted ? 'Completed' : 'Active'}
                           </span>
                           <span className="text-sm text-gray-500">
-                            {investment.daily_roi}% daily ROI
+                            {numericDailyRoi}% daily ROI
                           </span>
                         </div>
                       </div>
@@ -347,7 +365,7 @@ export default function DashboardPage() {
                       <div className="bg-blue-50 rounded-xl p-4 text-center">
                         <p className="text-sm text-gray-600 mb-1">Expected Total</p>
                         <p className="text-lg font-bold text-blue-600">
-                          ${parseFloat(investment.total_return || investment.expected_return || '0').toFixed(2)}
+                          ${expectedTotal.toFixed(2)}
                         </p>
                         <p className="text-xs text-blue-500">
                           At completion
@@ -364,7 +382,7 @@ export default function DashboardPage() {
                         </div>
                         <div>
                           <p className="text-xs text-gray-500 mb-1">Daily ROI</p>
-                          <p className="text-sm font-semibold text-gray-700">{investment.daily_roi}%</p>
+                          <p className="text-sm font-semibold text-gray-700">{numericDailyRoi}%</p>
                         </div>
                         <div>
                           <p className="text-xs text-gray-500 mb-1">End Date</p>
@@ -419,7 +437,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-800">Your Virtual Card</h2>
               <div className="px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-sm font-semibold">
-                Inactive
+                Not Active
               </div>
             </div>
             <p className="text-gray-600 mb-6">Activate your WolvCapital virtual Visa card for global transactions</p>
@@ -433,18 +451,9 @@ export default function DashboardPage() {
                   animationMs={800}
                   initialFlipped={false}
                 />
-                {/* Overlay for inactive state */}
-                <div className="absolute inset-0 bg-black bg-opacity-50 rounded-3xl flex items-center justify-center">
-                  <div className="text-center">
-                    <svg className="w-16 h-16 text-white mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                    <p className="text-white font-semibold text-lg">Card Locked</p>
-                    <p className="text-white text-sm opacity-90">Purchase to activate</p>
-                  </div>
-                </div>
               </div>
             </div>
+            <p className="text-sm text-gray-500 text-center mb-6">Preview your WolvCapital Visa card — purchase below to unlock live usage.</p>
             
             <div className="grid grid-cols-2 gap-4 text-center mb-6">
               <div className="p-3 bg-blue-50 rounded-xl">

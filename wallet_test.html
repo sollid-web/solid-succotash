@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wallet Test</title>
+</head>
+<body>
+    <h1>Wallet Address Test</h1>
+    <div id="result"></div>
+    
+    <script>
+        async function testWallets() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Loading wallets...';
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/crypto-wallets/');
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <h2>API Response (Status: ${response.status})</h2>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                    
+                    <h3>Wallet Addresses:</h3>
+                    ${data.map(wallet => `
+                        <div style="margin: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                            <strong>${wallet.currency}</strong> (${wallet.network})<br>
+                            Address: <code style="word-break: break-all;">${wallet.wallet_address}</code><br>
+                            Active: ${wallet.is_active ? 'Yes' : 'No'}
+                        </div>
+                    `).join('')}
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+                console.error('Error loading wallets:', error);
+            }
+        }
+        
+        // Test on page load
+        testWallets();
+    </script>
+</body>
+</html>

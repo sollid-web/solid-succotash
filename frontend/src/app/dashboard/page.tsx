@@ -24,7 +24,12 @@ interface Investment {
   amount: string
   status: string
   created_at: string
+  started_at: string
+  ends_at: string
   expected_return: string
+  total_return: string
+  daily_roi: string
+  duration_days: number
 }
 
 interface Transaction {
@@ -222,7 +227,9 @@ export default function DashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-8">
         {/* Welcome Section */}
         <section className="bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] rounded-3xl shadow-xl p-6 sm:p-8 text-white mb-4 sm:mb-8">
-          <h1 className="text-2xl sm:text-4xl font-bold mb-2">Welcome back, {user?.first_name || user?.email}!</h1>
+          <h1 className="text-2xl sm:text-4xl font-bold mb-2">
+            Welcome back, {user?.first_name || (user?.email ? user.email.split('@')[0] : 'User')}!
+          </h1>
           <p className="text-base sm:text-xl opacity-90">Your secure investment dashboard overview</p>
         </section>
 
@@ -344,131 +351,6 @@ export default function DashboardPage() {
             </Link>
           </div>
         </section>
-
-        {/* User Info Section (for debugging) */}
-        {user?.is_staff && (
-          <section className="mt-8 bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-4 sm:p-6">
-            <h3 className="text-base sm:text-lg font-bold text-yellow-800 mb-2 sm:mb-3">👑 Admin User</h3>
-            <div className="text-xs sm:text-sm text-yellow-700 space-y-1">
-              <p><strong>Email:</strong> {user?.email}</p>
-              <p><strong>User ID:</strong> {user?.id}</p>
-              <p><strong>Staff:</strong> {user?.is_staff ? 'Yes' : 'No'}</p>
-              <p><strong>Superuser:</strong> {user?.is_superuser ? 'Yes' : 'No'}</p>
-            </div>
-          </section>
-        )}
-
-        {/* Recent Transactions */}
-        <div className="bg-white rounded-3xl shadow-xl p-8 mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">Recent Transactions</h2>
-            <Link href="/dashboard/transactions" className="text-[#2563eb] text-sm hover:underline">View all</Link>
-          </div>
-
-          {transactions.length === 0 ? (
-            <p className="text-gray-500 text-sm">No transactions yet.</p>
-          ) : (
-            <div className="overflow-x-auto -mx-2 sm:mx-0">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead>
-                  <tr>
-                    <th className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                    <th className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                    <th className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
-                    <th className="px-2 sm:px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                    <th className="px-2 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-100">
-                  {transactions.map((tx) => (
-                    <tr key={tx.id}>
-                      <td className="px-2 sm:px-4 py-3 text-sm text-gray-700">{new Date(tx.created_at).toLocaleDateString()}</td>
-                      <td className="px-2 sm:px-4 py-3 text-sm capitalize">
-                        <span className={tx.tx_type === 'deposit' ? 'text-emerald-600' : 'text-orange-600'}>
-                          {tx.tx_type}
-                        </span>
-                      </td>
-                      <td className="px-2 sm:px-4 py-3 text-sm text-gray-600">{tx.payment_method}</td>
-                      <td className="px-2 sm:px-4 py-3 text-sm text-gray-900 text-right">${parseFloat(tx.amount || '0').toFixed(2)}</td>
-                      <td className="px-2 sm:px-4 py-3 text-sm">
-                        <span
-                          className={
-                            tx.status === 'approved'
-                              ? 'px-2 py-1 rounded-full text-xs bg-emerald-100 text-emerald-700'
-                              : tx.status === 'pending'
-                              ? 'px-2 py-1 rounded-full text-xs bg-amber-100 text-amber-700'
-                              : 'px-2 py-1 rounded-full text-xs bg-rose-100 text-rose-700'
-                          }
-                        >
-                          {tx.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-
-        {/* Quick Actions */}
-        <div className="bg-white rounded-3xl shadow-xl p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Link href="/dashboard/new-investment" className="p-6 border-2 border-gray-200 rounded-2xl hover:border-[#2563eb] hover:shadow-lg transition text-center group">
-              <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-[#2563eb] transition">
-                <svg className="w-8 h-8 text-[#2563eb] group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-gray-800 mb-2">New Investment</h3>
-              <p className="text-sm text-gray-600">Select a compliant investment plan and amount</p>
-            </Link>
-
-            <Link href="/dashboard/deposit" className="p-6 border-2 border-gray-200 rounded-2xl hover:border-[#2563eb] hover:shadow-lg transition text-center group">
-              <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-[#2563eb] transition">
-                <svg className="w-8 h-8 text-emerald-600 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-gray-800 mb-2">Deposit</h3>
-              <p className="text-sm text-gray-600">Fund your wallet securely</p>
-            </Link>
-
-            <Link href="/dashboard/withdraw" className="p-6 border-2 border-gray-200 rounded-2xl hover:border-[#2563eb] hover:shadow-lg transition text-center group">
-              <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-[#2563eb] transition">
-                <svg className="w-8 h-8 text-orange-600 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 20V4m8 8H4" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-gray-800 mb-2">Withdraw</h3>
-              <p className="text-sm text-gray-600">Request a payout (subject to compliance review)</p>
-            </Link>
-
-            <Link href="/dashboard/support" className="p-6 border-2 border-gray-200 rounded-2xl hover:border-[#2563eb] hover:shadow-lg transition text-center group">
-              <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-[#2563eb] transition">
-                <svg className="w-8 h-8 text-green-600 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-gray-800 mb-2">Support</h3>
-              <p className="text-sm text-gray-600">Get help from our compliance and investor support teams</p>
-            </Link>
-          </div>
-        </div>
-
-        {/* User Info Section (for debugging) */}
-        {user?.is_staff && (
-          <div className="mt-8 bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-6">
-            <h3 className="text-lg font-bold text-yellow-800 mb-3">👑 Admin User</h3>
-            <div className="text-sm text-yellow-700 space-y-1">
-              <p><strong>Email:</strong> {user?.email}</p>
-              <p><strong>User ID:</strong> {user?.id}</p>
-              <p><strong>Staff:</strong> {user?.is_staff ? 'Yes' : 'No'}</p>
-              <p><strong>Superuser:</strong> {user?.is_superuser ? 'Yes' : 'No'}</p>
-            </div>
-          </div>
-        )}
       </main>
     </div>
   )

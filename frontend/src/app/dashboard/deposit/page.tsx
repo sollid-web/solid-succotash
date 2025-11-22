@@ -12,9 +12,16 @@ interface CompanyWallet {
 }
 
 export default function DepositPage() {
-  const apiBase = useMemo(() => (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, ''), [])
+  const apiBase = useMemo(() => {
+    // Production API URL for wolvcapital.com
+    if (typeof window !== 'undefined' && window.location.hostname === 'wolvcapital.com') {
+      return 'https://api.wolvcapital.com'
+    }
+    // Development or other environments
+    return (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
+  }, [])
   const [amount, setAmount] = useState('')
-  const [method, setMethod] = useState('bank_transfer')
+  const [method, setMethod] = useState('BTC')
   const [reference, setReference] = useState('')
   const [txHash, setTxHash] = useState('')
   const [walletAddress, setWalletAddress] = useState('')
@@ -28,17 +35,36 @@ export default function DepositPage() {
   useEffect(() => {
     const loadWallets = async () => {
       try {
-        const res = await fetch(`${apiBase}/api/crypto-wallets/`)
+        console.log('Loading wallets from:', `${apiBase}/api/crypto-wallets/`)
+        const res = await fetch(`${apiBase}/api/crypto-wallets/`, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        })
+        console.log('Wallet fetch response status:', res.status)
         if (res.ok) {
           const data = await res.json()
+          console.log('Loaded wallets:', data)
           setCompanyWallets(Array.isArray(data) ? data : [])
+          // Show wallets section when crypto method is selected
+          if (['BTC','USDT','USDC','ETH'].includes(method)) {
+            setShowWallets(true)
+          }
+        } else {
+          const errorText = await res.text()
+          console.error('Failed to load wallets, status:', res.status, 'Response:', errorText)
+          setError(`Failed to load wallet addresses. Status: ${res.status}`)
         }
       } catch (e) {
-        console.warn('Failed to load company wallets', e)
+        console.error('Error loading company wallets:', e)
+        setError(`Network error loading wallet addresses: ${e instanceof Error ? e.message : 'Unknown error'}`)
       }
     }
     loadWallets()
-  }, [apiBase])
+  }, [apiBase, method])
 
   const copyToClipboard = async (text: string, label: string) => {
     try {
@@ -107,6 +133,20 @@ export default function DepositPage() {
       <form onSubmit={submit} className="space-y-6 max-w-xl">
         {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm">{error}</div>}
         {message && <div className="p-3 bg-emerald-50 text-emerald-700 rounded-xl text-sm">{message}</div>}
+        
+        {/* Debug info (remove in production) */}
+        {process.env.NODE_ENV === 'development' && (
+          <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-xl text-xs">
+            <p><strong>Debug:</strong></p>
+            <p>API Base: {apiBase}</p>
+            <p>Method: {method}</p>
+            <p>Company Wallets: {companyWallets.length}</p>
+            <p>Show Wallets: {showWallets ? 'Yes' : 'No'}</p>
+            {companyWallets.length > 0 && (
+              <p>Currencies: {companyWallets.map(w => w.currency).join(', ')}</p>
+            )}
+          </div>
+        )}
 
         <div className="grid md:grid-cols-2 gap-6">
           <div>
@@ -115,16 +155,20 @@ export default function DepositPage() {
           </div>
           <div>
             <label htmlFor="paymentMethod" className="block text-sm font-semibold text-gray-700 mb-2">Payment Method</label>
-            <select id="paymentMethod" aria-label="Payment method" value={method} onChange={(e) => setMethod(e.target.value)} className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:border-[#2563eb]">
+            <select id="paymentMethod" aria-label="Payment method" value={method} onChange={(e) => {
+              setMethod(e.target.value)
+              setShowWallets(['BTC','USDT','USDC','ETH'].includes(e.target.value))
+              setError('') // Clear any previous errors
+            }} className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:border-[#2563eb]">
               <option value="bank_transfer">Bank Transfer</option>
               <option value="BTC">Bitcoin (BTC)</option>
               <option value="USDT">Tether (USDT)</option>
               <option value="USDC">USD Coin (USDC)</option>
               <option value="ETH">Ethereum (ETH)</option>
             </select>
-            {['BTC','USDT','USDC','ETH'].includes(method) && (
+            {['BTC','USDT','USDC','ETH'].includes(method) && showWallets && (
               <div className="mt-3 space-y-3">
-                {/* Always show company wallet address for selected crypto method */}
+                {/* Company wallet address for selected crypto method */}
                 <div className="rounded-xl border-2 border-blue-200 p-4 bg-gradient-to-br from-blue-50 to-indigo-50">
                   {companyWallets.filter(w => w.currency === method && w.is_active).map(w => (
                     <div key={w.currency} className="space-y-4">
@@ -190,7 +234,18 @@ export default function DepositPage() {
                       </div>
                     </div>
                   ))}
-                  {companyWallets.filter(w => w.currency === method && w.is_active).length === 0 && (
+                  {companyWallets.length === 0 && (
+                    <div className="text-center py-4">
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-yellow-100 mb-2">
+                        <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <p className="text-sm text-gray-600 font-medium">Loading wallet addresses...</p>
+                      <p className="text-xs text-gray-500 mt-1">Please wait while we fetch deposit information</p>
+                    </div>
+                  )}
+                  {companyWallets.length > 0 && companyWallets.filter(w => w.currency === method && w.is_active).length === 0 && (
                     <div className="text-center py-4">
                       <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-2">
                         <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -232,14 +287,29 @@ export default function DepositPage() {
 }
 
 function QRCode({ address }: { address: string }) {
-  // Lightweight inline QR generation via third-party API placeholder (could be replaced with local lib)
-  const src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(address)}`
+  const [imageError, setImageError] = useState(false)
+  const src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(address)}&bgcolor=ffffff&color=000000&format=png&margin=1`
+  
+  if (imageError) {
+    return (
+      <div className="w-28 h-28 rounded-lg border-2 border-gray-300 bg-gray-50 p-1 shadow-sm flex items-center justify-center">
+        <div className="text-center">
+          <svg className="w-8 h-8 text-gray-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span className="text-xs text-gray-500">QR Code</span>
+        </div>
+      </div>
+    )
+  }
+  
   return (
     <img
       src={src}
       alt="Wallet address QR code"
       className="w-28 h-28 rounded-lg border-2 border-gray-300 bg-white p-1 shadow-sm"
       loading="lazy"
+      onError={() => setImageError(true)}
     />
   )
 }

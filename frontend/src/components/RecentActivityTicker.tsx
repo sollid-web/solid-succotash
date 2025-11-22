@@ -97,8 +97,8 @@ function generateRandomActivity(plans: string[], prev?: Activity | null): Activi
 
 const RecentActivityTicker: React.FC<Props> = ({
   plans = DEFAULT_PLANS,
-  minIntervalMs = 8000,
-  maxIntervalMs = 15000,
+  minIntervalMs = 30000,
+  maxIntervalMs = 60000,
   soundPath = "/sounds/chime.wav",
   soundVolume = 0.35,
   preventRepeatMs = 2000

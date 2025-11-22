@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import HomePage from '@/components/HomePage'
+import PublicLayout from '@/components/PublicLayout'
 
 export const metadata: Metadata = {
   title: 'WolvCapital · Digital Investment Platform',
@@ -29,5 +30,9 @@ export const metadata: Metadata = {
 }
 
 export default function Home() {
-  return <HomePage />
+  return (
+    <PublicLayout>
+      <HomePage />
+    </PublicLayout>
+  )
 }

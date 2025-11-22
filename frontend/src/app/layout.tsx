@@ -5,6 +5,7 @@ import TawkToChat from '@/components/TawkToChat'
 import { TranslationProvider } from '@/i18n/TranslationProvider'
 import NavBar from '@/components/NavBar'
 import RecentActivityTicker from '@/components/RecentActivityTicker'
+import { headers } from 'next/headers'
 
 const inter = Inter({ subsets: ['latin'], weight: [
   '300', '400', '500', '600', '700', '800', '900'
@@ -60,12 +61,7 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className={`${inter.className} font-brand antialiased bg-gray-50 text-gray-900`}>
         <TranslationProvider>
-          <NavBar />
-          <main className="min-h-screen pt-20">{/* offset for fixed navbar */}
-            {children}
-          </main>
-          <TawkToChat />
-          <RecentActivityTicker />
+          {children}
         </TranslationProvider>
       </body>
     </html>

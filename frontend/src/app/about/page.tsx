@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import FaqAccordion from '@/components/FaqAccordion'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
+import PublicLayout from '@/components/PublicLayout'
 
 function AboutNavigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -82,7 +83,7 @@ function AboutNavigation() {
 
 export default function AboutPage() {
   return (
-    <>
+    <PublicLayout>
       <Head>
   <title>About WolvCapital · U.S. Digital Investment Platform</title>
   <meta name="description" content="Discover WolvCapital, a U.S. regulated digital investment platform led by experienced professionals. Learn about our commitment to secure investment returns, compliance, and transparent cryptocurrency investment opportunities." />
@@ -260,6 +261,6 @@ export default function AboutPage() {
           </div>
         </div>
       </footer>
-    </>
+    </PublicLayout>
   )
 }

@@ -1,54 +1,90 @@
+'use client'
+
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import type { Metadata } from 'next'
+import { useState } from 'react'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 const RecentActivityTicker = dynamic(() => import('../../components/RecentActivityTicker'), { ssr: false })
 
-export const metadata: Metadata = {
-  title: 'Investment Plans · WolvCapital Digital Investment Platform',
-  description: 'Explore professionally structured investment plans by WolvCapital. Secure, compliant, and subject to manual review.',
-  openGraph: {
-    title: 'Investment Plans · WolvCapital',
-    description: 'Discover WolvCapital’s secure, audited investment plans.',
-    images: [
-      {
-        url: '/images/og/plans-og.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'WolvCapital Investment Plans – OpenGraph image',
-      },
-    ],
-    type: 'website',
-  },
-  robots: { index: true, follow: true },
+function PlansNavigation() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  return (
+    <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
+      <div className="container mx-auto px-4 lg:px-8">
+        <div className="flex items-center justify-between h-20">
+          <Link href="/" className="flex items-center space-x-2 sm:space-x-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-lg flex items-center justify-center">
+              <span className="text-xl sm:text-2xl font-bold text-white">W</span>
+            </div>
+            <span className="text-lg sm:text-2xl font-bold text-[#0b2f6b] hidden xs:block">WolvCapital</span>
+            <span className="text-lg font-bold text-[#0b2f6b] block xs:hidden">Wolv</span>
+          </Link>
+          
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
+            <Link href="/" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">Home</Link>
+            <Link href="/plans" className="text-[#0b2f6b] font-semibold">Plans</Link>
+            <Link href="/about" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">About</Link>
+            <Link href="/contact" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">Contact</Link>
+            <LanguageSwitcher />
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center space-x-2">
+            <div className="mr-2">
+              <LanguageSwitcher />
+            </div>
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 rounded-md text-gray-700 hover:text-[#0b2f6b] hover:bg-gray-100 transition"
+              aria-label="Toggle mobile menu"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {isMobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+
+          {/* Desktop Auth Buttons */}
+          <div className="hidden md:flex items-center space-x-4">
+            <Link href="/accounts/login" className="text-[#0b2f6b] font-semibold hover:text-[#2563eb] transition">Login</Link>
+            <Link href="/accounts/signup" className="bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-6 py-2.5 rounded-full font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105">Sign Up</Link>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden border-t border-gray-100 bg-white/95 backdrop-blur-sm">
+            <div className="px-4 py-4 space-y-3">
+              <Link href="/" className="block px-3 py-2 rounded-md font-medium text-gray-700 hover:text-[#0b2f6b] hover:bg-gray-50 transition" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
+              <Link href="/plans" className="block px-3 py-2 rounded-md font-medium text-[#0b2f6b] bg-blue-50 font-semibold" onClick={() => setIsMobileMenuOpen(false)}>Plans</Link>
+              <Link href="/about" className="block px-3 py-2 rounded-md font-medium text-gray-700 hover:text-[#0b2f6b] hover:bg-gray-50 transition" onClick={() => setIsMobileMenuOpen(false)}>About</Link>
+              <Link href="/contact" className="block px-3 py-2 rounded-md font-medium text-gray-700 hover:text-[#0b2f6b] hover:bg-gray-50 transition" onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
+              
+              {/* Mobile Auth Buttons */}
+              <div className="pt-3 border-t border-gray-100 space-y-3">
+                <Link href="/accounts/login" className="block w-full text-center px-4 py-3 text-[#0b2f6b] font-semibold hover:text-[#2563eb] transition border border-[#0b2f6b] rounded-full" onClick={() => setIsMobileMenuOpen(false)}>Login</Link>
+                <Link href="/accounts/signup" className="block w-full text-center bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-4 py-3 rounded-full font-semibold hover:shadow-lg transition" onClick={() => setIsMobileMenuOpen(false)}>Sign Up</Link>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </nav>
+  );
 }
 
 export default function PlansPage() {
   return (
     <div className="min-h-screen bg-white relative">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-lg flex items-center justify-center">
-                <span className="text-2xl font-bold text-white">W</span>
-              </div>
-              <span className="text-2xl font-bold text-[#0b2f6b]">WolvCapital</span>
-            </Link>
-            <div className="hidden md:flex items-center space-x-8">
-              <Link href="/" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">Home</Link>
-              <Link href="/plans" className="text-[#0b2f6b] font-semibold">Plans</Link>
-              <Link href="/about" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">About</Link>
-              <Link href="/contact" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">Contact</Link>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Link href="/accounts/login" className="text-[#0b2f6b] font-semibold hover:text-[#2563eb] transition">Login</Link>
-              <Link href="/accounts/signup" className="bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-6 py-2.5 rounded-full font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105">Sign Up</Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <PlansNavigation />
 
       {/* Hero Section with Full-Page Background Image */}
       <section className="relative w-full min-h-[320px] sm:min-h-[400px] md:min-h-[500px] lg:min-h-[630px] flex items-center justify-center mb-8 mt-24 overflow-hidden rounded-3xl shadow-xl">
@@ -59,11 +95,17 @@ export default function PlansPage() {
           priority
           className="object-cover object-center w-full h-full absolute inset-0 z-0"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-white/0 z-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/30 z-10" />
         <div className="relative z-20 w-full text-center px-4 py-12 sm:py-20">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white drop-shadow-lg mb-2">Investment Plans</h1>
-          <p className="text-lg sm:text-xl md:text-2xl text-white/90 drop-shadow-md">Choose a plan that matches your goals – designed with transparency.</p>
-          <p className="text-base sm:text-lg md:text-xl text-white/80 mt-2 max-w-2xl mx-auto">Explore WolvCapital’s professionally structured investment plans, designed for secure investment returns and compliant with U.S. financial regulations. Select a plan that aligns with your risk tolerance and financial objectives.</p>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white drop-shadow-2xl mb-4 [text-shadow:_2px_2px_4px_rgb(0_0_0_/_80%)]">
+            Investment Plans
+          </h1>
+          <p className="text-lg sm:text-xl md:text-2xl text-white drop-shadow-xl mb-4 [text-shadow:_1px_1px_3px_rgb(0_0_0_/_70%)]">
+            Choose a plan that matches your goals – designed with transparency.
+          </p>
+          <p className="text-base sm:text-lg md:text-xl text-white/95 drop-shadow-lg mt-2 max-w-2xl mx-auto [text-shadow:_1px_1px_2px_rgb(0_0_0_/_60%)]">
+            Explore WolvCapital's professionally structured investment plans, designed for secure investment returns and compliant with U.S. financial regulations. Select a plan that aligns with your risk tolerance and financial objectives.
+          </p>
         </div>
       </section>
 

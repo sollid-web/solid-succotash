@@ -32,20 +32,20 @@ export default function HomePage() {
 
         {/* Content Overlay */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl mx-auto">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight">
               {t('hero.welcome').split(' ').slice(0,2).join(' ') || 'Welcome to'}
-              <span className="block mt-2 bg-gradient-to-r from-blue-200 to-blue-100 bg-clip-text text-transparent">
+              <span className="block mt-1 sm:mt-2 bg-gradient-to-r from-blue-200 to-blue-100 bg-clip-text text-transparent">
                 WolvCapital
               </span>
             </h1>
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-blue-100 mb-6 sm:mb-8 max-w-2xl leading-relaxed">
+            <p className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl text-blue-100 mb-6 sm:mb-8 max-w-3xl mx-auto leading-relaxed px-4">
               Invest confidently with WolvCapital, a U.S. digital investment platform delivering secure cryptocurrency investment opportunities, transparent performance, and regulated financial solutions for institutional and individual investors.
             </p>
 
             <Link
               href="/accounts/signup"
-              className="inline-block bg-white text-[#0b2f6b] px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-full text-base sm:text-lg font-bold hover:bg-blue-50 transition-all transform hover:scale-105 shadow-2xl"
+              className="inline-block bg-white text-[#0b2f6b] px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-full text-sm sm:text-base md:text-lg font-bold hover:bg-blue-50 transition-all transform hover:scale-105 shadow-2xl"
             >
               Create Account
             </Link>
@@ -56,14 +56,14 @@ export default function HomePage() {
   {/* Live transactions ticker removed per request (performance + visual focus) */}
 
       {/* Features Section */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-12 sm:py-16 md:py-24 bg-gray-50">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-extrabold text-[#0b2f6b] mb-4">Why Invest with WolvCapital?</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">WolvCapital combines advanced technology and rigorous human oversight to deliver a secure, transparent, and compliant digital investment experience for discerning investors.</p>
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0b2f6b] mb-3 sm:mb-4">Why Invest with WolvCapital?</h2>
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">WolvCapital combines advanced technology and rigorous human oversight to deliver a secure, transparent, and compliant digital investment experience for discerning investors.</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100">
               <div className="w-16 h-16 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-2xl flex items-center justify-center mb-6">
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -18,8 +18,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = os.getenv("DEBUG", "0") == "1"  # Default to False for production
 
 # Generate a secure secret key (50+ chars, high entropy)
-default_secret = "wolvcapital-secure-2025-k8j9#mN2$pQ7!vX3&bR6@wE9*tY5^hU8%fG4+cZ1-nA0=sD7~lM3"
-SECRET_KEY = os.getenv("SECRET_KEY", default_secret)
+# CRITICAL: Never use default secret in production
+if not os.getenv("SECRET_KEY"):
+    if DEBUG:
+        default_secret = "wolvcapital-dev-only-secret-key-2025"
+    else:
+        raise ValueError(
+            "SECRET_KEY environment variable is required for production. "
+            "Generate one with: python -c 'import secrets; print(secrets.token_urlsafe(50))'"
+        )
+    SECRET_KEY = default_secret
+else:
+    SECRET_KEY = os.getenv("SECRET_KEY")
 
 # Render injects this, e.g. https://solid-succotash-654g.onrender.com
 RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL")

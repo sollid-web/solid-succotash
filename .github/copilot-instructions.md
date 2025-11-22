@@ -1,53 +1,85 @@
-# WolvCapital — Copilot Agent Guide
+# WolvCapital — AI Coding Agent Guide
 
-WolvCapital is a Django 5 investment platform where every financial action requires human review. Services perform calculations, but admins approve or reject all money-moving operations. Never auto-approve.
+WolvCapital is a Django 5 + Next.js investment platform where every financial action requires human review. Never auto-approve operations.
 
-## Architecture and flow
-- Apps: `core/` (UI, forms), `users/` (auth, Profile, Wallet, notifications), `investments/` (plans, user investments, ROI), `transactions/` (deposits/withdrawals, admin audit + notifications), `api/` (DRF endpoints).
-- Lifecycle: User submits → Admin approves/rejects via services → Audit + notifications recorded. All services run in `transaction.atomic()`.
+## Architecture Overview
+**Fullstack Deployment**: Django REST API (Render.com) + Next.js frontend (Vercel)
+- Apps: `core/` (health, email), `users/` (auth, wallets, notifications), `investments/` (plans, ROI), `transactions/` (deposits/withdrawals + audit), `api/` (DRF endpoints)
+- Frontend: Next.js 14 with TypeScript, Tailwind CSS at `frontend/`
+- Lifecycle: User submits → Admin approves/rejects via services → Audit + notifications recorded
 
-## Must-use service layer (no direct model edits)
-- Transactions: `transactions/services.py`
-	- `create_transaction(user, tx_type, amount, reference, payment_method='bank_transfer', tx_hash='', wallet_address_used='')`
-	- `approve_transaction(txn, admin_user, notes='')`, `reject_transaction(txn, admin_user, notes='')`
-- Investments: `investments/services.py`
-	- `create_investment(user, plan, amount)`
-	- `approve_investment(investment, admin_user, notes='')`, `reject_investment(investment, admin_user, notes='')`
-- Contracts: Approvals require `admin_user`; wallets are locked with `select_for_update()`; amounts must be positive and within plan bounds.
+## Critical Service Layer Pattern
+**Never edit models directly** - always use services with `admin_user` parameter:
 
-## Models and constraints
-- `users.User` (custom `AUTH_USER_MODEL`), `Profile.role` governs admin access, `UserWallet` holds balances.
-- `transactions.Transaction` uses UUID `id`, `status in {pending, approved, rejected}`; `AdminAuditLog` uses `entity` + string `entity_id`.
-- `transactions.AdminNotification` and `users.UserNotification` implement admin/user notification channels.
-- `investments.InvestmentPlan` (fixed four plans), `UserInvestment` (pending→approved→completed), `DailyRoiPayout` ensures idempotent daily ROI records.
-
-## ROI payouts (idempotent)
-- Command: `python manage.py payout_roi [--dry-run] [--date YYYY-MM-DD]` creates pending deposit transactions per approved investment and records `DailyRoiPayout`.
-- Wallets are credited only after an admin approves those ROI deposit transactions.
-
-## API surface (DRF)
-- Public: `GET /api/plans/`
-- User: `GET/POST /api/investments/`, `GET/POST /api/transactions/`, `GET /api/wallet/`
-- Admin: `GET /api/admin/transactions/`, `POST /api/admin/transactions/{id}/approve|reject`, `GET /api/admin/investments/`, `POST /api/admin/investments/{id}/approve|reject`
-
-## Developer workflow
-- Setup: `pip install -r requirements.txt`; run `python manage.py migrate && python manage.py seed_plans && python manage.py createsuperuser`.
-- Run: `python manage.py runserver` (SQLite locally). Tests: `python manage.py test`.
-- Deployment: Render via `render.yaml` → `start.sh` + WhiteNoise; env: `SECRET_KEY`, `DATABASE_URL`, `DEBUG=0`, `DJANGO_SETTINGS_MODULE=wolvcapital.settings`.
-
-## Conventions and gotchas
-- Never bypass services for approvals; always pass `admin_user`. Log approvals via `AdminAuditLog` with `str(uuid)` for `entity_id`.
-- Use `select_related()` on FK-heavy queries (e.g., `UserInvestment.plan`, `Transaction.user`).
-- Plans are canonical; restore with `python manage.py seed_plans`. The `update_plans` command is destructive—use only for coordinated migrations.
-- Auth: Email-only via django-allauth; redirects to `/dashboard/`. Request IDs via `wolvcapital.middleware.RequestIDMiddleware`. JSON logs when `DEBUG=0`.
-
-### Example: approving a transaction
 ```python
+# Good - proper audit trail
 from transactions.services import approve_transaction
-txn = approve_transaction(txn, admin_user, notes="Verified bank proof")
+txn = approve_transaction(txn, admin_user, notes="Verified documents")
+
+# Bad - bypasses audit and validation
+txn.status = 'approved'; txn.save()  # Never do this
 ```
 
-Questions or gaps? Tell us which section is unclear or missing so we can extend these rules.
+**Key Services**:
+- `transactions.services`: `create_transaction()`, `approve_transaction()`, `reject_transaction()`
+- `investments.services`: `create_investment()`, `approve_investment()`, `reject_investment()`
+- All run in `@transaction.atomic` blocks with `select_for_update()` on wallets
+
+## Essential Commands (Run in Order)
+```bash
+# Local setup
+python manage.py migrate
+python manage.py seed_plans          # Creates 4 investment plans (Pioneer, Vanguard, Horizon, Summit)
+python manage.py createsuperuser
+
+# ROI payouts (daily)
+python manage.py payout_roi --dry-run  # Preview payouts
+python manage.py payout_roi             # Execute (creates pending transactions)
+```
+
+## Model Architecture & Constraints
+- `users.User` → `Profile.role` (user/admin) + `UserWallet.balance` (with DB constraints)
+- `transactions.Transaction` uses UUID primary keys; `AdminAuditLog` tracks all approvals
+- `investments.InvestmentPlan` (4 fixed plans) → `UserInvestment` (pending→approved→completed)
+- `DailyRoiPayout` ensures idempotent ROI processing per investment/date
+
+## API Patterns (DRF + ViewSets)
+```
+Public:  GET /api/plans/
+User:    GET/POST /api/investments/, /api/transactions/, GET /api/wallet/  
+Admin:   GET/POST /api/admin/transactions/{id}/approve/, /api/admin/investments/{id}/approve/
+```
+
+**Auth**: Session-based via django-allauth (email-only, no usernames)
+
+## Frontend Integration
+- **Local**: Django (`:8000`) + Next.js (`:3000`)
+- **Production**: api.wolvcapital.com + wolvcapital.com  
+- **CORS**: Set `CORS_ALLOWED_ORIGINS` in Django settings for frontend domains
+
+## Deployment (Render + Vercel)
+- **Backend**: `render.yaml` → `start.sh` (migrations + seed_plans + Gunicorn)
+- **Frontend**: `cd frontend && vercel --prod`
+- **Critical env vars**: `DATABASE_URL`, `SECRET_KEY`, `CORS_ALLOWED_ORIGINS`, `CSRF_TRUSTED_ORIGINS`
+
+## Development Standards
+- **Code Quality**: Ruff linting configured in `pyproject.toml`
+- **Testing**: `python manage.py test` (pytest config in `conftest.py`)
+- **DB Queries**: Always use `select_related()` for `UserInvestment.plan`, `Transaction.user`
+- **Logging**: JSON format with `request_id` when `DEBUG=False`
+
+## Common Patterns & Gotchas
+- **Investment Plans**: Fixed schema - use `seed_plans` to restore defaults
+- **UUID Audit Logs**: Use `str(transaction.id)` in `AdminAuditLog.entity_id`
+- **Wallet Locking**: Services use `select_for_update()` to prevent race conditions
+- **ROI Processing**: Creates pending deposit transactions that require admin approval
+- **Email Notifications**: User preferences stored in `Profile` model with granular controls
+
+## Security & Business Rules
+- All financial operations require manual admin approval
+- Database constraints enforce positive amounts and valid ranges
+- Services validate plan limits and user balances before approval
+- Comprehensive audit trail for regulatory compliance
 # WolvCapital - AI Coding Agent Instructions
 
 ## Project Overview

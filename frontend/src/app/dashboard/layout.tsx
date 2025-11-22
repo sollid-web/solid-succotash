@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import RecentActivityTicker from '@/components/RecentActivityTicker';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -97,6 +98,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           Support
         </Link>
       </nav>
+      <RecentActivityTicker />
     </div>
   );
 }

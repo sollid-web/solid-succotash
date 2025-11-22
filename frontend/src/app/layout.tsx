@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import TawkToChat from '@/components/TawkToChat'
 import { TranslationProvider } from '@/i18n/TranslationProvider'
 import NavBar from '@/components/NavBar'
+import RecentActivityTicker from '@/components/RecentActivityTicker'
 
 const inter = Inter({ subsets: ['latin'], weight: [
   '300', '400', '500', '600', '700', '800', '900'
@@ -40,8 +41,12 @@ export const metadata: Metadata = {
     images: ['/images/home-og.jpg'],
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: '32x32' }
+    ],
     apple: '/apple-touch-icon.png',
+    shortcut: '/favicon.ico',
   },
   manifest: '/manifest.json',
 }
@@ -60,6 +65,7 @@ export default function RootLayout({
             {children}
           </main>
           <TawkToChat />
+          <RecentActivityTicker />
         </TranslationProvider>
       </body>
     </html>

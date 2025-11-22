@@ -93,25 +93,49 @@ export default function FlipCard({
               </svg>
             </div>
             <div className="flip-face flip-back" role="img" aria-label="Back of virtual Visa card">
-              <div style={{ position: 'relative', zIndex: 2, color: '#fff', fontWeight: 'bold', fontSize: 18, padding: '16px 24px 0 24px' }}>
-                Security Code
-              </div>
-              <div style={{ position: 'relative', zIndex: 2, color: '#fff', fontSize: 14, padding: '8px 24px 0 24px' }}>
-                See above
-              </div>
-              <div style={{ position: 'relative', zIndex: 2, color: '#fff', fontSize: 14, padding: '8px 24px 0 24px' }}>
-                For customer service:
-              </div>
-              <div style={{ position: 'relative', zIndex: 2, color: '#fff', fontSize: 14, padding: '8px 24px 0 24px' }}>
-                support@wolvcapital.com
-              </div>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300">
-                <rect width="480" height="300" rx="20" fill="url(#bgGradient)" />
-                <rect x="0" y="40" width="480" height="50" fill="black" />
-                <rect x="30" y="130" width="420" height="50" fill="white" />
-                <text x="400" y="160" fill="black" fontSize="22" fontFamily="Courier New" fontWeight="bold">***</text>
-                <text x="30" y="220" fill="white" fontSize="12" fontFamily="Arial" fontWeight="bold">WolvCapital Ltd · Customer Support +1-800-000-0000 · www.wolvcapital.com</text>
-                <circle cx="420" cy="240" r="20" fill="url(#metallicText)" opacity="0.6" />
+                <defs>
+                  <linearGradient id="bgGradientBack" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#1E5DF7" />
+                    <stop offset="100%" stopColor="#0A34B0" />
+                  </linearGradient>
+                  <linearGradient id="signaturePanel" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#F5F5F5" />
+                    <stop offset="100%" stopColor="#E8E8E8" />
+                  </linearGradient>
+                </defs>
+                
+                {/* Card Background */}
+                <rect width="480" height="300" rx="20" fill="url(#bgGradientBack)" />
+                
+                {/* Magnetic Stripe */}
+                <rect x="0" y="40" width="480" height="50" fill="#000000" />
+                
+                {/* Signature Panel */}
+                <rect x="30" y="130" width="350" height="40" rx="4" fill="url(#signaturePanel)" stroke="#CCCCCC" strokeWidth="1" />
+                
+                {/* Security Code */}
+                <text x="400" y="155" fill="#000000" fontSize="24" fontFamily="Courier New" fontWeight="bold">012</text>
+                
+                {/* Card Information Text */}
+                <text x="30" y="200" fill="white" fontSize="12" fontFamily="Arial" fontWeight="normal">
+                  This card is the property of WolvCapital Ltd.
+                </text>
+                <text x="30" y="220" fill="white" fontSize="12" fontFamily="Arial" fontWeight="normal">
+                  If found, please call 1-800-WOLV-CAP
+                </text>
+                
+                {/* Bottom Section */}
+                <text x="30" y="260" fill="white" fontSize="11" fontFamily="Arial" fontWeight="bold">
+                  AUTHORIZED SIGNATURE
+                </text>
+                <text x="280" y="260" fill="white" fontSize="11" fontFamily="Arial" fontWeight="normal">
+                  www.wolvcapital.com
+                </text>
+                
+                {/* Small decorative elements */}
+                <circle cx="420" cy="270" r="8" fill="white" opacity="0.3" />
+                <circle cx="440" cy="270" r="8" fill="white" opacity="0.2" />
               </svg>
             </div>
           </div>

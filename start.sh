@@ -53,52 +53,74 @@ EOF
     fi
 done
 
-# Create crypto wallets for deposits with error handling
-echo "₿ Setting up cryptocurrency wallets..."
-python manage.py shell << 'EOF' || echo "⚠️ Crypto wallet setup failed, continuing..."
+# Setup crypto wallets only if enabled (security consideration)
+if [[ -n "$SETUP_CRYPTO_WALLETS" && "$SETUP_CRYPTO_WALLETS" == "1" ]]; then
+    echo "₿ Setting up cryptocurrency wallets..."
+    python manage.py shell << 'EOF' || echo "⚠️ Crypto wallet setup failed, continuing..."
 try:
+    import os
     from transactions.models import CryptocurrencyWallet
 
-    # Create sample crypto wallets if they don't exist
-    wallets = [
-        {'currency': 'BTC', 'address': '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', 'network': 'Bitcoin Network'},
-        {'currency': 'USDT', 'address': '0x742d35Cc6C84D6A5a6A9dd1f6C4A4B2A7D3A1234', 'network': 'ERC-20'},
-        {'currency': 'USDC', 'address': '0x742d35Cc6C84D6A5a6A9dd1f6C4A4B2A7D3A5678', 'network': 'ERC-20'},
-        {'currency': 'ETH', 'address': '0x742d35Cc6C84D6A5a6A9dd1f6C4A4B2A7D3A9ABC', 'network': 'Ethereum'}
-    ]
+    # Only create wallets if actual addresses are provided via environment
+    btc_address = os.getenv('BTC_WALLET_ADDRESS')
+    eth_address = os.getenv('ETH_WALLET_ADDRESS')
+    usdt_address = os.getenv('USDT_WALLET_ADDRESS')
+    usdc_address = os.getenv('USDC_WALLET_ADDRESS')
 
-    for wallet_data in wallets:
-        wallet, created = CryptocurrencyWallet.objects.get_or_create(
-            currency=wallet_data['currency'],
-            defaults={
-                'wallet_address': wallet_data['address'],
-                'network': wallet_data['network'],
-                'is_active': True
-            }
-        )
-        if created:
-            print(f"Created {wallet_data['currency']} wallet")
-        else:
-            print(f"{wallet_data['currency']} wallet already exists")
-    print("✅ Crypto wallets setup completed")
+    wallets = []
+    if btc_address:
+        wallets.append({'currency': 'BTC', 'address': btc_address, 'network': 'Bitcoin Network'})
+    if eth_address:
+        wallets.append({'currency': 'ETH', 'address': eth_address, 'network': 'Ethereum'})
+    if usdt_address:
+        wallets.append({'currency': 'USDT', 'address': usdt_address, 'network': 'ERC-20'})
+    if usdc_address:
+        wallets.append({'currency': 'USDC', 'address': usdc_address, 'network': 'ERC-20'})
+
+    if not wallets:
+        print("⚠️ No crypto wallet addresses configured via environment variables")
+    else:
+        for wallet_data in wallets:
+            wallet, created = CryptocurrencyWallet.objects.get_or_create(
+                currency=wallet_data['currency'],
+                defaults={
+                    'wallet_address': wallet_data['address'],
+                    'network': wallet_data['network'],
+                    'is_active': True
+                }
+            )
+            if created:
+                print(f"Created {wallet_data['currency']} wallet")
+            else:
+                print(f"{wallet_data['currency']} wallet already exists")
+        print("✅ Crypto wallets setup completed")
 except Exception as e:
     print(f"❌ Crypto wallet setup error: {e}")
 EOF
+else
+    echo "⏭️ Skipping crypto wallet setup (set SETUP_CRYPTO_WALLETS=1 to enable)"
+fi
 
-# Create admin user if not exists with error handling
-echo "👤 Setting up admin user..."
-python manage.py shell << 'EOF' || echo "⚠️ Admin user setup failed, continuing..."
+# Create admin user if environment variable is set
+if [[ -n "$CREATE_INITIAL_ADMIN" && "$CREATE_INITIAL_ADMIN" == "1" ]]; then
+    echo "👤 Setting up initial admin user..."
+    python manage.py shell << 'EOF' || echo "⚠️ Admin user setup failed, continuing..."
 try:
+    import os
     from django.contrib.auth import get_user_model
     from users.models import Profile
 
     User = get_user_model()
-    admin_email = 'admin@wolvcapital.com'
-    if not User.objects.filter(email=admin_email).exists():
+    admin_email = os.getenv('INITIAL_ADMIN_EMAIL', 'admin@wolvcapital.com')
+    admin_password = os.getenv('INITIAL_ADMIN_PASSWORD')
+    
+    if not admin_password:
+        print("⚠️ INITIAL_ADMIN_PASSWORD not set, skipping admin creation")
+    elif not User.objects.filter(email=admin_email).exists():
         user = User.objects.create_user(
             username=admin_email,
             email=admin_email,
-            password='admin123',
+            password=admin_password,
             is_staff=True,
             is_superuser=True
         )
@@ -112,6 +134,9 @@ try:
 except Exception as e:
     print(f"❌ Admin user setup error: {e}")
 EOF
+else
+    echo "⏭️ Skipping admin user creation (set CREATE_INITIAL_ADMIN=1 to enable)"
+fi
 
 # Test database connection and verify setup
 echo "🔍 Verifying database setup..."

@@ -57,6 +57,31 @@ services:
         value: "true"
       - key: EMAIL_PORT
         value: "587"
+      # Security flags for production deployment
+      - key: CREATE_INITIAL_ADMIN
+        # Set to "1" only for initial deployment, then remove/set to "0"
+        value: "0"
+      - key: INITIAL_ADMIN_EMAIL
+        # Only used when CREATE_INITIAL_ADMIN=1
+        sync: false
+      - key: INITIAL_ADMIN_PASSWORD
+        # Only used when CREATE_INITIAL_ADMIN=1 - set strong password!
+        sync: false
+      - key: SETUP_CRYPTO_WALLETS
+        # Set to "1" only when you have real wallet addresses configured
+        value: "0"
+      - key: BTC_WALLET_ADDRESS
+        # Real BTC wallet address for deposits
+        sync: false
+      - key: ETH_WALLET_ADDRESS
+        # Real ETH wallet address for deposits
+        sync: false
+      - key: USDT_WALLET_ADDRESS
+        # Real USDT wallet address for deposits
+        sync: false
+      - key: USDC_WALLET_ADDRESS
+        # Real USDC wallet address for deposits
+        sync: false
 
 databases:
   - name: wolvcapital-db

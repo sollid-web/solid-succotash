@@ -26,16 +26,16 @@ interface Props {
 }
 
 const COUNTRIES = [
-  { code: "NO", name: "Norway", weight: 0.4, names: ["Matthew", "Olav", "Soren", "Ingrid", "Lars", "Kari"] },
-  { code: "US", name: "United States", weight: 0.2, names: ["Sonya", "James", "Alicia", "Michael", "Laura", "Kevin"] },
-  { code: "GB", name: "United Kingdom", weight: 0.15, names: ["Kenneth", "Harry", "Amelia", "Olivia", "George", "Chloe"] },
-  { code: "DE", name: "Germany", weight: 0.1, names: ["Lukas", "Mia", "Leon", "Hannah", "Felix", "Emma"] },
-  { code: "NG", name: "Nigeria", weight: 0.15, names: ["Emeka", "Aisha", "Tunde", "Ngozi", "Chinedu", "Amaka"] }
+  { code: "NO", name: "Norway", weight: 0.25, names: ["Matthew", "Olav", "Soren", "Ingrid", "Lars", "Kari", "Erik", "Astrid", "Magnus", "Freya", "Bjorn", "Sigrid"] },
+  { code: "US", name: "United States", weight: 0.25, names: ["Sonya", "James", "Alicia", "Michael", "Laura", "Kevin", "Jessica", "David", "Sarah", "Robert", "Emily", "Christopher"] },
+  { code: "GB", name: "United Kingdom", weight: 0.25, names: ["Kenneth", "Harry", "Amelia", "Olivia", "George", "Chloe", "William", "Charlotte", "Thomas", "Sophie", "James", "Isabella"] },
+  { code: "DE", name: "Germany", weight: 0.15, names: ["Lukas", "Mia", "Leon", "Hannah", "Felix", "Emma", "Maximilian", "Sophia", "Alexander", "Lena", "Noah", "Lea"] },
+  { code: "CA", name: "Canada", weight: 0.1, names: ["Jacob", "Emma", "Ethan", "Olivia", "Alexander", "Ava", "William", "Isabella", "James", "Sophia", "Benjamin", "Charlotte"] }
 ];
 
 const DEFAULT_PLANS = ["Pioneer", "Vanguard", "Horizon", "Summit"];
-const AMOUNTS = [200, 300, 400, 500, 750, 1000, 1500, 2500, 4000, 5000, 10000];
-const TIME_AGO_OPTIONS = ["just now", "a few seconds ago", "1 min ago", "2 mins ago"];
+const AMOUNTS = [150, 200, 250, 300, 350, 400, 450, 500, 600, 750, 850, 1000, 1200, 1500, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 7500, 8000, 9000, 10000, 12000, 15000, 18000, 20000, 25000];
+const TIME_AGO_OPTIONS = ["just now", "a few seconds ago", "30 seconds ago", "1 min ago", "2 mins ago", "3 mins ago", "5 mins ago", "a moment ago"];
 let GLOBAL_ID = 1;
 
 function pickWeightedCountry() {
@@ -70,13 +70,15 @@ function generateRandomActivity(plans: string[], prev?: Activity | null): Activi
   let message: string;
   if (type === "deposit") {
     amount = pickRandom(AMOUNTS);
-    message = `${name} from ${country.name} just deposited $${amount.toLocaleString()}`;
+    const depositActions = ["deposited", "funded their account with", "added", "transferred", "invested"];
+    message = `${name} from ${country.name} just ${pickRandom(depositActions)} $${amount.toLocaleString()}`;
   } else if (type === "withdrawal") {
     amount = pickRandom(AMOUNTS);
-    message = `${name} from ${country.name} just withdrew $${amount.toLocaleString()}`;
+    const withdrawalActions = ["withdrew", "requested payout of", "cashed out", "transferred out", "claimed"];
+    message = `${name} from ${country.name} just ${pickRandom(withdrawalActions)} $${amount.toLocaleString()}`;
   } else {
     plan = pickRandom(plans);
-    const verbs = ["joined", "migrated to", "upgraded to", "switched to"];
+    const verbs = ["joined", "migrated to", "upgraded to", "switched to", "enrolled in", "activated", "selected", "chose", "invested in", "started with"];
     message = `${name} ${pickRandom(verbs)} ${plan}`;
   }
   const timeAgo = pickRandom(TIME_AGO_OPTIONS);
@@ -95,8 +97,8 @@ function generateRandomActivity(plans: string[], prev?: Activity | null): Activi
 
 const RecentActivityTicker: React.FC<Props> = ({
   plans = DEFAULT_PLANS,
-  minIntervalMs = 3000,
-  maxIntervalMs = 6000,
+  minIntervalMs = 8000,
+  maxIntervalMs = 15000,
   soundPath = "/sounds/chime.wav",
   soundVolume = 0.35,
   preventRepeatMs = 2000

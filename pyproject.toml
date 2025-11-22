@@ -86,6 +86,7 @@ ignore = [
 "**/admin.py" = ["F401", "E722"]
 "check_admin.py" = ["F401", "F541", "E402"]
 "create_admin.py" = ["F541", "E402"]
+"test_email.py" = ["E402"]  # Django setup requires imports after django.setup()
 "core/health_check.py" = ["F401", "F541"]
 "core/management/commands/test_login.py" = ["F541"]
 "core/management/commands/verify_db.py" = ["F401"]

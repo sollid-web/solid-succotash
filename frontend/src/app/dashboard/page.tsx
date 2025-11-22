@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import FlipCard from '@/components/FlipCard'
 
 interface UserData {
   id: number
@@ -254,6 +255,82 @@ export default function DashboardPage() {
             <span className="text-xs font-semibold text-gray-500 mb-1">Total Invested</span>
             <span className="text-3xl font-bold text-[#0b2f6b]">${investments ? investments.filter(inv => inv.status === 'approved').reduce((sum, inv) => sum + parseFloat(inv.amount || '0'), 0).toFixed(2) : '0.00'}</span>
             <span className="text-xs text-gray-400 mt-2">Active investments</span>
+          </div>
+        </section>
+
+        {/* Virtual Card Section */}
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          {/* Virtual Card Display */}
+          <div className="bg-white rounded-3xl shadow-xl p-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-800">Your Virtual Card</h2>
+              <div className="px-3 py-1 bg-emerald-100 text-emerald-600 rounded-full text-sm font-semibold">
+                Active
+              </div>
+            </div>
+            <p className="text-gray-600 mb-6">Your WolvCapital virtual Visa card - Click to flip and view details</p>
+            
+            <div className="flex justify-center mb-6">
+              <FlipCard 
+                maxWidth={360}
+                aspectWidth={480}
+                aspectHeight={300}
+                animationMs={800}
+                initialFlipped={false}
+              />
+            </div>
+            
+            <div className="grid grid-cols-2 gap-4 text-center">
+              <div className="p-3 bg-blue-50 rounded-xl">
+                <p className="text-sm text-gray-600">Monthly Limit</p>
+                <p className="text-lg font-bold text-blue-600">$50,000</p>
+              </div>
+              <div className="p-3 bg-green-50 rounded-xl">
+                <p className="text-sm text-gray-600">Available</p>
+                <p className="text-lg font-bold text-green-600">${wallet ? (50000 - parseFloat(wallet.total_withdrawals || '0')).toFixed(0) : '50,000'}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Card Actions */}
+          <div className="bg-white rounded-3xl shadow-xl p-8">
+            <h3 className="text-xl font-bold text-gray-800 mb-6">Card Management</h3>
+            
+            <div className="space-y-4">
+              <div className="p-4 border border-gray-200 rounded-xl">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-semibold text-gray-800">Card Status</h4>
+                    <p className="text-sm text-gray-600">Your card is active and ready to use</p>
+                  </div>
+                  <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                </div>
+              </div>
+              
+              <div className="p-4 border border-gray-200 rounded-xl">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-semibold text-gray-800">Security</h4>
+                    <p className="text-sm text-gray-600">Enhanced fraud protection enabled</p>
+                  </div>
+                  <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3 mt-6">
+                <Link
+                  href="/dashboard/transactions"
+                  className="bg-[#2563eb] text-white px-4 py-3 rounded-xl font-semibold text-center hover:bg-[#1d4ed8] transition"
+                >
+                  View Transactions
+                </Link>
+                <button className="bg-gray-100 text-gray-700 px-4 py-3 rounded-xl font-semibold hover:bg-gray-200 transition">
+                  Card Settings
+                </button>
+              </div>
+            </div>
           </div>
         </section>
 

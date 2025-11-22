@@ -22,27 +22,20 @@ export default function KYCPage() {
     },
     {
       id: 2,
-      title: 'Phone Number',
-      description: 'Add and verify your phone number',
-      status: 'pending',
-      required: true
-    },
-    {
-      id: 3,
       title: 'Personal Information',
       description: 'Complete your personal profile',
       status: 'required',
       required: true
     },
     {
-      id: 4,
+      id: 3,
       title: 'Identity Documents',
       description: 'Upload government-issued ID and proof of address',
       status: 'required',
       required: true
     },
     {
-      id: 5,
+      id: 4,
       title: 'Enhanced Verification',
       description: 'Additional verification for higher limits (optional)',
       status: 'required',
@@ -51,6 +44,63 @@ export default function KYCPage() {
   ])
 
   const [selectedStep, setSelectedStep] = useState(2)
+  const [personalInfo, setPersonalInfo] = useState({
+    firstName: '',
+    lastName: '',
+    dateOfBirth: '',
+    nationality: '',
+    address: ''
+  })
+  const [uploadedFiles, setUploadedFiles] = useState({
+    governmentId: null as File | null,
+    proofOfAddress: null as File | null
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitMessage, setSubmitMessage] = useState('')
+
+  const handleFileUpload = (type: 'governmentId' | 'proofOfAddress') => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const validTypes = ['image/jpeg', 'image/png', 'application/pdf']
+      if (!validTypes.includes(file.type)) {
+        alert('Please upload a valid file type (JPG, PNG, or PDF)')
+        return
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must be less than 5MB')
+        return
+      }
+      setUploadedFiles(prev => ({ ...prev, [type]: file }))
+    }
+  }
+
+  const handlePersonalInfoSubmit = async () => {
+    if (!personalInfo.firstName || !personalInfo.lastName || !personalInfo.dateOfBirth || !personalInfo.nationality || !personalInfo.address) {
+      alert('Please fill in all required fields')
+      return
+    }
+    setIsSubmitting(true)
+    // Simulate API call
+    setTimeout(() => {
+      setSubmitMessage('Personal information saved successfully!')
+      setIsSubmitting(false)
+      setTimeout(() => setSubmitMessage(''), 3000)
+    }, 1000)
+  }
+
+  const handleDocumentSubmit = async () => {
+    if (!uploadedFiles.governmentId || !uploadedFiles.proofOfAddress) {
+      alert('Please upload both required documents')
+      return
+    }
+    setIsSubmitting(true)
+    // Simulate API call
+    setTimeout(() => {
+      setSubmitMessage('Documents uploaded successfully! Your KYC application is under review.')
+      setIsSubmitting(false)
+      setTimeout(() => setSubmitMessage(''), 3000)
+    }, 2000)
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -141,9 +191,14 @@ export default function KYCPage() {
           </div>
         )
 
-      case 3: // Personal Information
+      case 2: // Personal Information
         return (
           <div className="space-y-6">
+            {submitMessage && (
+              <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
+                <p className="text-sm text-green-800">{submitMessage}</p>
+              </div>
+            )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
@@ -152,8 +207,11 @@ export default function KYCPage() {
                 <input
                   type="text"
                   id="firstName"
+                  value={personalInfo.firstName}
+                  onChange={(e) => setPersonalInfo(prev => ({ ...prev, firstName: e.target.value }))}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Enter your first name"
+                  required
                 />
               </div>
               <div>
@@ -163,8 +221,11 @@ export default function KYCPage() {
                 <input
                   type="text"
                   id="lastName"
+                  value={personalInfo.lastName}
+                  onChange={(e) => setPersonalInfo(prev => ({ ...prev, lastName: e.target.value }))}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Enter your last name"
+                  required
                 />
               </div>
               <div>
@@ -174,7 +235,10 @@ export default function KYCPage() {
                 <input
                   type="date"
                   id="dateOfBirth"
+                  value={personalInfo.dateOfBirth}
+                  onChange={(e) => setPersonalInfo(prev => ({ ...prev, dateOfBirth: e.target.value }))}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
                 />
               </div>
               <div>
@@ -183,7 +247,10 @@ export default function KYCPage() {
                 </label>
                 <select
                   id="nationality"
+                  value={personalInfo.nationality}
+                  onChange={(e) => setPersonalInfo(prev => ({ ...prev, nationality: e.target.value }))}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
                 >
                   <option value="">Select your nationality</option>
                   <option value="US">United States</option>
@@ -201,41 +268,99 @@ export default function KYCPage() {
               <textarea
                 id="address"
                 rows={3}
+                value={personalInfo.address}
+                onChange={(e) => setPersonalInfo(prev => ({ ...prev, address: e.target.value }))}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Enter your full address"
+                required
               />
             </div>
-            <button className="w-full bg-[#2563eb] text-white py-3 rounded-lg hover:bg-[#1d4ed8] transition font-semibold">
-              Save Information
+            <button 
+              onClick={handlePersonalInfoSubmit}
+              disabled={isSubmitting}
+              className="w-full bg-[#2563eb] text-white py-3 rounded-lg hover:bg-[#1d4ed8] transition font-semibold disabled:opacity-50"
+            >
+              {isSubmitting ? 'Saving...' : 'Save Information'}
             </button>
           </div>
         )
 
-      case 4: // Identity Documents
+      case 3: // Identity Documents
         return (
           <div className="space-y-6">
+            {submitMessage && (
+              <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
+                <p className="text-sm text-green-800">{submitMessage}</p>
+              </div>
+            )}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Government ID Upload */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">Government-issued ID</h3>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[#2563eb] transition cursor-pointer">
-                  <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                  </svg>
-                  <p className="text-sm text-gray-600 mb-2">Upload a photo of your ID</p>
-                  <p className="text-xs text-gray-500">Passport, Driver's License, or National ID</p>
+                <div className="relative">
+                  <input
+                    type="file"
+                    id="governmentId"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    onChange={handleFileUpload('governmentId')}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  />
+                  <div className={`border-2 border-dashed rounded-lg p-6 text-center transition cursor-pointer ${
+                    uploadedFiles.governmentId ? 'border-green-300 bg-green-50' : 'border-gray-300 hover:border-[#2563eb]'
+                  }`}>
+                    {uploadedFiles.governmentId ? (
+                      <>
+                        <svg className="w-12 h-12 text-green-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p className="text-sm text-green-600 font-medium mb-2">{uploadedFiles.governmentId.name}</p>
+                        <p className="text-xs text-green-500">File uploaded successfully</p>
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <p className="text-sm text-gray-600 mb-2">Upload a photo of your ID</p>
+                        <p className="text-xs text-gray-500">Passport, Driver's License, or National ID</p>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
 
               {/* Proof of Address Upload */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">Proof of Address</h3>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[#2563eb] transition cursor-pointer">
-                  <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                  </svg>
-                  <p className="text-sm text-gray-600 mb-2">Upload proof of address</p>
-                  <p className="text-xs text-gray-500">Utility bill, bank statement, or lease agreement</p>
+                <div className="relative">
+                  <input
+                    type="file"
+                    id="proofOfAddress"
+                    accept=".jpg,.jpeg,.png,.pdf"
+                    onChange={handleFileUpload('proofOfAddress')}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  />
+                  <div className={`border-2 border-dashed rounded-lg p-6 text-center transition cursor-pointer ${
+                    uploadedFiles.proofOfAddress ? 'border-green-300 bg-green-50' : 'border-gray-300 hover:border-[#2563eb]'
+                  }`}>
+                    {uploadedFiles.proofOfAddress ? (
+                      <>
+                        <svg className="w-12 h-12 text-green-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p className="text-sm text-green-600 font-medium mb-2">{uploadedFiles.proofOfAddress.name}</p>
+                        <p className="text-xs text-green-500">File uploaded successfully</p>
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <p className="text-sm text-gray-600 mb-2">Upload proof of address</p>
+                        <p className="text-xs text-gray-500">Utility bill, bank statement, or lease agreement</p>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -253,19 +378,23 @@ export default function KYCPage() {
                     <li>• Ensure documents are clear and fully visible</li>
                     <li>• No edited or modified images</li>
                     <li>• Documents must be current and valid</li>
-                    <li>• Accepted formats: JPG, PNG, PDF</li>
+                    <li>• Accepted formats: JPG, PNG, PDF (max 5MB each)</li>
                   </ul>
                 </div>
               </div>
             </div>
             
-            <button className="w-full bg-[#2563eb] text-white py-3 rounded-lg hover:bg-[#1d4ed8] transition font-semibold">
-              Submit Documents
+            <button 
+              onClick={handleDocumentSubmit}
+              disabled={isSubmitting || !uploadedFiles.governmentId || !uploadedFiles.proofOfAddress}
+              className="w-full bg-[#2563eb] text-white py-3 rounded-lg hover:bg-[#1d4ed8] transition font-semibold disabled:opacity-50"
+            >
+              {isSubmitting ? 'Submitting...' : 'Submit Documents'}
             </button>
           </div>
         )
 
-      case 5: // Enhanced Verification
+      case 4: // Enhanced Verification
         return (
           <div className="space-y-6">
             <div className="bg-gradient-to-br from-purple-50 to-indigo-100 rounded-xl p-6 border border-purple-200">

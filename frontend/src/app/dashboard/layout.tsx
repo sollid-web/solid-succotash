@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import RecentActivityTicker from '@/components/RecentActivityTicker';
+import TawkToChat from '@/components/TawkToChat';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -200,6 +201,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Dashboard-specific Activity Ticker */}
       <RecentActivityTicker />
+      
+      {/* TawkTo Live Chat Support */}
+      <TawkToChat />
       
       {/* Dashboard Footer */}
       <footer className="bg-white border-t border-gray-200 mt-12">

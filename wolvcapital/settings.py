@@ -135,6 +135,9 @@ if IN_CODESPACES:
         CORS_ALLOWED_ORIGINS.append(cors_codespaces_origin)
     CORS_ALLOWED_ORIGIN_REGEXES.append(r"^https://.*\\.app\\.github\\.dev$")
 
+# Allow Vercel preview deployments (*.vercel.app)
+CORS_ALLOWED_ORIGIN_REGEXES.append(r"^https://.*\\.vercel\\.app$")
+
 CORS_ALLOWED_ORIGINS = list(dict.fromkeys(CORS_ALLOWED_ORIGINS))
 CSRF_TRUSTED_ORIGINS = list(dict.fromkeys(CSRF_TRUSTED_ORIGINS))
 

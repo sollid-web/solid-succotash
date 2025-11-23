@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import FlipCard from '@/components/FlipCard'
+import AccountVerificationStatus from '@/components/AccountVerificationStatus'
 
 interface UserData {
   id: number
@@ -244,6 +245,9 @@ export default function DashboardPage() {
           </h1>
           <p className="text-base sm:text-xl opacity-90">Your secure investment dashboard overview</p>
         </section>
+
+        {/* Account Verification Status */}
+        <AccountVerificationStatus />
 
         {/* Wallet Summary Section */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-4">

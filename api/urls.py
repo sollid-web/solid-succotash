@@ -9,6 +9,7 @@ router.register(r"investments", views.UserInvestmentViewSet, basename="api-inves
 router.register(r"transactions", views.TransactionViewSet, basename="api-transactions")
 router.register(r"plans", views.InvestmentPlanViewSet, basename="api-plans")
 router.register(r"crypto-wallets", views.CryptoWalletViewSet, basename="api-crypto-wallets")
+router.register(r"kyc", views.KycApplicationViewSet, basename="api-kyc")
 router.register(
     r"notifications",
     views.UserNotificationViewSet,
@@ -25,6 +26,11 @@ router.register(
     r"admin/investments",
     views.AdminUserInvestmentViewSet,
     basename="api-admin-investments",
+)
+router.register(
+    r"admin/kyc",
+    views.AdminKycApplicationViewSet,
+    basename="api-admin-kyc",
 )
 
 urlpatterns = [

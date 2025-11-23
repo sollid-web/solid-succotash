@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 
 interface KYCStep {
@@ -11,37 +11,70 @@ interface KYCStep {
   required: boolean
 }
 
+interface DocumentMetadata {
+  name: string
+  type?: string
+  size?: number
+  source?: 'local' | 'server'
+}
+
+interface KycApplication {
+  id: string
+  status: 'draft' | 'pending' | 'approved' | 'rejected'
+  personal_info: Record<string, any> | null
+  document_info: {
+    government_id?: DocumentMetadata | null
+    proof_of_address?: DocumentMetadata | null
+    [key: string]: any
+  } | null
+  personal_info_submitted_at: string | null
+  document_submitted_at: string | null
+  last_submitted_at: string | null
+  reviewed_by_email?: string | null
+  reviewed_at: string | null
+  reviewer_notes: string
+  rejection_reason: string
+  created_at: string
+  updated_at: string
+}
+
+const DEFAULT_KYC_STEPS: KYCStep[] = [
+  {
+    id: 1,
+    title: 'Email Verification',
+    description: 'Verify your email address',
+    status: 'completed',
+    required: true
+  },
+  {
+    id: 2,
+    title: 'Personal Information',
+    description: 'Complete your personal profile',
+    status: 'required',
+    required: true
+  },
+  {
+    id: 3,
+    title: 'Identity Documents',
+    description: 'Upload government-issued ID and proof of address',
+    status: 'required',
+    required: true
+  },
+  {
+    id: 4,
+    title: 'Enhanced Verification',
+    description: 'Additional verification for higher limits (optional)',
+    status: 'required',
+    required: false
+  }
+]
+
 export default function KYCPage() {
-  const [kycSteps] = useState<KYCStep[]>([
-    {
-      id: 1,
-      title: 'Email Verification',
-      description: 'Verify your email address',
-      status: 'completed',
-      required: true
-    },
-    {
-      id: 2,
-      title: 'Personal Information',
-      description: 'Complete your personal profile',
-      status: 'required',
-      required: true
-    },
-    {
-      id: 3,
-      title: 'Identity Documents',
-      description: 'Upload government-issued ID and proof of address',
-      status: 'required',
-      required: true
-    },
-    {
-      id: 4,
-      title: 'Enhanced Verification',
-      description: 'Additional verification for higher limits (optional)',
-      status: 'required',
-      required: false
-    }
-  ])
+  const [kycSteps, setKycSteps] = useState<KYCStep[]>(() => DEFAULT_KYC_STEPS.map(step => ({ ...step })))
+  const [latestApplication, setLatestApplication] = useState<KycApplication | null>(null)
+  const [loadingStatus, setLoadingStatus] = useState(true)
+  const [fetchError, setFetchError] = useState('')
+  const apiBase = useMemo(() => (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, ''), [])
 
   const [selectedStep, setSelectedStep] = useState(2)
   const [personalInfo, setPersonalInfo] = useState({
@@ -52,11 +85,130 @@ export default function KYCPage() {
     address: ''
   })
   const [uploadedFiles, setUploadedFiles] = useState({
-    governmentId: null as File | null,
-    proofOfAddress: null as File | null
+    governmentId: null as DocumentMetadata | null,
+    proofOfAddress: null as DocumentMetadata | null
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitMessage, setSubmitMessage] = useState('')
+  const statusLabelMap: Record<KycApplication['status'], string> = {
+    draft: 'Not Started',
+    pending: 'Pending Review',
+    approved: 'Approved',
+    rejected: 'Action Required'
+  }
+  const detailStatusClass: Record<KycApplication['status'], string> = {
+    draft: 'bg-gray-100 text-gray-700',
+    pending: 'bg-yellow-100 text-yellow-700',
+    approved: 'bg-green-100 text-green-700',
+    rejected: 'bg-red-100 text-red-700'
+  }
+
+  const statusFromApplication = useCallback((application: KycApplication | null, hasSubmission: boolean): KYCStep['status'] => {
+    if (!application || !hasSubmission) {
+      return 'required'
+    }
+    if (application.status === 'approved') {
+      return 'completed'
+    }
+    if (application.status === 'rejected') {
+      return 'failed'
+    }
+    return 'pending'
+  }, [])
+
+  const deriveSteps = useCallback((application: KycApplication | null) => {
+    return DEFAULT_KYC_STEPS.map(step => {
+      if (step.id === 2) {
+        const status = statusFromApplication(application, Boolean(application?.personal_info_submitted_at))
+        return { ...step, status }
+      }
+
+      if (step.id === 3) {
+        const status = statusFromApplication(application, Boolean(application?.document_submitted_at))
+        return { ...step, status }
+      }
+
+      if (step.id === 4) {
+        const hasProgress = application && application.status !== 'draft'
+        const status = statusFromApplication(application, Boolean(hasProgress))
+        return { ...step, status: hasProgress ? status : 'required' }
+      }
+
+      return { ...step }
+    })
+  }, [statusFromApplication])
+
+  useEffect(() => {
+    setKycSteps(deriveSteps(latestApplication))
+  }, [latestApplication, deriveSteps])
+
+  useEffect(() => {
+    if (latestApplication?.personal_info) {
+      const info = latestApplication.personal_info
+      setPersonalInfo({
+        firstName: info.first_name || info.firstName || '',
+        lastName: info.last_name || info.lastName || '',
+        dateOfBirth: info.date_of_birth || info.dateOfBirth || '',
+        nationality: info.nationality || '',
+        address: info.address || ''
+      })
+    }
+  }, [latestApplication])
+
+  useEffect(() => {
+    if (latestApplication?.document_info) {
+      const docs = latestApplication.document_info
+      setUploadedFiles({
+        governmentId: docs?.government_id
+          ? { ...docs.government_id, source: docs.government_id.source || 'server' }
+          : null,
+        proofOfAddress: docs?.proof_of_address
+          ? { ...docs.proof_of_address, source: docs.proof_of_address.source || 'server' }
+          : null,
+      })
+    }
+  }, [latestApplication])
+
+  const getToken = () => (typeof window === 'undefined' ? null : localStorage.getItem('authToken'))
+
+  const fetchKycStatus = useCallback(async () => {
+    const token = getToken()
+    if (!token) {
+      setFetchError('Please log in to view your KYC status.')
+      setLoadingStatus(false)
+      return
+    }
+
+    try {
+      setFetchError('')
+      const response = await fetch(`${apiBase}/api/kyc/`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Token ${token}`
+        },
+        credentials: 'include'
+      })
+
+      if (!response.ok) {
+        throw new Error('Unable to fetch KYC status')
+      }
+
+      const payload = await response.json()
+      const latest = Array.isArray(payload) ? payload[0] : payload
+      setLatestApplication(latest ?? null)
+    } catch (error) {
+      console.error('KYC fetch error:', error)
+      setFetchError('Unable to load your KYC status. Please refresh and try again.')
+    } finally {
+      setLoadingStatus(false)
+    }
+  }, [apiBase])
+
+  useEffect(() => {
+    fetchKycStatus()
+  }, [fetchKycStatus])
+  const [messageTone, setMessageTone] = useState<'success' | 'error'>('success')
 
   const handleFileUpload = (type: 'governmentId' | 'proofOfAddress') => (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -70,7 +222,31 @@ export default function KYCPage() {
         alert('File size must be less than 5MB')
         return
       }
-      setUploadedFiles(prev => ({ ...prev, [type]: file }))
+      setUploadedFiles(prev => ({
+        ...prev,
+        [type]: {
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          source: 'local'
+        }
+      }))
+    }
+  }
+
+  const updateStepStatus = (stepId: number, status: KYCStep['status']) => {
+    setKycSteps(prev => prev.map(step => (step.id === stepId ? { ...step, status } : step)))
+  }
+
+  const extractErrorMessage = async (response: Response) => {
+    try {
+      const data = await response.json()
+      if (typeof data === 'string') {
+        return data
+      }
+      return data.detail || data.error || 'Something went wrong. Please try again.'
+    } catch (error) {
+      return 'Something went wrong. Please try again.'
     }
   }
 
@@ -79,13 +255,53 @@ export default function KYCPage() {
       alert('Please fill in all required fields')
       return
     }
+
+    const token = getToken()
+    if (!token) {
+      alert('Please log in again to continue.')
+      return
+    }
+
     setIsSubmitting(true)
-    // Simulate API call
-    setTimeout(() => {
-      setSubmitMessage('Personal information saved successfully!')
-      setIsSubmitting(false)
+    setMessageTone('success')
+    setSubmitMessage('')
+
+    try {
+      const response = await fetch(`${apiBase}/api/kyc/personal-info/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Token ${token}`
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          first_name: personalInfo.firstName,
+          last_name: personalInfo.lastName,
+          date_of_birth: personalInfo.dateOfBirth,
+          nationality: personalInfo.nationality,
+          address: personalInfo.address
+        })
+      })
+
+      if (!response.ok) {
+        const detail = await extractErrorMessage(response)
+        setMessageTone('error')
+        setSubmitMessage(detail)
+        return
+      }
+
+      const data = await response.json()
+      setLatestApplication(data)
+      setMessageTone('success')
+      setSubmitMessage('Personal information submitted! Your KYC is pending review.')
       setTimeout(() => setSubmitMessage(''), 3000)
-    }, 1000)
+    } catch (error) {
+      console.error('KYC personal info error:', error)
+      setMessageTone('error')
+      setSubmitMessage('Unable to submit your information. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleDocumentSubmit = async () => {
@@ -93,13 +309,49 @@ export default function KYCPage() {
       alert('Please upload both required documents')
       return
     }
+    const token = getToken()
+    if (!token) {
+      alert('Please log in again to continue.')
+      return
+    }
+
     setIsSubmitting(true)
-    // Simulate API call
-    setTimeout(() => {
-      setSubmitMessage('Documents uploaded successfully! Your KYC application is under review.')
-      setIsSubmitting(false)
+    setMessageTone('success')
+    setSubmitMessage('')
+
+    try {
+      const response = await fetch(`${apiBase}/api/kyc/documents/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Token ${token}`
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          government_id: uploadedFiles.governmentId,
+          proof_of_address: uploadedFiles.proofOfAddress
+        })
+      })
+
+      if (!response.ok) {
+        const detail = await extractErrorMessage(response)
+        setMessageTone('error')
+        setSubmitMessage(detail)
+        return
+      }
+
+      const data = await response.json()
+      setLatestApplication(data)
+      setMessageTone('success')
+      setSubmitMessage('Documents uploaded successfully! Your KYC is under review.')
       setTimeout(() => setSubmitMessage(''), 3000)
-    }, 2000)
+    } catch (error) {
+      console.error('KYC document upload error:', error)
+      setMessageTone('error')
+      setSubmitMessage('Unable to upload document metadata. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const getStatusColor = (status: string) => {
@@ -165,8 +417,10 @@ export default function KYCPage() {
         return (
           <div className="space-y-6">
             {submitMessage && (
-              <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
-                <p className="text-sm text-green-800">{submitMessage}</p>
+              <div className={`p-4 border rounded-xl ${messageTone === 'error' ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'}`}>
+                <p className={`text-sm ${messageTone === 'error' ? 'text-red-800' : 'text-green-800'}`}>
+                  {submitMessage}
+                </p>
               </div>
             )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -259,8 +513,10 @@ export default function KYCPage() {
         return (
           <div className="space-y-6">
             {submitMessage && (
-              <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
-                <p className="text-sm text-green-800">{submitMessage}</p>
+              <div className={`p-4 border rounded-xl ${messageTone === 'error' ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'}`}>
+                <p className={`text-sm ${messageTone === 'error' ? 'text-red-800' : 'text-green-800'}`}>
+                  {submitMessage}
+                </p>
               </div>
             )}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -284,7 +540,9 @@ export default function KYCPage() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <p className="text-sm text-green-600 font-medium mb-2">{uploadedFiles.governmentId.name}</p>
-                        <p className="text-xs text-green-500">File uploaded successfully</p>
+                        <p className="text-xs text-green-500">
+                          {uploadedFiles.governmentId.source === 'server' ? 'File on record' : 'Ready to submit'}
+                        </p>
                       </>
                     ) : (
                       <>
@@ -319,7 +577,9 @@ export default function KYCPage() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <p className="text-sm text-green-600 font-medium mb-2">{uploadedFiles.proofOfAddress.name}</p>
-                        <p className="text-xs text-green-500">File uploaded successfully</p>
+                        <p className="text-xs text-green-500">
+                          {uploadedFiles.proofOfAddress.source === 'server' ? 'File on record' : 'Ready to submit'}
+                        </p>
                       </>
                     ) : (
                       <>
@@ -437,7 +697,29 @@ export default function KYCPage() {
             style={{ width: `${progress}%` }}
           ></div>
         </div>
+
+        {latestApplication && (
+          <div className="mt-4 flex items-center justify-between text-sm">
+            <span className="uppercase tracking-wide text-white/80">Current Status</span>
+            <span className="px-3 py-1 rounded-full bg-white/20 text-white font-semibold">
+              {statusLabelMap[latestApplication.status]}
+            </span>
+          </div>
+        )}
       </div>
+
+      {loadingStatus && (
+        <div className="bg-white rounded-2xl shadow-lg p-4 flex items-center space-x-3">
+          <div className="w-4 h-4 border-2 border-[#2563eb] border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-sm text-gray-600">Refreshing your latest KYC status…</p>
+        </div>
+      )}
+
+      {fetchError && (
+        <div className="bg-red-50 border border-red-200 text-red-700 rounded-2xl p-4">
+          {fetchError}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Steps Sidebar */}
@@ -486,6 +768,37 @@ export default function KYCPage() {
                 {kycSteps.find(s => s.id === selectedStep)?.description}
               </p>
             </div>
+
+            {latestApplication && (
+              <div className="mb-6 rounded-xl border border-gray-200 bg-gray-50 p-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm text-gray-600">Application status</p>
+                    <p className="text-lg font-semibold text-gray-900">
+                      {statusLabelMap[latestApplication.status]}
+                    </p>
+                  </div>
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${detailStatusClass[latestApplication.status]}`}>
+                    {statusLabelMap[latestApplication.status]}
+                  </span>
+                </div>
+                {latestApplication.last_submitted_at && (
+                  <p className="mt-3 text-sm text-gray-600">
+                    Last submitted: {new Date(latestApplication.last_submitted_at).toLocaleString()}
+                  </p>
+                )}
+                {latestApplication.reviewer_notes && (
+                  <p className="mt-3 text-sm text-gray-700">
+                    <span className="font-semibold">Reviewer notes:</span> {latestApplication.reviewer_notes}
+                  </p>
+                )}
+                {latestApplication.status === 'rejected' && latestApplication.rejection_reason && (
+                  <p className="mt-2 text-sm text-red-700">
+                    <span className="font-semibold">Action required:</span> {latestApplication.rejection_reason}
+                  </p>
+                )}
+              </div>
+            )}
             
             {renderStepContent()}
           </div>

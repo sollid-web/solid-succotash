@@ -318,3 +318,58 @@ def notify_card_rejected(user, card, reason=""):
         entity_type="virtual_card",
         entity_id=card.id,
     )
+
+
+def notify_kyc_submitted(user, application, stage_label="application"):
+    """Notify user that their KYC submission is pending review."""
+    message = (
+        f"Your KYC {stage_label} has been received and is pending manual review. "
+        "Our compliance team will update you once verification is complete."
+    )
+
+    return create_user_notification(
+        user=user,
+        notification_type="kyc_submitted",
+        title="KYC Submitted",
+        message=message,
+        priority="medium",
+        action_url="/dashboard/kyc",
+        entity_type="kyc",
+        entity_id=application.id,
+    )
+
+
+def notify_kyc_approved(user, application, notes=""):
+    """Notify user that their KYC was approved."""
+    message = "Your KYC verification has been approved. You now have full account access."
+    if notes:
+        message += f"\n\nNotes: {notes}"
+
+    return create_user_notification(
+        user=user,
+        notification_type="kyc_approved",
+        title="KYC Approved",
+        message=message,
+        priority="high",
+        action_url="/dashboard/",
+        entity_type="kyc",
+        entity_id=application.id,
+    )
+
+
+def notify_kyc_rejected(user, application, reason=""):
+    """Notify user that their KYC was rejected."""
+    message = "Your KYC verification was rejected. Please review the notes and resubmit."
+    if reason:
+        message += f"\n\nReason: {reason}"
+
+    return create_user_notification(
+        user=user,
+        notification_type="kyc_rejected",
+        title="KYC Rejected",
+        message=message,
+        priority="high",
+        action_url="/dashboard/kyc",
+        entity_type="kyc",
+        entity_id=application.id,
+    )

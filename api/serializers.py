@@ -6,7 +6,7 @@ from rest_framework import serializers
 from core.models import Agreement, UserAgreementAcceptance
 from investments.models import InvestmentPlan, UserInvestment
 from transactions.models import CryptocurrencyWallet, Transaction
-from users.models import Profile, UserNotification, UserWallet
+from users.models import KycApplication, Profile, UserNotification, UserWallet
 
 
 class AgreementSerializer(serializers.ModelSerializer):
@@ -151,6 +151,56 @@ class UserWalletSerializer(serializers.ModelSerializer):
             or Decimal("0.00")
         )
         return total
+
+
+class KycApplicationSerializer(serializers.ModelSerializer):
+    user_email = serializers.EmailField(source="user.email", read_only=True)
+    reviewed_by_email = serializers.EmailField(source="reviewed_by.email", read_only=True)
+
+    class Meta:
+        model = KycApplication
+        fields = [
+            "id",
+            "user_email",
+            "status",
+            "personal_info",
+            "document_info",
+            "personal_info_submitted_at",
+            "document_submitted_at",
+            "last_submitted_at",
+            "reviewed_by_email",
+            "reviewed_at",
+            "reviewer_notes",
+            "rejection_reason",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = fields
+
+
+class AdminKycApplicationSerializer(KycApplicationSerializer):
+    class Meta(KycApplicationSerializer.Meta):
+        fields = KycApplicationSerializer.Meta.fields
+
+
+class KycPersonalInfoSerializer(serializers.Serializer):
+    first_name = serializers.CharField(max_length=150)
+    last_name = serializers.CharField(max_length=150)
+    date_of_birth = serializers.DateField()
+    nationality = serializers.CharField(max_length=60)
+    address = serializers.CharField()
+
+
+class KycDocumentSerializer(serializers.Serializer):
+    government_id = serializers.JSONField()
+    proof_of_address = serializers.JSONField()
+
+    def validate(self, attrs):
+        if not attrs.get("government_id") or not attrs.get("proof_of_address"):
+            raise serializers.ValidationError(
+                "Both government ID and proof of address metadata are required."
+            )
+        return attrs
 
     def get_total_withdrawals(self, obj):
         from transactions.models import Transaction

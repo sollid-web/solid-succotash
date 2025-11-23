@@ -255,6 +255,7 @@ class AdminNotification(models.Model):
         ("new_investment", "New Investment Request"),
         ("new_card_request", "New Virtual Card Request"),
         ("user_registration", "New User Registration"),
+        ("new_kyc", "New KYC Submission"),
     ]
 
     PRIORITY_CHOICES = [
@@ -331,6 +332,7 @@ class AdminAuditLog(models.Model):
         ("investment", "Investment"),
         ("plan", "Plan"),
         ("user", "User"),
+        ("kyc", "KYC Application"),
     ]
 
     ACTION_CHOICES = [

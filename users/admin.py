@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.http import HttpResponse
 
-from .models import Profile, User, UserNotification, UserWallet
+from .models import KycApplication, Profile, User, UserNotification, UserWallet
 
 
 class ProfileInline(admin.StackedInline):
@@ -181,3 +181,63 @@ class UserNotificationAdmin(admin.ModelAdmin):
 # Re-register UserAdmin
 # admin.site.unregister(User)  # Not needed with custom User model
 admin.site.register(User, UserAdmin)
+
+
+@admin.register(KycApplication)
+class KycApplicationAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",
+        "status",
+        "personal_info_submitted_at",
+        "document_submitted_at",
+        "reviewed_by",
+        "reviewed_at",
+        "updated_at",
+    )
+    list_filter = ("status", "created_at", "reviewed_at")
+    search_fields = ("user__email", "user__first_name", "user__last_name")
+    readonly_fields = (
+        "id",
+        "created_at",
+        "updated_at",
+        "personal_info_submitted_at",
+        "document_submitted_at",
+        "last_submitted_at",
+    )
+    fieldsets = (
+        (
+            "Applicant",
+            {
+                "fields": (
+                    "id",
+                    "user",
+                    "status",
+                    "personal_info",
+                    "document_info",
+                )
+            },
+        ),
+        (
+            "Submission Timing",
+            {
+                "fields": (
+                    "personal_info_submitted_at",
+                    "document_submitted_at",
+                    "last_submitted_at",
+                )
+            },
+        ),
+        (
+            "Review",
+            {
+                "fields": (
+                    "reviewed_by",
+                    "reviewed_at",
+                    "reviewer_notes",
+                    "rejection_reason",
+                    "created_at",
+                    "updated_at",
+                )
+            },
+        ),
+    )

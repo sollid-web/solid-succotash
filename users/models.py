@@ -104,6 +104,9 @@ class UserNotification(models.Model):
         ("roi_payout", "ROI Payout"),
         ("system_alert", "System Alert"),
         ("welcome", "Welcome Message"),
+        ("kyc_submitted", "KYC Submitted"),
+        ("kyc_approved", "KYC Approved"),
+        ("kyc_rejected", "KYC Rejected"),
     ]
 
     PRIORITY_CHOICES = [
@@ -157,4 +160,49 @@ class UserNotification(models.Model):
             models.Index(fields=["created_at"]),
             models.Index(fields=["is_read"]),
             models.Index(fields=["priority"]),
+        ]
+
+
+class KycApplication(models.Model):
+    STATUS_CHOICES = [
+        ("draft", "Draft"),
+        ("pending", "Pending Review"),
+        ("approved", "Approved"),
+        ("rejected", "Rejected"),
+    ]
+
+    id: models.UUIDField = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user: models.ForeignKey = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="kyc_applications",
+    )
+    status: models.CharField = models.CharField(max_length=20, choices=STATUS_CHOICES, default="draft")
+    personal_info: models.JSONField = models.JSONField(default=dict, blank=True)
+    document_info: models.JSONField = models.JSONField(default=dict, blank=True)
+    personal_info_submitted_at: models.DateTimeField = models.DateTimeField(null=True, blank=True)
+    document_submitted_at: models.DateTimeField = models.DateTimeField(null=True, blank=True)
+    last_submitted_at: models.DateTimeField = models.DateTimeField(null=True, blank=True)
+    reviewed_by: models.ForeignKey = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="reviewed_kyc_applications",
+    )
+    reviewed_at: models.DateTimeField = models.DateTimeField(null=True, blank=True)
+    reviewer_notes: models.TextField = models.TextField(blank=True)
+    rejection_reason: models.TextField = models.TextField(blank=True)
+    created_at: models.DateTimeField = models.DateTimeField(default=timezone.now)
+    updated_at: models.DateTimeField = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"KYC {self.user.email} - {self.status}"
+
+    class Meta:
+        db_table = "users_kyc_application"
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["status"]),
+            models.Index(fields=["user", "status"]),
         ]

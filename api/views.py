@@ -3,7 +3,7 @@ import hashlib
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.shortcuts import get_object_or_404
-from rest_framework import permissions, status, viewsets
+from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.exceptions import ValidationError
@@ -23,19 +23,29 @@ from transactions.services import (
     create_transaction,
     reject_transaction,
 )
-from users.models import Profile, UserNotification, UserWallet
+from users.models import KycApplication, Profile, UserNotification, UserWallet
 from users.notification_service import mark_all_read as service_mark_all_read
 from users.notification_service import (
     mark_notification_read as service_mark_notification_read,
+)
+from users.services import (
+    approve_kyc_application,
+    reject_kyc_application,
+    submit_document_info,
+    submit_personal_info,
 )
 
 from .serializers import (
     AdminTransactionSerializer,
     AdminUserInvestmentSerializer,
+    AdminKycApplicationSerializer,
     AgreementSerializer,
     CryptocurrencyWalletSerializer,
     EmailPreferencesSerializer,
     InvestmentPlanSerializer,
+    KycApplicationSerializer,
+    KycDocumentSerializer,
+    KycPersonalInfoSerializer,
     TransactionSerializer,
     UserInvestmentSerializer,
     UserNotificationSerializer,
@@ -507,3 +517,64 @@ class CryptoWalletViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CryptocurrencyWallet.objects.filter(is_active=True).order_by("currency")
     serializer_class = CryptocurrencyWalletSerializer
     permission_classes = [permissions.AllowAny]
+
+
+class KycApplicationViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    """User-facing endpoints for managing their KYC application."""
+
+    serializer_class = KycApplicationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return KycApplication.objects.filter(user=self.request.user).order_by("-created_at")
+
+    @action(detail=False, methods=["post"], url_path="personal-info")
+    def submit_personal_info(self, request):
+        serializer = KycPersonalInfoSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        application = submit_personal_info(request.user, serializer.validated_data)
+        output = self.get_serializer(application)
+        return Response(output.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["post"], url_path="documents")
+    def submit_documents(self, request):
+        serializer = KycDocumentSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        application = submit_document_info(request.user, serializer.validated_data)
+        output = self.get_serializer(application)
+        return Response(output.data, status=status.HTTP_200_OK)
+
+
+class AdminKycApplicationViewSet(viewsets.ModelViewSet):
+    """Admin endpoints for reviewing and updating KYC applications."""
+
+    queryset = KycApplication.objects.select_related("user", "reviewed_by").order_by("-created_at")
+    serializer_class = AdminKycApplicationSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop("partial", False)
+        instance = self.get_object()
+        target_status = request.data.get("status")
+        notes = request.data.get("notes", "")
+        reason = request.data.get("reason", "")
+
+        if target_status and target_status != instance.status:
+            try:
+                if target_status == "approved":
+                    approve_kyc_application(instance, request.user, notes)
+                elif target_status == "rejected":
+                    reject_kyc_application(instance, request.user, reason or notes)
+                else:
+                    raise ValidationError("Unsupported status change requested.")
+            except DjangoValidationError as exc:
+                raise ValidationError(exc.messages)
+
+            instance.refresh_from_db()
+            serializer = self.get_serializer(instance)
+            return Response(serializer.data)
+
+        kwargs["partial"] = partial
+        return super().update(request, *args, **kwargs)

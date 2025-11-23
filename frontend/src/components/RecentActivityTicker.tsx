@@ -26,16 +26,17 @@ interface Props {
 }
 
 const COUNTRIES = [
-  { code: "NO", name: "Norway", weight: 0.25, names: ["Matthew", "Olav", "Soren", "Ingrid", "Lars", "Kari", "Erik", "Astrid", "Magnus", "Freya", "Bjorn", "Sigrid"] },
-  { code: "US", name: "United States", weight: 0.25, names: ["Sonya", "James", "Alicia", "Michael", "Laura", "Kevin", "Jessica", "David", "Sarah", "Robert", "Emily", "Christopher"] },
-  { code: "GB", name: "United Kingdom", weight: 0.25, names: ["Kenneth", "Harry", "Amelia", "Olivia", "George", "Chloe", "William", "Charlotte", "Thomas", "Sophie", "James", "Isabella"] },
-  { code: "DE", name: "Germany", weight: 0.15, names: ["Lukas", "Mia", "Leon", "Hannah", "Felix", "Emma", "Maximilian", "Sophia", "Alexander", "Lena", "Noah", "Lea"] },
-  { code: "CA", name: "Canada", weight: 0.1, names: ["Jacob", "Emma", "Ethan", "Olivia", "Alexander", "Ava", "William", "Isabella", "James", "Sophia", "Benjamin", "Charlotte"] }
+  { code: "NO", name: "Norway", weight: 0.2, names: ["Soren", "Ingrid", "Kari", "Erik", "Astrid", "Bjorn", "Sigrid", "Rolf", "Helga", "Per", "Liv", "Torsten"] },
+  { code: "US", name: "United States", weight: 0.25, names: ["Brandon", "Jennifer", "Marcus", "Rachel", "Tyler", "Amanda", "Joshua", "Michelle", "Daniel", "Ashley", "Nathan", "Stephanie"] },
+  { code: "GB", name: "United Kingdom", weight: 0.2, names: ["Charlie", "Sophie", "Marcus", "Grace", "Oliver", "Lucy", "Benjamin", "Eleanor", "Henry", "Violet", "Jack", "Rose"] },
+  { code: "DE", name: "Germany", weight: 0.15, names: ["Henrik", "Sophia", "Tobias", "Clara", "Jonas", "Frieda", "Karl", "Greta", "Franz", "Hilda", "Otto", "Inge"] },
+  { code: "FR", name: "France", weight: 0.1, names: ["Antoine", "Margot", "Damien", "Amélie", "Laurent", "Isabelle", "Nicolas", "Céline", "Julien", "Nathalie", "François", "Véronique"] },
+  { code: "SG", name: "Singapore", weight: 0.1, names: ["Wei", "Ming", "Ravi", "Priya", "Ahmad", "Nur", "Arjun", "Aisha", "Kai", "Li", "Anand", "Fatima"] }
 ];
 
 const DEFAULT_PLANS = ["Pioneer", "Vanguard", "Horizon", "Summit"];
-const AMOUNTS = [150, 200, 250, 300, 350, 400, 450, 500, 600, 750, 850, 1000, 1200, 1500, 1800, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000, 7000, 7500, 8000, 9000, 10000, 12000, 15000, 18000, 20000, 25000];
-const TIME_AGO_OPTIONS = ["just now", "a few seconds ago", "30 seconds ago", "1 min ago", "2 mins ago", "3 mins ago", "5 mins ago", "a moment ago"];
+const AMOUNTS = [175, 225, 275, 325, 375, 425, 475, 525, 625, 775, 875, 1050, 1250, 1550, 1850, 2100, 2600, 3100, 3600, 4100, 4600, 5100, 5600, 6100, 7100, 7600, 8100, 9100, 10100, 12500, 15500, 18500, 21000, 26000];
+const TIME_AGO_OPTIONS = ["just now", "moments ago", "a few seconds ago", "1 min ago", "2 mins ago", "3 mins ago", "4 mins ago", "5 mins ago", "right now", "seconds ago"];
 let GLOBAL_ID = 1;
 
 function pickWeightedCountry() {

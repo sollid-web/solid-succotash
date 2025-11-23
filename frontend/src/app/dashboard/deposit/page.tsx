@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { getApiBaseUrl } from '@/lib/config'
 import Link from 'next/link'
 
 interface CompanyWallet {
@@ -12,14 +13,7 @@ interface CompanyWallet {
 }
 
 export default function DepositPage() {
-  const apiBase = useMemo(() => {
-    // Production API URL for wolvcapital.com
-    if (typeof window !== 'undefined' && window.location.hostname === 'wolvcapital.com') {
-      return 'https://api.wolvcapital.com'
-    }
-    // Development or other environments
-    return (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
-  }, [])
+  const apiBase = useMemo(() => getApiBaseUrl(), [])
   const [amount, setAmount] = useState('')
   const [method, setMethod] = useState('BTC')
   const [reference, setReference] = useState('')
@@ -134,19 +128,7 @@ export default function DepositPage() {
         {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm">{error}</div>}
         {message && <div className="p-3 bg-emerald-50 text-emerald-700 rounded-xl text-sm">{message}</div>}
         
-        {/* Debug info (remove in production) */}
-        {process.env.NODE_ENV === 'development' && (
-          <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-xl text-xs">
-            <p><strong>Debug:</strong></p>
-            <p>API Base: {apiBase}</p>
-            <p>Method: {method}</p>
-            <p>Company Wallets: {companyWallets.length}</p>
-            <p>Show Wallets: {showWallets ? 'Yes' : 'No'}</p>
-            {companyWallets.length > 0 && (
-              <p>Currencies: {companyWallets.map(w => w.currency).join(', ')}</p>
-            )}
-          </div>
-        )}
+        {/* Debug block removed for production build (was conditional on NODE_ENV) */}
 
         <div className="grid md:grid-cols-2 gap-6">
           <div>

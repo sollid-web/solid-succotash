@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useMemo } from 'react'
+import { getApiBaseUrl } from '@/lib/config'
 import Link from 'next/link'
 
 interface Transaction {
@@ -18,7 +19,7 @@ interface Transaction {
 }
 
 export default function TransactionsPage() {
-  const apiBase = useMemo(() => (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, ''), [])
+  const apiBase = useMemo(() => getApiBaseUrl(), [])
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')

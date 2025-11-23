@@ -14,9 +14,8 @@ export default function HomePage() {
   const { t } = useTranslation()
   return (
     <div className="min-h-screen bg-white">
-
-  {/* Hero Section with Background Image and Text Overlay */}
-  <section className="relative min-h-screen flex items-center">
+      {/* Hero Section with Background Image and Text Overlay */}
+      <section className="relative min-h-screen flex items-center">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           {/* Mobile and Desktop - Using same hero image */}
@@ -269,6 +268,7 @@ export default function HomePage() {
             <Link href="/accounts/signup" className="bg-gradient-to-r from-[#fde047] to-[#facc15] text-[#0b2f6b] px-6 sm:px-10 py-3 sm:py-4 rounded-full text-base sm:text-lg font-bold hover:shadow-2xl transition-all duration-300 hover:scale-105">Open Account</Link>
           </div>
         </div>
+      </section>
       {/* Trust & Compliance Section */}
       <TrustSection />
 

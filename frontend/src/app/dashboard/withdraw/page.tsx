@@ -1,10 +1,11 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { getApiBaseUrl } from '@/lib/config'
 import Link from 'next/link'
 
 export default function WithdrawPage() {
-  const apiBase = useMemo(() => (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, ''), [])
+  const apiBase = useMemo(() => getApiBaseUrl(), [])
   const [amount, setAmount] = useState('')
   const [reference, setReference] = useState('')
   const [loading, setLoading] = useState(false)

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+import { getApiBaseUrl } from '@/lib/config';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import RecentActivityTicker from '@/components/RecentActivityTicker';
@@ -22,9 +23,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         }
 
         // Verify token with backend
-        const apiBase = typeof window !== 'undefined' && window.location.hostname === 'wolvcapital.com'
-          ? 'https://api.wolvcapital.com'
-          : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '');
+        const apiBase = getApiBaseUrl();
         
         const response = await fetch(`${apiBase}/api/auth/me/`, {
           headers: {
@@ -58,9 +57,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const handleLogout = async () => {
     try {
       const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-      const apiBase = typeof window !== 'undefined' && window.location.hostname === 'wolvcapital.com'
-        ? 'https://api.wolvcapital.com'
-        : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '');
+      const apiBase = getApiBaseUrl();
       
       // API logout
       await fetch(`${apiBase}/api/auth/logout/`, {

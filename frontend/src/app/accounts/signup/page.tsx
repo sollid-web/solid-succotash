@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
+import { getApiBaseUrl } from '@/lib/config'
 import Link from 'next/link'
 
 export default function SignupPage() {
@@ -11,9 +12,7 @@ export default function SignupPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // Use correct API URL for production
-    const apiBase = typeof window !== 'undefined' && window.location.hostname === 'wolvcapital.com'
-      ? 'https://api.wolvcapital.com'
-      : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')
+    const apiBase = getApiBaseUrl()
     window.location.href = `${apiBase}/accounts/signup/?email=${encodeURIComponent(email)}`
   }
 

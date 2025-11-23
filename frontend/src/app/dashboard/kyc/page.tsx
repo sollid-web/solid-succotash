@@ -1,7 +1,7 @@
-'use client'
-
+  'use client'  
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import { getApiBaseUrl } from '@/lib/config'
 
 interface KYCStep {
   id: number
@@ -9,15 +9,12 @@ interface KYCStep {
   description: string
   status: 'completed' | 'pending' | 'required' | 'failed'
   required: boolean
-}
-
-interface DocumentMetadata {
+}interface DocumentMetadata {
   name: string
   type?: string
   size?: number
   source?: 'local' | 'server'
 }
-
 interface KycApplication {
   id: string
   status: 'draft' | 'pending' | 'approved' | 'rejected'
@@ -37,7 +34,6 @@ interface KycApplication {
   created_at: string
   updated_at: string
 }
-
 const DEFAULT_KYC_STEPS: KYCStep[] = [
   {
     id: 1,
@@ -74,7 +70,7 @@ export default function KYCPage() {
   const [latestApplication, setLatestApplication] = useState<KycApplication | null>(null)
   const [loadingStatus, setLoadingStatus] = useState(true)
   const [fetchError, setFetchError] = useState('')
-  const apiBase = useMemo(() => (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, ''), [])
+  const apiBase = useMemo(() => getApiBaseUrl(), [])
 
   const [selectedStep, setSelectedStep] = useState(2)
   const [personalInfo, setPersonalInfo] = useState({
@@ -530,6 +526,7 @@ export default function KYCPage() {
                     accept=".jpg,.jpeg,.png,.pdf"
                     onChange={handleFileUpload('governmentId')}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    aria-label="Upload government-issued identification"
                   />
                   <div className={`border-2 border-dashed rounded-lg p-6 text-center transition cursor-pointer ${
                     uploadedFiles.governmentId ? 'border-green-300 bg-green-50' : 'border-gray-300 hover:border-[#2563eb]'
@@ -567,6 +564,7 @@ export default function KYCPage() {
                     accept=".jpg,.jpeg,.png,.pdf"
                     onChange={handleFileUpload('proofOfAddress')}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    aria-label="Upload proof of address document"
                   />
                   <div className={`border-2 border-dashed rounded-lg p-6 text-center transition cursor-pointer ${
                     uploadedFiles.proofOfAddress ? 'border-green-300 bg-green-50' : 'border-gray-300 hover:border-[#2563eb]'
@@ -691,12 +689,11 @@ export default function KYCPage() {
         </div>
         
         {/* Progress Bar */}
-        <div className="w-full bg-white/20 rounded-full h-3">
-          <div 
-            className="bg-white h-3 rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
+        <progress
+          value={Math.max(0, Math.min(100, progress))}
+          max={100}
+          className="kyc-progress"
+        />
 
         {latestApplication && (
           <div className="mt-4 flex items-center justify-between text-sm">
@@ -840,6 +837,30 @@ export default function KYCPage() {
           </div>
         </div>
       </div>
+      <style jsx>{`
+        .kyc-progress {
+          width: 100%;
+          height: 0.75rem;
+          border-radius: 9999px;
+          background-color: rgba(255, 255, 255, 0.2);
+          overflow: hidden;
+          appearance: none;
+        }
+        .kyc-progress::-webkit-progress-bar {
+          background-color: rgba(255, 255, 255, 0.2);
+          border-radius: 9999px;
+        }
+        .kyc-progress::-webkit-progress-value {
+          background-color: #ffffff;
+          border-radius: 9999px;
+          transition: width 0.3s ease;
+        }
+        .kyc-progress::-moz-progress-bar {
+          background-color: #ffffff;
+          border-radius: 9999px;
+          transition: width 0.3s ease;
+        }
+      `}</style>
     </div>
   )
 }

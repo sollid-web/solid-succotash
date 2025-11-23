@@ -1,15 +1,12 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { Inter } from 'next/font/google'
 import TawkToChat from '@/components/TawkToChat'
 import { TranslationProvider } from '@/i18n/TranslationProvider'
 import NavBar from '@/components/NavBar'
 import RecentActivityTicker from '@/components/RecentActivityTicker'
 import { headers } from 'next/headers'
 
-const inter = Inter({ subsets: ['latin'], weight: [
-  '300', '400', '500', '600', '700', '800', '900'
-] });
+// Removed Google font import for offline/build stability; fallback to Tailwind font-sans.
 
 export const metadata: Metadata = {
   title: 'WolvCapital - Professional Investment Platform',
@@ -59,7 +56,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} font-brand antialiased bg-gray-50 text-gray-900`}>
+      <body className="font-sans font-brand antialiased bg-gray-50 text-gray-900">
         <TranslationProvider>
           {children}
         </TranslationProvider>

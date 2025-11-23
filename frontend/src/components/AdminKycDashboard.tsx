@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { getApiBaseUrl } from '@/lib/config'
 
 interface KycApplication {
   id: string
@@ -29,7 +30,7 @@ export default function AdminKycDashboard() {
     const fetchApplications = async () => {
       try {
         const token = localStorage.getItem('authToken')
-        const apiBase = (typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_API_URL : undefined) || 'http://localhost:8000'
+        const apiBase = getApiBaseUrl()
 
         const response = await fetch(`${apiBase}/api/admin/kyc/`, {
           headers: {
@@ -63,7 +64,7 @@ export default function AdminKycDashboard() {
     setActionLoading(true)
     try {
       const token = localStorage.getItem('authToken')
-      const apiBase = (typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_API_URL : undefined) || 'http://localhost:8000'
+      const apiBase = getApiBaseUrl()
 
       const response = await fetch(`${apiBase}/api/admin/kyc/${appId}/`, {
         method: 'PATCH',
@@ -103,7 +104,7 @@ export default function AdminKycDashboard() {
     setActionLoading(true)
     try {
       const token = localStorage.getItem('authToken')
-      const apiBase = (typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_API_URL : undefined) || 'http://localhost:8000'
+      const apiBase = getApiBaseUrl()
 
       const response = await fetch(`${apiBase}/api/admin/kyc/${appId}/`, {
         method: 'PATCH',

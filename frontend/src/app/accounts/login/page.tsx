@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { getApiBaseUrl } from '@/lib/config'
 import Link from 'next/link'
 
 export default function LoginPage() {
@@ -11,15 +12,7 @@ export default function LoginPage() {
   const [signupSuccess, setSignupSuccess] = useState(false)
 
   // Compute API base once and normalize (no trailing slash)
-  const apiBase = useMemo(() => {
-    // Production API URL for wolvcapital.com
-    if (typeof window !== 'undefined' && window.location.hostname === 'wolvcapital.com') {
-      return 'https://api.wolvcapital.com'
-    }
-    // Development or other environments
-    const raw = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-    return raw.replace(/\/$/, '')
-  }, [])
+  const apiBase = useMemo(() => getApiBaseUrl(), [])
 
   // Check for signup success parameter and show success message
   useEffect(() => {
@@ -40,8 +33,9 @@ export default function LoginPage() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const isProdLike = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
-      if (isProdLike && !process.env.NEXT_PUBLIC_API_URL) {
-        setError('Configuration error: API URL is not set. Please set NEXT_PUBLIC_API_URL in Vercel and redeploy.')
+      // Basic sanity check: apiBase should not point to localhost in production-like environments
+      if (isProdLike && apiBase.includes('localhost')) {
+        setError('Configuration error: API base URL is still localhost. Set NEXT_PUBLIC_API_URL in environment and redeploy.')
       }
       // Optional lightweight health check
       fetch(`${apiBase}/healthz/`, { method: 'GET' }).catch(() => {

@@ -26,17 +26,6 @@ export default function FlipCard({
 }: FlipCardProps) {
   const [flipped, setFlipped] = useState<boolean>(initialFlipped);
   const aspectCSS = useMemo(() => `${aspectWidth} / ${aspectHeight}`, [aspectWidth, aspectHeight]);
-  const cssVars = useMemo(
-    () => ({
-      ['--max-width' as any]: `${maxWidth}px`,
-      ['--aspect' as any]: aspectCSS,
-      ['--duration' as any]: `${animationMs}ms`,
-      ['--perspective' as any]: `${perspective}px`,
-      ['--radius' as any]: `${borderRadius}px`,
-      ['--shadow' as any]: shadow,
-    }),
-    [maxWidth, aspectCSS, animationMs, perspective, borderRadius, shadow]
-  );
 
   const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -45,27 +34,33 @@ export default function FlipCard({
     }
   };
 
+  const ariaProps = flipped
+    ? { 'aria-pressed': 'true' as const }
+    : { 'aria-pressed': 'false' as const };
+  const ariaLabel = flipped
+    ? 'Click to flip card to front'
+    : 'Click to flip card to back';
+
   return (
     <div className={`w-full flex items-center justify-center ${className}`}> 
       <style jsx>{`
-        .flip-card { perspective: var(--perspective); max-width: var(--max-width); width: 100%; }
-        .flip-outer { position: relative; width: 100%; aspect-ratio: var(--aspect); }
-        .flip-inner { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform var(--duration) ease; cursor: pointer; }
+        .flip-card { perspective: ${perspective}px; max-width: ${maxWidth}px; width: 100%; }
+        .flip-outer { position: relative; width: 100%; aspect-ratio: ${aspectCSS}; }
+        .flip-inner { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform ${animationMs}ms ease; cursor: pointer; }
         .is-flipped { transform: rotateY(180deg); }
-        .flip-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+        .flip-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: ${borderRadius}px; overflow: hidden; box-shadow: ${shadow}; }
         .flip-back { transform: rotateY(180deg); }
       `}</style>
-
-      <div className="flip-card cursor-pointer" style={cssVars as React.CSSProperties}>
+      <div className="flip-card cursor-pointer">
         <div className="flip-outer">
           <div
             className={`flip-inner ${flipped ? 'is-flipped' : ''}`}
             role="button"
-            aria-pressed={flipped}
-            aria-label={flipped ? "Click to flip card to front" : "Click to flip card to back"}
+            aria-label={ariaLabel}
             tabIndex={0}
             onClick={() => setFlipped((f) => !f)}
             onKeyDown={onKeyDown}
+            {...ariaProps}
           >
             <div className="flip-face" role="img" aria-label="Front of virtual Visa card">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300">

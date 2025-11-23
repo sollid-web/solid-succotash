@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import FlipCard from '@/components/FlipCard'
 import AccountVerificationStatus from '@/components/AccountVerificationStatus'
+import { getApiBaseUrl } from '@/lib/config'
 
 interface UserData {
   id: number
@@ -66,6 +67,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [activated, setActivated] = useState(false)
+  const apiBase = useMemo(() => getApiBaseUrl(), [])
 
   // Minimum deposit for lowest plan (hardcoded, or fetch from API if needed)
   const MIN_DEPOSIT = 100.00;
@@ -80,7 +82,6 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
       const token = localStorage.getItem('authToken')
 
       try {
@@ -158,10 +159,9 @@ export default function DashboardPage() {
     }
 
     fetchUserData()
-  }, [])
+  }, [apiBase])
 
   const handleLogout = async () => {
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
     const token = localStorage.getItem('authToken')
 
     try {
@@ -337,14 +337,11 @@ export default function DashboardPage() {
                         <span className="text-sm font-medium text-gray-600">Progress</span>
                         <span className="text-sm text-gray-500">{daysElapsed}/{totalDays} days</span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-3">
-                        <div 
-                          className={`h-3 rounded-full transition-all duration-300 ${
-                            isCompleted ? 'bg-green-500' : 'bg-blue-500'
-                          }`}
-                          style={{ width: `${progressPercentage}%` }}
-                        ></div>
-                      </div>
+                      <progress
+                        value={Math.max(0, Math.min(100, progressPercentage))}
+                        max={100}
+                        className={`progress-bar ${isCompleted ? 'progress-bar--completed' : 'progress-bar--active'}`}
+                      />
                       <div className="flex justify-between mt-2 text-sm">
                         <span className="text-gray-500">
                           Started: {startDate ? startDate.toLocaleDateString() : 'N/A'}
@@ -644,6 +641,40 @@ export default function DashboardPage() {
           </div>
         </section>
       </main>
+      <style jsx>{`
+        .progress-bar {
+          width: 100%;
+          height: 0.75rem;
+          border-radius: 9999px;
+          background-color: #e5e7eb;
+          overflow: hidden;
+          appearance: none;
+        }
+        .progress-bar::-webkit-progress-bar {
+          background-color: #e5e7eb;
+          border-radius: 9999px;
+        }
+        .progress-bar::-webkit-progress-value {
+          border-radius: 9999px;
+          transition: width 0.3s ease;
+        }
+        .progress-bar--active::-webkit-progress-value {
+          background-color: #3b82f6;
+        }
+        .progress-bar--completed::-webkit-progress-value {
+          background-color: #22c55e;
+        }
+        .progress-bar::-moz-progress-bar {
+          border-radius: 9999px;
+          transition: width 0.3s ease;
+        }
+        .progress-bar--active::-moz-progress-bar {
+          background-color: #3b82f6;
+        }
+        .progress-bar--completed::-moz-progress-bar {
+          background-color: #22c55e;
+        }
+      `}</style>
     </div>
   )
 }

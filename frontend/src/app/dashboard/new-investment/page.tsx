@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { getApiBaseUrl } from '@/lib/config'
 import Link from 'next/link'
 
 interface Plan {
@@ -14,7 +15,7 @@ interface Plan {
 }
 
 export default function NewInvestmentPage() {
-  const apiBase = useMemo(() => (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, ''), [])
+  const apiBase = useMemo(() => getApiBaseUrl(), [])
   const [plans, setPlans] = useState<Plan[]>([])
   const [planId, setPlanId] = useState<number | ''>('' as any)
   const [amount, setAmount] = useState('')

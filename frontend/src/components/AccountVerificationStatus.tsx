@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { getApiBaseUrl } from '@/lib/config'
 
 interface VerificationStatus {
   email_verified: boolean
@@ -24,7 +25,7 @@ export default function AccountVerificationStatus() {
           return
         }
 
-        const apiBase = (typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_API_URL : undefined) || 'http://localhost:8000'
+        const apiBase = getApiBaseUrl()
         const response = await fetch(`${apiBase}/api/auth/me/`, {
           headers: {
             Authorization: `Token ${token}`
@@ -87,6 +88,7 @@ export default function AccountVerificationStatus() {
 
   const completedCount = verificationItems.filter(v => v.status || v.pending).length
   const completionPercentage = Math.round((completedCount / verificationItems.length) * 100)
+  const progressWidth = `${completionPercentage}%`
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-6">
@@ -103,10 +105,7 @@ export default function AccountVerificationStatus() {
 
       {/* Progress Bar */}
       <div className="w-full bg-gray-200 rounded-full h-3 mb-8">
-        <div
-          className="bg-gradient-to-r from-green-400 to-green-600 h-3 rounded-full transition-all duration-500"
-          style={{ width: `${completionPercentage}%` }}
-        />
+        <div className="bg-gradient-to-r from-green-400 to-green-600 h-3 rounded-full transition-all duration-500 verification-progress" />
       </div>
 
       {/* Verification Items */}
@@ -179,6 +178,10 @@ export default function AccountVerificationStatus() {
           <li>• Review your account activity regularly</li>
         </ul>
       </div>
+
+      <style jsx>{`
+        .verification-progress { width: ${progressWidth}; }
+      `}</style>
     </div>
   )
 }

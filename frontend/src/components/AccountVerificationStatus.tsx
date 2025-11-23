@@ -24,7 +24,7 @@ export default function AccountVerificationStatus() {
           return
         }
 
-        const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+        const apiBase = (typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_API_URL : undefined) || 'http://localhost:8000'
         const response = await fetch(`${apiBase}/api/auth/me/`, {
           headers: {
             Authorization: `Token ${token}`

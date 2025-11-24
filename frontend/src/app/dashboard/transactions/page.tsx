@@ -185,48 +185,6 @@ export default function TransactionsPage() {
           <p className="text-gray-600">View and manage all your deposits and withdrawals</p>
         </div>
 
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-gray-600 font-semibold text-sm">Total Deposits</h3>
-              <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
-                <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
-                </svg>
-              </div>
-            </div>
-            <p className="text-2xl font-bold text-emerald-600">${stats.totalDeposits.toFixed(2)}</p>
-            <p className="text-xs text-gray-500 mt-2">Approved deposits</p>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-gray-600 font-semibold text-sm">Total Withdrawals</h3>
-              <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
-                <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 13l-5 5m0 0l-5-5m5 5V6" />
-                </svg>
-              </div>
-            </div>
-            <p className="text-2xl font-bold text-orange-600">${stats.totalWithdrawals.toFixed(2)}</p>
-            <p className="text-xs text-gray-500 mt-2">Approved withdrawals</p>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-gray-600 font-semibold text-sm">Pending</h3>
-              <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-            </div>
-            <p className="text-2xl font-bold text-amber-600">{stats.pendingCount}</p>
-            <p className="text-xs text-gray-500 mt-2">Awaiting approval</p>
-          </div>
-        </div>
-
         {/* Filters and Search */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">

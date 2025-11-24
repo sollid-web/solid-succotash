@@ -249,27 +249,58 @@ export default function DashboardPage() {
         {/* Account Verification Status */}
         <AccountVerificationStatus />
 
-        {/* Wallet Summary Section */}
+        {/* Transaction Statistics Section */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-4">
-          <div className="bg-white rounded-2xl shadow p-6 flex flex-col items-start">
-            <span className="text-xs font-semibold text-gray-500 mb-1">Current Balance</span>
-            <span className="text-3xl font-bold text-[#2563eb]">${wallet ? parseFloat(wallet.balance || '0').toFixed(2) : '0.00'}</span>
-            <span className="text-xs text-gray-400 mt-2">Available funds</span>
+          <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-gray-600 font-semibold text-sm">Current Balance</h3>
+              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                </svg>
+              </div>
+            </div>
+            <p className="text-3xl font-bold text-blue-600">${wallet ? parseFloat(wallet.balance || '0').toFixed(2) : '0.00'}</p>
+            <p className="text-xs text-gray-500 mt-2">Available funds</p>
           </div>
-          <div className="bg-white rounded-2xl shadow p-6 flex flex-col items-start">
-            <span className="text-xs font-semibold text-gray-500 mb-1">Total Deposits</span>
-            <span className="text-3xl font-bold text-emerald-600">${wallet ? parseFloat(wallet.total_deposits || '0').toFixed(2) : '0.00'}</span>
-            <span className="text-xs text-gray-400 mt-2">Approved deposits</span>
+
+          <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-gray-600 font-semibold text-sm">Total Deposits</h3>
+              <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+                <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                </svg>
+              </div>
+            </div>
+            <p className="text-3xl font-bold text-emerald-600">${transactions.filter(tx => tx.tx_type === 'deposit' && tx.status === 'approved').reduce((sum, tx) => sum + parseFloat(tx.amount || '0'), 0).toFixed(2)}</p>
+            <p className="text-xs text-gray-500 mt-2">Approved deposits</p>
           </div>
-          <div className="bg-white rounded-2xl shadow p-6 flex flex-col items-start">
-            <span className="text-xs font-semibold text-gray-500 mb-1">Total Withdrawals</span>
-            <span className="text-3xl font-bold text-orange-600">${wallet ? parseFloat(wallet.total_withdrawals || '0').toFixed(2) : '0.00'}</span>
-            <span className="text-xs text-gray-400 mt-2">Approved withdrawals</span>
+
+          <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-gray-600 font-semibold text-sm">Total Withdrawals</h3>
+              <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
+                <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 13l-5 5m0 0l-5-5m5 5V6" />
+                </svg>
+              </div>
+            </div>
+            <p className="text-3xl font-bold text-orange-600">${transactions.filter(tx => tx.tx_type === 'withdrawal' && tx.status === 'approved').reduce((sum, tx) => sum + parseFloat(tx.amount || '0'), 0).toFixed(2)}</p>
+            <p className="text-xs text-gray-500 mt-2">Approved withdrawals</p>
           </div>
-          <div className="bg-white rounded-2xl shadow p-6 flex flex-col items-start">
-            <span className="text-xs font-semibold text-gray-500 mb-1">Total Invested</span>
-            <span className="text-3xl font-bold text-[#0b2f6b]">${investments ? investments.filter(inv => inv.status === 'approved').reduce((sum, inv) => sum + parseFloat(inv.amount || '0'), 0).toFixed(2) : '0.00'}</span>
-            <span className="text-xs text-gray-400 mt-2">Active investments</span>
+
+          <div className="bg-white rounded-2xl shadow-lg p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-gray-600 font-semibold text-sm">Total Invested</h3>
+              <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 012-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+              </div>
+            </div>
+            <p className="text-3xl font-bold text-purple-600">${investments.filter(inv => inv.status === 'approved').reduce((sum, inv) => sum + parseFloat(inv.amount || '0'), 0).toFixed(2)}</p>
+            <p className="text-xs text-gray-500 mt-2">Active investments</p>
           </div>
         </section>
 

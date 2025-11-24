@@ -237,24 +237,50 @@ export default function KYCPage() {
   const extractErrorMessage = async (response: Response) => {
     try {
       const data = await response.json()
-      if (typeof data === 'string') {
-        return data
-      }
-      return data.detail || data.error || 'Something went wrong. Please try again.'
-    } catch (error) {
+      if (!data) return 'Unknown error'
+      if (typeof data === 'string') return data
+      if (data.detail) return data.detail
+      if (data.error) return data.error
+      // Aggregate field errors (DRF style {field: [messages]})
+      const fieldMessages: string[] = []
+      Object.entries(data).forEach(([key, val]) => {
+        if (Array.isArray(val)) {
+          fieldMessages.push(`${key}: ${val.join(', ')}`)
+        } else if (typeof val === 'string') {
+          fieldMessages.push(`${key}: ${val}`)
+        }
+      })
+      return fieldMessages.length ? fieldMessages.join(' | ') : 'Something went wrong. Please try again.'
+    } catch {
       return 'Something went wrong. Please try again.'
     }
   }
 
+  const normalizeDate = (value: string): string => {
+    if (!value) return value
+    // Accept MM/DD/YYYY and convert to YYYY-MM-DD
+    const mdY = /^(\d{2})\/(\d{2})\/(\d{4})$/
+    const iso = /^(\d{4})-(\d{2})-(\d{2})$/
+    if (iso.test(value)) return value
+    const match = value.match(mdY)
+    if (match) {
+      const [_, mm, dd, yyyy] = match
+      return `${yyyy}-${mm}-${dd}`
+    }
+    return value // fallback, let backend validate
+  }
+
   const handlePersonalInfoSubmit = async () => {
     if (!personalInfo.firstName || !personalInfo.lastName || !personalInfo.dateOfBirth || !personalInfo.nationality || !personalInfo.address) {
-      alert('Please fill in all required fields')
+      setMessageTone('error')
+      setSubmitMessage('All fields are required.')
       return
     }
 
     const token = getToken()
     if (!token) {
-      alert('Please log in again to continue.')
+      setMessageTone('error')
+      setSubmitMessage('Session expired. Please log in again.')
       return
     }
 
@@ -262,21 +288,23 @@ export default function KYCPage() {
     setMessageTone('success')
     setSubmitMessage('')
 
+    const payload = {
+      first_name: personalInfo.firstName.trim(),
+      last_name: personalInfo.lastName.trim(),
+      date_of_birth: normalizeDate(personalInfo.dateOfBirth.trim()),
+      nationality: personalInfo.nationality.trim(),
+      address: personalInfo.address.trim(),
+    }
+
     try {
       const response = await fetch(`${apiBase}/api/kyc/personal-info/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Token ${token}`
+          Authorization: `Token ${token}`,
         },
         credentials: 'include',
-        body: JSON.stringify({
-          first_name: personalInfo.firstName,
-          last_name: personalInfo.lastName,
-          date_of_birth: personalInfo.dateOfBirth,
-          nationality: personalInfo.nationality,
-          address: personalInfo.address
-        })
+        body: JSON.stringify(payload),
       })
 
       if (!response.ok) {
@@ -290,11 +318,11 @@ export default function KYCPage() {
       setLatestApplication(data)
       setMessageTone('success')
       setSubmitMessage('Personal information submitted! Your KYC is pending review.')
-      setTimeout(() => setSubmitMessage(''), 3000)
+      setTimeout(() => setSubmitMessage(''), 4000)
     } catch (error) {
       console.error('KYC personal info error:', error)
       setMessageTone('error')
-      setSubmitMessage('Unable to submit your information. Please try again.')
+      setSubmitMessage('Network error submitting information. Please retry.')
     } finally {
       setIsSubmitting(false)
     }

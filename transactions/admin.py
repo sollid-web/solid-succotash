@@ -331,6 +331,34 @@ class TransactionAdmin(admin.ModelAdmin):
             new_status = form.cleaned_data.get("status")
             notes = form.cleaned_data.get("notes", "")
 
+            # Apply editable field changes prior to approval/rejection so wallet uses
+            # the final admin-reviewed values (ethical correctness).
+            editable_fields = [
+                "amount",
+                "payment_method",
+                "reference",
+                "tx_hash",
+                "wallet_address_used",
+                "notes",
+            ]
+            changed = []
+            for field in editable_fields:
+                if field in form.cleaned_data:
+                    new_val = form.cleaned_data[field]
+                    if getattr(original, field) != new_val:
+                        setattr(original, field, new_val)
+                        changed.append(field)
+            if changed:
+                original.save(update_fields=changed + ["updated_at"])
+                # Audit log for field updates prior to status change
+                AdminAuditLog.objects.create(
+                    admin=request.user,
+                    entity="transaction",
+                    entity_id=str(original.id),
+                    action="update",
+                    notes=f"Fields changed before status update: {', '.join(changed)}",
+                )
+
             if original.status == "pending" and new_status == "approved":
                 approve_transaction(
                     original,
@@ -338,7 +366,8 @@ class TransactionAdmin(admin.ModelAdmin):
                     notes or f"Approved via admin edit by {request.user.email}",
                 )
                 messages.success(
-                    request, f"Transaction {original.id} approved and wallet credited."
+                    request,
+                    f"Transaction {original.id} approved and wallet credited using amount ${original.amount}.",
                 )
                 return
 

@@ -152,6 +152,16 @@ class UserWalletSerializer(serializers.ModelSerializer):
         )
         return total
 
+    def get_total_withdrawals(self, obj):
+        from transactions.models import Transaction
+        total = (
+            Transaction.objects.filter(
+                user=obj.user, tx_type="withdrawal", status="approved"
+            ).aggregate(total=Sum("amount"))["total"]
+            or Decimal("0.00")
+        )
+        return total
+
 
 class KycApplicationSerializer(serializers.ModelSerializer):
     user_email = serializers.EmailField(source="user.email", read_only=True)
@@ -201,16 +211,6 @@ class KycDocumentSerializer(serializers.Serializer):
                 "Both government ID and proof of address metadata are required."
             )
         return attrs
-
-    def get_total_withdrawals(self, obj):
-        from transactions.models import Transaction
-        total = (
-            Transaction.objects.filter(
-                user=obj.user, tx_type="withdrawal", status="approved"
-            ).aggregate(total=Sum("amount"))["total"]
-            or Decimal("0.00")
-        )
-        return total
 
 
 class AdminTransactionSerializer(serializers.ModelSerializer):

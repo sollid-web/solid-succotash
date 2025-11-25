@@ -48,7 +48,7 @@ def create_test_data():
             'subject': 'Investment Inquiry - High Net Worth Client',
             'from_email': 'john.smith@example.com',
             'from_name': 'John Smith',
-            'to_email': 'invest@wolvcapital.com',
+            'to_email': 'support@wolvcapital.com',
             'body_text': '''Hello,
 
 I am interested in your investment plans. I have approximately $50,000 to invest and would like to know more about the Summit plan.
@@ -116,7 +116,7 @@ Mike''',
             'subject': 'Partnership Opportunity',
             'from_email': 'business@investmentfirm.com',
             'from_name': 'Investment Partners LLC',
-            'to_email': 'partnerships@wolvcapital.com',
+            'to_email': 'admin@wolvcapital.com',
             'body_text': '''Hello WolvCapital Team,
 
 We represent a group of high net worth individuals interested in your investment platform.
@@ -165,7 +165,7 @@ WolvCapital Security System''',
             'subject': 'Monthly newsletter subscription',
             'from_email': 'newsletter@example.com',
             'from_name': 'Newsletter Subscriber',
-            'to_email': 'marketing@wolvcapital.com',
+            'to_email': 'support@wolvcapital.com',
             'body_text': 'Please add me to your monthly investment newsletter. Thanks!',
             'received_at': timezone.now() - timedelta(days=3),
             'status': EmailInbox.STATUS_ARCHIVED,

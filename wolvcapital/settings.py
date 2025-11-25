@@ -406,7 +406,7 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
 
 # Default from email
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "WolvCapital <noreply@wolvcapital.com>")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "WolvCapital <support@wolvcapital.com>")
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 # Email timeout (30 seconds)
@@ -420,7 +420,8 @@ ADMIN_EMAIL_RECIPIENTS = [
     email.strip()
     for email in os.getenv(
         "ADMIN_EMAIL_RECIPIENTS",
-        "admin@wolvcapital.com,support@wolvcapital.com"
+        "support@wolvcapital.com,privacy@wolvcapital.com,"
+        "legal@wolvcapital.com,admin@wolvcapital.com"
     ).split(",")
     if email.strip()
 ]

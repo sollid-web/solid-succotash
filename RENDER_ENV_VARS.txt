@@ -1,0 +1,110 @@
+================================================================================
+WOLVCAPITAL - RENDER.COM ENVIRONMENT VARIABLES
+================================================================================
+
+Copy these to your Render Dashboard → Environment section:
+
+--------------------------------------------------------------------------------
+
+# Django Core Settings
+SECRET_KEY=Vr6jAdqRwdBpkA8mDwvZxfW5PjgBSLlL-hIdVwt1GbmVE2UnobGri5KDKGj0dYB09k4
+DEBUG=0
+
+# Email Configuration (REQUIRED - Update with your SMTP details)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=noreply@wolvcapital.com
+EMAIL_HOST_PASSWORD=your-gmail-app-password-here
+DEFAULT_FROM_EMAIL=WolvCapital <noreply@wolvcapital.com>
+
+# Admin Email Recipients (Contact Form notifications)
+ADMIN_EMAIL_RECIPIENTS=admin@wolvcapital.com,support@wolvcapital.com,finance@wolvcapital.com,compliance@wolvcapital.com,operations@wolvcapital.com
+
+# CORS Settings (for Next.js frontend)
+CORS_ALLOWED_ORIGINS=https://wolvcapital.com,https://www.wolvcapital.com,https://wolvcapital.vercel.app
+CSRF_TRUSTED_ORIGINS=https://wolvcapital.com,https://www.wolvcapital.com
+
+# Optional Settings
+CUSTOM_DOMAIN=wolvcapital.com
+SITE_URL=https://api.wolvcapital.com
+PUBLIC_SITE_URL=https://wolvcapital.com
+
+--------------------------------------------------------------------------------
+
+ACTION ITEMS:
+✓ SECRET_KEY generated (KEEP THIS SECRET!)
+□ Copy all variables to Render Dashboard → Environment
+□ Update EMAIL_HOST_USER with your actual email
+□ Update EMAIL_HOST_PASSWORD with Gmail App Password
+□ Update ADMIN_EMAIL_RECIPIENTS with your 5 admin emails
+□ Update CORS_ALLOWED_ORIGINS with your actual frontend URL
+
+================================================================================
+GMAIL APP PASSWORD SETUP (Required for Email)
+================================================================================
+
+1. Enable 2-Factor Authentication:
+   - Go to: https://myaccount.google.com/security
+   - Turn on 2-Step Verification
+
+2. Generate App Password:
+   - Go to: https://myaccount.google.com/apppasswords
+   - Select "Mail" and your device
+   - Click "Generate"
+   - Copy the 16-character password (remove spaces)
+   - Use this as EMAIL_HOST_PASSWORD
+
+3. Alternative: Use SendGrid (Recommended for Production)
+   - Sign up: https://sendgrid.com/
+   - Get API key
+   - Update:
+     EMAIL_HOST=smtp.sendgrid.net
+     EMAIL_PORT=587
+     EMAIL_HOST_USER=apikey
+     EMAIL_HOST_PASSWORD=your-sendgrid-api-key
+
+================================================================================
+HOW TO APPLY TO RENDER
+================================================================================
+
+1. Login to Render Dashboard: https://dashboard.render.com/
+
+2. Select your WolvCapital web service
+
+3. Go to "Environment" tab
+
+4. Click "Add Environment Variable"
+
+5. For EACH variable above:
+   - Enter the KEY (e.g., SECRET_KEY)
+   - Enter the VALUE (e.g., Vr6jAdqRwdBpkA8mDwvZxfW5PjgBSLlL...)
+   - Click "Add"
+
+6. Click "Save Changes" at the bottom
+
+7. Render will automatically redeploy with new variables
+
+================================================================================
+VERIFY DEPLOYMENT
+================================================================================
+
+1. Wait for Render redeploy to complete (~2-3 minutes)
+
+2. Check deployment logs for errors:
+   - Look for "Starting Gunicorn"
+   - No SECRET_KEY errors
+   - No email configuration warnings
+
+3. Test contact form:
+   - Visit: https://api.wolvcapital.com/contact/
+   - Fill out form and submit
+   - Check admin emails for notification
+
+4. Check Django admin:
+   - Visit: https://api.wolvcapital.com/admin/
+   - Login with superuser
+   - Go to "Support Requests"
+   - Verify submission appears
+
+================================================================================

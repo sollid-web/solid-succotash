@@ -415,6 +415,19 @@ EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "30"))
 # Email subject prefix
 EMAIL_SUBJECT_PREFIX = os.getenv("EMAIL_SUBJECT_PREFIX", "[WolvCapital] ")
 
+# Admin email recipients for contact form and support notifications
+ADMIN_EMAIL_RECIPIENTS = [
+    email.strip()
+    for email in os.getenv(
+        "ADMIN_EMAIL_RECIPIENTS",
+        "admin@wolvcapital.com,support@wolvcapital.com"
+    ).split(",")
+    if email.strip()
+]
+
+# Site URL for email links
+SITE_URL = os.getenv("SITE_URL", os.getenv("RENDER_EXTERNAL_URL", "http://localhost:8000"))
+
 # Base URLs for backend and public-facing site
 PUBLIC_SITE_URL = os.getenv("PUBLIC_SITE_URL", "https://wolvcapital.com")
 

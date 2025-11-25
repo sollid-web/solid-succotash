@@ -1,7 +1,10 @@
 from django import forms
 from django.core.validators import MinValueValidator
+from django.core.mail import send_mail
+from django.conf import settings
 
 from investments.models import InvestmentPlan
+from .models import SupportRequest
 
 
 class InvestmentForm(forms.Form):
@@ -145,3 +148,105 @@ class WithdrawalForm(forms.Form):
         ),
         help_text="Provide your bank account details or wallet address for the withdrawal",
     )
+
+
+class ContactForm(forms.ModelForm):
+    """Contact/Support form for users to send messages to admins"""
+    
+    class Meta:
+        model = SupportRequest
+        fields = ['full_name', 'contact_email', 'topic', 'message']
+        widgets = {
+            'full_name': forms.TextInput(attrs={
+                'class': 'w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 focus:border-blue-600 transition',
+                'placeholder': 'Your full name'
+            }),
+            'contact_email': forms.EmailInput(attrs={
+                'class': 'w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 focus:border-blue-600 transition',
+                'placeholder': 'your.email@example.com'
+            }),
+            'topic': forms.TextInput(attrs={
+                'class': 'w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 focus:border-blue-600 transition',
+                'placeholder': 'Subject of your message'
+            }),
+            'message': forms.Textarea(attrs={
+                'class': 'w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 focus:border-blue-600 transition',
+                'placeholder': 'Type your message here...',
+                'rows': 6
+            }),
+        }
+        labels = {
+            'full_name': 'Full Name',
+            'contact_email': 'Email Address',
+            'topic': 'Subject',
+            'message': 'Message',
+        }
+    
+    def save_and_notify(self, request=None, user=None):
+        """Save message and send email notifications to all admin recipients"""
+        instance = self.save(commit=False)
+        
+        # Attach user if authenticated
+        if user and user.is_authenticated:
+            instance.user = user
+            if not instance.full_name:
+                instance.full_name = user.get_full_name() or user.email
+            if not instance.contact_email:
+                instance.contact_email = user.email
+        
+        # Capture request metadata if available
+        if request:
+            instance.source_url = request.build_absolute_uri()
+            # Get client IP
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                instance.ip_address = x_forwarded_for.split(',')[0]
+            else:
+                instance.ip_address = request.META.get('REMOTE_ADDR')
+            instance.user_agent = request.META.get('HTTP_USER_AGENT', '')[:255]
+        
+        instance.save()
+        
+        # Send email notification to all admin recipients
+        admin_emails = getattr(settings, 'ADMIN_EMAIL_RECIPIENTS', [])
+        if admin_emails:
+            site_url = getattr(settings, 'SITE_URL', 'http://localhost:8000')
+            
+            email_body = f"""
+New Support Message from WolvCapital Contact Form
+{'=' * 60}
+
+From: {instance.full_name} <{instance.contact_email}>
+Subject: {instance.topic}
+Status: {instance.get_status_display()}
+Submitted: {instance.created_at.strftime('%Y-%m-%d %H:%M:%S')}
+
+Message:
+{instance.message}
+
+{'=' * 60}
+User Account: {instance.user.email if instance.user else 'Not logged in'}
+IP Address: {instance.ip_address or 'N/A'}
+Source: {instance.source_url or 'N/A'}
+
+View in Admin Panel:
+{site_url}/admin/core/supportrequest/{instance.id}/change/
+
+Reply to: {instance.contact_email}
+            """
+            
+            try:
+                send_mail(
+                    subject=f"[WolvCapital Support] {instance.topic}",
+                    message=email_body.strip(),
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=admin_emails,
+                    fail_silently=False,
+                )
+            except Exception as e:
+                # Log the error but don't fail the form submission
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f"Failed to send contact form email: {e}")
+        
+        return instance

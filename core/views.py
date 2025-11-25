@@ -2,9 +2,12 @@ import logging
 import tempfile
 
 from django.conf import settings
+from django.contrib import messages
 from django.http import FileResponse, Http404, HttpResponse, JsonResponse
+from django.shortcuts import render, redirect
 
 from .models import Agreement
+from .forms import ContactForm
 
 logger = logging.getLogger(__name__)
 
@@ -60,3 +63,41 @@ def agreement_pdf(request, agreement_id: int):
         )
     finally:  # pragma: no branch - temporary file cleaned by OS
         logger.debug("Generated agreement PDF for %s", agreement_id)
+
+
+def contact_view(request):
+    """Contact/Support form for users to send messages to admins."""
+    
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            try:
+                # Save and send notification emails
+                user = request.user if request.user.is_authenticated else None
+                form.save_and_notify(request=request, user=user)
+                
+                messages.success(
+                    request,
+                    'Thank you! Your message has been sent. Our support team will respond shortly.'
+                )
+                return redirect('dashboard' if user else 'contact')
+            except Exception as e:
+                logger.error(f"Failed to save contact form: {e}")
+                messages.error(
+                    request,
+                    'Sorry, we encountered an error. Please try again or email us directly.'
+                )
+    else:
+        # Pre-fill form if user is authenticated
+        initial = {}
+        if request.user.is_authenticated:
+            initial = {
+                'full_name': request.user.get_full_name() or '',
+                'contact_email': request.user.email
+            }
+        form = ContactForm(initial=initial)
+    
+    return render(request, 'core/contact.html', {
+        'form': form,
+        'admin_emails': settings.ADMIN_EMAIL_RECIPIENTS,
+    })

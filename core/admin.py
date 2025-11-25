@@ -26,12 +26,11 @@ class SupportRequestAdmin(admin.ModelAdmin):
         "full_name",
         "topic",
         "status",
-        "source_url",
         "created_at",
         "handled_by",
     )
-    list_filter = ("status", "created_at")
-    search_fields = ("contact_email", "full_name", "message", "topic")
+    list_filter = ("status", "created_at", "handled_by")
+    search_fields = ("contact_email", "full_name", "message", "topic", "admin_notes")
     readonly_fields = (
         "user",
         "ip_address",
@@ -41,3 +40,51 @@ class SupportRequestAdmin(admin.ModelAdmin):
         "source_url",
     )
     ordering = ("-created_at",)
+    date_hierarchy = "created_at"
+    
+    fieldsets = (
+        ('Message Details', {
+            'fields': (
+                'user',
+                'full_name',
+                'contact_email',
+                'topic',
+                'message',
+                'source_url',
+                'created_at',
+            )
+        }),
+        ('Admin Response', {
+            'fields': (
+                'status',
+                'handled_by',
+                'admin_notes',
+                'responded_at',
+                'updated_at',
+            )
+        }),
+        ('Metadata', {
+            'fields': (
+                'ip_address',
+                'user_agent',
+            ),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    actions = ['mark_in_progress', 'mark_resolved']
+    
+    def mark_in_progress(self, request, queryset):
+        updated = queryset.update(status='in_progress', handled_by=request.user)
+        self.message_user(request, f"{updated} support request(s) marked as in progress.")
+    mark_in_progress.short_description = "Mark selected as In Progress"
+    
+    def mark_resolved(self, request, queryset):
+        from django.utils import timezone
+        updated = queryset.update(
+            status='resolved',
+            handled_by=request.user,
+            responded_at=timezone.now()
+        )
+        self.message_user(request, f"{updated} support request(s) marked as resolved.")
+    mark_resolved.short_description = "Mark selected as Resolved"

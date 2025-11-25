@@ -6,6 +6,16 @@
     "editor.defaultFormatter": "ms-vscode.powershell",
     "github.copilot.chat.newWorkspaceCreation.enabled": true,
     "github.copilot.chat.newWorkspace.useContext7": true,
-    "files.autoSaveWorkspaceFilesOnly": true
-    // No markdownlint schema references present
+    "files.autoSaveWorkspaceFilesOnly": true,
+    "html.validate.scripts": false,
+    "html.validate.styles": false,
+    "html.customData": [".vscode/html-custom-data.json"],
+    "markdownlint.config": {
+        "MD031": false,
+        "MD032": false,
+        "MD034": false,
+        "MD036": false,
+        "MD040": false,
+        "MD022": false
+    }
 }

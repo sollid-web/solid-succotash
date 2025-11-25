@@ -443,6 +443,21 @@ if not SITE_URL:
 ADMIN_SITE_URL = os.getenv("ADMIN_SITE_URL", SITE_URL)
 
 # ------------------------------------------------------------------
+# Business Email Inbox Configuration (IMAP)
+# ------------------------------------------------------------------
+# IMAP settings for fetching business emails
+INBOX_IMAP_HOST = os.getenv("INBOX_IMAP_HOST", "imap.gmail.com")
+INBOX_IMAP_PORT = int(os.getenv("INBOX_IMAP_PORT", "993"))
+INBOX_EMAIL_USER = os.getenv("INBOX_EMAIL_USER", EMAIL_HOST_USER)
+INBOX_EMAIL_PASSWORD = os.getenv("INBOX_EMAIL_PASSWORD", EMAIL_HOST_PASSWORD)
+INBOX_FOLDER = os.getenv("INBOX_FOLDER", "INBOX")
+INBOX_USE_SSL = os.getenv("INBOX_USE_SSL", "True").lower() == "true"
+
+# Sync settings
+INBOX_SYNC_LIMIT = int(os.getenv("INBOX_SYNC_LIMIT", "100"))  # Max emails per sync
+INBOX_AUTO_SYNC = os.getenv("INBOX_AUTO_SYNC", "False").lower() == "true"  # Enable cron sync
+
+# ------------------------------------------------------------------
 # I18N / TZ
 # ------------------------------------------------------------------
 LANGUAGE_CODE = "en-us"

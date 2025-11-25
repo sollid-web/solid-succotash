@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ email.subject }} - Business Inbox{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <div class="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <a href="{% url 'inbox' %}" class="text-blue-600 hover:text-blue-800 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Inbox
+                </a>
+                <div class="flex space-x-2">
+                    <!-- Action Buttons -->
+                    <form method="post" action="{% url 'inbox_action' email.id %}" class="inline" onsubmit="return confirmAction(event, 'archive', 'Archive this email?')">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="archive">
+                        <button type="submit" class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">
+                            Archive
+                        </button>
+                    </form>
+                    <form method="post" action="{% url 'inbox_action' email.id %}" class="inline" onsubmit="return confirmAction(event, 'spam', 'Mark as spam?')">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="spam">
+                        <button type="submit" class="px-3 py-2 text-sm text-red-700 hover:bg-red-50 rounded-md">
+                            Spam
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <!-- Email Header -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex-1">
+                    <h1 class="text-2xl font-bold text-gray-900 mb-2">{{ email.subject }}</h1>
+                    <div class="flex items-center space-x-4 text-sm text-gray-600">
+                        <span class="font-medium">{{ email.from_name|default:email.from_email }}</span>
+                        <span>&lt;{{ email.from_email }}&gt;</span>
+                        <span>{{ email.received_at|date:"M d, Y g:i A" }}</span>
+                    </div>
+                    <div class="mt-2 text-sm text-gray-600">
+                        <strong>To:</strong> {{ email.to_email }}
+                        {% if email.cc %}
+                        <br><strong>CC:</strong> {{ email.cc }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Status Badges -->
+                <div class="flex flex-col items-end space-y-2">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                        {% if email.status == 'unread' %}bg-blue-100 text-blue-800
+                        {% elif email.status == 'read' %}bg-gray-100 text-gray-800
+                        {% elif email.status == 'replied' %}bg-green-100 text-green-800
+                        {% elif email.status == 'archived' %}bg-purple-100 text-purple-800
+                        {% elif email.status == 'spam' %}bg-red-100 text-red-800
+                        {% endif %}">
+                        {{ email.get_status_display }}
+                    </span>
+                    
+                    {% if email.priority != 'normal' %}
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                        {% if email.priority == 'urgent' %}bg-red-100 text-red-800
+                        {% elif email.priority == 'high' %}bg-orange-100 text-orange-800
+                        {% elif email.priority == 'low' %}bg-gray-100 text-gray-600
+                        {% endif %}">
+                        {{ email.get_priority_display }} Priority
+                    </span>
+                    {% endif %}
+
+                    <button onclick="toggleStar({{ email.id }}, this)" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200">
+                        <svg class="w-4 h-4 mr-1 {% if email.is_starred %}text-yellow-500 fill-current{% endif %}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                        </svg>
+                        {% if email.is_starred %}Starred{% else %}Star{% endif %}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Attachments -->
+            {% if email.has_attachments %}
+            <div class="border-t border-gray-200 pt-4 mt-4">
+                <h3 class="text-sm font-medium text-gray-900 mb-2">
+                    Attachments ({{ email.attachment_info.count }})
+                </h3>
+                <div class="space-y-2">
+                    {% for file in email.attachment_info.files %}
+                    <div class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
+                            </svg>
+                            <span class="text-sm text-gray-900">{{ file.filename }}</span>
+                            <span class="text-xs text-gray-500">({{ file.size|filesizeformat }})</span>
+                        </div>
+                        <span class="text-xs text-gray-500">{{ file.content_type }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Assignment & Priority Controls -->
+            <div class="border-t border-gray-200 pt-4 mt-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Assigned to</label>
+                        {% if email.assigned_to %}
+                        <span class="text-sm text-gray-900">{{ email.assigned_to.get_full_name|default:email.assigned_to.email }}</span>
+                        {% else %}
+                        <form method="post" action="{% url 'inbox_action' email.id %}" class="inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="assign">
+                            <button type="submit" class="text-sm text-blue-600 hover:text-blue-800">
+                                Assign to me
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                        <form method="post" action="{% url 'inbox_action' email.id %}" class="inline-flex items-center space-x-2">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="priority">
+                            <select name="priority" onchange="this.form.submit()" class="text-sm border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                                <option value="low" {% if email.priority == 'low' %}selected{% endif %}>Low</option>
+                                <option value="normal" {% if email.priority == 'normal' %}selected{% endif %}>Normal</option>
+                                <option value="high" {% if email.priority == 'high' %}selected{% endif %}>High</option>
+                                <option value="urgent" {% if email.priority == 'urgent' %}selected{% endif %}>Urgent</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Body -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <h2 class="text-lg font-medium text-gray-900 mb-4">Message</h2>
+            
+            {% if email.body_html %}
+            <div class="prose max-w-none">
+                {{ email.body_html|safe }}
+            </div>
+            {% else %}
+            <div class="whitespace-pre-wrap text-gray-700">{{ email.body_text }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Quick Reply Section -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-lg font-medium text-gray-900 mb-4">Quick Reply</h2>
+            
+            {% if templates %}
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Email Templates</label>
+                <select id="templateSelect" onchange="loadTemplate()" class="w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">-- Select a template --</option>
+                    {% for template in templates %}
+                    <option value="{{ template.id }}" data-subject="{{ template.subject }}" data-body="{{ template.body|escapejs }}">
+                        {{ template.name }} {% if template.category %}({{ template.category }}){% endif %}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endif %}
+
+            <form method="post" action="#" class="space-y-4">
+                {% csrf_token %}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                    <input type="text" id="replySubject" value="Re: {{ email.subject }}" class="w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                    <textarea id="replyBody" rows="8" class="w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Type your reply..."></textarea>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-sm text-gray-600">
+                        Replying to: <strong>{{ email.from_email }}</strong>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button type="button" class="px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            Save Draft
+                        </button>
+                        <button type="submit" class="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                            Send Reply
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="mt-4 p-3 bg-blue-50 rounded-md">
+                <p class="text-sm text-blue-800">
+                    <strong>Note:</strong> Reply functionality requires SMTP configuration. This interface saves your draft for manual sending or use the Django admin to send emails.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleStar(emailId, button) {
+    const formData = new FormData();
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    formData.append('action', 'star');
+
+    fetch(`/inbox/${emailId}/action/`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const svg = button.querySelector('svg');
+            const text = button.querySelector('text');
+            if (data.starred) {
+                svg.classList.add('text-yellow-500', 'fill-current');
+                button.innerHTML = button.innerHTML.replace('Star', 'Starred');
+            } else {
+                svg.classList.remove('text-yellow-500', 'fill-current');
+                button.innerHTML = button.innerHTML.replace('Starred', 'Star');
+            }
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+function loadTemplate() {
+    const select = document.getElementById('templateSelect');
+    const option = select.options[select.selectedIndex];
+    if (option.value) {
+        document.getElementById('replySubject').value = option.dataset.subject;
+        document.getElementById('replyBody').value = option.dataset.body;
+    }
+}
+
+function confirmAction(event, action, message) {
+    if (!confirm(message)) {
+        event.preventDefault();
+        return false;
+    }
+    return true;
+}
+</script>
+{% endblock %}

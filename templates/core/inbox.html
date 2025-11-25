@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Business Inbox - WolvCapital{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <div class="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Business Inbox</h1>
+                    <p class="text-sm text-gray-600 mt-1">Manage your professional email communications</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <!-- Sync Button -->
+                    <form method="post" action="{% url 'inbox_sync' %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                            Sync Emails
+                        </button>
+                    </form>
+                    
+                    <a href="{% url 'dashboard' %}" class="text-sm text-gray-600 hover:text-gray-900">
+                        Back to Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-4 gap-4 pb-4">
+                <div class="bg-blue-50 rounded-lg p-3">
+                    <div class="text-sm text-blue-600 font-medium">Total Emails</div>
+                    <div class="text-2xl font-bold text-blue-900">{{ stats.total }}</div>
+                </div>
+                <div class="bg-yellow-50 rounded-lg p-3">
+                    <div class="text-sm text-yellow-600 font-medium">Unread</div>
+                    <div class="text-2xl font-bold text-yellow-900">{{ stats.unread }}</div>
+                </div>
+                <div class="bg-purple-50 rounded-lg p-3">
+                    <div class="text-sm text-purple-600 font-medium">Starred</div>
+                    <div class="text-2xl font-bold text-purple-900">{{ stats.starred }}</div>
+                </div>
+                <div class="bg-green-50 rounded-lg p-3">
+                    <div class="text-sm text-green-600 font-medium">Assigned to Me</div>
+                    <div class="text-2xl font-bold text-green-900">{{ stats.assigned_to_me }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <!-- Filters -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+            <form method="get" class="flex flex-wrap gap-4">
+                <!-- Search -->
+                <div class="flex-1 min-w-[200px]">
+                    <input type="text" name="search" value="{{ current_filters.search }}" 
+                           placeholder="Search emails..." 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <!-- Status Filter -->
+                <select name="status" class="px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">All Status</option>
+                    {% for value, label in status_choices %}
+                    <option value="{{ value }}" {% if current_filters.status == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+
+                <!-- Priority Filter -->
+                <select name="priority" class="px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">All Priority</option>
+                    {% for value, label in priority_choices %}
+                    <option value="{{ value }}" {% if current_filters.priority == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+
+                <!-- Quick Filters -->
+                <label class="inline-flex items-center">
+                    <input type="checkbox" name="starred" value="1" {% if current_filters.starred %}checked{% endif %}
+                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                    <span class="ml-2 text-sm text-gray-700">Starred only</span>
+                </label>
+
+                <label class="inline-flex items-center">
+                    <input type="checkbox" name="assigned" value="me" {% if current_filters.assigned %}checked{% endif %}
+                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                    <span class="ml-2 text-sm text-gray-700">Assigned to me</span>
+                </label>
+
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Apply Filters
+                </button>
+
+                {% if current_filters.search or current_filters.status or current_filters.priority or current_filters.starred or current_filters.assigned %}
+                <a href="{% url 'inbox' %}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200">
+                    Clear All
+                </a>
+                {% endif %}
+            </form>
+        </div>
+
+        <!-- Email List -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            {% if page_obj %}
+            <div class="divide-y divide-gray-200">
+                {% for email in page_obj %}
+                <a href="{% url 'inbox_detail' email.id %}" 
+                   class="block hover:bg-gray-50 transition-colors {% if email.status == 'unread' %}bg-blue-50{% endif %}">
+                    <div class="p-4">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-start space-x-3 flex-1">
+                                <!-- Star Icon -->
+                                <button onclick="event.preventDefault(); toggleStar({{ email.id }}, this);" 
+                                        class="mt-1 text-gray-400 hover:text-yellow-500 focus:outline-none">
+                                    <svg class="w-5 h-5 {% if email.is_starred %}text-yellow-500 fill-current{% endif %}" 
+                                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                              d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                                    </svg>
+                                </button>
+
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center space-x-2">
+                                        <p class="text-sm font-semibold text-gray-900 truncate">
+                                            {{ email.from_name|default:email.from_email }}
+                                        </p>
+                                        {% if email.status == 'unread' %}
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                                            Unread
+                                        </span>
+                                        {% endif %}
+                                        {% if email.priority == 'high' or email.priority == 'urgent' %}
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
+                                            {{ email.get_priority_display }}
+                                        </span>
+                                        {% endif %}
+                                    </div>
+                                    <p class="text-sm text-gray-600 mt-1 {% if email.status == 'unread' %}font-semibold{% endif %}">
+                                        {{ email.subject }}
+                                    </p>
+                                    <p class="text-sm text-gray-500 mt-1 truncate">
+                                        {{ email.preview }}
+                                    </p>
+                                    <div class="flex items-center space-x-4 mt-2 text-xs text-gray-500">
+                                        <span>{{ email.received_at|date:"M d, Y g:i A" }}</span>
+                                        {% if email.has_attachments %}
+                                        <span class="inline-flex items-center">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
+                                            </svg>
+                                            {{ email.attachment_info.count }} attachment{{ email.attachment_info.count|pluralize }}
+                                        </span>
+                                        {% endif %}
+                                        {% if email.assigned_to %}
+                                        <span class="inline-flex items-center">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                            </svg>
+                                            {{ email.assigned_to.get_full_name|default:email.assigned_to.email }}
+                                        </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Status Badge -->
+                            <div class="ml-4">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                    {% if email.status == 'unread' %}bg-blue-100 text-blue-800
+                                    {% elif email.status == 'read' %}bg-gray-100 text-gray-800
+                                    {% elif email.status == 'replied' %}bg-green-100 text-green-800
+                                    {% elif email.status == 'archived' %}bg-purple-100 text-purple-800
+                                    {% elif email.status == 'spam' %}bg-red-100 text-red-800
+                                    {% endif %}">
+                                    {{ email.get_status_display }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+                <div class="flex items-center justify-between">
+                    <div class="text-sm text-gray-700">
+                        Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} emails
+                    </div>
+                    <div class="flex space-x-2">
+                        {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" 
+                           class="px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            Previous
+                        </a>
+                        {% endif %}
+                        {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" 
+                           class="px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            Next
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% else %}
+            <div class="text-center py-12">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">No emails found</h3>
+                <p class="mt-1 text-sm text-gray-500">Try adjusting your filters or sync new emails.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleStar(emailId, button) {
+    const formData = new FormData();
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+    formData.append('action', 'star');
+
+    fetch(`/inbox/${emailId}/action/`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const svg = button.querySelector('svg');
+            if (data.starred) {
+                svg.classList.add('text-yellow-500', 'fill-current');
+            } else {
+                svg.classList.remove('text-yellow-500', 'fill-current');
+            }
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script>
+{% endblock %}

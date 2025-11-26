@@ -4,7 +4,9 @@ import logging
 from email.header import decode_header
 from email.utils import parseaddr
 import os
+from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
+from django.utils.text import get_valid_filename
 from core.models import IncomingEmail, EmailAttachment
 from dotenv import load_dotenv
 
@@ -15,7 +17,7 @@ load_dotenv()
 logger = logging.getLogger("core.management.fetch_mail")
 
 
-def _decode_mime_header(value: str) -> str:
+def _decode_mime_header(value: str | None) -> str:
     """Decode MIME-encoded headers, join multiple parts safely."""
     if not value:
         return ""
@@ -116,7 +118,7 @@ class Command(BaseCommand):
             ]
             self.stderr.write(
                 f"IMAP credentials missing: {', '.join(missing)}.\n"
-                "Checked IMAP_HOST/INBOX_IMAP_HOST/SMTP_HOST and IMAP_USER/INBOX_EMAIL_USER/EMAIL_USER, "
+                "Checked IMAP_HOST/INBOX_IMAP_HOST/SMTP_HOST, IMAP_USER/INBOX_EMAIL_USER/EMAIL_USER/DEFAULT_FROM_EMAIL, "
                 "and IMAP_PASS/INBOX_EMAIL_PASSWORD/EMAIL_PASS/EMAIL_HOST_PASSWORD."
             )
             logger.error("Missing IMAP credentials: %s", missing)
@@ -224,30 +226,25 @@ class Command(BaseCommand):
                                 content_disposition = str(part.get("Content-Disposition") or "")
                                 if "attachment" in content_disposition:
                                     filename = part.get_filename()
-                                    if filename:
-                                        # Ensure attachments dir exists
-                                        attachments_dir = os.path.join("email_attachments")
-                                        os.makedirs(attachments_dir, exist_ok=True)
-                                        safe_name = filename.replace("/", "_").replace("\\", "_")
-                                        filepath = os.path.join(attachments_dir, safe_name)
-                                        try:
-                                            payload = part.get_payload(decode=True)
-                                            # Basic scan check before writing
-                                            if not _scan_attachment(payload, safe_name):
-                                                logger.info("Skipping attachment %s due to scan/size rules", safe_name)
-                                                continue
-                                            with open(filepath, "wb") as f:
-                                                f.write(payload)
-                                        except Exception:
-                                            logger.exception("Failed to write attachment %s", filepath)
-                                            continue
+                                    if not filename:
+                                        continue
+                                    payload = part.get_payload(decode=True)
+                                    if not payload:
+                                        logger.info("Skipping attachment %s: empty payload", filename)
+                                        continue
+                                    safe_name = get_valid_filename(filename)
+                                    # Basic scan check before writing
+                                    if not _scan_attachment(payload, safe_name):
+                                        logger.info("Skipping attachment %s due to scan/size rules", safe_name)
+                                        continue
 
-                                        # Save attachment to the database (FileField stores path)
-                                        EmailAttachment.objects.create(
-                                            email=incoming_email,
-                                            filename=safe_name,
-                                            file=filepath,
-                                        )
+                                    attachment_content = ContentFile(payload, name=safe_name)
+
+                                    EmailAttachment.objects.create(
+                                        email=incoming_email,
+                                        filename=safe_name,
+                                        file=attachment_content,
+                                    )
 
                             self.stdout.write(f"Email from {from_} with subject '{subject}' saved.")
                             logger.info("Saved email from %s subject=%s id=%s", from_, subject, incoming_email.id)

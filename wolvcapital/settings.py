@@ -329,7 +329,9 @@ if not DEBUG and not TESTING:
     WHITENOISE_MANIFEST_STRICT = False
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = str(BASE_DIR / "media")
+MEDIA_ROOT_PATH = BASE_DIR / "media"
+MEDIA_ROOT_PATH.mkdir(parents=True, exist_ok=True)
+MEDIA_ROOT = str(MEDIA_ROOT_PATH)
 
 # ------------------------------------------------------------------
 # Branding Configuration
@@ -535,6 +537,11 @@ LOGGING = {
             "level": LOG_LEVEL,
             "propagate": False,
         },
+            "core.management.fetch_mail": {
+                "handlers": ["console"],
+                "level": os.getenv("FETCH_MAIL_LOG_LEVEL", "INFO"),
+                "propagate": False,
+            },
     },
 }
 

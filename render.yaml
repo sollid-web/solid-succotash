@@ -87,3 +87,12 @@ databases:
   - name: wolvcapital-db
     databaseName: wolvcapital
     user: wolvcapital
+
+# Scheduled cron jobs (Render cron)
+cron:
+  - name: fetch-mail
+    schedule: "0 * * * *" # hourly
+    command: "python manage.py fetch_mail --limit 100"
+    env:
+      - key: DJANGO_SETTINGS_MODULE
+        value: "wolvcapital.settings"

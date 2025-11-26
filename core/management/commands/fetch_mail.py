@@ -13,18 +13,58 @@ class Command(BaseCommand):
     help = 'Fetch emails from the IMAP server and store them in the database.'
 
     def handle(self, *args, **kwargs):
-        # IMAP server credentials
-        imap_host = os.getenv('IMAP_HOST')
-        imap_user = os.getenv('IMAP_USER')
-        imap_password = os.getenv('IMAP_PASSWORD')
+        # IMAP server credentials - try multiple common env var names and fallbacks
+        imap_host = (
+            os.getenv('IMAP_HOST')
+            or os.getenv('INBOX_IMAP_HOST')
+            or os.getenv('INBOX_IMAP_HOST'.upper())
+            or os.getenv('SMTP_HOST')
+        )
+        imap_port = (
+            os.getenv('IMAP_PORT')
+            or os.getenv('INBOX_IMAP_PORT')
+            or os.getenv('IMAP_PORT')
+        )
+        imap_user = (
+            os.getenv('IMAP_USER')
+            or os.getenv('INBOX_EMAIL_USER')
+            or os.getenv('EMAIL_USER')
+            or os.getenv('DEFAULT_FROM_EMAIL')
+        )
+        imap_password = (
+            os.getenv('IMAP_PASS')
+            or os.getenv('INBOX_EMAIL_PASSWORD')
+            or os.getenv('EMAIL_PASS')
+            or os.getenv('EMAIL_HOST_PASSWORD')
+        )
 
         if not all([imap_host, imap_user, imap_password]):
-            self.stderr.write("IMAP credentials are not fully configured in the environment variables.")
+            missing = [
+                name
+                for name, val in (
+                    ("IMAP_HOST", imap_host),
+                    ("IMAP_USER", imap_user),
+                    ("IMAP_PASSWORD/IMAP_PASS", imap_password),
+                )
+                if not val
+            ]
+            self.stderr.write(
+                f"IMAP credentials missing: {', '.join(missing)}.\n"
+                "Checked IMAP_HOST/INBOX_IMAP_HOST/SMTP_HOST and IMAP_USER/INBOX_EMAIL_USER/EMAIL_USER, "
+                "and IMAP_PASS/INBOX_EMAIL_PASSWORD/EMAIL_PASS/EMAIL_HOST_PASSWORD."
+            )
             return
 
         try:
-            # Connect to the server
-            mail = imaplib.IMAP4_SSL(imap_host)
+            # Connect to the server (use provided port if available)
+            if imap_port:
+                try:
+                    mail = imaplib.IMAP4_SSL(imap_host, int(imap_port))
+                except Exception:
+                    # Fall back to default SSL connection if port parsing fails
+                    mail = imaplib.IMAP4_SSL(imap_host)
+            else:
+                mail = imaplib.IMAP4_SSL(imap_host)
             mail.login(imap_user, imap_password)
 
             # Select the mailbox you want to use

@@ -25,18 +25,23 @@ interface Props {
   preventRepeatMs?: number;
 }
 
+// Concise country list with male-only sample names and controlled weights.
+// Distribution can be tuned; includes Scotland (as part of UK/GB but labelled Scotland here).
 const COUNTRIES = [
-  { code: "NO", name: "Norway", weight: 0.2, names: ["Soren", "Ingrid", "Kari", "Erik", "Astrid", "Bjorn", "Sigrid", "Rolf", "Helga", "Per", "Liv", "Torsten"] },
-  { code: "US", name: "United States", weight: 0.25, names: ["Brandon", "Jennifer", "Marcus", "Rachel", "Tyler", "Amanda", "Joshua", "Michelle", "Daniel", "Ashley", "Nathan", "Stephanie"] },
-  { code: "GB", name: "United Kingdom", weight: 0.2, names: ["Charlie", "Sophie", "Marcus", "Grace", "Oliver", "Lucy", "Benjamin", "Eleanor", "Henry", "Violet", "Jack", "Rose"] },
-  { code: "DE", name: "Germany", weight: 0.15, names: ["Henrik", "Sophia", "Tobias", "Clara", "Jonas", "Frieda", "Karl", "Greta", "Franz", "Hilda", "Otto", "Inge"] },
-  { code: "FR", name: "France", weight: 0.1, names: ["Antoine", "Margot", "Damien", "Amélie", "Laurent", "Isabelle", "Nicolas", "Céline", "Julien", "Nathalie", "François", "Véronique"] },
-  { code: "SG", name: "Singapore", weight: 0.1, names: ["Wei", "Ming", "Ravi", "Priya", "Ahmad", "Nur", "Arjun", "Aisha", "Kai", "Li", "Anand", "Fatima"] }
+  { code: "SC", name: "Scotland", weight: 0.2, names: ["Callum", "Lewis", "Ewan", "Alistair", "Gavin", "Hamish", "Iain", "Ross"] },
+  { code: "NO", name: "Norway", weight: 0.2, names: ["Soren", "Erik", "Bjorn", "Rolf", "Per", "Torsten", "Olav"] },
+  { code: "US", name: "United States", weight: 0.2, names: ["Brandon", "Marcus", "Tyler", "Joshua", "Daniel", "Nathan", "Justin"] },
+  { code: "GB", name: "United Kingdom", weight: 0.1, names: ["Oliver", "Henry", "Jack", "Benjamin", "Charlie"] },
+  { code: "DE", name: "Germany", weight: 0.08, names: ["Tobias", "Jonas", "Karl", "Franz"] },
+  { code: "FR", name: "France", weight: 0.07, names: ["Antoine", "Laurent", "Nicolas", "Julien"] },
+  { code: "SG", name: "Singapore", weight: 0.05, names: ["Wei", "Ming", "Arjun", "Kai"] },
+  { code: "OTHER", name: "Other", weight: 0.1, names: ["Alex", "Sam", "Lee", "Max"] },
 ];
 
 const DEFAULT_PLANS = ["Pioneer", "Vanguard", "Horizon", "Summit"];
-const AMOUNTS = [175, 225, 275, 325, 375, 425, 475, 525, 625, 775, 875, 1050, 1250, 1550, 1850, 2100, 2600, 3100, 3600, 4100, 4600, 5100, 5600, 6100, 7100, 7600, 8100, 9100, 10100, 12500, 15500, 18500, 21000, 26000];
-const TIME_AGO_OPTIONS = ["just now", "moments ago", "a few seconds ago", "1 min ago", "2 mins ago", "3 mins ago", "4 mins ago", "5 mins ago", "right now", "seconds ago"];
+// Concise amounts typical for business-level ticker
+const AMOUNTS = [500, 1000, 2500, 5000, 10000, 25000, 50000];
+const TIME_AGO_OPTIONS = ["just now", "moments ago", "1 min ago"];
 let GLOBAL_ID = 1;
 
 function pickWeightedCountry() {
@@ -61,27 +66,23 @@ function randBetween(min: number, max: number) {
 function generateRandomActivity(plans: string[], prev?: Activity | null): Activity {
   const country = pickWeightedCountry();
   const name = pickRandom(country.names);
+  // Make transactions more common to match business spec
   const roll = Math.random();
-  let type: ActivityType;
-  if (roll < 0.15) type = "plan";
-  else if (roll < 0.35) type = "withdrawal";
-  else type = "deposit";
+  let type: ActivityType = roll < 0.7 ? "deposit" : roll < 0.9 ? "withdrawal" : "plan";
   let amount: number | undefined;
   let plan: string | undefined;
   let message: string;
-  if (type === "deposit") {
-    amount = pickRandom(AMOUNTS);
-    const depositActions = ["deposited", "funded their account with", "added", "transferred", "invested"];
-    message = `${name} from ${country.name} just ${pickRandom(depositActions)} $${amount.toLocaleString()}`;
-  } else if (type === "withdrawal") {
-    amount = pickRandom(AMOUNTS);
-    const withdrawalActions = ["withdrew", "requested payout of", "cashed out", "transferred out", "claimed"];
-    message = `${name} from ${country.name} just ${pickRandom(withdrawalActions)} $${amount.toLocaleString()}`;
-  } else {
+
+  if (type === "plan") {
     plan = pickRandom(plans);
-    const verbs = ["joined", "migrated to", "upgraded to", "switched to", "enrolled in", "activated", "selected", "chose", "invested in", "started with"];
-    message = `${name} ${pickRandom(verbs)} ${plan}`;
+    message = `${name} (${country.name}) started ${plan}`;
+  } else {
+    amount = pickRandom(AMOUNTS);
+    const action = type === "deposit" ? "deposited" : "withdrew";
+    // concise business-level message
+    message = `${name} (${country.name}) ${action} $${amount.toLocaleString()}`;
   }
+
   const timeAgo = pickRandom(TIME_AGO_OPTIONS);
   return {
     id: GLOBAL_ID++,
@@ -92,17 +93,18 @@ function generateRandomActivity(plans: string[], prev?: Activity | null): Activi
     amount,
     plan,
     message,
-    timeAgo
+    timeAgo,
   };
 }
 
 const RecentActivityTicker: React.FC<Props> = ({
   plans = DEFAULT_PLANS,
+  // Default interval between 30s and 60s per request
   minIntervalMs = 30000,
   maxIntervalMs = 60000,
   soundPath = "/sounds/chime.wav",
   soundVolume = 0.35,
-  preventRepeatMs = 2000
+  preventRepeatMs = 2000,
 }) => {
   const [activity, setActivity] = useState<Activity | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);

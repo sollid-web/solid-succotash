@@ -65,6 +65,39 @@ const DEFAULT_KYC_STEPS: KYCStep[] = [
   }
 ]
 
+const APPLICATION_STATUS_TO_STEP_STATUS: Record<KycApplication['status'], KYCStep['status']> = {
+  draft: 'required',
+  pending: 'pending',
+  approved: 'completed',
+  rejected: 'failed'
+}
+
+const hasJsonContent = (value: Record<string, any> | null | undefined) => Boolean(value && Object.keys(value).length > 0)
+
+const hasPersonalInfoSubmission = (application: KycApplication | null) => {
+  if (!application) {
+    return false
+  }
+
+  if (application.status === 'approved' || application.status === 'rejected') {
+    return true
+  }
+
+  return Boolean(application.personal_info_submitted_at || hasJsonContent(application.personal_info))
+}
+
+const hasDocumentSubmission = (application: KycApplication | null) => {
+  if (!application) {
+    return false
+  }
+
+  if (application.status === 'approved' || application.status === 'rejected') {
+    return true
+  }
+
+  return Boolean(application.document_submitted_at || hasJsonContent(application.document_info))
+}
+
 export default function KYCPage() {
   const [kycSteps, setKycSteps] = useState<KYCStep[]>(() => DEFAULT_KYC_STEPS.map(step => ({ ...step })))
   const [latestApplication, setLatestApplication] = useState<KycApplication | null>(null)
@@ -100,32 +133,40 @@ export default function KYCPage() {
   }
 
   const statusFromApplication = useCallback((application: KycApplication | null, hasSubmission: boolean): KYCStep['status'] => {
-    if (!application || !hasSubmission) {
+    if (!application) {
       return 'required'
     }
-    if (application.status === 'approved') {
-      return 'completed'
+
+    if (!hasSubmission) {
+      if (application.status === 'approved') {
+        return 'completed'
+      }
+      if (application.status === 'rejected') {
+        return 'failed'
+      }
+      return 'required'
     }
-    if (application.status === 'rejected') {
-      return 'failed'
-    }
-    return 'pending'
+
+    return APPLICATION_STATUS_TO_STEP_STATUS[application.status] ?? 'required'
   }, [])
 
   const deriveSteps = useCallback((application: KycApplication | null) => {
+    const personalInfoSubmitted = hasPersonalInfoSubmission(application)
+    const documentSubmitted = hasDocumentSubmission(application)
+
     return DEFAULT_KYC_STEPS.map(step => {
       if (step.id === 2) {
-        const status = statusFromApplication(application, Boolean(application?.personal_info_submitted_at))
+        const status = statusFromApplication(application, personalInfoSubmitted)
         return { ...step, status }
       }
 
       if (step.id === 3) {
-        const status = statusFromApplication(application, Boolean(application?.document_submitted_at))
+        const status = statusFromApplication(application, documentSubmitted)
         return { ...step, status }
       }
 
       if (step.id === 4) {
-        const hasProgress = application && application.status !== 'draft'
+        const hasProgress = Boolean(application && application.status !== 'draft')
         const status = statusFromApplication(application, Boolean(hasProgress))
         return { ...step, status: hasProgress ? status : 'required' }
       }
@@ -308,7 +349,12 @@ export default function KYCPage() {
       })
 
       if (!response.ok) {
-        const detail = await extractErrorMessage(response)
+        let detail = ''
+        if (response.status >= 500) {
+          detail = 'Server error processing your information. Please retry shortly or contact support.'
+        } else {
+          detail = await extractErrorMessage(response)
+        }
         setMessageTone('error')
         setSubmitMessage(detail)
         return
@@ -358,7 +404,12 @@ export default function KYCPage() {
       })
 
       if (!response.ok) {
-        const detail = await extractErrorMessage(response)
+        let detail = ''
+        if (response.status >= 500) {
+          detail = 'Server error accepting document metadata. Please retry shortly.'
+        } else {
+          detail = await extractErrorMessage(response)
+        }
         setMessageTone('error')
         setSubmitMessage(detail)
         return

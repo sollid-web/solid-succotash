@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from django.core.exceptions import ValidationError
+from datetime import date, datetime
 from django.db import transaction
 from django.utils import timezone
 
@@ -56,8 +57,15 @@ def submit_personal_info(user, personal_info: dict[str, Any]) -> KycApplication:
 
     application, _ = KycApplication.objects.select_for_update().get_or_create(user=user)
     previous_status = application.status
+    # Ensure all values are JSON serializable (convert date/datetime objects to ISO strings)
+    sanitized: dict[str, Any] = {}
+    for key, value in personal_info.items():
+        if isinstance(value, (date, datetime)):
+            sanitized[key] = value.isoformat()
+        else:
+            sanitized[key] = value
 
-    application.personal_info = personal_info
+    application.personal_info = sanitized
     application.personal_info_submitted_at = timezone.now()
     application.last_submitted_at = timezone.now()
     application.status = "pending"

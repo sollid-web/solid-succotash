@@ -532,8 +532,11 @@ class KycApplicationViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, vi
     def submit_personal_info(self, request):
         serializer = KycPersonalInfoSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
-        application = submit_personal_info(request.user, serializer.validated_data)
+        # Wrap Django ValidationError from service layer to return proper 400 instead of 500
+        try:
+            application = submit_personal_info(request.user, serializer.validated_data)
+        except DjangoValidationError as exc:
+            raise ValidationError(exc.messages)
         output = self.get_serializer(application)
         return Response(output.data, status=status.HTTP_200_OK)
 
@@ -541,8 +544,10 @@ class KycApplicationViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, vi
     def submit_documents(self, request):
         serializer = KycDocumentSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
-        application = submit_document_info(request.user, serializer.validated_data)
+        try:
+            application = submit_document_info(request.user, serializer.validated_data)
+        except DjangoValidationError as exc:
+            raise ValidationError(exc.messages)
         output = self.get_serializer(application)
         return Response(output.data, status=status.HTTP_200_OK)
 

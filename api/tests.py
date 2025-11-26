@@ -186,3 +186,33 @@ class EmailPreferencesAPITests(TestCase):
         data = resp.json()
         self.assertFalse(data["email_notifications_enabled"])
         self.assertFalse(data["email_security_alerts"])
+
+
+class KycPersonalInfoAPITests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.user = User.objects.create_user(
+            username="kyc_user", email="kyc_user@example.com", password="pass12345"
+        )
+        self.client = APIClient()
+        self.client.login(username="kyc_user", password="pass12345")
+
+    def test_submit_personal_info_success(self):
+        payload = {
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "date_of_birth": "1990-01-01",
+            "nationality": "US",
+            "address": "123 Main Street",
+        }
+        resp = self.client.post("/api/kyc/personal-info/", payload, format="json")
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertEqual(data["status"], "pending")
+        self.assertIn("personal_info_submitted_at", data)
+
+    def test_submit_personal_info_missing_fields_returns_400(self):
+        # Missing required fields should now yield a 400 (serializer validation) not a 500
+        payload = {"first_name": "Only"}
+        resp = self.client.post("/api/kyc/personal-info/", payload, format="json")
+        self.assertEqual(resp.status_code, 400)

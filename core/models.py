@@ -251,3 +251,20 @@ class EmailTemplate(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.category})"
+
+
+class IncomingEmail(models.Model):
+    subject = models.CharField(max_length=512, blank=True)
+    sender = models.CharField(max_length=512, blank=True)
+    recipients = models.CharField(max_length=1024, blank=True)
+    body = models.TextField(blank=True)
+    raw_date = models.CharField(max_length=128, blank=True)
+    received_by = models.CharField(max_length=255, blank=True)  # which mailbox received it
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class EmailAttachment(models.Model):
+    email = models.ForeignKey(IncomingEmail, related_name='attachments', on_delete=models.CASCADE)
+    filename = models.CharField(max_length=255)
+    file = models.FileField(upload_to='email_attachments/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)

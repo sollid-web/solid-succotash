@@ -12,7 +12,26 @@ load_dotenv()
 class Command(BaseCommand):
     help = 'Fetch emails from the IMAP server and store them in the database.'
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--dry-run",
+            action="store_true",
+            dest="dry_run",
+            help="Parse and show emails without saving to the database",
+        )
+        parser.add_argument(
+            "--limit",
+            type=int,
+            dest="limit",
+            default=0,
+            help="Optional limit on number of emails to fetch (0 = no limit)",
+        )
+
     def handle(self, *args, **kwargs):
+        dry_run = kwargs.get("dry_run", False)
+        limit = int(kwargs.get("limit", 0) or 0)
+        if dry_run:
+            self.stdout.write("Running in dry-run mode: emails will not be saved.")
         # IMAP server credentials - try multiple common env var names and fallbacks
         imap_host = (
             os.getenv('IMAP_HOST')
@@ -77,7 +96,10 @@ class Command(BaseCommand):
                 self.stderr.write("Failed to fetch emails.")
                 return
 
+            fetched = 0
             for num in messages[0].split():
+                if limit and fetched >= limit:
+                    break
                 # Fetch the email by ID
                 status, msg_data = mail.fetch(num, '(RFC822)')
                 if status != "OK":
@@ -116,34 +138,41 @@ class Command(BaseCommand):
                         else:
                             body = msg.get_payload(decode=True).decode()
 
-                        # Save the email to the database
-                        incoming_email = IncomingEmail.objects.create(
-                            subject=subject,
-                            sender=from_,
-                            recipients=to,
-                            body=body,
-                            raw_date=msg.get("Date"),
-                            received_by=imap_user
-                        )
+                        # Show/save the email according to dry-run flag
+                        if dry_run:
+                            self.stdout.write(f"[DRY] From: {from_} Subject: {subject}")
+                        else:
+                            incoming_email = IncomingEmail.objects.create(
+                                subject=subject,
+                                sender=from_,
+                                recipients=to,
+                                body=body,
+                                raw_date=msg.get("Date"),
+                                received_by=imap_user,
+                            )
 
-                        # Process attachments
-                        for part in msg.walk():
-                            content_disposition = str(part.get("Content-Disposition"))
-                            if "attachment" in content_disposition:
-                                filename = part.get_filename()
-                                if filename:
-                                    filepath = f"email_attachments/{filename}"
-                                    with open(filepath, "wb") as f:
-                                        f.write(part.get_payload(decode=True))
+                            # Process attachments
+                            for part in msg.walk():
+                                content_disposition = str(part.get("Content-Disposition"))
+                                if "attachment" in content_disposition:
+                                    filename = part.get_filename()
+                                    if filename:
+                                        # Ensure attachments dir exists
+                                        attachments_dir = os.path.join("email_attachments")
+                                        os.makedirs(attachments_dir, exist_ok=True)
+                                        filepath = os.path.join(attachments_dir, filename)
+                                        with open(filepath, "wb") as f:
+                                            f.write(part.get_payload(decode=True))
 
-                                    # Save attachment to the database
-                                    EmailAttachment.objects.create(
-                                        email=incoming_email,
-                                        filename=filename,
-                                        file=filepath
-                                    )
+                                        # Save attachment to the database (FileField stores path)
+                                        EmailAttachment.objects.create(
+                                            email=incoming_email,
+                                            filename=filename,
+                                            file=filepath,
+                                        )
 
-                        self.stdout.write(f"Email from {from_} with subject '{subject}' saved.")
+                            self.stdout.write(f"Email from {from_} with subject '{subject}' saved.")
+                        fetched += 1
 
             # Close the connection
             mail.logout()

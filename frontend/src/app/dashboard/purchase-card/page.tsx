@@ -187,7 +187,7 @@ export default function PurchaseCardPage() {
                         name="paymentMethod"
                         value={method.value}
                         checked={paymentMethod === method.value}
-                        onChange={(e) => setPaymentMethod(e.target.value)}
+                        onChange={() => setPaymentMethod(method.value as 'BTC' | 'USDT' | 'USDC' | 'ETH')}
                         className="peer sr-only"
                       />
                       <div className="flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer peer-checked:border-[#2563eb] peer-checked:bg-blue-50 hover:border-gray-300 transition">

@@ -10,9 +10,9 @@ const OVERRIDE_WIDGET_ID = '1j9kn4okn'
 
 // Optional enable/disable via env; default ON
 const ENABLED = typeof process !== 'undefined'
-  ? (process.env.NEXT_PUBLIC_TAWK_ENABLED ?? 'true') !== 'false'
+  ? (((process as any).env?.NEXT_PUBLIC_TAWK_ENABLED ?? 'true') !== 'false')
   : true
-const DEBUG = typeof process !== 'undefined' && process.env.NEXT_PUBLIC_TAWK_DEBUG === '1'
+const DEBUG = typeof process !== 'undefined' && ((process as any).env?.NEXT_PUBLIC_TAWK_DEBUG === '1')
 
 export default function TawkToChat() {
   useEffect(() => {

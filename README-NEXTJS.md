@@ -112,7 +112,14 @@ CMD ["npm", "start"]
 ```env
 NEXT_PUBLIC_API_URL=https://api.wolvcapital.com
 NEXT_PUBLIC_SITE_URL=https://wolvcapital.com
+NEXT_PUBLIC_TAWK_ENABLED=true
+NEXT_PUBLIC_TAWK_PROPERTY_ID=your-tawk-property-id
+NEXT_PUBLIC_TAWK_WIDGET_ID=your-tawk-widget-id
+NEXT_PUBLIC_TAWK_DEBUG=0
 ```
+
+- Set `NEXT_PUBLIC_TAWK_ENABLED=false` to temporarily hide the live-chat widget without code changes.
+- Toggle `NEXT_PUBLIC_TAWK_DEBUG=1` in lower environments to stream widget lifecycle events to the browser console.
 
 ### Images
 Place your images in `/public/images/`:

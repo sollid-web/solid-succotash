@@ -3,9 +3,9 @@ from decimal import Decimal
 from django.db.models import Sum
 from rest_framework import serializers
 
-from core.models import Agreement, UserAgreementAcceptance
+from core.models import Agreement, UserAgreementAcceptance, PlatformCertificate
 from investments.models import InvestmentPlan, UserInvestment
-from transactions.models import CryptocurrencyWallet, Transaction
+from transactions.models import CryptocurrencyWallet, Transaction, VirtualCard
 from users.models import KycApplication, Profile, UserNotification, UserWallet
 
 
@@ -326,6 +326,59 @@ class CryptocurrencyWalletSerializer(serializers.ModelSerializer):
             "wallet_address",
             "network",
             "is_active",
+            "updated_at",
+        ]
+        read_only_fields = fields
+
+
+class VirtualCardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VirtualCard
+        fields = [
+            "id",
+            "card_type",
+            "card_number",
+            "cardholder_name",
+            "expiry_month",
+            "expiry_year",
+            "cvv",
+            "balance",
+            "purchase_amount",
+            "status",
+            "is_active",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = [
+            "id",
+            "card_number",
+            "cardholder_name",
+            "expiry_month",
+            "expiry_year",
+            "cvv",
+            "balance",
+            "status",
+            "is_active",
+            "created_at",
+            "updated_at",
+        ]
+
+
+class PlatformCertificateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlatformCertificate
+        fields = [
+            "title",
+            "certificate_id",
+            "issue_date",
+            "jurisdiction",
+            "issuing_authority",
+            "verification_url",
+            "authority_seal_url",
+            "signature_1_url",
+            "signature_2_url",
+            "is_active",
+            "created_at",
             "updated_at",
         ]
         read_only_fields = fields

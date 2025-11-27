@@ -268,3 +268,31 @@ class EmailAttachment(models.Model):
     filename = models.CharField(max_length=255)
     file = models.FileField(upload_to='email_attachments/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
+
+
+class PlatformCertificate(models.Model):
+    """Public-facing certificate of operation details.
+
+    Non-financial metadata to improve platform transparency. Managed via Django admin.
+    """
+
+    title = models.CharField(max_length=255, default="Certificate of Operation")
+    certificate_id = models.CharField(max_length=64, unique=True)
+    issue_date = models.DateField(default=timezone.now)
+    jurisdiction = models.CharField(max_length=255, default="United States")
+    issuing_authority = models.CharField(max_length=255, help_text="Name of the issuing authority")
+    verification_url = models.URLField(max_length=500, blank=True)
+
+    authority_seal_url = models.URLField(max_length=500, blank=True)
+    signature_1_url = models.URLField(max_length=500, blank=True)
+    signature_2_url = models.URLField(max_length=500, blank=True)
+
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self) -> str:  # pragma: no cover - trivial
+        return f"{self.title} ({self.certificate_id})"

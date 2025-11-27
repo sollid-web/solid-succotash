@@ -8,6 +8,7 @@ from users.models import User, UserWallet
 
 from .models import AdminAuditLog, Transaction
 from .notifications import create_admin_notification
+from .models import VirtualCard
 
 
 @transaction.atomic
@@ -199,3 +200,65 @@ def create_transaction(
     EmailService.send_transaction_notification(txn, 'created')
 
     return txn
+
+
+@transaction.atomic
+def create_virtual_card_request(user: User, amount: float, notes: str = "") -> VirtualCard:
+    """
+    Create a pending virtual card request for the user.
+    Does not generate card details; requires manual admin approval.
+    Also creates an admin notification for review.
+    """
+    amount_decimal = amount if isinstance(amount, Decimal) else Decimal(str(amount))
+
+    if amount_decimal <= 0:
+        raise ValidationError("Purchase amount must be positive")
+
+    card = VirtualCard.objects.create(
+        user=user,
+        purchase_amount=amount_decimal,
+        status="pending",
+        notes=notes or "Virtual card activation request",
+    )
+
+    # Create admin notification
+    from .notifications import create_admin_notification
+
+    create_admin_notification(
+        notification_type="new_card_request",
+        title=f"New Virtual Card Request: ${amount_decimal.quantize(Decimal('0.01'))}",
+        message=f"User {user.email} requested a virtual card. Amount: ${amount_decimal.quantize(Decimal('0.01'))}. Notes: {notes}",
+        user=user,
+        entity_type="card",
+        entity_id=str(card.id),
+        priority="medium",
+    )
+
+    # Optional: send email to user confirming receipt
+    from core.email_service import EmailService
+
+    try:
+        EmailService.send_generic_email(
+            to=user.email,
+            subject="Virtual Card Request Received",
+            template_slug="virtual_card_request_received",
+            context={
+                "user_email": user.email,
+                "amount": f"${amount_decimal.quantize(Decimal('0.01'))}",
+                "card_id": str(card.id),
+            },
+        )
+    except Exception:
+        # Fail silently if template not configured
+        pass
+
+    # Create audit log
+    AdminAuditLog.objects.create(
+        admin=user,  # actor is the requesting user; admin will appear on approval
+        entity="user",
+        entity_id=str(user.id),
+        action="create",
+        notes=f"Virtual card request {card.id} created by user",
+    )
+
+    return card

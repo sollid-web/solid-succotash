@@ -10,19 +10,20 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from core.models import Agreement, SupportRequest, UserAgreementAcceptance
+from core.models import Agreement, SupportRequest, UserAgreementAcceptance, PlatformCertificate
 from investments.models import InvestmentPlan, UserInvestment
 from investments.services import (
     approve_investment,
     create_investment,
     reject_investment,
 )
-from transactions.models import CryptocurrencyWallet, Transaction
+from transactions.models import CryptocurrencyWallet, Transaction, VirtualCard
 from transactions.services import (
     approve_transaction,
     create_transaction,
     reject_transaction,
 )
+from transactions.services import create_virtual_card_request
 from users.models import KycApplication, Profile, UserNotification, UserWallet
 from users.notification_service import mark_all_read as service_mark_all_read
 from users.notification_service import (
@@ -41,6 +42,8 @@ from .serializers import (
     AdminKycApplicationSerializer,
     AgreementSerializer,
     CryptocurrencyWalletSerializer,
+    VirtualCardSerializer,
+    PlatformCertificateSerializer,
     EmailPreferencesSerializer,
     InvestmentPlanSerializer,
     KycApplicationSerializer,
@@ -517,6 +520,52 @@ class CryptoWalletViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CryptocurrencyWallet.objects.filter(is_active=True).order_by("currency")
     serializer_class = CryptocurrencyWalletSerializer
     permission_classes = [permissions.AllowAny]
+
+
+class VirtualCardViewSet(viewsets.GenericViewSet):
+    """User endpoints to list and request virtual cards (pending -> approved)."""
+
+    serializer_class = VirtualCardSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return VirtualCard.objects.filter(user=self.request.user).order_by("-created_at")
+
+    def list(self, request, *args, **kwargs):
+        qs = self.get_queryset()
+        serializer = self.get_serializer(qs, many=True)
+        return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        amount = request.data.get("purchase_amount")
+        notes = (request.data.get("notes") or "").strip()
+
+        try:
+            amount_val = float(amount)
+        except (TypeError, ValueError):
+            return Response({"error": "Valid purchase_amount is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            card = create_virtual_card_request(request.user, amount_val, notes)
+        except DjangoValidationError as exc:
+            raise ValidationError(exc.messages)
+
+        output = self.get_serializer(card)
+        headers = self.get_success_headers(output.data)
+        return Response(output.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class PublicCertificateView(APIView):
+    """Public endpoint exposing the latest active platform certificate."""
+
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        cert = PlatformCertificate.objects.filter(is_active=True).order_by("-created_at").first()
+        if not cert:
+            return Response({"detail": "No active certificate configured."}, status=status.HTTP_404_NOT_FOUND)
+        serializer = PlatformCertificateSerializer(cert)
+        return Response(serializer.data)
 
 
 class KycApplicationViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):

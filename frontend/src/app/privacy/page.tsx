@@ -15,7 +15,7 @@ export default function PrivacyPolicyPage() {
   <meta name="robots" content="index, follow" />
       </Head>
 
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-hero-privacy bg-cover bg-center bg-no-repeat overlay-dark-60">
         <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="flex items-center justify-between h-20">
@@ -29,15 +29,15 @@ export default function PrivacyPolicyPage() {
           </div>
         </nav>
 
-        <section className="pt-32 pb-16">
+        <section className="pt-32 pb-16 bg-white/80 backdrop-blur-[1px]">
           <div className="container mx-auto px-4 lg:px-8 max-w-4xl">
             <div className="text-center mb-12">
               <div className="flex flex-col items-center mb-8">
                 {/* Privacy OG Image as Hero Background */}
                 <section className="relative w-full h-[320px] sm:h-[400px] md:h-[500px] lg:h-[630px] flex items-center justify-center mb-8 mt-4 overflow-hidden rounded-3xl shadow-xl">
                   <Image
-                    src="/images/legal/privacy-og.jpg"
-                    alt="WolvCapital Privacy Policy OpenGraph image"
+                    src="/images/legal/wolvcapital-privacy-policy-hero.jpg"
+                    alt="WolvCapital Privacy Policy Hero image"
                     fill
                     priority
                     className="object-cover object-center w-full h-full absolute inset-0 z-0"

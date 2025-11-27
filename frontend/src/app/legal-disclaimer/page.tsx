@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 export default function LegalDisclaimerPage() {
     return (
       <>
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-hero-legal bg-cover bg-center bg-no-repeat">
           <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
             <div className="container mx-auto px-4 lg:px-8">
               <div className="flex items-center justify-between h-20">
@@ -47,18 +47,9 @@ export default function LegalDisclaimerPage() {
             </div>
           </nav>
 
-          <section className="pt-32 pb-16 relative overflow-hidden">
+          <section className="pt-32 pb-16 relative overflow-hidden bg-black/40">
             {/* Hero Background Image */}
-            <div className="absolute inset-0 w-full h-full pointer-events-none select-none">
-              <Image
-                src="/images/legal/wolvcapital-legal-disclaimer.jpg"
-                alt="Legal Disclaimer Background"
-                fill
-                priority
-                className="object-cover object-center opacity-30"
-                sizes="100vw"
-              />
-            </div>
+            {/* Background already applied to wrapper; optional secondary overlay retained */}
             <div className="relative z-10 container mx-auto px-4 lg:px-8 max-w-6xl">
               {/* Enhanced Legal Disclaimer Image Card */}
               <div className="w-full flex flex-col items-center justify-center mb-8 mt-2">

@@ -103,8 +103,8 @@ export default function ContactPage() {
         <meta name="robots" content="index, follow" />
         <meta property="og:image" content="/images/contact-og.jpg" />
       </Head>
-      <div className="min-h-screen bg-white">
-  <section className="pt-32 pb-16 bg-gradient-to-br from-[#0b2f6b] to-[#1d4ed8] text-white text-center">
+      <div className="min-h-screen bg-hero-contact bg-cover bg-center bg-no-repeat overlay-dark-40">
+  <section className="pt-32 pb-16 bg-black/40 text-white text-center">
           <div className="container mx-auto px-4 lg:px-8">
             <h1 className="text-5xl lg:text-6xl font-extrabold mb-6">Contact WolvCapital</h1>
             <p className="text-xl text-gray-200 max-w-3xl mx-auto">
@@ -126,7 +126,7 @@ export default function ContactPage() {
           </div>
         </section>
   {/* Live transactions ticker removed per request (no banner after header) */}
-  <section className="py-24 bg-white">
+  <section className="py-24 bg-white/90 backdrop-blur-[1px]">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="mb-16">
               <div className="text-center mb-8">
@@ -248,6 +248,7 @@ export default function ContactPage() {
                   <li><Link href="/legal-disclaimer" className="text-gray-300 hover:text-white transition">Legal Disclaimer</Link></li>
                   <li><Link href="/risk-disclosure" className="text-gray-300 hover:text-white transition">Risk Disclosure</Link></li>
                   <li><Link href="/privacy" className="text-gray-300 hover:text-white transition">Privacy Policy</Link></li>
+                  <li><Link href="/legal/certificate-of-operation" className="text-gray-300 hover:text-white transition">Certificate of Operation</Link></li>
                 </ul>
               </div>
               <div>

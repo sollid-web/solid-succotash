@@ -91,6 +91,38 @@ body {
     z-index: 2;
     padding: 6rem 0 5rem;
   }
+  /* Certificate styles */
+  .certificate-shell { @apply max-w-5xl mx-auto my-6 sm:my-10; }
+  .certificate-border {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid rgba(7,29,66,0.12);
+    box-shadow: 0 24px 80px rgba(7,29,66,0.18);
+    position: relative;
+    overflow: hidden;
+  }
+  .certificate-watermark {
+    position: absolute;
+    inset: auto auto 1rem 1rem;
+    font-weight: 800;
+    font-size: 96px;
+    line-height: 1;
+    color: rgba(7,29,66,0.06);
+    user-select: none;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .signature-line { border-bottom: 2px solid rgba(7,29,66,0.5); height: 40px; }
+  .certificate-seal {
+    width: 88px; height: 88px; border-radius: 9999px;
+    border: 3px solid rgba(11,47,107,0.6);
+    color: rgba(11,47,107,0.9);
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: inset 0 0 0 4px rgba(37,99,235,0.15), 0 6px 18px rgba(11,47,107,0.25);
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.98), rgba(248,250,252,0.95));
+    text-align: center;
+  }
+  .signature-img { max-height: 56px; width: auto; object-fit: contain; }
   
   .brand-title {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -113,6 +145,32 @@ body {
     animation: gradientShift 15s ease infinite;
     background-size: 400% 400%;
   }
+
+  /* Hero Background Utilities (mobile-first, no inline styles) */
+  .bg-hero-auth { background-image: url('/images/welcome-mobile.jpg'); }
+  .bg-hero-risk { background-image: url('/images/og/risk-disclosure-hero.jpg'); }
+  .bg-hero-faq { background-image: url('/images/og/faq-hero.jpg'); }
+  .bg-hero-terms { background-image: url('/images/legal/legal-terms-hero.jpg'); }
+  .bg-hero-legal { background-image: url('/images/legal/wolvcapital-legal-disclaimer.jpg'); }
+  .bg-hero-home { background-image: url('/images/welcome-mobile.jpg'); }
+  .bg-hero-about { background-image: url('/images/about-hero.jpg'); }
+  .bg-hero-privacy { background-image: url('/images/legal/wolvcapital-privacy-policy-hero.jpg'); }
+  .bg-hero-contact { background-image: url('/images/contact-hero.jpg'); }
+
+  /* Base page background helper */
+  .bg-page { background-repeat: no-repeat; background-position: center; background-size: cover; }
+
+  /* Overlay utilities (parent must be relative or block-level) */
+  .overlay-dark-40 { position: relative; }
+  .overlay-dark-40::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.40); pointer-events: none; }
+  .overlay-dark-60 { position: relative; }
+  .overlay-dark-60::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.60); pointer-events: none; }
+
+  /* Readable content panel */
+  .panel-readable { background: rgba(255,255,255,0.92); -webkit-backdrop-filter: saturate(140%) blur(6px); backdrop-filter: saturate(140%) blur(6px); box-shadow: 0 8px 32px rgba(0,0,0,0.25); }
+  .h-readable { color: #0f172a; }
+  .p-readable { color: #1f2937; }
+  .container-readable { max-width: 1100px; margin: 0 auto; padding: 1rem; }
 }
 
 /* Keyframes */
@@ -149,6 +207,7 @@ body {
   .hero-content {
     padding: 4rem 0 3rem;
   }
+  .container-readable { padding: 2rem; }
   
   .brand-title {
     font-size: 2.5rem;
@@ -171,4 +230,13 @@ body {
   .hero-overlay {
     background: rgba(0, 0, 0, 0.8);
   }
+}
+
+/* Print styles for clean PDF output */
+@media print {
+  body { background: #ffffff !important; }
+  .overlay-dark-40::before, .overlay-dark-60::before { display: none !important; }
+  .certificate-shell { margin: 0 auto; max-width: 800px; }
+  .certificate-border { box-shadow: none !important; border: 1px solid #d1d5db !important; }
+  .panel-readable { background: #ffffff !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; box-shadow: none !important; }
 }

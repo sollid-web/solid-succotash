@@ -1,14 +1,68 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { getApiBaseUrl } from '@/lib/config'
 
+type Wallet = {
+  currency: 'BTC' | 'USDT' | 'USDC' | 'ETH'
+  wallet_address: string
+  network: string
+  is_active: boolean
+  updated_at: string
+}
+
+const QR_URL = (data: string) =>
+  `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(data)}`
+
 export default function PurchaseCardPage() {
-  const [paymentMethod, setPaymentMethod] = useState('BTC')
+  const [paymentMethod, setPaymentMethod] = useState<'BTC' | 'USDT' | 'USDC' | 'ETH'>('BTC')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
+  const [wallets, setWallets] = useState<Wallet[]>([])
+  const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null)
+  const [cardRequestId, setCardRequestId] = useState('')
+  const [txnId, setTxnId] = useState('')
+
+  useEffect(() => {
+    let active = true
+    ;(async () => {
+      try {
+        const apiBase = getApiBaseUrl()
+        const resp = await fetch(`${apiBase}/api/crypto-wallets/`)
+        const data = await resp.json()
+        if (!active) return
+        setWallets(Array.isArray(data) ? data : [])
+      } catch {
+        // ignore
+      }
+    })()
+    return () => {
+      active = false
+    }
+  }, [])
+
+  useEffect(() => {
+    const w = wallets.find((w) => w.currency === paymentMethod && w.is_active)
+    setSelectedWallet(w || null)
+  }, [wallets, paymentMethod])
+
+  const qrData = useMemo(() => {
+    if (!selectedWallet) return ''
+    const memo = `Virtual Card Payment $1000 via ${paymentMethod}`
+    return `${selectedWallet.wallet_address}\n${memo}`
+  }, [selectedWallet, paymentMethod])
+
+  const copyAddress = async () => {
+    if (!selectedWallet) return
+    try {
+      await navigator.clipboard.writeText(selectedWallet.wallet_address)
+      alert('Wallet address copied')
+    } catch {
+      alert('Copy failed')
+    }
+  }
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,7 +78,9 @@ export default function PurchaseCardPage() {
 
     try {
       const apiBase = getApiBaseUrl()
-      const response = await fetch(`${apiBase}/api/transactions/`, {
+
+      // 1) Create deposit transaction
+      const txResp = await fetch(`${apiBase}/api/transactions/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -36,21 +92,33 @@ export default function PurchaseCardPage() {
           amount: 1000,
           reference: 'Virtual Card Activation Payment',
           payment_method: paymentMethod,
-          wallet_address_used: '',
+          wallet_address_used: selectedWallet?.wallet_address || '',
           tx_hash: ''
         })
       })
-
-      const data = await response.json()
-      
-      if (response.ok) {
-        setMessage('Payment request submitted successfully! Your card will be activated once payment is confirmed.')
-        setTimeout(() => {
-          window.location.href = '/dashboard'
-        }, 3000)
-      } else {
-        setError(data.detail || data.non_field_errors?.[0] || 'Payment submission failed')
+      const txData = await txResp.json().catch(() => ({}))
+      if (!txResp.ok) {
+        throw new Error(txData?.detail || txData?.non_field_errors?.[0] || 'Payment submission failed')
       }
+      setTxnId(txData?.id || '')
+
+      // 2) Create virtual card request
+      const cardResp = await fetch(`${apiBase}/api/virtual-cards/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`
+        },
+        credentials: 'include',
+        body: JSON.stringify({ purchase_amount: 1000, notes: 'Card activation payment submitted' })
+      })
+      const cardData = await cardResp.json().catch(() => ({}))
+      if (!cardResp.ok) {
+        throw new Error(cardData?.error || cardData?.detail || 'Card request failed')
+      }
+      setCardRequestId(cardData?.id || '')
+
+      setMessage('Payment submitted. Awaiting admin approval for virtual card request.')
     } catch (err) {
       setError('Network error. Please try again.')
       console.error('Payment error:', err)
@@ -152,6 +220,32 @@ export default function PurchaseCardPage() {
                 </div>
               </div>
 
+              {/* Wallet address + QR */}
+              <div className="mt-4">
+                {selectedWallet ? (
+                  <div className="border rounded-xl p-4 flex items-center gap-4">
+                    <img
+                      src={QR_URL(qrData)}
+                      alt="QR"
+                      className="w-24 h-24 border rounded"
+                    />
+                    <div className="flex-1">
+                      <div className="text-sm text-gray-500">Send exactly</div>
+                      <div className="font-semibold">$1,000 in {paymentMethod}</div>
+                      <div className="mt-2 text-sm text-gray-500">To wallet ({selectedWallet.network || 'network not specified'}):</div>
+                      <div className="mt-1 font-mono break-all">{selectedWallet.wallet_address}</div>
+                      <button
+                        type="button"
+                        onClick={copyAddress}
+                        className="mt-2 text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded"
+                      >Copy Address</button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-3 border rounded bg-yellow-50 text-yellow-700">Selected payment method currently unavailable.</div>
+                )}
+              </div>
+
               <button
                 type="submit"
                 disabled={loading}
@@ -172,6 +266,16 @@ export default function PurchaseCardPage() {
                 )}
               </button>
             </form>
+
+            {/* Awaiting Approval State */}
+            {(txnId || cardRequestId) && (
+              <div className="mt-6 p-4 border rounded bg-green-50 text-green-700 space-y-1">
+                <div className="font-semibold">Awaiting Admin Approval</div>
+                <div className="text-sm">Deposit reference ID: {txnId || '—'}</div>
+                <div className="text-sm">Card request ID: {cardRequestId || '—'}</div>
+                <a href="/dashboard/cards" className="text-sm text-indigo-700 underline">View card requests</a>
+              </div>
+            )}
           </div>
 
           {/* Benefits Summary */}

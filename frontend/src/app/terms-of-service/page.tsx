@@ -15,8 +15,8 @@ export default function TermsOfServicePage() {
   <meta name="robots" content="index, follow" />
       </Head>
 
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
+      <div className="min-h-screen bg-hero-terms bg-cover bg-center bg-no-repeat">
+      <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-sm border-b border-gray-100 z-50">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <Link href="/" className="flex items-center space-x-3">
@@ -42,7 +42,7 @@ export default function TermsOfServicePage() {
       </nav>
 
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-gradient-to-br from-[#0b2f6b] to-[#1d4ed8] text-white">
+      <section className="pt-32 pb-16 bg-black/50 text-white">
         <div className="container mx-auto px-4 lg:px-8 text-center">
           <h1 className="text-5xl lg:text-6xl font-extrabold mb-6">Terms of Service</h1>
           <p className="text-xl text-gray-200">Effective Date: October 2025</p>
@@ -62,7 +62,7 @@ export default function TermsOfServicePage() {
       </section>
 
       {/* Content */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white/90 backdrop-blur-[1px]">
         <div className="container mx-auto px-4 lg:px-8 max-w-4xl prose prose-lg">
           <p className="text-xl text-gray-700 mb-8 leading-relaxed">
             Welcome to WolvCapital, a U.S. regulated digital investment platform. By accessing or using our services, you agree to be bound by these Terms of Service. Please read them carefully before using the platform. All financial operations are subject to U.S. regulatory standards and compliance review.
@@ -128,7 +128,7 @@ export default function TermsOfServicePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#071d42] text-white py-16">
+      <footer className="bg-[#071d42] text-white py-16 bg-opacity-95">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8 mb-12">
             <div>
@@ -147,6 +147,7 @@ export default function TermsOfServicePage() {
                 <li><Link href="/legal-disclaimer" className="text-gray-300 hover:text-white transition">Legal Disclaimer</Link></li>
                 <li><Link href="/risk-disclosure" className="text-gray-300 hover:text-white transition">Risk Disclosure</Link></li>
                 <li><Link href="/privacy" className="text-gray-300 hover:text-white transition">Privacy Policy</Link></li>
+                <li><Link href="/legal/certificate-of-operation" className="text-gray-300 hover:text-white transition">Certificate of Operation</Link></li>
               </ul>
             </div>
             <div>
@@ -166,6 +167,7 @@ export default function TermsOfServicePage() {
           </div>
         </div>
       </footer>
+      </div>
     </>
   )
 }

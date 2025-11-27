@@ -87,7 +87,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0b2f6b] via-[#1d4ed8] to-[#2563eb] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-hero-auth bg-cover bg-center bg-no-repeat flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -100,7 +100,7 @@ export default function LoginPage() {
         </div>
 
         {/* Login Card */}
-        <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-10">
+        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 md:p-10">
           <h1 className="text-3xl font-bold text-[#0b2f6b] mb-2 text-center">Welcome Back</h1>
           <p className="text-gray-600 text-center mb-8">Sign in to access your investment dashboard</p>
 

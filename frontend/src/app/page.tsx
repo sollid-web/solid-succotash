@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <PublicLayout>
+    <PublicLayout backgroundClassName="bg-hero-home overlay-dark-60">
       <HomePage />
     </PublicLayout>
   )

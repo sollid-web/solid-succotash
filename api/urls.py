@@ -19,6 +19,9 @@ router.register(
 router.register(
     r"crypto-wallets", views.CryptoWalletViewSet, basename="api-crypto-wallets"
 )
+router.register(
+    r"virtual-cards", views.VirtualCardViewSet, basename="api-virtual-cards"
+)
 router.register(r"kyc", views.KycApplicationViewSet, basename="api-kyc")
 router.register(
     r"notifications",
@@ -47,6 +50,7 @@ urlpatterns = [
     path("", include(router.urls)),
     path("wallet/", views.WalletView.as_view(), name="api-wallet"),
     path("support/", views.SupportRequestView.as_view(), name="api-support"),
+    path("public/certificate/", views.PublicCertificateView.as_view(), name="api-public-certificate"),
     path(
         "profile/email-preferences/",
         views.EmailPreferencesView.as_view(),

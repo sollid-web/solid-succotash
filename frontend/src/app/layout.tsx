@@ -55,11 +55,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className="font-sans font-brand antialiased bg-gray-50 text-gray-900">
-        <TranslationProvider>
-          {children}
-        </TranslationProvider>
+    <html lang="en">
+      <body className="min-h-screen bg-white">
+        {children}
       </body>
     </html>
   )

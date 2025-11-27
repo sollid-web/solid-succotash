@@ -18,7 +18,7 @@ export default function RiskDisclosurePage() {
 				<meta name="robots" content="index, follow" />
 			</Head>
 
-			<div className="min-h-screen bg-white">
+			<div className="min-h-screen bg-hero-risk bg-cover bg-center bg-no-repeat">
 				<nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
 					<div className="container mx-auto px-4 lg:px-8">
 						<div className="flex items-center justify-between h-20">
@@ -32,7 +32,7 @@ export default function RiskDisclosurePage() {
 					</div>
 				</nav>
 
-				<section className="pt-32 pb-16 bg-gradient-to-br from-[#0b2f6b] to-[#1d4ed8] text-white">
+				<section className="pt-32 pb-16 bg-black/50 text-white">
 					<div className="container mx-auto px-4 lg:px-8 text-center">
 						<h1 className="text-5xl lg:text-6xl font-extrabold mb-6">Risk Disclosure</h1>
 						<p className="text-xl text-gray-200 max-w-3xl mx-auto mb-8">
@@ -53,7 +53,7 @@ export default function RiskDisclosurePage() {
 					</div>
 				</section>
 
-				<section className="py-24 bg-white">
+				<section className="py-24 bg-white/90 backdrop-blur-[1px]">
 					<div className="container mx-auto px-4 lg:px-8 max-w-4xl prose prose-lg">
 						<h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">Investment Risks</h2>
 						<p className="text-lg text-gray-700 mb-4">

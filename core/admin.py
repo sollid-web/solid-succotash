@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.utils import timezone
 
-from .models import Agreement, SupportRequest, UserAgreementAcceptance, EmailInbox, EmailTemplate
+from .models import Agreement, SupportRequest, UserAgreementAcceptance, EmailInbox, EmailTemplate, PlatformCertificate
 
 
 @admin.register(Agreement)
@@ -326,3 +326,28 @@ class EmailTemplateAdmin(admin.ModelAdmin):
         if not change:
             obj.created_by = request.user
         super().save_model(request, obj, form, change)
+
+
+@admin.register(PlatformCertificate)
+class PlatformCertificateAdmin(admin.ModelAdmin):
+    list_display = ("certificate_id", "title", "issuing_authority", "issue_date", "is_active", "created_at")
+    list_filter = ("is_active", "issue_date", "created_at")
+    search_fields = ("certificate_id", "title", "issuing_authority", "jurisdiction")
+    readonly_fields = ("created_at", "updated_at")
+    ordering = ("-created_at",)
+
+    fieldsets = (
+        ("Certificate", {
+            "fields": ("title", "certificate_id", "issue_date", "jurisdiction", "issuing_authority", "is_active"),
+        }),
+        ("Verification", {
+            "fields": ("verification_url",),
+        }),
+        ("Branding & Signatures", {
+            "fields": ("authority_seal_url", "signature_1_url", "signature_2_url"),
+        }),
+        ("Timestamps", {
+            "fields": ("created_at", "updated_at"),
+            "classes": ("collapse",),
+        }),
+    )

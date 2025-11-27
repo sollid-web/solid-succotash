@@ -83,7 +83,7 @@ function AboutNavigation() {
 
 export default function AboutPage() {
   return (
-    <PublicLayout>
+    <PublicLayout backgroundClassName="bg-hero-about overlay-dark-40">
       <Head>
   <title>About WolvCapital · U.S. Digital Investment Platform</title>
   <meta name="description" content="Discover WolvCapital, a U.S. regulated digital investment platform led by experienced professionals. Learn about our commitment to secure investment returns, compliance, and transparent cryptocurrency investment opportunities." />
@@ -98,14 +98,14 @@ export default function AboutPage() {
       <AboutNavigation />
 
       {/* Hero */}
-      <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 bg-gradient-to-br from-[#0b2f6b] to-[#1d4ed8] text-white">
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 bg-black/50 text-white">
         <div className="container mx-auto px-4 lg:px-8 text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 sm:mb-6">About WolvCapital</h1>
           <p className="text-base sm:text-lg md:text-xl text-gray-200 max-w-3xl mx-auto px-4">WolvCapital is a U.S. regulated digital investment platform dedicated to secure investment returns, transparent operations, and rigorous human oversight. Our mission is to deliver compliant cryptocurrency investment opportunities for institutional and individual investors.</p>
           <div className="mt-6 sm:mt-8 flex justify-center">
               <div className="relative w-full max-w-[320px] sm:max-w-[480px] aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 mx-auto flex items-center justify-center">
                   <Image
-                    src="/images/home-hero.jpg"
+                    src="/images/about-hero.jpg"
                     alt="WolvCapital About Hero"
                     fill
                     priority
@@ -242,6 +242,7 @@ export default function AboutPage() {
                 <li><Link href="/legal-disclaimer" className="text-gray-300 hover:text-white transition">Legal Disclaimer</Link></li>
                 <li><Link href="/risk-disclosure" className="text-gray-300 hover:text-white transition">Risk Disclosure</Link></li>
                 <li><Link href="/privacy" className="text-gray-300 hover:text-white transition">Privacy Policy</Link></li>
+                <li><Link href="/legal/certificate-of-operation" className="text-gray-300 hover:text-white transition">Certificate of Operation</Link></li>
               </ul>
             </div>
             <div>

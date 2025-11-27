@@ -216,3 +216,42 @@ class KycPersonalInfoAPITests(TestCase):
         payload = {"first_name": "Only"}
         resp = self.client.post("/api/kyc/personal-info/", payload, format="json")
         self.assertEqual(resp.status_code, 400)
+
+
+class KycDocumentsAPITests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.user = User.objects.create_user(
+            username="kyc_docs_user", email="kyc_docs_user@example.com", password="pass12345"
+        )
+        self.client = APIClient()
+        self.client.login(username="kyc_docs_user", password="pass12345")
+
+        # Ensure there is an application by first submitting personal info (creates pending application)
+        personal_payload = {
+            "first_name": "Doc",
+            "last_name": "Tester",
+            "date_of_birth": "1992-02-02",
+            "nationality": "US",
+            "address": "456 Secondary Ave",
+        }
+        self.client.post("/api/kyc/personal-info/", personal_payload, format="json")
+
+    def test_submit_documents_success(self):
+        payload = {
+            "government_id": {"name": "passport.png", "type": "image/png", "size": 12345},
+            "proof_of_address": {"name": "utility.pdf", "type": "application/pdf", "size": 23456},
+        }
+        resp = self.client.post("/api/kyc/documents/", payload, format="json")
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertEqual(data["status"], "pending")
+        self.assertIn("document_submitted_at", data)
+
+    def test_submit_documents_missing_one_returns_400(self):
+        payload = {
+            "government_id": {"name": "passport.png", "type": "image/png", "size": 12345},
+            # Missing proof_of_address
+        }
+        resp = self.client.post("/api/kyc/documents/", payload, format="json")
+        self.assertEqual(resp.status_code, 400)

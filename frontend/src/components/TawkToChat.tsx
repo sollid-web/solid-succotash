@@ -1,76 +1,55 @@
-import Script from 'next/script'
+"use client"
+import { useEffect } from 'react'
 
-// Ensure process.env is typed correctly for Node.js
-declare const process: {
-  env: { [key: string]: string | undefined }
-}
+// Hard override per user request; ignore previous env-driven config entirely.
+// Provided production embed values:
+// Property ID: 6910c11e3239d4195bd86428
+// Widget ID:   1j9kn4okn
+const OVERRIDE_PROPERTY_ID = '6910c11e3239d4195bd86428'
+const OVERRIDE_WIDGET_ID = '1j9kn4okn'
 
-const DEFAULT_PROPERTY = '6910bc388e8c101957916042'
-const DEFAULT_WIDGET = '1j9klug1o'
-
-// @ts-ignore
-const enabledFlag = process.env.NEXT_PUBLIC_TAWK_ENABLED
-const TAWK_CONFIG = {
-  enabled: enabledFlag ? enabledFlag !== 'false' : true,
-  // @ts-ignore
-  propertyId: process.env.NEXT_PUBLIC_TAWK_PROPERTY_ID || DEFAULT_PROPERTY,
-  // @ts-ignore
-  widgetId: process.env.NEXT_PUBLIC_TAWK_WIDGET_ID || DEFAULT_WIDGET,
-  // @ts-ignore
-  debug: process.env.NEXT_PUBLIC_TAWK_DEBUG === '1',
-}
-
-const isProduction = process.env.NODE_ENV === 'production'
-
-const log = (message: string, level: 'info' | 'warn' = 'info') => {
-  if (isProduction) {
-    return
-  }
-
-  const prefix = `[TawkToChat] ${message}`
-  if (level === 'warn') {
-    console.warn(prefix)
-  } else {
-    console.info(prefix)
-  }
-}
+// Optional enable/disable via env; default ON
+const ENABLED = typeof process !== 'undefined'
+  ? (process.env.NEXT_PUBLIC_TAWK_ENABLED ?? 'true') !== 'false'
+  : true
+const DEBUG = typeof process !== 'undefined' && process.env.NEXT_PUBLIC_TAWK_DEBUG === '1'
 
 export default function TawkToChat() {
-  if (!TAWK_CONFIG.enabled) {
-    log('Disabled via NEXT_PUBLIC_TAWK_ENABLED')
-    return null
-  }
+  useEffect(() => {
+    if (!ENABLED) {
+      if (DEBUG) console.info('[TawkToChat] Disabled.')
+      return
+    }
+    // Prevent double injection
+    if (typeof window !== 'undefined' && (window as any).Tawk_API) {
+      if (DEBUG) console.info('[TawkToChat] Already loaded.')
+      return
+    }
+    const scriptId = 'tawk-override-embed'
+    if (document.getElementById(scriptId)) {
+      if (DEBUG) console.info('[TawkToChat] Script tag already present.')
+      return
+    }
+    const s1 = document.createElement('script')
+    const s0 = document.getElementsByTagName('script')[0]
+    s1.id = scriptId
+    s1.async = true
+    s1.src = `https://embed.tawk.to/${OVERRIDE_PROPERTY_ID}/${OVERRIDE_WIDGET_ID}`
+    s1.charset = 'UTF-8'
+    s1.setAttribute('crossorigin', '*')
+    s0?.parentNode?.insertBefore(s1, s0)
+    if (DEBUG) console.info('[TawkToChat] Injected override script.')
+    ;(window as any).Tawk_API = (window as any).Tawk_API || {}
+    if (DEBUG) {
+      const api = (window as any).Tawk_API
+      api.onLoad = () => console.info('[TawkToChat] Widget loaded')
+      api.onChatMaximized = () => console.info('[TawkToChat] Chat maximized')
+      api.onChatMinimized = () => console.info('[TawkToChat] Chat minimized')
+      api.onChatStarted = () => console.info('[TawkToChat] Chat started')
+      api.onChatEnded = () => console.info('[TawkToChat] Chat ended')
+    }
+  }, [])
 
-  if (!TAWK_CONFIG.propertyId || !TAWK_CONFIG.widgetId) {
-    log('Missing property or widget ID. Skipping script injection.', 'warn')
-    return null
-  }
-
-  const src = `https://embed.tawk.to/${TAWK_CONFIG.propertyId}/${TAWK_CONFIG.widgetId}`
-
-  return (
-    <>
-      {TAWK_CONFIG.debug && (
-        <Script id="tawkto-debug" strategy="afterInteractive">
-          {`window.Tawk_API = window.Tawk_API || {};
-window.Tawk_API.onLoad = function () {
-  console.info('[TawkToChat] Widget loaded');
-};
-window.Tawk_API.onChatMaximized = function () {
-  console.info('[TawkToChat] Chat maximized');
-};
-window.Tawk_API.onChatMinimized = function () {
-  console.info('[TawkToChat] Chat minimized');
-};
-window.Tawk_API.onChatStarted = function () {
-  console.info('[TawkToChat] Chat started');
-};
-window.Tawk_API.onChatEnded = function () {
-  console.info('[TawkToChat] Chat ended');
-};`}
-        </Script>
-      )}
-      <Script id="tawkto-widget-src" strategy="afterInteractive" src={src} crossOrigin="anonymous" />
-    </>
-  )
+  // Component renders nothing; script injected via side effect
+  return null
 }

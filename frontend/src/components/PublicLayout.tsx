@@ -15,7 +15,7 @@ export default function PublicLayout({ children, backgroundImageUrl, backgroundC
     <>
       <NavBar />
       <main
-        className={`min-h-screen pt-20 ${backgroundClassName ? `${backgroundClassName} bg-cover bg-center bg-no-repeat` : ''}`}
+        className={`min-h-screen pt-20 ${backgroundClassName ? `${backgroundClassName} bg-cover bg-center bg-no-repeat relative` : ''}`}
         style={backgroundImageUrl && !backgroundClassName ? {
           backgroundImage: `url(${backgroundImageUrl})`,
           backgroundSize: 'cover',
@@ -23,7 +23,12 @@ export default function PublicLayout({ children, backgroundImageUrl, backgroundC
           backgroundPosition: 'center',
         } : undefined}
       >{/* offset for fixed navbar */}
+        {backgroundClassName && (
+          <div className="pointer-events-none absolute inset-0 bg-black/10"></div>
+        )}
+        <div className="relative">
         {children}
+        </div>
       </main>
       <TawkToChat />
       <RecentActivityTicker />

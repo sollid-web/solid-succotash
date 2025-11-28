@@ -23,7 +23,8 @@
 
 /* Base Styles */
 html {
-  scroll-behavior: smooth;
+  /* Enable smooth scrolling across the site */
+  scroll-behavior: smooth; 
 }
 
 body {

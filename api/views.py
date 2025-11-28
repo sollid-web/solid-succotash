@@ -29,6 +29,7 @@ from users.notification_service import mark_all_read as service_mark_all_read
 from users.notification_service import (
     mark_notification_read as service_mark_notification_read,
 )
+from users.verification import issue_verification_code, verify_code
 from users.services import (
     approve_kyc_application,
     reject_kyc_application,
@@ -632,3 +633,49 @@ class AdminKycApplicationViewSet(viewsets.ModelViewSet):
 
         kwargs["partial"] = partial
         return super().update(request, *args, **kwargs)
+
+
+@api_view(["POST"]) 
+@permission_classes([permissions.AllowAny])
+def send_verification_code(request):
+    """Issue a 4-digit email verification code to a given email.
+
+    If the user account exists, a fresh code is issued and emailed.
+    If not, we create a disabled account shell, then issue the code.
+    """
+    email = (request.data.get("email") or "").strip()
+    if not email:
+        return Response({"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    user, created = User.objects.get_or_create(username=email, defaults={"email": email, "is_active": False})
+    issue_verification_code(user)
+    return Response({"status": "sent"}, status=status.HTTP_200_OK)
+
+
+@api_view(["POST"]) 
+@permission_classes([permissions.AllowAny])
+def verify_email_code(request):
+    """Verify the 4-digit code; activate account and allow signup continuation."""
+    email = (request.data.get("email") or "").strip()
+    code = (request.data.get("code") or "").strip()
+    if not email or not code:
+        return Response({"error": "Email and code are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    user = User.objects.filter(email=email).first()
+    if not user:
+        return Response({"error": "Account not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    ok = verify_code(user, code)
+    if not ok:
+        return Response({"error": "Invalid or expired code."}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Activate account so registration can complete; no financial action implied
+    if not user.is_active:
+        user.is_active = True
+        user.save(update_fields=["is_active"])
+
+    return Response({"verified": True}, status=status.HTTP_200_OK)

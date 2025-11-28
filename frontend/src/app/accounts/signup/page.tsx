@@ -1,125 +1,108 @@
-'use client'
+"use client"
 
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
+import PublicLayout from '@/components/PublicLayout'
 import { getApiBaseUrl } from '@/lib/config'
-import Link from 'next/link'
 
 export default function SignupPage() {
+  const [step, setStep] = useState<'email' | 'code' | 'password'>('email')
   const [email, setEmail] = useState('')
-  const [password1, setPassword1] = useState('')
-  const [password2, setPassword2] = useState('')
+  const [code, setCode] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [message, setMessage] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Use correct API URL for production
-    const apiBase = getApiBaseUrl()
-    window.location.href = `${apiBase}/accounts/signup/?email=${encodeURIComponent(email)}`
+  const apiBase = getApiBaseUrl()
+
+  const requestCode = async () => {
+    setLoading(true); setError(''); setMessage('')
+    try {
+      const resp = await fetch(`${apiBase}/api/auth/verification/send/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      })
+      const data = await resp.json()
+      if (!resp.ok) throw new Error(data?.error || 'Failed to send code')
+      setMessage('Verification code sent to your email.')
+      setStep('code')
+    } catch (e) {
+      setError('Could not send code.')
+    } finally { setLoading(false) }
+  }
+
+  const verifyCode = async () => {
+    setLoading(true); setError(''); setMessage('')
+    try {
+      const resp = await fetch(`${apiBase}/api/auth/verification/verify/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code })
+      })
+      const data = await resp.json()
+      if (!resp.ok) throw new Error(data?.error || 'Invalid or expired code')
+      setMessage('Email verified. Continue to set password.')
+      setStep('password')
+    } catch (e) {
+      setError('Invalid or expired code.')
+    } finally { setLoading(false) }
+  }
+
+  const completeSignup = async () => {
+    setLoading(true); setError(''); setMessage('')
+    try {
+      const resp = await fetch(`${apiBase}/api/auth/token/generate/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+      const data = await resp.json()
+      if (!resp.ok) throw new Error(data?.error || 'Signup failed')
+      setMessage('Registration complete. Redirecting to dashboard...')
+      localStorage.setItem('authToken', data.token)
+      setTimeout(() => { window.location.href = '/dashboard' }, 800)
+    } catch (e) {
+      setError('Failed to complete signup.')
+    } finally { setLoading(false) }
   }
 
   return (
-    <div className="min-h-screen bg-hero-auth bg-cover bg-center bg-no-repeat flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center space-x-3">
-            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-2xl">
-              <span className="text-3xl font-bold text-[#0b2f6b]">W</span>
+    <PublicLayout backgroundClassName="bg-hero-auth overlay-dark-md">
+      <div className="min-h-screen pt-24 px-4">
+        <div className="max-w-lg mx-auto bg.white/80 backdrop-blur rounded-2xl shadow p-6">
+          <h1 className="text-2xl font-bold mb-4">Create your account</h1>
+          {error && <div className="mb-3 text-sm text-red-700 bg-red-50 border border-red-200 rounded p-2">{error}</div>}
+          {message && <div className="mb-3 text-sm text-green-700 bg-green-50 border border-green-200 rounded p-2">{message}</div>}
+
+          {step === 'email' && (
+            <div className="space-y-4">
+              <label className="block text-sm font-semibold">Email</label>
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)} className="w-full border rounded px-3 py-2" placeholder="you@example.com" />
+              <button onClick={requestCode} disabled={loading || !email} className="w-full bg-blue-600 text-white py-2 rounded disabled:opacity-50">Send Verification Code</button>
             </div>
-            <span className="text-3xl font-bold text-white">WolvCapital</span>
-          </Link>
-        </div>
+          )}
 
-        {/* Signup Card */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 md:p-10">
-          <h1 className="text-3xl font-bold text-[#0b2f6b] mb-2 text-center">Create Account</h1>
-          <p className="text-gray-600 text-center mb-8">Start your investment journey today</p>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
-              <input 
-                type="email" 
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#2563eb] focus:outline-none transition"
-                placeholder="you@example.com"
-                required
-              />
+          {step === 'code' && (
+            <div className="space-y-4">
+              <label className="block text-sm font-semibold">Enter 4-digit code</label>
+              <input type="text" value={code} maxLength={4} onChange={e => setCode(e.target.value)} className="w-full border rounded px-3 py-2 tracking-widest" placeholder="1234" />
+              <div className="flex gap-2">
+                <button onClick={verifyCode} disabled={loading || code.length !== 4} className="flex-1 bg-green-600 text-white py-2 rounded disabled:opacity-50">Verify</button>
+                <button onClick={requestCode} disabled={loading} className="flex-1 bg-gray-200 text-gray-800 py-2 rounded">Resend</button>
+              </div>
             </div>
+          )}
 
-            <div>
-              <label htmlFor="password1" className="block text-sm font-bold text-gray-700 mb-2">Password</label>
-              <input 
-                type="password" 
-                id="password1"
-                value={password1}
-                onChange={(e) => setPassword1(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#2563eb] focus:outline-none transition"
-                placeholder="••••••••"
-                required
-              />
-              <p className="mt-1 text-xs text-gray-500">Must be at least 8 characters</p>
+          {step === 'password' && (
+            <div className="space-y-4">
+              <label className="block text-sm font-semibold">Choose a password</label>
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)} className="w-full border rounded px-3 py-2" placeholder="••••••••" />
+              <button onClick={completeSignup} disabled={loading || password.length < 8} className="w-full bg-blue-600 text-white py-2 rounded disabled:opacity-50">Complete Registration</button>
             </div>
-
-            <div>
-              <label htmlFor="password2" className="block text-sm font-bold text-gray-700 mb-2">Confirm Password</label>
-              <input 
-                type="password" 
-                id="password2"
-                value={password2}
-                onChange={(e) => setPassword2(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#2563eb] focus:outline-none transition"
-                placeholder="••••••••"
-                required
-              />
-            </div>
-
-            <div className="flex items-start">
-              <input 
-                type="checkbox" 
-                id="terms"
-                className="w-4 h-4 mt-1 text-[#2563eb] border-gray-300 rounded focus:ring-[#2563eb]"
-                required
-              />
-              <label htmlFor="terms" className="ml-2 text-sm text-gray-700">
-                I agree to the{' '}
-                <Link href="/terms-of-service" className="text-[#2563eb] hover:underline font-semibold">Terms of Service</Link>
-                {' '}and{' '}
-                <Link href="/privacy" className="text-[#2563eb] hover:underline font-semibold">Privacy Policy</Link>
-              </label>
-            </div>
-
-            <button 
-              type="submit"
-              className="w-full bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all duration-300 hover:scale-105"
-            >
-              Create Account
-            </button>
-          </form>
-
-          <div className="mt-8 text-center">
-            <p className="text-gray-600">
-              Already have an account? {' '}
-              <Link href="/accounts/login" className="text-[#2563eb] hover:text-[#1d4ed8] font-bold transition">Sign In</Link>
-            </p>
-          </div>
-
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-              <p className="text-sm text-blue-800">
-                <strong>Note:</strong> All accounts require admin approval for deposits and withdrawals. Manual verification ensures maximum security.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="text-center mt-6">
-          <Link href="/" className="text-white hover:text-gray-200 font-semibold transition">
-            ← Back to Home
-          </Link>
+          )}
         </div>
       </div>
-    </div>
+    </PublicLayout>
   )
 }

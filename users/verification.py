@@ -44,10 +44,11 @@ def _generate_code() -> str:
 @transaction.atomic
 def issue_verification_code(user) -> EmailVerification:
     # invalidate previous active codes
-    EmailVerification.objects.filter(
-        user=user,
-        used_at__isnull=True,
-    ).update(used_at=timezone.now())
+        # Rate limit: if a code was issued within the last 60 seconds, deny
+        recent = EmailVerification.objects.filter(user=user).order_by('-created_at').first()
+        if recent and (timezone.now() - recent.created_at).total_seconds() < 60:
+            raise ValueError("Too many requests. Please wait before requesting another code.")
+        EmailVerification.objects.filter(user=user, used_at__isnull=True).update(used_at=timezone.now())
 
     code = _generate_code()
     ev = EmailVerification.objects.create(

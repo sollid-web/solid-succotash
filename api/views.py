@@ -431,6 +431,8 @@ def logout_view(request):
 def current_user_view(request):
     """Get current authenticated user details."""
     user = request.user
+    profile = getattr(user, "profile", None)
+    email_verified = bool(getattr(profile, "email_verified", False))
     return Response({
         "id": user.id,
         "email": user.email,
@@ -438,6 +440,7 @@ def current_user_view(request):
         "last_name": user.last_name,
         "is_staff": user.is_staff,
         "is_superuser": user.is_superuser,
+        "email_verified": email_verified,
     })
 
 
@@ -504,6 +507,8 @@ def token_refresh_view(request):
 def token_verify_view(request):
     """Verify that the current token is valid."""
     user = request.user
+    profile = getattr(user, "profile", None)
+    email_verified = bool(getattr(profile, "email_verified", False))
     return Response({
         "valid": True,
         "user": {
@@ -511,6 +516,7 @@ def token_verify_view(request):
             "email": user.email,
             "first_name": user.first_name,
             "last_name": user.last_name,
+            "email_verified": email_verified,
         }
     })
 
@@ -649,8 +655,13 @@ def send_verification_code(request):
 
     from django.contrib.auth import get_user_model
     User = get_user_model()
-    user, created = User.objects.get_or_create(username=email, defaults={"email": email, "is_active": False})
-    issue_verification_code(user)
+    user, created = User.objects.get_or_create(
+        username=email, defaults={"email": email, "is_active": False}
+    )
+    try:
+        issue_verification_code(user)
+    except ValueError as e:
+        return Response({"error": str(e)}, status=status.HTTP_429_TOO_MANY_REQUESTS)
     return Response({"status": "sent"}, status=status.HTTP_200_OK)
 
 
@@ -679,3 +690,35 @@ def verify_email_code(request):
         user.save(update_fields=["is_active"])
 
     return Response({"verified": True}, status=status.HTTP_200_OK)
+
+
+@api_view(["POST"]) 
+@permission_classes([permissions.AllowAny])
+def complete_signup(request):
+    """Finalize signup by setting a password after email verification."""
+    email = (request.data.get("email") or "").strip()
+    password = (request.data.get("password") or "").strip()
+
+    if not email or not password:
+        return Response({"error": "Email and password are required."}, status=status.HTTP_400_BAD_REQUEST)
+    if len(password) < 8:
+        return Response({"error": "Password must be at least 8 characters."}, status=status.HTTP_400_BAD_REQUEST)
+
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    user = User.objects.filter(email=email).first()
+    if not user:
+        return Response({"error": "Account not found."}, status=status.HTTP_404_NOT_FOUND)
+    if not user.is_active:
+        return Response({"error": "Email not verified yet."}, status=status.HTTP_400_BAD_REQUEST)
+
+    profile = getattr(user, "profile", None)
+    if profile is not None and getattr(profile, "email_verified", False) is False:
+        return Response({"error": "Email not verified yet."}, status=status.HTTP_400_BAD_REQUEST)
+
+    user.set_password(password)
+    user.save(update_fields=["password"])
+
+    Token.objects.filter(user=user).delete()
+    token = Token.objects.create(user=user)
+    return Response({"token": token.key}, status=status.HTTP_200_OK)

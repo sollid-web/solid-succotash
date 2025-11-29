@@ -52,7 +52,7 @@ export default function SignupPage() {
   const completeSignup = async () => {
     setLoading(true); setError(''); setMessage('')
     try {
-      const resp = await fetch(`${apiBase}/api/auth/token/generate/`, {
+      const resp = await fetch(`${apiBase}/api/auth/complete-signup/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })

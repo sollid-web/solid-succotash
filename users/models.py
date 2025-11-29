@@ -37,6 +37,7 @@ class Profile(models.Model):
     email_wallet_updates: models.BooleanField = models.BooleanField(default=True, help_text="Wallet credit/debit notifications")
     email_security_alerts: models.BooleanField = models.BooleanField(default=True, help_text="Security alerts")
     email_marketing: models.BooleanField = models.BooleanField(default=False, help_text="Marketing and promotional emails")
+    email_verified: models.BooleanField = models.BooleanField(default=False, help_text="Email address verified via code")
 
     def __str__(self):
         return f"{self.user.email} - {self.role}"

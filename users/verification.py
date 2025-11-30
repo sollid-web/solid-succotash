@@ -1,43 +1,15 @@
 from __future__ import annotations
 
-import random
+import secrets
 from datetime import timedelta
 from typing import Optional
 
 from django.contrib.auth import get_user_model
+from django.db import transaction
 from django.utils import timezone
-from django.db import models, transaction
 
 from core.email_service import send_email
-
-
-import secrets
-
-class EmailVerification(models.Model):
-    user = models.ForeignKey(
-        get_user_model(),
-        on_delete=models.CASCADE,
-        related_name="email_verifications",
-    )
-    token = models.CharField(max_length=64, unique=True)
-    expires_at = models.DateTimeField()
-    used_at = models.DateTimeField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        indexes = [
-            models.Index(fields=["user", "expires_at"]),
-            models.Index(fields=["token"]),
-        ]
-
-    @property
-    def is_expired(self) -> bool:
-        return timezone.now() > self.expires_at
-
-    @property
-    def is_used(self) -> bool:
-        return self.used_at is not None
-
+from .models import EmailVerification
 
 
 def _generate_token() -> str:

@@ -27,13 +27,26 @@ function VerifyEmailContent() {
 
     // Call the backend API to verify the token
     const apiUrl = (process as any)?.env?.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-    fetch(`${apiUrl}/api/auth/verify-email/?token=${encodeURIComponent(token)}`, {
+    const verifyUrl = `${apiUrl}/api/auth/verify-email/?token=${encodeURIComponent(token)}`
+    
+    console.log('Email Verification Debug:')
+    console.log('- API URL:', apiUrl)
+    console.log('- Verify URL:', verifyUrl)
+    console.log('- Token (first 20 chars):', token.substring(0, 20))
+    
+    fetch(verifyUrl, {
       headers: {
         'Accept': 'application/json',
       },
     })
-      .then(res => res.json())
+      .then(res => {
+        console.log('- Response Status:', res.status)
+        console.log('- Response OK:', res.ok)
+        return res.json()
+      })
       .then(data => {
+        console.log('- Response Data:', data)
+        
         if (data.success) {
           setStatus('success')
           setMessage(data.message || 'Email verified successfully!')
@@ -50,7 +63,7 @@ function VerifyEmailContent() {
         }
       })
       .catch((error) => {
-        console.error('Verification error:', error)
+        console.error('Verification fetch error:', error)
         setStatus('error')
         setMessage('Failed to verify email. Please try again or contact support.')
         setRedirectUrl('/accounts/signup')

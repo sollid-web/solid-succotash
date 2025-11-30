@@ -207,3 +207,33 @@ class KycApplication(models.Model):
             models.Index(fields=["status"]),
             models.Index(fields=["user", "status"]),
         ]
+
+
+class EmailVerification(models.Model):
+    """Email verification tokens for account activation"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="email_verifications",
+    )
+    token = models.CharField(max_length=64, unique=True)
+    expires_at = models.DateTimeField()
+    used_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["user", "expires_at"]),
+            models.Index(fields=["token"]),
+        ]
+
+    @property
+    def is_expired(self) -> bool:
+        return timezone.now() > self.expires_at
+
+    @property
+    def is_used(self) -> bool:
+        return self.used_at is not None
+
+    def __str__(self):
+        return f"EmailVerification for {self.user.email} - {'used' if self.is_used else 'active'}"

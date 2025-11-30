@@ -64,8 +64,9 @@ def issue_verification_token(user) -> EmailVerification:
     send_email(
         template_name="email_verification",
         to_emails=user.email,
-        context={"user": user, "verify_url": verify_url},
+        context={"user": user, "verify_url": verify_url, "username": user.username or user.email},
         subject="Verify your WolvCapital email address",
+        from_email="WolvCapital Support <support@wolvcapital.com>",
     )
     return ev
 

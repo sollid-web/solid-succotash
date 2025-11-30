@@ -126,8 +126,26 @@ class EmailService:
                 body=text_content,
                 from_email=from_email,
                 to=recipients,
+                reply_to=["support@wolvcapital.com"],
             )
             msg.attach_alternative(html_content, "text/html")
+
+            # Add headers to improve deliverability
+            is_urgent = email_type in [
+                'SECURITY_ALERT',
+                'ADMIN_ALERT',
+            ]
+            site_url = full_context.get(
+                "site_url",
+                "https://wolvcapital.com",
+            )
+            msg.extra_headers = {
+                'X-Mailer': 'WolvCapital Email System',
+                'X-Priority': '1' if is_urgent else '3',
+                'Importance': 'High' if is_urgent else 'Normal',
+                'List-Unsubscribe': f'<{site_url}/accounts/settings/>',
+            }
+
             sent_count = msg.send(fail_silently=False)
 
             if sent_count and sent_count > 0:

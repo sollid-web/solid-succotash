@@ -20,30 +20,29 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ------------------------------------------------------------------
 # Core flags / secrets
 # ------------------------------------------------------------------
-DEBUG = os.getenv("DEBUG", "0") == "1"  # Default to False for production
+from environ import Env
+env = Env()
+Env.read_env()  # Load .env early
 
-secret_env = os.getenv("SECRET_KEY")
-if secret_env:
-    SECRET_KEY = secret_env
-elif DEBUG:
-    SECRET_KEY = "wolvcapital-dev-only-secret-key-2025"
+# Unified DEBUG + SECRET_KEY handling
+DEBUG = env.bool("DEBUG", default=True)
+_secret_key_env = env("SECRET_KEY", default=None)
+if _secret_key_env:
+    SECRET_KEY = _secret_key_env
 else:
-    raise ValueError(
-        "SECRET_KEY environment variable is required for production. "
-        "Generate one with: python -c 'import secrets; print(secrets.token_urlsafe(50))'"
-    )
-
-# Render injects this, e.g. https://solid-succotash-654g.onrender.com
-RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL")
-# Render commonly exposes the hostname via this env var
-RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME")
-CUSTOM_DOMAIN = os.getenv("CUSTOM_DOMAIN")  # optional, supports comma-separated list
-
-# ------------------------------------------------------------------
-# Hosts & CSRF
-# ------------------------------------------------------------------
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "testserver"]
+    if DEBUG:
+        SECRET_KEY = "dev-secret-key-for-testing-only-do-not-use-in-prod"
+    else:
+        raise ValueError("SECRET_KEY environment variable required when DEBUG=False")
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000"]
+
+# Initialize ALLOWED_HOSTS before mutation logic below
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
+
+# Render / deployment host hints (defined before conditional usage later)
+RENDER_EXTERNAL_URL = env("RENDER_EXTERNAL_URL", default=None)
+RENDER_EXTERNAL_HOSTNAME = env("RENDER_EXTERNAL_HOSTNAME", default=None)
+CUSTOM_DOMAIN = env("CUSTOM_DOMAIN", default=None)
 
 DEFAULT_CORS_ORIGINS = [
     "http://localhost:3000",
@@ -193,6 +192,7 @@ INSTALLED_APPS = [
     "investments",
     "transactions",
     "api",
+    "referrals",
 ]
 
 # ------------------------------------------------------------------

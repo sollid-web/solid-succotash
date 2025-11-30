@@ -28,13 +28,16 @@ def create_user_wallet(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def send_welcome_notification(sender, instance, created, **kwargs):
-    """Send welcome notification to new users."""
-    if created:
-        from .notification_service import notify_welcome
-
-        notify_welcome(instance)
-
-        # Send welcome email
-        from core.email_service import EmailService
-
-        EmailService.send_welcome_email(instance)
+    """Send welcome notice only after account is verified and active."""
+    if not created:
+        return
+    # Avoid sending welcome until email is verified and account is active
+    profile = getattr(instance, "profile", None)
+    is_verified = bool(getattr(profile, "email_verified", False))
+    if not (instance.is_active and is_verified):
+        return
+    from .notification_service import notify_welcome
+    notify_welcome(instance)
+    # Send welcome email
+    from core.email_service import EmailService
+    EmailService.send_welcome_email(instance)

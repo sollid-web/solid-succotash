@@ -74,8 +74,19 @@ urlpatterns = [
     path(
         "auth/token/verify/", views.token_verify_view, name="api-token-verify"
     ),
-    path("auth/verification/send/", views.send_verification_code, name="send_verification_code"),
-    path("auth/verification/verify/", views.verify_email_code, name="verify_email_code"),
-    path("auth/complete-signup/", views.complete_signup, name="complete_signup"),
-    path("auth/verify-email/", views.verify_email_link, name="verify_email_link"),
+    path(
+        "auth/verification/resend/",
+        views.resend_verification,
+        name="resend_verification",
+    ),
+    path(
+        "auth/complete-signup/",
+        views.complete_signup,
+        name="complete_signup",
+    ),
+    path(
+        "auth/verify-email/",
+        views.verify_email_link,
+        name="verify_email_link",
+    ),
 ]

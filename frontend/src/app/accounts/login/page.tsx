@@ -76,13 +76,43 @@ export default function LoginPage() {
         const nextPath = params.get('next') || '/dashboard'
         window.location.href = nextPath
       } else {
-        setError(data.error || 'Login failed. Please try again.')
+        // If backend indicates inactive account, show resend option
+        if (data?.inactive) {
+          setError('Your account is not verified. Check your email or resend the verification link below.')
+        } else {
+          setError(data.error || 'Login failed. Please try again.')
+        }
       }
     } catch (err) {
       setError('Network error. Please check your connection and try again.')
       console.error('Login error:', err)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleResend = async () => {
+    setError('')
+    if (!email) {
+      setError('Enter your email above to resend the verification link.')
+      return
+    }
+    try {
+      const res = await fetch(`${apiBase}/api/auth/verification/resend/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+        credentials: 'include',
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setError('Verification email resent. Please check your inbox.')
+      } else {
+        setError(data?.error || 'Unable to resend verification. Try again later.')
+      }
+    } catch (e) {
+      console.error('Resend error', e)
+      setError('Network error. Please try again later.')
     }
   }
 
@@ -166,6 +196,18 @@ export default function LoginPage() {
             >
               {loading ? 'Signing In...' : 'Sign In'}
             </button>
+
+            {error.includes('not verified') && (
+              <div className="mt-4 text-center">
+                <button
+                  type="button"
+                  onClick={handleResend}
+                  className="text-sm text-[#2563eb] hover:text-[#1d4ed8] font-semibold"
+                >
+                  Resend verification email
+                </button>
+              </div>
+            )}
           </form>
 
           <div className="mt-8 text-center">

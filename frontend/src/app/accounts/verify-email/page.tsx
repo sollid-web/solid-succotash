@@ -26,7 +26,12 @@ function VerifyEmailContent() {
     }
 
     // Call the backend API to verify the token
-    const apiUrl = (process as any)?.env?.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+    // Robust fallback: use production API if env not set
+    const envApi = (process as any)?.env?.NEXT_PUBLIC_API_URL
+    const isProd = (process as any)?.env?.NODE_ENV === 'production'
+    const apiUrl = envApi && envApi.trim().length > 0
+      ? envApi
+      : (isProd ? 'https://api.wolvcapital.com' : 'http://localhost:8000')
     const verifyUrl = `${apiUrl}/api/auth/verify-email/?token=${encodeURIComponent(token)}`
     
     console.log('Email Verification Debug:')

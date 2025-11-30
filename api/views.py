@@ -386,16 +386,32 @@ def login_view(request):
             {"error": "Email and password are required."},
             status=status.HTTP_400_BAD_REQUEST
         )
+    # Early lookup to distinguish inactive from bad credentials
+    from django.contrib.auth import get_user_model
+    UserModel = get_user_model()
+    existing = UserModel.objects.filter(email=email).first()
+    if existing and not existing.is_active:
+        # Offer resend flow to inactive accounts
+        return Response(
+            {
+                "error": "Account not verified. Check your email or resend.",
+                "inactive": True,
+            },
+            status=status.HTTP_403_FORBIDDEN,
+        )
 
-    # Authenticate user
+    # Authenticate user normally
     user = authenticate(request, username=email, password=password)
+    if user is None:
+        return Response(
+            {"error": "Invalid email or password."},
+            status=status.HTTP_401_UNAUTHORIZED,
+        )
 
-    if user is not None:
-        login(request, user)
-        # Create or get token for the user
-        token, created = Token.objects.get_or_create(user=user)
-
-        return Response({
+    login(request, user)
+    token, _ = Token.objects.get_or_create(user=user)
+    return Response(
+        {
             "success": True,
             "token": token.key,
             "user": {
@@ -403,13 +419,9 @@ def login_view(request):
                 "email": user.email,
                 "first_name": user.first_name,
                 "last_name": user.last_name,
-            }
-        })
-    else:
-        return Response(
-            {"error": "Invalid email or password."},
-            status=status.HTTP_401_UNAUTHORIZED
-        )
+            },
+        }
+    )
 
 
 @api_view(["POST"])
@@ -641,56 +653,32 @@ class AdminKycApplicationViewSet(viewsets.ModelViewSet):
         return super().update(request, *args, **kwargs)
 
 
-@api_view(["POST"]) 
+@api_view(["POST"])
 @permission_classes([permissions.AllowAny])
-def send_verification_code(request):
-    """Issue a 4-digit email verification code to a given email.
-
-    If the user account exists, a fresh code is issued and emailed.
-    If not, we create a disabled account shell, then issue the code.
-    """
+def resend_verification(request):
+    """Resend email verification link token for an inactive account."""
     email = (request.data.get("email") or "").strip()
     if not email:
-        return Response({"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
-
+        return Response(
+            {"error": "Email required."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
     from django.contrib.auth import get_user_model
-    User = get_user_model()
-    user, created = User.objects.get_or_create(
-        username=email, defaults={"email": email, "is_active": False}
-    )
-    try:
-        issue_verification_code(user)
-    except ValueError as e:
-        return Response({"error": str(e)}, status=status.HTTP_429_TOO_MANY_REQUESTS)
-    return Response({"status": "sent"}, status=status.HTTP_200_OK)
-
-
-@api_view(["POST"]) 
-@permission_classes([permissions.AllowAny])
-def verify_email_code(request):
-    """Verify the 4-digit code; activate account and allow signup continuation."""
-    email = (request.data.get("email") or "").strip()
-    code = (request.data.get("code") or "").strip()
-    if not email or not code:
-        return Response({"error": "Email and code are required."}, status=status.HTTP_400_BAD_REQUEST)
-
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-    user = User.objects.filter(email=email).first()
+    UserModel = get_user_model()
+    user = UserModel.objects.filter(email=email).first()
     if not user:
-        return Response({"error": "Account not found."}, status=status.HTTP_404_NOT_FOUND)
-
-    ok = verify_code(user, code)
-    if not ok:
-        return Response({"error": "Invalid or expired code."}, status=status.HTTP_400_BAD_REQUEST)
-
-    # Activate account so registration can complete; no financial action implied
-    if not user.is_active:
-        user.is_active = True
-        user.save(update_fields=["is_active"])
-
-    return Response({"verified": True}, status=status.HTTP_200_OK)
-
+        return Response(
+            {"error": "Account not found."},
+            status=status.HTTP_404_NOT_FOUND,
+        )
+    if user.is_active:
+        return Response(
+            {"status": "already_active"},
+            status=status.HTTP_200_OK,
+        )
+    # Issue a fresh token and send email
+    issue_verification_token(user)
+    return Response({"status": "resent"}, status=status.HTTP_200_OK)
 
 
 @api_view(["POST"])
@@ -701,9 +689,15 @@ def complete_signup(request):
     password = (request.data.get("password") or "").strip()
 
     if not email or not password:
-        return Response({"error": "Email and password are required."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"error": "Email and password are required."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
     if len(password) < 8:
-        return Response({"error": "Password must be at least 8 characters."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"error": "Password must be at least 8 characters."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     from django.contrib.auth import get_user_model
     User = get_user_model()
@@ -746,7 +740,13 @@ def verify_email_link(request):
     logger = logging.getLogger(__name__)
     
     token = request.GET.get("token", "")
-    logger.info(f"Email verification attempt with token: {token[:10]}..." if token else "No token provided")
+    if token:
+        logger.info(
+            "Email verification attempt with token prefix: %s...",
+            token[:10],
+        )
+    else:
+        logger.info("Email verification attempt with no token provided")
     
     if not token:
         logger.warning("Email verification failed: No token provided")
@@ -763,11 +763,16 @@ def verify_email_link(request):
         ev = verify_token(token)
         
         if not ev:
-            logger.warning(f"Email verification failed: Invalid or expired token")
+            logger.warning(
+                "Email verification failed: Invalid or expired token"
+            )
             return Response(
                 {
                     "success": False,
-                    "error": "Invalid or expired verification link. Please request a new one.",
+                    "error": (
+                        "Invalid or expired verification link. Please request "
+                        "a new one."
+                    ),
                     "redirect_url": "/accounts/signup"
                 },
                 status=status.HTTP_400_BAD_REQUEST
@@ -781,19 +786,24 @@ def verify_email_link(request):
             return Response(
                 {
                     "success": True,
-                    "message": "Your email is already verified. You can now log in.",
-                    "redirect_url": "/accounts/login"
+                    "message": (
+                        "Your email is already verified. You can now log in."
+                    ),
+                    "redirect_url": "/accounts/login",
                 },
-                status=status.HTTP_200_OK
+                status=status.HTTP_200_OK,
             )
         
         return Response(
             {
                 "success": True,
-                "message": "Email verified successfully! You can now log in to your account.",
-                "redirect_url": "/accounts/login?verified=1"
+                "message": (
+                    "Email verified successfully! You can now log in to "
+                    "your account."
+                ),
+                "redirect_url": "/accounts/login?verified=1",
             },
-            status=status.HTTP_200_OK
+            status=status.HTTP_200_OK,
         )
     except Exception as e:
         logger.error(f"Email verification error: {str(e)}", exc_info=True)

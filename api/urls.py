@@ -77,4 +77,5 @@ urlpatterns = [
     path("auth/verification/send/", views.send_verification_code, name="send_verification_code"),
     path("auth/verification/verify/", views.verify_email_code, name="verify_email_code"),
     path("auth/complete-signup/", views.complete_signup, name="complete_signup"),
+    path("auth/verify-email/", views.verify_email_link, name="verify_email_link"),
 ]

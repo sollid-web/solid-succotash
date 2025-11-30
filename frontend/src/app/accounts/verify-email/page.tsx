@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import Link from "next/link"
 import PublicLayout from "@/components/PublicLayout"
 
 // Force dynamic rendering since we use search params
@@ -10,45 +11,127 @@ export const dynamic = 'force-dynamic'
 function VerifyEmailContent() {
   const router = useRouter()
   const params = useSearchParams()
-  const [status, setStatus] = useState<'pending'|'success'|'error'>('pending')
-  const [message, setMessage] = useState('Verifying your email...')
+  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
+  const [message, setMessage] = useState('Verifying your email address...')
+  const [redirectUrl, setRedirectUrl] = useState('/accounts/login')
 
   useEffect(() => {
     const token = params.get('token')
+    
     if (!token) {
       setStatus('error')
-      setMessage('Missing verification token.')
+      setMessage('Verification token is missing. Please check your email link.')
+      setRedirectUrl('/accounts/signup')
       return
     }
-    fetch(`/api/auth/verify-link/?token=${encodeURIComponent(token)}`)
-      .then(res => {
-        if (res.redirected) {
-          router.replace(res.url)
-          return
-        }
-        return res.json()
-      })
+
+    // Call the backend API to verify the token
+    const apiUrl = (process as any)?.env?.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+    fetch(`${apiUrl}/api/auth/verify-email/?token=${encodeURIComponent(token)}`, {
+      headers: {
+        'Accept': 'application/json',
+      },
+    })
+      .then(res => res.json())
       .then(data => {
-        if (data?.error) {
-          setStatus('error')
-          setMessage(data.error)
-        } else {
+        if (data.success) {
           setStatus('success')
-          setMessage('Email verified! Redirecting to sign in...')
-          setTimeout(() => router.replace('/accounts/login?verified=1'), 1500)
+          setMessage(data.message || 'Email verified successfully!')
+          setRedirectUrl(data.redirect_url || '/accounts/login')
+          
+          // Auto-redirect after 3 seconds
+          setTimeout(() => {
+            router.push(data.redirect_url || '/accounts/login')
+          }, 3000)
+        } else {
+          setStatus('error')
+          setMessage(data.error || 'Email verification failed.')
+          setRedirectUrl(data.redirect_url || '/accounts/signup')
         }
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error('Verification error:', error)
         setStatus('error')
-        setMessage('Verification failed.')
+        setMessage('Failed to verify email. Please try again or contact support.')
+        setRedirectUrl('/accounts/signup')
       })
   }, [params, router])
 
   return (
     <div className="min-h-screen pt-24 px-4">
-      <div className="max-w-lg mx-auto bg.white/80 backdrop-blur rounded-2xl shadow p-6 text-center">
-        <h1 className="text-2xl font-bold mb-4">Email Verification</h1>
-        <div className={`mb-3 text-sm p-2 rounded ${status === 'error' ? 'text-red-700 bg-red-50 border border-red-200' : 'text-green-700 bg-green-50 border border-green-200'}`}>{message}</div>
+      <div className="max-w-lg mx-auto bg-white/95 backdrop-blur rounded-2xl shadow-xl p-8 text-center">
+        {status === 'loading' && (
+          <>
+            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-6"></div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-3">Verifying Email</h1>
+            <p className="text-gray-600">{message}</p>
+          </>
+        )}
+
+        {status === 'success' && (
+          <>
+            <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
+              <svg
+                className="h-10 w-10 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-3">Email Verified!</h1>
+            <p className="text-gray-700 mb-6">{message}</p>
+            <p className="text-sm text-gray-500 mb-6">Redirecting to login in 3 seconds...</p>
+            <Link
+              href={redirectUrl}
+              className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
+            >
+              Go to Login Now
+            </Link>
+          </>
+        )}
+
+        {status === 'error' && (
+          <>
+            <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-6">
+              <svg
+                className="h-10 w-10 text-red-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-3">Verification Failed</h1>
+            <p className="text-gray-700 mb-6">{message}</p>
+            <div className="space-y-3">
+              <Link
+                href="/accounts/login"
+                className="block w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
+              >
+                Go to Login
+              </Link>
+              <Link
+                href="/accounts/signup"
+                className="block w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
+              >
+                Sign Up Again
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </div>
   )

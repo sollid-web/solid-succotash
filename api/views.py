@@ -738,18 +738,51 @@ def complete_signup(request):
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
 def verify_email_link(request):
+    """
+    Verify email token and activate user account.
+    Returns JSON response with success status and redirect URL.
+    """
     token = request.GET.get("token", "")
+    
     if not token:
         return Response(
-            {"error": "Missing token."},
+            {
+                "success": False,
+                "error": "Verification token is required.",
+                "redirect_url": "/accounts/signup"
+            },
             status=status.HTTP_400_BAD_REQUEST
         )
+    
     ev = verify_token(token)
+    
     if not ev:
         return Response(
-            {"error": "Invalid or expired token."},
+            {
+                "success": False,
+                "error": "Invalid or expired verification link. Please request a new one.",
+                "redirect_url": "/accounts/signup"
+            },
             status=status.HTTP_400_BAD_REQUEST
         )
-    # Redirect to sign-in page after verification
-    from django.shortcuts import redirect
-    return redirect("/accounts/login?verified=1")
+    
+    # Check if user is already active
+    user = ev.user
+    if user.is_active:
+        return Response(
+            {
+                "success": True,
+                "message": "Your email is already verified. You can now log in.",
+                "redirect_url": "/accounts/login"
+            },
+            status=status.HTTP_200_OK
+        )
+    
+    return Response(
+        {
+            "success": True,
+            "message": "Email verified successfully! You can now log in to your account.",
+            "redirect_url": "/accounts/login?verified=1"
+        },
+        status=status.HTTP_200_OK
+    )

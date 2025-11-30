@@ -71,6 +71,31 @@ class TestAuthenticationEndpoints:
 
         assert response.status_code == status.HTTP_200_OK
 
+    def test_verification_flow(self, api_client, db):
+        """Test send and verify email code endpoints."""
+        send_url = reverse('send_verification_code')
+        verify_url = reverse('verify_email_code')
+        complete_url = reverse('complete_signup')
+
+        email = 'newuser@example.com'
+        # Send code
+        resp = api_client.post(send_url, { 'email': email }, format='json')
+        assert resp.status_code in (status.HTTP_200_OK, status.HTTP_429_TOO_MANY_REQUESTS)
+
+        # For test simplicity, simulate verification by retrieving code from DB
+        from users.verification import EmailVerification
+        ev = EmailVerification.objects.filter(user__email=email).order_by('-created_at').first()
+        assert ev is not None
+
+        # Verify code
+        resp = api_client.post(verify_url, { 'email': email, 'code': ev.code }, format='json')
+        assert resp.status_code == status.HTTP_200_OK
+
+        # Complete signup (password set)
+        resp = api_client.post(complete_url, { 'email': email, 'password': 'testpass123' }, format='json')
+        assert resp.status_code == status.HTTP_200_OK
+        assert 'token' in resp.data
+
 
 @pytest.mark.django_db
 class TestUserEndpoints:

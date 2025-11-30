@@ -58,24 +58,18 @@ def process_deposit_referral(referred_user_id, deposit_amount: Decimal, currency
         # Create pending transaction using WolvCapital's transaction service
         txn = create_transaction(
             user=referral.referrer,
-            transaction_type='deposit',
+            tx_type='deposit',
             amount=reward_amount,
-            currency=currency,
-            description=f"Referral reward: {percent}% of ${deposit_amount}",
-            meta={
-                'referral_id': str(referral.id),
-                'reward_id': str(reward.id),
-                'referred_user_id': str(referred_user_id),
-                'source': 'referral_deposit_bonus'
-            }
+            reference=f"Referral reward: {percent}% of ${deposit_amount}",
+            payment_method='referral_bonus'
         )
 
         # Mark referral credited (transaction still pending approval)
         referral.mark_credited()
 
         return {
-            'ok': True, 
-            'reward_amount': str(reward_amount), 
+            'ok': True,
+            'reward_amount': str(reward_amount),
             'transaction_id': str(txn.id)
         }
     except Exception as e:

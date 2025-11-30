@@ -57,16 +57,10 @@ def create_manual_referral_reward(referral, amount: Decimal, currency: str, admi
 
     txn = create_transaction(
         user=referral.referrer,
-        transaction_type='deposit',
+        tx_type='deposit',
         amount=amount,
-        currency=currency,
-        description=f"Manual referral reward - {notes}",
-        meta={
-            'referral_id': str(referral.id),
-            'reward_id': str(reward.id),
-            'source': 'manual_referral_reward',
-            'admin_user': str(admin_user.id)
-        }
+        reference=f"Manual referral reward - {notes}",
+        payment_method='referral_bonus'
     )
 
     return reward, txn

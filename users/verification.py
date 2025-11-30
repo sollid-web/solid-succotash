@@ -11,13 +11,15 @@ from django.db import models, transaction
 from core.email_service import send_email
 
 
+import secrets
+
 class EmailVerification(models.Model):
     user = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
         related_name="email_verifications",
     )
-    code = models.CharField(max_length=4)
+    token = models.CharField(max_length=64, unique=True)
     expires_at = models.DateTimeField()
     used_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -25,7 +27,7 @@ class EmailVerification(models.Model):
     class Meta:
         indexes = [
             models.Index(fields=["user", "expires_at"]),
-            models.Index(fields=["code"]),
+            models.Index(fields=["token"]),
         ]
 
     @property
@@ -37,55 +39,60 @@ class EmailVerification(models.Model):
         return self.used_at is not None
 
 
-def _generate_code() -> str:
-    return f"{random.randint(0, 9999):04d}"
+
+def _generate_token() -> str:
+    return secrets.token_urlsafe(32)
+
 
 
 @transaction.atomic
-def issue_verification_code(user) -> EmailVerification:
-    # invalidate previous active codes
-        # Rate limit: if a code was issued within the last 60 seconds, deny
-        recent = EmailVerification.objects.filter(user=user).order_by('-created_at').first()
-        if recent and (timezone.now() - recent.created_at).total_seconds() < 60:
-            raise ValueError("Too many requests. Please wait before requesting another code.")
-        EmailVerification.objects.filter(user=user, used_at__isnull=True).update(used_at=timezone.now())
+def issue_verification_token(user) -> EmailVerification:
+    # invalidate previous active tokens
+    recent = EmailVerification.objects.filter(user=user).order_by('-created_at').first()
+    if recent and (timezone.now() - recent.created_at).total_seconds() < 60:
+        raise ValueError("Too many requests. Please wait before requesting another link.")
+    EmailVerification.objects.filter(user=user, used_at__isnull=True).update(used_at=timezone.now())
 
-    code = _generate_code()
+    token = _generate_token()
     ev = EmailVerification.objects.create(
         user=user,
-        code=code,
-        expires_at=timezone.now() + timedelta(minutes=15),
+        token=token,
+        expires_at=timezone.now() + timedelta(hours=2),
     )
 
+    verify_url = f"https://wolvcapital.com/accounts/verify-email?token={token}"
     send_email(
-        to_address=user.email,
-        subject="Your WolvCapital verification code",
         template_name=None,
-        body=f"Your verification code is {code}. It expires in 15 minutes.",
+        to_emails=user.email,
+        context={"user": user, "verify_url": verify_url},
+        subject="Verify your WolvCapital email address",
     )
     return ev
 
 
+
 @transaction.atomic
-def verify_code(user, code: str) -> bool:
+def verify_token(token: str) -> Optional[EmailVerification]:
     ev: Optional[EmailVerification] = (
         EmailVerification.objects.select_for_update()
-        .filter(user=user, code=code, used_at__isnull=True)
+        .filter(token=token, used_at__isnull=True)
         .order_by("-created_at")
         .first()
     )
     if not ev or ev.is_expired:
-        return False
+        return None
     ev.used_at = timezone.now()
     ev.save(update_fields=["used_at"])
 
-    # mark user as verified via profile flag if present or is_active
-    # do not auto-approve any financial operations
+    user = ev.user
     try:
         profile = getattr(user, "profile", None)
         if profile and hasattr(profile, "email_verified"):
             profile.email_verified = True
             profile.save(update_fields=["email_verified"])
+        if not user.is_active:
+            user.is_active = True
+            user.save(update_fields=["is_active"])
     except Exception:
         pass
-    return True
+    return ev

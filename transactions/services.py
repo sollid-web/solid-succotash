@@ -78,6 +78,20 @@ def approve_transaction(txn: Transaction, admin_user: User, notes: str = "") -> 
 
     EmailService.send_transaction_notification(txn, 'approved', notes)
 
+    # Process referral rewards for deposits (if applicable)
+    if txn.tx_type == "deposit":
+        try:
+            from referrals.tasks import process_deposit_referral
+            process_deposit_referral(
+                referred_user_id=txn.user.id,
+                deposit_amount=txn.amount,
+                currency='USD'
+            )
+        except Exception:
+            # Fail silently - referral processing shouldn't break
+            # transaction approval
+            pass
+
     return txn
 
 

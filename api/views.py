@@ -29,7 +29,7 @@ from users.notification_service import mark_all_read as service_mark_all_read
 from users.notification_service import (
     mark_notification_read as service_mark_notification_read,
 )
-from users.verification import issue_verification_code, verify_code
+from users.verification import issue_verification_token, verify_token
 from users.services import (
     approve_kyc_application,
     reject_kyc_application,
@@ -692,10 +692,11 @@ def verify_email_code(request):
     return Response({"verified": True}, status=status.HTTP_200_OK)
 
 
-@api_view(["POST"]) 
+
+@api_view(["POST"])
 @permission_classes([permissions.AllowAny])
 def complete_signup(request):
-    """Finalize signup by setting a password after email verification."""
+    """Signup: create user, send verification link."""
     email = (request.data.get("email") or "").strip()
     password = (request.data.get("password") or "").strip()
 
@@ -706,19 +707,49 @@ def complete_signup(request):
 
     from django.contrib.auth import get_user_model
     User = get_user_model()
-    user = User.objects.filter(email=email).first()
-    if not user:
-        return Response({"error": "Account not found."}, status=status.HTTP_404_NOT_FOUND)
-    if not user.is_active:
-        return Response({"error": "Email not verified yet."}, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Check if user already exists
+    if (User.objects.filter(username=email).exists() or
+            User.objects.filter(email=email).exists()):
+        return Response(
+            {"error": "An account with this email already exists."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    # Create new inactive user
+    try:
+        user = User.objects.create_user(
+            username=email,
+            email=email,
+            password=password,
+            is_active=False
+        )
+    except Exception as e:
+        return Response(
+            {"error": f"Failed to create account: {str(e)}"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
-    profile = getattr(user, "profile", None)
-    if profile is not None and getattr(profile, "email_verified", False) is False:
-        return Response({"error": "Email not verified yet."}, status=status.HTTP_400_BAD_REQUEST)
+    # Send verification email
+    issue_verification_token(user)
+    return Response({"status": "verification_sent"}, status=status.HTTP_200_OK)
 
-    user.set_password(password)
-    user.save(update_fields=["password"])
 
-    Token.objects.filter(user=user).delete()
-    token = Token.objects.create(user=user)
-    return Response({"token": token.key}, status=status.HTTP_200_OK)
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def verify_email_link(request):
+    token = request.GET.get("token", "")
+    if not token:
+        return Response(
+            {"error": "Missing token."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    ev = verify_token(token)
+    if not ev:
+        return Response(
+            {"error": "Invalid or expired token."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    # Redirect to sign-in page after verification
+    from django.shortcuts import redirect
+    return redirect("/accounts/login?verified=1")

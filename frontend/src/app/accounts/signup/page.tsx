@@ -30,16 +30,23 @@ export default function SignupPage() {
       return
     }
     try {
+      console.log('Attempting signup with API:', apiBase)
       const resp = await fetch(`${apiBase}/api/auth/complete-signup/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       })
+      console.log('Signup response status:', resp.status)
       const data = await resp.json()
-      if (!resp.ok) throw new Error(data?.error || 'Signup failed')
+      console.log('Signup response data:', data)
+      if (!resp.ok) {
+        setError(data?.error || 'Signup failed. Please try again.')
+        return
+      }
       setStep('sent')
-    } catch (e) {
-      setError('Failed to complete signup.')
+    } catch (e: any) {
+      console.error('Signup error:', e)
+      setError(e?.message || 'Failed to complete signup. Please check your connection.')
     } finally { setLoading(false) }
   }
 

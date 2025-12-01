@@ -131,6 +131,15 @@ def approve_kyc_application(application: KycApplication, admin_user, notes: str 
 
     _resolve_admin_notifications(application, admin_user)
     notify_kyc_approved(application.user, application, notes)
+    # Admin email alert for approved KYC
+    try:
+        from core.email_service import EmailService
+        EmailService.send_admin_alert(
+            subject="KYC Approved",
+            message=f"KYC application {application.id} for user {application.user.email} was approved.",
+        )
+    except Exception:
+        pass
     return application
 
 
@@ -163,4 +172,16 @@ def reject_kyc_application(
 
     _resolve_admin_notifications(application, admin_user)
     notify_kyc_rejected(application.user, application, application.rejection_reason)
+    # Admin email alert for rejected KYC
+    try:
+        from core.email_service import EmailService
+        EmailService.send_admin_alert(
+            subject="KYC Rejected",
+            message=(
+                f"KYC application {application.id} for user {application.user.email} was rejected. "
+                f"Reason: {application.rejection_reason or 'N/A'}"
+            ),
+        )
+    except Exception:
+        pass
     return application

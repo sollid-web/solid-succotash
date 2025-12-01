@@ -195,6 +195,13 @@ INSTALLED_APPS = [
     "referrals",
 ]
 
+# Alert thresholds for high-priority admin email notifications
+ALERT_THRESHOLDS = {
+    "high_deposit": 10000,       # USD amount triggering high deposit alert
+    "high_withdrawal": 5000,    # USD amount triggering high withdrawal alert
+    "high_card_purchase": 5000, # USD amount triggering high virtual card request alert
+}
+
 # ------------------------------------------------------------------
 # REST Framework Configuration
 # ------------------------------------------------------------------

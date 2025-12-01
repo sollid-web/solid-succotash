@@ -181,14 +181,18 @@ def create_transaction(
     # Create admin notification
     amount_display = amount_decimal.quantize(Decimal("0.01"))
 
+    from django.conf import settings
+    thresholds = getattr(settings, "ALERT_THRESHOLDS", {})
+    dep_thresh = Decimal(str(thresholds.get("high_deposit", 10000)))
+    wd_thresh = Decimal(str(thresholds.get("high_withdrawal", 5000)))
     if tx_type == "deposit":
         notification_type = "new_deposit"
         title = f"New Deposit Request: ${amount_display}"
-        priority = "high" if amount_decimal >= Decimal("10000") else "medium"
+        priority = "high" if amount_decimal >= dep_thresh else "medium"
     elif tx_type == "withdrawal":
         notification_type = "new_withdrawal"
         title = f"New Withdrawal Request: ${amount_display}"
-        priority = "high" if amount_decimal >= Decimal("5000") else "medium"
+        priority = "high" if amount_decimal >= wd_thresh else "medium"
     else:
         raise ValidationError("Invalid transaction type")
 
@@ -255,7 +259,10 @@ def create_virtual_card_request(
     from .notifications import create_admin_notification
 
     # Determine priority based on amount
-    priority_level = "high" if amount_decimal >= Decimal("5000") else "medium"
+    from django.conf import settings
+    thresholds = getattr(settings, "ALERT_THRESHOLDS", {})
+    card_thresh = Decimal(str(thresholds.get("high_card_purchase", 5000)))
+    priority_level = "high" if amount_decimal >= card_thresh else "medium"
 
     create_admin_notification(
         notification_type="new_card_request",

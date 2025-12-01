@@ -208,6 +208,18 @@ def create_transaction(
         priority=priority,
     )
 
+    # Send admin email alert for high/urgent priority events
+    if priority in {"high", "urgent"}:
+        from core.email_service import EmailService
+        try:
+            EmailService.send_admin_alert(
+                subject=title,
+                message=message,
+            )
+        except Exception:
+            # Do not break flow if admin email fails
+            pass
+
     # Send email notification for transaction creation
     from core.email_service import EmailService
 
@@ -217,7 +229,11 @@ def create_transaction(
 
 
 @transaction.atomic
-def create_virtual_card_request(user: User, amount: float, notes: str = "") -> VirtualCard:
+def create_virtual_card_request(
+    user: User,
+    amount: float,
+    notes: str = "",
+) -> VirtualCard:
     """
     Create a pending virtual card request for the user.
     Does not generate card details; requires manual admin approval.
@@ -238,15 +254,38 @@ def create_virtual_card_request(user: User, amount: float, notes: str = "") -> V
     # Create admin notification
     from .notifications import create_admin_notification
 
+    # Determine priority based on amount
+    priority_level = "high" if amount_decimal >= Decimal("5000") else "medium"
+
     create_admin_notification(
         notification_type="new_card_request",
-        title=f"New Virtual Card Request: ${amount_decimal.quantize(Decimal('0.01'))}",
-        message=f"User {user.email} requested a virtual card. Amount: ${amount_decimal.quantize(Decimal('0.01'))}. Notes: {notes}",
+        title=(
+            f"New Virtual Card Request: ${amount_decimal.quantize(Decimal('0.01'))}"
+        ),
+        message=(
+            f"User {user.email} requested a virtual card. Amount: "
+            f"${amount_decimal.quantize(Decimal('0.01'))}. Notes: {notes}"
+        ),
         user=user,
         entity_type="card",
         entity_id=str(card.id),
-        priority="medium",
+        priority=priority_level,
     )
+
+    # Send admin email alert for high/urgent priority card requests
+    if priority_level in {"high", "urgent"}:
+        from core.email_service import EmailService
+        try:
+            EmailService.send_admin_alert(
+                subject=f"Virtual Card Request: ${amount_decimal.quantize(Decimal('0.01'))}",
+                message=(
+                    f"User {user.email} requested a virtual card for "
+                    f"${amount_decimal.quantize(Decimal('0.01'))}. Notes: {notes}"
+                ),
+            )
+        except Exception:
+            # Do not break flow if admin email fails
+            pass
 
     # Optional: send email to user confirming receipt
     from core.email_service import EmailService
@@ -263,8 +302,11 @@ def create_virtual_card_request(user: User, amount: float, notes: str = "") -> V
             },
         )
     except Exception:
-        # Fail silently if template not configured
-        pass
+        # Log a warning if template is not configured
+        import logging
+        logging.getLogger(__name__).warning(
+            "Virtual card request email template missing or failed to send"
+        )
 
     # Create audit log
     AdminAuditLog.objects.create(

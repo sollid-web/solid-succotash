@@ -258,6 +258,50 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Referral Program Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <h2 className="text-3xl lg:text-4xl font-extrabold text-[#0b2f6b] mb-4">Earn with Our Referral Program</h2>
+              <p className="text-gray-700 text-base lg:text-lg mb-4">Share WolvCapital with your network and earn referral rewards when your referrals become active investors. All activity is subject to manual compliance review and approval.</p>
+              <ul className="list-disc list-inside text-gray-700 space-y-2 mb-6">
+                <li>Generate your unique code from the dashboard</li>
+                <li>Share your referral link with friends or colleagues</li>
+                <li>Track stats and rewards in your account</li>
+              </ul>
+              <div className="flex flex-wrap gap-3">
+                <Link href="/referrals" className="bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-6 py-3 rounded-full font-bold hover:shadow-lg transition-all">Learn More</Link>
+                <a href="/referrals-brochure.html" target="_blank" rel="noopener" className="bg-white border border-gray-200 text-[#0b2f6b] px-6 py-3 rounded-full font-bold hover:shadow-lg transition-all">Download Brochure</a>
+              </div>
+              <p className="text-xs text-gray-500 mt-3">Rewards are never auto-approved; all payouts require administrative review.</p>
+            </div>
+            <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] flex items-center justify-center">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v12m6-6H6"/></svg>
+                </div>
+                <h3 className="text-xl font-bold text-[#0b2f6b]">Referral Highlights</h3>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="p-4 bg-blue-50 rounded-2xl text-center">
+                  <p className="text-sm text-blue-700">Manual Review</p>
+                  <p className="text-2xl font-extrabold text-blue-900">100%</p>
+                </div>
+                <div className="p-4 bg-emerald-50 rounded-2xl text-center">
+                  <p className="text-sm text-emerald-700">Transparent</p>
+                  <p className="text-2xl font-extrabold text-emerald-900">Always</p>
+                </div>
+                <div className="p-4 bg-amber-50 rounded-2xl text-center">
+                  <p className="text-sm text-amber-700">Secure</p>
+                  <p className="text-2xl font-extrabold text-amber-900">By Design</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-24 bg-gradient-to-br from-[#0b2f6b] via-[#1d4ed8] to-[#2563eb] text-white">
         <div className="container mx-auto px-4 lg:px-8 text-center">

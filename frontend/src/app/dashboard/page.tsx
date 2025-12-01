@@ -64,6 +64,9 @@ export default function DashboardPage() {
   const [wallet, setWallet] = useState<WalletData | null>(null)
   const [investments, setInvestments] = useState<Investment[]>([])
   const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [referral, setReferral] = useState<{ code: string | null, stats: { total_referrals: number, credited: number, pending: number, rewards_total: string } } | null>(null)
+  const [referralLoading, setReferralLoading] = useState(false)
+  const [generatingCode, setGeneratingCode] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [activated, setActivated] = useState(false)
@@ -143,6 +146,59 @@ export default function DashboardPage() {
             const txData: Transaction[] = await txResponse.json()
             setTransactions(Array.isArray(txData) ? txData.slice(0, 5) : [])
           }
+
+          // Fetch referral summary + rewards to compute credited/pending
+          try {
+            setReferralLoading(true)
+            const [summaryResp, rewardsResp] = await Promise.all([
+              fetch(`${apiBase}/api/referrals/summary/`, {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Token ${token}`,
+                },
+                credentials: 'include',
+              }),
+              fetch(`${apiBase}/api/referrals/rewards/`, {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Token ${token}`,
+                },
+                credentials: 'include',
+              }),
+            ])
+
+            if (summaryResp.ok) {
+              const summary = await summaryResp.json()
+              let credited = 0
+              let pending = 0
+              let rewardsTotalAmount = 0
+              if (rewardsResp.ok) {
+                const rewardsData = await rewardsResp.json()
+                const results = Array.isArray(rewardsData?.results) ? rewardsData.results : []
+                for (const r of results) {
+                  if (r?.approved) credited++
+                  else pending++
+                  const amt = parseFloat(String(r?.amount ?? '0'))
+                  if (!isNaN(amt)) rewardsTotalAmount += amt
+                }
+              }
+
+              const mapped = {
+                code: summary.code || null,
+                stats: {
+                  total_referrals: summary.referred_count ?? 0,
+                  credited,
+                  pending,
+                  rewards_total: rewardsTotalAmount.toFixed(2),
+                },
+              }
+              setReferral(mapped)
+            }
+          } finally {
+            setReferralLoading(false)
+          }
         } else {
           setError('Please log in to access the dashboard')
           // Redirect to login after a delay
@@ -211,6 +267,59 @@ export default function DashboardPage() {
         </div>
       </div>
     )
+  }
+
+  const handleGenerateReferralCode = async () => {
+    const token = localStorage.getItem('authToken')
+    if (!token) return
+    try {
+      setGeneratingCode(true)
+      const resp = await fetch(`${apiBase}/api/referrals/generate-code/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`,
+        },
+        credentials: 'include',
+      })
+      if (resp.ok) {
+        const data = await resp.json()
+        // Refresh summary after generating code
+        setReferral((prev) => ({
+          code: data.code,
+          stats: prev?.stats || { total_referrals: 0, credited: 0, pending: 0, rewards_total: '0' },
+        }))
+      }
+    } catch (e) {
+      console.error('Failed to generate referral code', e)
+    } finally {
+      setGeneratingCode(false)
+    }
+  }
+
+  const handleCopyReferralLink = async () => {
+    if (!referral?.code) return
+    const link = `${window.location.origin}/accounts/signup?ref=${encodeURIComponent(referral.code)}`
+    try {
+      await navigator.clipboard.writeText(link)
+      alert('Referral link copied to clipboard')
+    } catch (e) {
+      console.error('Clipboard error', e)
+    }
+  }
+
+  const handleShareReferral = async () => {
+    if (!referral?.code) return
+    const link = `${window.location.origin}/accounts/signup?ref=${encodeURIComponent(referral.code)}`
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: 'Join me on WolvCapital', text: 'Sign up and start investing with WolvCapital.', url: link })
+      } catch (e) {
+        // user may cancel share
+      }
+    } else {
+      await handleCopyReferralLink()
+    }
   }
 
   return (
@@ -458,6 +567,77 @@ export default function DashboardPage() {
                 </svg>
                 Start Your First Investment
               </Link>
+            </div>
+          )}
+        </section>
+
+        {/* Referral Program Section */}
+        <section className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6 items-center">
+            <div className="lg:col-span-2 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-800">Referral Program</h2>
+              <Link href="/referrals" className="text-[#2563eb] text-sm hover:underline">Learn more</Link>
+            </div>
+            <div className="hidden lg:block">
+              {/* Stylish banner embed; replace with your asset path */}
+              <Link href="/referral" className="block">
+                <img
+                  src="/images/referral-hero-wolvcapital.png"
+                  alt="Earn when you invite investors"
+                  className="w-full h-28 object-cover rounded-xl shadow-md hover:shadow-lg transition"
+                />
+              </Link>
+            </div>
+          </div>
+
+          {referralLoading ? (
+            <p className="text-gray-500">Loading referral details...</p>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Code + Actions */}
+              <div className="lg:col-span-1 border-2 border-gray-100 rounded-2xl p-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">Your Referral Code</h3>
+                {referral?.code ? (
+                  <div>
+                    <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 mb-3">
+                      <span className="font-mono text-lg tracking-wider text-gray-800">{referral.code}</span>
+                      <span className="px-2 py-1 rounded-full text-xs bg-emerald-100 text-emerald-700">Active</span>
+                    </div>
+                    <div className="flex gap-3">
+                      <button onClick={handleCopyReferralLink} className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold">Copy Link</button>
+                      <button onClick={handleShareReferral} className="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition font-semibold">Share</button>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-3">Referral link: {typeof window !== 'undefined' ? `${window.location.origin}/accounts/signup?ref=${referral.code}` : ''}</p>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="text-gray-600 mb-4">Generate your unique code to start earning rewards when friends join.</p>
+                    <button onClick={handleGenerateReferralCode} disabled={generatingCode} className="px-4 py-2 bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white rounded-lg font-semibold hover:shadow-lg transition disabled:opacity-60">
+                      {generatingCode ? 'Generating…' : 'Generate Code'}
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Stats */}
+              <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="bg-blue-50 rounded-2xl p-5 text-center">
+                  <p className="text-sm text-blue-700 mb-1">Total Referrals</p>
+                  <p className="text-3xl font-extrabold text-blue-900">{referral?.stats?.total_referrals ?? 0}</p>
+                </div>
+                <div className="bg-emerald-50 rounded-2xl p-5 text-center">
+                  <p className="text-sm text-emerald-700 mb-1">Credited</p>
+                  <p className="text-3xl font-extrabold text-emerald-900">{referral?.stats?.credited ?? 0}</p>
+                </div>
+                <div className="bg-amber-50 rounded-2xl p-5 text-center">
+                  <p className="text-sm text-amber-700 mb-1">Pending</p>
+                  <p className="text-3xl font-extrabold text-amber-900">{referral?.stats?.pending ?? 0}</p>
+                </div>
+                <div className="bg-purple-50 rounded-2xl p-5 text-center">
+                  <p className="text-sm text-purple-700 mb-1">Total Rewards</p>
+                  <p className="text-3xl font-extrabold text-purple-900">${referral?.stats?.rewards_total ? parseFloat(referral.stats.rewards_total).toFixed(2) : '0.00'}</p>
+                </div>
+              </div>
             </div>
           )}
         </section>

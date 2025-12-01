@@ -2,6 +2,7 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from . import views
+from .referrals_endpoints import referrals_summary, referrals_rewards
 
 router = DefaultRouter()
 router.register(
@@ -50,7 +51,11 @@ urlpatterns = [
     path("", include(router.urls)),
     path("wallet/", views.WalletView.as_view(), name="api-wallet"),
     path("support/", views.SupportRequestView.as_view(), name="api-support"),
-    path("public/certificate/", views.PublicCertificateView.as_view(), name="api-public-certificate"),
+    path(
+        "public/certificate/",
+        views.PublicCertificateView.as_view(),
+        name="api-public-certificate",
+    ),
     path(
         "profile/email-preferences/",
         views.EmailPreferencesView.as_view(),
@@ -88,5 +93,16 @@ urlpatterns = [
         "auth/verify-email/",
         views.verify_email_link,
         name="verify_email_link",
+    ),
+    # Referrals
+    path(
+        "referrals/summary/",
+        referrals_summary,
+        name="api-referrals-summary",
+    ),
+    path(
+        "referrals/rewards/",
+        referrals_rewards,
+        name="api-referrals-rewards",
     ),
 ]

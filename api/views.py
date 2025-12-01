@@ -687,6 +687,7 @@ def complete_signup(request):
     """Signup: create user, send verification link."""
     email = (request.data.get("email") or "").strip()
     password = (request.data.get("password") or "").strip()
+    referral_code = (request.data.get("referral_code") or "").strip()
 
     if not email or not password:
         return Response(
@@ -724,9 +725,27 @@ def complete_signup(request):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    # Attach referral if a valid code was provided
+    referral_attached = False
+    if referral_code:
+        try:
+            from referrals.services import create_referral_if_code
+            ref = create_referral_if_code(user, referral_code)
+            if ref:
+                referral_attached = True
+        except Exception:
+            # Do not block signup on referral issues
+            pass
+
     # Send verification email
     issue_verification_token(user)
-    return Response({"status": "verification_sent"}, status=status.HTTP_200_OK)
+    return Response(
+        {
+            "status": "verification_sent",
+            "referral_attached": referral_attached,
+        },
+        status=status.HTTP_200_OK,
+    )
 
 
 @api_view(["GET"])

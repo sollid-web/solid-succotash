@@ -28,14 +28,14 @@ function VerifyEmailContent() {
     // Call the backend API to verify the token
     // Robust fallback: use production API if env not set
     const envApi = (process as any)?.env?.NEXT_PUBLIC_API_URL
-    const isProd = (process as any)?.env?.NODE_ENV === 'production'
-    const apiUrl = envApi && envApi.trim().length > 0
-      ? envApi
-      : (isProd ? 'https://api.wolvcapital.com' : 'http://localhost:8000')
-    const verifyUrl = `${apiUrl}/api/auth/verify-email/?token=${encodeURIComponent(token)}`
+    const isProdLike = typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
+    const apiBase = envApi && envApi.trim()
+      ? envApi.replace(/\/$/, '')
+      : (isProdLike ? 'https://api-wolvcapital.onrender.com' : 'http://localhost:8000')
+    const verifyUrl = `${apiBase}/api/auth/verify-email/?token=${encodeURIComponent(token)}`
     
     console.log('Email Verification Debug:')
-    console.log('- API URL:', apiUrl)
+    console.log('- API URL:', apiBase)
     console.log('- Verify URL:', verifyUrl)
     console.log('- Token (first 20 chars):', token.substring(0, 20))
     

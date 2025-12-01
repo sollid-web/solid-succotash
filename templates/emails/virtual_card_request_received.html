@@ -1,0 +1,9 @@
+{% extends "emails/base_email.html" %}
+{% block body %}
+<h2>Virtual Card Request Received</h2>
+<p>We received your virtual card request for {{ amount }}.</p>
+<p>Request ID: {{ card_id }}</p>
+<p>Our team will review and notify you once approved.</p>
+<p>Track status in your dashboard.</p>
+<p>Regards,<br>{{ brand_name }} Support</p>
+{% endblock %}

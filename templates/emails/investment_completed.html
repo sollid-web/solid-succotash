@@ -1,0 +1,10 @@
+{% extends "emails/base_email.html" %}
+{% block body %}
+<h2>Investment Completed</h2>
+<p>Your investment in the {{ investment.plan.name }} plan has completed.</p>
+<p>Amount: ${{ investment.amount }}<br>
+Duration: {{ investment.plan.duration_days }} days<br>
+Daily ROI: {{ investment.plan.daily_roi }}%</p>
+<p>Total projected return: {{ investment.total_return }}.</p>
+<p>Thank you for investing with {{ brand_name }}.</p>
+{% endblock %}

@@ -10,6 +10,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [referralCode, setReferralCode] = useState('')
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
   const [step, setStep] = useState<'form' | 'sent'>('form')
@@ -34,7 +35,7 @@ export default function SignupPage() {
       const resp = await fetch(`${apiBase}/api/auth/complete-signup/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password, referral_code: referralCode || undefined })
       })
       console.log('Signup response status:', resp.status)
       const data = await resp.json()
@@ -66,6 +67,8 @@ export default function SignupPage() {
               <input type="password" value={password} onChange={e => setPassword(e.target.value)} className="w-full border rounded px-3 py-2" placeholder="••••••••" />
               <label className="block text-sm font-semibold">Confirm Password</label>
               <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="w-full border rounded px-3 py-2" placeholder="••••••••" />
+              <label className="block text-sm font-semibold">Referral Code (optional)</label>
+              <input type="text" value={referralCode} onChange={e => setReferralCode(e.target.value.trim())} className="w-full border rounded px-3 py-2" placeholder="ABC123" />
               <button onClick={completeSignup} disabled={loading || !email || password.length < 8 || confirmPassword !== password} className="w-full bg-blue-600 text-white py-2 rounded disabled:opacity-50">Sign Up</button>
             </div>
           )}

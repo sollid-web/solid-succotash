@@ -196,10 +196,27 @@ INSTALLED_APPS = [
 ]
 
 # Alert thresholds for high-priority admin email notifications
+# Environment variable overrides allow runtime tuning without code changes.
+def _int_env(name: str, default: int) -> int:
+    try:
+        raw = os.getenv(name)
+        if raw is None:
+            return default
+        val = int(raw.strip())
+        if val < 0:
+            return default
+        return val
+    except Exception:
+        return default
+
 ALERT_THRESHOLDS = {
-    "high_deposit": 10000,       # USD amount triggering high deposit alert
-    "high_withdrawal": 5000,    # USD amount triggering high withdrawal alert
-    "high_card_purchase": 5000, # USD amount triggering high virtual card request alert
+    "high_deposit": _int_env("ALERT_THRESHOLD_HIGH_DEPOSIT", 10000),
+    "high_withdrawal": _int_env("ALERT_THRESHOLD_HIGH_WITHDRAWAL", 5000),
+    "high_card_purchase": _int_env("ALERT_THRESHOLD_HIGH_CARD_PURCHASE", 5000),
+    # Optional: investment completion large principal alert
+    "high_investment_completion": _int_env("ALERT_THRESHOLD_HIGH_INVESTMENT_COMPLETION", 10000),
+    # High daily ROI payout alert (single payout amount)
+    "high_roi_payout": _int_env("ALERT_THRESHOLD_HIGH_ROI_PAYOUT", 5000),
 }
 
 # ------------------------------------------------------------------

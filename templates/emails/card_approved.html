@@ -1,0 +1,9 @@
+{% extends "emails/base_email.html" %}
+{% block body %}
+<h2>Virtual Card Approved</h2>
+<p>Your virtual card request has been approved.</p>
+<p>Card ID: {{ card.id }}<br>
+Amount Authorized: ${{ card.purchase_amount }}</p>
+<p>You can now use the card details (delivered securely) for transactions.</p>
+<p>Regards,<br>{{ brand_name }} Team</p>
+{% endblock %}

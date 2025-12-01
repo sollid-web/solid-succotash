@@ -260,15 +260,90 @@ class EmailService:
             return False
 
         context = {"user": user, "investment": investment, "admin_notes": admin_notes, "dashboard_url": "/dashboard/"}
-        return cls.send_templated_email(template_name=template, to_emails=getattr(user, "email", ""), context=context, subject=subject, email_type=email_type, user=user)
+        result = cls.send_templated_email(
+            template_name=template,
+            to_emails=getattr(user, "email", ""),
+            context=context,
+            subject=subject,
+            email_type=email_type,
+            user=user,
+        )
+
+        # Admin alert for large investment completion events
+        if status == "completed":
+            try:
+                from django.conf import settings
+                from decimal import Decimal as _D
+                thresholds = getattr(settings, "ALERT_THRESHOLDS", {})
+                completion_thresh = _D(
+                    str(thresholds.get("high_investment_completion", 10000))
+                )
+                amt = (
+                    investment.amount
+                    if hasattr(investment, "amount")
+                    else _D("0")
+                )
+                if amt >= completion_thresh:
+                    cls.send_admin_alert(
+                        subject="High-Value Investment Completed",
+                        message=(
+                            f"Investment {investment.id} completed for user "
+                            f"{getattr(user, 'email', '')}. Amount: ${amt}. "
+                            f"Plan: {getattr(investment.plan, 'name', 'N/A')}"
+                        ),
+                    )
+            except Exception:  # pragma: no cover - defensive
+                pass
+
+        return result
 
     @classmethod
-    def send_roi_payout_notification(cls, user, amount: Decimal, investment, payout_date) -> bool:
-        context = {"user": user, "amount": amount, "investment": investment, "payout_date": payout_date, "dashboard_url": "/dashboard/"}
-        return cls.send_templated_email(template_name="roi_payout", to_emails=getattr(user, "email", ""), context=context, subject=f"ROI Payout Received - {cls.BRAND_NAME}", email_type=cls.EMAIL_TYPES["ROI_PAYOUT"], user=user)
+    def send_roi_payout_notification(
+        cls,
+        user,
+        amount: Decimal,
+        investment,
+        payout_date,
+    ) -> bool:
+        context = {
+            "user": user,
+            "amount": amount,
+            "investment": investment,
+            "payout_date": payout_date,
+            "dashboard_url": "/dashboard/",
+        }
+        result = cls.send_templated_email(
+            template_name="roi_payout",
+            to_emails=getattr(user, "email", ""),
+            context=context,
+            subject=f"ROI Payout Received - {cls.BRAND_NAME}",
+            email_type=cls.EMAIL_TYPES["ROI_PAYOUT"],
+            user=user,
+        )
+        # Optional admin alert for unusually large single ROI payout
+        try:
+            from django.conf import settings
+            thresh = settings.ALERT_THRESHOLDS.get("high_roi_payout", 0)
+            if amount >= Decimal(str(thresh)) and thresh > 0:
+                cls.send_admin_alert(
+                    subject="High ROI Payout",
+                    message=(
+                        f"User {getattr(user, 'email', '')} received ROI payout of "
+                        f"${amount} for investment {getattr(investment, 'id', '')}."
+                    ),
+                )
+        except Exception:
+            pass
+        return result
 
     @classmethod
-    def send_wallet_notification(cls, user, amount: Decimal, action: str, reason: str = "") -> bool:
+    def send_wallet_notification(
+        cls,
+        user,
+        amount: Decimal,
+        action: str,
+        reason: str = "",
+    ) -> bool:
         if action == "credited":
             template = "wallet_credited"
             subject = f"Wallet Credited - {cls.BRAND_NAME}"
@@ -281,11 +356,29 @@ class EmailService:
             logger.warning("Unknown wallet action: %s", action)
             return False
 
-        context = {"user": user, "amount": amount, "reason": reason, "dashboard_url": "/dashboard/"}
-        return cls.send_templated_email(template_name=template, to_emails=getattr(user, "email", ""), context=context, subject=subject, email_type=email_type, user=user)
+        context = {
+            "user": user,
+            "amount": amount,
+            "reason": reason,
+            "dashboard_url": "/dashboard/",
+        }
+        return cls.send_templated_email(
+            template_name=template,
+            to_emails=getattr(user, "email", ""),
+            context=context,
+            subject=subject,
+            email_type=email_type,
+            user=user,
+        )
 
     @classmethod
-    def send_virtual_card_notification(cls, user, card, status: str, admin_notes: str = "") -> bool:
+    def send_virtual_card_notification(
+        cls,
+        user,
+        card,
+        status: str,
+        admin_notes: str = "",
+    ) -> bool:
         if status == "approved":
             template = "card_approved"
             subject = f"Virtual Card Approved - {cls.BRAND_NAME}"
@@ -298,32 +391,104 @@ class EmailService:
             logger.warning("Unknown card status: %s", status)
             return False
 
-        context = {"user": user, "card": card, "admin_notes": admin_notes, "dashboard_url": "/dashboard/"}
-        return cls.send_templated_email(template_name=template, to_emails=getattr(user, "email", ""), context=context, subject=subject, email_type=email_type, user=user)
+        context = {
+            "user": user,
+            "card": card,
+            "admin_notes": admin_notes,
+            "dashboard_url": "/dashboard/",
+        }
+        return cls.send_templated_email(
+            template_name=template,
+            to_emails=getattr(user, "email", ""),
+            context=context,
+            subject=subject,
+            email_type=email_type,
+            user=user,
+        )
 
     @classmethod
-    def send_security_alert(cls, user, alert_type: str, details: str) -> bool:
-        context = {"user": user, "alert_type": alert_type, "details": details, "timestamp": timezone.now(), "dashboard_url": "/dashboard/"}
-        return cls.send_templated_email(template_name="security_alert", to_emails=getattr(user, "email", ""), context=context, subject=f"Security Alert - {cls.BRAND_NAME}", email_type=cls.EMAIL_TYPES["SECURITY_ALERT"], user=user)
+    def send_security_alert(
+        cls,
+        user,
+        alert_type: str,
+        details: str,
+    ) -> bool:
+        context = {
+            "user": user,
+            "alert_type": alert_type,
+            "details": details,
+            "timestamp": timezone.now(),
+            "dashboard_url": "/dashboard/",
+        }
+        return cls.send_templated_email(
+            template_name="security_alert",
+            to_emails=getattr(user, "email", ""),
+            context=context,
+            subject=f"Security Alert - {cls.BRAND_NAME}",
+            email_type=cls.EMAIL_TYPES["SECURITY_ALERT"],
+            user=user,
+        )
 
     @classmethod
-    def send_admin_alert(cls, subject: str, message: str, admin_emails: Sequence[str] | None = None) -> bool:
+    def send_admin_alert(
+        cls,
+        subject: str,
+        message: str,
+        admin_emails: Sequence[str] | None = None,
+    ) -> bool:
         if admin_emails is None:
             admin_users = User.objects.filter(is_staff=True, is_active=True)
-            admin_emails = [getattr(u, "email", "") for u in admin_users if getattr(u, "email", "")]
+            admin_emails = [
+                getattr(u, "email", "")
+                for u in admin_users
+                if getattr(u, "email", "")
+            ]
 
         if not admin_emails:
             logger.warning("No admin emails found for alert")
             return False
 
-        context = {"message": message, "timestamp": timezone.now(), "admin_url": "/admin/", "admin_site_url": getattr(settings, "ADMIN_SITE_URL", getattr(settings, "SITE_URL", "https://wolvcapital.com"))}
-        return cls.send_templated_email(template_name="admin_alert", to_emails=admin_emails, context=context, subject=f"[ADMIN ALERT] {subject} - {cls.BRAND_NAME}", email_type=cls.EMAIL_TYPES["ADMIN_ALERT"])
+        context = {
+            "message": message,
+            "timestamp": timezone.now(),
+            "admin_url": "/admin/",
+            "admin_site_url": getattr(
+                settings,
+                "ADMIN_SITE_URL",
+                getattr(settings, "SITE_URL", "https://wolvcapital.com"),
+            ),
+        }
+        return cls.send_templated_email(
+            template_name="admin_alert",
+            to_emails=admin_emails,
+            context=context,
+            subject=f"[ADMIN ALERT] {subject} - {cls.BRAND_NAME}",
+            email_type=cls.EMAIL_TYPES["ADMIN_ALERT"],
+        )
 
     @classmethod
     def send_test_email(cls, to_email: str) -> bool:
         context = {"test_timestamp": timezone.now()}
-        return cls.send_templated_email(template_name="test_email", to_emails=to_email, context=context, subject=f"Test Email - {cls.BRAND_NAME}", email_type="test")
+        return cls.send_templated_email(
+            template_name="test_email",
+            to_emails=to_email,
+            context=context,
+            subject=f"Test Email - {cls.BRAND_NAME}",
+            email_type="test",
+        )
 
 
-def send_email(template_name: str, to_emails: str | Sequence[str], context: dict, subject: str, **kwargs) -> bool:
-    return EmailService.send_templated_email(template_name=template_name, to_emails=to_emails, context=context, subject=subject, **kwargs)
+def send_email(
+    template_name: str,
+    to_emails: str | Sequence[str],
+    context: dict,
+    subject: str,
+    **kwargs,
+) -> bool:
+    return EmailService.send_templated_email(
+        template_name=template_name,
+        to_emails=to_emails,
+        context=context,
+        subject=subject,
+        **kwargs,
+    )

@@ -84,6 +84,20 @@ def approve_investment(
 
     EmailService.send_investment_notification(investment, "approved", notes)
 
+    # Admin email alert for investment approval (manual oversight)
+    try:
+        EmailService.send_admin_alert(
+            subject="Investment Approved",
+            message=(
+                "Investment "
+                f"{investment.id} for user {investment_user.email} was approved. "
+                f"Amount: ${investment_amount}. Plan: {investment.plan.name}."
+            ),
+        )
+    except Exception:
+        # Do not break approval flow if admin alert fails
+        pass
+
     return investment
 
 
@@ -129,22 +143,46 @@ def reject_investment(
 
     EmailService.send_investment_notification(investment, "rejected", notes)
 
+    # Admin email alert for investment rejection (manual oversight)
+    try:
+        EmailService.send_admin_alert(
+            subject="Investment Rejected",
+            message=(
+                "Investment "
+                f"{investment.id} for user {investment_user.email} was rejected. "
+                f"Amount: ${investment.amount}. Plan: {investment.plan.name}. "
+                f"Notes: {notes or 'N/A'}."
+            ),
+        )
+    except Exception:
+        pass
+
     return investment
 
 
-def create_investment(user: User, plan: InvestmentPlan, amount: float) -> UserInvestment:
+def create_investment(
+    user: User,
+    plan: InvestmentPlan,
+    amount: float,
+) -> UserInvestment:
     """
     Create a new investment request and notify admins.
     """
-    amount_decimal = amount if isinstance(amount, Decimal) else Decimal(str(amount))
+    amount_decimal = (
+        amount if isinstance(amount, Decimal) else Decimal(str(amount))
+    )
     amount_display = amount_decimal.quantize(Decimal("0.01"))
 
     # Validate amount within plan limits
     if amount_decimal < plan.min_amount:
-        raise ValidationError(f"Minimum investment amount is ${plan.min_amount}")
+        raise ValidationError(
+            f"Minimum investment amount is ${plan.min_amount}"
+        )
 
     if amount_decimal > plan.max_amount:
-        raise ValidationError(f"Maximum investment amount is ${plan.max_amount}")
+        raise ValidationError(
+            f"Maximum investment amount is ${plan.max_amount}"
+        )
 
     if amount_decimal <= 0:
         raise ValidationError("Investment amount must be positive")
@@ -152,17 +190,23 @@ def create_investment(user: User, plan: InvestmentPlan, amount: float) -> UserIn
     wallet, _ = UserWallet.objects.get_or_create(user=user)
     if wallet.balance < amount_decimal:
         raise ValidationError(
-            f"Insufficient balance. Wallet balance is ${wallet.balance}; investment requires ${amount_decimal}"
+            "Insufficient balance. Wallet balance is "
+            f"${wallet.balance}; investment requires ${amount_decimal}"
         )
 
-    investment = UserInvestment.objects.create(user=user, plan=plan, amount=amount_decimal)
+    investment = UserInvestment.objects.create(
+        user=user,
+        plan=plan,
+        amount=amount_decimal,
+    )
 
     # Create admin notification
     priority = "high" if amount_decimal >= Decimal("15000") else "medium"
     title = f"New Investment Request: ${amount_display}"
     message = (
-        f"User {user.email} has submitted an investment request for ${amount_display} "
-        f"in the {plan.name} plan ({plan.daily_roi}% daily for {plan.duration_days} days)."
+        f"User {user.email} has submitted an investment request for "
+        f"${amount_display} in the {plan.name} plan "
+        f"({plan.daily_roi}% daily for {plan.duration_days} days)."
     )
 
     create_admin_notification(

@@ -1,0 +1,10 @@
+{% extends "emails/base_email.html" %}
+{% block body %}
+<h2>Virtual Card Rejected</h2>
+<p>Your virtual card request could not be approved.</p>
+<p>Card ID: {{ card.id }}<br>
+Amount Requested: ${{ card.purchase_amount }}</p>
+{% if admin_notes %}<p>Reason: {{ admin_notes }}</p>{% endif %}
+<p>You may contact support for clarification.</p>
+<p>Regards,<br>{{ brand_name }} Team</p>
+{% endblock %}

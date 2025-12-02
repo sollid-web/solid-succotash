@@ -53,29 +53,19 @@ export default function RiskDisclosurePage() {
 					</div>
 				</section>
 
-				<section className="py-24 bg-white/90 backdrop-blur-[1px]">
-					<div className="container mx-auto px-4 lg:px-8 max-w-4xl prose prose-lg">
-						<h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">Investment Risks</h2>
-						<p className="text-lg text-gray-700 mb-4">
-							All investments in digital assets and cryptocurrencies involve risk. Market conditions can change rapidly, and past performance does not guarantee future results. You may lose some or all of your invested capital. WolvCapital does not provide any guarantee of performance or returns.
-						</p>
-						<h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">Manual Review Process</h2>
-						<p className="text-lg text-gray-700 mb-4">
-							Every deposit, withdrawal, and investment is manually reviewed by our compliance team to ensure regulatory compliance and security. Processing times may vary depending on volume and additional compliance checks.
-						</p>
-						<h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">Limitation of Liability</h2>
-						<p className="text-lg text-gray-700 mb-4">
-							WolvCapital is not liable for any direct, indirect, incidental, or consequential damages arising from your use of the platform, investment losses, or service interruptions. All services are provided in accordance with applicable U.S. financial regulations.
-						</p>
-						<h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">Contact Information</h2>
-						<p className="text-lg text-gray-700 mb-4">
-							If you have any questions about this Risk Disclosure, please contact us at <a href="mailto:legal@wolvcapital.com" className="text-blue-600 hover:underline">legal@wolvcapital.com</a>. All communications are handled in accordance with U.S. regulatory requirements.
-						</p>
-						<div className="text-center mt-12">
-							<Link href="/" className="text-[#2563eb] hover:text-[#1d4ed8] font-semibold">&larr; Back to Home</Link>
-						</div>
-					</div>
-				</section>
+				<main className="min-h-screen bg-white">
+					<section className="max-w-2xl mx-auto py-16 px-4">
+						<h1 className="text-4xl font-bold mb-6">Risk Disclosure Statement</h1>
+						<p className="text-lg text-gray-700 mb-8">Investing in digital assets carries inherent financial risks. Past performance does not guarantee future results.</p>
+						<h2 className="text-2xl font-semibold mb-4">Investor Acknowledgment</h2>
+						<ul className="list-disc pl-6 mb-6 text-gray-700 space-y-2">
+							<li>ROI is based on market performance</li>
+							<li>Cryptocurrency prices fluctuate</li>
+							<li>There is potential for partial or total loss</li>
+						</ul>
+						<p className="text-lg text-blue-700 font-semibold mt-8">WolvCapital provides structured plans but cannot eliminate investment risks.</p>
+					</section>
+				</main>
 
 				<footer className="bg-[#071d42] text-white py-16">
 					<div className="container mx-auto px-4 lg:px-8">

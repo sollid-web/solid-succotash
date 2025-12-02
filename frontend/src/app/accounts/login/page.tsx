@@ -117,8 +117,17 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-hero-auth bg-cover bg-center bg-no-repeat flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <main className="min-h-screen bg-white">
+      <section className="max-w-2xl mx-auto py-16 px-4">
+        <h1 className="text-4xl font-bold mb-6">Login to Your WolvCapital Dashboard</h1>
+        <p className="text-lg text-gray-700 mb-8">Access your secure investment portal to manage funds, track performance, and withdraw earnings.</p>
+        <h2 className="text-2xl font-semibold mb-4">Dashboard Features</h2>
+        <ul className="list-disc pl-6 mb-6 text-gray-700 space-y-2">
+          <li>What currencies do you accept?<br /><span className="text-blue-700">Bitcoin (BTC), USDT (TRC20/ERC20), Visa card, and other major digital assets.</span></li>
+          <li>Is WolvCapital secure?<br /><span className="text-blue-700">Your dashboard is encrypted and monitored with advanced security measures.</span></li>
+          <li>Are there hidden fees?<br /><span className="text-blue-700">No. All returns and charges are clearly displayed before you invest.</span></li>
+        </ul>
+
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center space-x-3">
@@ -232,7 +241,7 @@ export default function LoginPage() {
             ← Back to Home
           </Link>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   )
 }

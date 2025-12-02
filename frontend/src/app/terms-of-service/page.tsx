@@ -62,70 +62,23 @@ export default function TermsOfServicePage() {
       </section>
 
       {/* Content */}
-      <section className="py-24 bg-white/90 backdrop-blur-[1px]">
-        <div className="container mx-auto px-4 lg:px-8 max-w-4xl prose prose-lg">
-          <p className="text-xl text-gray-700 mb-8 leading-relaxed">
-            Welcome to WolvCapital, a U.S. regulated digital investment platform. By accessing or using our services, you agree to be bound by these Terms of Service. Please read them carefully before using the platform. All financial operations are subject to U.S. regulatory standards and compliance review.
-          </p>
-
-          <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">1. Eligibility</h2>
-          <p className="text-gray-700 leading-relaxed mb-4">To use WolvCapital's services, you must meet the following requirements:</p>
-          <ul className="list-disc pl-6 space-y-2 text-gray-700">
-            <li>Be at least 18 years of age or the age of majority in your jurisdiction</li>
-            <li>Have the legal capacity to enter into binding contracts</li>
-            <li>Be legally permitted to invest in cryptocurrencies and digital assets in your jurisdiction</li>
-            <li>Not be located in a country subject to international sanctions or embargoes</li>
-          </ul>
-
-          <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">2. Account Responsibilities</h2>
-          <p className="text-gray-700 leading-relaxed mb-4">When you create an account with WolvCapital, you agree to:</p>
-          <ul className="list-disc pl-6 space-y-2 text-gray-700">
-            <li><strong>Confidentiality:</strong> Maintain the confidentiality of your login credentials</li>
-            <li><strong>Account Activity:</strong> Any activity under your account is your responsibility</li>
-            <li><strong>Notification:</strong> Notify us immediately of unauthorized access</li>
-            <li><strong>Accurate Information:</strong> Provide and maintain accurate personal information</li>
-          </ul>
-
-          <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">3. Investment Risks</h2>
-          <p className="text-gray-700 leading-relaxed">
-            All investments carry inherent risk. You acknowledge that investment returns are not guaranteed, digital asset values can decline rapidly, and you may lose some or all of your invested capital. WolvCapital does not provide any guarantee of performance. Please review our <Link href="/risk-disclosure" className="text-[#2563eb] hover:underline font-semibold">Risk Disclosure</Link> before investing.
-          </p>
-
-          <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">4. Manual Approval Process</h2>
-          <p className="text-gray-700 leading-relaxed">
-            All financial transactions undergo manual off-chain review by our compliance team. Processing times typically range from 24-72 hours. Transactions may be delayed or rejected if they do not meet our compliance standards or U.S. regulatory requirements.
-          </p>
-
-          <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">5. Fees</h2>
-          <p className="text-gray-700 leading-relaxed mb-4">WolvCapital may charge fees for certain services, including:</p>
-          <ul className="list-disc pl-6 space-y-2 text-gray-700">
-            <li>Deposit processing fees (depending on payment method)</li>
-            <li>Withdrawal transaction fees</li>
-            <li>Virtual card issuance and maintenance fees</li>
-            <li>Early withdrawal penalties on investment plans</li>
-          </ul>
-
-          <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">6. Limitation of Liability</h2>
-          <p className="text-gray-700 leading-relaxed">
-            To the fullest extent permitted by law, WolvCapital is not liable for losses arising from market volatility, investment performance, or user negligence. Our total liability shall not exceed the amount of fees paid by you in the 12 months preceding the claim. All services are provided in accordance with applicable U.S. financial regulations.
-          </p>
-
-          <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">7. Governing Law</h2>
-          <p className="text-gray-700 leading-relaxed">
-            These Terms of Service are governed by the laws of the United States. Any disputes shall be resolved in courts located in the United States unless otherwise required by mandatory consumer protection laws in your jurisdiction. WolvCapital complies with all applicable SEC, CFTC, and CCPA requirements.
-          </p>
-
-          <div className="bg-blue-50 border-l-4 border-blue-500 p-6 mt-12 rounded-r-lg">
-            <h3 className="text-xl font-bold text-blue-900 mb-2">Agreement Acknowledgment</h3>
-            <p className="text-blue-800">
-              By creating an account and using WolvCapital's services, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service, our{' '}
-              <Link href="/legal-disclaimer" className="text-blue-600 hover:underline font-semibold">Legal Disclaimer</Link>,{' '}
-              <Link href="/risk-disclosure" className="text-blue-600 hover:underline font-semibold">Risk Disclosure</Link>, and{' '}
-              <Link href="/privacy" className="text-blue-600 hover:underline font-semibold">Privacy Policy</Link>. All policies are designed to meet U.S. financial and data protection standards.
-            </p>
-          </div>
-        </div>
-      </section>
+      <main className="min-h-screen bg-white">
+  <section className="max-w-2xl mx-auto py-16 px-4">
+    <h1 className="text-4xl font-bold mb-6">Terms of Service</h1>
+    <p className="text-lg text-gray-700 mb-8">These terms govern your access and use of WolvCapital, including all investment activities, withdrawals, and dashboard actions.</p>
+    <h2 className="text-2xl font-semibold mb-4">Key Areas Covered</h2>
+    <ul className="list-disc pl-6 mb-6 text-gray-700 space-y-2">
+      <li>Account registration</li>
+      <li>Investor responsibilities</li>
+      <li>ROI structure</li>
+      <li>Withdrawal rules</li>
+      <li>Platform rights</li>
+      <li>Limitations of liability</li>
+      <li>Dispute resolution</li>
+    </ul>
+    <p className="text-lg text-blue-700 font-semibold mt-8">By using WolvCapital, you agree to these terms.</p>
+  </section>
+</main>
 
       {/* Footer */}
       <footer className="bg-[#071d42] text-white py-16 bg-opacity-95">

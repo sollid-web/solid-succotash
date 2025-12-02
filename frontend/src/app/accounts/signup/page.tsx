@@ -53,9 +53,26 @@ export default function SignupPage() {
 
   return (
     <PublicLayout backgroundClassName="bg-hero-auth overlay-dark-md">
-      <div className="min-h-screen pt-24 px-4">
-        <div className="max-w-lg mx-auto bg.white/80 backdrop-blur rounded-2xl shadow p-6">
-          <h1 className="text-2xl font-bold mb-4">Create your account</h1>
+      <main className="min-h-screen bg-white">
+        <section className="max-w-2xl mx-auto py-16 px-4">
+          <h1 className="text-4xl font-bold mb-6">Create Your WolvCapital Account</h1>
+          <p className="text-lg text-gray-700 mb-8">Join thousands of global investors growing their digital assets through a secure and transparent platform.</p>
+          <h2 className="text-2xl font-semibold mb-4">Why Create an Account?</h2>
+          <ul className="list-disc pl-6 mb-6 text-gray-700 space-y-2">
+            <li>Access all investment plans</li>
+            <li>Track your daily ROI in real time</li>
+            <li>Withdraw profits every 7 days</li>
+            <li>Manage your wallet and referrals</li>
+            <li>Receive instant support from our team</li>
+          </ul>
+          <h2 className="text-2xl font-semibold mb-4">Sign Up in 3 Easy Steps</h2>
+          <ol className="list-decimal pl-6 mb-6 text-gray-700 space-y-2">
+            <li>Enter your name and email</li>
+            <li>Choose a secure password</li>
+            <li>Verify your account and start investing</li>
+          </ol>
+          <p className="text-lg text-blue-700 font-semibold mt-8">Your financial growth starts here.</p>
+
           {error && <div className="mb-3 text-sm text-red-700 bg-red-50 border border-red-200 rounded p-2">{error}</div>}
           {message && <div className="mb-3 text-sm text-green-700 bg-green-50 border border-green-200 rounded p-2">{message}</div>}
 
@@ -80,8 +97,8 @@ export default function SignupPage() {
               <button className="mt-4 w-full bg-gray-200 text-gray-800 py-2 rounded" onClick={() => router.replace('/accounts/login')}>Go to Sign In</button>
             </div>
           )}
-        </div>
-      </div>
+        </section>
+      </main>
     </PublicLayout>
   )
 }

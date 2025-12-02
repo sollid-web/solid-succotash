@@ -34,14 +34,16 @@ export default function LegalPage() {
           <section className="max-w-2xl mx-auto py-16 px-4">
             <h1 className="text-4xl font-bold mb-6">Legal & Compliance Overview</h1>
             <div className="mb-8 flex justify-center">
-              <Image
-                src="/images/legal/terms.svg"
-                alt="Legal & Compliance Icon"
-                width={120}
-                height={120}
-                className="mx-auto"
-                priority
-              />
+              <div className="relative w-full max-w-[480px] aspect-[2/3] rounded-2xl overflow-hidden shadow-2xl border-2 border-gray-200">
+                <Image
+                  src="/img/legal_disclaimer_wolvcapital.jpg"
+                  alt="Legal practitioner signing WolvCapital disclaimer documents"
+                  fill
+                  priority
+                  className="object-cover object-center"
+                  sizes="(max-width: 768px) 100vw, 480px"
+                />
+              </div>
             </div>
             <p className="text-lg text-gray-700 mb-8">WolvCapital is committed to maintaining high standards of operational transparency, data protection, and responsible investment practices. Our legal and compliance framework is designed to protect investors, ensure regulatory adherence, and foster trust in digital asset management.</p>
             <h2 className="text-2xl font-semibold mb-4">Compliance Focus Areas</h2>

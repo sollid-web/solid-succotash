@@ -117,32 +117,16 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-white">
-      <section className="max-w-2xl mx-auto py-16 px-4">
-        <h1 className="text-4xl font-bold mb-6">Login to Your WolvCapital Dashboard</h1>
-        <p className="text-lg text-gray-700 mb-8">Access your secure investment portal to manage funds, track performance, and withdraw earnings.</p>
-        <h2 className="text-2xl font-semibold mb-4">Dashboard Features</h2>
-        <ul className="list-disc pl-6 mb-6 text-gray-700 space-y-2">
-          <li>What currencies do you accept?<br /><span className="text-blue-700">Bitcoin (BTC), USDT (TRC20/ERC20), Visa card, and other major digital assets.</span></li>
-          <li>Is WolvCapital secure?<br /><span className="text-blue-700">Your dashboard is encrypted and monitored with advanced security measures.</span></li>
-          <li>Are there hidden fees?<br /><span className="text-blue-700">No. All returns and charges are clearly displayed before you invest.</span></li>
-        </ul>
-
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center space-x-3">
-            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-2xl">
-              <span className="text-3xl font-bold text-[#0b2f6b]">W</span>
-            </div>
-            <span className="text-3xl font-bold text-white">WolvCapital</span>
-          </Link>
+    <main className="min-h-screen bg-hero-login bg-cover bg-center bg-no-repeat">
+      <section className="pt-32 pb-16 bg-black/60 text-white text-center">
+        <div className="container mx-auto px-4 lg:px-8">
+          <h1 className="text-5xl font-extrabold mb-3">Login to Your WolvCapital Dashboard</h1>
+          <p className="text-lg text-blue-100 mb-6">Access your secure investment portal to manage funds, track performance, and withdraw earnings.</p>
         </div>
-
-        {/* Login Card */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 md:p-10">
-          <h1 className="text-3xl font-bold text-[#0b2f6b] mb-2 text-center">Welcome Back</h1>
-          <p className="text-gray-600 text-center mb-8">Sign in to access your investment dashboard</p>
-
+      </section>
+      <section className="py-16 bg-white/90 backdrop-blur-[1px]">
+        <div className="container mx-auto px-4 lg:px-8 max-w-xl">
+          {/* Error and success messages */}
           {signupSuccess && (
             <div className="mb-6 p-4 bg-emerald-50 border-2 border-emerald-200 rounded-xl">
               <div className="flex items-start space-x-3">
@@ -163,6 +147,7 @@ export default function LoginPage() {
             </div>
           )}
 
+          {/* Login form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
@@ -219,27 +204,12 @@ export default function LoginPage() {
             )}
           </form>
 
-          <div className="mt-8 text-center">
-            <p className="text-gray-600">
-              Don't have an account? {' '}
-              <Link href="/accounts/signup" className="text-[#2563eb] hover:text-[#1d4ed8] font-bold transition">Sign Up</Link>
-            </p>
-          </div>
-
-          <div className="mt-6 pt-6 border-t border-gray-200 text-center">
-            <p className="text-sm text-gray-500">
-              By signing in, you agree to our{' '}
-              <Link href="/terms-of-service" className="text-[#2563eb] hover:underline">Terms of Service</Link>
-              {' '}and{' '}
-              <Link href="/privacy" className="text-[#2563eb] hover:underline">Privacy Policy</Link>
-            </p>
-          </div>
-        </div>
-
-        <div className="text-center mt-6">
-          <Link href="/" className="text-white hover:text-gray-200 font-semibold transition">
-            ← Back to Home
-          </Link>
+          <h2 className="text-2xl font-semibold mt-10 mb-4">Dashboard Features</h2>
+          <ul className="list-disc pl-6 mb-6 text-gray-700 space-y-2">
+            <li>What currencies do you accept?<br /><span className="text-blue-700">Bitcoin (BTC), USDT (TRC20/ERC20), Visa card, and other major digital assets.</span></li>
+            <li>Is WolvCapital secure?<br /><span className="text-blue-700">Your dashboard is encrypted and monitored with advanced security measures.</span></li>
+            <li>Are there hidden fees?<br /><span className="text-blue-700">No. All returns and charges are clearly displayed before you invest.</span></li>
+          </ul>
         </div>
       </section>
     </main>

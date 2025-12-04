@@ -1,4 +1,5 @@
 from decimal import Decimal
+from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -64,6 +65,17 @@ class DailyRoiPayoutTests(TestCase):
             user=self.user, tx_type="deposit", reference__contains="ROI payout"
         )
         self.assertEqual(list(txns_after.values_list("id", flat=True)), first_txn_ids)
+
+    @patch("investments.management.commands.payout_roi.EmailService.send_roi_payout_notification")
+    def test_daily_payout_sends_email_notification(self, mock_send):
+        process_date = timezone.now().date().isoformat()
+        call_command("payout_roi", date=process_date)
+
+        mock_send.assert_called_once()
+        args, _ = mock_send.call_args
+        self.assertEqual(args[0], self.user)
+        self.assertEqual(args[1], Decimal("5.00"))  # 1% of 500
+        self.assertEqual(args[2], self.investment)
 
 
 class InvestmentRejectionTests(TestCase):

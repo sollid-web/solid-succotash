@@ -1,3 +1,4 @@
+import logging
 from decimal import Decimal
 
 from django.core.management.base import BaseCommand
@@ -6,6 +7,9 @@ from django.utils import timezone
 
 from investments.models import DailyRoiPayout, UserInvestment
 from transactions.services import create_transaction
+from core.email_service import EmailService
+
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -57,6 +61,20 @@ class Command(BaseCommand):
                     )
                     DailyRoiPayout.objects.create(
                         investment=inv, payout_date=process_date, amount=payout
+                    )
+                try:
+                    EmailService.send_roi_payout_notification(
+                        inv.user,
+                        payout,
+                        inv,
+                        process_date,
+                    )
+                except Exception as exc:  # pragma: no cover - defensive logging
+                    logger.warning(
+                        "ROI payout email failed for user %s investment %s: %s",
+                        getattr(inv.user, "email", inv.user_id),
+                        inv.id,
+                        exc,
                     )
                 self.stdout.write(f"Paid {payout} to user {inv.user_id} (investment {inv.id})")
             paid += 1

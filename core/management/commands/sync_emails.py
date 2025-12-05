@@ -2,8 +2,8 @@
 Management command to sync emails from IMAP inbox
 """
 
-from django.core.management.base import BaseCommand
 from django.conf import settings
+from django.core.management.base import BaseCommand
 
 from core.email_inbox_service import fetch_new_emails
 
@@ -33,12 +33,12 @@ class Command(BaseCommand):
 
         if dry_run:
             self.stdout.write(self.style.WARNING('DRY RUN MODE - No emails will be saved'))
-            
+
             # Test connection
             from core.email_inbox_service import EmailInboxService
             service = EmailInboxService()
             mail = service.connect()
-            
+
             if mail:
                 self.stdout.write(self.style.SUCCESS('✓ IMAP connection successful!'))
                 try:
@@ -57,12 +57,12 @@ class Command(BaseCommand):
                 self.stdout.write(f'  INBOX_IMAP_HOST: {getattr(settings, "INBOX_IMAP_HOST", "Not set")}')
                 self.stdout.write(f'  INBOX_EMAIL_USER: {getattr(settings, "INBOX_EMAIL_USER", "Not set")}')
                 self.stdout.write(f'  INBOX_EMAIL_PASSWORD: {"***" if getattr(settings, "INBOX_EMAIL_PASSWORD", "") else "Not set"}')
-            
+
             return
 
         try:
             count = fetch_new_emails(limit=limit)
-            
+
             if count > 0:
                 self.stdout.write(
                     self.style.SUCCESS(f'✓ Successfully fetched and saved {count} new email(s)')
@@ -75,7 +75,7 @@ class Command(BaseCommand):
                 self.stdout.write(
                     self.style.ERROR('✗ Email sync failed - check logs for details')
                 )
-                
+
         except Exception as e:
             self.stdout.write(
                 self.style.ERROR(f'✗ Error during sync: {e}')

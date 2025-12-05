@@ -1,9 +1,10 @@
 from django import forms
-from django.core.validators import MinValueValidator
-from django.core.mail import send_mail
 from django.conf import settings
+from django.core.mail import send_mail
+from django.core.validators import MinValueValidator
 
 from investments.models import InvestmentPlan
+
 from .models import SupportRequest
 
 
@@ -152,7 +153,7 @@ class WithdrawalForm(forms.Form):
 
 class ContactForm(forms.ModelForm):
     """Contact/Support form for users to send messages to admins"""
-    
+
     class Meta:
         model = SupportRequest
         fields = ['full_name', 'contact_email', 'topic', 'message']
@@ -181,11 +182,11 @@ class ContactForm(forms.ModelForm):
             'topic': 'Subject',
             'message': 'Message',
         }
-    
+
     def save_and_notify(self, request=None, user=None):
         """Save message and send email notifications to all admin recipients"""
         instance = self.save(commit=False)
-        
+
         # Attach user if authenticated
         if user and user.is_authenticated:
             instance.user = user
@@ -193,7 +194,7 @@ class ContactForm(forms.ModelForm):
                 instance.full_name = user.get_full_name() or user.email
             if not instance.contact_email:
                 instance.contact_email = user.email
-        
+
         # Capture request metadata if available
         if request:
             instance.source_url = request.build_absolute_uri()
@@ -204,14 +205,14 @@ class ContactForm(forms.ModelForm):
             else:
                 instance.ip_address = request.META.get('REMOTE_ADDR')
             instance.user_agent = request.META.get('HTTP_USER_AGENT', '')[:255]
-        
+
         instance.save()
-        
+
         # Send email notification to all admin recipients
         admin_emails = getattr(settings, 'ADMIN_EMAIL_RECIPIENTS', [])
         if admin_emails:
             site_url = getattr(settings, 'SITE_URL', 'http://localhost:8000')
-            
+
             email_body = f"""
 New Support Message from WolvCapital Contact Form
 {'=' * 60}
@@ -234,7 +235,7 @@ View in Admin Panel:
 
 Reply to: {instance.contact_email}
             """
-            
+
             try:
                 send_mail(
                     subject=f"[WolvCapital Support] {instance.topic}",
@@ -248,5 +249,5 @@ Reply to: {instance.contact_email}
                 import logging
                 logger = logging.getLogger(__name__)
                 logger.error(f"Failed to send contact form email: {e}")
-        
+
         return instance

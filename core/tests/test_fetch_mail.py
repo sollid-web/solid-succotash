@@ -1,6 +1,7 @@
-from core.management.commands.fetch_mail import _decode_mime_header
-from email.message import EmailMessage
 import email
+from email.message import EmailMessage
+
+from core.management.commands.fetch_mail import _decode_mime_header
 
 
 def test_decode_simple_ascii():

@@ -21,6 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Core flags / secrets
 # ------------------------------------------------------------------
 from environ import Env
+
 env = Env()
 Env.read_env()  # Load .env early
 

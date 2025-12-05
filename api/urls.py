@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from . import views
-from .referrals_endpoints import referrals_summary, referrals_rewards
+from .referrals_endpoints import referrals_rewards, referrals_summary
 
 router = DefaultRouter()
 router.register(

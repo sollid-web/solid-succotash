@@ -4,28 +4,33 @@ Creates sample inbox data for testing
 """
 
 import os
+
 import django
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wolvcapital.settings')
 django.setup()
 
-from django.utils import timezone
 from datetime import timedelta
+
+from django.utils import timezone
+
 from core.models import EmailInbox, EmailTemplate
 from users.models import User
 
+
 def create_test_data():
     """Create test emails and templates."""
-    
+
     print("🚀 Creating test data for Business Email Inbox...")
-    
+
     # Get or create admin user - use first superuser or any staff user
     admin_user = User.objects.filter(is_staff=True).first()
-    
+
     if not admin_user:
         # Create a test admin user with unique username
-        from django.contrib.auth.hashers import make_password
         import uuid
+
+        from django.contrib.auth.hashers import make_password
         username = f"admin_{uuid.uuid4().hex[:8]}"
         admin_user = User.objects.create(
             username=username,
@@ -37,10 +42,10 @@ def create_test_data():
         )
         print(f"✓ Created admin user: {admin_user.email}")
         print(f"   Username: {username}")
-        print(f"   Password: admin123")
+        print("   Password: admin123")
     else:
         print(f"✓ Using admin: {admin_user.email}")
-    
+
     # Sample emails
     test_emails = [
         {
@@ -172,7 +177,7 @@ WolvCapital Security System''',
             'priority': EmailInbox.PRIORITY_LOW,
         },
     ]
-    
+
     created_count = 0
     for email_data in test_emails:
         email, created = EmailInbox.objects.get_or_create(
@@ -183,9 +188,9 @@ WolvCapital Security System''',
             created_count += 1
             status_icon = '🌟' if email.is_starred else '📧'
             print(f"{status_icon} Created: {email.subject[:50]}")
-    
+
     print(f"\n✓ Created {created_count} test emails")
-    
+
     # Create email templates
     templates = [
         {
@@ -260,7 +265,7 @@ Best regards,
 WolvCapital Support Team''',
         },
     ]
-    
+
     template_count = 0
     for template_data in templates:
         template, created = EmailTemplate.objects.get_or_create(
@@ -270,15 +275,15 @@ WolvCapital Support Team''',
         if created:
             template_count += 1
             print(f"📝 Created template: {template.name}")
-    
+
     print(f"\n✓ Created {template_count} email templates")
-    
+
     # Statistics
     total_emails = EmailInbox.objects.count()
     unread = EmailInbox.objects.filter(status=EmailInbox.STATUS_UNREAD).count()
     starred = EmailInbox.objects.filter(is_starred=True).count()
     urgent = EmailInbox.objects.filter(priority=EmailInbox.PRIORITY_URGENT).count()
-    
+
     print("\n" + "="*60)
     print("📊 INBOX STATISTICS")
     print("="*60)
@@ -287,7 +292,7 @@ WolvCapital Support Team''',
     print(f"Starred: {starred}")
     print(f"Urgent: {urgent}")
     print("="*60)
-    
+
     print("\n✅ Test data creation complete!")
     print("\n🌐 Access your inbox at:")
     print("   http://localhost:8000/inbox/")
@@ -295,7 +300,7 @@ WolvCapital Support Team''',
     print("\n💡 Admin credentials:")
     print(f"   Email: {admin_user.email}")
     print("   Password: admin123 (if newly created)")
-    
+
 
 if __name__ == '__main__':
     create_test_data()

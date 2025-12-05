@@ -2,12 +2,15 @@
 Test contact form functionality
 """
 import os
+
 os.environ['DEBUG'] = '1'
 
 import django
+
 django.setup()
 
 from django.contrib.auth import get_user_model
+
 from core.forms import ContactForm
 from core.models import SupportRequest
 
@@ -28,11 +31,11 @@ form_data = {
 form = ContactForm(data=form_data)
 if form.is_valid():
     print("✅ Form is valid")
-    
+
     # Save without sending email (for testing)
     instance = form.save(commit=False)
     instance.save()
-    
+
     print(f"✅ Support request created: ID {instance.id}")
     print(f"   From: {instance.full_name} <{instance.contact_email}>")
     print(f"   Subject: {instance.topic}")
@@ -66,13 +69,13 @@ try:
             'topic': 'Account inquiry',
             'message': 'I have a question about my account balance.',
         }
-        
+
         form_user = ContactForm(data=form_data_user)
         if form_user.is_valid():
             instance_user = form_user.save(commit=False)
             instance_user.user = user
             instance_user.save()
-            
+
             print(f"✅ Support request created for user: {user.email}")
             print(f"   Linked to user ID: {instance_user.user_id}")
         else:
@@ -91,7 +94,7 @@ from django.conf import settings
 
 print(f"EMAIL_BACKEND: {settings.EMAIL_BACKEND}")
 print(f"DEFAULT_FROM_EMAIL: {settings.DEFAULT_FROM_EMAIL}")
-print(f"ADMIN_EMAIL_RECIPIENTS:")
+print("ADMIN_EMAIL_RECIPIENTS:")
 for email in settings.ADMIN_EMAIL_RECIPIENTS:
     print(f"  - {email}")
 

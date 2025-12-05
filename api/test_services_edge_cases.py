@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from transactions.services import create_transaction, approve_transaction
+from transactions.services import approve_transaction, create_transaction
 from users.models import UserWallet
 
 

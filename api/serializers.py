@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.db.models import Sum
 from rest_framework import serializers
 
-from core.models import Agreement, UserAgreementAcceptance, PlatformCertificate
+from core.models import Agreement, PlatformCertificate, UserAgreementAcceptance
 from investments.models import InvestmentPlan, UserInvestment
 from transactions.models import CryptocurrencyWallet, Transaction, VirtualCard
 from users.models import KycApplication, Profile, UserNotification, UserWallet

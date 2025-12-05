@@ -1,13 +1,15 @@
 """Quick test for signup fix"""
 import os
+
 import django
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wolvcapital.settings')
 django.setup()
 
-from django.test import Client
-from django.contrib.auth import get_user_model
 import json
+
+from django.contrib.auth import get_user_model
+from django.test import Client
 
 User = get_user_model()
 

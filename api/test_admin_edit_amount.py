@@ -2,11 +2,11 @@ from decimal import Decimal
 
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from django.test import TestCase, RequestFactory
+from django.test import RequestFactory, TestCase
 
-from transactions.services import create_transaction
 from transactions.admin import TransactionAdmin
 from transactions.models import Transaction
+from transactions.services import create_transaction
 from users.models import UserWallet
 
 
@@ -64,8 +64,8 @@ class AdminEditAmountApprovalTests(TestCase):
         request = self.factory.post("/admin/transactions/transaction/")
         request.user = self.admin
         # Attach session and messages to request so admin messages API works
-        from django.contrib.sessions.middleware import SessionMiddleware
         from django.contrib.messages.storage.fallback import FallbackStorage
+        from django.contrib.sessions.middleware import SessionMiddleware
         session_mw = SessionMiddleware(lambda r: None)
         session_mw.process_request(request)
         request.session.save()

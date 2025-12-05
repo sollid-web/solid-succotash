@@ -5,9 +5,9 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils import timezone
 
+from core.email_service import EmailService
 from investments.models import DailyRoiPayout, UserInvestment
 from transactions.services import create_transaction
-from core.email_service import EmailService
 
 logger = logging.getLogger(__name__)
 

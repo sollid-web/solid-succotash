@@ -272,8 +272,9 @@ class EmailService:
         # Admin alert for large investment completion events
         if status == "completed":
             try:
-                from django.conf import settings
                 from decimal import Decimal as _D
+
+                from django.conf import settings
                 thresholds = getattr(settings, "ALERT_THRESHOLDS", {})
                 completion_thresh = _D(
                     str(thresholds.get("high_investment_completion", 10000))

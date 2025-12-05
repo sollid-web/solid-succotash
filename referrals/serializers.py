@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import ReferralCode, Referral, ReferralReward
+
+from .models import Referral, ReferralCode, ReferralReward
 
 
 class ReferralCodeSerializer(serializers.ModelSerializer):
@@ -11,10 +12,10 @@ class ReferralCodeSerializer(serializers.ModelSerializer):
 class ReferralSerializer(serializers.ModelSerializer):
     referrer_email = serializers.CharField(source='referrer.email', read_only=True)
     referred_email = serializers.CharField(source='referred_user.email', read_only=True)
-    
+
     class Meta:
         model = Referral
-        fields = ('id', 'referrer', 'referrer_email', 'referred_user', 'referred_email', 
+        fields = ('id', 'referrer', 'referrer_email', 'referred_user', 'referred_email',
                   'code', 'status', 'created_at', 'reward_processed')
 
 

@@ -1,8 +1,15 @@
 from django.contrib import admin
-from django.utils.html import format_html
 from django.utils import timezone
+from django.utils.html import format_html
 
-from .models import Agreement, SupportRequest, UserAgreementAcceptance, EmailInbox, EmailTemplate, PlatformCertificate
+from .models import (
+    Agreement,
+    EmailInbox,
+    EmailTemplate,
+    PlatformCertificate,
+    SupportRequest,
+    UserAgreementAcceptance,
+)
 
 
 @admin.register(Agreement)
@@ -43,7 +50,7 @@ class SupportRequestAdmin(admin.ModelAdmin):
     )
     ordering = ("-created_at",)
     date_hierarchy = "created_at"
-    
+
     fieldsets = (
         ('Message Details', {
             'fields': (
@@ -73,14 +80,14 @@ class SupportRequestAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
-    
+
     actions = ['mark_in_progress', 'mark_resolved']
-    
+
     def mark_in_progress(self, request, queryset):
         updated = queryset.update(status='in_progress', handled_by=request.user)
         self.message_user(request, f"{updated} support request(s) marked as in progress.")
     mark_in_progress.short_description = "Mark selected as In Progress"
-    
+
     def mark_resolved(self, request, queryset):
         from django.utils import timezone
         updated = queryset.update(
@@ -132,7 +139,7 @@ class EmailInboxAdmin(admin.ModelAdmin):
     ordering = ('-received_at',)
     date_hierarchy = 'received_at'
     list_per_page = 50
-    
+
     fieldsets = (
         ('Email Details', {
             'fields': (
@@ -185,7 +192,7 @@ class EmailInboxAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
-    
+
     actions = [
         'mark_as_read',
         'mark_as_unread',
@@ -197,7 +204,7 @@ class EmailInboxAdmin(admin.ModelAdmin):
         'set_priority_normal',
         'toggle_star',
     ]
-    
+
     def status_badge(self, obj):
         colors = {
             'unread': 'blue',
@@ -213,7 +220,7 @@ class EmailInboxAdmin(admin.ModelAdmin):
             obj.get_status_display()
         )
     status_badge.short_description = 'Status'
-    
+
     def priority_badge(self, obj):
         if obj.priority == 'urgent':
             color = '#DC2626'
@@ -229,7 +236,7 @@ class EmailInboxAdmin(admin.ModelAdmin):
             obj.get_priority_display()
         )
     priority_badge.short_description = 'Priority'
-    
+
     def subject_with_star(self, obj):
         star = '⭐ ' if obj.is_starred else ''
         return format_html(
@@ -238,61 +245,61 @@ class EmailInboxAdmin(admin.ModelAdmin):
             obj.subject[:60] + '...' if len(obj.subject) > 60 else obj.subject
         )
     subject_with_star.short_description = 'Subject'
-    
+
     def from_display(self, obj):
         if obj.from_name:
             return format_html('{}<br><small style="color: #6B7280;">{}</small>', obj.from_name, obj.from_email)
         return obj.from_email
     from_display.short_description = 'From'
-    
+
     def raw_headers_display(self, obj):
         if obj.raw_headers:
             headers_html = '<br>'.join([f'<strong>{k}:</strong> {v}' for k, v in obj.raw_headers.items()[:20]])
             return format_html(headers_html)
         return '-'
     raw_headers_display.short_description = 'Email Headers'
-    
+
     # Actions
     def mark_as_read(self, request, queryset):
         updated = queryset.update(status='read', read_at=timezone.now(), assigned_to=request.user)
         self.message_user(request, f'{updated} email(s) marked as read.')
     mark_as_read.short_description = 'Mark as Read'
-    
+
     def mark_as_unread(self, request, queryset):
         updated = queryset.update(status='unread', read_at=None)
         self.message_user(request, f'{updated} email(s) marked as unread.')
     mark_as_unread.short_description = 'Mark as Unread'
-    
+
     def mark_as_replied(self, request, queryset):
         updated = queryset.update(status='replied', replied_at=timezone.now())
         self.message_user(request, f'{updated} email(s) marked as replied.')
     mark_as_replied.short_description = 'Mark as Replied'
-    
+
     def mark_as_archived(self, request, queryset):
         updated = queryset.update(status='archived')
         self.message_user(request, f'{updated} email(s) archived.')
     mark_as_archived.short_description = 'Archive'
-    
+
     def mark_as_spam(self, request, queryset):
         updated = queryset.update(status='spam')
         self.message_user(request, f'{updated} email(s) marked as spam.')
     mark_as_spam.short_description = 'Mark as Spam'
-    
+
     def assign_to_me(self, request, queryset):
         updated = queryset.update(assigned_to=request.user)
         self.message_user(request, f'{updated} email(s) assigned to you.')
     assign_to_me.short_description = 'Assign to Me'
-    
+
     def set_priority_high(self, request, queryset):
         updated = queryset.update(priority='high')
         self.message_user(request, f'{updated} email(s) set to high priority.')
     set_priority_high.short_description = 'Set Priority: High'
-    
+
     def set_priority_normal(self, request, queryset):
         updated = queryset.update(priority='normal')
         self.message_user(request, f'{updated} email(s) set to normal priority.')
     set_priority_normal.short_description = 'Set Priority: Normal'
-    
+
     def toggle_star(self, request, queryset):
         for email in queryset:
             email.toggle_star()
@@ -307,7 +314,7 @@ class EmailTemplateAdmin(admin.ModelAdmin):
     search_fields = ('name', 'subject', 'body', 'category')
     readonly_fields = ('created_by', 'created_at', 'updated_at')
     ordering = ('category', 'name')
-    
+
     fieldsets = (
         ('Template Info', {
             'fields': ('name', 'category', 'is_active')
@@ -321,7 +328,7 @@ class EmailTemplateAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
-    
+
     def save_model(self, request, obj, form, change):
         if not change:
             obj.created_by = request.user

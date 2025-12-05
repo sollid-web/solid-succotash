@@ -54,16 +54,65 @@ export default function RiskDisclosurePage() {
 				</section>
 
 				<main className="min-h-screen bg-white">
-					<section className="max-w-2xl mx-auto py-16 px-4">
-						<h1 className="text-4xl font-bold mb-6">Risk Disclosure Statement</h1>
-						<p className="text-lg text-gray-700 mb-8">Investing in digital assets carries inherent financial risks. Past performance does not guarantee future results.</p>
-						<h2 className="text-2xl font-semibold mb-4">Investor Acknowledgment</h2>
-						<ul className="list-disc pl-6 mb-6 text-gray-700 space-y-2">
-							<li>ROI is based on market performance</li>
-							<li>Cryptocurrency prices fluctuate</li>
-							<li>There is potential for partial or total loss</li>
-						</ul>
-						<p className="text-lg text-blue-700 font-semibold mt-8">WolvCapital provides structured plans but cannot eliminate investment risks.</p>
+					<section className="max-w-4xl mx-auto py-16 px-4 space-y-10">
+						<div>
+							<h1 className="text-4xl font-bold mb-4">Risk Disclosure Statement</h1>
+							<p className="text-lg text-gray-700">
+								Participation in WolvCapital investment plans involves exposure to digital-asset and traditional-market volatility. The value of investments may increase or decrease without notice, and past performance does not guarantee future returns. We encourage every investor to assess personal liquidity needs and consult independent financial, legal, and tax advisors before allocating capital.
+							</p>
+						</div>
+						<div className="grid gap-8 md:grid-cols-2">
+							<div>
+								<h2 className="text-2xl font-semibold mb-3">Investor Acknowledgment</h2>
+								<ul className="list-disc pl-6 text-gray-700 space-y-2">
+									<li>ROI projections are scenario-based and may deviate from realized performance.</li>
+									<li>Digital assets may experience sudden liquidity constraints or delisting events.</li>
+									<li>Counterparty banking rails can introduce delays in withdrawals or settlements.</li>
+									<li>Regulatory changes in the U.S. or abroad may impact plan availability.</li>
+								</ul>
+							</div>
+							<div>
+								<h2 className="text-2xl font-semibold mb-3">Operational Safeguards</h2>
+								<ul className="list-disc pl-6 text-gray-700 space-y-2">
+									<li>All deposits, withdrawals, and ROI payouts are reviewed manually by compliance personnel.</li>
+									<li>User wallets are locked with database-level constraints to prevent unauthorized debits.</li>
+									<li>Audit logs capture every admin action for regulatory inspection.</li>
+									<li>Email notifications provide transparency for each status change.</li>
+								</ul>
+							</div>
+						</div>
+						<div>
+							<h2 className="text-2xl font-semibold mb-3">Market & Liquidity Risk</h2>
+							<p className="text-gray-700 mb-4">
+								Digital assets may experience dramatic price swings due to macroeconomic events, protocol vulnerabilities, or exchange outages. Liquidity risk may arise if counterparties halt redemptions or if network congestion delays settlement. Investors should be prepared for extended holding periods and evaluate how a sudden loss of access to funds would affect personal obligations.
+							</p>
+							<p className="text-gray-700">
+								WolvCapital mitigates operational risk through conservative treasury management and diversified custody partnerships, yet cannot guarantee uninterrupted access or appreciation of capital.
+							</p>
+						</div>
+						<div>
+							<h2 className="text-2xl font-semibold mb-3">Regulatory & Compliance Considerations</h2>
+							<p className="text-gray-700 mb-4">
+								Investment offerings are subject to federal and state oversight, sanctions screening, and Know Your Customer (KYC) requirements. New guidance from the SEC, CFTC, FinCEN, or international bodies may necessitate freezing certain products, reversing transactions, or requesting additional documentation from users.
+							</p>
+							<p className="text-gray-700">
+								Users agree to provide accurate information, respond to compliance outreach, and acknowledge that failure to do so may result in delayed or rejected transactions.
+							</p>
+						</div>
+						<div>
+							<h2 className="text-2xl font-semibold mb-3">User Responsibilities</h2>
+							<ul className="list-disc pl-6 text-gray-700 space-y-2">
+								<li>Maintain secure account credentials and enable available MFA options.</li>
+								<li>Monitor transaction notifications and report discrepancies immediately.</li>
+								<li>Review plan documents, fees, and early-withdrawal limitations before committing funds.</li>
+								<li>Understand that WolvCapital does not provide personalized investment, legal, or tax advice.</li>
+							</ul>
+						</div>
+						<div className="border-l-4 border-blue-600 bg-blue-50 p-6 rounded-lg">
+							<p className="text-lg text-blue-900 font-semibold">
+								WolvCapital provides structured plans, manual review, and regulatory safeguards, but no platform can eliminate the inherent risks of investing. Only deploy capital you can afford to lose, diversify appropriately, and remain engaged with compliance communications.
+							</p>
+						</div>
 					</section>
 				</main>
 

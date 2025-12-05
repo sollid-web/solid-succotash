@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import TawkToChat from '@/components/TawkToChat'
 import { TranslationProvider } from '@/i18n/TranslationProvider'
@@ -54,12 +56,35 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+
   return (
     <html lang="en">
       <body className="min-h-screen bg-white">
+        {measurementId ? (
+          <>
+            <Script
+              strategy="afterInteractive"
+              src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
+            />
+            <Script
+              id="ga4-init"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${measurementId}');
+                `,
+              }}
+            />
+          </>
+        ) : null}
         <TranslationProvider>
           {children}
         </TranslationProvider>
+        <Analytics />
       </body>
     </html>
   )

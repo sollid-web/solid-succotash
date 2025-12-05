@@ -81,6 +81,13 @@ Go to your domain registrar (GoDaddy, Namecheap, Cloudflare, etc.) and add these
 6. Usually instant (Cloudflare is fast!)
 ```
 
+#### Automating Cloudflare DNS updates
+- Copy `ops/cloudflare_dns_records.example.json` to `ops/cloudflare_dns_records.json` and replace the placeholder values with the real SPF/DKIM/DMARC/BIMI strings from your providers.
+- Create a Cloudflare API token with **Zone → DNS → Edit** permissions and export it locally (`$Env:CF_API_TOKEN = "..."`).
+- Run `python tools/cloudflare_dns_sync.py --zone-id <ZONE_ID> --dry-run` to preview the changes; drop `--dry-run` when ready to push.
+- The script normalizes `@` and subdomains automatically, so keep names short like `@`, `www`, `_dmarc`, `_domainkey.mail`, etc.
+- Logs will show `CREATE`, `UPDATE`, or `SKIP` for each record so you can audit what changed before promoting to production.
+
 ---
 
 ## After Adding DNS Records

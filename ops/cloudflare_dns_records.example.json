@@ -1,0 +1,44 @@
+{
+  "records": [
+    {
+      "type": "TXT",
+      "name": "@",
+      "content": "v=spf1 include:_spf.privateemail.com include:amazonses.com -all",
+      "ttl": 3600,
+      "proxied": false,
+      "comment": "SPF authorizes PrivateEmail + AWS SES senders"
+    },
+    {
+      "type": "TXT",
+      "name": "_dmarc",
+      "content": "v=DMARC1; p=none; rua=mailto:dmarc@wolvcapital.com; ruf=mailto:dmarc@wolvcapital.com; fo=1; pct=100",
+      "ttl": 3600,
+      "proxied": false,
+      "comment": "Switch p=quarantine/reject after monitoring"
+    },
+    {
+      "type": "TXT",
+      "name": "pm._domainkey",
+      "content": "v=DKIM1; k=rsa; p=REPLACE_WITH_PRIVATEEMAIL_PUBLIC_KEY",
+      "ttl": 3600,
+      "proxied": false,
+      "comment": "PrivateEmail DKIM selector"
+    },
+    {
+      "type": "CNAME",
+      "name": "ses2025._domainkey",
+      "content": "ses2025.dkim.amazonses.com",
+      "ttl": 3600,
+      "proxied": false,
+      "comment": "AWS SES DKIM selector"
+    },
+    {
+      "type": "TXT",
+      "name": "default._bimi",
+      "content": "v=BIMI1; l=https://cdn.wolvcapital.com/brand/wolvcapital-logo.svg; a=https://cdn.wolvcapital.com/brand/verified-mark.pem",
+      "ttl": 3600,
+      "proxied": false,
+      "comment": "Optional BIMI once DMARC is at p=reject"
+    }
+  ]
+}

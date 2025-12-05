@@ -1,7 +1,9 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://wolvcapital.com";
+  // Derive base URL from environment with a sensible default and normalize trailing slashes
+  const baseUrl =
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") ?? "https://wolvcapital.com";
 
   // Static routes
   const staticRoutes: MetadataRoute.SitemapItem[] = [

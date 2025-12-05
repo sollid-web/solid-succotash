@@ -1,8 +1,8 @@
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework import permissions
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
-from referrals.models import Referral, ReferralReward, ReferralCode
+from referrals.models import Referral, ReferralCode, ReferralReward
 
 
 @api_view(["GET"])

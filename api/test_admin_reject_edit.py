@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from django.test import TestCase, RequestFactory
+from django.test import RequestFactory, TestCase
 
 from transactions.admin import TransactionAdmin
 from transactions.models import Transaction
@@ -62,8 +62,8 @@ class AdminEditAmountRejectionTests(TestCase):
 
         request = self.factory.post("/admin/transactions/transaction/")
         request.user = self.admin
-        from django.contrib.sessions.middleware import SessionMiddleware
         from django.contrib.messages.storage.fallback import FallbackStorage
+        from django.contrib.sessions.middleware import SessionMiddleware
         smw = SessionMiddleware(lambda r: None)
         smw.process_request(request)
         request.session.save()

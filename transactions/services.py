@@ -6,9 +6,8 @@ from django.utils import timezone
 
 from users.models import User, UserWallet
 
-from .models import AdminAuditLog, Transaction
+from .models import AdminAuditLog, Transaction, VirtualCard
 from .notifications import create_admin_notification
-from .models import VirtualCard
 
 
 @transaction.atomic
@@ -256,10 +255,10 @@ def create_virtual_card_request(
     )
 
     # Create admin notification
-    from .notifications import create_admin_notification
-
     # Determine priority based on amount
     from django.conf import settings
+
+    from .notifications import create_admin_notification
     thresholds = getattr(settings, "ALERT_THRESHOLDS", {})
     card_thresh = Decimal(str(thresholds.get("high_card_purchase", 5000)))
     priority_level = "high" if amount_decimal >= card_thresh else "medium"

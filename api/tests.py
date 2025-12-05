@@ -145,8 +145,9 @@ class NotificationAPITests(TestCase):
         resp = self.client.get("/api/notifications/")
         self.assertEqual(resp.status_code, 200)
         payload = resp.json()
-        # User has 2 manually created notifications + 1 auto-created welcome notification
-        self.assertEqual(len(payload), 3)
+        # User has 2 manually created notifications (welcome auto-notification
+        # requires email verification which is not done in this test)
+        self.assertEqual(len(payload), 2)
         # Verify only this user's notifications are returned (not 'other' user's)
         titles = [n["title"] for n in payload]
         self.assertIn("Alert", titles)

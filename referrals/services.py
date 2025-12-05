@@ -1,10 +1,11 @@
 from decimal import Decimal
-from django.db import transaction
-from django.utils import timezone
-from django.contrib.auth import get_user_model
 
-from .models import Referral, ReferralCode, ReferralSetting, ReferralReward
+from django.contrib.auth import get_user_model
+from django.db import transaction
+
 from transactions.services import create_transaction
+
+from .models import Referral, ReferralCode, ReferralReward
 
 User = get_user_model()
 
@@ -16,20 +17,20 @@ def create_referral_if_code(referred_user, code: str, meta: dict = None):
     """
     if not code:
         return None
-    
+
     try:
         ref_code = ReferralCode.objects.get(code=code, active=True)
     except ReferralCode.DoesNotExist:
         return None
-    
+
     # Prevent self-referral
     if str(ref_code.user.pk) == str(referred_user.pk):
         return None
-    
+
     # Check if user already has referral
     if Referral.objects.filter(referred_user=referred_user).exists():
         return None
-    
+
     ref = Referral.objects.create(
         referred_user=referred_user,
         referrer=ref_code.user,

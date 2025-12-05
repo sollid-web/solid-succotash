@@ -3,16 +3,18 @@ Run: python test_referral_flow.py
 Assumes Django environment; uses in-memory actions.
 """
 import os
-import django
 from decimal import Decimal
+
+import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wolvcapital.settings")
 django.setup()
 
 from django.contrib.auth import get_user_model
-from referrals.models import ReferralCode, Referral, ReferralReward
+
+from referrals.models import ReferralCode, ReferralReward
 from referrals.services import create_referral_if_code
-from transactions.services import create_transaction, approve_transaction
+from transactions.services import approve_transaction, create_transaction
 from users.models import UserWallet
 
 User = get_user_model()

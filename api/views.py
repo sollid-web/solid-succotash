@@ -10,7 +10,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from core.models import Agreement, SupportRequest, UserAgreementAcceptance, PlatformCertificate
+from core.models import Agreement, PlatformCertificate, SupportRequest, UserAgreementAcceptance
 from investments.models import InvestmentPlan, UserInvestment
 from investments.services import (
     approve_investment,
@@ -21,39 +21,39 @@ from transactions.models import CryptocurrencyWallet, Transaction, VirtualCard
 from transactions.services import (
     approve_transaction,
     create_transaction,
+    create_virtual_card_request,
     reject_transaction,
 )
-from transactions.services import create_virtual_card_request
 from users.models import KycApplication, Profile, UserNotification, UserWallet
 from users.notification_service import mark_all_read as service_mark_all_read
 from users.notification_service import (
     mark_notification_read as service_mark_notification_read,
 )
-from users.verification import issue_verification_token, verify_token
 from users.services import (
     approve_kyc_application,
     reject_kyc_application,
     submit_document_info,
     submit_personal_info,
 )
+from users.verification import issue_verification_token, verify_token
 
 from .serializers import (
+    AdminKycApplicationSerializer,
     AdminTransactionSerializer,
     AdminUserInvestmentSerializer,
-    AdminKycApplicationSerializer,
     AgreementSerializer,
     CryptocurrencyWalletSerializer,
-    VirtualCardSerializer,
-    PlatformCertificateSerializer,
     EmailPreferencesSerializer,
     InvestmentPlanSerializer,
     KycApplicationSerializer,
     KycDocumentSerializer,
     KycPersonalInfoSerializer,
+    PlatformCertificateSerializer,
     TransactionSerializer,
     UserInvestmentSerializer,
     UserNotificationSerializer,
     UserWalletSerializer,
+    VirtualCardSerializer,
 )
 
 
@@ -702,7 +702,7 @@ def complete_signup(request):
 
     from django.contrib.auth import get_user_model
     User = get_user_model()
-    
+
     # Check if user already exists
     if (User.objects.filter(username=email).exists() or
             User.objects.filter(email=email).exists()):
@@ -710,7 +710,7 @@ def complete_signup(request):
             {"error": "An account with this email already exists."},
             status=status.HTTP_400_BAD_REQUEST
         )
-    
+
     # Create new inactive user
     try:
         user = User.objects.create_user(
@@ -757,7 +757,7 @@ def verify_email_link(request):
     """
     import logging
     logger = logging.getLogger(__name__)
-    
+
     token = request.GET.get("token", "")
     if token:
         logger.info(
@@ -766,7 +766,7 @@ def verify_email_link(request):
         )
     else:
         logger.info("Email verification attempt with no token provided")
-    
+
     if not token:
         logger.warning("Email verification failed: No token provided")
         return Response(
@@ -777,10 +777,10 @@ def verify_email_link(request):
             },
             status=status.HTTP_400_BAD_REQUEST
         )
-    
+
     try:
         ev = verify_token(token)
-        
+
         if not ev:
             logger.warning(
                 "Email verification failed: Invalid or expired token"
@@ -796,11 +796,11 @@ def verify_email_link(request):
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
+
         # Check if user is already active
         user = ev.user
         logger.info(f"Email verification successful for user: {user.email}")
-        
+
         if user.is_active:
             return Response(
                 {
@@ -812,7 +812,7 @@ def verify_email_link(request):
                 },
                 status=status.HTTP_200_OK,
             )
-        
+
         return Response(
             {
                 "success": True,

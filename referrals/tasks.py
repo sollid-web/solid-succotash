@@ -1,10 +1,11 @@
 from decimal import Decimal
-from django.db import transaction
-from django.utils import timezone
-from django.contrib.auth import get_user_model
 
-from .models import Referral, ReferralSetting, ReferralReward
+from django.contrib.auth import get_user_model
+from django.db import transaction
+
 from transactions.services import create_transaction
+
+from .models import Referral, ReferralReward, ReferralSetting
 
 User = get_user_model()
 
@@ -17,16 +18,16 @@ def process_deposit_referral(referred_user_id, deposit_amount: Decimal, currency
     """
     try:
         referral = Referral.objects.filter(
-            referred_user__id=referred_user_id, 
+            referred_user__id=referred_user_id,
             reward_processed=False
         ).select_for_update().select_related('referrer').first()
-        
+
         if not referral:
             return {'ok': False, 'reason': 'no_pending_referral'}
 
         # Load settings
         deposit_setting = ReferralSetting.get(
-            'deposit_reward', 
+            'deposit_reward',
             {"percent": 2.5, "enabled": True, "apply_once": True, "min_deposit": 0}
         )
         if not deposit_setting.get('enabled', True):
@@ -45,7 +46,7 @@ def process_deposit_referral(referred_user_id, deposit_amount: Decimal, currency
             reward_amount = min(reward_amount, Decimal(str(cap)))
 
         # Record referral reward
-        reward = ReferralReward.objects.create(
+        ReferralReward.objects.create(
             referral=referral,
             reward_type=ReferralReward.TYPE_DEPOSIT,
             amount=reward_amount,

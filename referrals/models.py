@@ -1,9 +1,10 @@
 import uuid
 from decimal import Decimal
+
 from django.conf import settings
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
-from django.core.validators import MinValueValidator
 
 User = settings.AUTH_USER_MODEL
 

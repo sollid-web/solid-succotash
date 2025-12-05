@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import ReferralCode, Referral, ReferralReward, ReferralSetting
+
+from .models import Referral, ReferralCode, ReferralReward, ReferralSetting
 
 
 @admin.register(ReferralCode)

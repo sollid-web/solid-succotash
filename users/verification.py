@@ -2,13 +2,12 @@ from __future__ import annotations
 
 import secrets
 from datetime import timedelta
-from typing import Optional
 
-from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.utils import timezone
 
 from core.email_service import send_email
+
 from .models import EmailVerification
 
 
@@ -45,8 +44,8 @@ def issue_verification_token(user) -> EmailVerification:
 
 
 @transaction.atomic
-def verify_token(token: str) -> Optional[EmailVerification]:
-    ev: Optional[EmailVerification] = (
+def verify_token(token: str) -> EmailVerification | None:
+    ev: EmailVerification | None = (
         EmailVerification.objects.select_for_update()
         .filter(token=token, used_at__isnull=True)
         .order_by("-created_at")

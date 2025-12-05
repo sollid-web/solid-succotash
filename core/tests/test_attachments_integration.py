@@ -1,7 +1,9 @@
 import os
+
 from django.test import TestCase
-from core.models import IncomingEmail, EmailAttachment
+
 from core.management.commands.fetch_mail import _scan_attachment
+from core.models import EmailAttachment, IncomingEmail
 
 
 class AttachmentIntegrationTests(TestCase):

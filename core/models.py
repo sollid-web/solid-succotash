@@ -140,22 +140,22 @@ class EmailInbox(models.Model):
     cc = models.TextField(blank=True, help_text="Comma-separated CC recipients")
     bcc = models.TextField(blank=True, help_text="Comma-separated BCC recipients")
     reply_to = models.EmailField(blank=True)
-    
+
     # Content
     body_text = models.TextField(help_text="Plain text version")
     body_html = models.TextField(blank=True, help_text="HTML version")
-    
+
     # Attachments
     has_attachments = models.BooleanField(default=False)
     attachment_info = models.JSONField(default=dict, blank=True, help_text="Attachment metadata")
-    
+
     # Status and organization
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_UNREAD)
     priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES, default=PRIORITY_NORMAL)
     is_starred = models.BooleanField(default=False)
     labels = models.CharField(max_length=255, blank=True, help_text="Comma-separated labels")
     folder = models.CharField(max_length=50, default="inbox")
-    
+
     # Tracking
     assigned_to = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -167,13 +167,13 @@ class EmailInbox(models.Model):
     )
     read_at = models.DateTimeField(null=True, blank=True)
     replied_at = models.DateTimeField(null=True, blank=True)
-    
+
     # Metadata
     received_at = models.DateTimeField(help_text="When email was received by mail server")
     ip_address = models.GenericIPAddressField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, help_text="When fetched into system")
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     # Raw email storage
     raw_headers = models.JSONField(default=dict, blank=True)
     raw_email = models.TextField(blank=True, help_text="Complete raw email for forensics")

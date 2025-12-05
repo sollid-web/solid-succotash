@@ -5,6 +5,6 @@ django-stubs==5.0.4
 django-stubs-ext==5.0.4
 pre-commit==3.8.0
 mutmut==3.0.1
-mutatest==3.2.0
+mutatest==3.1.0
 pytest==8.3.3
 pytest-django==4.9.0

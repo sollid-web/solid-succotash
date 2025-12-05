@@ -1,8 +1,9 @@
 """
 Test script for contact form functionality
 """
-from django.core.mail import send_mail
 from django.conf import settings
+from django.core.mail import send_mail
+
 from core.forms import ContactForm
 
 # Test 1: Create and save contact form
@@ -21,7 +22,7 @@ form = ContactForm(data=form_data)
 
 if form.is_valid():
     print("✓ Form validation passed")
-    
+
     # Save and send notification
     try:
         support_request = form.save_and_notify()

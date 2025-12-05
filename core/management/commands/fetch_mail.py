@@ -1,14 +1,16 @@
-import imaplib
 import email
+import imaplib
 import logging
+import os
 from email.header import decode_header
 from email.utils import parseaddr
-import os
+
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 from django.utils.text import get_valid_filename
-from core.models import IncomingEmail, EmailAttachment
 from dotenv import load_dotenv
+
+from core.models import EmailAttachment, IncomingEmail
 
 # Load environment variables from .env file
 load_dotenv()
@@ -193,7 +195,7 @@ class Command(BaseCommand):
                                         payload = part.get_payload(decode=True)
                                         if payload:
                                             body_html = payload.decode(errors="replace")
-                                except Exception as e:
+                                except Exception:
                                     logger.exception("Error decoding email body part")
                         else:
                             try:

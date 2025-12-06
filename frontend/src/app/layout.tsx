@@ -6,7 +6,6 @@ import TawkToChat from '@/components/TawkToChat'
 import { TranslationProvider } from '@/i18n/TranslationProvider'
 import NavBar from '@/components/NavBar'
 import RecentActivityTicker from '@/components/RecentActivityTicker'
-import { headers } from 'next/headers'
 
 // Removed Google font import for offline/build stability; fallback to Tailwind font-sans.
 
@@ -60,6 +59,79 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        {/* FAQ Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "How does WolvCapital generate investor returns?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "WolvCapital uses diversified digital asset strategies with automated monitoring tools to generate structured daily returns."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Is WolvCapital regulated?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "WolvCapital follows KYC, AML, and PCI-DSS standards but is not licensed as a government-regulated financial institution."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How long do withdrawals take?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Profit withdrawals are available at end of your active investment plan and capital withdrawals are processed after plan completion."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What are the minimum and maximum investment amounts?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Minimum investment begins at $100. Higher-tier plans support custom or flexible amounts."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How is my account secured?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "WolvCapital provides 2FA, 256-bit SSL encryption, and continuous fraud monitoring to protect user accounts."
+                  }
+                }
+              ]
+            })
+          }}
+        />
+        {/* Organization Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "WolvCapital",
+              "url": "https://www.wolvcapital.com",
+              "logo": "https://www.wolvcapital.com/logo.png",
+              "sameAs": [
+                "https://facebook.com/wolvcapital",
+                "https://instagram.com/wolvcapital",
+                "https://twitter.com/wolvcapital"
+              ],
+              "description": "WolvCapital is a secure digital asset investment platform offering structured daily ROI, AML/KYC compliance, 256-bit encryption, and global investor support."
+            })
+          }}
+        />
+      </head>
       <body className="min-h-screen bg-white">
         {measurementId ? (
           <>
@@ -82,7 +154,14 @@ export default function RootLayout({
           </>
         ) : null}
         <TranslationProvider>
-          {children}
+          <div className="flex min-h-screen flex-col bg-white">
+            <NavBar />
+            <RecentActivityTicker />
+            <main className="flex-1">
+              {children}
+            </main>
+          </div>
+          <TawkToChat />
         </TranslationProvider>
         <Analytics />
       </body>

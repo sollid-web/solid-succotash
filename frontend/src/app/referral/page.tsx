@@ -1,11 +1,23 @@
-// app/referral/page.tsx
 import React from 'react';
 import ReferralCTA from '../../components/ReferralCTA';
 import PublicLayout from '../../components/PublicLayout';
 
 export const metadata = {
-  title: 'WolvCapital — Referral Program',
-  description: 'Invite friends, earn rewards. Learn how WolvCapital referral program works and start earning.',
+  title: 'Referral Program — WolvCapital | Earn Lifetime Commissions',
+  description: 'Join WolvCapital\'s referral program and earn lifetime commissions on every investment made by your referrals. Automatic tracking, instant payouts, and unlimited earning potential.',
+  keywords: 'referral program, earn commissions, investment referrals, passive income, affiliate program, WolvCapital referrals',
+  openGraph: {
+    title: 'Referral Program — WolvCapital',
+    description: 'Earn Rewards by Inviting Investors • Lifetime Commissions',
+    images: ['/og-images/referral-og.png'],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Referral Program — WolvCapital',
+    description: 'Earn Rewards by Inviting Investors',
+    images: ['/og-images/referral-og.png'],
+  },
 };
 
 export default function ReferralPage() {
@@ -16,180 +28,114 @@ export default function ReferralPage() {
   return (
     <PublicLayout>
       <main className="min-h-screen bg-white">
-      {/* Hero Section - Dark Navy Background */}
-      <section className="bg-gradient-to-br from-[#1a2847] via-[#243555] to-[#2d4366] text-white">
-        <div className="max-w-6xl mx-auto px-6 py-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left Column - Text Content */}
+      {/* Hero Section */}
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] text-white">
+        <div className="container mx-auto px-4 lg:px-8 text-center">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 sm:mb-6">WolvCapital Referral Program</h1>
+          <p className="text-base sm:text-lg md:text-xl text-gray-200 max-w-3xl mx-auto px-4">Earn lifetime commissions by sharing investment opportunities with your network.</p>
+        </div>
+      </section>
+
+      {/* Main Content */}
+      <section className="py-12 sm:py-16 md:py-24 bg-white">
+        <div className="container mx-auto px-4 lg:px-8 max-w-5xl">
+          <div className="space-y-8 sm:space-y-12">
+            {/* Overview */}
             <div>
-              <div className="flex items-center gap-3 mb-6">
-                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M20 5L5 12L20 19L35 12L20 5Z" fill="white" opacity="0.9"/>
-                  <path d="M5 18V25L20 32L35 25V18" stroke="white" strokeWidth="2" opacity="0.9"/>
-                </svg>
-                <span className="text-xl font-semibold">WolvCapital</span>
-              </div>
-              
-              <h1 className="text-4xl sm:text-5xl font-bold leading-tight mb-6">
-                Earn with<br />WolvCapital —<br />Referral Program
-              </h1>
-
-              <p className="text-blue-100 text-lg mb-8 leading-relaxed">
-                Share your unique referral link. When someone registers with your link and completes a qualifying investment action (first deposit of investment), you earn a commission-edito to your wallet.
+              <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-6">
+                The WolvCapital Referral Program allows active investors to earn additional income by introducing new members to the platform.
               </p>
-
-              {/* CTA Buttons */}
-              <ReferralCTA signupUrl={signupUrl} />
+              <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
+                Receive a percentage of every investment made by users you refer—automatically credited to your wallet.
+              </p>
             </div>
 
-            {/* Right Column - Visual Card */}
-            <div className="bg-gradient-to-br from-[#2d4879] to-[#1e3a5f] rounded-3xl p-8 shadow-2xl">
-              <div className="flex items-center justify-center gap-4 mb-6">
-                <div className="w-16 h-16 bg-[#3d5a8f] rounded-2xl flex items-center justify-center">
-                  <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
-                    <path d="M20 5L5 12L20 19L35 12L20 5Z" fill="white" opacity="0.9"/>
-                  </svg>
-                </div>
-                <div className="w-20 h-20 bg-gradient-to-br from-orange-400 to-orange-500 rounded-2xl flex items-center justify-center relative">
-                  <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-br from-orange-300 to-orange-400 rounded-xl flex items-center justify-center shadow-lg">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 2L14 8H20L15 12L17 18L12 14L7 18L9 12L4 8H10L12 2Z" fill="white"/>
-                    </svg>
+            {/* How It Works */}
+            <div>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#0b2f6b] mb-4 sm:mb-6">How It Works</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                <div className="bg-gradient-to-br from-blue-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-xl flex items-center justify-center mb-4">
+                    <span className="text-white font-extrabold text-xl sm:text-2xl">1</span>
                   </div>
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
-                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="white" strokeWidth="2"/>
-                    <path d="M8 12L11 15L16 9" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
+                  <h3 className="text-xl sm:text-2xl font-bold text-[#0b2f6b] mb-3">Share Your Link</h3>
+                  <p className="text-base sm:text-lg text-gray-700">Find your unique referral link in your dashboard and share it with friends, family, or followers.</p>
                 </div>
-                <div className="w-16 h-16 bg-[#3d5a8f] rounded-2xl flex items-center justify-center">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="12" r="9" stroke="white" strokeWidth="2"/>
-                    <path d="M12 6v6l4 2" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
+
+                <div className="bg-gradient-to-br from-purple-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl flex items-center justify-center mb-4">
+                    <span className="text-white font-extrabold text-xl sm:text-2xl">2</span>
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-bold text-purple-700 mb-3">They Join & Invest</h3>
+                  <p className="text-base sm:text-lg text-gray-700">When new users sign up through your link and activate an investment plan, you qualify for commission.</p>
                 </div>
-                <div className="w-14 h-14 bg-[#3d5a8f] rounded-2xl flex items-center justify-center opacity-70">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke="white" strokeWidth="2"/>
-                  </svg>
+
+                <div className="bg-gradient-to-br from-green-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-green-600 to-green-700 rounded-xl flex items-center justify-center mb-4">
+                    <span className="text-white font-extrabold text-xl sm:text-2xl">3</span>
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-bold text-green-700 mb-3">Earn Rewards</h3>
+                  <p className="text-base sm:text-lg text-gray-700">Your commission is credited automatically every time your referral makes an investment.</p>
                 </div>
               </div>
+            </div>
 
-              <h2 className="text-2xl font-bold text-center mb-4">
-                Earn when you invite investors
-              </h2>
-
-              <p className="text-blue-100 text-center mb-6">
-                Get a commission when your referrals make their first qualifying deposit.
+            {/* Commission Details */}
+            <div>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#0b2f6b] mb-4 sm:mb-6">Referral Rewards</h2>
+              <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-6">
+                You earn a fixed percentage of each investment made by your referrals. Specific rates vary by plan tier and referral activity level.
               </p>
-
-              <div className="bg-cyan-600 text-white rounded-xl px-6 py-3 text-center font-semibold">
-                Share your link —grow youermigs
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Three Steps Section */}
-      <section className="max-w-6xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Step 1 */}
-          <div className="bg-white rounded-2xl p-8 text-center">
-            <div className="w-24 h-24 bg-[#3d5a8f] rounded-3xl flex items-center justify-center mx-auto mb-6">
-              <svg width="48" height="48" viewBox="0 0 40 40" fill="none">
-                <path d="M20 5L5 12L20 19L35 12L20 5Z" fill="white" opacity="0.9"/>
-                <path d="M5 18V25L20 32L35 25V18" stroke="white" strokeWidth="2" opacity="0.9"/>
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold mb-3">Unique referral link</h3>
-            <p className="text-gray-600 leading-relaxed">
-              Your personal code and shareable link — private to your account.
-            </p>
-          </div>
-
-          {/* Step 2 */}
-          <div className="bg-white rounded-2xl p-8 text-center">
-            <div className="w-24 h-24 bg-gradient-to-br from-orange-400 to-orange-500 rounded-3xl flex items-center justify-center mx-auto mb-6 relative">
-              <div className="absolute -top-2 -right-2 w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <path d="M5 13l4 4L19 7" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-                </svg>
-              </div>
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="8" r="3" fill="white"/>
-                <circle cx="18" cy="16" r="2.5" fill="white" opacity="0.8"/>
-                <path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="white" strokeWidth="2" fill="none"/>
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold mb-3">Verified activity only</h3>
-            <p className="text-gray-600 leading-relaxed">
-              Bonuses are paid after qualifying deposit/investment — not on clicks alone.
-            </p>
-          </div>
-
-          {/* Step 3 */}
-          <div className="bg-white rounded-2xl p-8 text-center">
-            <div className="w-24 h-24 bg-[#3d5a8f] rounded-3xl flex items-center justify-center mx-auto mb-6">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="9" stroke="white" strokeWidth="2.5"/>
-                <circle cx="15" cy="9" r="2" fill="white"/>
-                <path d="M12 12l-3 3M12 12l3-3" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold mb-3">Audit & security</h3>
-            <p className="text-gray-600 leading-relaxed">
-              All rewards are recorded in the transaction ledger and subject to fraud checks.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Reward Model Section */}
-      <section className="bg-gray-50 py-16">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="bg-white rounded-2xl shadow-lg p-8">
-            <h2 className="text-2xl font-bold mb-6">Current Reward Model</h2>
-            <p className="text-gray-700 text-lg mb-4">
-              <span className="font-semibold">Standard: 2.5 %</span> of referred user's <span className="font-semibold">s first deposit.</span> Rewards are credited when the referred user's deposit clears.
-            </p>
-
-            <div className="mt-8">
-              <h3 className="font-semibold text-lg mb-3">Security & rules</h3>
-              <ul className="space-y-2 text-gray-600">
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">•</span>
-                  <span>Self-referrals and duplicate accounts are blocked.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">•</span>
-                  <span>High-value rewards may require KYC before withdrawal.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-600 mt-1">•</span>
-                  <span>Admin retains the right to review and reverse fraudulent rewards.</span>
-                </li>
+              <ul className="space-y-3 text-base sm:text-lg text-gray-700 list-disc pl-6">
+                <li>Lifetime earnings: Earn for every investment, not just the first</li>
+                <li>Automatic tracking: No manual submission required</li>
+                <li>Instant payouts: Commissions are deposited directly to your balance</li>
               </ul>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* FAQ section */}
-      <section className="max-w-6xl mx-auto px-6 py-16">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-          <h2 className="text-2xl font-bold mb-6">FAQ</h2>
-          <div className="grid gap-6">
+            {/* Why Promote */}
             <div>
-              <h3 className="font-semibold text-lg mb-2">When do I get paid?</h3>
-              <p className="text-gray-600">When the referred user completes a qualifying deposit or investment and the deposit is confirmed.</p>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#0b2f6b] mb-4 sm:mb-6">Why Promote WolvCapital?</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                <div>
+                  <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">Trusted Platform</h3>
+                  <p className="text-base sm:text-lg text-gray-700">Established security, KYC compliance, and global investor base.</p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">Proven Returns</h3>
+                  <p className="text-base sm:text-lg text-gray-700">1%-2% daily ROI model backed by diversified digital asset strategies.</p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">Simple Dashboard</h3>
+                  <p className="text-base sm:text-lg text-gray-700">User-friendly interface makes onboarding effortless.</p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">24/7 Support</h3>
+                  <p className="text-base sm:text-lg text-gray-700">Help your referrals succeed with responsive customer assistance.</p>
+                </div>
+              </div>
             </div>
+
+            {/* Program Rules */}
             <div>
-              <h3 className="font-semibold text-lg mb-2">Can I refer unlimited people?</h3>
-              <p className="text-gray-600">Yes — as long as referrals comply with our terms and anti-fraud policies.</p>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#0b2f6b] mb-4 sm:mb-6">Program Rules</h2>
+              <ul className="space-y-3 text-base sm:text-lg text-gray-700 list-disc pl-6">
+                <li>Only verified investors can participate in the referral program</li>
+                <li>Referrals must use your unique link during registration</li>
+                <li>Self-referrals and fraudulent activity result in account suspension</li>
+                <li>WolvCapital reserves the right to modify or terminate the program at any time</li>
+              </ul>
             </div>
-            <div>
-              <h3 className="font-semibold text-lg mb-2">How do I track rewards?</h3>
-              <p className="text-gray-600">Open your Referral Dashboard to see pending and credited referrals, plus transaction history.</p>
+
+            {/* CTA */}
+            <div className="bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] p-6 sm:p-10 rounded-2xl text-center text-white">
+              <h3 className="text-2xl sm:text-3xl font-bold mb-4">Ready to Start Earning?</h3>
+              <p className="text-base sm:text-lg text-gray-200 mb-6 max-w-2xl mx-auto">
+                Log in to your dashboard to access your unique referral link and start building passive income today.
+              </p>
+              <a href="/dashboard" className="inline-block bg-white text-[#0b2f6b] px-8 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl">
+                Go to Dashboard
+              </a>
             </div>
           </div>
         </div>

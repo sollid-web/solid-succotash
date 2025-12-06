@@ -1,109 +1,18 @@
-"use client"
-import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
-import { useState } from 'react'
-import LanguageSwitcher from '@/components/LanguageSwitcher'
+import type { Metadata } from 'next'
 
 const MapWithOverlay = dynamic(() => import('@/components/MapWithOverlay'), { ssr: false })
 
-function ContactNavigation() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  return (
-    <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          <Link href="/" className="flex items-center space-x-2 sm:space-x-3">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-lg flex items-center justify-center">
-              <span className="text-xl sm:text-2xl font-bold text-white">W</span>
-            </div>
-            <span className="text-lg sm:text-2xl font-bold text-[#0b2f6b] hidden xs:block">WolvCapital</span>
-            <span className="text-lg font-bold text-[#0b2f6b] block xs:hidden">Wolv</span>
-          </Link>
-          
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">Home</Link>
-            <Link href="/plans" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">Plans</Link>
-            <Link href="/about" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">About</Link>
-            <Link href="/contact" className="text-[#0b2f6b] font-semibold">Contact</Link>
-            <LanguageSwitcher />
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center space-x-2">
-            <div className="mr-2">
-              <LanguageSwitcher />
-            </div>
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-md text-gray-700 hover:text-[#0b2f6b] hover:bg-gray-100 transition"
-              aria-label="Toggle mobile menu"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {isMobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
-          </div>
-
-          {/* Desktop Auth Buttons */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Link href="/accounts/login" className="text-[#0b2f6b] font-semibold hover:text-[#2563eb] transition">Login</Link>
-            <Link href="/accounts/signup" className="bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-6 py-2.5 rounded-full font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105">Sign Up</Link>
-          </div>
-        </div>
-
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-100 bg-white/95 backdrop-blur-sm">
-            <div className="px-4 py-4 space-y-3">
-              <Link href="/" className="block px-3 py-2 rounded-md font-medium text-gray-700 hover:text-[#0b2f6b] hover:bg-gray-50 transition" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
-              <Link href="/plans" className="block px-3 py-2 rounded-md font-medium text-gray-700 hover:text-[#0b2f6b] hover:bg-gray-50 transition" onClick={() => setIsMobileMenuOpen(false)}>Plans</Link>
-              <Link href="/about" className="block px-3 py-2 rounded-md font-medium text-gray-700 hover:text-[#0b2f6b] hover:bg-gray-50 transition" onClick={() => setIsMobileMenuOpen(false)}>About</Link>
-              <Link href="/contact" className="block px-3 py-2 rounded-md font-medium text-[#0b2f6b] bg-blue-50 font-semibold" onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
-              
-              {/* Mobile Auth Buttons */}
-              <div className="pt-3 border-t border-gray-100 space-y-3">
-                <Link href="/accounts/login" className="block w-full text-center px-4 py-3 text-[#0b2f6b] font-semibold hover:text-[#2563eb] transition border border-[#0b2f6b] rounded-full" onClick={() => setIsMobileMenuOpen(false)}>Login</Link>
-                <Link href="/accounts/signup" className="block w-full text-center bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-4 py-3 rounded-full font-semibold hover:shadow-lg transition" onClick={() => setIsMobileMenuOpen(false)}>Sign Up</Link>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </nav>
-  );
+export const metadata: Metadata = {
+  title: 'Contact Us — WolvCapital | Support & Investor Assistance',
+  description: 'Reach out to WolvCapital support for account assistance, investment inquiries, or general platform help. Our team is available to support global investors.',
 }
 
 export default function ContactPage() {
   return (
-    <>
-      <Head>
-        <title>Contact WolvCapital · U.S. Digital Investment Platform</title>
-        <meta
-          name="description"
-          content="Contact WolvCapital, a U.S. regulated digital investment platform. Connect with our compliance and investor support teams for secure investment returns and cryptocurrency investment opportunities."
-        />
-        <meta
-          name="keywords"
-          content="digital investment platform, U.S. fintech company, secure investment returns, cryptocurrency investment, regulated financial platform, WolvCapital contact"
-        />
-        <meta property="og:title" content="Contact WolvCapital · U.S. Digital Investment Platform" />
-        <meta property="og:description" content="Contact WolvCapital’s compliance and investor support teams in the United States." />
-        
-        <meta property="og:image:type" content="image/jpeg" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:image" content="/images/contact-og.jpg" />
-      </Head>
-      <div className="min-h-screen bg-hero-contact bg-cover bg-center bg-no-repeat overlay-dark-40">
+    <div className="min-h-screen bg-hero-contact bg-cover bg-center bg-no-repeat overlay-dark-40">
   <section className="pt-32 pb-16 bg-black/40 text-white text-center">
           <div className="container mx-auto px-4 lg:px-8">
             <h1 className="text-5xl lg:text-6xl font-extrabold mb-6">Contact WolvCapital</h1>
@@ -272,6 +181,5 @@ export default function ContactPage() {
           </div>
         </footer>
       </div>
-    </>
   )
 }

@@ -1,21 +1,25 @@
-import Head from 'next/head';
 import Link from 'next/link'
 import Image from 'next/image'
 
+export const metadata = {
+  title: 'Privacy Policy — WolvCapital | Data Protection & Security',
+  description: 'Learn how WolvCapital protects your personal information with 256-bit encryption, KYC compliance, and strict data security measures.',
+  openGraph: {
+    title: 'Privacy Policy — WolvCapital',
+    description: 'Your Data. Protected.',
+    images: ['/og-images/privacy-og.png'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Privacy Policy — WolvCapital',
+    description: 'Your Data. Protected.',
+    images: ['/og-images/privacy-og.png'],
+  },
+}
+
 export default function PrivacyPolicyPage() {
   return (
-    <>
-      <Head>
-  <title>Privacy Policy · WolvCapital Digital Investment Platform</title>
-  <meta name="description" content="Review WolvCapital’s privacy policy for secure investment returns, cryptocurrency investment opportunities, and U.S. regulatory compliance." />
-  <meta name="keywords" content="digital investment platform, U.S. fintech company, secure investment returns, cryptocurrency investment, regulated financial platform, privacy policy, WolvCapital" />
-  <meta property="og:title" content="WolvCapital Privacy Policy · U.S. Digital Investment Platform" />
-  <meta property="og:description" content="Learn about WolvCapital’s user data protection and privacy practices, compliant with U.S. financial regulations." />
-  <meta property="og:image" content="/images/legal/wolvcapital-privacy-policy.jpg" />
-  <meta name="robots" content="index, follow" />
-      </Head>
-
-      <div className="min-h-screen bg-hero-privacy bg-cover bg-center bg-no-repeat overlay-dark-60">
+    <div className="min-h-screen bg-hero-privacy bg-cover bg-center bg-no-repeat overlay-dark-60">
         <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="flex items-center justify-between h-20">
@@ -157,7 +161,6 @@ export default function PrivacyPolicyPage() {
             </div>
           </div>
         </section>
-      </div>
-    </>
+    </div>
   )
 }

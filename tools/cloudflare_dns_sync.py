@@ -30,7 +30,10 @@ def _read_body(resp: Any) -> dict:
     body = resp.read().decode("utf-8")
     if not body:
         return {}
-    return json.loads(body)
+    try:
+        return json.loads(body)
+    except json.JSONDecodeError:
+        return {}
 
 
 def cf_request(
@@ -56,11 +59,18 @@ def cf_request(
     try:
         with request.urlopen(req) as resp:
             return _read_body(resp)
-    except error.HTTPError as exc:  # pragma: no cover - network failure
-        detail = exc.read().decode("utf-8")
+    except error.HTTPError as exc:
+        try:
+            error_body = exc.read().decode("utf-8")
+            detail = json.loads(error_body) if error_body else {}
+            error_msg = json.dumps(detail, indent=2) if detail else error_body
+        except Exception:
+            error_msg = str(exc)
         raise SystemExit(
-            f"Cloudflare API error {exc.code} for {method} {path}: {detail}"
+            f"Cloudflare API error {exc.code} for {method} {path}: {error_msg}"
         ) from exc
+    except Exception as exc:
+        raise SystemExit(f"Request failed for {method} {path}: {exc}") from exc
 
 
 @dataclass
@@ -87,7 +97,14 @@ class DNSRecord:
 def load_records(path: Path) -> list[DNSRecord]:
     with path.open("r", encoding="utf-8") as handle:
         data = json.load(handle)
-    records = data.get("records", [])
+    
+    if "records" not in data:
+        raise SystemExit(f"Invalid records file format: missing 'records' key")
+    
+    records = data["records"]
+    if not isinstance(records, list):
+        raise SystemExit(f"Invalid records file format: 'records' must be a list")
+    
     return [DNSRecord.from_dict(rec) for rec in records]
 
 

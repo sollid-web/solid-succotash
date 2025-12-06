@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
 
+Sitemap: https://www.wolvcapital.com/sitemap.xml
+
+# Disallow dynamic/utility routes
+Disallow: /canvas/
+
 Sitemap: https://wolvcapital.com/sitemap.xml

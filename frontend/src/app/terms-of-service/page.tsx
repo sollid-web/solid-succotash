@@ -1,46 +1,27 @@
-import Head from 'next/head';
 import Link from 'next/link'
 import Image from 'next/image'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Terms of Service — WolvCapital',
+  description: 'Read WolvCapital\'s terms of service, user agreement, and platform rules governing digital asset investment services.',
+  openGraph: {
+    title: 'Terms of Service — WolvCapital',
+    description: 'User Agreement & Platform Rules',
+    images: ['/og-images/terms-og.png'],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Terms of Service — WolvCapital',
+    description: 'User Agreement & Platform Rules',
+    images: ['/og-images/terms-og.png'],
+  },
+};
 
 export default function TermsOfServicePage() {
   return (
-    <>
-      <Head>
-  <title>Terms of Service · WolvCapital Digital Investment Platform</title>
-  <meta name="description" content="Review WolvCapital’s Terms of Service for secure investment returns, cryptocurrency investment opportunities, and U.S. regulatory compliance." />
-  <meta name="keywords" content="digital investment platform, U.S. fintech company, secure investment returns, cryptocurrency investment, regulated financial platform, terms of service, WolvCapital" />
-  <meta property="og:title" content="WolvCapital Terms of Service · U.S. Digital Investment Platform" />
-  <meta property="og:description" content="Read WolvCapital's user participation, investment, and compliance policy agreements." />
-   <meta property="og:image" content="/images/legal/legal-terms-og.jpg" />
-  <meta name="robots" content="index, follow" />
-      </Head>
-
-      <div className="min-h-screen bg-hero-terms bg-cover bg-center bg-no-repeat">
-      <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-sm border-b border-gray-100 z-50">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            <Link href="/" className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-lg flex items-center justify-center">
-                <span className="text-2xl font-bold text-white">W</span>
-              </div>
-              <span className="text-2xl font-bold text-[#0b2f6b]">WolvCapital</span>
-            </Link>
-            
-            <div className="hidden md:flex items-center space-x-8">
-              <Link href="/" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">Home</Link>
-              <Link href="/plans" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">Plans</Link>
-              <Link href="/about" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">About</Link>
-              <Link href="/contact" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">Contact</Link>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <Link href="/accounts/login" className="text-[#0b2f6b] font-semibold hover:text-[#2563eb] transition">Login</Link>
-              <Link href="/accounts/signup" className="bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-6 py-2.5 rounded-full font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105">Sign Up</Link>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+    <div className="min-h-screen bg-hero-terms bg-cover bg-center bg-no-repeat">
       {/* Hero */}
       <section className="pt-32 pb-16 bg-black/50 text-white">
         <div className="container mx-auto px-4 lg:px-8 text-center">
@@ -63,22 +44,88 @@ export default function TermsOfServicePage() {
 
       {/* Content */}
       <main className="min-h-screen bg-white">
-  <section className="max-w-2xl mx-auto py-16 px-4">
-    <h1 className="text-4xl font-bold mb-6">Terms of Service</h1>
-    <p className="text-lg text-gray-700 mb-8">These terms govern your access and use of WolvCapital, including all investment activities, withdrawals, and dashboard actions.</p>
-    <h2 className="text-2xl font-semibold mb-4">Key Areas Covered</h2>
-    <ul className="list-disc pl-6 mb-6 text-gray-700 space-y-2">
-      <li>Account registration</li>
-      <li>Investor responsibilities</li>
-      <li>ROI structure</li>
-      <li>Withdrawal rules</li>
-      <li>Platform rights</li>
-      <li>Limitations of liability</li>
-      <li>Dispute resolution</li>
-    </ul>
-    <p className="text-lg text-blue-700 font-semibold mt-8">By using WolvCapital, you agree to these terms.</p>
-  </section>
-</main>
+        <section className="max-w-4xl mx-auto py-16 px-4">
+          <div className="space-y-12">
+            <div>
+              <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                By accessing or using WolvCapital, you agree to comply with these Terms of Service. If you do not agree with any part of these terms, do not use the platform.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">1. Acceptance of Terms</h2>
+              <p className="text-lg text-gray-700 leading-relaxed">
+                These terms constitute a legally binding agreement between you and WolvCapital. By registering, depositing funds, or using platform features, you accept all terms and policies.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">2. Eligibility</h2>
+              <p className="text-lg text-gray-700 leading-relaxed mb-4">
+                You must meet the following criteria:
+              </p>
+              <ul className="space-y-3 text-lg text-gray-700 list-disc pl-6">
+                <li>At least 18 years of age</li>
+                <li>Legally permitted to invest in digital assets in your jurisdiction</li>
+                <li>Capable of entering a binding contract</li>
+                <li>Able to pass KYC verification</li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">3. Investment Participation</h2>
+              <p className="text-lg text-gray-700 leading-relaxed mb-4">
+                All investment plans are subject to availability and review. WolvCapital reserves the right to:
+              </p>
+              <ul className="space-y-3 text-lg text-gray-700 list-disc pl-6">
+                <li>Modify investment plans and ROI rates</li>
+                <li>Suspend or terminate access at any time</li>
+                <li>Require additional verification for withdrawals</li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">4. Withdrawals & Payouts</h2>
+              <p className="text-lg text-gray-700 leading-relaxed">
+                Withdrawal requests are processed manually and may require up to 5 business days. Additional verification may be requested for security purposes.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">5. Account Security</h2>
+              <p className="text-lg text-gray-700 leading-relaxed">
+                You are responsible for protecting your login credentials and account access. Notify support immediately if unauthorized activity is suspected.
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">6. Prohibited Activities</h2>
+              <p className="text-lg text-gray-700 leading-relaxed mb-4">
+                The following actions are strictly prohibited:
+              </p>
+              <ul className="space-y-3 text-lg text-gray-700 list-disc pl-6">
+                <li>Using the platform for money laundering or fraud</li>
+                <li>Creating multiple accounts</li>
+                <li>Attempting to exploit system vulnerabilities</li>
+                <li>Providing false information during KYC verification</li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">7. Changes to Terms</h2>
+              <p className="text-lg text-gray-700 leading-relaxed">
+                WolvCapital may update these terms at any time. Continued use of the platform after changes constitutes acceptance.
+              </p>
+            </div>
+
+            <div className="bg-blue-50 p-8 rounded-2xl">
+              <p className="text-lg text-gray-700 leading-relaxed font-semibold">
+                For questions about these terms, contact support@wolvcapital.com
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
 
       {/* Footer */}
       <footer className="bg-[#071d42] text-white py-16 bg-opacity-95">
@@ -112,7 +159,7 @@ export default function TermsOfServicePage() {
             </div>
             <div>
               <h3 className="text-xl font-bold mb-4">WolvCapital</h3>
-              <p className="text-gray-300 text-sm leading-relaxed">U.S. regulated digital investment platform delivering secure investment workflows, manual compliance reviews, and premium virtual card solutions for professional and institutional clients.</p>
+              <p className="text-gray-300 text-sm leading-relaxed">WolvCapital is a digital asset investment platform providing secure and sustainable daily ROI opportunities through diversified strategies and advanced risk controls. With global investor support, AML/KYC compliance, and industry-grade security, WolvCapital delivers a trusted environment for digital asset growth.</p>
             </div>
           </div>
           <div className="border-t border-gray-700 pt-8 text-center text-gray-400">
@@ -120,7 +167,6 @@ export default function TermsOfServicePage() {
           </div>
         </div>
       </footer>
-      </div>
-    </>
+    </div>
   )
 }

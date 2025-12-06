@@ -2,9 +2,9 @@ import React from "react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Security & Fund Protection — WolvCapital",
+  title: "Security — WolvCapital | 256-bit Encryption & AML/KYC Compliance",
   description:
-    "WolvCapital security and fund protection measures. Account protection, fund custody, manual review, anti-fraud, and infrastructure monitoring.",
+    "WolvCapital employs enterprise-grade security: 256-bit SSL encryption, KYC verification, AML compliance, 2FA, 24/7 fraud monitoring, and PCI-DSS standards.",
 };
 
 export default function SecurityPage(): JSX.Element {

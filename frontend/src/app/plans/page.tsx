@@ -1,90 +1,31 @@
-'use client'
-
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { useState } from 'react'
-import LanguageSwitcher from '@/components/LanguageSwitcher'
-const RecentActivityTicker = dynamic(() => import('../../components/RecentActivityTicker'), { ssr: false })
 
-function PlansNavigation() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  return (
-    <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          <Link href="/" className="flex items-center space-x-2 sm:space-x-3">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-lg flex items-center justify-center">
-              <span className="text-xl sm:text-2xl font-bold text-white">W</span>
-            </div>
-            <span className="text-lg sm:text-2xl font-bold text-[#0b2f6b] hidden xs:block">WolvCapital</span>
-            <span className="text-lg font-bold text-[#0b2f6b] block xs:hidden">Wolv</span>
-          </Link>
-          
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">Home</Link>
-            <Link href="/plans" className="text-[#0b2f6b] font-semibold">Plans</Link>
-            <Link href="/about" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">About</Link>
-            <Link href="/contact" className="text-gray-700 hover:text-[#0b2f6b] font-medium transition">Contact</Link>
-            <LanguageSwitcher />
-          </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center space-x-2">
-            <div className="mr-2">
-              <LanguageSwitcher />
-            </div>
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-md text-gray-700 hover:text-[#0b2f6b] hover:bg-gray-100 transition"
-              aria-label="Toggle mobile menu"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {isMobileMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
-          </div>
-
-          {/* Desktop Auth Buttons */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Link href="/accounts/login" className="text-[#0b2f6b] font-semibold hover:text-[#2563eb] transition">Login</Link>
-            <Link href="/accounts/signup" className="bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-6 py-2.5 rounded-full font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105">Sign Up</Link>
-          </div>
-        </div>
-
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-100 bg-white/95 backdrop-blur-sm">
-            <div className="px-4 py-4 space-y-3">
-              <Link href="/" className="block px-3 py-2 rounded-md font-medium text-gray-700 hover:text-[#0b2f6b] hover:bg-gray-50 transition" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
-              <Link href="/plans" className="block px-3 py-2 rounded-md font-medium text-[#0b2f6b] bg-blue-50 font-semibold" onClick={() => setIsMobileMenuOpen(false)}>Plans</Link>
-              <Link href="/about" className="block px-3 py-2 rounded-md font-medium text-gray-700 hover:text-[#0b2f6b] hover:bg-gray-50 transition" onClick={() => setIsMobileMenuOpen(false)}>About</Link>
-              <Link href="/contact" className="block px-3 py-2 rounded-md font-medium text-gray-700 hover:text-[#0b2f6b] hover:bg-gray-50 transition" onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
-              
-              {/* Mobile Auth Buttons */}
-              <div className="pt-3 border-t border-gray-100 space-y-3">
-                <Link href="/accounts/login" className="block w-full text-center px-4 py-3 text-[#0b2f6b] font-semibold hover:text-[#2563eb] transition border border-[#0b2f6b] rounded-full" onClick={() => setIsMobileMenuOpen(false)}>Login</Link>
-                <Link href="/accounts/signup" className="block w-full text-center bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-4 py-3 rounded-full font-semibold hover:shadow-lg transition" onClick={() => setIsMobileMenuOpen(false)}>Sign Up</Link>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </nav>
-  );
-}
+export const metadata = {
+  title: "Investment Plans — WolvCapital | 1%–2% Daily ROI Options",
+  description:
+    "Explore WolvCapital's investment plans offering 1%–2% daily returns, flexible withdrawal schedules, professional monitoring, and enterprise-grade security for global investors.",
+  openGraph: {
+    title: 'Investment Plans — WolvCapital',
+    description: '1%–2% Daily ROI • Flexible Withdrawals • Plans starting from $100',
+    images: ['/og-images/plans-og.png'],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Investment Plans — WolvCapital',
+    description: '1%–2% Daily ROI • Flexible Withdrawals',
+    images: ['/og-images/plans-og.png'],
+  },
+};
 
 export default function PlansPage() {
   return (
     <div className="min-h-screen bg-white relative">
-      {/* Navigation */}
-      <PlansNavigation />
+      {/* spacer for fixed global NavBar */}
+      <div className="h-20" />
 
       {/* Hero Section with Full-Page Background Image */}
       <section className="relative w-full min-h-[320px] sm:min-h-[400px] md:min-h-[500px] lg:min-h-[630px] flex items-center justify-center mb-8 mt-24 overflow-hidden rounded-3xl shadow-xl">
@@ -108,9 +49,6 @@ export default function PlansPage() {
           </p>
         </div>
       </section>
-
-      {/* Recent Activity Ticker */}
-      <RecentActivityTicker plans={["Pioneer", "Vanguard", "Horizon", "Summit"]} />
 
       {/* OG Image Display Below Hero */}
       <div className="w-full flex justify-center items-center mb-8">

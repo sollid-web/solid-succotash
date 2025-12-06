@@ -8,6 +8,7 @@ import ReviewsRotator from '@/components/ReviewsRotator'
 import TrustSection from '@/components/TrustSection'
 import ProfessionalFooter from '@/components/ProfessionalFooter'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
+import { UserPlus, Briefcase, CreditCard, TrendingUp, Shield, Lock, FileCheck, Clock, Bitcoin, HelpCircle, CheckCircle2 } from 'lucide-react'
 // NavBar and any live transaction banners are intentionally omitted for a cleaner, faster initial render.
 
 export default function HomePage() {
@@ -56,11 +57,49 @@ export default function HomePage() {
 
   {/* Live transactions ticker removed per request (performance + visual focus) */}
 
+      {/* SEO Content Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4 lg:px-8 max-w-5xl">
+          <h2 className="text-3xl lg:text-4xl font-extrabold text-[#0b2f6b] mb-6">Invest in Secure Digital Assets With Confidence</h2>
+          <div className="prose prose-lg max-w-none text-gray-700 space-y-6">
+            <p className="text-lg leading-relaxed">
+              WolvCapital is a digital investment platform designed for individuals seeking reliable, technology-driven asset growth. Our infrastructure combines advanced encryption, real-time fraud monitoring, transparent performance metrics, and strict KYC/AML compliance to ensure every investor experiences a secure and seamless investment process.
+            </p>
+            <p className="text-lg leading-relaxed">
+              We provide structured investment plans with daily returns, flexible withdrawal options, and enterprise-grade security. Our platform supports investors from over 120 countries, delivering a user-friendly environment backed by professional risk controls and continuous system monitoring.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6">
+              <h3 className="text-xl font-bold text-[#0b2f6b] mb-4">Predictable Daily ROI</h3>
+              <p className="text-gray-700">
+                Our fixed and flexible plans provide structured returns ranging from 1% to 2% daily, depending on the selected tier. Investors retain control of their capital, profits, and withdrawal schedules.
+              </p>
+            </div>
+
+            <div className="bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl p-6">
+              <h3 className="text-xl font-bold text-[#0b2f6b] mb-4">Battle-Tested Infrastructure</h3>
+              <p className="text-gray-700">
+                WolvCapital operates on secure, cloud-based architecture with 99.9% uptime, ensuring uninterrupted platform performance during deposits, withdrawals, or active investment periods.
+              </p>
+            </div>
+
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6">
+              <h3 className="text-xl font-bold text-[#0b2f6b] mb-4">Global Investor Network</h3>
+              <p className="text-gray-700">
+                More than 45,000 verified investors trust WolvCapital to manage their digital assets across 120+ countries. Our user approval and verification processes meet global standards for operational transparency.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
       <section className="py-12 sm:py-16 md:py-24 bg-gray-50">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0b2f6b] mb-3 sm:mb-4">Why Invest with WolvCapital?</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#0b2f6b] mb-3 sm:mb-4">Why Investors Choose WolvCapital</h2>
             <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">WolvCapital combines advanced technology and rigorous human oversight to deliver a secure, transparent, and compliant digital investment experience for discerning investors.</p>
           </div>
 
@@ -254,6 +293,280 @@ export default function HomePage() {
                 <Link href="/accounts/signup" className="block w-full bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-white text-center py-3 rounded-full font-bold hover:shadow-lg transition-all duration-300 group-hover:scale-105">Get Started</Link>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl lg:text-5xl font-extrabold text-[#0b2f6b] mb-4">How WolvCapital Works</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">Our streamlined investment process ensures security, transparency, and compliance at every step.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            {/* Step 1 */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-full flex items-center justify-center mx-auto mb-4 relative">
+                <UserPlus className="w-10 h-10 text-white" aria-hidden="true" />
+                <span className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center text-[#0b2f6b] font-bold shadow-lg">1</span>
+              </div>
+              <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">Create Account</h3>
+              <p className="text-gray-600">Sign up with your email and complete KYC verification for regulatory compliance.</p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-[#2563eb] to-[#1d4ed8] rounded-full flex items-center justify-center mx-auto mb-4 relative">
+                <Briefcase className="w-10 h-10 text-white" aria-hidden="true" />
+                <span className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center text-[#2563eb] font-bold shadow-lg">2</span>
+              </div>
+              <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">Choose Plan</h3>
+              <p className="text-gray-600">Select from our professionally structured investment plans based on your goals.</p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-purple-700 rounded-full flex items-center justify-center mx-auto mb-4 relative">
+                <CreditCard className="w-10 h-10 text-white" aria-hidden="true" />
+                <span className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center text-purple-600 font-bold shadow-lg">3</span>
+              </div>
+              <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">Deposit Funds</h3>
+              <p className="text-gray-600">Fund your wallet securely. All deposits are manually reviewed and approved.</p>
+            </div>
+
+            {/* Step 4 */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-green-600 to-green-700 rounded-full flex items-center justify-center mx-auto mb-4 relative">
+                <TrendingUp className="w-10 h-10 text-white" aria-hidden="true" />
+                <span className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center text-green-600 font-bold shadow-lg">4</span>
+              </div>
+              <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">Track Returns</h3>
+              <p className="text-gray-600">Monitor your investment performance with real-time dashboard analytics.</p>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <Link href="/how-it-works" className="inline-block bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-8 py-4 rounded-full text-lg font-bold hover:shadow-2xl transition-all duration-300 hover:scale-105">
+              Learn More About Our Process
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Security Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl lg:text-5xl font-extrabold text-[#0b2f6b] mb-6">Security and Compliance Standards</h2>
+              <p className="text-lg text-gray-700 max-w-4xl mx-auto">
+                WolvCapital implements a multilayered security framework to safeguard investor funds and sensitive information. Our operational environment includes:
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+              <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <UserPlus className="w-7 h-7 text-blue-600" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">KYC Verification</h3>
+                    <p className="text-gray-600">Mandatory identity verification helps prevent fraud, identity theft, and unauthorized account use.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Shield className="w-7 h-7 text-green-600" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">AML Compliance</h3>
+                    <p className="text-gray-600">Real-time transaction monitoring detects and blocks suspicious activity while preserving user privacy.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Lock className="w-7 h-7 text-purple-600" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">256-Bit SSL Encryption</h3>
+                    <p className="text-gray-600">All data exchanged on the platform is encrypted with bank-grade security.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Shield className="w-7 h-7 text-amber-600" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">Two-Factor Authentication</h3>
+                    <p className="text-gray-600">Added protection prevents unauthorized access to investor accounts.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Clock className="w-7 h-7 text-red-600" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">24/7 Fraud Monitoring</h3>
+                    <p className="text-gray-600">Our systems proactively track account behavior and prevent abnormal financial activity.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <FileCheck className="w-7 h-7 text-indigo-600" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">PCI-DSS Level 1 Standards</h3>
+                    <p className="text-gray-600">Ensures that payment operations meet the highest industry benchmark.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center bg-white rounded-2xl p-8 shadow-lg">
+              <p className="text-lg text-gray-700 mb-6">
+                WolvCapital is committed to maintaining a secure, transparent, and reliable ecosystem for digital asset investors worldwide.
+              </p>
+              <Link href="/security" className="inline-block bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-8 py-4 rounded-full text-lg font-bold hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                View Our Security Measures
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Security Visual Stats */}
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white rounded-3xl p-8 shadow-2xl border-2 border-gray-200">
+              <h3 className="text-2xl font-bold text-[#0b2f6b] mb-6 text-center">Security At A Glance</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl text-center">
+                  <div className="text-4xl font-bold text-green-700 mb-2">256-bit</div>
+                  <div className="text-sm text-green-600 font-semibold">SSL Encryption</div>
+                </div>
+                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl text-center">
+                  <div className="text-4xl font-bold text-blue-700 mb-2">100%</div>
+                  <div className="text-sm text-blue-600 font-semibold">Manual Review</div>
+                </div>
+                <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-2xl text-center">
+                  <div className="text-4xl font-bold text-purple-700 mb-2">24/7</div>
+                  <div className="text-sm text-purple-600 font-semibold">Monitoring</div>
+                </div>
+                <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-2xl text-center">
+                  <div className="text-4xl font-bold text-orange-700 mb-2">U.S.</div>
+                  <div className="text-sm text-orange-600 font-semibold">Compliant</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl lg:text-5xl font-extrabold text-[#0b2f6b] mb-4">Frequently Asked Questions</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">Get answers to common questions about investing with WolvCapital.</p>
+          </div>
+
+          <div className="max-w-4xl mx-auto space-y-4 mb-12">
+            <div className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all border border-gray-200 hover:border-[#0b2f6b]">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <TrendingUp className="w-6 h-6 text-[#0b2f6b]" aria-hidden="true" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">How does WolvCapital generate investor returns?</h3>
+                  <p className="text-gray-700">WolvCapital uses a diversified strategy within the digital asset market, supported by automated monitoring tools and controlled risk exposure. Returns are based on the performance of selected asset pools and daily market conditions.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all border border-gray-200 hover:border-green-600">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Shield className="w-6 h-6 text-green-600" aria-hidden="true" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">Is WolvCapital regulated?</h3>
+                  <p className="text-gray-700">WolvCapital follows global compliance standards such as KYC, AML, and PCI-DSS, but it is not a government-regulated financial institution. Investors should review our Risk Disclosure before investing.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all border border-gray-200 hover:border-purple-600">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Clock className="w-6 h-6 text-purple-600" aria-hidden="true" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">How long do withdrawals take?</h3>
+                  <p className="text-gray-700">Profit withdrawals are available at end of your active investment plan. Processing time may vary depending on network conditions and verification requirements.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all border border-gray-200 hover:border-amber-600">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <CreditCard className="w-6 h-6 text-amber-600" aria-hidden="true" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">What are the minimum and maximum investment amounts?</h3>
+                  <p className="text-gray-700">Minimum investment begins at $100. Higher-tier plans allow flexible or custom amounts depending on investor profile and plan type.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all border border-gray-200 hover:border-indigo-600">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Lock className="w-6 h-6 text-indigo-600" aria-hidden="true" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">How is my account secured?</h3>
+                  <p className="text-gray-700">WolvCapital uses multi-layer security including 2FA, 256-bit encryption, and real-time fraud detection to ensure full account protection.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all border border-gray-200 hover:border-blue-600">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <UserPlus className="w-6 h-6 text-blue-600" aria-hidden="true" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">Which countries does WolvCapital serve?</h3>
+                  <p className="text-gray-700">Our platform supports investors from over 120 countries, provided they meet local compliance requirements.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <Link href="/faq" className="inline-block bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-8 py-4 rounded-full text-lg font-bold hover:shadow-2xl transition-all duration-300 hover:scale-105">
+              View All FAQs
+            </Link>
           </div>
         </div>
       </section>

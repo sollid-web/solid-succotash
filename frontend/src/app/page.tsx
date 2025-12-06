@@ -3,28 +3,29 @@ import HomePage from '@/components/HomePage'
 import PublicLayout from '@/components/PublicLayout'
 
 export const metadata: Metadata = {
-  title: 'WolvCapital · Digital Investment Platform',
+  title: 'WolvCapital — Secure Digital Asset Investment Platform | Earn 1%–2% Daily ROI',
   description:
-    'WolvCapital is a trusted digital investment platform offering crypto-based and ROI-driven financial opportunities with transparency, security, and expert oversight.',
+    'Invest in secure digital assets with WolvCapital. Enjoy transparent plans, daily ROI up to 2%, AML/KYC compliance, 256-bit encryption, and 24/7 monitoring. Join 45,000+ verified investors globally.',
+  keywords: 'digital asset investment, crypto investment platform, secure investment returns, daily ROI crypto, WolvCapital, asset management platform, verified investors, AML compliant investment',
   openGraph: {
-    title: 'WolvCapital · Digital Investment Platform',
+    title: 'Secure Digital Asset Investment | WolvCapital',
     description:
-      'Trusted crypto-based investment platform offering transparency and real returns.',
+      'Earn 1%–2% Daily ROI with AML/KYC compliance and 256-bit encryption. Trusted by 45,000+ investors.',
     images: [
       {
-         url: '/images/home-og.jpg',
+         url: '/og-images/home-og.png',
         width: 1200,
         height: 630,
-        alt: 'WolvCapital Professional Investment Platform',
+        alt: 'WolvCapital Secure Digital Asset Investment Platform',
       },
     ],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'WolvCapital · Digital Investment Platform',
+    title: 'WolvCapital — Secure Digital Asset Investment Platform',
     description:
-      'Trusted crypto-based investment platform offering transparency and real returns.',
+      'Invest in secure digital assets. Daily ROI up to 5%, AML/KYC compliance, 256-bit encryption. Join 45,000+ verified investors globally.',
      images: ['/images/home-og.jpg'],
   },
 }

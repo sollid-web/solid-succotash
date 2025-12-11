@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import ProfessionalFooter from '@/components/ProfessionalFooter'
 
 export const metadata = {
   title: 'Privacy Policy — WolvCapital | Data Protection & Security',
@@ -38,19 +39,15 @@ export default function PrivacyPolicyPage() {
             <div className="text-center mb-12">
               <div className="flex flex-col items-center mb-8">
                 {/* Privacy OG Image as Hero Background */}
-                <section className="relative w-full h-[320px] sm:h-[400px] md:h-[500px] lg:h-[630px] flex items-center justify-center mb-8 mt-4 overflow-hidden rounded-3xl shadow-xl">
+                <section className="relative w-full flex items-center justify-center mb-8 mt-4">
                   <Image
-                    src="/images/legal/wolvcapital-privacy-policy-hero.jpg"
-                    alt="WolvCapital Privacy Policy Hero image"
-                    fill
+                    src="/og-images/privacy-og.png"
+                    alt="Privacy Policy – Your Data. Protected."
+                    width={1200}
+                    height={630}
                     priority
-                    className="object-cover object-center w-full h-full absolute inset-0 z-0"
+                    className="rounded-2xl shadow-2xl max-w-full h-auto"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-white/0 z-10" />
-                  <div className="relative z-20 w-full text-center px-4">
-                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white drop-shadow-lg mb-2">Privacy Policy</h1>
-                    <p className="text-lg sm:text-xl md:text-2xl text-white/90 drop-shadow-md">Investment data is protected by strict privacy policies and U.S. financial regulations.</p>
-                  </div>
                 </section>
               </div>
               <h1 className="text-5xl lg:text-6xl font-extrabold text-[#0b2f6b] mb-4">Privacy Policy</h1>
@@ -161,6 +158,7 @@ export default function PrivacyPolicyPage() {
             </div>
           </div>
         </section>
+      <ProfessionalFooter />
     </div>
   )
 }

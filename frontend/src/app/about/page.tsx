@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import PublicLayout from '@/components/PublicLayout'
+import ProfessionalFooter from '@/components/ProfessionalFooter'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -42,6 +43,18 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* OG Image Display */}
+      <div className="w-full flex justify-center items-center py-8 bg-gray-50">
+        <Image
+          src="/og-images/about-og.png"
+          alt="About WolvCapital – Global, Secure, Transparent Digital Asset Management"
+          width={1200}
+          height={630}
+          priority
+          className="rounded-2xl shadow-2xl max-w-full h-auto"
+        />
+      </div>
 
       {/* Content */}
       <section className="py-12 sm:py-16 md:py-24 bg-white">

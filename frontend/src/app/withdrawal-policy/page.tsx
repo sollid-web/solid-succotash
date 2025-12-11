@@ -1,4 +1,5 @@
 import React from "react";
+import ProfessionalFooter from '@/components/ProfessionalFooter';
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -76,10 +77,11 @@ export default function WithdrawalPolicyPage(): JSX.Element {
 
         <div className="mt-8 border-t pt-6">
           <p className="text-gray-600">
-            For urgent issues email <a className="text-indigo-600 underline" href="mailto:support@wolv-invest">support@wolv-invest</a>.
+            For urgent issues email <a className="text-indigo-600 underline" href="mailto:support@wolvcapital.com">support@wolvcapital.com</a>.
           </p>
         </div>
       </div>
+      <ProfessionalFooter />
     </main>
   );
 }

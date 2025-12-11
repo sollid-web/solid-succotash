@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     title: 'WolvCapital — Secure Digital Asset Investment Platform',
     description:
       'Invest in secure digital assets. Daily ROI up to 5%, AML/KYC compliance, 256-bit encryption. Join 45,000+ verified investors globally.',
-     images: ['/images/home-og.jpg'],
+     images: ['/og-images/home-og.png'],
   },
 }
 

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { getApiBaseUrl } from '@/lib/config'
 import Link from 'next/link'
+import ProfessionalFooter from '@/components/ProfessionalFooter'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -117,7 +118,9 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-hero-auth bg-cover bg-center bg-no-repeat flex items-center justify-center p-4">
+    <>
+    <div className="min-h-screen bg-hero-auth bg-cover bg-center bg-no-repeat">
+      <div className="flex items-center justify-center p-4 min-h-screen">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -233,6 +236,9 @@ export default function LoginPage() {
           </Link>
         </div>
       </div>
+      </div>
     </div>
+    <ProfessionalFooter />
+    </>
   )
 }

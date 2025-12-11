@@ -8,7 +8,7 @@ import ReviewsRotator from '@/components/ReviewsRotator'
 import TrustSection from '@/components/TrustSection'
 import ProfessionalFooter from '@/components/ProfessionalFooter'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
-import { UserPlus, Briefcase, CreditCard, TrendingUp, Shield, Lock, FileCheck, Clock, Bitcoin, HelpCircle, CheckCircle2 } from 'lucide-react'
+import { UserPlus, Briefcase, CreditCard, TrendingUp, Shield, Lock, FileCheck, Clock, Bitcoin, HelpCircle, CheckCircle2, ShieldCheck, Globe, Users } from 'lucide-react'
 // NavBar and any live transaction banners are intentionally omitted for a cleaner, faster initial render.
 
 export default function HomePage() {
@@ -57,6 +57,18 @@ export default function HomePage() {
 
   {/* Live transactions ticker removed per request (performance + visual focus) */}
 
+      {/* OG Image Display */}
+      <div className="w-full flex justify-center items-center py-8 bg-gray-50">
+        <Image
+          src="/og-images/home-og.png"
+          alt="Secure Digital Asset Investment — WolvCapital"
+          width={1200}
+          height={630}
+          priority
+          className="rounded-2xl shadow-2xl max-w-full h-auto"
+        />
+      </div>
+
       {/* SEO Content Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4 lg:px-8 max-w-5xl">
@@ -86,6 +98,10 @@ export default function HomePage() {
             </div>
 
             <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6">
+              <div className="relative w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                <div className="absolute inset-0 bg-purple-400 rounded-2xl blur-sm opacity-50"></div>
+                <Globe className="relative w-8 h-8 text-white" strokeWidth={2.5} />
+              </div>
               <h3 className="text-xl font-bold text-[#0b2f6b] mb-4">Global Investor Network</h3>
               <p className="text-gray-700">
                 More than 45,000 verified investors trust WolvCapital to manage their digital assets across 120+ countries. Our user approval and verification processes meet global standards for operational transparency.
@@ -369,8 +385,9 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
               <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <UserPlus className="w-7 h-7 text-blue-600" aria-hidden="true" />
+                  <div className="relative w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <div className="absolute inset-0 bg-blue-400 rounded-2xl blur-sm opacity-50"></div>
+                    <UserPlus className="relative w-8 h-8 text-white" aria-hidden="true" strokeWidth={2.5} />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">KYC Verification</h3>
@@ -381,8 +398,9 @@ export default function HomePage() {
 
               <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Shield className="w-7 h-7 text-green-600" aria-hidden="true" />
+                  <div className="relative w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <div className="absolute inset-0 bg-green-400 rounded-2xl blur-sm opacity-50"></div>
+                    <Shield className="relative w-8 h-8 text-white" aria-hidden="true" strokeWidth={2.5} />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">AML Compliance</h3>
@@ -393,8 +411,9 @@ export default function HomePage() {
 
               <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Lock className="w-7 h-7 text-purple-600" aria-hidden="true" />
+                  <div className="relative w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <div className="absolute inset-0 bg-purple-400 rounded-2xl blur-sm opacity-50"></div>
+                    <Lock className="relative w-8 h-8 text-white" aria-hidden="true" strokeWidth={2.5} />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">256-Bit SSL Encryption</h3>
@@ -405,8 +424,9 @@ export default function HomePage() {
 
               <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Shield className="w-7 h-7 text-amber-600" aria-hidden="true" />
+                  <div className="relative w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <div className="absolute inset-0 bg-amber-400 rounded-2xl blur-sm opacity-50"></div>
+                    <ShieldCheck className="relative w-8 h-8 text-white" aria-hidden="true" strokeWidth={2.5} />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">Two-Factor Authentication</h3>
@@ -417,8 +437,9 @@ export default function HomePage() {
 
               <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-7 h-7 text-red-600" aria-hidden="true" />
+                  <div className="relative w-14 h-14 bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <div className="absolute inset-0 bg-red-400 rounded-2xl blur-sm opacity-50"></div>
+                    <Clock className="relative w-8 h-8 text-white" aria-hidden="true" strokeWidth={2.5} />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">24/7 Fraud Monitoring</h3>
@@ -429,8 +450,9 @@ export default function HomePage() {
 
               <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <FileCheck className="w-7 h-7 text-indigo-600" aria-hidden="true" />
+                  <div className="relative w-14 h-14 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <div className="absolute inset-0 bg-indigo-400 rounded-2xl blur-sm opacity-50"></div>
+                    <FileCheck className="relative w-8 h-8 text-white" aria-hidden="true" strokeWidth={2.5} />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">PCI-DSS Level 1 Standards</h3>
@@ -460,20 +482,44 @@ export default function HomePage() {
               <h3 className="text-2xl font-bold text-[#0b2f6b] mb-6 text-center">Security At A Glance</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl text-center">
-                  <div className="text-4xl font-bold text-green-700 mb-2">256-bit</div>
+                  <div className="flex justify-center mb-3">
+                    <div className="relative w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
+                      <div className="absolute inset-0 bg-green-400 rounded-2xl blur opacity-40"></div>
+                      <Lock className="relative w-9 h-9 text-white" strokeWidth={2.5} />
+                    </div>
+                  </div>
+                  <div className="text-3xl font-bold text-green-700 mb-2">256-bit</div>
                   <div className="text-sm text-green-600 font-semibold">SSL Encryption</div>
                 </div>
                 <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl text-center">
-                  <div className="text-4xl font-bold text-blue-700 mb-2">100%</div>
-                  <div className="text-sm text-blue-600 font-semibold">Manual Review</div>
+                  <div className="flex justify-center mb-3">
+                    <div className="relative w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg">
+                      <div className="absolute inset-0 bg-blue-400 rounded-2xl blur opacity-40"></div>
+                      <ShieldCheck className="relative w-9 h-9 text-white" strokeWidth={2.5} />
+                    </div>
+                  </div>
+                  <div className="text-3xl font-bold text-blue-700 mb-2">AML/KYC</div>
+                  <div className="text-sm text-blue-600 font-semibold">Fully Compliant</div>
                 </div>
                 <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-2xl text-center">
-                  <div className="text-4xl font-bold text-purple-700 mb-2">24/7</div>
+                  <div className="flex justify-center mb-3">
+                    <div className="relative w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
+                      <div className="absolute inset-0 bg-purple-400 rounded-2xl blur opacity-40"></div>
+                      <Clock className="relative w-9 h-9 text-white" strokeWidth={2.5} />
+                    </div>
+                  </div>
+                  <div className="text-3xl font-bold text-purple-700 mb-2">24/7</div>
                   <div className="text-sm text-purple-600 font-semibold">Monitoring</div>
                 </div>
                 <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-2xl text-center">
-                  <div className="text-4xl font-bold text-orange-700 mb-2">U.S.</div>
-                  <div className="text-sm text-orange-600 font-semibold">Compliant</div>
+                  <div className="flex justify-center mb-3">
+                    <div className="relative w-16 h-16 bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl flex items-center justify-center shadow-lg">
+                      <div className="absolute inset-0 bg-orange-400 rounded-2xl blur opacity-40"></div>
+                      <Users className="relative w-9 h-9 text-white" strokeWidth={2.5} />
+                    </div>
+                  </div>
+                  <div className="text-3xl font-bold text-orange-700 mb-2">45,000+</div>
+                  <div className="text-sm text-orange-600 font-semibold">Global Investors</div>
                 </div>
               </div>
             </div>

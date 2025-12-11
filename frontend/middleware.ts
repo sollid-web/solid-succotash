@@ -11,6 +11,7 @@ export function middleware(request: NextRequest) {
   const isAsset = pathname.startsWith('/_next') || pathname.startsWith('/images') || pathname.includes('.')
   if (!hasLocaleCookie && !isAsset) {
     // Country -> locale mapping
+    // @ts-ignore - geo property is available in production/edge runtime
     const country = (request.geo?.country || '').toUpperCase()
     const countryMap: Record<string,string> = {
       // Spanish-speaking

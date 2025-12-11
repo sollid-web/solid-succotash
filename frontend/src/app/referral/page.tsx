@@ -1,6 +1,8 @@
 import React from 'react';
+import Image from 'next/image';
 import ReferralCTA from '../../components/ReferralCTA';
 import PublicLayout from '../../components/PublicLayout';
+import ProfessionalFooter from '@/components/ProfessionalFooter';
 
 export const metadata = {
   title: 'Referral Program — WolvCapital | Earn Lifetime Commissions',
@@ -35,6 +37,18 @@ export default function ReferralPage() {
           <p className="text-base sm:text-lg md:text-xl text-gray-200 max-w-3xl mx-auto px-4">Earn lifetime commissions by sharing investment opportunities with your network.</p>
         </div>
       </section>
+
+      {/* OG Image Display */}
+      <div className="w-full flex justify-center items-center py-8 bg-gray-50">
+        <Image
+          src="/og-images/referral-og.png"
+          alt="Referral Program – Earn Rewards by Inviting Investors"
+          width={1200}
+          height={630}
+          priority
+          className="rounded-2xl shadow-2xl max-w-full h-auto"
+        />
+      </div>
 
       {/* Main Content */}
       <section className="py-12 sm:py-16 md:py-24 bg-white">
@@ -141,6 +155,7 @@ export default function ReferralPage() {
         </div>
       </section>
       </main>
+      <ProfessionalFooter />
     </PublicLayout>
   );
 }

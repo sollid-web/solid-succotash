@@ -36,9 +36,21 @@ body {
 /* Custom Component Classes */
 @layer components {
   .btn-brand-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 font-semibold text-white rounded-xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300;
-    background: var(--brand-gradient);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    font-weight: 600;
+    color: #fff;
+    border-radius: 0.75rem;
+    transition-property: all;
+    transition-duration: 300ms;
+    outline: none;
     box-shadow: 0 8px 25px rgba(11, 47, 107, 0.3);
+    background: var(--brand-gradient);
   }
   
   .btn-brand-primary:hover {
@@ -48,26 +60,56 @@ body {
   }
   
   .btn-brand-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 font-semibold bg-white border-2 rounded-xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    font-weight: 600;
+    background-color: #fff;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 0.75rem;
+    transition-property: all;
+    transition-duration: 300ms;
+    outline: none;
+    box-shadow: none;
     border-color: var(--brand-secondary);
     color: var(--brand-primary);
   }
   
   .btn-brand-secondary:hover {
     background: var(--brand-secondary);
-    @apply text-white;
+    color: #fff;
     transform: translateY(-2px) scale(1.02);
   }
   
   .btn-gold {
-    @apply inline-flex items-center justify-center px-6 py-3 font-bold rounded-xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-300;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    font-weight: bold;
+    border-radius: 0.75rem;
+    transition-property: all;
+    transition-duration: 300ms;
+    outline: none;
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
     background: var(--gold-gradient);
     color: var(--brand-dark);
-    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
   }
   
   .card-brand {
-    @apply border-0 rounded-2xl overflow-hidden transition-all duration-300;
+    border: 0;
+    border-radius: 1rem; /* rounded-2xl */
+    overflow: hidden;
+    transition-property: all;
+    transition-duration: 300ms;
     box-shadow: 0 20px 60px rgba(7, 29, 66, 0.15);
   }
   
@@ -77,23 +119,47 @@ body {
   }
   
   .hero-bg {
-    @apply absolute inset-0 w-full h-full object-cover;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     z-index: 0;
   }
   
   .hero-overlay {
-    @apply absolute inset-0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     background: var(--hero-gradient);
     z-index: 1;
   }
   
   .hero-content {
-    @apply relative text-white;
+    position: relative;
+    color: #fff;
     z-index: 2;
     padding: 6rem 0 5rem;
   }
   /* Certificate styles */
-  .certificate-shell { @apply max-w-5xl mx-auto my-6 sm:my-10; }
+  .certificate-shell {
+    max-width: 64rem; /* max-w-5xl */
+    margin-left: auto; /* mx-auto */
+    margin-right: auto;
+    margin-top: 1.5rem; /* my-6 */
+    margin-bottom: 1.5rem;
+  }
+  @media (min-width: 640px) {
+    .certificate-shell {
+      margin-top: 2.5rem; /* sm:my-10 */
+      margin-bottom: 2.5rem;
+    }
+  }
   .certificate-border {
     background: #ffffff;
     border-radius: 16px;
@@ -109,6 +175,7 @@ body {
     font-size: 96px;
     line-height: 1;
     color: rgba(7,29,66,0.06);
+    -webkit-user-select: none;
     user-select: none;
     pointer-events: none;
     z-index: 0;
@@ -148,7 +215,7 @@ body {
   }
 
   /* Hero Background Utilities (mobile-first, no inline styles) */
-  .bg-hero-auth { background-image: url('/images/welcome-mobile.jpg'); }
+  .bg-hero-auth { background-image: url('/images/legal/home-hero.png'); }
   .bg-hero-risk { background-image: url('/images/og/risk-disclosure-hero.jpg'); }
   .bg-hero-faq { background-image: url('/images/og/faq-hero.jpg'); }
   .bg-hero-terms { background-image: url('/images/legal/legal-terms-hero.jpg'); }

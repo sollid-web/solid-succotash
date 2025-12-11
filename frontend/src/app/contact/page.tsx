@@ -1,14 +1,11 @@
+"use client"
+
 import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
-import type { Metadata } from 'next'
+import ProfessionalFooter from '@/components/ProfessionalFooter'
 
 const MapWithOverlay = dynamic(() => import('@/components/MapWithOverlay'), { ssr: false })
-
-export const metadata: Metadata = {
-  title: 'Contact Us — WolvCapital | Support & Investor Assistance',
-  description: 'Reach out to WolvCapital support for account assistance, investment inquiries, or general platform help. Our team is available to support global investors.',
-}
 
 export default function ContactPage() {
   return (

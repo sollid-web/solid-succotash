@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { ShieldCheck, Lock, UserCheck, Shield, Clock, FileCheck, AlertTriangle } from 'lucide-react'
 
 export default function TrustSection() {
   return (
@@ -20,12 +21,11 @@ export default function TrustSection() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             {/* Compliance Card 1 */}
-            <div className="bg-white rounded-xl p-8 shadow-lg border-l-4 border-green-500">
+            <div className="bg-white rounded-xl p-8 shadow-lg border-l-4 border-green-500 hover:shadow-xl transition-all">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
-                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                <div className="relative w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+                  <div className="absolute inset-0 bg-green-400 rounded-2xl blur-sm opacity-50"></div>
+                  <UserCheck className="relative w-8 h-8 text-white" strokeWidth={2.5} />
                 </div>
                 <h3 className="text-xl font-bold text-[#0b2f6b]">KYC Verified</h3>
               </div>
@@ -33,12 +33,11 @@ export default function TrustSection() {
             </div>
 
             {/* Compliance Card 2 */}
-            <div className="bg-white rounded-xl p-8 shadow-lg border-l-4 border-blue-500">
+            <div className="bg-white rounded-xl p-8 shadow-lg border-l-4 border-blue-500 hover:shadow-xl transition-all">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m7 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                <div className="relative w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+                  <div className="absolute inset-0 bg-blue-400 rounded-2xl blur-sm opacity-50"></div>
+                  <ShieldCheck className="relative w-8 h-8 text-white" strokeWidth={2.5} />
                 </div>
                 <h3 className="text-xl font-bold text-[#0b2f6b]">AML Compliant</h3>
               </div>
@@ -46,12 +45,11 @@ export default function TrustSection() {
             </div>
 
             {/* Compliance Card 3 */}
-            <div className="bg-white rounded-xl p-8 shadow-lg border-l-4 border-purple-500">
+            <div className="bg-white rounded-xl p-8 shadow-lg border-l-4 border-purple-500 hover:shadow-xl transition-all">
               <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
-                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
+                <div className="relative w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+                  <div className="absolute inset-0 bg-purple-400 rounded-2xl blur-sm opacity-50"></div>
+                  <Lock className="relative w-8 h-8 text-white" strokeWidth={2.5} />
                 </div>
                 <h3 className="text-xl font-bold text-[#0b2f6b]">Data Encryption</h3>
               </div>
@@ -60,23 +58,47 @@ export default function TrustSection() {
           </div>
 
           {/* Security Standards Row */}
-          <div className="bg-blue-50 rounded-xl p-8 md:p-12">
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-8 md:p-12 shadow-lg">
             <h3 className="text-2xl font-bold text-[#0b2f6b] mb-8 text-center">Security Standards</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-2">2FA</div>
+                <div className="flex justify-center mb-3">
+                  <div className="relative w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <div className="absolute inset-0 bg-indigo-400 rounded-2xl blur opacity-40"></div>
+                    <Shield className="relative w-9 h-9 text-white" strokeWidth={2.5} />
+                  </div>
+                </div>
+                <div className="text-2xl font-bold text-indigo-700 mb-2">2FA</div>
                 <p className="text-sm text-gray-700">Two-Factor Authentication</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-2">256-bit</div>
+                <div className="flex justify-center mb-3">
+                  <div className="relative w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <div className="absolute inset-0 bg-green-400 rounded-2xl blur opacity-40"></div>
+                    <Lock className="relative w-9 h-9 text-white" strokeWidth={2.5} />
+                  </div>
+                </div>
+                <div className="text-2xl font-bold text-green-700 mb-2">256-bit</div>
                 <p className="text-sm text-gray-700">SSL Encryption</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-2">24/7</div>
+                <div className="flex justify-center mb-3">
+                  <div className="relative w-16 h-16 bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <div className="absolute inset-0 bg-red-400 rounded-2xl blur opacity-40"></div>
+                    <Clock className="relative w-9 h-9 text-white" strokeWidth={2.5} />
+                  </div>
+                </div>
+                <div className="text-2xl font-bold text-red-700 mb-2">24/7</div>
                 <p className="text-sm text-gray-700">Fraud Monitoring</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-2">PCI-DSS</div>
+                <div className="flex justify-center mb-3">
+                  <div className="relative w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <div className="absolute inset-0 bg-blue-400 rounded-2xl blur opacity-40"></div>
+                    <FileCheck className="relative w-9 h-9 text-white" strokeWidth={2.5} />
+                  </div>
+                </div>
+                <div className="text-2xl font-bold text-blue-700 mb-2">PCI-DSS</div>
                 <p className="text-sm text-gray-700">Level 1 Certified</p>
               </div>
             </div>
@@ -85,11 +107,16 @@ export default function TrustSection() {
       </section>
 
       {/* Risk Disclosure Banner */}
-      <section className="py-8 bg-yellow-50 border-t-4 border-yellow-400">
+      <section className="py-8 bg-gradient-to-br from-yellow-50 to-amber-50 border-t-4 border-yellow-400">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-            <div className="flex-1">
-              <h3 className="text-lg font-bold text-yellow-800 mb-2">Important Disclosure</h3>
+            <div className="flex gap-4">
+              <div className="relative w-12 h-12 bg-gradient-to-br from-yellow-500 to-amber-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                <div className="absolute inset-0 bg-yellow-400 rounded-xl blur-sm opacity-50"></div>
+                <AlertTriangle className="relative w-7 h-7 text-white" strokeWidth={2.5} />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-yellow-800 mb-2">Important Disclosure</h3>
               <p className="text-sm md:text-base text-yellow-900 mb-4">
                 All investments carry risk, including potential loss of principal. Past performance does not guarantee future results. Digital asset investments are highly volatile and not suitable for all investors. Please review our{' '}
                 <Link href="/risk-disclosure" className="font-bold underline hover:no-underline">
@@ -101,6 +128,7 @@ export default function TrustSection() {
                 </Link>
                 {' '}before investing.
               </p>
+              </div>
             </div>
             <Link
               href="/risk-disclosure"

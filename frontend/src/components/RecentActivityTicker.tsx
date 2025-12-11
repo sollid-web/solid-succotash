@@ -28,25 +28,32 @@ interface Props {
   className?: string;
 }
 
-// --- Combined-gender country pool ---
+// --- Combined-gender country pool with enhanced global diversity ---
 const COUNTRIES = [
-  { code: "SC", name: "Scotland", weight: 0.12, names: ["Callum","Lewis","Ewan","Alistair","Gavin","Hamish","Iain","Ross","Finlay","Duncan","Isla","Freya","Eilidh","Skye","Ailsa","Mhairi"] },
-  { code: "NO", name: "Norway", weight: 0.08, names: ["Soren","Erik","Bjorn","Rolf","Per","Torsten","Olav","Leif","Magnus","Ingrid","Astrid","Liv","Kari","Sigrid","Helene"] },
-  { code: "US", name: "United States", weight: 0.18, names: ["Brandon","Marcus","Tyler","Joshua","Daniel","Nathan","Justin","Ethan","Samuel","Carlos","Derek","Emily","Sarah","Jessica","Ashley","Brittany","Emma","Olivia","Sophia","Hannah"] },
-  { code: "GB", name: "United Kingdom", weight: 0.12, names: ["Oliver","Henry","Jack","Benjamin","Charlie","Theo","Liam","Freddie","Amelia","Emily","Grace","Sophie","Chloe","Lily","Mia","Victoria"] },
-  { code: "DE", name: "Germany", weight: 0.07, names: ["Tobias","Jonas","Karl","Franz","Lukas","Matthias","Anna","Julia","Lena","Sophie","Emma","Katharina"] },
-  { code: "FR", name: "France", weight: 0.06, names: ["Antoine","Laurent","Nicolas","Julien","Pierre","Camille","Clara","Léa","Amélie","Chloé","Manon"] },
-  { code: "SG", name: "Singapore", weight: 0.04, names: ["Wei","Ming","Arjun","Kai","Hao","Li Na","Mei","Jia","Ananya","Siti","Hema"] },
-  { code: "IN", name: "India", weight: 0.07, names: ["Amit","Ravi","Sahil","Arjun","Karan","Vikram","Priya","Aisha","Neha","Divya","Riya","Anjali"] },
-  { code: "ZA", name: "South Africa", weight: 0.04, names: ["Thabo","Sipho","Lerato","Jabu","Naledi","Zinhle","Thandi","Ayanda","Zanele"] },
-  { code: "CA", name: "Canada", weight: 0.03, names: ["Liam","Noah","Ethan","Lucas","Ava","Charlotte","Ella","Harper","Emily"] },
-  { code: "AU", name: "Australia", weight: 0.03, names: ["Jack","Oliver","Connor","Henry","Charlotte","Matilda","Ruby","Isla","Evie"] },
-  { code: "OTHER", name: "Other", weight: 0.08, names: ["Alex","Sam","Lee","Max","Robin","Jordan","Taylor","Sarah","Mia","Zoe","Ada","Layla","Hope","Naomi"] },
+  { code: "US", name: "United States", weight: 0.15, names: ["Brandon","Marcus","Tyler","Joshua","Daniel","Nathan","Justin","Ethan","Samuel","Carlos","Derek","Emily","Sarah","Jessica","Ashley","Brittany","Emma","Olivia","Sophia","Hannah","Michael","David","James"] },
+  { code: "GB", name: "United Kingdom", weight: 0.12, names: ["Oliver","Henry","Jack","Benjamin","Charlie","Theo","Liam","Freddie","George","Amelia","Emily","Grace","Sophie","Chloe","Lily","Mia","Victoria","Poppy","Isabella"] },
+  { code: "DE", name: "Germany", weight: 0.08, names: ["Tobias","Jonas","Karl","Franz","Lukas","Matthias","Felix","Leon","Anna","Julia","Lena","Sophie","Emma","Katharina","Marie","Hannah"] },
+  { code: "FR", name: "France", weight: 0.07, names: ["Antoine","Laurent","Nicolas","Julien","Pierre","Gabriel","Louis","Thomas","Camille","Clara","Léa","Amélie","Chloé","Manon","Emma","Louise"] },
+  { code: "CA", name: "Canada", weight: 0.06, names: ["Liam","Noah","Ethan","Lucas","William","Jack","Owen","Ava","Charlotte","Ella","Harper","Emily","Sophia","Olivia","Emma"] },
+  { code: "AU", name: "Australia", weight: 0.05, names: ["Jack","Oliver","Connor","Henry","William","Thomas","Charlotte","Matilda","Ruby","Isla","Evie","Amelia","Mia","Grace"] },
+  { code: "SG", name: "Singapore", weight: 0.05, names: ["Wei","Ming","Arjun","Kai","Hao","Ryan","Ethan","Li Na","Mei","Jia","Ananya","Siti","Hema","Cheryl","Rachel"] },
+  { code: "IN", name: "India", weight: 0.08, names: ["Amit","Ravi","Sahil","Arjun","Karan","Vikram","Rohan","Aditya","Priya","Aisha","Neha","Divya","Riya","Anjali","Shreya","Pooja"] },
+  { code: "NO", name: "Norway", weight: 0.05, names: ["Soren","Erik","Bjorn","Rolf","Per","Torsten","Olav","Leif","Magnus","Ingrid","Astrid","Liv","Kari","Sigrid","Helene"] },
+  { code: "SE", name: "Sweden", weight: 0.04, names: ["Lars","Anders","Gustav","Erik","Oscar","Johan","Emma","Alice","Maja","Elsa","Wilma","Ebba"] },
+  { code: "NL", name: "Netherlands", weight: 0.04, names: ["Daan","Lucas","Sem","Milan","Levi","Emma","Julia","Sophie","Anna","Lotte","Lisa"] },
+  { code: "ZA", name: "South Africa", weight: 0.04, names: ["Thabo","Sipho","Lerato","Jabu","Liam","Connor","Naledi","Zinhle","Thandi","Ayanda","Zanele","Emma"] },
+  { code: "JP", name: "Japan", weight: 0.03, names: ["Hiroshi","Takeshi","Kenji","Yuki","Haruto","Sakura","Yui","Hina","Aoi","Rin","Mio"] },
+  { code: "KR", name: "South Korea", weight: 0.03, names: ["Min-jun","Ji-hoon","Seo-jun","Jun-seo","Do-yun","Ji-woo","Seo-yeon","Ha-eun","Min-seo","Soo-ah"] },
+  { code: "BR", name: "Brazil", weight: 0.03, names: ["Lucas","Gabriel","Pedro","Matheus","Rafael","Julia","Maria","Ana","Beatriz","Isabella","Laura"] },
+  { code: "MX", name: "Mexico", weight: 0.02, names: ["Miguel","Diego","Carlos","Jose","Luis","Sofia","Maria","Camila","Valentina","Isabella","Ana"] },
+  { code: "IT", name: "Italy", weight: 0.03, names: ["Leonardo","Francesco","Alessandro","Lorenzo","Matteo","Sofia","Giulia","Aurora","Alice","Ginevra"] },
+  { code: "ES", name: "Spain", weight: 0.03, names: ["Hugo","Martin","Lucas","Mateo","Daniel","Lucia","Sofia","Maria","Martina","Paula","Emma"] },
+  { code: "AE", name: "UAE", weight: 0.02, names: ["Ahmed","Mohammed","Omar","Ali","Khalid","Fatima","Aisha","Mariam","Noura","Sara","Layla"] },
 ];
 
-const DEFAULT_PLANS = ["Pioneer", "Vanguard", "Horizon", "Summit", "Retirement", "VIP"];
-const AMOUNTS = [100,250,500,750,1000,1250,2500,5000,7500,10000,15000,20000,25000,35000,50000,75000,100000];
-const TIME_AGO_OPTIONS = ["just now","moments ago","1 min ago","2 mins ago","5 mins ago"];
+const DEFAULT_PLANS = ["Pioneer", "Vanguard", "Horizon", "Summit"];
+const AMOUNTS = [100,250,500,750,1000,1500,2000,2500,3500,5000,7500,10000,12500,15000,20000,25000,30000,40000,50000,75000,100000];
+const TIME_AGO_OPTIONS = ["just now","moments ago","1 min ago","2 mins ago","3 mins ago","5 mins ago"];
 
 let GLOBAL_ID = Date.now() % 1000000;
 
@@ -190,23 +197,24 @@ const RecentActivitySingle: React.FC<Props> = ({
         .card {
           display: flex;
           align-items: center;
-          gap: 0.7rem;
-          background: linear-gradient(180deg, rgba(16,16,20,0.96), rgba(10,10,14,0.95));
+          gap: 0.85rem;
+          background: linear-gradient(135deg, rgba(11,47,107,0.97), rgba(20,37,75,0.95));
           color: #fff;
-          padding: 0.9rem 1.1rem;
-          border-radius: 28px;
-          font-size: 0.95rem;
-          box-shadow: 0 20px 40px rgba(2,6,23,0.55), inset 0 1px 0 rgba(255,255,255,0.02);
-          backdrop-filter: blur(8px);
+          padding: 1rem 1.3rem;
+          border-radius: 24px;
+          font-size: 0.96rem;
+          box-shadow: 0 12px 32px rgba(11,47,107,0.35), 0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(255,255,255,0.08);
           transform-origin: left bottom;
           display: flex;
           align-items: center;
-          min-width: 220px;
-          max-width: 420px;
+          min-width: 240px;
+          max-width: 440px;
           pointer-events: none;
-          transition: transform 420ms cubic-bezier(.22,.9,.35,1), opacity 420ms ease;
+          transition: transform 380ms cubic-bezier(.22,.9,.35,1), opacity 380ms ease, box-shadow 380ms ease;
           opacity: 0;
-          transform: translateY(8px) scale(0.995);
+          transform: translateY(10px) scale(0.98);
         }
 
         .card.enter {
@@ -215,35 +223,49 @@ const RecentActivitySingle: React.FC<Props> = ({
         }
         .card.exit {
           opacity: 0;
-          transform: translateY(8px) scale(0.995);
+          transform: translateY(10px) scale(0.98);
         }
 
         .flag {
-          width: 26px;
-          height: 18px;
+          width: 28px;
+          height: 20px;
           object-fit: cover;
-          border-radius: 3px;
+          border-radius: 5px;
           flex-shrink: 0;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.45);
+          box-shadow: 0 3px 8px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.25);
+          border: 1px solid rgba(255,255,255,0.12);
         }
 
-        .text { overflow: hidden; min-width: 0; }
+        .text { overflow: hidden; min-width: 0; flex: 1; }
         .main {
           font-weight: 700;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          max-width: calc(100% - 40px);
+          max-width: 100%;
+          letter-spacing: -0.01em;
+          text-shadow: 0 1px 2px rgba(0,0,0,0.25);
         }
         .meta {
-          font-size: 0.75rem;
-          opacity: 0.8;
-          margin-top: 4px;
+          font-size: 0.78rem;
+          opacity: 0.82;
+          margin-top: 3px;
+          color: rgba(255,255,255,0.85);
+          font-weight: 500;
         }
 
-        .card.plan { background: linear-gradient(90deg, rgba(5,28,48,0.96), rgba(7,65,85,0.96)); }
-        .card.deposit { /* default dark */ }
-        .card.withdrawal { background: linear-gradient(90deg, rgba(36,16,16,0.96), rgba(48,18,18,0.95)); }
+        .card.plan { 
+          background: linear-gradient(135deg, rgba(37,99,235,0.96), rgba(29,78,216,0.94));
+          box-shadow: 0 12px 32px rgba(37,99,235,0.4), 0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        .card.deposit { 
+          background: linear-gradient(135deg, rgba(5,150,105,0.96), rgba(4,120,87,0.94));
+          box-shadow: 0 12px 32px rgba(5,150,105,0.4), 0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+        .card.withdrawal { 
+          background: linear-gradient(135deg, rgba(220,38,38,0.96), rgba(185,28,28,0.94));
+          box-shadow: 0 12px 32px rgba(220,38,38,0.35), 0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
 
         @media (max-width: 640px) {
           .single-wrapper { left: 0.6rem; bottom: 0.9rem; max-width: 96vw; }

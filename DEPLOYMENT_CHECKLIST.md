@@ -47,12 +47,16 @@ python -c "from django.core.management.utils import get_random_secret_key; print
 
 **Optional Email Variables (for notifications):**
 ```bash
-EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_HOST_USER=your-email@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password
+# Recommended (Resend)
+RESEND_API_KEY=your-resend-api-key
+EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend
+DEFAULT_FROM_EMAIL=WolvCapital <no-reply@yourdomain.com>
+
+# Fallback (SMTP)
+SMTP_HOST=smtp.privateemail.com
+SMTP_PORT=587
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-password
 ```
 
 ### 3. Create PostgreSQL Database

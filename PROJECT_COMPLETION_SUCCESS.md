@@ -133,16 +133,19 @@ Users can customize notifications at `/users/email-preferences/`:
 
 ## 🚀 Production Readiness
 
-### SMTP Configuration
+### Email Provider Configuration
 ```python
 # settings.py - Production ready
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')      # Environment variable
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')  # App password
-DEFAULT_FROM_EMAIL = 'WolvCapital <noreply@wolvcapital.com>'
+# Recommended (Resend)
+EMAIL_BACKEND = 'core.email_backends.resend.ResendEmailBackend'
+RESEND_API_KEY = env('RESEND_API_KEY')
+DEFAULT_FROM_EMAIL = 'WolvCapital <no-reply@wolvcapital.com>'
+
+# SMTP fallback
+SMTP_HOST = env('SMTP_HOST')
+SMTP_PORT = env('SMTP_PORT')
+EMAIL_USER = env('EMAIL_USER')
+EMAIL_PASS = env('EMAIL_PASS')
 ```
 
 ### Management Commands

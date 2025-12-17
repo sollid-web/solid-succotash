@@ -413,27 +413,36 @@ ACCOUNT_SIGNUP_REDIRECT_URL = f"{FRONTEND_URL}/accounts/login?signup=success"
 # ------------------------------------------------------------------
 # Email Configuration
 # ------------------------------------------------------------------
+# Resend API key (optional). If present in production, we can send via Resend.
+RESEND_API_KEY = os.getenv("RESEND_API_KEY")
+
 # Email backend selection based on environment
 email_backend_override = os.getenv("EMAIL_BACKEND")
 if email_backend_override:
     EMAIL_BACKEND = email_backend_override
-elif DEBUG:
-    # Development: Print emails to console
-    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 else:
-    # Production: Use SMTP
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    if DEBUG:
+        # Development: Print emails to console
+        EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    elif RESEND_API_KEY:
+        # Production: Prefer Resend if configured
+        EMAIL_BACKEND = "core.email_backends.resend.ResendEmailBackend"
+    else:
+        # Production fallback: Use SMTP
+        EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 # SMTP Configuration (for production)
-EMAIL_HOST = os.getenv('SMTP_HOST', 'smtp.privateemail.com')
-EMAIL_PORT = int(os.getenv('SMTP_PORT', 587))
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
-DEFAULT_FROM_EMAIL = os.getenv('EMAIL_USER')
-
+# Backwards-compatible: accept either SMTP_* / EMAIL_USER+EMAIL_PASS, or legacy EMAIL_HOST/EMAIL_HOST_USER.
+EMAIL_HOST = os.getenv('SMTP_HOST') or os.getenv('EMAIL_HOST', 'smtp.privateemail.com')
+EMAIL_PORT = int(os.getenv('SMTP_PORT') or os.getenv('EMAIL_PORT', 587))
+EMAIL_USE_TLS = (os.getenv('EMAIL_USE_TLS', 'True').lower() == 'true')
+EMAIL_HOST_USER = os.getenv('EMAIL_USER') or os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS') or os.getenv('EMAIL_HOST_PASSWORD')
 # Default from email
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "WolvCapital <support@wolvcapital.com>")
+DEFAULT_FROM_EMAIL = os.getenv(
+    "DEFAULT_FROM_EMAIL",
+    "WolvCapital <no-reply@wolvcapital.com>",
+)
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 # Email timeout (30 seconds)

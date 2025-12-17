@@ -89,16 +89,18 @@ Automatic email triggers via Django signals:
 
 ## Production Configuration
 
-### SMTP Settings (settings.py)
+### Email Provider Settings (settings.py)
 ```python
-# Production email backend
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')  # Set in environment
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')  # Set in environment
-DEFAULT_FROM_EMAIL = 'WolvCapital <noreply@wolvcapital.com>'
+# Production email backend (recommended)
+# If RESEND_API_KEY is set in the environment, settings.py will prefer Resend:
+EMAIL_BACKEND = 'core.email_backends.resend.ResendEmailBackend'
+DEFAULT_FROM_EMAIL = 'WolvCapital <no-reply@wolvcapital.com>'
+
+# SMTP fallback (only if you choose SMTP)
+SMTP_HOST = 'smtp.privateemail.com'
+SMTP_PORT = 587
+EMAIL_USER = 'your-email@gmail.com'
+EMAIL_PASS = 'your-app-password'
 
 # Development email backend  
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -106,8 +108,14 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 ### Environment Variables Required
 ```bash
-EMAIL_HOST_USER=your-gmail@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password
+RESEND_API_KEY=your-resend-api-key
+DEFAULT_FROM_EMAIL=WolvCapital <no-reply@wolvcapital.com>
+
+# SMTP fallback
+SMTP_HOST=smtp.privateemail.com
+SMTP_PORT=587
+EMAIL_USER=your-gmail@gmail.com
+EMAIL_PASS=your-app-password
 ```
 
 ## Management Commands
@@ -209,12 +217,18 @@ The system automatically respects user preferences:
 
 ## Next Steps for Production
 
-### 1. SMTP Configuration
+### 1. Email Provider Configuration
 Set up production email credentials:
 ```bash
-# In Render.com or production environment
-EMAIL_HOST_USER=noreply@wolvcapital.com
-EMAIL_HOST_PASSWORD=secure-app-password
+# Recommended (Resend)
+RESEND_API_KEY=your-resend-api-key
+DEFAULT_FROM_EMAIL=WolvCapital <no-reply@wolvcapital.com>
+
+# SMTP fallback
+SMTP_HOST=smtp.privateemail.com
+SMTP_PORT=587
+EMAIL_USER=no-reply@wolvcapital.com
+EMAIL_PASS=secure-app-password
 ```
 
 ### 2. Email Domain Setup

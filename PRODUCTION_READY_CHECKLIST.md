@@ -19,12 +19,16 @@ DATABASE_URL=<postgresql-connection-string>
 
 **Email Configuration:**
 ```bash
-EMAIL_HOST=smtp.sendgrid.net
-EMAIL_HOST_USER=apikey
-EMAIL_HOST_PASSWORD=<sendgrid-api-key>
-EMAIL_USE_TLS=true
-EMAIL_PORT=587
-DEFAULT_FROM_EMAIL="WolvCapital <noreply@wolvcapital.com>"
+# Recommended (Resend)
+RESEND_API_KEY=<resend-api-key>
+EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend
+DEFAULT_FROM_EMAIL="WolvCapital <no-reply@wolvcapital.com>"
+
+# SMTP fallback (SendGrid)
+SMTP_HOST=smtp.sendgrid.net
+SMTP_PORT=587
+EMAIL_USER=apikey
+EMAIL_PASS=<sendgrid-api-key>
 ```
 
 **Domain & CORS Configuration:**

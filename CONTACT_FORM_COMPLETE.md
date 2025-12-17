@@ -63,12 +63,9 @@ Your contact form system is **100% complete** and ready for deployment!
    ```
    SECRET_KEY=Vr6jAdqRwdBpkA8mDwvZxfW5PjgBSLlL-hIdVwt1GbmVE2UnobGri5KDKGj0dYB09k4
    DEBUG=0
-   EMAIL_HOST=smtp.gmail.com
-   EMAIL_PORT=587
-   EMAIL_USE_TLS=True
-   EMAIL_HOST_USER=noreply@wolvcapital.com  ← UPDATE
-   EMAIL_HOST_PASSWORD=your-gmail-app-password  ← UPDATE
-   DEFAULT_FROM_EMAIL=WolvCapital <noreply@wolvcapital.com>
+   RESEND_API_KEY=your-resend-api-key  ← SET
+   EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend
+   DEFAULT_FROM_EMAIL=WolvCapital <no-reply@wolvcapital.com>
    ADMIN_EMAIL_RECIPIENTS=admin@wolvcapital.com,support@wolvcapital.com,...  ← UPDATE
    CORS_ALLOWED_ORIGINS=https://your-frontend.vercel.app  ← UPDATE
    CSRF_TRUSTED_ORIGINS=https://wolvcapital.com,https://www.wolvcapital.com
@@ -76,24 +73,34 @@ Your contact form system is **100% complete** and ready for deployment!
 
 5. Click **"Save Changes"** → Render auto-redeploys
 
-### Step 2: Setup Gmail App Password
+### Step 2: Email Provider Setup
+
+**Recommended: Resend**
+
+1. Verify your domain in Resend
+2. Create an API key
+3. Set `RESEND_API_KEY` in Render
+4. Ensure `DEFAULT_FROM_EMAIL` uses a verified sender (e.g. `no-reply@wolvcapital.com`)
+
+**SMTP (only if you choose SMTP fallback):**
 
 **Quick Setup (Gmail):**
 
 1. Enable 2FA: https://myaccount.google.com/security
 2. Generate App Password: https://myaccount.google.com/apppasswords
 3. Copy 16-character password (remove spaces)
-4. Paste as `EMAIL_HOST_PASSWORD` in Render
+4. Paste as `EMAIL_PASS` in Render (with `EMAIL_USER`)
 
-**OR Use SendGrid (Recommended):**
+**OR Use SendGrid (SMTP fallback):**
 
 1. Sign up: https://sendgrid.com/ (free 100 emails/day)
 2. Get API key
 3. Update Render:
    ```
-   EMAIL_HOST=smtp.sendgrid.net
-   EMAIL_HOST_USER=apikey
-   EMAIL_HOST_PASSWORD=your-sendgrid-api-key
+   SMTP_HOST=smtp.sendgrid.net
+   SMTP_PORT=587
+   EMAIL_USER=apikey
+   EMAIL_PASS=your-sendgrid-api-key
    ```
 
 ### Step 3: Test Deployment
@@ -228,7 +235,7 @@ http://localhost:8000/admin/core/supportrequest/
 1. **Never commit `.env` to Git** - It contains SECRET_KEY (already in .gitignore)
 2. **Keep SECRET_KEY secret** - It's in RENDER_ENV_VARS.txt (local file only)
 3. **Use App Passwords** - Never use your real Gmail password
-4. **Update placeholder emails** - Replace noreply@wolvcapital.com with real emails
+4. **Update sender email** - Ensure no-reply@wolvcapital.com is verified in Resend
 5. **Test in production** - Submit real test after deployment
 
 ---

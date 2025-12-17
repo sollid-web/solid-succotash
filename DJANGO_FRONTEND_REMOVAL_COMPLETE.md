@@ -179,13 +179,16 @@ CORS_ALLOWED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
 CSRF_TRUSTED_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
 
 # Optional
-EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_HOST_USER=your-email@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password
-DEFAULT_FROM_EMAIL=noreply@yourdomain.com
+# Recommended (Resend)
+RESEND_API_KEY=your-resend-api-key
+EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend
+DEFAULT_FROM_EMAIL=WolvCapital <no-reply@yourdomain.com>
+
+# Fallback (SMTP)
+SMTP_HOST=smtp.privateemail.com
+SMTP_PORT=587
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-password
 ```
 
 ### Next.js Frontend

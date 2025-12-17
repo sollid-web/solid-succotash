@@ -40,8 +40,12 @@
 
 6. **UPDATE THESE VALUES** before saving:
    ```
-   EMAIL_HOST_USER=your-actual-email@gmail.com
-   EMAIL_HOST_PASSWORD=your-gmail-app-password
+   # Recommended (Resend)
+   RESEND_API_KEY=your-resend-api-key
+
+   # SMTP fallback (only if using SMTP)
+   EMAIL_USER=your-actual-email@gmail.com
+   EMAIL_PASS=your-gmail-app-password
    ADMIN_EMAIL_RECIPIENTS=email1@company.com,email2@company.com,email3@company.com,email4@company.com,email5@company.com
    CORS_ALLOWED_ORIGINS=https://your-actual-frontend-url.vercel.app
    ```
@@ -50,7 +54,15 @@
 
 8. Render will **automatically redeploy** (~2-3 minutes)
 
-### Step 2: Setup Gmail App Password (Required)
+### Step 2: Email Provider Setup
+
+**Recommended: Resend**
+
+1. Verify your sending domain in Resend
+2. Create an API key
+3. Set `RESEND_API_KEY` in Render
+
+**SMTP fallback (only if using SMTP):**
 
 **Option A: Gmail SMTP (Simple for testing)**
 
@@ -63,7 +75,7 @@
    - Select **"Mail"** and your device
    - Click **"Generate"**
    - Copy the **16-character password** (remove spaces)
-   - Use this as `EMAIL_HOST_PASSWORD` in Render
+   - Use this as `EMAIL_PASS` in Render
 
 **Option B: SendGrid (Recommended for production)**
 
@@ -71,12 +83,12 @@
 
 2. Get API key from dashboard
 
-3. Update Render environment variables:
+3. Update Render environment variables (SMTP):
    ```
-   EMAIL_HOST=smtp.sendgrid.net
-   EMAIL_PORT=587
-   EMAIL_HOST_USER=apikey
-   EMAIL_HOST_PASSWORD=your-sendgrid-api-key
+   SMTP_HOST=smtp.sendgrid.net
+   SMTP_PORT=587
+   EMAIL_USER=apikey
+   EMAIL_PASS=your-sendgrid-api-key
    ```
 
 ### Step 3: Verify Deployment
@@ -107,15 +119,13 @@
 
 ### Required (Must Update)
 - `SECRET_KEY` ✅ Generated automatically
-- `EMAIL_HOST_USER` ❌ Update with your email
-- `EMAIL_HOST_PASSWORD` ❌ Update with App Password
+- `RESEND_API_KEY` ✅ Recommended (Resend)
+- `EMAIL_USER` / `EMAIL_PASS` ❌ Only if using SMTP fallback
 - `ADMIN_EMAIL_RECIPIENTS` ❌ Update with your 5 admin emails
 
 ### Auto-Generated (Can Keep As-Is)
 - `DEBUG=0` ✅
-- `EMAIL_HOST=smtp.gmail.com` ✅
-- `EMAIL_PORT=587` ✅
-- `EMAIL_USE_TLS=True` ✅
+- `DEFAULT_FROM_EMAIL` ✅
 
 ### Optional (Update if Using Custom Domain)
 - `CORS_ALLOWED_ORIGINS` - Add your frontend URL

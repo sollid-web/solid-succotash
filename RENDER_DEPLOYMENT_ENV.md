@@ -2,9 +2,21 @@
 
 ## Required Environment Variables (Set in Render Dashboard)
 
-### 🔐 Email Configuration (SendGrid)
+### 🔐 Email Configuration
+
+**Recommended (Resend):**
 ```
-EMAIL_HOST_PASSWORD=SG.your_sendgrid_api_key_here
+RESEND_API_KEY=your-resend-api-key
+EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend
+DEFAULT_FROM_EMAIL=WolvCapital <no-reply@wolvcapital.com>
+```
+
+**SMTP fallback (SendGrid):**
+```
+SMTP_HOST=smtp.sendgrid.net
+SMTP_PORT=587
+EMAIL_USER=apikey
+EMAIL_PASS=SG.your_sendgrid_api_key_here
 ```
 
 ### 👤 Initial Admin Setup (Optional - for first deployment only)
@@ -34,7 +46,7 @@ USDC_WALLET_ADDRESS=your_usdc_address
 ### During Deployment:
 - [ ] Connect GitHub repository to Render
 - [ ] Deploy via Blueprint (render.yaml)
-- [ ] Set EMAIL_HOST_PASSWORD in dashboard
+- [ ] Set RESEND_API_KEY (recommended) or SMTP fallback vars
 - [ ] Optionally set admin user credentials
 - [ ] Wait for build to complete (~5-10 minutes)
 

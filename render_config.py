@@ -32,13 +32,17 @@ def print_env_vars():
     print("")
 
     # Email Configuration
-    print("# Email Configuration (REQUIRED - Update with your SMTP details)")
-    print("EMAIL_HOST=smtp.gmail.com")
-    print("EMAIL_PORT=587")
-    print("EMAIL_USE_TLS=True")
-    print("EMAIL_HOST_USER=noreply@wolvcapital.com  # ← UPDATE THIS")
-    print("EMAIL_HOST_PASSWORD=your-gmail-app-password-here  # ← UPDATE THIS")
-    print("DEFAULT_FROM_EMAIL=WolvCapital <noreply@wolvcapital.com>")
+    print("# Email Configuration (RECOMMENDED - Resend)")
+    print("RESEND_API_KEY=your-resend-api-key  # ← SET THIS")
+    print("EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend")
+    print("DEFAULT_FROM_EMAIL=WolvCapital <no-reply@wolvcapital.com>")
+    print("")
+
+    print("# Email Configuration (Fallback - SMTP)")
+    print("SMTP_HOST=smtp.privateemail.com")
+    print("SMTP_PORT=587")
+    print("EMAIL_USER=support@wolvcapital.com  # ← UPDATE THIS")
+    print("EMAIL_PASS=your-smtp-password  # ← UPDATE THIS")
     print("")
 
     # Admin Email Recipients
@@ -62,20 +66,25 @@ def print_env_vars():
     print("-" * 80)
     print("\n✓ SECRET_KEY has been generated")
     print("✓ Copy all variables above to Render Dashboard")
-    print("✓ Update EMAIL_* values with your SMTP credentials")
+    print("✓ Set RESEND_API_KEY (recommended) OR configure SMTP fallback")
     print("✓ Update ADMIN_EMAIL_RECIPIENTS with your admin emails")
     print("✓ Update CORS_ALLOWED_ORIGINS with your frontend URLs")
     print("\n" + "=" * 80)
     print("\nIMPORTANT EMAIL SETUP NOTES:")
     print("-" * 80)
     print("""
-For Gmail SMTP:
+For Resend (recommended):
+1. Verify your sending domain in Resend
+2. Create an API key
+3. Set RESEND_API_KEY in Render
+
+For Gmail SMTP (only if using SMTP fallback):
 1. Enable 2-Factor Authentication on your Google Account
 2. Generate an App Password:
-   - Go to: https://myaccount.google.com/apppasswords
-   - Select 'Mail' and your device
-   - Copy the 16-character password (remove spaces)
-   - Use this as EMAIL_HOST_PASSWORD
+    - Go to: https://myaccount.google.com/apppasswords
+    - Select 'Mail' and your device
+    - Copy the 16-character password (remove spaces)
+    - Use this as EMAIL_PASS
 
 For Other Email Providers:
 - SendGrid: Use SMTP relay with API key
@@ -108,12 +117,17 @@ SECRET_KEY={secret_key}
 
 # Email Configuration (Console backend for local development)
 EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_HOST_USER=your-email@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password
-DEFAULT_FROM_EMAIL=WolvCapital <noreply@wolvcapital.com>
+DEFAULT_FROM_EMAIL=WolvCapital <no-reply@wolvcapital.com>
+
+# Optional: test Resend locally
+# RESEND_API_KEY=your-resend-api-key
+# EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend
+
+# Optional: SMTP fallback
+# SMTP_HOST=smtp.privateemail.com
+# SMTP_PORT=587
+# EMAIL_USER=your-email@gmail.com
+# EMAIL_PASS=your-app-password
 
 # Admin Email Recipients
 ADMIN_EMAIL_RECIPIENTS=admin@localhost,support@localhost

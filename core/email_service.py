@@ -27,7 +27,7 @@ class EmailService:
     DEFAULT_FROM_EMAIL = getattr(
         settings,
         "DEFAULT_FROM_EMAIL",
-        "noreply@wolvcapital.com",
+        "no-reply@wolvcapital.com",
     )
     BRAND_NAME = getattr(settings, "BRAND", {}).get("name", "WolvCapital")
     EMAIL_TYPES = {

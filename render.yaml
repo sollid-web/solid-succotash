@@ -45,18 +45,12 @@ services:
         # Next.js frontend domain for Django redirects
         value: "https://wolvcapital.com"
       - key: DEFAULT_FROM_EMAIL
-        value: "WolvCapital <noreply@wolvcapital.com>"
-      - key: EMAIL_HOST
-        value: "smtp.sendgrid.net"
-      - key: EMAIL_HOST_USER
-        value: "apikey"  # SendGrid requires the literal string 'apikey'
-      - key: EMAIL_HOST_PASSWORD
-        # Store your SendGrid API key (e.g., SG.XXXX). Set in Render dashboard.
+        value: "WolvCapital <no-reply@wolvcapital.com>"
+      - key: RESEND_API_KEY
+        # Store your Resend API key (re_XXXX). Set in Render dashboard.
         sync: false
-      - key: EMAIL_USE_TLS
-        value: "true"
-      - key: EMAIL_PORT
-        value: "587"
+      - key: EMAIL_BACKEND
+        value: "core.email_backends.resend.ResendEmailBackend"
       # Security flags for production deployment
       - key: CREATE_INITIAL_ADMIN
         # Set to "1" only for initial deployment, then remove/set to "0"

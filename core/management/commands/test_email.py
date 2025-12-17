@@ -52,6 +52,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.WARNING('\nEMAIL CONFIGURATION:'))
         self.stdout.write(self.style.WARNING('-'*60))
         self.stdout.write(f'EMAIL_BACKEND: {settings.EMAIL_BACKEND}')
+        self.stdout.write(f'RESEND_API_KEY set: {bool(getattr(settings, "RESEND_API_KEY", None))}')
         self.stdout.write(f'EMAIL_HOST: {getattr(settings, "EMAIL_HOST", "Not set")}')
         self.stdout.write(f'EMAIL_PORT: {getattr(settings, "EMAIL_PORT", "Not set")}')
         self.stdout.write(f'EMAIL_USE_TLS: {getattr(settings, "EMAIL_USE_TLS", "Not set")}')

@@ -7,16 +7,23 @@ Copy these to your Render Dashboard → Environment section:
 --------------------------------------------------------------------------------
 
 # Django Core Settings
-SECRET_KEY=Vr6jAdqRwdBpkA8mDwvZxfW5PjgBSLlL-hIdVwt1GbmVE2UnobGri5KDKGj0dYB09k4
+SECRET_KEY=your-generated-secret-key-here
 DEBUG=0
 
-# Email Configuration (REQUIRED - Update with your SMTP details)
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_HOST_USER=support@wolvcapital.com
-EMAIL_HOST_PASSWORD=your-gmail-app-password-here
-DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>
+# Email Configuration (RECOMMENDED - Resend)
+# Set this in Render as a secret.
+RESEND_API_KEY=your-resend-api-key
+# Optional: you can force the backend explicitly.
+EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend
+DEFAULT_FROM_EMAIL=WolvCapital <no-reply@wolvcapital.com>
+
+# Email Configuration (Fallback - SMTP)
+# Note: settings.py reads SMTP_* and EMAIL_* env vars differ across docs.
+# If you use SMTP, set these names (not EMAIL_HOST/EMAIL_HOST_PASSWORD).
+SMTP_HOST=smtp.privateemail.com
+SMTP_PORT=587
+EMAIL_USER=support@wolvcapital.com
+EMAIL_PASS=your-smtp-password
 
 # Admin Email Recipients (Contact Form notifications)
 ADMIN_EMAIL_RECIPIENTS=support@wolvcapital.com,privacy@wolvcapital.com,legal@wolvcapital.com,admin@wolvcapital.com
@@ -35,13 +42,13 @@ PUBLIC_SITE_URL=https://wolvcapital.com
 ACTION ITEMS:
 ✓ SECRET_KEY generated (KEEP THIS SECRET!)
 □ Copy all variables to Render Dashboard → Environment
-□ Update EMAIL_HOST_USER with your actual email
-□ Update EMAIL_HOST_PASSWORD with Gmail App Password
-□ Update ADMIN_EMAIL_RECIPIENTS with your 5 admin emails
+□ Set RESEND_API_KEY (Resend) OR SMTP_HOST/EMAIL_USER/EMAIL_PASS (SMTP)
+□ Update DEFAULT_FROM_EMAIL to a verified sender (Resend domain)
+□ Update ADMIN_EMAIL_RECIPIENTS with your admin emails
 □ Update CORS_ALLOWED_ORIGINS with your actual frontend URL
 
 ================================================================================
-GMAIL APP PASSWORD SETUP (Required for Email)
+GMAIL APP PASSWORD SETUP (Only if using SMTP)
 ================================================================================
 
 1. Enable 2-Factor Authentication:
@@ -53,16 +60,16 @@ GMAIL APP PASSWORD SETUP (Required for Email)
    - Select "Mail" and your device
    - Click "Generate"
    - Copy the 16-character password (remove spaces)
-   - Use this as EMAIL_HOST_PASSWORD
+   - Use this as EMAIL_PASS (with EMAIL_USER)
 
 3. Alternative: Use SendGrid (Recommended for Production)
    - Sign up: https://sendgrid.com/
    - Get API key
    - Update:
-     EMAIL_HOST=smtp.sendgrid.net
-     EMAIL_PORT=587
-     EMAIL_HOST_USER=apikey
-     EMAIL_HOST_PASSWORD=your-sendgrid-api-key
+   SMTP_HOST=smtp.sendgrid.net
+   SMTP_PORT=587
+   EMAIL_USER=apikey
+   EMAIL_PASS=your-sendgrid-api-key
 
 ================================================================================
 HOW TO APPLY TO RENDER

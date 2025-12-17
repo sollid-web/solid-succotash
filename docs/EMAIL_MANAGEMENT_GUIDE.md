@@ -90,7 +90,7 @@ from django.core.mail import send_mail
 send_mail(
     subject='Welcome!',
     message='Thank you for joining WolvCapital.',
-    from_email='noreply@wolvcapital.com',
+    from_email='no-reply@wolvcapital.com',
     recipient_list=['user@example.com'],
     fail_silently=False,
 )
@@ -104,7 +104,7 @@ subject = 'Welcome to WolvCapital'
 text_content = 'Thank you for joining!'
 html_content = '<h1>Welcome!</h1><p>Thank you for joining <strong>WolvCapital</strong>.</p>'
 
-msg = EmailMultiAlternatives(subject, text_content, 'noreply@wolvcapital.com', ['user@example.com'])
+msg = EmailMultiAlternatives(subject, text_content, 'no-reply@wolvcapital.com', ['user@example.com'])
 msg.attach_alternative(html_content, "text/html")
 msg.send()
 ```
@@ -115,30 +115,37 @@ msg.send()
 Your email system is configured in `wolvcapital/settings.py`:
 
 - **Development:** Emails print to console (not sent)
-- **Production:** Uses SMTP (Gmail by default)
+- **Production:** Prefers **Resend** when `RESEND_API_KEY` is set (falls back to SMTP)
 
 ### Production Email Setup (Render Environment Variables)
 
-To actually send emails in production, set these in Render:
+To actually send emails in production, set these in Render.
 
+**Recommended (Resend):**
 ```
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_HOST_USER=your-email@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password
-DEFAULT_FROM_EMAIL=WolvCapital <noreply@wolvcapital.com>
+RESEND_API_KEY=your-resend-api-key
+EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend
+DEFAULT_FROM_EMAIL=WolvCapital <no-reply@wolvcapital.com>
 ```
 
-**For Gmail:**
+**SMTP fallback (only if using SMTP):**
+```
+SMTP_HOST=smtp.privateemail.com
+SMTP_PORT=587
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-password
+DEFAULT_FROM_EMAIL=WolvCapital <no-reply@wolvcapital.com>
+```
+
+**For Gmail (SMTP fallback):**
 1. Enable 2-Factor Authentication
 2. Generate an "App Password": https://myaccount.google.com/apppasswords
-3. Use the app password (not your regular password) for `EMAIL_HOST_PASSWORD`
+3. Use the app password (not your regular password) for `EMAIL_PASS`
 
-**Alternative SMTP Providers:**
-- **SendGrid:** `EMAIL_HOST=smtp.sendgrid.net`, `EMAIL_PORT=587`
-- **Mailgun:** `EMAIL_HOST=smtp.mailgun.org`, `EMAIL_PORT=587`
-- **AWS SES:** `EMAIL_HOST=email-smtp.us-east-1.amazonaws.com`, `EMAIL_PORT=587`
+**Alternative SMTP Providers (fallback):**
+- **SendGrid:** `SMTP_HOST=smtp.sendgrid.net`, `SMTP_PORT=587`, `EMAIL_USER=apikey`
+- **Mailgun:** `SMTP_HOST=smtp.mailgun.org`, `SMTP_PORT=587`
+- **AWS SES:** `SMTP_HOST=email-smtp.us-east-1.amazonaws.com`, `SMTP_PORT=587`
 
 ## 📊 Quick Commands Reference
 
@@ -171,7 +178,7 @@ python manage.py shell -c "from users.models import User; [print(u.email) for u 
 
 Your platform uses:
 - **Support:** support@wolvcapital.com
-- **System/No-reply:** noreply@wolvcapital.com
+- **System/No-reply:** no-reply@wolvcapital.com
 
 These should be configured as:
 - Forwarding addresses (if not actual mailboxes)

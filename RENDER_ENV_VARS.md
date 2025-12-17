@@ -18,19 +18,23 @@ Copy these environment variables when creating your Render web service:
 
 ### Database
 ```
-DATABASE_URL=postgresql://ken_1ikd_user:yfr2VkGl9kvxTDjm16GVubHqGTEMkWNo@dpg-d36ug5mmcj7s73e0g6vg-a.oregon-postgres.render.com/ken_1ikd
+DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DBNAME
 ```
 
 # Security (Render sets automatically)
 RENDER_EXTERNAL_HOSTNAME=your-app.onrender.com (Auto-set by Render)
 
-# Optional: Email Configuration (for production notifications)
-EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USE_TLS=True
-EMAIL_HOST_USER=your-email@gmail.com
-EMAIL_HOST_PASSWORD=your-app-password
+# Optional: Email Configuration (production notifications)
+# Recommended (Resend)
+RESEND_API_KEY=your-resend-api-key
+EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend
+DEFAULT_FROM_EMAIL=WolvCapital <no-reply@wolvcapital.com>
+
+# Fallback (SMTP)
+SMTP_HOST=smtp.privateemail.com
+SMTP_PORT=587
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-password
 ```
 
 ## Environment Variables Set Automatically by Render

@@ -42,21 +42,21 @@
 │                                                                              │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 
-╭─ STEP 2: Setup Gmail App Password ──────────────────────────────────────────╮
+╭─ STEP 2: Email Provider Setup ──────────────────────────────────────────────╮
 │                                                                              │
-│  Option A: Gmail (Simple)                                                   │
-│    1. Enable 2FA: https://myaccount.google.com/security                     │
-│    2. Generate App Password: https://myaccount.google.com/apppasswords      │
-│    3. Copy 16-character password (remove spaces)                            │
-│    4. Paste as EMAIL_HOST_PASSWORD in Render                                │
+│  Recommended: Resend                                                       │
+│    1. Verify domain in Resend                                               │
+│    2. Create API key                                                       │
+│    3. Set RESEND_API_KEY in Render                                          │
 │                                                                              │
-│  Option B: SendGrid (Recommended for Production)                            │
+│  SMTP Fallback: SendGrid                                                    │
 │    1. Sign up: https://sendgrid.com/ (free 100/day)                         │
 │    2. Get API key from dashboard                                            │
 │    3. Update in Render:                                                     │
-│       EMAIL_HOST=smtp.sendgrid.net                                          │
-│       EMAIL_HOST_USER=apikey                                                │
-│       EMAIL_HOST_PASSWORD=your-sendgrid-api-key                             │
+│       SMTP_HOST=smtp.sendgrid.net                                           │
+│       SMTP_PORT=587                                                        │
+│       EMAIL_USER=apikey                                                     │
+│       EMAIL_PASS=your-sendgrid-api-key                                      │
 │                                                                              │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 

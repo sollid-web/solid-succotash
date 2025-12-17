@@ -1,7 +1,7 @@
 ---
 title: "Centralized vs Decentralized Crypto Platforms: Key Differences"
 description: "A neutral comparison of centralized and decentralized crypto platforms for informed decision-making."
-date: "2024-12-20"
+date: "2024-12-19"
 ---
 
 Crypto platforms generally fall into two categories: centralized and decentralized.

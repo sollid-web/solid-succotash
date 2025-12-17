@@ -18,6 +18,8 @@ Avoid platforms that rely on vague promises or unclear terms.
 ## 2. Risk Awareness
 Crypto markets are volatile. Returns are never guaranteed, and losses are possible. Any platform suggesting otherwise should be approached with caution.
 
+For live market data, see [CoinGecko](https://www.coingecko.com/).
+
 ## 3. Security Measures
 Key questions to consider:
 - Is account access protected?

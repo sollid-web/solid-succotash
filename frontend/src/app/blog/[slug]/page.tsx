@@ -108,6 +108,19 @@ export default async function BlogPostPage({ params }: PageProps) {
 
       <section className="py-10 sm:py-14">
         <div className="container mx-auto px-4 lg:px-8 max-w-3xl">
+          {post.coverImage ? (
+            <div className="mt-2 mb-10 aspect-[16/9] overflow-hidden rounded-2xl border border-gray-200 bg-gray-100">
+              <img
+                src={post.coverImage}
+                alt={post.coverImageAlt || post.title}
+                className="h-full w-full object-cover"
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+              />
+            </div>
+          ) : null}
+
           <article
             className="blog-content"
             dangerouslySetInnerHTML={{ __html: post.contentHtml }}

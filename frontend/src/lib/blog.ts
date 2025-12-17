@@ -10,11 +10,85 @@ import remarkRehype from 'remark-rehype'
 import rehypeStringify from 'rehype-stringify'
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize'
 
+type HastNode = {
+  type?: string
+  tagName?: string
+  properties?: Record<string, unknown>
+  children?: HastNode[]
+}
+
+function isExternalHttpUrl(href: string): boolean {
+  if (!href) return false
+
+  const trimmed = href.trim()
+  if (!trimmed) return false
+
+  // Internal/relative anchors should remain normal.
+  // Note: protocol-relative URLs start with '//' and should be treated as absolute.
+  if ((trimmed.startsWith('/') && !trimmed.startsWith('//')) || trimmed.startsWith('#')) return false
+  if (trimmed.startsWith('mailto:') || trimmed.startsWith('tel:')) return false
+
+  let url: URL
+  try {
+    url = new URL(trimmed, 'https://wolvcapital.com')
+  } catch {
+    return false
+  }
+
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return false
+
+  const host = url.hostname.toLowerCase()
+  if (host === 'wolvcapital.com' || host === 'www.wolvcapital.com') return false
+  if (host.endsWith('.wolvcapital.com')) return false
+
+  return true
+}
+
+function normalizeRel(value: unknown): string {
+  if (Array.isArray(value)) return value.filter((v) => typeof v === 'string').join(' ')
+  return typeof value === 'string' ? value : ''
+}
+
+function addExternalLinkAttrs(tree: HastNode): void {
+  const visit = (node: HastNode) => {
+    if (!node) return
+
+    if (node.type === 'element' && node.tagName === 'a') {
+      const props = (node.properties ??= {})
+      const href = typeof props.href === 'string' ? props.href : ''
+
+      if (href && isExternalHttpUrl(href)) {
+        props.target = '_blank'
+
+        const rel = normalizeRel(props.rel)
+        const tokens = new Set(rel.split(/\s+/).filter(Boolean).map((t) => t.toLowerCase()))
+        tokens.add('noopener')
+        tokens.add('noreferrer')
+        props.rel = Array.from(tokens).join(' ')
+      }
+    }
+
+    if (Array.isArray(node.children)) {
+      for (const child of node.children) visit(child)
+    }
+  }
+
+  visit(tree)
+}
+
+function rehypeExternalLinks() {
+  return (tree: HastNode) => {
+    addExternalLinkAttrs(tree)
+  }
+}
+
 export type BlogPostMeta = {
   slug: string
   title: string
   description: string
   date: string // ISO yyyy-mm-dd or full ISO string
+  coverImage?: string
+  coverImageAlt?: string
 }
 
 export type BlogPost = BlogPostMeta & {
@@ -48,6 +122,9 @@ function parseAndValidateFrontmatter(slug: string, raw: string): { meta: BlogPos
   const description = typeof data.description === 'string' ? data.description.trim() : ''
   const dateRaw = typeof data.date === 'string' ? data.date.trim() : ''
 
+  const coverImageRaw = typeof data.coverImage === 'string' ? data.coverImage.trim() : ''
+  const coverImageAltRaw = typeof data.coverImageAlt === 'string' ? data.coverImageAlt.trim() : ''
+
   if (!title) throw new Error(`Post ${slug} is missing frontmatter field: title`)
   if (!description) throw new Error(`Post ${slug} is missing frontmatter field: description`)
   if (!dateRaw) throw new Error(`Post ${slug} is missing frontmatter field: date`)
@@ -57,6 +134,15 @@ function parseAndValidateFrontmatter(slug: string, raw: string): { meta: BlogPos
     throw new Error(`Post ${slug} has invalid frontmatter date: ${dateRaw}`)
   }
 
+  const coverImage = (() => {
+    if (!coverImageRaw) return undefined
+    const lower = coverImageRaw.toLowerCase()
+    if (lower.startsWith('/') || lower.startsWith('https://') || lower.startsWith('http://')) return coverImageRaw
+    return undefined
+  })()
+
+  const coverImageAlt = coverImage ? (coverImageAltRaw || title) : undefined
+
   return {
     meta: {
       slug,
@@ -64,6 +150,8 @@ function parseAndValidateFrontmatter(slug: string, raw: string): { meta: BlogPos
       description,
       // Store as YYYY-MM-DD for stable sorting and display.
       date: date.toISOString().slice(0, 10),
+      ...(coverImage ? { coverImage } : {}),
+      ...(coverImageAlt ? { coverImageAlt } : {}),
     },
     markdown: content,
   }
@@ -95,6 +183,7 @@ async function renderMarkdownToHtml(markdown: string): Promise<string> {
     .use(remarkParse)
     .use(remarkGfm)
     .use(remarkRehype)
+    .use(rehypeExternalLinks)
     .use(rehypeSanitize, schema)
     .use(rehypeStringify)
     .process(markdown)

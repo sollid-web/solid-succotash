@@ -5,7 +5,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { getApiBaseUrl } from '@/lib/config'
 import { useRouter } from 'next/navigation'
-import ProfessionalFooter from '@/components/ProfessionalFooter'
 
 export default function SignupPage() {
   const [email, setEmail] = useState('')
@@ -254,7 +253,6 @@ export default function SignupPage() {
         </div>
       </div>
     </div>
-    <ProfessionalFooter />
     </>
   )
 }

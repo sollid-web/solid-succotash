@@ -2,7 +2,6 @@ import React from 'react';
 import Image from 'next/image';
 import ReferralCTA from '../../components/ReferralCTA';
 import PublicLayout from '../../components/PublicLayout';
-import ProfessionalFooter from '@/components/ProfessionalFooter';
 
 export const metadata = {
   title: 'Referral Program — WolvCapital | Earn Lifetime Commissions',
@@ -155,7 +154,6 @@ export default function ReferralPage() {
         </div>
       </section>
       </main>
-      <ProfessionalFooter />
     </PublicLayout>
   );
 }

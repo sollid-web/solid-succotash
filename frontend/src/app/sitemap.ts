@@ -1,10 +1,13 @@
 import { MetadataRoute } from "next";
+import { getAllPostsMeta } from "@/lib/blog";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") ?? "https://wolvcapital.com";
 
   const currentDate = new Date().toISOString();
+
+  const blogPosts = getAllPostsMeta();
 
   return [
     // Core pages - highest priority
@@ -26,6 +29,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly' as const,
       priority: 0.8
     },
+
+    // Blog
+    {
+      url: `${baseUrl}/blog`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    },
+    ...blogPosts.map((post) => ({
+      url: `${baseUrl}/blog/${post.slug}`,
+      lastModified: new Date(post.date).toISOString(),
+      changeFrequency: 'yearly' as const,
+      priority: 0.4,
+    })),
     { 
       url: `${baseUrl}/about`, 
       lastModified: currentDate,

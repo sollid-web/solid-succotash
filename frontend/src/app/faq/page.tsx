@@ -4,7 +4,6 @@ import React from "react"
 import Image from 'next/image'
 import Link from 'next/link'
 import { Shield, Lock, TrendingUp, Clock, CreditCard, HelpCircle, Users, FileCheck, Globe } from 'lucide-react'
-import ProfessionalFooter from '@/components/ProfessionalFooter'
 
 export default function FAQPage(): JSX.Element {
   const faqs = [
@@ -189,7 +188,6 @@ export default function FAQPage(): JSX.Element {
           </div>
         </div>
       </div>
-      <ProfessionalFooter />
     </div>
   )
 }

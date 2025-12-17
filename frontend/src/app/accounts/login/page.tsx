@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { getApiBaseUrl } from '@/lib/config'
 import Link from 'next/link'
-import ProfessionalFooter from '@/components/ProfessionalFooter'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -238,7 +237,6 @@ export default function LoginPage() {
       </div>
       </div>
     </div>
-    <ProfessionalFooter />
     </>
   )
 }

@@ -197,6 +197,93 @@ body {
     font-weight: 800;
     letter-spacing: -0.02em;
   }
+
+  /* Blog (Markdown) content styles */
+  .blog-content {
+    color: var(--brand-darker);
+    line-height: 1.9;
+    font-size: 1.05rem;
+    max-width: 68ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  @media (min-width: 640px) {
+    .blog-content {
+      font-size: 1.075rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .blog-content {
+      font-size: 1.1rem;
+    }
+  }
+  .blog-content h1,
+  .blog-content h2,
+  .blog-content h3 {
+    color: var(--brand-primary);
+    font-weight: 800;
+    line-height: 1.25;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  .blog-content h1 { font-size: 2rem; }
+  .blog-content h2 { font-size: 1.6rem; }
+  .blog-content h3 { font-size: 1.25rem; }
+  .blog-content p { margin: 0 0 1.15rem; color: #374151; }
+  .blog-content ul,
+  .blog-content ol { margin: 0 0 1.15rem; padding-left: 1.25rem; color: #374151; }
+  .blog-content ul { list-style: disc; }
+  .blog-content ol { list-style: decimal; }
+  .blog-content li { margin: 0.35rem 0; }
+  .blog-content hr {
+    margin: 2rem 0;
+    border: 0;
+    border-top: 1px solid rgba(17, 24, 39, 0.12);
+  }
+  .blog-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 1rem;
+    margin: 1.25rem 0;
+  }
+  .blog-content a {
+    color: var(--brand-secondary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .blog-content a:hover { color: var(--brand-primary); }
+  .blog-content blockquote {
+    margin: 1.5rem 0;
+    padding: 0.75rem 1rem;
+    border-left: 4px solid rgba(37, 99, 235, 0.35);
+    background: rgba(248, 250, 252, 0.9);
+    border-radius: 0.75rem;
+    color: #374151;
+  }
+  .blog-content code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.95em;
+    padding: 0.15rem 0.35rem;
+    border-radius: 0.5rem;
+    background: rgba(17, 24, 39, 0.06);
+  }
+  .blog-content pre {
+    margin: 1.25rem 0;
+    padding: 1rem;
+    border-radius: 1rem;
+    overflow-x: auto;
+    background: rgba(17, 24, 39, 0.06);
+  }
+  .blog-content pre code { background: transparent; padding: 0; }
+
+  /* Blog CTA + disclaimer blocks */
+  .blog-cta .blog-cta__card {
+    border-left: 4px solid rgba(37, 99, 235, 0.35);
+  }
+  .blog-disclaimer .blog-disclaimer__card {
+    background: rgba(248, 250, 252, 0.9);
+    border-left: 4px solid rgba(11, 47, 107, 0.25);
+  }
 }
 
 /* Animation Classes */

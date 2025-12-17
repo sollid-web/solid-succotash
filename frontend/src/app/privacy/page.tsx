@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import ProfessionalFooter from '@/components/ProfessionalFooter'
 
 export const metadata = {
   title: 'Privacy Policy — WolvCapital | Data Protection & Security',
@@ -158,7 +157,6 @@ export default function PrivacyPolicyPage() {
             </div>
           </div>
         </section>
-      <ProfessionalFooter />
     </div>
   )
 }

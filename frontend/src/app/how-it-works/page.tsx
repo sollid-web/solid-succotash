@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import ProfessionalFooter from '@/components/ProfessionalFooter';
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -177,7 +176,6 @@ export default function HowItWorksPage() {
           </div>
         </div>
       </div>
-      <ProfessionalFooter />
     </div>
   );
 }

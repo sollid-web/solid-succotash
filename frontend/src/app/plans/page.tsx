@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import ProfessionalFooter from '@/components/ProfessionalFooter'
 
 export const metadata = {
   title: "Investment Plans — WolvCapital | 1%–2% Daily ROI Options",
@@ -203,7 +202,6 @@ export default function PlansPage() {
         </div>
       </section>
 
-      <ProfessionalFooter />
     </div>
   )
 }

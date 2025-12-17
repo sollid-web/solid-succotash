@@ -1,5 +1,4 @@
 import React from "react";
-import ProfessionalFooter from '@/components/ProfessionalFooter';
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -67,7 +66,6 @@ export default function LeadershipPage(): JSX.Element {
           </div>
         </div>
       </div>
-      <ProfessionalFooter />
     </main>
   );
 }

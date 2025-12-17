@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
-import ProfessionalFooter from '@/components/ProfessionalFooter'
 
 const MapWithOverlay = dynamic(() => import('@/components/MapWithOverlay'), { ssr: false })
 
@@ -133,50 +132,6 @@ export default function ContactPage() {
             </div>
           </div>
         </section>
-
-        <footer className="bg-[#071d42] text-white py-16">
-          <div className="container mx-auto px-4 lg:px-8">
-            <div className="grid md:grid-cols-4 gap-8 mb-12">
-              <div>
-                <h3 className="text-xl font-bold mb-4">Quick Links</h3>
-                <ul className="space-y-2">
-                  <li><Link href="/" className="text-gray-300 hover:text-white transition">Home</Link></li>
-                  <li><Link href="/plans" className="text-gray-300 hover:text-white transition">Investment Plans</Link></li>
-                  <li><Link href="/about" className="text-gray-300 hover:text-white transition">About Us</Link></li>
-                  <li><Link href="/contact" className="text-gray-300 hover:text-white transition">Contact</Link></li>
-                  <li><Link href="/faq" className="text-gray-300 hover:text-white transition">FAQ</Link></li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="text-xl font-bold mb-4">Legal</h3>
-                <ul className="space-y-2">
-                  <li><Link href="/terms-of-service" className="text-gray-300 hover:text-white transition">Terms of Service</Link></li>
-                  <li><Link href="/legal-disclaimer" className="text-gray-300 hover:text-white transition">Legal Disclaimer</Link></li>
-                  <li><Link href="/risk-disclosure" className="text-gray-300 hover:text-white transition">Risk Disclosure</Link></li>
-                  <li><Link href="/privacy" className="text-gray-300 hover:text-white transition">Privacy Policy</Link></li>
-                  <li><Link href="/legal/certificate-of-operation" className="text-gray-300 hover:text-white transition">Certificate of Operation</Link></li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="text-xl font-bold mb-4">Contact Info</h3>
-                <ul className="space-y-2 text-gray-300">
-                  <li>support@wolvcapital.com</li>
-                  <li>Compliance & Investor Support</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="text-xl font-bold mb-4">WolvCapital</h3>
-                <p className="text-gray-300 text-sm leading-relaxed">
-                  WolvCapital is a U.S. regulated digital investment platform providing secure investment returns, robust
-                  compliance controls, and premium virtual card solutions for professional and institutional clients.
-                </p>
-              </div>
-            </div>
-            <div className="border-t border-gray-700 pt-8 text-center text-gray-400">
-              <p>© 2025 WolvCapital. All rights reserved.</p>
-            </div>
-          </div>
-        </footer>
       </div>
   )
 }

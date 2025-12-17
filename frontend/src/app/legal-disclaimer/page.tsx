@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import ProfessionalFooter from '@/components/ProfessionalFooter'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -136,7 +135,6 @@ export default function LegalDisclaimerPage() {
             </div>
           </section>
         </div>
-        <ProfessionalFooter />
       </>
     );
 }

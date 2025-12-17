@@ -1,5 +1,4 @@
 import React from "react";
-import ProfessionalFooter from '@/components/ProfessionalFooter';
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -81,7 +80,6 @@ export default function WithdrawalPolicyPage(): JSX.Element {
           </p>
         </div>
       </div>
-      <ProfessionalFooter />
     </main>
   );
 }

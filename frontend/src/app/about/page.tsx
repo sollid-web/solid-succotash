@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import PublicLayout from '@/components/PublicLayout'
-import ProfessionalFooter from '@/components/ProfessionalFooter'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {

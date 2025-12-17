@@ -5,7 +5,7 @@ import './globals.css'
 import TawkToChat from '@/components/TawkToChat'
 import { TranslationProvider } from '@/i18n/TranslationProvider'
 import NavBar from '@/components/NavBar'
-import RecentActivityTicker from '@/components/RecentActivityTicker'
+import GaPageView from '@/components/GaPageView'
 
 // Removed Google font import for offline/build stability; fallback to Tailwind font-sans.
 
@@ -151,15 +151,25 @@ export default function RootLayout({
                 `,
               }}
             />
+            <GaPageView measurementId={measurementId} />
           </>
         ) : null}
         <TranslationProvider>
           <div className="flex min-h-screen flex-col bg-white">
             <NavBar />
-            <RecentActivityTicker />
             <main className="flex-1">
               {children}
             </main>
+            <footer className="border-t border-gray-200 bg-white">
+              <div className="container mx-auto px-4 lg:px-8 py-8">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <p className="font-semibold text-[#0b2f6b]">WolvCapital</p>
+                  <p className="text-sm text-gray-600">
+                    © {new Date().getFullYear()} WolvCapital. All rights reserved.
+                  </p>
+                </div>
+              </div>
+            </footer>
           </div>
           <TawkToChat />
         </TranslationProvider>

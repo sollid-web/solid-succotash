@@ -35,7 +35,7 @@ def print_env_vars():
     print("# Email Configuration (RECOMMENDED - Resend)")
     print("RESEND_API_KEY=your-resend-api-key  # ← SET THIS")
     print("EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend")
-    print("DEFAULT_FROM_EMAIL=WolvCapital <no-reply@wolvcapital.com>")
+    print("DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>")
     print("")
 
     print("# Email Configuration (Fallback - SMTP)")
@@ -117,7 +117,7 @@ SECRET_KEY={secret_key}
 
 # Email Configuration (Console backend for local development)
 EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
-DEFAULT_FROM_EMAIL=WolvCapital <no-reply@wolvcapital.com>
+DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>
 
 # Optional: test Resend locally
 # RESEND_API_KEY=your-resend-api-key

@@ -15,7 +15,7 @@ DEBUG=0
 RESEND_API_KEY=your-resend-api-key
 # Optional: you can force the backend explicitly.
 EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend
-DEFAULT_FROM_EMAIL=WolvCapital <no-reply@wolvcapital.com>
+DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>
 
 
 # Email Configuration (Fallback - SMTP)

@@ -45,7 +45,7 @@ services:
         # Next.js frontend domain for Django redirects
         value: "https://wolvcapital.com"
       - key: DEFAULT_FROM_EMAIL
-        value: "WolvCapital <no-reply@wolvcapital.com>"
+        value: "WolvCapital <support@wolvcapital.com>"
       - key: RESEND_API_KEY
         # Store your Resend API key (re_XXXX). Set in Render dashboard.
         sync: false

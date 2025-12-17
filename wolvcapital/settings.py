@@ -441,7 +441,7 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS') or os.getenv('EMAIL_HOST_PASSWORD'
 # Default from email
 DEFAULT_FROM_EMAIL = os.getenv(
     "DEFAULT_FROM_EMAIL",
-    "WolvCapital <no-reply@wolvcapital.com>",
+    "WolvCapital <support@wolvcapital.com>",
 )
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 

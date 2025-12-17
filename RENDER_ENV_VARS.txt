@@ -17,6 +17,7 @@ RESEND_API_KEY=your-resend-api-key
 EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend
 DEFAULT_FROM_EMAIL=WolvCapital <no-reply@wolvcapital.com>
 
+
 # Email Configuration (Fallback - SMTP)
 # Note: settings.py reads SMTP_* and EMAIL_* env vars differ across docs.
 # If you use SMTP, set these names (not EMAIL_HOST/EMAIL_HOST_PASSWORD).

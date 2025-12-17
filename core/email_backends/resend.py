@@ -134,20 +134,33 @@ class ResendEmailBackend(BaseEmailBackend):
                 status = getattr(response, "status", 200)
                 body = response.read().decode("utf-8", errors="ignore")
 
+            response_json: dict[str, object] = {}
+            if body:
+                try:
+                    parsed = json.loads(body)
+                    if isinstance(parsed, dict):
+                        response_json = parsed
+                except Exception:
+                    response_json = {}
+
+            resend_id = response_json.get("id")
+
             if 200 <= status < 300:
                 logger.info(
-                    "Resend email sent: subject=%r to=%s status=%s",
+                    "Resend email accepted: subject=%r to=%s status=%s id=%s",
                     message.subject,
                     to_list,
                     status,
+                    resend_id,
                 )
                 return True
 
             logger.error(
-                "Resend email failed: subject=%r to=%s status=%s body=%s",
+                "Resend email failed: subject=%r to=%s status=%s id=%s body=%s",
                 message.subject,
                 to_list,
                 status,
+                resend_id,
                 body[:500],
             )
             return False

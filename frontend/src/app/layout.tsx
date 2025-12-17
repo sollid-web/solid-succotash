@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
+import { Suspense } from 'react'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import TawkToChat from '@/components/TawkToChat'
@@ -151,7 +152,9 @@ export default function RootLayout({
                 `,
               }}
             />
-            <GaPageView measurementId={measurementId} />
+            <Suspense fallback={null}>
+              <GaPageView measurementId={measurementId} />
+            </Suspense>
           </>
         ) : null}
         <TranslationProvider>

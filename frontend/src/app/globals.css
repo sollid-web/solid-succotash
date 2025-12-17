@@ -207,6 +207,12 @@ body {
     margin-left: auto;
     margin-right: auto;
   }
+  .blog-content > :first-child {
+    margin-top: 0;
+  }
+  .blog-content > :last-child {
+    margin-bottom: 0;
+  }
   @media (min-width: 640px) {
     .blog-content {
       font-size: 1.075rem;
@@ -223,6 +229,7 @@ body {
     color: var(--brand-primary);
     font-weight: 800;
     line-height: 1.25;
+    scroll-margin-top: 7rem;
     margin-top: 2rem;
     margin-bottom: 0.75rem;
   }
@@ -277,6 +284,12 @@ body {
   .blog-content pre code { background: transparent; padding: 0; }
 
   /* Blog CTA + disclaimer blocks */
+  .blog-cta,
+  .blog-disclaimer {
+    max-width: 68ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
   .blog-cta .blog-cta__card {
     border-left: 4px solid rgba(37, 99, 235, 0.35);
   }

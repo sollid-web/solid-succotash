@@ -113,14 +113,15 @@ export default async function BlogPostPage({ params }: PageProps) {
             dangerouslySetInnerHTML={{ __html: post.contentHtml }}
           />
 
-          <BlogCta />
+          <div className="mt-12 border-t border-gray-200 pt-8">
+            <BlogCta />
+            <RiskDisclaimer className="mt-4" />
 
-          <RiskDisclaimer className="mt-4" />
-
-          <div className="mt-10 pt-8 border-t border-gray-200">
-            <Link href="/blog" className="font-semibold text-[#0b2f6b] hover:text-[#2563eb] transition">
-              ← Back to all articles
-            </Link>
+            <div className="mt-10">
+              <Link href="/blog" className="font-semibold text-[#0b2f6b] hover:text-[#2563eb] transition">
+                ← Back to all articles
+              </Link>
+            </div>
           </div>
         </div>
       </section>

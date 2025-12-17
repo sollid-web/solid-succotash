@@ -19,7 +19,7 @@ export default function BlogIndexPage() {
   return (
     <div className="min-h-screen bg-white">
       <section className="pt-28 pb-10 bg-gray-50">
-        <div className="container mx-auto px-4 lg:px-8 max-w-5xl">
+        <div className="container mx-auto px-4 lg:px-8 max-w-3xl">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0b2f6b]">
             WolvCapital Blog
           </h1>
@@ -32,7 +32,7 @@ export default function BlogIndexPage() {
       </section>
 
       <section className="py-10 sm:py-14">
-        <div className="container mx-auto px-4 lg:px-8 max-w-5xl">
+        <div className="container mx-auto px-4 lg:px-8 max-w-3xl">
           {posts.length === 0 ? (
             <div className="bg-white border border-gray-200 rounded-2xl p-6">
               <p className="text-gray-700">No posts yet. Please check back soon.</p>

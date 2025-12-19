@@ -365,7 +365,7 @@ WEB_CONCURRENCY=2
 # Recommended (Resend)
 RESEND_API_KEY=your-resend-api-key
 EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend
-DEFAULT_FROM_EMAIL=WolvCapital <no-reply@yourdomain.com>
+DEFAULT_FROM_EMAIL=WolvCapital <support@yourdomain.com>
 
 # Fallback (SMTP)
 SMTP_HOST=smtp.privateemail.com

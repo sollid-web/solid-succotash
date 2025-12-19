@@ -5,6 +5,8 @@ import Link from 'next/link'
 import FlipCard from './FlipCard'
 import { useTranslation } from '@/i18n/TranslationProvider'
 import ReviewsRotator from '@/components/ReviewsRotator'
+import LiveMarketTicker from '@/components/LiveMarketTicker'
+import MarketWidget from '@/components/MarketWidget'
 import TrustSection from '@/components/TrustSection'
 import ProfessionalFooter from '@/components/ProfessionalFooter'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
@@ -80,6 +82,10 @@ export default function HomePage() {
             <p className="text-lg leading-relaxed">
               We provide structured investment plans with daily returns, flexible withdrawal options, and enterprise-grade security. Our platform supports investors from over 120 countries, delivering a user-friendly environment backed by professional risk controls and continuous system monitoring.
             </p>
+          </div>
+
+          <div className="mt-10">
+            <LiveMarketTicker />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
@@ -166,147 +172,36 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Investment Plans Section */}
-      <section className="py-24 bg-white">
+      {/* Market + Plans CTA (homepage no longer lists plan details) */}
+      <section className="py-12 sm:py-16 bg-white" aria-labelledby="market-reference">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-extrabold text-[#0b2f6b] mb-4">Explore Our Investment Plans</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">Select from a range of professionally structured investment plans tailored to diverse risk profiles and financial objectives. All plans are subject to U.S. regulatory standards and compliance review.</p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {/* Pioneer */}
-            <div className="group bg-gradient-to-br from-gray-50 to-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border-2 border-gray-200 hover:border-[#0b2f6b] relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#0b2f6b]/10 to-transparent rounded-bl-full"></div>
-              <div className="relative">
-                <div className="text-sm font-bold text-[#0b2f6b] uppercase tracking-wider mb-4">Pioneer</div>
-                <div className="mb-6">
-                  <div className="text-5xl font-extrabold text-[#0b2f6b] mb-2">1.00%</div>
-                  <div className="text-gray-600 font-medium">Daily Return</div>
+          <div className="mx-auto max-w-6xl">
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:items-start">
+              <div className="justify-self-center lg:justify-self-start">
+                <h2 id="market-reference" className="text-2xl sm:text-3xl font-extrabold text-[#0b2f6b]">
+                  Market reference pricing
+                </h2>
+                <p className="mt-2 text-sm sm:text-base text-gray-600 max-w-md leading-relaxed">
+                  Live BTC and ETH quotes for context only. Prices can be volatile and are not investment advice.
+                </p>
+                <div className="mt-6">
+                  <MarketWidget />
                 </div>
-                <div className="space-y-3 mb-8">
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Duration:</span>
-                    <span className="font-bold text-[#0b2f6b]">90 days</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Min Amount:</span>
-                    <span className="font-bold text-[#0b2f6b]">$100.00</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Max Amount:</span>
-                    <span className="font-bold text-[#0b2f6b]">$999.00</span>
-                  </div>
-                  <div className="flex justify-between py-2">
-                    <span className="text-gray-600">Total Return:</span>
-                    <span className="font-bold text-green-600">90%</span>
-                  </div>
-                </div>
-                <p className="text-gray-600 text-sm mb-6 leading-relaxed">Entry-level plan designed for new investors seeking stable, secure digital asset growth over a three-month period.</p>
-                <Link href="/accounts/signup" className="block w-full bg-gradient-to-r from-[#0b2f6b] to-[#2563eb] text-white text-center py-3 rounded-full font-bold hover:shadow-lg transition-all duration-300 group-hover:scale-105">Get Started</Link>
               </div>
-            </div>
 
-            {/* Vanguard */}
-            <div className="group bg-gradient-to-br from-blue-50 to-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border-2 border-blue-200 hover:border-[#2563eb] relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#2563eb]/10 to-transparent rounded-bl-full"></div>
-              <div className="relative">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="text-sm font-bold text-[#2563eb] uppercase tracking-wider">Vanguard</div>
-                  <span className="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">Popular</span>
+              <div className="rounded-2xl border border-gray-200 bg-gray-50 p-6 sm:p-8">
+                <h3 className="text-xl sm:text-2xl font-bold text-[#0b2f6b]">Explore investment plans</h3>
+                <p className="mt-2 text-sm sm:text-base text-gray-700 leading-relaxed max-w-2xl">
+                  Review plan terms, eligibility, and risk disclosures before making any request. All investment activity is subject to verification and manual review.
+                </p>
+                <div className="mt-6">
+                  <Link
+                    href="/plans"
+                    className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] px-6 py-3 text-sm sm:text-base font-bold text-white hover:shadow-lg transition-all"
+                  >
+                    View Plans
+                  </Link>
                 </div>
-                <div className="mb-6">
-                  <div className="text-5xl font-extrabold text-[#2563eb] mb-2">1.25%</div>
-                  <div className="text-gray-600 font-medium">Daily Return</div>
-                </div>
-                <div className="space-y-3 mb-8">
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Duration:</span>
-                    <span className="font-bold text-[#2563eb]">150 days</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Min Amount:</span>
-                    <span className="font-bold text-[#2563eb]">$1,000.00</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Max Amount:</span>
-                    <span className="font-bold text-[#2563eb]">$4,999.00</span>
-                  </div>
-                  <div className="flex justify-between py-2">
-                    <span className="text-gray-600">Total Return:</span>
-                    <span className="font-bold text-green-600">188%</span>
-                  </div>
-                </div>
-                <p className="text-gray-600 text-sm mb-6 leading-relaxed">A balanced plan for investors seeking portfolio growth and consistent returns over a five-month term, with full compliance and audit transparency.</p>
-                <Link href="/accounts/signup" className="block w-full bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] text-white text-center py-3 rounded-full font-bold hover:shadow-lg transition-all duration-300 group-hover:scale-105">Get Started</Link>
-              </div>
-            </div>
-
-            {/* Horizon */}
-            <div className="group bg-gradient-to-br from-purple-50 to-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 border-2 border-purple-200 hover:border-purple-600 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-600/10 to-transparent rounded-bl-full"></div>
-              <div className="relative">
-                <div className="text-sm font-bold text-purple-700 uppercase tracking-wider mb-4">Horizon</div>
-                <div className="mb-6">
-                  <div className="text-5xl font-extrabold text-purple-700 mb-2">1.50%</div>
-                  <div className="text-gray-600 font-medium">Daily Return</div>
-                </div>
-                <div className="space-y-3 mb-8">
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Duration:</span>
-                    <span className="font-bold text-purple-700">180 days</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Min Amount:</span>
-                    <span className="font-bold text-purple-700">$5,000.00</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Max Amount:</span>
-                    <span className="font-bold text-purple-700">$14,999.00</span>
-                  </div>
-                  <div className="flex justify-between py-2">
-                    <span className="text-gray-600">Total Return:</span>
-                    <span className="font-bold text-green-600">270%</span>
-                  </div>
-                </div>
-                <p className="text-gray-600 text-sm mb-6 leading-relaxed">Advanced plan for experienced investors seeking higher allocations and extended growth over a six-month period, with all activity subject to regulatory review.</p>
-                <Link href="/accounts/signup" className="block w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white text-center py-3 rounded-full font-bold hover:shadow-lg transition-all duration-300 group-hover:scale-105">Get Started</Link>
-              </div>
-            </div>
-
-            {/* Summit */}
-            <div className="group bg-gradient-to-br from-amber-50 via-yellow-50 to-white rounded-3xl p-8 shadow-2xl hover:shadow-3xl transition-all duration-300 border-2 border-amber-300 hover:border-amber-500 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-amber-400/20 to-transparent rounded-bl-full"></div>
-              <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-gradient-to-tr from-amber-400/10 to-transparent rounded-tr-full"></div>
-              <div className="relative">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="text-sm font-bold text-amber-700 uppercase tracking-wider">Summit</div>
-                  <span className="bg-gradient-to-r from-amber-400 to-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full">VIP</span>
-                </div>
-                <div className="mb-6">
-                  <div className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-yellow-600 mb-2">2.00%</div>
-                  <div className="text-gray-600 font-medium">Daily Return</div>
-                </div>
-                <div className="space-y-3 mb-8">
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Duration:</span>
-                    <span className="font-bold text-amber-700">365 days</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Min Amount:</span>
-                    <span className="font-bold text-amber-700">$15,000.00</span>
-                  </div>
-                  <div className="flex justify-between py-2 border-b border-gray-200">
-                    <span className="text-gray-600">Max Amount:</span>
-                    <span className="font-bold text-amber-700">$100,000.00</span>
-                  </div>
-                  <div className="flex justify-between py-2">
-                    <span className="text-gray-600">Total Return:</span>
-                    <span className="font-bold text-green-600">730%</span>
-                  </div>
-                </div>
-                <p className="text-gray-600 text-sm mb-6 leading-relaxed">Exclusive annual plan for high-net-worth and institutional clients seeking premium digital investment opportunities with comprehensive compliance oversight.</p>
-                <Link href="/accounts/signup" className="block w-full bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-white text-center py-3 rounded-full font-bold hover:shadow-lg transition-all duration-300 group-hover:scale-105">Get Started</Link>
               </div>
             </div>
           </div>

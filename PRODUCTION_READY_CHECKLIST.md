@@ -22,7 +22,7 @@ DATABASE_URL=<postgresql-connection-string>
 # Recommended (Resend)
 RESEND_API_KEY=<resend-api-key>
 EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend
-DEFAULT_FROM_EMAIL="WolvCapital <no-reply@wolvcapital.com>"
+DEFAULT_FROM_EMAIL="WolvCapital <support@wolvcapital.com>"
 
 # SMTP fallback (SendGrid)
 SMTP_HOST=smtp.sendgrid.net

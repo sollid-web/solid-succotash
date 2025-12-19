@@ -50,7 +50,7 @@ python -c "from django.core.management.utils import get_random_secret_key; print
 # Recommended (Resend)
 RESEND_API_KEY=your-resend-api-key
 EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend
-DEFAULT_FROM_EMAIL=WolvCapital <no-reply@yourdomain.com>
+DEFAULT_FROM_EMAIL=WolvCapital <support@yourdomain.com>
 
 # Fallback (SMTP)
 SMTP_HOST=smtp.privateemail.com
@@ -68,7 +68,7 @@ In Render Dashboard:
 4. Region: Same as your web service
 5. `DATABASE_URL` is automatically connected
 
-### 4. Deploy!
+### 4. Deploy
 
 Click "Create Web Service" or "Apply" (for blueprint)
 
@@ -116,23 +116,23 @@ After deployment completes:
 
 ## 🐛 Troubleshooting
 
-### If you see "Bad Request (400)":
+### If you see "Bad Request (400)"
 1. Check `DEBUG=0` (not "False")
 2. Verify `SECRET_KEY` is set
 3. Check logs in Render dashboard
 4. Ensure `RENDER_EXTERNAL_HOSTNAME` is detected
 
-### If database connection fails:
+### If database connection fails
 1. Verify PostgreSQL database is running
 2. Check `DATABASE_URL` is set automatically
 3. Run migrations again
 
-### If static files don't load:
+### If static files don't load
 1. Check build logs for collectstatic errors
 2. Verify WhiteNoise in requirements.txt
 3. Check `STATIC_ROOT` in settings.py
 
-### View Logs:
+### View Logs
 In Render dashboard → Your Service → "Logs" tab
 
 ## 📧 Getting Help

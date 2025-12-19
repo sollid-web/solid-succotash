@@ -65,7 +65,7 @@ Your contact form system is **100% complete** and ready for deployment!
    DEBUG=0
    RESEND_API_KEY=your-resend-api-key  ← SET
    EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend
-   DEFAULT_FROM_EMAIL=WolvCapital <no-reply@wolvcapital.com>
+   DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>
    ADMIN_EMAIL_RECIPIENTS=admin@wolvcapital.com,support@wolvcapital.com,...  ← UPDATE
    CORS_ALLOWED_ORIGINS=https://your-frontend.vercel.app  ← UPDATE
    CSRF_TRUSTED_ORIGINS=https://wolvcapital.com,https://www.wolvcapital.com
@@ -80,7 +80,7 @@ Your contact form system is **100% complete** and ready for deployment!
 1. Verify your domain in Resend
 2. Create an API key
 3. Set `RESEND_API_KEY` in Render
-4. Ensure `DEFAULT_FROM_EMAIL` uses a verified sender (e.g. `no-reply@wolvcapital.com`)
+4. Ensure `DEFAULT_FROM_EMAIL` uses a verified sender (e.g. `support@wolvcapital.com`)
 
 **SMTP (only if you choose SMTP fallback):**
 
@@ -235,7 +235,7 @@ http://localhost:8000/admin/core/supportrequest/
 1. **Never commit `.env` to Git** - It contains SECRET_KEY (already in .gitignore)
 2. **Keep SECRET_KEY secret** - It's in RENDER_ENV_VARS.txt (local file only)
 3. **Use App Passwords** - Never use your real Gmail password
-4. **Update sender email** - Ensure no-reply@wolvcapital.com is verified in Resend
+4. **Update sender email** - Ensure support@wolvcapital.com is verified in Resend
 5. **Test in production** - Submit real test after deployment
 
 ---

@@ -18,7 +18,7 @@
   - ✅ Added `X-Mailer: WolvCapital Email System` for identification
   - ✅ Added `X-Priority` and `Importance` headers for urgency classification
   - ✅ Added `List-Unsubscribe` header for compliance and spam prevention
-  - ✅ Used proper FROM address with display name: `WolvCapital <no-reply@wolvcapital.com>`
+  - ✅ Used proper FROM address with display name: `WolvCapital <support@wolvcapital.com>`
 
 ## Technical Changes
 
@@ -59,7 +59,7 @@ send_email(
     to_emails=user.email,
     context={"user": user, "verify_url": verify_url, "username": user.username or user.email},
     subject="Verify your WolvCapital email address",
-  from_email="WolvCapital <no-reply@wolvcapital.com>",
+  from_email="WolvCapital <support@wolvcapital.com>",
 )
 ```
 
@@ -123,7 +123,7 @@ EMAIL_USER=support@wolvcapital.com
 EMAIL_PASS=<your_smtp_password>
 SMTP_HOST=smtp.privateemail.com
 SMTP_PORT=587
-DEFAULT_FROM_EMAIL=WolvCapital <no-reply@wolvcapital.com>
+DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>
 ```
 
 ### Email Content Best Practices

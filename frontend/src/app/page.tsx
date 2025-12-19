@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import HomePage from '@/components/HomePage'
 import PublicLayout from '@/components/PublicLayout'
-
 export const metadata: Metadata = {
   title: 'WolvCapital — Secure Digital Asset Investment Platform | Earn 1%–2% Daily ROI',
   description:

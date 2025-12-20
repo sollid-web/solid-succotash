@@ -117,7 +117,7 @@ export default function FAQPage(): JSX.Element {
           {/* Hero Section */}
           <div className="text-center mb-16">
             <Link href="/" className="inline-block mb-8">
-              <Image src="/wolv-logo.svg" alt="WolvCapital" width={180} height={48} />
+              <Image src="/wolv-logo.svg" alt="WolvCapital" width={180} height={60} />
             </Link>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white drop-shadow-2xl mb-6">
               Frequently Asked Questions

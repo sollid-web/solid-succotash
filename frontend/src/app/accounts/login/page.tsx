@@ -128,7 +128,7 @@ export default function LoginPage() {
               src="/wolv-logo.svg"
               alt="WolvCapital"
               width={240}
-              height={64}
+              height={80}
               priority
               className="h-12 w-auto"
             />

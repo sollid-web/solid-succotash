@@ -31,7 +31,7 @@ export default function NavBar() {
               src="/wolv-logo.svg"
               alt="WolvCapital"
               width={240}
-              height={64}
+              height={80}
               priority
               className="h-8 sm:h-10 w-auto"
             />

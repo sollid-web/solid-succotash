@@ -1,0 +1,36 @@
+<svg width="720" height="240" viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="WolvCapital">
+  <rect width="720" height="240" fill="#0047FF"/>
+
+  <g transform="translate(120,120) scale(1.15)">
+    <polygon points="-60,-70 -25,-110 -15,-45" fill="#FFFFFF"/>
+    <polygon points="60,-70 25,-110 15,-45" fill="#FFFFFF"/>
+
+    <polygon
+      points="
+        -15,-45
+        -40,-10
+        -30,30
+        0,55
+        30,30
+        40,-10
+        15,-45
+        0,-25
+      "
+      fill="#FFFFFF"
+    />
+
+    <polygon points="-6,40 0,48 6,40" fill="#0047FF"/>
+  </g>
+
+  <text
+    x="260"
+    y="145"
+    fill="#FFFFFF"
+    font-size="60"
+    font-family="Inter, Arial, Helvetica, sans-serif"
+    font-weight="700"
+    letter-spacing="1.2"
+  >
+    WolvCapital
+  </text>
+</svg>

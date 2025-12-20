@@ -7,7 +7,7 @@ export default function OrganizationJsonLd() {
     "@type": "Organization",
     "name": "WolvCapital",
     "url": "https://wolvcapital.com",
-    "logo": "https://wolvcapital.com/logo.png",
+    "logo": "https://wolvcapital.com/wolv-logo.svg",
     "sameAs": [
       "https://www.facebook.com/yourpage",
       "https://twitter.com/yourhandle",

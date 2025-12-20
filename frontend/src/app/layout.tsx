@@ -122,7 +122,7 @@ export default function RootLayout({
               "@type": "Organization",
               "name": "WolvCapital",
               "url": "https://www.wolvcapital.com",
-              "logo": "https://www.wolvcapital.com/logo.png",
+              "logo": "https://www.wolvcapital.com/wolv-logo.svg",
               "sameAs": [
                 "https://facebook.com/wolvcapital",
                 "https://instagram.com/wolvcapital",

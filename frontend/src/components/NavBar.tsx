@@ -1,5 +1,6 @@
 "use client"
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
@@ -26,11 +27,14 @@ export default function NavBar() {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link href="/" className="flex items-center space-x-2 sm:space-x-3">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-lg flex items-center justify-center">
-              <span className="text-xl sm:text-2xl font-bold text-white">W</span>
-            </div>
-            <span className="text-lg sm:text-2xl font-bold text-[#0b2f6b] hidden xs:block">WolvCapital</span>
-            <span className="text-lg font-bold text-[#0b2f6b] block xs:hidden">Wolv</span>
+            <Image
+              src="/wolv-logo.svg"
+              alt="WolvCapital"
+              width={240}
+              height={64}
+              priority
+              className="h-8 sm:h-10 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}

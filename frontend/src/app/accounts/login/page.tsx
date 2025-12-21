@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { getApiBaseUrl } from '@/lib/config'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')

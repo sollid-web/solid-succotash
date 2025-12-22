@@ -8,7 +8,17 @@ from types import ModuleType
 from typing import Any
 from urllib.parse import urlparse
 
-# dj-database-url is optional in some environments; try to import and fall back gracefully.
+Env: Any
+try:
+    from environ import Env as _Env
+except Exception:  # pragma: no cover
+    # Optional dependency in some environments.
+    Env = None
+else:
+    Env = _Env
+
+# dj-database-url is optional in some environments; import and fall back
+# gracefully.
 dj_database_url: ModuleType | None
 try:
     dj_database_url = importlib.import_module("dj_database_url")
@@ -20,7 +30,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ------------------------------------------------------------------
 # Core flags / secrets
 # ------------------------------------------------------------------
-from environ import Env
+if Env is None:
+    raise ImportError(
+        "django-environ is required. Install 'environ' / 'django-environ' "
+        "in the runtime."
+    )
 
 env = Env()
 Env.read_env()  # Load .env early
@@ -34,7 +48,9 @@ else:
     if DEBUG:
         SECRET_KEY = "dev-secret-key-for-testing-only-do-not-use-in-prod"
     else:
-        raise ValueError("SECRET_KEY environment variable required when DEBUG=False")
+        raise ValueError(
+            "SECRET_KEY environment variable required when DEBUG=False"
+        )
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000"]
 
 # Initialize ALLOWED_HOSTS before mutation logic below
@@ -52,7 +68,11 @@ DEFAULT_CORS_ORIGINS = [
 
 cors_origins_env = os.getenv("CORS_ALLOWED_ORIGINS", "")
 if cors_origins_env:
-    CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins_env.split(",") if origin.strip()]
+    CORS_ALLOWED_ORIGINS = [
+        origin.strip()
+        for origin in cors_origins_env.split(",")
+        if origin.strip()
+    ]
 else:
     CORS_ALLOWED_ORIGINS = DEFAULT_CORS_ORIGINS.copy()
 
@@ -62,7 +82,11 @@ for origin in DEFAULT_CORS_ORIGINS:
 
 # --- GitHub Codespaces support ---
 CODESPACES_DOMAIN = os.getenv("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN")
-IN_CODESPACES = bool(CODESPACES_DOMAIN or os.getenv("CODESPACES") or os.getenv("GITHUB_CODESPACES"))
+IN_CODESPACES = bool(
+    CODESPACES_DOMAIN
+    or os.getenv("CODESPACES")
+    or os.getenv("GITHUB_CODESPACES")
+)
 
 if IN_CODESPACES:
     ALLOWED_HOSTS += [".app.github.dev"]
@@ -92,7 +116,8 @@ if CUSTOM_DOMAIN:
     raw_domains = [d.strip() for d in CUSTOM_DOMAIN.split(",") if d.strip()]
     for domain in raw_domains:
         candidates = {domain}
-        # If caller supplied bare apex, also trust the www subdomain (and vice versa)
+        # If caller supplied bare apex, also trust the www subdomain
+        # (and vice versa).
         if domain.startswith("www."):
             candidates.add(domain.removeprefix("www."))
         else:
@@ -109,7 +134,9 @@ if CUSTOM_DOMAIN:
 
 env_allowed_hosts = os.getenv("ALLOWED_HOSTS", "")
 if env_allowed_hosts:
-    ALLOWED_HOSTS += [h.strip() for h in env_allowed_hosts.split(",") if h.strip()]
+    ALLOWED_HOSTS += [
+        h.strip() for h in env_allowed_hosts.split(",") if h.strip()
+    ]
 
 extra_hosts = os.getenv("ALLOWED_HOSTS_EXTRA", "")
 if extra_hosts:
@@ -117,21 +144,32 @@ if extra_hosts:
 
 env_csrf_origins = os.getenv("CSRF_TRUSTED_ORIGINS", "")
 if env_csrf_origins:
-    CSRF_TRUSTED_ORIGINS += [o.strip() for o in env_csrf_origins.split(",") if o.strip()]
+    CSRF_TRUSTED_ORIGINS += [
+        o.strip() for o in env_csrf_origins.split(",") if o.strip()
+    ]
 
 extra_origins = os.getenv("CSRF_TRUSTED_ORIGINS_EXTRA", "")
 if extra_origins:
-    CSRF_TRUSTED_ORIGINS += [o.strip() for o in extra_origins.split(",") if o.strip()]
+    CSRF_TRUSTED_ORIGINS += [
+        o.strip() for o in extra_origins.split(",") if o.strip()
+    ]
 
 extra_cors = os.getenv("CORS_ALLOWED_ORIGINS_EXTRA", "")
 if extra_cors:
-    CORS_ALLOWED_ORIGINS += [o.strip() for o in extra_cors.split(",") if o.strip()]
+    CORS_ALLOWED_ORIGINS += [
+        o.strip() for o in extra_cors.split(",") if o.strip()
+    ]
 
 CORS_ALLOWED_ORIGIN_REGEXES: list[str] = []
 
 if IN_CODESPACES:
-    cors_codespaces_origin = f"https://{CODESPACES_DOMAIN}" if CODESPACES_DOMAIN else None
-    if cors_codespaces_origin and cors_codespaces_origin not in CORS_ALLOWED_ORIGINS:
+    cors_codespaces_origin = (
+        f"https://{CODESPACES_DOMAIN}" if CODESPACES_DOMAIN else None
+    )
+    if (
+        cors_codespaces_origin
+        and cors_codespaces_origin not in CORS_ALLOWED_ORIGINS
+    ):
         CORS_ALLOWED_ORIGINS.append(cors_codespaces_origin)
     CORS_ALLOWED_ORIGIN_REGEXES.append(r"^https://.*\\.app\\.github\\.dev$")
 
@@ -198,6 +236,8 @@ INSTALLED_APPS = [
 
 # Alert thresholds for high-priority admin email notifications
 # Environment variable overrides allow runtime tuning without code changes.
+
+
 def _int_env(name: str, default: int) -> int:
     try:
         raw = os.getenv(name)
@@ -210,12 +250,16 @@ def _int_env(name: str, default: int) -> int:
     except Exception:
         return default
 
+
 ALERT_THRESHOLDS = {
     "high_deposit": _int_env("ALERT_THRESHOLD_HIGH_DEPOSIT", 10000),
     "high_withdrawal": _int_env("ALERT_THRESHOLD_HIGH_WITHDRAWAL", 5000),
     "high_card_purchase": _int_env("ALERT_THRESHOLD_HIGH_CARD_PURCHASE", 5000),
     # Optional: investment completion large principal alert
-    "high_investment_completion": _int_env("ALERT_THRESHOLD_HIGH_INVESTMENT_COMPLETION", 10000),
+    "high_investment_completion": _int_env(
+        "ALERT_THRESHOLD_HIGH_INVESTMENT_COMPLETION",
+        10000,
+    ),
     # High daily ROI payout alert (single payout amount)
     "high_roi_payout": _int_env("ALERT_THRESHOLD_HIGH_ROI_PAYOUT", 5000),
 }
@@ -225,9 +269,9 @@ ALERT_THRESHOLDS = {
 # ------------------------------------------------------------------
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "wolvcapital.authentication.RlsJwtAuthentication",
         "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
+        "wolvcapital.authentication.RlsTokenAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
@@ -265,6 +309,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "wolvcapital.middleware.PostgresRlsSessionMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
@@ -280,8 +325,10 @@ if os.getenv("DATABASE_URL"):
             )
         }
     else:
-        # Minimal fallback parser for DATABASE_URL when dj-database-url isn't installed.
-        # Supports common PostgreSQL URLs like: postgres://user:pass@host:port/dbname
+        # Minimal fallback parser for DATABASE_URL when dj-database-url isn't
+        # installed.
+        # Supports common PostgreSQL URLs like:
+        # postgres://user:pass@host:port/dbname
         p = urlparse(os.environ["DATABASE_URL"])
         db_name = p.path.lstrip("/") if p.path else ""
         db_engine = "django.db.backends.postgresql"
@@ -339,18 +386,24 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [str(BASE_DIR / "static")]
 STATIC_ROOT_PATH = BASE_DIR / "staticfiles"
 
-# Ensure STATIC_ROOT exists so whitenoise/tests don't warn about missing directory
+# Ensure STATIC_ROOT exists so whitenoise/tests don't warn about missing
+# directory
 STATIC_ROOT_PATH.mkdir(parents=True, exist_ok=True)
 STATIC_ROOT = str(STATIC_ROOT_PATH)
 
-TESTING = any(arg in os.environ.get("PYTEST_CURRENT_TEST", "") for arg in ["::"]) or any(
-    c in " ".join(sys.argv) for c in ["test", "pytest"]
-)
+TESTING = any(
+    arg in os.environ.get("PYTEST_CURRENT_TEST", "")
+    for arg in ["::"]
+) or any(c in " ".join(sys.argv) for c in ["test", "pytest"])
 
 if not DEBUG and not TESTING:
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-    # Avoid hard 500s if a static path is referenced but missing in the manifest.
-    # WhiteNoise will fall back to the un-hashed file path instead of raising ValueError.
+    STATICFILES_STORAGE = (
+        "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    )
+    # Avoid hard 500s if a static path is referenced but missing in the
+    # manifest.
+    # WhiteNoise will fall back to the un-hashed file path instead of raising
+    # ValueError.
     WHITENOISE_MANIFEST_STRICT = False
 
 MEDIA_URL = "/media/"
@@ -432,12 +485,20 @@ else:
         EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 # SMTP Configuration (for production)
-# Backwards-compatible: accept either SMTP_* / EMAIL_USER+EMAIL_PASS, or legacy EMAIL_HOST/EMAIL_HOST_USER.
-EMAIL_HOST = os.getenv('SMTP_HOST') or os.getenv('EMAIL_HOST', 'smtp.privateemail.com')
-EMAIL_PORT = int(os.getenv('SMTP_PORT') or os.getenv('EMAIL_PORT', 587))
+# Backwards-compatible: accept either SMTP_* / EMAIL_USER+EMAIL_PASS,
+# or legacy EMAIL_HOST/EMAIL_HOST_USER.
+EMAIL_HOST = os.getenv("SMTP_HOST") or os.getenv(
+    "EMAIL_HOST",
+    "smtp.privateemail.com",
+)
+EMAIL_PORT = int(
+    str(os.getenv("SMTP_PORT") or os.getenv("EMAIL_PORT") or "587")
+)
 EMAIL_USE_TLS = (os.getenv('EMAIL_USE_TLS', 'True').lower() == 'true')
 EMAIL_HOST_USER = os.getenv('EMAIL_USER') or os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS') or os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASS") or os.getenv(
+    "EMAIL_HOST_PASSWORD"
+)
 # Default from email
 DEFAULT_FROM_EMAIL = os.getenv(
     "DEFAULT_FROM_EMAIL",
@@ -462,20 +523,23 @@ ADMIN_EMAIL_RECIPIENTS = [
     if email.strip()
 ]
 
-# Site URL for email links
-SITE_URL = os.getenv("SITE_URL", os.getenv("RENDER_EXTERNAL_URL", "http://localhost:8000"))
-
 # Base URLs for backend and public-facing site
 PUBLIC_SITE_URL = os.getenv("PUBLIC_SITE_URL", "https://wolvcapital.com")
 
-SITE_URL = os.getenv("SITE_URL")
-if not SITE_URL:
-    if RENDER_EXTERNAL_URL:
-        SITE_URL = RENDER_EXTERNAL_URL
-    elif IN_CODESPACES and CODESPACES_DOMAIN:
-        SITE_URL = f"https://{os.getenv('GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN', '')}"
-    else:
-        SITE_URL = PUBLIC_SITE_URL
+# Site URL for email links
+# NOTE: Must always be a string (used in email templates/headers).
+_CODESPACES_SITE_URL = (
+    f"https://{os.getenv('GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN', '')}"
+    if IN_CODESPACES and CODESPACES_DOMAIN
+    else ""
+)
+SITE_URL: str = (
+    os.getenv("SITE_URL")
+    or RENDER_EXTERNAL_URL
+    or _CODESPACES_SITE_URL
+    or PUBLIC_SITE_URL
+)
+SITE_URL = str(SITE_URL)
 
 ADMIN_SITE_URL = os.getenv("ADMIN_SITE_URL", SITE_URL)
 
@@ -491,8 +555,12 @@ INBOX_FOLDER = os.getenv("INBOX_FOLDER", "INBOX")
 INBOX_USE_SSL = os.getenv("INBOX_USE_SSL", "True").lower() == "true"
 
 # Sync settings
-INBOX_SYNC_LIMIT = int(os.getenv("INBOX_SYNC_LIMIT", "100"))  # Max emails per sync
-INBOX_AUTO_SYNC = os.getenv("INBOX_AUTO_SYNC", "False").lower() == "true"  # Enable cron sync
+INBOX_SYNC_LIMIT = int(
+    os.getenv("INBOX_SYNC_LIMIT", "100")
+)  # Max emails per sync
+INBOX_AUTO_SYNC = (
+    os.getenv("INBOX_AUTO_SYNC", "False").lower() == "true"
+)  # Enable cron sync
 
 # ------------------------------------------------------------------
 # I18N / TZ
@@ -514,7 +582,8 @@ LOG_FORMAT = os.getenv("LOG_FORMAT", "json")  # 'json' or 'plain'
 class JsonFormatter:
     """Minimal JSON log formatter to avoid external deps.
 
-    Produces a single-line JSON object with level, message, logger, and timestamp.
+    Produces a single-line JSON object with level, message, logger,
+    and timestamp.
     """
 
     def format(self, record):  # pragma: no cover (formatting utility)
@@ -565,17 +634,21 @@ LOGGING = {
     },
     "root": {"handlers": ["console"], "level": LOG_LEVEL},
     "loggers": {
-        "django": {"handlers": ["console"], "level": LOG_LEVEL, "propagate": False},
+        "django": {
+            "handlers": ["console"],
+            "level": LOG_LEVEL,
+            "propagate": False,
+        },
         "wolvcapital": {
             "handlers": ["console"],
             "level": LOG_LEVEL,
             "propagate": False,
         },
-            "core.management.fetch_mail": {
-                "handlers": ["console"],
-                "level": os.getenv("FETCH_MAIL_LOG_LEVEL", "INFO"),
-                "propagate": False,
-            },
+        "core.management.fetch_mail": {
+            "handlers": ["console"],
+            "level": os.getenv("FETCH_MAIL_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
     },
 }
 
@@ -588,7 +661,9 @@ SESSION_COOKIE_SECURE = not DEBUG and not IN_CODESPACES
 CSRF_COOKIE_SECURE = not DEBUG and not IN_CODESPACES
 
 # HSTS Security (HTTP Strict Transport Security)
-SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "31536000"))  # 1 year
+SECURE_HSTS_SECONDS = int(
+    os.getenv("SECURE_HSTS_SECONDS", "31536000")
+)  # 1 year
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
@@ -611,8 +686,12 @@ CSRF_USE_SESSIONS = False
 CSRF_COOKIE_HTTPONLY = False
 
 # Session basics
-SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Use database-backed sessions
+SESSION_ENGINE = (
+    "django.contrib.sessions.backends.db"
+)  # Use database-backed sessions
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 7  # 7 days
-SESSION_SAVE_EVERY_REQUEST = True  # Save session on every request to maintain login
+SESSION_SAVE_EVERY_REQUEST = (
+    True
+)  # Save session on every request to maintain login
 SESSION_COOKIE_NAME = "wolvcapital_sessionid"
 SESSION_COOKIE_DOMAIN = None  # Let Django handle this automatically

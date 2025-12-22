@@ -1,8 +1,13 @@
 import hashlib
 
+from django.apps import apps
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.db import connection
+from django.db.models import Count
+from django.db.models.functions import TruncDate
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action, api_view, permission_classes
@@ -10,7 +15,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from core.models import Agreement, PlatformCertificate, SupportRequest, UserAgreementAcceptance
+from core.models import Agreement, SupportRequest, UserAgreementAcceptance
 from investments.models import InvestmentPlan, UserInvestment
 from investments.services import (
     approve_investment,
@@ -24,7 +29,7 @@ from transactions.services import (
     create_virtual_card_request,
     reject_transaction,
 )
-from users.models import KycApplication, Profile, UserNotification, UserWallet
+from users.models import Profile, UserNotification, UserWallet
 from users.notification_service import mark_all_read as service_mark_all_read
 from users.notification_service import (
     mark_notification_read as service_mark_notification_read,
@@ -154,6 +159,143 @@ class TransactionViewSet(viewsets.ModelViewSet):
         output_serializer = self.get_serializer(txn)
         headers = self.get_success_headers(output_serializer.data)
         return Response(output_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class UserDashboardAnalyticsView(APIView):
+    """Authenticated, user-scoped analytics for the dashboard.
+
+    Descriptive only (counts and statuses). No projections.
+    """
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        days_raw = request.query_params.get("days", "30")
+        try:
+            days = max(7, min(365, int(days_raw)))
+        except (TypeError, ValueError):
+            days = 30
+
+        start_dt = timezone.now() - timezone.timedelta(days=days - 1)
+        start_date = start_dt.date()
+
+        def _scoped_queryset(model):
+            """Prefer DB-enforced scoping (RLS) on Postgres; fall back to user filter."""
+
+            if connection.vendor == "postgresql":
+                return model.objects.all()
+            return model.objects.filter(user=request.user)
+
+        tx_qs = _scoped_queryset(Transaction).filter(created_at__date__gte=start_date)
+        inv_qs = _scoped_queryset(UserInvestment).filter(created_at__date__gte=start_date)
+
+        tx_by_day = {
+            row["day"]: row["count"]
+            for row in tx_qs.annotate(day=TruncDate("created_at"))
+            .values("day")
+            .annotate(count=Count("id"))
+        }
+        inv_by_day = {
+            row["day"]: row["count"]
+            for row in inv_qs.annotate(day=TruncDate("created_at"))
+            .values("day")
+            .annotate(count=Count("id"))
+        }
+
+        activity_over_time = []
+        for offset in range(days):
+            day = start_date + timezone.timedelta(days=offset)
+            activity_over_time.append(
+                {
+                    "date": day.isoformat(),
+                    "count": int(tx_by_day.get(day, 0)) + int(inv_by_day.get(day, 0)),
+                }
+            )
+
+        tx_breakdown_rows = list(
+            tx_qs.values("tx_type").annotate(count=Count("id"))
+        )
+        deposits = 0
+        withdrawals = 0
+        for row in tx_breakdown_rows:
+            if row["tx_type"] == "deposit":
+                deposits = int(row["count"])
+            elif row["tx_type"] == "withdrawal":
+                withdrawals = int(row["count"])
+
+        inv_status_rows = list(
+            _scoped_queryset(UserInvestment).values("status").annotate(count=Count("id"))
+        )
+        active = 0
+        completed = 0
+        pending = 0
+        for row in inv_status_rows:
+            status_val = row["status"]
+            count_val = int(row["count"])
+            if status_val == "approved":
+                active += count_val
+            elif status_val == "completed":
+                completed += count_val
+            elif status_val == "pending":
+                pending += count_val
+
+        tx_recent = list(
+            _scoped_queryset(Transaction)
+            .order_by("-created_at")
+            .values("created_at", "tx_type", "status")[:10]
+        )
+        inv_recent = list(
+            _scoped_queryset(UserInvestment)
+            .select_related("plan")
+            .order_by("-created_at")
+            .values("created_at", "status", "plan__name")[:10]
+        )
+
+        recent_activity = []
+        for row in tx_recent:
+            created_at = row["created_at"]
+            tx_type = row["tx_type"]
+            recent_activity.append(
+                {
+                    "date": created_at.isoformat() if created_at else "",
+                    "action_type": "Deposit" if tx_type == "deposit" else "Withdrawal",
+                    "status": row["status"],
+                }
+            )
+        for row in inv_recent:
+            created_at = row["created_at"]
+            plan_name = row.get("plan__name") or "Investment"
+            recent_activity.append(
+                {
+                    "date": created_at.isoformat() if created_at else "",
+                    "action_type": f"Investment ({plan_name})",
+                    "status": row["status"],
+                }
+            )
+
+        recent_activity.sort(key=lambda x: x["date"], reverse=True)
+        recent_activity = recent_activity[:10]
+
+        return Response(
+            {
+                "window_days": days,
+                "activity_over_time": activity_over_time,
+                "transaction_breakdown": {
+                    "deposits": deposits,
+                    "withdrawals": withdrawals,
+                },
+                "investment_status_overview": {
+                    "active": active,
+                    "completed": completed,
+                    "pending": pending,
+                },
+                "recent_activity": recent_activity,
+                "scoping": {
+                    "db_vendor": connection.vendor,
+                    "rls_expected": connection.vendor == "postgresql",
+                },
+            }
+        )
 
 
 class WalletView(APIView):
@@ -580,7 +722,12 @@ class PublicCertificateView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
-        cert = PlatformCertificate.objects.filter(is_active=True).order_by("-created_at").first()
+        PlatformCertificateModel = apps.get_model("core", "PlatformCertificate")
+        cert = (
+            PlatformCertificateModel.objects.filter(is_active=True)
+            .order_by("-created_at")
+            .first()
+        )
         if not cert:
             return Response({"detail": "No active certificate configured."}, status=status.HTTP_404_NOT_FOUND)
         serializer = PlatformCertificateSerializer(cert)
@@ -594,7 +741,8 @@ class KycApplicationViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, vi
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return KycApplication.objects.filter(user=self.request.user).order_by("-created_at")
+        KycApplicationModel = apps.get_model("users", "KycApplication")
+        return KycApplicationModel.objects.filter(user=self.request.user).order_by("-created_at")
 
     @action(detail=False, methods=["post"], url_path="personal-info")
     def submit_personal_info(self, request):
@@ -623,9 +771,14 @@ class KycApplicationViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, vi
 class AdminKycApplicationViewSet(viewsets.ModelViewSet):
     """Admin endpoints for reviewing and updating KYC applications."""
 
-    queryset = KycApplication.objects.select_related("user", "reviewed_by").order_by("-created_at")
     serializer_class = AdminKycApplicationSerializer
     permission_classes = [permissions.IsAdminUser]
+
+    def get_queryset(self):
+        KycApplicationModel = apps.get_model("users", "KycApplication")
+        return KycApplicationModel.objects.select_related("user", "reviewed_by").order_by(
+            "-created_at"
+        )
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)

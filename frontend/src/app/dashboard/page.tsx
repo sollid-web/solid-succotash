@@ -5,6 +5,15 @@ import Link from 'next/link'
 import FlipCard from '@/components/FlipCard'
 import AccountVerificationStatus from '@/components/AccountVerificationStatus'
 import { getApiBaseUrl } from '@/lib/config'
+import ChartCard from '@/components/dashboard/ChartCard'
+import ActivityOverTimeChart, {
+  type ActivityOverTimePoint,
+} from '@/components/dashboard/ActivityOverTimeChart'
+import TransactionBreakdownDonut from '@/components/dashboard/TransactionBreakdownDonut'
+import InvestmentStatusOverview from '@/components/dashboard/InvestmentStatusOverview'
+import RecentActivityTable, {
+  type RecentActivityRow,
+} from '@/components/dashboard/RecentActivityTable'
 
 interface UserData {
   id: number
@@ -39,8 +48,6 @@ interface Investment {
   created_at: string
   started_at: string
   ends_at: string
-  expected_return: string
-  total_return: string
   daily_roi?: string
   duration_days?: number
   plan?: InvestmentPlanDetails
@@ -59,11 +66,28 @@ interface Transaction {
   updated_at: string
 }
 
+interface DashboardAnalyticsResponse {
+  activity_over_time: ActivityOverTimePoint[]
+  transaction_breakdown: {
+    deposits: number
+    withdrawals: number
+  }
+  investment_status_overview: {
+    active: number
+    completed: number
+    pending: number
+  }
+  recent_activity: RecentActivityRow[]
+}
+
 export default function DashboardPage() {
   const [user, setUser] = useState<UserData | null>(null)
   const [wallet, setWallet] = useState<WalletData | null>(null)
   const [investments, setInvestments] = useState<Investment[]>([])
   const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [analytics, setAnalytics] = useState<DashboardAnalyticsResponse | null>(
+    null
+  )
   const [referral, setReferral] = useState<{ code: string | null, stats: { total_referrals: number, credited: number, pending: number, rewards_total: string } } | null>(null)
   const [referralLoading, setReferralLoading] = useState(false)
   const [generatingCode, setGeneratingCode] = useState(false)
@@ -145,6 +169,25 @@ export default function DashboardPage() {
           if (txResponse.ok) {
             const txData: Transaction[] = await txResponse.json()
             setTransactions(Array.isArray(txData) ? txData.slice(0, 5) : [])
+          }
+
+          // Fetch dashboard analytics (counts only)
+          const analyticsResp = await fetch(
+            `${apiBase}/api/analytics/overview/`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`,
+              },
+              credentials: 'include',
+            }
+          )
+
+          if (analyticsResp.ok) {
+            const analyticsData: DashboardAnalyticsResponse =
+              await analyticsResp.json()
+            setAnalytics(analyticsData)
           }
 
           // Fetch referral summary + rewards to compute credited/pending
@@ -413,6 +456,54 @@ export default function DashboardPage() {
           </div>
         </section>
 
+        {/* Analytics Overview (counts only) */}
+        <section className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg sm:text-2xl font-bold text-gray-800">
+              Analytics Overview
+            </h2>
+            <p className="text-xs sm:text-sm text-gray-500">
+              Activity and status counts
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <ChartCard
+              title="Activity Over Time"
+              subtitle="Daily account actions (recent)"
+            >
+              <ActivityOverTimeChart
+                data={analytics?.activity_over_time ?? []}
+              />
+            </ChartCard>
+
+            <ChartCard
+              title="Transaction Breakdown"
+              subtitle="Deposit vs withdrawal counts"
+            >
+              <TransactionBreakdownDonut
+                deposits={analytics?.transaction_breakdown?.deposits ?? 0}
+                withdrawals={
+                  analytics?.transaction_breakdown?.withdrawals ?? 0
+                }
+              />
+            </ChartCard>
+
+            <ChartCard
+              title="Investment Status Overview"
+              subtitle="Active, completed, and pending counts"
+            >
+              <InvestmentStatusOverview
+                active={analytics?.investment_status_overview?.active ?? 0}
+                completed={
+                  analytics?.investment_status_overview?.completed ?? 0
+                }
+                pending={analytics?.investment_status_overview?.pending ?? 0}
+              />
+            </ChartCard>
+          </div>
+        </section>
+
         {/* Active Investment Plans Section */}
         <section className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 mb-8">
           <div className="flex items-center justify-between mb-6">
@@ -433,17 +524,10 @@ export default function DashboardPage() {
                 const now = new Date()
                 const planName = investment.plan?.name ?? investment.plan_name ?? 'Investment Plan'
                 const totalDays = investment.plan?.duration_days ?? investment.duration_days ?? 0
-                const planDailyRoi = investment.plan?.daily_roi ?? investment.daily_roi ?? '0'
-                const numericDailyRoi = parseFloat(planDailyRoi || '0')
                 const investmentAmount = parseFloat(investment.amount || '0')
                 const daysLeft = endDate ? Math.max(0, Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))) : 0
                 const daysElapsed = Math.min(totalDays, Math.max(0, totalDays - daysLeft))
                 const progressPercentage = totalDays > 0 ? Math.min(100, (daysElapsed / totalDays) * 100) : 0
-                const dailyReturn = (investmentAmount * numericDailyRoi) / 100
-                const totalEarned = dailyReturn * daysElapsed
-                const expectedTotal = parseFloat(
-                  investment.total_return || investment.expected_return || '0'
-                ) || (investmentAmount + dailyReturn * totalDays)
                 const isCompleted = daysLeft === 0 && endDate && now >= endDate
                 
                 return (
@@ -459,9 +543,6 @@ export default function DashboardPage() {
                               : 'bg-blue-100 text-blue-700'
                           }`}>
                             {isCompleted ? 'Completed' : 'Active'}
-                          </span>
-                          <span className="text-sm text-gray-500">
-                            {numericDailyRoi}% daily ROI
                           </span>
                         </div>
                       </div>
@@ -492,28 +573,6 @@ export default function DashboardPage() {
                       </div>
                     </div>
 
-                    {/* Financial Details Grid */}
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      <div className="bg-green-50 rounded-xl p-4 text-center">
-                        <p className="text-sm text-gray-600 mb-1">Total Earned</p>
-                        <p className="text-lg font-bold text-green-600">
-                          ${totalEarned.toFixed(2)}
-                        </p>
-                        <p className="text-xs text-green-500">
-                          ${dailyReturn.toFixed(2)}/day
-                        </p>
-                      </div>
-                      <div className="bg-blue-50 rounded-xl p-4 text-center">
-                        <p className="text-sm text-gray-600 mb-1">Expected Total</p>
-                        <p className="text-lg font-bold text-blue-600">
-                          ${expectedTotal.toFixed(2)}
-                        </p>
-                        <p className="text-xs text-blue-500">
-                          At completion
-                        </p>
-                      </div>
-                    </div>
-
                     {/* Investment Details */}
                     <div className="border-t border-gray-100 pt-4">
                       <div className="grid grid-cols-3 gap-4 text-center">
@@ -522,8 +581,10 @@ export default function DashboardPage() {
                           <p className="text-sm font-semibold text-gray-700">{totalDays} days</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 mb-1">Daily ROI</p>
-                          <p className="text-sm font-semibold text-gray-700">{numericDailyRoi}%</p>
+                          <p className="text-xs text-gray-500 mb-1">Progress</p>
+                          <p className="text-sm font-semibold text-gray-700">
+                            {Math.round(progressPercentage)}%
+                          </p>
                         </div>
                         <div>
                           <p className="text-xs text-gray-500 mb-1">End Date</p>
@@ -760,53 +821,12 @@ export default function DashboardPage() {
         {/* Recent Transactions Section */}
         <section className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 flex flex-col gap-4">
           <div className="flex items-center justify-between mb-2 sm:mb-6">
-            <h2 className="text-lg sm:text-2xl font-bold text-gray-800">Recent Transactions</h2>
-            <Link href="/dashboard/transactions" className="text-[#2563eb] text-xs sm:text-sm hover:underline">View all</Link>
+            <h2 className="text-lg sm:text-2xl font-bold text-gray-800">
+              Recent Activity
+            </h2>
           </div>
-          {transactions.length === 0 ? (
-            <p className="text-gray-500 text-sm">No transactions yet.</p>
-          ) : (
-            <div className="overflow-x-auto -mx-2 sm:mx-0">
-              <table className="min-w-full divide-y divide-gray-200 text-xs sm:text-sm">
-                <thead>
-                  <tr>
-                    <th className="px-2 sm:px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                    <th className="px-2 sm:px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                    <th className="px-2 sm:px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Method</th>
-                    <th className="px-2 sm:px-4 py-3 text-right font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                    <th className="px-2 sm:px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-100">
-                  {transactions.map((tx) => (
-                    <tr key={tx.id}>
-                      <td className="px-2 sm:px-4 py-3 text-gray-700">{new Date(tx.created_at).toLocaleDateString()}</td>
-                      <td className="px-2 sm:px-4 py-3 capitalize">
-                        <span className={tx.tx_type === 'deposit' ? 'text-emerald-600' : 'text-orange-600'}>
-                          {tx.tx_type}
-                        </span>
-                      </td>
-                      <td className="px-2 sm:px-4 py-3 text-gray-600">{tx.payment_method}</td>
-                      <td className="px-2 sm:px-4 py-3 text-gray-900 text-right">${parseFloat(tx.amount || '0').toFixed(2)}</td>
-                      <td className="px-2 sm:px-4 py-3">
-                        <span
-                          className={
-                            tx.status === 'approved'
-                              ? 'px-2 py-1 rounded-full text-xs bg-emerald-100 text-emerald-700'
-                              : tx.status === 'pending'
-                              ? 'px-2 py-1 rounded-full text-xs bg-amber-100 text-amber-700'
-                              : 'px-2 py-1 rounded-full text-xs bg-rose-100 text-rose-700'
-                          }
-                        >
-                          {tx.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+
+          <RecentActivityTable rows={analytics?.recent_activity ?? []} />
         </section>
 
         {/* Quick Actions Section */}

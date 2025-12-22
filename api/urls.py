@@ -50,6 +50,11 @@ router.register(
 urlpatterns = [
     path("", include(router.urls)),
     path("wallet/", views.WalletView.as_view(), name="api-wallet"),
+    path(
+        "analytics/overview/",
+        views.UserDashboardAnalyticsView.as_view(),
+        name="api-analytics-overview",
+    ),
     path("support/", views.SupportRequestView.as_view(), name="api-support"),
     path(
         "public/certificate/",

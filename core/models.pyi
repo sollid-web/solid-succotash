@@ -1,7 +1,8 @@
-from datetime import datetime
+from datetime import date, datetime
 
 from django.contrib.auth.models import User
 from django.db import models
+
 
 class SupportRequest(models.Model):
     user: User | None
@@ -19,6 +20,7 @@ class SupportRequest(models.Model):
     created_at: datetime
     updated_at: datetime
 
+
 class Agreement(models.Model):
     title: str
     slug: str
@@ -29,6 +31,7 @@ class Agreement(models.Model):
     created_at: datetime
     updated_at: datetime
 
+
 class UserAgreementAcceptance(models.Model):
     user: User
     agreement: Agreement
@@ -37,3 +40,18 @@ class UserAgreementAcceptance(models.Model):
     user_agent: str
     agreement_hash: str
     agreement_version: str
+
+
+class PlatformCertificate(models.Model):
+    title: str
+    certificate_id: str
+    issue_date: date
+    jurisdiction: str
+    issuing_authority: str
+    verification_url: str
+    authority_seal_url: str
+    signature_1_url: str
+    signature_2_url: str
+    is_active: bool
+    created_at: datetime
+    updated_at: datetime

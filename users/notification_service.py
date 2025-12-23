@@ -115,9 +115,21 @@ def delete_expired_notifications():
 
 def notify_deposit_approved(user, transaction, admin_notes=""):
     """Notify user that their deposit was approved."""
-    message = f"Your deposit of ${transaction.amount} via {transaction.get_payment_method_display()} has been approved and credited to your wallet."
+    from urllib.parse import urlencode
+    
+    message = f"Your deposit of ${transaction.amount} has been approved and added to your wallet."
     if admin_notes:
         message += f"\n\nAdmin notes: {admin_notes}"
+
+    # Build success page URL with transaction details
+    params = {
+        'status': 'completed',
+        'txId': str(transaction.id),
+        'amount': str(transaction.amount),
+        'email': user.email,
+        'name': user.profile.full_name if hasattr(user, 'profile') else user.email,
+    }
+    action_url = f"/dashboard/checkout/success?{urlencode(params)}"
 
     return create_user_notification(
         user=user,
@@ -125,7 +137,7 @@ def notify_deposit_approved(user, transaction, admin_notes=""):
         title="Deposit Approved",
         message=message,
         priority="high",
-        action_url="/dashboard/",
+        action_url=action_url,
         entity_type="transaction",
         entity_id=transaction.id,
     )
@@ -151,9 +163,21 @@ def notify_deposit_rejected(user, transaction, reason=""):
 
 def notify_withdrawal_approved(user, transaction, admin_notes=""):
     """Notify user that their withdrawal was approved."""
+    from urllib.parse import urlencode
+    
     message = f"Your withdrawal request of ${transaction.amount} has been approved and processed."
     if admin_notes:
         message += f"\n\nAdmin notes: {admin_notes}"
+
+    # Build success page URL with transaction details
+    params = {
+        'status': 'completed',
+        'txId': str(transaction.id),
+        'amount': str(transaction.amount),
+        'email': user.email,
+        'name': user.profile.full_name if hasattr(user, 'profile') else user.email,
+    }
+    action_url = f"/dashboard/checkout/success?{urlencode(params)}"
 
     return create_user_notification(
         user=user,
@@ -161,7 +185,7 @@ def notify_withdrawal_approved(user, transaction, admin_notes=""):
         title="Withdrawal Approved",
         message=message,
         priority="high",
-        action_url="/dashboard/",
+        action_url=action_url,
         entity_type="transaction",
         entity_id=transaction.id,
     )
@@ -187,9 +211,21 @@ def notify_withdrawal_rejected(user, transaction, reason=""):
 
 def notify_investment_approved(user, investment, admin_notes=""):
     """Notify user that their investment was approved."""
+    from urllib.parse import urlencode
+    
     message = f"Your investment of ${investment.amount} in the {investment.plan.name} plan has been approved and activated."
     if admin_notes:
         message += f"\n\nAdmin notes: {admin_notes}"
+
+    # Build success page URL with investment details
+    params = {
+        'status': 'completed',
+        'txId': str(investment.id),
+        'amount': str(investment.amount),
+        'email': user.email,
+        'name': user.profile.full_name if hasattr(user, 'profile') else user.email,
+    }
+    action_url = f"/dashboard/checkout/success?{urlencode(params)}"
 
     return create_user_notification(
         user=user,
@@ -197,7 +233,7 @@ def notify_investment_approved(user, investment, admin_notes=""):
         title="Investment Approved",
         message=message,
         priority="high",
-        action_url="/dashboard/",
+        action_url=action_url,
         entity_type="investment",
         entity_id=investment.id,
     )

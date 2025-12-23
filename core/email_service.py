@@ -27,7 +27,7 @@ class EmailService:
     DEFAULT_FROM_EMAIL = getattr(
         settings,
         "DEFAULT_FROM_EMAIL",
-        "support@wolvcapital.com",
+        "WolvCapital <support@wolvcapital.com>",
     )
     BRAND_NAME = getattr(settings, "BRAND", {}).get("name", "WolvCapital")
     EMAIL_TYPES = {
@@ -172,12 +172,25 @@ class EmailService:
     @classmethod
     def _should_send_email(cls, user, email_type: str) -> bool:
         """
-        Placeholder for checking user preferences.
-        Implement lookup against a profile or preferences table.
+        Check user email preferences before sending.
         """
-        if hasattr(user, "profile") and hasattr(user.profile, "email_preferences"):
-            preferences = user.profile.email_preferences
-            return preferences.get(email_type, True)
+        if not user:
+            return False
+            
+        # Check if user has profile and email preferences
+        if hasattr(user, "profile"):
+            profile = user.profile
+            if hasattr(profile, "email_preferences"):
+                preferences = profile.email_preferences
+                # Get preference for this email type
+                should_send = preferences.get(email_type, True)
+                logger.debug(
+                    "Email preference check for %s: %s = %s",
+                    getattr(user, "email", "unknown"),
+                    email_type,
+                    should_send,
+                )
+                return should_send
         return True
 
     @classmethod
@@ -197,30 +210,55 @@ class EmailService:
             to_emails=getattr(user, "email", ""),
             context=context,
             subject=f"Welcome to {cls.BRAND_NAME}!",
-            email_type=cls.EMAIL_TYPES["WELCOME"],
+            email_type="welcome",
             user=user,
         )
 
     @classmethod
     def send_transaction_notification(cls, transaction: Any, status: str, admin_notes: str = "") -> bool:
+        """Send transaction notification email based on status."""
         user = transaction.user
+        
         if status == "created":
             template = "transaction_created"
             subject = f"Transaction Submitted - {cls.BRAND_NAME}"
-            email_type = cls.EMAIL_TYPES["TRANSACTION_CREATED"]
+            email_type = "transaction_created"
         elif status == "approved":
             template = "transaction_approved"
             subject = f"Transaction Approved - {cls.BRAND_NAME}"
-            email_type = cls.EMAIL_TYPES["TRANSACTION_APPROVED"]
+            email_type = "transaction_approved"
         elif status == "rejected":
             template = "transaction_rejected"
             subject = f"Transaction Rejected - {cls.BRAND_NAME}"
-            email_type = cls.EMAIL_TYPES["TRANSACTION_REJECTED"]
+            email_type = "transaction_rejected"
         else:
             logger.warning("Unknown transaction status: %s", status)
             return False
-        context = {"user": user, "transaction": transaction, "admin_notes": admin_notes, "dashboard_url": "/dashboard/"}
-        return cls.send_templated_email(template_name=template, to_emails=getattr(user, "email", ""), context=context, subject=subject, email_type=email_type, user=user)
+            
+        context = {
+            "user": user,
+            "transaction": transaction,
+            "admin_notes": admin_notes,
+            "dashboard_url": "/dashboard/",
+            "transaction_type": transaction.tx_type,
+            "amount": transaction.amount,
+        }
+        
+        logger.info(
+            "Sending %s email to %s for transaction %s",
+            email_type,
+            getattr(user, "email", "unknown"),
+            transaction.id,
+        )
+        
+        return cls.send_templated_email(
+            template_name=template,
+            to_emails=getattr(user, "email", ""),
+            context=context,
+            subject=subject,
+            email_type=email_type,
+            user=user,
+        )
 
 
 
@@ -238,29 +276,46 @@ class EmailService:
 
     @classmethod
     def send_investment_notification(cls, investment, status: str, admin_notes: str = "") -> bool:
+        """Send investment notification email based on status."""
         user = investment.user
+        
         if status == "created":
             template = "investment_created"
             subject = f"Investment Submitted - {cls.BRAND_NAME}"
-            email_type = cls.EMAIL_TYPES["INVESTMENT_CREATED"]
+            email_type = "investment_created"
         elif status == "approved":
             template = "investment_approved"
             subject = f"Investment Approved - {cls.BRAND_NAME}"
-            email_type = cls.EMAIL_TYPES["INVESTMENT_APPROVED"]
+            email_type = "investment_approved"
         elif status == "rejected":
             template = "investment_rejected"
             subject = f"Investment Rejected - {cls.BRAND_NAME}"
-            email_type = cls.EMAIL_TYPES["INVESTMENT_REJECTED"]
+            email_type = "investment_rejected"
         elif status == "completed":
             template = "investment_completed"
             subject = f"Investment Completed - {cls.BRAND_NAME}"
-            email_type = cls.EMAIL_TYPES["INVESTMENT_COMPLETED"]
+            email_type = "investment_completed"
         else:
             logger.warning("Unknown investment status: %s", status)
             return False
 
-        context = {"user": user, "investment": investment, "admin_notes": admin_notes, "dashboard_url": "/dashboard/"}
-        result = cls.send_templated_email(
+        context = {
+            "user": user,
+            "investment": investment,
+            "admin_notes": admin_notes,
+            "dashboard_url": "/dashboard/",
+            "plan_name": investment.plan.name if investment.plan else "N/A",
+            "amount": investment.amount,
+        }
+        
+        logger.info(
+            "Sending %s email to %s for investment %s",
+            email_type,
+            getattr(user, "email", "unknown"),
+            investment.id,
+        )
+        
+        return cls.send_templated_email(
             template_name=template,
             to_emails=getattr(user, "email", ""),
             context=context,
@@ -268,35 +323,6 @@ class EmailService:
             email_type=email_type,
             user=user,
         )
-
-        # Admin alert for large investment completion events
-        if status == "completed":
-            try:
-                from decimal import Decimal as _D
-
-                from django.conf import settings
-                thresholds = getattr(settings, "ALERT_THRESHOLDS", {})
-                completion_thresh = _D(
-                    str(thresholds.get("high_investment_completion", 10000))
-                )
-                amt = (
-                    investment.amount
-                    if hasattr(investment, "amount")
-                    else _D("0")
-                )
-                if amt >= completion_thresh:
-                    cls.send_admin_alert(
-                        subject="High-Value Investment Completed",
-                        message=(
-                            f"Investment {investment.id} completed for user "
-                            f"{getattr(user, 'email', '')}. Amount: ${amt}. "
-                            f"Plan: {getattr(investment.plan, 'name', 'N/A')}"
-                        ),
-                    )
-            except Exception:  # pragma: no cover - defensive
-                pass
-
-        return result
 
     @classmethod
     def send_roi_payout_notification(

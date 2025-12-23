@@ -7,6 +7,7 @@ import TawkToChat from '@/components/TawkToChat'
 import { TranslationProvider } from '@/i18n/TranslationProvider'
 import NavBar from '@/components/NavBar'
 import GaPageView from '@/components/GaPageView'
+import SegmentProvider from '@/components/SegmentProvider'
 
 // Removed Google font import for offline/build stability; fallback to Tailwind font-sans.
 
@@ -134,30 +135,31 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-white">
-        {measurementId ? (
-          <>
-            <Script
-              strategy="afterInteractive"
-              src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
-            />
-            <Script
-              id="ga4-init"
-              strategy="afterInteractive"
-              dangerouslySetInnerHTML={{
-                __html: `
+        <SegmentProvider writeKey={process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY || ''}>
+          {measurementId ? (
+            <>
+              <Script
+                strategy="afterInteractive"
+                src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
+              />
+              <Script
+                id="ga4-init"
+                strategy="afterInteractive"
+                dangerouslySetInnerHTML={{
+                  __html: `
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
                   gtag('js', new Date());
                   gtag('config', '${measurementId}');
                 `,
-              }}
-            />
-            <Suspense fallback={null}>
-              <GaPageView measurementId={measurementId} />
-            </Suspense>
-          </>
-        ) : null}
-        <TranslationProvider>
+                }}
+              />
+              <Suspense fallback={null}>
+                <GaPageView measurementId={measurementId} />
+              </Suspense>
+            </>
+          ) : null}
+          <TranslationProvider>
           <div className="flex min-h-screen flex-col bg-white">
             <NavBar />
             <main className="flex-1">
@@ -177,6 +179,7 @@ export default function RootLayout({
           <TawkToChat />
         </TranslationProvider>
         <Analytics />
+        </SegmentProvider>
       </body>
     </html>
   )

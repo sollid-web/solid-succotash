@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import TrustpilotInvite from '@/components/TrustpilotInvite'
+import { trackEvent } from '@/lib/segment'
 
 export default function CheckoutSuccessPage() {
   const searchParams = useSearchParams()
@@ -13,9 +14,25 @@ export default function CheckoutSuccessPage() {
   useEffect(() => {
     const status = searchParams.get('status')
     const txId = searchParams.get('txId')
+    const amount = searchParams.get('amount')
+    const userEmail = searchParams.get('email')
+    const userName = searchParams.get('name')
     
     setTransactionStatus(status)
     setTransactionId(txId)
+
+    // Track transaction completion in Segment (Trustpilot integration)
+    if (status === 'completed' && txId) {
+      trackEvent('Order Completed', {
+        orderId: txId,
+        revenue: amount ? parseFloat(amount) : undefined,
+        email: userEmail || undefined,
+        name: userName || undefined,
+        properties: {
+          trustpilot_invitation_trigger: true
+        }
+      })
+    }
   }, [searchParams])
 
   const isCompleted = transactionStatus === 'completed'

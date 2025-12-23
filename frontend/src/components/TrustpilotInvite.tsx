@@ -1,37 +1,40 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import Script from 'next/script'
 
-export default function TrustpilotInvite() {
-  const [scriptLoaded, setScriptLoaded] = useState(false)
-  const [scriptError, setScriptError] = useState(false)
+declare global {
+  interface Window {
+    TrustpilotObject: string
+    tp: any
+  }
+}
 
+export default function TrustpilotInvite() {
   useEffect(() => {
-    if (scriptLoaded && !scriptError && typeof window !== 'undefined') {
-      try {
-        // @ts-ignore
-        if (window.tp && typeof window.tp === 'function') {
-          // @ts-ignore
-          window.tp('register', '41a2HhCCWtcwdtgx')
-        }
-      } catch (error) {
-        console.error('Trustpilot registration error:', error)
+    // Initialize Trustpilot queue if not already present
+    if (typeof window !== 'undefined' && !window.tp) {
+      window.TrustpilotObject = 'tp'
+      window.tp = window.tp || function() {
+        (window.tp.q = window.tp.q || []).push(arguments)
       }
     }
-  }, [scriptLoaded, scriptError])
+  }, [])
 
   return (
     <>
       <Script
-        id="trustpilot-invite"
-        src="https://invites.trustpilot.com/product-reviews/evaluation.min.js"
+        id="trustpilot-invite-loader"
         strategy="afterInteractive"
-        onLoad={() => setScriptLoaded(true)}
-        onError={() => {
-          console.error('Failed to load Trustpilot script')
-          setScriptError(true)
+        dangerouslySetInnerHTML={{
+          __html: `
+            (function(w,d,s,r,n){w.TrustpilotObject=n;w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)};
+            a=d.createElement(s);a.async=1;a.src=r;a.type='text/java'+s;f=d.getElementsByTagName(s)[0];
+            f.parentNode.insertBefore(a,f)})(window,document,'script', 'https://invitejs.trustpilot.com/tp.min.js', 'tp');
+            tp('register', '41a2HhCCWtcwdtgx');
+          `
         }}
+        onError={() => console.error('Failed to load Trustpilot script')}
       />
     </>
   )

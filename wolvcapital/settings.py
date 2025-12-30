@@ -506,8 +506,8 @@ DEFAULT_FROM_EMAIL = os.getenv(
 )
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
-# Email timeout (30 seconds)
-EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "30"))
+# Email timeout (90 seconds)
+EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "90"))
 
 # Email subject prefix
 EMAIL_SUBJECT_PREFIX = os.getenv("EMAIL_SUBJECT_PREFIX", "[WolvCapital] ")
@@ -556,10 +556,10 @@ INBOX_USE_SSL = os.getenv("INBOX_USE_SSL", "True").lower() == "true"
 
 # Sync settings
 INBOX_SYNC_LIMIT = int(
-    os.getenv("INBOX_SYNC_LIMIT", "100")
+    os.getenv("INBOX_SYNC_LIMIT", "200")
 )  # Max emails per sync
 INBOX_AUTO_SYNC = (
-    os.getenv("INBOX_AUTO_SYNC", "False").lower() == "true"
+    os.getenv("INBOX_AUTO_SYNC", "TRUE").lower() == "true"
 )  # Enable cron sync
 
 # ------------------------------------------------------------------

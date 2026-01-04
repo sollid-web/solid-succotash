@@ -17,4 +17,4 @@ COPY . .
 
 RUN python manage.py collectstatic --noinput
 
-CMD ["gunicorn", "WolvCapital.wsgi:application", "--bind", "0.0.0.0:$PORT"]
+CMD ["sh", "-c", "gunicorn WolvCapital.wsgi:application --bind 0.0.0.0:$PORT"]

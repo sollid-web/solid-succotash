@@ -23,8 +23,8 @@ CUSTOM_DOMAIN = os.getenv("CUSTOM_DOMAIN")  # optional
 # ------------------------------------------------------------------
 # Hosts & CSRF
 # ------------------------------------------------------------------
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
-CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", ".trycloudflare.com"] 
+CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000", "https://*.trycloudflare.com"]
 
 # --- GitHub Codespaces support ---
 CODESPACES_DOMAIN = os.getenv("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN")
@@ -35,10 +35,10 @@ if IN_CODESPACES:
     CSRF_TRUSTED_ORIGINS += ["https://*.app.github.dev"]
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     # Keep cookies insecure for development
-    SESSION_COOKIE_SECURE = False
-    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
     # Allow session cookies to work in codespaces
-    SESSION_COOKIE_SAMESITE = None
+    SESSION_COOKIE_SAMESITE = "Lax"
 
 if RENDER_EXTERNAL_URL:
     p = urlparse(RENDER_EXTERNAL_URL)

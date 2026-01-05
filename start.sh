@@ -151,7 +151,7 @@ echo "🔍 Verifying database setup..."
 python manage.py verify_db || echo "⚠️ Setup verification failed, continuing..."
 
 echo "🎉 WolvCapital startup complete!"
-echo "🌐 Admin Login: admin@wolvcapital.com / admin123"
+echo "🌐 Admin: /admin/ (create via 'python manage.py createsuperuser' or set CREATE_INITIAL_ADMIN=1 with INITIAL_ADMIN_EMAIL/INITIAL_ADMIN_PASSWORD)"
 echo "💼 Platform Features: Investment Plans, Crypto Deposits, Virtual Cards, Admin Notifications"
 
 # Enable error handling for the server start

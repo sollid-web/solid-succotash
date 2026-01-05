@@ -17,6 +17,7 @@ COPY . .
 
 RUN python manage.py collectstatic --noinput
 
-# Railway detects this Dockerfile and will use the container CMD.
-# Use start.sh so $PORT is expanded by the shell and the correct WSGI module is used.
-CMD ["bash", "start.sh"]
+# NOTE: Railway will prefer the Dockerfile CMD.
+# Start Gunicorn directly (fast) so healthchecks can pass; run migrations/seeding
+# via platform release phases or Render's start.sh (render.yaml uses that).
+CMD ["bash", "-lc", "exec gunicorn wolvcapital.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers ${WEB_CONCURRENCY:-2} --timeout 120"]

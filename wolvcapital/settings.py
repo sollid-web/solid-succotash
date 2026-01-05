@@ -88,6 +88,21 @@ IN_CODESPACES = bool(
     or os.getenv("GITHUB_CODESPACES")
 )
 
+# --- Railway support ---
+# Railway health checks use `healthcheck.railway.app` as the Host header.
+IN_RAILWAY = bool(
+    os.getenv("RAILWAY")
+    or os.getenv("RAILWAY_ENVIRONMENT")
+    or os.getenv("RAILWAY_ENVIRONMENT_NAME")
+    or os.getenv("RAILWAY_PROJECT_ID")
+    or any(k.startswith("RAILWAY_") for k in os.environ)
+)
+
+if IN_RAILWAY:
+    for host in ["healthcheck.railway.app", ".railway.app", ".up.railway.app"]:
+        if host not in ALLOWED_HOSTS:
+            ALLOWED_HOSTS.append(host)
+
 if IN_CODESPACES:
     ALLOWED_HOSTS += [".app.github.dev"]
     CSRF_TRUSTED_ORIGINS += ["https://*.app.github.dev"]

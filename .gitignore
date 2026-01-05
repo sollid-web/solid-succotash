@@ -54,3 +54,4 @@ wheels/
 MANIFEST
 .next/
 .vercel
+Dockerfile

@@ -17,4 +17,6 @@ COPY . .
 
 RUN python manage.py collectstatic --noinput
 
-CMD ["sh", "-c", "gunicorn WolvCapital.wsgi:application --bind 0.0.0.0:$PORT"]
+# Railway detects this Dockerfile and will use the container CMD.
+# Use start.sh so $PORT is expanded by the shell and the correct WSGI module is used.
+CMD ["bash", "start.sh"]

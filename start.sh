@@ -160,7 +160,7 @@ set -e
 # Start the application with proper Render.com configuration
 echo "🚀 Starting Gunicorn server on port $PORT..."
 exec python -m gunicorn wolvcapital.wsgi:application \
-    --bind 0.0.0.0:$PORT \
+    --bind 0.0.0.0:${PORT:-8000} \
     --workers 2 \
     --timeout 120 \
     --keep-alive 5 \

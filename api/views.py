@@ -15,6 +15,7 @@ from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 
 from core.models import Agreement, SupportRequest, UserAgreementAcceptance
 from investments.models import InvestmentPlan, UserInvestment
@@ -513,9 +514,16 @@ class EmailPreferencesView(APIView):
         return Response(serializer.data)
 
 
+@csrf_exempt
 @api_view(["POST", "OPTIONS"])
 @permission_classes([permissions.AllowAny])
 def login_view(request):
+    """
+    API endpoint for user login.
+    - Publicly accessible (AllowAny, no authentication required)
+    - CSRF exempt for token/JWT auth
+    - Returns 401 for inactive/unverified users
+    """
     """API endpoint for user login."""
     if request.method == "OPTIONS":
         return Response(status=status.HTTP_200_OK)
@@ -552,7 +560,7 @@ def login_view(request):
     if not user.is_active:
         return Response(
             {"error": "Account not verified. Please check your email for a verification link or resend it.", "inactive": True},
-            status=status.HTTP_403_FORBIDDEN,
+            status=status.HTTP_401_UNAUTHORIZED,
         )
 
     login(request, user)
@@ -889,7 +897,16 @@ def complete_signup(request):
 
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
+@csrf_exempt
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
 def verify_email_link(request):
+    """
+    Verify email token and activate user account.
+    - Idempotent: safe to call multiple times
+    - Activates user and sets is_active, is_verified, email_verified if present
+    - Returns success if already verified
+    """
     """
     Verify email token and activate user account.
     Returns JSON response with success status and redirect URL.
@@ -921,6 +938,19 @@ def verify_email_link(request):
         ev = verify_token(token)
         if ev:
             user = ev.user
+            # Explicitly activate and set all relevant fields
+            updated = False
+            if not user.is_active:
+                user.is_active = True
+                updated = True
+            if hasattr(user, "is_verified") and not getattr(user, "is_verified", False):
+                user.is_verified = True
+                updated = True
+            if hasattr(user, "email_verified") and not getattr(user, "email_verified", False):
+                user.email_verified = True
+                updated = True
+            if updated:
+                user.save()
             logger.info(f"Email verification successful for user: {user.email}")
             return Response({
                 "success": True,

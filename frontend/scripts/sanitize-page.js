@@ -162,7 +162,7 @@ export default function ContactPage() {
               <div>
                 <h3 className="text-xl font-bold mb-4">Contact Info</h3>
                 <ul className="space-y-2 text-gray-300">
-                  <li>support@wolvcapital.com</li>
+                  <li>support@mail.wolvcapital.com</li>
                   <li>24/7 Support</li>
                 </ul>
               </div>

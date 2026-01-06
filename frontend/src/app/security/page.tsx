@@ -68,7 +68,7 @@ export default function SecurityPage(): JSX.Element {
           <h3 className="text-xl font-medium mb-2">Transparency & Reporting</h3>
           <p className="text-gray-600">
             We keep records of account actions and transactions to enable auditing and dispute resolution. If you suspect
-            unauthorized activity, contact <a className="text-indigo-600 underline" href="mailto:support@wolvcapital.com">support@wolvcapital.com</a> immediately.
+            unauthorized activity, contact <a className="text-indigo-600 underline" href="mailto:support@mail.wolvcapital.com">support@mail.wolvcapital.com</a> immediately.
           </p>
         </div>
       </div>

@@ -257,7 +257,7 @@ python manage.py test
 - Admin site: `/admin/`
 - Health check: `/healthz/`
 - Legal agreements are versioned through the `Agreement` model with SHA256 hashing.
-- Contact: support@wolvcapital.com
+- Contact: support@mail.wolvcapital.com
 
 ## License and Contributions
 

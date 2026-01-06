@@ -71,7 +71,7 @@ ADMIN_SITE_URL=https://api.wolvcapital.com
 RESEND_API_KEY=re_YOUR_RESEND_API_KEY_HERE
 
 # Sender email (must be verified in Resend)
-DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>
+DEFAULT_FROM_EMAIL=WolvCapital <support@mail.wolvcapital.com>
 
 # Optional: Server error emails
 SERVER_EMAIL=server@wolvcapital.com
@@ -143,7 +143,7 @@ ADMIN_SITE_URL=https://api.wolvcapital.com
 
 # === Email (Resend) ===
 RESEND_API_KEY=re_YOUR_API_KEY_HERE
-DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>
+DEFAULT_FROM_EMAIL=WolvCapital <support@mail.wolvcapital.com>
 SERVER_EMAIL=server@wolvcapital.com
 ADMIN_EMAIL=admin@wolvcapital.com
 

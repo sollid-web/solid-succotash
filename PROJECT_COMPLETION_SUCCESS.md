@@ -139,7 +139,7 @@ Users can customize notifications at `/users/email-preferences/`:
 # Recommended (Resend)
 EMAIL_BACKEND = 'core.email_backends.resend.ResendEmailBackend'
 RESEND_API_KEY = env('RESEND_API_KEY')
-DEFAULT_FROM_EMAIL = 'WolvCapital <support@wolvcapital.com>'
+DEFAULT_FROM_EMAIL = 'WolvCapital <support@mail.wolvcapital.com>'
 
 # SMTP fallback
 SMTP_HOST = env('SMTP_HOST')

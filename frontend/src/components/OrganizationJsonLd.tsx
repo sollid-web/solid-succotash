@@ -15,7 +15,7 @@ export default function OrganizationJsonLd() {
     ],
     "contactPoint": [{
       "@type": "ContactPoint",
-      "email": "support@wolvcapital.com",
+      "email": "support@mail.wolvcapital.com",
       "contactType": "customer support",
       "areaServed": "Worldwide",
       "availableLanguage": ["English"]

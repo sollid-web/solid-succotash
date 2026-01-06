@@ -20,7 +20,7 @@ class EmailService:
 
     BRAND_NAME: str = getattr(settings, "BRAND_NAME", "WolvCapital")
     DEFAULT_FROM_EMAIL: str = getattr(
-        settings, "DEFAULT_FROM_EMAIL", "support@wolvcapital.com"
+        settings, "DEFAULT_FROM_EMAIL", "support@mail.wolvcapital.com"
     )
 
     EMAIL_TYPES = {

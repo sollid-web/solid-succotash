@@ -526,7 +526,7 @@ Configure your real business email in environment variables and sync your actual
 
 ```bash
 # Set your credentials
-export INBOX_EMAIL_USER="support@wolvcapital.com"
+export INBOX_EMAIL_USER="support@mail.wolvcapital.com"
 export INBOX_EMAIL_PASSWORD="your-app-password"
 
 # Sync emails

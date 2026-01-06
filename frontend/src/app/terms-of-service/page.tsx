@@ -132,7 +132,7 @@ export default function TermsOfServicePage() {
 
             <div className="bg-blue-50 p-8 rounded-2xl">
               <p className="text-lg text-gray-700 leading-relaxed font-semibold">
-                For questions about these terms, contact support@wolvcapital.com
+                For questions about these terms, contact support@mail.wolvcapital.com
               </p>
             </div>
           </div>

@@ -58,7 +58,7 @@ python manage.py send_email \
   --to user@example.com \
   --subject "Test" \
   --message "Hello" \
-  --from-email "support@wolvcapital.com"
+  --from-email "support@mail.wolvcapital.com"
 ```
 
 ### Method 3: Django Shell (Advanced)
@@ -90,7 +90,7 @@ from django.core.mail import send_mail
 send_mail(
     subject='Welcome!',
     message='Thank you for joining WolvCapital.',
-  from_email='support@wolvcapital.com',
+  from_email='support@mail.wolvcapital.com',
     recipient_list=['user@example.com'],
     fail_silently=False,
 )
@@ -104,7 +104,7 @@ subject = 'Welcome to WolvCapital'
 text_content = 'Thank you for joining!'
 html_content = '<h1>Welcome!</h1><p>Thank you for joining <strong>WolvCapital</strong>.</p>'
 
-msg = EmailMultiAlternatives(subject, text_content, 'support@wolvcapital.com', ['user@example.com'])
+msg = EmailMultiAlternatives(subject, text_content, 'support@mail.wolvcapital.com', ['user@example.com'])
 msg.attach_alternative(html_content, "text/html")
 msg.send()
 ```
@@ -125,7 +125,7 @@ To actually send emails in production, set these in Render.
 ```
 RESEND_API_KEY=your-resend-api-key
 EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend
-DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>
+DEFAULT_FROM_EMAIL=WolvCapital <support@mail.wolvcapital.com>
 ```
 
 **SMTP fallback (only if using SMTP):**
@@ -134,7 +134,7 @@ SMTP_HOST=smtp.privateemail.com
 SMTP_PORT=587
 EMAIL_USER=your-email@gmail.com
 EMAIL_PASS=your-app-password
-DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>
+DEFAULT_FROM_EMAIL=WolvCapital <support@mail.wolvcapital.com>
 ```
 
 **For Gmail (SMTP fallback):**
@@ -177,8 +177,8 @@ python manage.py shell -c "from users.models import User; [print(u.email) for u 
 ## 📱 Contact Email Addresses
 
 Your platform uses:
-- **Support:** support@wolvcapital.com
-- **System Sender:** support@wolvcapital.com
+- **Support:** support@mail.wolvcapital.com
+- **System Sender:** support@mail.wolvcapital.com
 
 These should be configured as:
 - Forwarding addresses (if not actual mailboxes)

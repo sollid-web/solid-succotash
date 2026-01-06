@@ -27,7 +27,7 @@ class EmailService:
     DEFAULT_FROM_EMAIL = getattr(
         settings,
         "DEFAULT_FROM_EMAIL",
-        "WolvCapital <support@wolvcapital.com>",
+        "WolvCapital <support@mail.wolvcapital.com>",
     )
     BRAND_NAME = getattr(settings, "BRAND", {}).get("name", "WolvCapital")
     EMAIL_TYPES = {
@@ -126,7 +126,7 @@ class EmailService:
                 body=text_content,
                 from_email=from_email,
                 to=recipients,
-                reply_to=["support@wolvcapital.com"],
+                reply_to=["support@mail.wolvcapital.com"],
             )
             msg.attach_alternative(html_content, "text/html")
 

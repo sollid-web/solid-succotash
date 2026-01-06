@@ -35,19 +35,19 @@ def print_env_vars():
     print("# Email Configuration (RECOMMENDED - Resend)")
     print("RESEND_API_KEY=your-resend-api-key  # ← SET THIS")
     print("EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend")
-    print("DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>")
+    print("DEFAULT_FROM_EMAIL=WolvCapital <support@mail.wolvcapital.com>")
     print("")
 
     print("# Email Configuration (Fallback - SMTP)")
     print("SMTP_HOST=smtp.privateemail.com")
     print("SMTP_PORT=587")
-    print("EMAIL_USER=support@wolvcapital.com  # ← UPDATE THIS")
+    print("EMAIL_USER=support@mail.wolvcapital.com  # ← UPDATE THIS")
     print("EMAIL_PASS=your-smtp-password  # ← UPDATE THIS")
     print("")
 
     # Admin Email Recipients
     print("# Admin Email Recipients (Contact Form notifications)")
-    print("ADMIN_EMAIL_RECIPIENTS=admin@wolvcapital.com,support@wolvcapital.com,finance@wolvcapital.com,compliance@wolvcapital.com,operations@wolvcapital.com  # ← UPDATE WITH YOUR EMAILS")
+    print("ADMIN_EMAIL_RECIPIENTS=admin@wolvcapital.com,support@mail.wolvcapital.com,finance@wolvcapital.com,compliance@wolvcapital.com,operations@wolvcapital.com  # ← UPDATE WITH YOUR EMAILS")
     print("")
 
     # CORS Settings
@@ -117,7 +117,7 @@ SECRET_KEY={secret_key}
 
 # Email Configuration (Console backend for local development)
 EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
-DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>
+DEFAULT_FROM_EMAIL=WolvCapital <support@mail.wolvcapital.com>
 
 # Optional: test Resend locally
 # RESEND_API_KEY=your-resend-api-key

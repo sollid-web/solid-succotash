@@ -909,8 +909,8 @@ export default function KYCPage() {
             <div>
               <h3 className="font-semibold text-gray-900 mb-1">Email Support</h3>
               <p className="text-sm text-gray-600">Send us your verification questions</p>
-              <a href="mailto:support@wolvcapital.com" className="text-[#2563eb] text-sm hover:underline">
-                support@wolvcapital.com →
+              <a href="mailto:support@mail.wolvcapital.com" className="text-[#2563eb] text-sm hover:underline">
+                support@mail.wolvcapital.com →
               </a>
             </div>
           </div>

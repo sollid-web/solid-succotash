@@ -28,7 +28,7 @@ RENDER_EXTERNAL_HOSTNAME=your-app.onrender.com (Auto-set by Render)
 # Recommended (Resend)
 RESEND_API_KEY=your-resend-api-key
 EMAIL_BACKEND=core.email_backends.resend.ResendEmailBackend
-DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>
+DEFAULT_FROM_EMAIL=WolvCapital <support@mail.wolvcapital.com>
 
 # Fallback (SMTP)
 SMTP_HOST=smtp.privateemail.com

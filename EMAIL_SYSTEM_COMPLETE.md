@@ -94,7 +94,7 @@ Automatic email triggers via Django signals:
 # Production email backend (recommended)
 # If RESEND_API_KEY is set in the environment, settings.py will prefer Resend:
 EMAIL_BACKEND = 'core.email_backends.resend.ResendEmailBackend'
-DEFAULT_FROM_EMAIL = 'WolvCapital <support@wolvcapital.com>'
+DEFAULT_FROM_EMAIL = 'WolvCapital <support@mail.wolvcapital.com>'
 
 # SMTP fallback (only if you choose SMTP)
 SMTP_HOST = 'smtp.privateemail.com'
@@ -109,7 +109,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ### Environment Variables Required
 ```bash
 RESEND_API_KEY=your-resend-api-key
-DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>
+DEFAULT_FROM_EMAIL=WolvCapital <support@mail.wolvcapital.com>
 
 # SMTP fallback
 SMTP_HOST=smtp.privateemail.com
@@ -222,12 +222,12 @@ Set up production email credentials:
 ```bash
 # Recommended (Resend)
 RESEND_API_KEY=your-resend-api-key
-DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>
+DEFAULT_FROM_EMAIL=WolvCapital <support@mail.wolvcapital.com>
 
 # SMTP fallback
 SMTP_HOST=smtp.privateemail.com
 SMTP_PORT=587
-EMAIL_USER=support@wolvcapital.com
+EMAIL_USER=support@mail.wolvcapital.com
 EMAIL_PASS=secure-app-password
 ```
 

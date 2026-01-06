@@ -50,7 +50,7 @@ railway variables set SECRET_KEY="<generated-key>"
 railway variables set DEBUG="0"
 railway variables set DJANGO_SETTINGS_MODULE="wolvcapital.settings"
 railway variables set RESEND_API_KEY="re_YOUR_KEY"
-railway variables set DEFAULT_FROM_EMAIL="WolvCapital <support@wolvcapital.com>"
+railway variables set DEFAULT_FROM_EMAIL="WolvCapital <support@mail.wolvcapital.com>"
 railway variables set WEB_CONCURRENCY="2"
 ```
 

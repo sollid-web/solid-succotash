@@ -75,7 +75,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">Email Support</h3>
-                      <p className="text-gray-700 text-lg">support@wolvcapital.com</p>
+                      <p className="text-gray-700 text-lg">support@mail.wolvcapital.com</p>
                       <p className="text-gray-600 mt-1">Our compliance and investor support teams respond to all inquiries within one business day.</p>
                     </div>
                   </div>

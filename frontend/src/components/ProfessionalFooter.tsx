@@ -107,7 +107,7 @@ export default function ProfessionalFooter() {
                   </Link>
                 </li>
                 <li>
-                  <a href="mailto:support@wolvcapital.com" className="text-blue-100 hover:text-white transition-colors">
+                  <a href="mailto:support@mail.wolvcapital.com" className="text-blue-100 hover:text-white transition-colors">
                     Email Support
                   </a>
                 </li>

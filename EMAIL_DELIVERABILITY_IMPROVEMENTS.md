@@ -14,11 +14,11 @@
   - No Reply-To header
   - No List-Unsubscribe header (required by many email providers)
 - **Solutions Implemented**:
-  - ✅ Added `Reply-To: support@wolvcapital.com` header
+  - ✅ Added `Reply-To: support@mail.wolvcapital.com` header
   - ✅ Added `X-Mailer: WolvCapital Email System` for identification
   - ✅ Added `X-Priority` and `Importance` headers for urgency classification
   - ✅ Added `List-Unsubscribe` header for compliance and spam prevention
-  - ✅ Used proper FROM address with display name: `WolvCapital <support@wolvcapital.com>`
+  - ✅ Used proper FROM address with display name: `WolvCapital <support@mail.wolvcapital.com>`
 
 ## Technical Changes
 
@@ -32,7 +32,7 @@ msg = EmailMultiAlternatives(
     body=text_content,
     from_email=from_email,
     to=recipients,
-    reply_to=["support@wolvcapital.com"],
+    reply_to=["support@mail.wolvcapital.com"],
 )
 
 # Add headers to improve deliverability
@@ -59,7 +59,7 @@ send_email(
     to_emails=user.email,
     context={"user": user, "verify_url": verify_url, "username": user.username or user.email},
     subject="Verify your WolvCapital email address",
-  from_email="WolvCapital <support@wolvcapital.com>",
+  from_email="WolvCapital <support@mail.wolvcapital.com>",
 )
 ```
 
@@ -119,11 +119,11 @@ Ensure your SMTP server's IP has a PTR record pointing to your domain.
 
 Make sure these are set in production:
 ```bash
-EMAIL_USER=support@wolvcapital.com
+EMAIL_USER=support@mail.wolvcapital.com
 EMAIL_PASS=<your_smtp_password>
 SMTP_HOST=smtp.privateemail.com
 SMTP_PORT=587
-DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>
+DEFAULT_FROM_EMAIL=WolvCapital <support@mail.wolvcapital.com>
 ```
 
 ### Email Content Best Practices

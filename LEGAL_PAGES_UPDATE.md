@@ -197,7 +197,7 @@ Complete overhaul of WolvCapital's legal and informational pages to reflect prof
 
 ## Contact Information Provided
 
-**General Support:** support@wolvcapital.com
+**General Support:** support@mail.wolvcapital.com
 **Legal Matters:** legal@wolvcapital.com
 **Compliance:** compliance@wolvcapital.com
 **Privacy:** privacy@wolvcapital.com

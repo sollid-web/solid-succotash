@@ -140,7 +140,7 @@ export default function PrivacyPolicyPage() {
                 <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">7. Contact</h2>
                 <ul className="list-disc pl-6 space-y-2 text-gray-700">
                   <li><strong>Email:</strong> <a href="mailto:privacy@wolvcapital.com" className="text-blue-600 hover:underline">privacy@wolvcapital.com</a></li>
-                  <li><strong>General Support:</strong> <a href="mailto:support@wolvcapital.com" className="text-blue-600 hover:underline">support@wolvcapital.com</a></li>
+                  <li><strong>General Support:</strong> <a href="mailto:support@mail.wolvcapital.com" className="text-blue-600 hover:underline">support@mail.wolvcapital.com</a></li>
                 </ul>
               </div>
 

@@ -100,7 +100,7 @@ SECRET_KEY=<50-char-random-string>
 DEBUG=0
 DATABASE_URL=${{Postgres.DATABASE_URL}}  # Auto-set by Railway
 RESEND_API_KEY=re_YOUR_RESEND_API_KEY
-DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>
+DEFAULT_FROM_EMAIL=WolvCapital <support@mail.wolvcapital.com>
 ```
 
 **Set after getting Railway domain**:

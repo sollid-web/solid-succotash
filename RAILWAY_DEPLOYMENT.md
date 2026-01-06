@@ -64,7 +64,7 @@ PUBLIC_SITE_URL=https://wolvcapital.com
 ADMIN_SITE_URL=https://wolvcapital-production.up.railway.app
 
 # Email Configuration
-DEFAULT_FROM_EMAIL=WolvCapital <support@wolvcapital.com>
+DEFAULT_FROM_EMAIL=WolvCapital <support@mail.wolvcapital.com>
 RESEND_API_KEY=re_<your-resend-api-key>
 
 # Performance

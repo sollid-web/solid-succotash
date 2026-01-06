@@ -458,6 +458,13 @@ AUTHENTICATION_BACKENDS = [
 # Frontend URLs (Next.js handles all user-facing pages)
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
+# Ensure the configured frontend origin is trusted for CORS/CSRF
+_frontend_origin = FRONTEND_URL.rstrip("/")
+if _frontend_origin and _frontend_origin not in CORS_ALLOWED_ORIGINS:
+    CORS_ALLOWED_ORIGINS.append(_frontend_origin)
+if _frontend_origin and _frontend_origin not in CSRF_TRUSTED_ORIGINS:
+    CSRF_TRUSTED_ORIGINS.append(_frontend_origin)
+
 # Redirect to frontend after Django admin/allauth operations
 LOGIN_URL = f"{FRONTEND_URL}/accounts/login"
 LOGIN_REDIRECT_URL = f"{FRONTEND_URL}/dashboard"
@@ -517,7 +524,7 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASS") or os.getenv(
 # Default from email
 DEFAULT_FROM_EMAIL = os.getenv(
     "DEFAULT_FROM_EMAIL",
-    "WolvCapital <support@wolvcapital.com>",
+    "WolvCapital <support@mail.wolvcapital.com>",
 )
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
@@ -532,7 +539,7 @@ ADMIN_EMAIL_RECIPIENTS = [
     email.strip()
     for email in os.getenv(
         "ADMIN_EMAIL_RECIPIENTS",
-        "support@wolvcapital.com,privacy@wolvcapital.com,"
+        "support@mail.wolvcapital.com,privacy@wolvcapital.com,"
         "legal@wolvcapital.com,admin@wolvcapital.com"
     ).split(",")
     if email.strip()

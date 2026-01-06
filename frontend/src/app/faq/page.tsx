@@ -77,7 +77,7 @@ export default function FAQPage(): JSX.Element {
       icon: <Shield className="w-6 h-6" />,
       color: "cyan",
       question: "How do I contact support?",
-      answer: "Email support@wolvcapital.com or use the contact form on our Contact page. Our support team is available 24/7 to assist with account issues, technical questions, or investment inquiries."
+      answer: "Email support@mail.wolvcapital.com or use the contact form on our Contact page. Our support team is available 24/7 to assist with account issues, technical questions, or investment inquiries."
     }
   ]
 
@@ -167,7 +167,7 @@ export default function FAQPage(): JSX.Element {
                 Contact Support
               </Link>
               <a 
-                href="mailto:support@wolvcapital.com"
+                href="mailto:support@mail.wolvcapital.com"
                 className="inline-block bg-white border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-full text-lg font-bold hover:bg-blue-50 transition-all duration-300 hover:scale-105"
               >
                 Email Us

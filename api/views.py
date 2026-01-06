@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.decorators import action, api_view, permission_classes, authentication_classes
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -516,6 +516,7 @@ class EmailPreferencesView(APIView):
 
 @csrf_exempt
 @api_view(["POST", "OPTIONS"])
+@authentication_classes([])
 @permission_classes([permissions.AllowAny])
 def login_view(request):
     """
@@ -823,7 +824,9 @@ class ResendVerificationSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
 
+@csrf_exempt
 @api_view(["POST"])
+@authentication_classes([])
 @permission_classes([permissions.AllowAny])
 def resend_verification(request):
     """Resend email verification link for an inactive account. Idempotent."""
@@ -848,7 +851,9 @@ class SignupSerializer(serializers.Serializer):
     referral_code = serializers.CharField(required=False, allow_blank=True)
 
 
+@csrf_exempt
 @api_view(["POST"])
+@authentication_classes([])
 @permission_classes([permissions.AllowAny])
 def complete_signup(request):
     """Signup: create user, send verification link. Prevents duplicate inactive users."""
@@ -895,10 +900,9 @@ def complete_signup(request):
     return Response({"status": "verification_sent", "referral_attached": referral_attached}, status=status.HTTP_200_OK)
 
 
-@api_view(["GET"])
-@permission_classes([permissions.AllowAny])
 @csrf_exempt
 @api_view(["GET"])
+@authentication_classes([])
 @permission_classes([permissions.AllowAny])
 def verify_email_link(request):
     """
@@ -959,6 +963,7 @@ def verify_email_link(request):
             }, status=status.HTTP_200_OK)
 
         # If token is used/expired, check if user is already active
+        EmailVerification = apps.get_model("users", "EmailVerification")
         ev_any = EmailVerification.objects.filter(token=token).order_by("-created_at").first()
         if ev_any and ev_any.user.is_active:
             logger.info("Email verification token already used; user %s is active", ev_any.user.email)

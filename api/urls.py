@@ -90,6 +90,11 @@ urlpatterns = [
         name="resend_verification",
     ),
     path(
+        "auth/resend-verification/",
+        views.resend_verification,
+        name="resend_verification_alias",
+    ),
+    path(
         "auth/complete-signup/",
         views.complete_signup,
         name="complete_signup",

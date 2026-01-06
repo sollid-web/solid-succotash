@@ -29,7 +29,7 @@ from transactions.services import (
     create_virtual_card_request,
     reject_transaction,
 )
-from users.models import Profile, UserNotification, UserWallet
+from users.models import EmailVerification, Profile, UserNotification, UserWallet
 from users.notification_service import mark_all_read as service_mark_all_read
 from users.notification_service import (
     mark_notification_read as service_mark_notification_read,
@@ -935,6 +935,21 @@ def verify_email_link(request):
         ev = verify_token(token)
 
         if not ev:
+            # If the token was already used but the user is active, treat as success
+            ev_any = EmailVerification.objects.filter(token=token).order_by("-created_at").first()
+            if ev_any and ev_any.user.is_active:
+                logger.info(
+                    "Email verification token already used; user %s is active", ev_any.user.email
+                )
+                return Response(
+                    {
+                        "success": True,
+                        "message": "Your email is already verified. You can now log in.",
+                        "redirect_url": "/accounts/login",
+                    },
+                    status=status.HTTP_200_OK,
+                )
+
             logger.warning(
                 "Email verification failed: Invalid or expired token"
             )

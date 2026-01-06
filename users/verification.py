@@ -3,6 +3,7 @@ from __future__ import annotations
 import secrets
 from datetime import timedelta
 
+from django.conf import settings
 from django.db import transaction
 from django.utils import timezone
 
@@ -31,7 +32,11 @@ def issue_verification_token(user) -> EmailVerification:
         expires_at=timezone.now() + timedelta(hours=2),
     )
 
-    verify_url = f"https://wolvcapital.com/accounts/verify-email?token={token}"
+    site_url = str(
+        getattr(settings, "PUBLIC_SITE_URL", None)
+        or getattr(settings, "SITE_URL", "https://wolvcapital.com")
+    ).rstrip("/")
+    verify_url = f"{site_url}/accounts/verify-email?token={token}"
     send_email(
         template_name="email_verification",
         to_emails=user.email,

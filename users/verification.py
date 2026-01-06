@@ -11,10 +11,9 @@ from core.email_service import send_email
 
 from .models import EmailVerification
 
-
+  
 def _generate_token() -> str:
     return secrets.token_urlsafe(32)
-
 
 
 @transaction.atomic
@@ -47,9 +46,9 @@ def issue_verification_token(user) -> EmailVerification:
     return ev
 
 
-
 @transaction.atomic
 def verify_token(token: str) -> EmailVerification | None:
+    """Verify a token, activate user if valid, mark token as used. Idempotent."""
     ev: EmailVerification | None = (
         EmailVerification.objects.select_for_update()
         .filter(token=token, used_at__isnull=True)
@@ -62,6 +61,7 @@ def verify_token(token: str) -> EmailVerification | None:
     ev.save(update_fields=["used_at"])
 
     user = ev.user
+    updated_fields = []
     try:
         profile = getattr(user, "profile", None)
         if profile and hasattr(profile, "email_verified"):
@@ -69,7 +69,12 @@ def verify_token(token: str) -> EmailVerification | None:
             profile.save(update_fields=["email_verified"])
         if not user.is_active:
             user.is_active = True
-            user.save(update_fields=["is_active"])
+            updated_fields.append("is_active")
+        if hasattr(user, "email_verified") and not getattr(user, "email_verified", False):
+            user.email_verified = True
+            updated_fields.append("email_verified")
+        if updated_fields:
+            user.save(update_fields=updated_fields)
     except Exception:
         pass
     return ev

@@ -1,3 +1,4 @@
+from rest_framework import serializers
 import hashlib
 
 from django.apps import apps
@@ -29,7 +30,6 @@ from transactions.services import (
     create_virtual_card_request,
     reject_transaction,
 )
-from users.models import EmailVerification, Profile, UserNotification, UserWallet
 from users.notification_service import mark_all_read as service_mark_all_read
 from users.notification_service import (
     mark_notification_read as service_mark_notification_read,
@@ -549,6 +549,11 @@ def login_view(request):
             {"error": "Invalid email or password."},
             status=status.HTTP_401_UNAUTHORIZED,
         )
+    if not user.is_active:
+        return Response(
+            {"error": "Account not verified. Please check your email for a verification link or resend it.", "inactive": True},
+            status=status.HTTP_403_FORBIDDEN,
+        )
 
     login(request, user)
     token, _ = Token.objects.get_or_create(user=user)
@@ -806,63 +811,54 @@ class AdminKycApplicationViewSet(viewsets.ModelViewSet):
         return super().update(request, *args, **kwargs)
 
 
+class ResendVerificationSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
 @api_view(["POST"])
 @permission_classes([permissions.AllowAny])
 def resend_verification(request):
-    """Resend email verification link token for an inactive account."""
-    email = (request.data.get("email") or "").strip()
-    if not email:
-        return Response(
-            {"error": "Email required."},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+    """Resend email verification link for an inactive account. Idempotent."""
+    serializer = ResendVerificationSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    email = serializer.validated_data["email"].strip()
     from django.contrib.auth import get_user_model
     UserModel = get_user_model()
     user = UserModel.objects.filter(email=email).first()
     if not user:
-        return Response(
-            {"error": "Account not found."},
-            status=status.HTTP_404_NOT_FOUND,
-        )
+        return Response({"success": True, "message": "If an account exists, a verification email has been sent."}, status=status.HTTP_200_OK)
     if user.is_active:
-        return Response(
-            {"status": "already_active"},
-            status=status.HTTP_200_OK,
-        )
+        return Response({"success": True, "message": "Account already verified. You can log in."}, status=status.HTTP_200_OK)
     # Issue a fresh token and send email
     issue_verification_token(user)
-    return Response({"status": "resent"}, status=status.HTTP_200_OK)
+    return Response({"success": True, "message": "Verification email resent. Please check your inbox."}, status=status.HTTP_200_OK)
+
+
+class SignupSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(min_length=8)
+    referral_code = serializers.CharField(required=False, allow_blank=True)
 
 
 @api_view(["POST"])
 @permission_classes([permissions.AllowAny])
 def complete_signup(request):
-    """Signup: create user, send verification link."""
-    email = (request.data.get("email") or "").strip()
-    password = (request.data.get("password") or "").strip()
-    referral_code = (request.data.get("referral_code") or "").strip()
-
-    if not email or not password:
-        return Response(
-            {"error": "Email and password are required."},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-    if len(password) < 8:
-        return Response(
-            {"error": "Password must be at least 8 characters."},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+    """Signup: create user, send verification link. Prevents duplicate inactive users."""
+    serializer = SignupSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    email = serializer.validated_data["email"].strip()
+    password = serializer.validated_data["password"]
+    referral_code = serializer.validated_data.get("referral_code", "").strip()
 
     from django.contrib.auth import get_user_model
     User = get_user_model()
 
-    # Check if user already exists
-    if (User.objects.filter(username=email).exists() or
-            User.objects.filter(email=email).exists()):
-        return Response(
-            {"error": "An account with this email already exists."},
-            status=status.HTTP_400_BAD_REQUEST
-        )
+    # Prevent duplicate signup for existing users (active or inactive)
+    existing = User.objects.filter(email=email).first()
+    if existing:
+        if not existing.is_active:
+            return Response({"error": "An account with this email already exists but is not yet verified. Please check your email for a verification link or resend it."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "An account with this email already exists."}, status=status.HTTP_400_BAD_REQUEST)
 
     # Create new inactive user
     try:
@@ -873,10 +869,7 @@ def complete_signup(request):
             is_active=False
         )
     except Exception as e:
-        return Response(
-            {"error": f"Failed to create account: {str(e)}"},
-            status=status.HTTP_400_BAD_REQUEST
-        )
+        return Response({"error": f"Failed to create account: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
     # Attach referral if a valid code was provided
     referral_attached = False
@@ -887,18 +880,11 @@ def complete_signup(request):
             if ref:
                 referral_attached = True
         except Exception:
-            # Do not block signup on referral issues
             pass
 
     # Send verification email
     issue_verification_token(user)
-    return Response(
-        {
-            "status": "verification_sent",
-            "referral_attached": referral_attached,
-        },
-        status=status.HTTP_200_OK,
-    )
+    return Response({"status": "verification_sent", "referral_attached": referral_attached}, status=status.HTTP_200_OK)
 
 
 @api_view(["GET"])
@@ -933,72 +919,35 @@ def verify_email_link(request):
 
     try:
         ev = verify_token(token)
-
-        if not ev:
-            # If the token was already used but the user is active, treat as success
-            ev_any = EmailVerification.objects.filter(token=token).order_by("-created_at").first()
-            if ev_any and ev_any.user.is_active:
-                logger.info(
-                    "Email verification token already used; user %s is active", ev_any.user.email
-                )
-                return Response(
-                    {
-                        "success": True,
-                        "message": "Your email is already verified. You can now log in.",
-                        "redirect_url": "/accounts/login",
-                    },
-                    status=status.HTTP_200_OK,
-                )
-
-            logger.warning(
-                "Email verification failed: Invalid or expired token"
-            )
-            return Response(
-                {
-                    "success": False,
-                    "error": (
-                        "Invalid or expired verification link. Please request "
-                        "a new one."
-                    ),
-                    "redirect_url": "/accounts/signup"
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        # Check if user is already active
-        user = ev.user
-        logger.info(f"Email verification successful for user: {user.email}")
-
-        if user.is_active:
-            return Response(
-                {
-                    "success": True,
-                    "message": (
-                        "Your email is already verified. You can now log in."
-                    ),
-                    "redirect_url": "/accounts/login",
-                },
-                status=status.HTTP_200_OK,
-            )
-
-        return Response(
-            {
+        if ev:
+            user = ev.user
+            logger.info(f"Email verification successful for user: {user.email}")
+            return Response({
                 "success": True,
-                "message": (
-                    "Email verified successfully! You can now log in to "
-                    "your account."
-                ),
+                "message": "Email verified successfully! You can now log in to your account.",
                 "redirect_url": "/accounts/login?verified=1",
-            },
-            status=status.HTTP_200_OK,
-        )
+            }, status=status.HTTP_200_OK)
+
+        # If token is used/expired, check if user is already active
+        ev_any = EmailVerification.objects.filter(token=token).order_by("-created_at").first()
+        if ev_any and ev_any.user.is_active:
+            logger.info("Email verification token already used; user %s is active", ev_any.user.email)
+            return Response({
+                "success": True,
+                "message": "Your email is already verified. You can now log in.",
+                "redirect_url": "/accounts/login",
+            }, status=status.HTTP_200_OK)
+
+        logger.warning("Email verification failed: Invalid or expired token")
+        return Response({
+            "success": False,
+            "error": "Invalid or expired verification link. Please request a new one.",
+            "redirect_url": "/accounts/signup"
+        }, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         logger.error(f"Email verification error: {str(e)}", exc_info=True)
-        return Response(
-            {
-                "success": False,
-                "error": f"Verification failed: {str(e)}",
-                "redirect_url": "/accounts/signup"
-            },
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR
-        )
+        return Response({
+            "success": False,
+            "error": f"Verification failed: {str(e)}",
+            "redirect_url": "/accounts/signup"
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

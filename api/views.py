@@ -4,6 +4,7 @@ import hashlib
 from django.apps import apps
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
+from django.core.cache import cache
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import connection
 from django.db.models import Count
@@ -539,10 +540,43 @@ def login_view(request):
             {"error": "Email and password are required."},
             status=status.HTTP_400_BAD_REQUEST
         )
+
+    def _get_client_ip(req) -> str:
+        forwarded = (req.META.get("HTTP_X_FORWARDED_FOR") or "").split(",")[0].strip()
+        return forwarded or (req.META.get("REMOTE_ADDR") or "")
+
+    normalized_email = str(email).strip().lower()
+    client_ip = _get_client_ip(request) or "unknown"
+
+    max_attempts = int(getattr(settings, "MAX_FAILED_LOGIN_ATTEMPTS", 5))
+    window_seconds = int(getattr(settings, "FAILED_LOGIN_WINDOW_SECONDS", 15 * 60))
+    lockout_seconds = int(getattr(settings, "FAILED_LOGIN_LOCKOUT_SECONDS", 15 * 60))
+
+    # Global brute-force protection: lock out by client IP regardless of which
+    # account is being targeted.
+    attempts_key = f"auth:login_attempts_ip:{client_ip}"
+    lock_key = f"auth:login_lock_ip:{client_ip}"
+
+    now_ts = int(timezone.now().timestamp())
+    lock_until = cache.get(lock_key)
+    if isinstance(lock_until, int) and lock_until > now_ts:
+        retry_after = max(1, lock_until - now_ts)
+        resp = Response(
+            {
+                "error": "Too many failed login attempts. Please try again later.",
+                "retry_after": retry_after,
+            },
+            status=status.HTTP_429_TOO_MANY_REQUESTS,
+        )
+        resp["Retry-After"] = str(retry_after)
+        return resp
+    if lock_until is not None:
+        cache.delete(lock_key)
+
     # Early lookup to distinguish inactive from bad credentials
     from django.contrib.auth import get_user_model
     UserModel = get_user_model()
-    existing = UserModel.objects.filter(email=email).first()
+    existing = UserModel.objects.filter(email=normalized_email).first()
     if existing and not existing.is_active:
         # Offer resend flow to inactive accounts
         return Response(
@@ -554,8 +588,28 @@ def login_view(request):
         )
 
     # Authenticate user normally
-    user = authenticate(request, username=email, password=password)
+    user = authenticate(request, username=normalized_email, password=password)
     if user is None:
+        attempts = cache.get(attempts_key)
+        try:
+            attempts_int = int(attempts or 0)
+        except (TypeError, ValueError):
+            attempts_int = 0
+        attempts_int += 1
+        cache.set(attempts_key, attempts_int, timeout=window_seconds)
+
+        if attempts_int >= max_attempts:
+            lock_until_ts = now_ts + lockout_seconds
+            cache.set(lock_key, lock_until_ts, timeout=lockout_seconds)
+            resp = Response(
+                {
+                    "error": "Too many failed login attempts. Please try again later.",
+                    "retry_after": lockout_seconds,
+                },
+                status=status.HTTP_429_TOO_MANY_REQUESTS,
+            )
+            resp["Retry-After"] = str(lockout_seconds)
+            return resp
         return Response(
             {"error": "Invalid email or password."},
             status=status.HTTP_401_UNAUTHORIZED,
@@ -565,6 +619,10 @@ def login_view(request):
             {"error": "Account not verified. Please check your email for a verification link or resend it.", "inactive": True},
             status=status.HTTP_401_UNAUTHORIZED,
         )
+
+    # Successful auth: clear any accumulated failures.
+    cache.delete(attempts_key)
+    cache.delete(lock_key)
 
     login(request, user)
     token, _ = Token.objects.get_or_create(user=user)

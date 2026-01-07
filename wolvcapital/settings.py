@@ -565,6 +565,48 @@ SITE_URL = str(SITE_URL)
 
 ADMIN_SITE_URL = os.getenv("ADMIN_SITE_URL", SITE_URL)
 
+
+def _add_trusted_origin_and_host(url_value: str | None) -> None:
+    """Add hostname from a URL to ALLOWED_HOSTS and its https origin to CSRF/CORS.
+
+    This prevents 400 Bad Request (DisallowedHost) and CSRF failures when the
+    backend is accessed behind a proxy using the public site domain.
+    """
+
+    if not url_value:
+        return
+
+    raw = str(url_value).strip()
+    if not raw:
+        return
+
+    parsed = urlparse(raw if "://" in raw else f"https://{raw}")
+    host = parsed.hostname
+    if not host:
+        return
+
+    candidates = {host}
+    if host.startswith("www."):
+        candidates.add(host.removeprefix("www."))
+    else:
+        candidates.add(f"www.{host}")
+
+    for candidate in candidates:
+        if candidate and candidate not in ALLOWED_HOSTS:
+            ALLOWED_HOSTS.append(candidate)
+
+    # Trust https origin for CSRF/CORS (admin + any cookie-auth forms)
+    https_origin = f"https://{host}"
+    if https_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(https_origin)
+    if https_origin not in CORS_ALLOWED_ORIGINS:
+        CORS_ALLOWED_ORIGINS.append(https_origin)
+
+
+# Always trust our public site + frontend URL even if CUSTOM_DOMAIN isn't set.
+_add_trusted_origin_and_host(PUBLIC_SITE_URL)
+_add_trusted_origin_and_host(os.getenv("FRONTEND_URL"))
+
 # ------------------------------------------------------------------
 # Business Email Inbox Configuration (IMAP)
 # ------------------------------------------------------------------

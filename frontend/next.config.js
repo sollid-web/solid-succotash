@@ -32,6 +32,16 @@ const nextConfig = {
     // reach Django instead of returning a Next.js 404.
     const backendBase = process.env.NEXT_PUBLIC_API_URL || 'https://solid-succotash-production.up.railway.app'
     return [
+      // Proxy Django admin through the frontend domain.
+      {
+        source: '/admin/:path*',
+        destination: `${backendBase.replace(/\/$/, '')}/admin/:path*`,
+      },
+      // Proxy Django static assets (needed for admin CSS/JS).
+      {
+        source: '/static/:path*',
+        destination: `${backendBase.replace(/\/$/, '')}/static/:path*`,
+      },
       {
         source: '/api/:path*',
         destination: `${backendBase.replace(/\/$/, '')}/api/:path*`,

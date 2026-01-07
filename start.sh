@@ -21,6 +21,26 @@ for i in {1..3}; do
     fi
 done
 
+# Optional: Create/update a superuser on startup (useful on Railway where
+# interactive shells may be unavailable).
+#
+# Enable by setting:
+#   BOOTSTRAP_SUPERUSER=1
+#   RENDER_SUPERUSER_EMAIL=you@example.com
+#   RENDER_SUPERUSER_PASSWORD=StrongPassword
+# Optional:
+#   RENDER_SUPERUSER_NAME="Your Name"
+if [[ -n "$BOOTSTRAP_SUPERUSER" && "$BOOTSTRAP_SUPERUSER" == "1" ]]; then
+    echo "👤 Bootstrapping superuser (BOOTSTRAP_SUPERUSER=1)..."
+    if python manage.py create_render_superuser; then
+        echo "✅ Superuser bootstrap succeeded"
+    else
+        echo "⚠️ Superuser bootstrap failed (continuing startup)"
+    fi
+else
+    echo "⏭️ Skipping superuser bootstrap (set BOOTSTRAP_SUPERUSER=1 to enable)"
+fi
+
 # Collect static files (critical for production)
 echo "📂 Collecting static files..."
 if python manage.py collectstatic --noinput; then

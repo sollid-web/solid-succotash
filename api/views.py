@@ -3,6 +3,7 @@ import hashlib
 
 from django.apps import apps
 from django.contrib.auth import authenticate, login, logout
+from django.conf import settings
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import connection
 from django.db.models import Count
@@ -928,13 +929,17 @@ def verify_email_link(request):
     else:
         logger.info("Email verification attempt with no token provided")
 
+    public_site_url = str(getattr(settings, "PUBLIC_SITE_URL", "") or "").rstrip("/")
+    login_redirect = f"{public_site_url}/accounts/login" if public_site_url else "/accounts/login"
+    signup_redirect = f"{public_site_url}/accounts/signup" if public_site_url else "/accounts/signup"
+
     if not token:
         logger.warning("Email verification failed: No token provided")
         return Response(
             {
                 "success": False,
                 "error": "Verification token is required.",
-                "redirect_url": "/accounts/signup"
+                "redirect_url": signup_redirect,
             },
             status=status.HTTP_400_BAD_REQUEST
         )
@@ -960,7 +965,7 @@ def verify_email_link(request):
             return Response({
                 "success": True,
                 "message": "Email verified successfully! You can now log in to your account.",
-                "redirect_url": "/accounts/login?verified=1",
+                "redirect_url": f"{login_redirect}?verified=1",
             }, status=status.HTTP_200_OK)
 
         # If token is used/expired, check if user is already active
@@ -971,19 +976,19 @@ def verify_email_link(request):
             return Response({
                 "success": True,
                 "message": "Your email is already verified. You can now log in.",
-                "redirect_url": "/accounts/login",
+                "redirect_url": login_redirect,
             }, status=status.HTTP_200_OK)
 
         logger.warning("Email verification failed: Invalid or expired token")
         return Response({
             "success": False,
             "error": "Invalid or expired verification link. Please request a new one.",
-            "redirect_url": "/accounts/signup"
+            "redirect_url": signup_redirect,
         }, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         logger.error(f"Email verification error: {str(e)}", exc_info=True)
         return Response({
             "success": False,
             "error": f"Verification failed: {str(e)}",
-            "redirect_url": "/accounts/signup"
+            "redirect_url": signup_redirect,
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

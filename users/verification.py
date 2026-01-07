@@ -31,13 +31,12 @@ def issue_verification_token(user) -> EmailVerification:
         expires_at=timezone.now() + timedelta(hours=2),
     )
 
-    # Prefer backend site URL for API links when available.
-    api_base_url = str(
-        getattr(settings, "SITE_URL", None)
-        or getattr(settings, "PUBLIC_SITE_URL", None)
+    # Verification links should land on the public UI, not the API.
+    public_base_url = str(
+        getattr(settings, "PUBLIC_SITE_URL", None)
         or "https://wolvcapital.com"
     ).rstrip("/")
-    verify_url = f"{api_base_url}/api/auth/verify-email/?token={token}"
+    verify_url = f"{public_base_url}/accounts/verify-email?token={token}"
     send_email(
         template_name="email_verification",
         to_emails=user.email,

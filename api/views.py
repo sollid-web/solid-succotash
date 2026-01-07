@@ -907,15 +907,11 @@ def complete_signup(request):
 @authentication_classes([])
 @permission_classes([permissions.AllowAny])
 def verify_email_link(request):
-    """
-    Verify email token and activate user account.
-    - Idempotent: safe to call multiple times
-    - Activates user and sets is_active, is_verified, email_verified if present
-    - Returns success if already verified
-    """
-    """
-    Verify email token and activate user account.
-    Returns JSON response with success status and redirect URL.
+    """Verify email token and activate user account.
+
+    This endpoint is API-first (returns JSON) but will redirect browser-style
+    (HTML) requests to the public frontend verification page so users never land
+    on a raw DRF response.
     """
     import logging
     logger = logging.getLogger(__name__)
@@ -932,6 +928,19 @@ def verify_email_link(request):
     public_site_url = str(getattr(settings, "PUBLIC_SITE_URL", "") or "").rstrip("/")
     login_redirect = f"{public_site_url}/accounts/login" if public_site_url else "/accounts/login"
     signup_redirect = f"{public_site_url}/accounts/signup" if public_site_url else "/accounts/signup"
+
+    # If a user hits this endpoint directly in a browser, redirect them to the
+    # frontend UI which will call this endpoint expecting JSON.
+    accept_header = str(request.META.get("HTTP_ACCEPT", "") or "").lower()
+    wants_html = "text/html" in accept_header
+    wants_json = "application/json" in accept_header or not wants_html
+    if wants_html and not wants_json:
+        from django.http import HttpResponseRedirect
+
+        ui_base = public_site_url or ""
+        if token:
+            return HttpResponseRedirect(f"{ui_base}/accounts/verify-email?token={token}")
+        return HttpResponseRedirect(f"{ui_base}/accounts/verify-email")
 
     if not token:
         logger.warning("Email verification failed: No token provided")
@@ -985,10 +994,10 @@ def verify_email_link(request):
             "error": "Invalid or expired verification link. Please request a new one.",
             "redirect_url": signup_redirect,
         }, status=status.HTTP_400_BAD_REQUEST)
-    except Exception as e:
-        logger.error(f"Email verification error: {str(e)}", exc_info=True)
+    except Exception:
+        logger.error("Email verification error", exc_info=True)
         return Response({
             "success": False,
-            "error": f"Verification failed: {str(e)}",
+            "error": "Verification failed. Please request a new link or contact support.",
             "redirect_url": signup_redirect,
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

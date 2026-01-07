@@ -35,7 +35,7 @@ def issue_verification_token(user) -> EmailVerification:
         getattr(settings, "PUBLIC_SITE_URL", None)
         or getattr(settings, "SITE_URL", "https://wolvcapital.com")
     ).rstrip("/")
-    verify_url = f"{site_url}/accounts/verify-email?token={token}"
+    verify_url = f"{site_url}/api/auth/verify-email/?token={token}"
     send_email(
         template_name="email_verification",
         to_emails=user.email,

@@ -35,6 +35,7 @@ from users.notification_service import mark_all_read as service_mark_all_read
 from users.notification_service import (
     mark_notification_read as service_mark_notification_read,
 )
+from users.models import Profile, UserNotification, UserWallet
 from users.services import (
     approve_kyc_application,
     reject_kyc_application,

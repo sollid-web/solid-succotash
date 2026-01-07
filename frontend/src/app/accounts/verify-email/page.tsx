@@ -26,12 +26,24 @@ function VerifyEmailContent() {
     }
 
     // Call the backend API to verify the token
-    // Robust fallback: use production API if env not set
+    // Robust fallback: prefer NEXT_PUBLIC_API_URL, else guess api.* from current domain
     const envApi = (process as any)?.env?.NEXT_PUBLIC_API_URL
     const isProdLike = typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
+
+    const defaultProdApiBase = 'https://solid-succotash-production.up.railway.app'
+
+    const guessedSameOriginApiBase = (() => {
+      if (typeof window === 'undefined') return ''
+      const origin = window.location.origin
+      const host = window.location.hostname
+      // If the frontend is being served from the API host already, use same-origin.
+      if (host.includes('up.railway.app') || host.startsWith('api.')) return origin
+      return ''
+    })()
+
     const apiBase = envApi && envApi.trim()
       ? envApi.replace(/\/$/, '')
-      : (isProdLike ? 'https://api-wolvcapital.onrender.com' : 'http://localhost:8000')
+      : (isProdLike ? (guessedSameOriginApiBase || defaultProdApiBase) : 'http://localhost:8000')
     const verifyUrl = `${apiBase}/api/auth/verify-email/?token=${encodeURIComponent(token)}`
     
     console.log('Email Verification Debug:')

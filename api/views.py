@@ -549,7 +549,7 @@ def login_view(request):
                 "error": "Account not verified. Check your email or resend.",
                 "inactive": True,
             },
-            status=status.HTTP_403_FORBIDDEN,
+            status=status.HTTP_401_UNAUTHORIZED,
         )
 
     # Authenticate user normally

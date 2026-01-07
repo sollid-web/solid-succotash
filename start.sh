@@ -164,5 +164,6 @@ exec python -m gunicorn wolvcapital.wsgi:application \
     --workers 2 \
     --timeout 120 \
     --keep-alive 5 \
+    --limit-request-line 8190 \
     --max-requests 1000 \
     --preload

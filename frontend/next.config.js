@@ -12,6 +12,9 @@ const nextConfig = {
   // Disabling the built-in redirect prevents this loop while keeping our
   // rewrite proxy for /admin/* intact.
   skipTrailingSlashRedirect: true,
+  // Ensure middleware doesn't normalize URLs in a way that strips trailing
+  // slashes before our admin rewrites run.
+  skipMiddlewareUrlNormalize: true,
   // i18n removed - not supported in App Router, handled via middleware instead
   images: {
     remotePatterns: [

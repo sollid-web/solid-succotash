@@ -1,6 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Django admin URLs require trailing slashes. When Next.js auto-normalizes
+  // URLs (default behavior), it can strip trailing slashes and create a
+  // redirect loop with Django's APPEND_SLASH behavior.
+  //
+  // Example loop:
+  //   /admin/users/profile/  (Next strips ->) /admin/users/profile
+  //   /admin/users/profile   (Django appends ->) /admin/users/profile/
+  //
+  // Disabling the built-in redirect prevents this loop while keeping our
+  // rewrite proxy for /admin/* intact.
+  skipTrailingSlashRedirect: true,
   // i18n removed - not supported in App Router, handled via middleware instead
   images: {
     remotePatterns: [

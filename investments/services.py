@@ -333,3 +333,40 @@ def create_investment(
     EmailService.send_investment_notification(investment, "created")
 
     return investment
+
+
+@transaction.atomic
+def recalculate_investment_end_date(
+    *,
+    investment: UserInvestment,
+    admin_user: User,
+    notes: str = "",
+) -> UserInvestment:
+    """Recalculate `ends_at` from `started_at + plan.duration_days`.
+
+    Intended for controlled administrative corrections when plan terms were
+    previously mis-seeded or when end dates are inconsistent.
+
+    This does NOT change wallet balances.
+    """
+
+    if investment.started_at is None:
+        raise ValidationError("Cannot recalculate end date without started_at")
+
+    expected_end = investment.started_at + timedelta(days=investment.plan.duration_days)
+
+    if investment.ends_at == expected_end:
+        return investment
+
+    investment.ends_at = expected_end
+    investment.save(update_fields=["ends_at"])
+
+    AdminAuditLog.objects.create(
+        admin=admin_user,
+        entity="investment",
+        entity_id=str(investment.id),
+        action="recalculate_end_date",
+        notes=notes or "Recalculated investment end date",
+    )
+
+    return investment

@@ -13,6 +13,101 @@ from users.models import UserWallet
 from .models import DailyRoiPayout, InvestmentPlan, UserInvestment
 
 
+class HistoricalInvestmentCreationTests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.user = User.objects.create_user(
+            username="hist_user",
+            email="",
+            password=None,
+            is_active=True,
+        )
+        self.user.set_unusable_password()
+        self.user.save(update_fields=["password"])
+
+        self.admin = User.objects.create_user(
+            username="hist_admin",
+            email="hist_admin@example.com",
+            password="pass12345",
+            is_staff=True,
+        )
+
+        self.plan = InvestmentPlan.objects.create(
+            name="HistPlan",
+            description="Historical",
+            daily_roi=Decimal("1.25"),
+            duration_days=150,
+            min_amount=Decimal("100"),
+            max_amount=Decimal("20000"),
+        )
+
+        wallet = self.user.wallet
+        wallet.balance = Decimal("20000.00")
+        wallet.save(update_fields=["balance"])
+
+    def test_create_approved_investment_at_debits_wallet_and_audits(self):
+        from investments.services import create_approved_investment_at
+        from transactions.models import AdminAuditLog
+
+        started_at = timezone.datetime(2025, 11, 20, tzinfo=timezone.get_current_timezone())
+
+        inv = create_approved_investment_at(
+            user=self.user,
+            plan=self.plan,
+            amount=Decimal("4999"),
+            admin_user=self.admin,
+            started_at=started_at,
+            notes="restore",
+        )
+
+        inv.refresh_from_db()
+        self.user.wallet.refresh_from_db()
+        self.assertEqual(inv.status, "approved")
+        self.assertEqual(inv.started_at.date().isoformat(), "2025-11-20")
+        self.assertEqual(inv.ends_at.date().isoformat(), "2026-04-19")
+        self.assertEqual(self.user.wallet.balance, Decimal("15001.00"))
+        self.assertTrue(
+            AdminAuditLog.objects.filter(entity="investment", entity_id=str(inv.id), action="approve").exists()
+        )
+
+    @patch("core.email_service.EmailService.send_transaction_notification")
+    @patch("core.email_service.EmailService.send_admin_alert")
+    def test_management_command_creates_funding_and_investments(self, _mock_alert, _mock_tx_email):
+        # Funding (approved deposit) then two historical investments.
+        call_command(
+            "create_historical_investments",
+            username=self.user.username,
+            admin_email=self.admin.email,
+            fund=["20000"],
+            investment=[
+                "HistPlan|9000|2025-11-23",
+                "HistPlan|7800|2025-11-28",
+            ],
+            dry_run=True,
+        )
+
+        # Dry-run should not change wallet or create investments.
+        self.assertEqual(UserInvestment.objects.filter(user=self.user).count(), 0)
+        self.user.wallet.refresh_from_db()
+        self.assertEqual(self.user.wallet.balance, Decimal("20000.00"))
+
+        call_command(
+            "create_historical_investments",
+            username=self.user.username,
+            admin_email=self.admin.email,
+            fund=["20000"],
+            investment=[
+                "HistPlan|9000|2025-11-23",
+                "HistPlan|7800|2025-11-28",
+            ],
+        )
+
+        self.assertEqual(UserInvestment.objects.filter(user=self.user, status="approved").count(), 2)
+        self.user.wallet.refresh_from_db()
+        # Start 20000, +20000 funding, -16800 investments = 23200
+        self.assertEqual(self.user.wallet.balance, Decimal("23200.00"))
+
+
 class DailyRoiPayoutTests(TestCase):
     def setUp(self):
         User = get_user_model()

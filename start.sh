@@ -166,6 +166,27 @@ else
     echo "⏭️ Skipping admin user creation (set CREATE_INITIAL_ADMIN=1 to enable)"
 fi
 
+# Critical database safety check
+echo "🛡️ Database safety check..."
+python manage.py shell << 'EOF' || echo "⚠️ Database safety check failed"
+try:
+    from django.conf import settings
+    db_engine = settings.DATABASES['default']['ENGINE']
+    if 'sqlite' in db_engine.lower():
+        import os
+        if any(k.startswith('RAILWAY_') for k in os.environ) and not settings.DEBUG:
+            print("\n❌ CRITICAL: Railway production using SQLite!")
+            print("   Users and data will be LOST on every redeploy.")
+            print("   Add PostgreSQL service and set DATABASE_URL immediately.")
+            exit(1)
+        else:
+            print("✅ SQLite OK for local development")
+    else:
+        print(f"✅ Using production database: {db_engine}")
+except Exception as e:
+    print(f"⚠️ Database check error: {e}")
+EOF
+
 # Test database connection and verify setup
 echo "🔍 Verifying database setup..."
 python manage.py verify_db || echo "⚠️ Setup verification failed, continuing..."

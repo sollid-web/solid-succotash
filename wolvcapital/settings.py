@@ -360,6 +360,14 @@ if os.getenv("DATABASE_URL"):
             }
         }
 else:
+    # Guard against SQLite fallback in production environments
+    if IN_RAILWAY and not DEBUG:
+        raise ValueError(
+            "Railway production deployment detected without DATABASE_URL! "
+            "Add PostgreSQL service and set DATABASE_URL to prevent data loss. "
+            "Users and investments will be lost on every redeploy with SQLite."
+        )
+    
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",

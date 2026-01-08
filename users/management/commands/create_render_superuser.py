@@ -63,11 +63,22 @@ class Command(BaseCommand):
                 user.save()
                 action = "created"
             else:
-                user.set_password(password)
-                user.is_superuser = True
-                user.is_staff = True
-                user.save(update_fields=["password", "is_superuser", "is_staff"])
-                action = "updated"
+                # Only update existing users if they're not already superusers
+                # or if we're in a clear bootstrap scenario
+                if user.is_superuser and user.is_staff:
+                    self.stdout.write(
+                        self.style.WARNING(
+                            f"Superuser {email} already exists and has admin privileges. "
+                            "Skipping password update to avoid overwriting existing account."
+                        )
+                    )
+                    action = "skipped (already admin)"
+                else:
+                    user.set_password(password)
+                    user.is_superuser = True
+                    user.is_staff = True
+                    user.save(update_fields=["password", "is_superuser", "is_staff"])
+                    action = "promoted to admin"
 
             profile, profile_created = Profile.objects.get_or_create(
                 user=user,

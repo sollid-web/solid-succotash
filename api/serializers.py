@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.db.models import Sum
+from django.utils import timezone
 from rest_framework import serializers
 
 from core.models import Agreement, PlatformCertificate, UserAgreementAcceptance
@@ -73,6 +74,7 @@ class UserInvestmentSerializer(serializers.ModelSerializer):
     plan = InvestmentPlanSerializer(read_only=True)
     plan_id = serializers.IntegerField(write_only=True)
     total_return = serializers.DecimalField(max_digits=12, decimal_places=2, read_only=True)
+    ends_at = serializers.SerializerMethodField()
 
     class Meta:
         model = UserInvestment
@@ -88,6 +90,19 @@ class UserInvestmentSerializer(serializers.ModelSerializer):
             "total_return",
         ]
         read_only_fields = ["status", "started_at", "ends_at", "created_at"]
+
+    def get_ends_at(self, obj):
+        # Approved investments should always run for plan.duration_days from started_at.
+        # This is a read-time safeguard for legacy records with stale ends_at.
+        if (
+            obj.status == "approved"
+            and obj.started_at
+            and getattr(obj, "plan", None)
+            and getattr(obj.plan, "duration_days", None)
+        ):
+            expected = obj.started_at + timezone.timedelta(days=int(obj.plan.duration_days))
+            return expected
+        return obj.ends_at
 
     def validate(self, data):
         plan_id = data.get("plan_id")
@@ -246,6 +261,7 @@ class AdminUserInvestmentSerializer(serializers.ModelSerializer):
     user_email = serializers.EmailField(source="user.email", read_only=True)
     plan_name = serializers.CharField(source="plan.name", read_only=True)
     total_return = serializers.DecimalField(max_digits=12, decimal_places=2, read_only=True)
+    ends_at = serializers.SerializerMethodField()
 
     class Meta:
         model = UserInvestment
@@ -267,6 +283,17 @@ class AdminUserInvestmentSerializer(serializers.ModelSerializer):
             "created_at",
             "total_return",
         ]
+
+    def get_ends_at(self, obj):
+        if (
+            obj.status == "approved"
+            and obj.started_at
+            and getattr(obj, "plan", None)
+            and getattr(obj.plan, "duration_days", None)
+        ):
+            expected = obj.started_at + timezone.timedelta(days=int(obj.plan.duration_days))
+            return expected
+        return obj.ends_at
 
 
 class UserNotificationSerializer(serializers.ModelSerializer):

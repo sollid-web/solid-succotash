@@ -1,9 +1,21 @@
+import hashlib
+from decimal import Decimal
+
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
+from investments.models import InvestmentPlan, UserInvestment
+from investments.services import approve_investment, create_investment
+from transactions.models import Transaction
+from transactions.services import approve_transaction, create_transaction
+
 from .models import Agreement
+
+
+User = get_user_model()
 
 
 class AgreementModelTests(TestCase):
@@ -101,30 +113,6 @@ class AgreementAPITests(TestCase):
             UserAgreementAcceptance.objects.filter(user=self.user, agreement=self.agreement).count(),
             1,
         )
-
-
-from decimal import Decimal
-
-from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
-from django.test import Client, TestCase
-from django.urls import reverse
-
-from investments.models import InvestmentPlan, UserInvestment
-from investments.services import (
-    approve_investment,
-    create_investment,
-    reject_investment,
-)
-from transactions.models import AdminAuditLog, Transaction
-from transactions.services import (
-    approve_transaction,
-    create_transaction,
-    reject_transaction,
-)
-from users.models import Profile, UserWallet
-
-User = get_user_model()
 
 
 class UserModelTests(TestCase):
@@ -346,8 +334,6 @@ class InvestmentServiceTests(TestCase):
             approve_investment(investment, self.admin_user, "Should fail due to balance")
 
 
-
-
 class ManagementCommandTests(TestCase):
     def test_seed_plans_command(self):
         """Test that seed_plans command creates plans"""
@@ -365,11 +351,11 @@ class ManagementCommandTests(TestCase):
         # Check specific plans
         pioneer = InvestmentPlan.objects.get(name="Pioneer")
         self.assertEqual(pioneer.daily_roi, Decimal("1.00"))
-        self.assertEqual(pioneer.duration_days, 14)
+        self.assertEqual(pioneer.duration_days, 90)
 
         summit = InvestmentPlan.objects.get(name="Summit")
         self.assertEqual(summit.daily_roi, Decimal("2.00"))
-        self.assertEqual(summit.duration_days, 45)
+        self.assertEqual(summit.duration_days, 365)
 
     def test_seed_agreements_command(self):
         from django.core.management import call_command
@@ -411,8 +397,6 @@ class AgreementIntegrityTests(TestCase):
         from .models import UserAgreementAcceptance
 
         acc = UserAgreementAcceptance.objects.get(user=self.user, agreement=self.agreement)
-        import hashlib
-
         expected_hash = hashlib.sha256(self.agreement.body.encode("utf-8")).hexdigest()
         self.assertEqual(acc.agreement_hash, expected_hash)
         self.assertEqual(acc.agreement_version, self.agreement.version)

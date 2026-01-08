@@ -1,9 +1,8 @@
-from rest_framework import serializers
 import hashlib
 
 from django.apps import apps
-from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
+from django.contrib.auth import authenticate, login, logout
 from django.core.cache import cache
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import connection
@@ -11,13 +10,18 @@ from django.db.models import Count
 from django.db.models.functions import TruncDate
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from rest_framework import mixins, permissions, status, viewsets
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import mixins, permissions, serializers, status, viewsets
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import action, api_view, permission_classes, authentication_classes
+from rest_framework.decorators import (
+    action,
+    api_view,
+    authentication_classes,
+    permission_classes,
+)
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.views.decorators.csrf import csrf_exempt
 
 from core.models import Agreement, SupportRequest, UserAgreementAcceptance
 from investments.models import InvestmentPlan, UserInvestment
@@ -33,11 +37,11 @@ from transactions.services import (
     create_virtual_card_request,
     reject_transaction,
 )
+from users.models import Profile, UserNotification, UserWallet
 from users.notification_service import mark_all_read as service_mark_all_read
 from users.notification_service import (
     mark_notification_read as service_mark_notification_read,
 )
-from users.models import Profile, UserNotification, UserWallet
 from users.services import (
     approve_kyc_application,
     reject_kyc_application,
@@ -113,7 +117,7 @@ class UserInvestmentViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return UserInvestment.objects.filter(user=self.request.user)
+        return UserInvestment.objects.select_related("plan").filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -348,7 +352,7 @@ class AdminTransactionViewSet(viewsets.ModelViewSet):
 class AdminUserInvestmentViewSet(viewsets.ModelViewSet):
     """Admin investments management endpoint"""
 
-    queryset = UserInvestment.objects.all()
+    queryset = UserInvestment.objects.select_related("plan", "user").all()
     serializer_class = AdminUserInvestmentSerializer
     permission_classes = [permissions.IsAdminUser]
 

@@ -525,10 +525,14 @@ export default function DashboardPage() {
                 const planName = investment.plan?.name ?? investment.plan_name ?? 'Investment Plan'
                 const totalDays = investment.plan?.duration_days ?? investment.duration_days ?? 0
                 const investmentAmount = parseFloat(investment.amount || '0')
+                const dailyRoiPercent = parseFloat(String(investment.plan?.daily_roi ?? investment.daily_roi ?? 0))
+                const dailyEarning = investmentAmount * (dailyRoiPercent / 100)
                 const daysLeft = endDate ? Math.max(0, Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))) : 0
                 const daysElapsed = Math.min(totalDays, Math.max(0, totalDays - daysLeft))
                 const progressPercentage = totalDays > 0 ? Math.min(100, (daysElapsed / totalDays) * 100) : 0
                 const isCompleted = daysLeft === 0 && endDate && now >= endDate
+                const totalEarned = dailyEarning * daysElapsed
+                const expectedTotal = investmentAmount * (1 + (dailyRoiPercent / 100) * totalDays)
                 
                 return (
                   <div key={investment.id} className="border-2 border-gray-100 rounded-2xl p-6 hover:border-blue-200 transition-all duration-300 hover:shadow-lg">
@@ -543,6 +547,9 @@ export default function DashboardPage() {
                               : 'bg-blue-100 text-blue-700'
                           }`}>
                             {isCompleted ? 'Completed' : 'Active'}
+                          </span>
+                          <span className="text-sm text-gray-500">
+                            {dailyRoiPercent}% daily ROI
                           </span>
                         </div>
                       </div>
@@ -573,6 +580,20 @@ export default function DashboardPage() {
                       </div>
                     </div>
 
+                    {/* Earnings Tiles */}
+                    <div className="grid grid-cols-2 gap-4 mt-4">
+                      <div className="rounded-2xl p-4 bg-green-50 border border-green-100">
+                        <p className="text-sm text-gray-600">Total Earned</p>
+                        <p className="text-2xl font-bold text-green-700">${totalEarned.toFixed(2)}</p>
+                        <p className="text-sm text-green-700">${dailyEarning.toFixed(2)}/day</p>
+                      </div>
+                      <div className="rounded-2xl p-4 bg-blue-50 border border-blue-100 text-center">
+                        <p className="text-sm text-gray-600">Expected Total</p>
+                        <p className="text-2xl font-bold text-blue-700">${expectedTotal.toFixed(2)}</p>
+                        <p className="text-sm text-blue-700">At completion</p>
+                      </div>
+                    </div>
+
                     {/* Investment Details */}
                     <div className="border-t border-gray-100 pt-4">
                       <div className="grid grid-cols-3 gap-4 text-center">
@@ -581,9 +602,9 @@ export default function DashboardPage() {
                           <p className="text-sm font-semibold text-gray-700">{totalDays} days</p>
                         </div>
                         <div>
-                          <p className="text-xs text-gray-500 mb-1">Progress</p>
+                          <p className="text-xs text-gray-500 mb-1">Daily ROI</p>
                           <p className="text-sm font-semibold text-gray-700">
-                            {Math.round(progressPercentage)}%
+                            {dailyRoiPercent}%
                           </p>
                         </div>
                         <div>

@@ -151,6 +151,8 @@ def create_transaction(
     payment_method: str = "bank_transfer",
     tx_hash: str = "",
     wallet_address_used: str = "",
+    notify_admin: bool = True,
+    notify_user: bool = True,
 ) -> Transaction:
     """
     Create a new transaction and notify admins.
@@ -177,56 +179,63 @@ def create_transaction(
         wallet_address_used=wallet_address_used,
     )
 
-    # Create admin notification
-    amount_display = amount_decimal.quantize(Decimal("0.01"))
+    if notify_admin:
+        # Create admin notification
+        amount_display = amount_decimal.quantize(Decimal("0.01"))
 
-    from django.conf import settings
-    thresholds = getattr(settings, "ALERT_THRESHOLDS", {})
-    dep_thresh = Decimal(str(thresholds.get("high_deposit", 10000)))
-    wd_thresh = Decimal(str(thresholds.get("high_withdrawal", 5000)))
-    if tx_type == "deposit":
-        notification_type = "new_deposit"
-        title = f"New Deposit Request: ${amount_display}"
-        priority = "high" if amount_decimal >= dep_thresh else "medium"
-    elif tx_type == "withdrawal":
-        notification_type = "new_withdrawal"
-        title = f"New Withdrawal Request: ${amount_display}"
-        priority = "high" if amount_decimal >= wd_thresh else "medium"
-    else:
-        raise ValidationError("Invalid transaction type")
+        from django.conf import settings
 
-    payment_info = f" via {payment_method}"
-    if payment_method in {"BTC", "USDT", "USDC", "ETH"}:
-        payment_info += f" (Hash: {tx_hash[:10]}...)" if tx_hash else ""
+        thresholds = getattr(settings, "ALERT_THRESHOLDS", {})
+        dep_thresh = Decimal(str(thresholds.get("high_deposit", 10000)))
+        wd_thresh = Decimal(str(thresholds.get("high_withdrawal", 5000)))
+        if tx_type == "deposit":
+            notification_type = "new_deposit"
+            title = f"New Deposit Request: ${amount_display}"
+            priority = "high" if amount_decimal >= dep_thresh else "medium"
+        elif tx_type == "withdrawal":
+            notification_type = "new_withdrawal"
+            title = f"New Withdrawal Request: ${amount_display}"
+            priority = "high" if amount_decimal >= wd_thresh else "medium"
+        else:
+            raise ValidationError("Invalid transaction type")
 
-    message = f"User {user.email} has submitted a {tx_type} request for ${amount_display}{payment_info}. Reference: {reference}"
+        payment_info = f" via {payment_method}"
+        if payment_method in {"BTC", "USDT", "USDC", "ETH"}:
+            payment_info += f" (Hash: {tx_hash[:10]}...)" if tx_hash else ""
 
-    create_admin_notification(
-        notification_type=notification_type,
-        title=title,
-        message=message,
-        user=user,
-        entity_type="transaction",
-        entity_id=str(txn.id),
-        priority=priority,
-    )
+        message = (
+            f"User {user.email} has submitted a {tx_type} request for ${amount_display}"
+            f"{payment_info}. Reference: {reference}"
+        )
 
-    # Send admin email alert for high/urgent priority events
-    if priority in {"high", "urgent"}:
+        create_admin_notification(
+            notification_type=notification_type,
+            title=title,
+            message=message,
+            user=user,
+            entity_type="transaction",
+            entity_id=str(txn.id),
+            priority=priority,
+        )
+
+        # Send admin email alert for high/urgent priority events
+        if priority in {"high", "urgent"}:
+            from core.email_service import EmailService
+
+            try:
+                EmailService.send_admin_alert(
+                    subject=title,
+                    message=message,
+                )
+            except Exception:
+                # Do not break flow if admin email fails
+                pass
+
+    if notify_user:
+        # Send email notification for transaction creation
         from core.email_service import EmailService
-        try:
-            EmailService.send_admin_alert(
-                subject=title,
-                message=message,
-            )
-        except Exception:
-            # Do not break flow if admin email fails
-            pass
 
-    # Send email notification for transaction creation
-    from core.email_service import EmailService
-
-    EmailService.send_transaction_notification(txn, 'created')
+        EmailService.send_transaction_notification(txn, "created")
 
     return txn
 

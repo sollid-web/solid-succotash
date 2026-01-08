@@ -66,6 +66,34 @@ class DailyRoiPayoutTests(TestCase):
         )
         self.assertEqual(list(txns_after.values_list("id", flat=True)), first_txn_ids)
 
+    def test_backfill_range_is_idempotent_and_capped_to_investment_window(self):
+        # Force a stable window in the past so we can backfill deterministically.
+        self.investment.started_at = timezone.datetime(2025, 12, 1, tzinfo=timezone.get_current_timezone())
+        self.investment.ends_at = timezone.datetime(2025, 12, 15, tzinfo=timezone.get_current_timezone())
+        self.investment.save(update_fields=["started_at", "ends_at"])
+
+        # Backfill beyond the investment's end date; it should cap to 2025-12-14 inclusive.
+        call_command(
+            "payout_roi",
+            start_date="2025-12-04",
+            end_date="2025-12-20",
+            no_emails=True,
+        )
+
+        payouts = DailyRoiPayout.objects.filter(investment=self.investment).order_by("payout_date")
+        self.assertEqual(payouts.count(), 11)  # 2025-12-04 .. 2025-12-14 inclusive
+        self.assertEqual(payouts.first().payout_date.isoformat(), "2025-12-04")
+        self.assertEqual(payouts.last().payout_date.isoformat(), "2025-12-14")
+
+        # Second run should not create duplicates.
+        call_command(
+            "payout_roi",
+            start_date="2025-12-04",
+            end_date="2025-12-20",
+            no_emails=True,
+        )
+        self.assertEqual(DailyRoiPayout.objects.filter(investment=self.investment).count(), 11)
+
     @patch("investments.management.commands.payout_roi.EmailService.send_roi_payout_notification")
     def test_daily_payout_sends_email_notification(self, mock_send):
         process_date = timezone.now().date().isoformat()

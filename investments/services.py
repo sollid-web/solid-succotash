@@ -13,6 +13,114 @@ from users.models import User, UserWallet
 from .models import InvestmentPlan, UserInvestment
 
 
+def _ensure_aware(dt):
+    if dt is None:
+        return None
+    if timezone.is_aware(dt):
+        return dt
+    return timezone.make_aware(dt)
+
+
+@transaction.atomic
+def create_approved_investment_at(
+    *,
+    user: User,
+    plan: InvestmentPlan,
+    amount: Decimal | float,
+    admin_user: User,
+    started_at,
+    notes: str = "",
+    notify_user: bool = False,
+    notify_admin: bool = False,
+) -> UserInvestment:
+    """
+    Create an already-approved investment with a historical start date.
+
+    This is intended for controlled administrative restoration/correction.
+    It debits the user's wallet under lock and records an audit log entry.
+
+    Defaults to not sending emails/notifications.
+    """
+
+    amount_decimal = amount if isinstance(amount, Decimal) else Decimal(str(amount))
+    if amount_decimal <= 0:
+        raise ValidationError("Investment amount must be positive")
+
+    # Validate amount within plan limits
+    if amount_decimal < plan.min_amount:
+        raise ValidationError(f"Minimum investment amount is ${plan.min_amount}")
+    if amount_decimal > plan.max_amount:
+        raise ValidationError(f"Maximum investment amount is ${plan.max_amount}")
+
+    started_at = _ensure_aware(started_at)
+    if not started_at:
+        raise ValidationError("started_at is required")
+
+    # Lock wallet and debit
+    try:
+        wallet = UserWallet.objects.select_for_update().get(user=user)
+    except UserWallet.DoesNotExist:
+        wallet = UserWallet.objects.create(user=user)
+
+    if wallet.balance < amount_decimal:
+        raise ValidationError(
+            "Insufficient wallet balance for approval. Balance "
+            f"${wallet.balance}, required ${amount_decimal}"
+        )
+
+    wallet.balance -= amount_decimal
+    wallet.save(update_fields=["balance", "updated_at"])
+
+    investment = UserInvestment.objects.create(
+        user=user,
+        plan=plan,
+        amount=amount_decimal,
+        status="approved",
+        started_at=started_at,
+        ends_at=started_at + timedelta(days=plan.duration_days),
+        created_at=started_at,
+    )
+
+    AdminAuditLog.objects.create(
+        admin=admin_user,
+        entity="investment",
+        entity_id=str(investment.id),
+        action="approve",
+        notes=notes or "Historical investment restoration",
+    )
+
+    if notify_user:
+        from users.notification_service import notify_investment_approved, notify_wallet_debited
+
+        notify_investment_approved(cast(User, investment.user), investment, notes)
+        notify_wallet_debited(
+            cast(User, investment.user),
+            amount_decimal,
+            reason=f"Investment approved for {plan.name}",
+        )
+
+        from core.email_service import EmailService
+
+        EmailService.send_investment_notification(investment, "approved", notes)
+
+    if notify_admin:
+        from core.email_service import EmailService
+
+        try:
+            EmailService.send_admin_alert(
+                subject="Historical Investment Restored",
+                message=(
+                    f"Investment {investment.id} for user {user.email or user.username} "
+                    f"was restored as approved. Amount: ${amount_decimal}. "
+                    f"Plan: {plan.name}. Started: {started_at.isoformat()}."
+                ),
+            )
+        except Exception:
+            pass
+
+    return investment
+
+
 @transaction.atomic
 def approve_investment(
     investment: UserInvestment, admin_user: User, notes: str = ""

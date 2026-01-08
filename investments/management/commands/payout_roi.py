@@ -1,4 +1,6 @@
 import logging
+from datetime import date
+from datetime import datetime
 from decimal import Decimal
 
 from django.core.management.base import BaseCommand
@@ -7,6 +9,7 @@ from django.utils import timezone
 
 from core.email_service import EmailService
 from investments.models import DailyRoiPayout, UserInvestment
+from transactions.models import Transaction
 from transactions.services import create_transaction
 from wolvcapital.rls import rls_admin_context
 
@@ -31,84 +34,207 @@ class Command(BaseCommand):
             help="Process for a specific ISO date (YYYY-MM-DD)",
             default=None,
         )
+        parser.add_argument(
+            "--start-date",
+            type=str,
+            help=(
+                "Backfill starting from this ISO date (YYYY-MM-DD), inclusive. "
+                "If provided, processes each day from start-date to end-date (or today)."
+            ),
+            default=None,
+        )
+        parser.add_argument(
+            "--end-date",
+            type=str,
+            help="Backfill ending at this ISO date (YYYY-MM-DD), inclusive. Defaults to today.",
+            default=None,
+        )
+        parser.add_argument(
+            "--user-email",
+            type=str,
+            help="Only process investments for a specific user email",
+            default=None,
+        )
+        parser.add_argument(
+            "--investment-id",
+            type=str,
+            help="Only process a specific investment id",
+            default=None,
+        )
+        parser.add_argument(
+            "--no-emails",
+            action="store_true",
+            help="Do not send ROI or transaction emails (recommended for backfills)",
+        )
+
+    def _parse_date(self, value: str) -> date:
+        return datetime.fromisoformat(value).date()
+
+    def _iter_dates(self, start, end):
+        cur = start
+        while cur <= end:
+            yield cur
+            cur += timezone.timedelta(days=1)
 
     def handle(self, *args, **options):
         with rls_admin_context():
-            process_date = (
-                timezone.now().date()
-                if not options["date"]
-                else timezone.datetime.fromisoformat(options["date"]).date()
-            )
             dry = options["dry_run"]
+            no_emails = bool(options.get("no_emails"))
+
+            start_date_raw = options.get("start_date")
+            end_date_raw = options.get("end_date")
+
+            if start_date_raw and options.get("date"):
+                raise ValueError("Use either --date or --start-date/--end-date, not both")
+
+            if end_date_raw and not start_date_raw:
+                raise ValueError("--end-date requires --start-date")
+
+            if start_date_raw:
+                start_date = self._parse_date(start_date_raw)
+                end_date = (
+                    timezone.now().date() if not end_date_raw else self._parse_date(end_date_raw)
+                )
+                if end_date < start_date:
+                    raise ValueError("--end-date must be >= --start-date")
+                date_mode = "range"
+            else:
+                process_date = (
+                    timezone.now().date()
+                    if not options["date"]
+                    else self._parse_date(options["date"])
+                )
+                start_date = end_date = process_date
+                date_mode = "single"
+
             paid = 0
+            synced = 0
             total_amount = Decimal("0")
             qs = UserInvestment.objects.filter(status="approved")
+            if options.get("user_email"):
+                qs = qs.filter(user__email__iexact=options["user_email"].strip())
+            if options.get("investment_id"):
+                qs = qs.filter(id=options["investment_id"].strip())
+
             for inv in qs.select_related("plan", "user"):
+                # Only process investments that have an active window
+                if not inv.started_at or not inv.ends_at:
+                    continue
+
+                inv_start = inv.started_at.date()
+                inv_end_exclusive = inv.ends_at.date()
+
+                effective_start = max(start_date, inv_start)
+                effective_end = min(end_date, inv_end_exclusive - timezone.timedelta(days=1))
+                if effective_end < effective_start:
+                    continue
+
                 # Simple daily payout: amount * (daily_roi / 100)
-                daily_roi = (inv.plan.daily_roi or Decimal("0")) / Decimal(
-                    "100"
-                )
+                daily_roi = (inv.plan.daily_roi or Decimal("0")) / Decimal("100")
                 payout = (inv.amount * daily_roi).quantize(Decimal("0.01"))
                 if payout <= 0:
                     continue
-                # Idempotency check
-                if DailyRoiPayout.objects.filter(
-                    investment=inv, payout_date=process_date
-                ).exists():
-                    continue
-                if dry:
-                    self.stdout.write(
-                        (
-                            f"[DRY] Would pay {payout} to user {inv.user_id} "
-                            f"for investment {inv.id}"
+
+                existing_dates = set(
+                    DailyRoiPayout.objects.filter(
+                        investment=inv,
+                        payout_date__gte=effective_start,
+                        payout_date__lte=effective_end,
+                    ).values_list("payout_date", flat=True)
+                )
+
+                for day in self._iter_dates(effective_start, effective_end):
+                    if day in existing_dates:
+                        continue
+
+                    reference = f"ROI payout {day} for investment {inv.id}"
+
+                    # If the transaction exists (but payout record is missing), sync the payout record only.
+                    existing_txn = Transaction.objects.filter(
+                        user=inv.user,
+                        tx_type="deposit",
+                        reference=reference,
+                    ).first()
+
+                    if existing_txn:
+                        if dry:
+                            self.stdout.write(
+                                (
+                                    f"[DRY] Would sync DailyRoiPayout {payout} for user {inv.user_id} "
+                                    f"investment {inv.id} date {day} (txn exists)"
+                                )
+                            )
+                        else:
+                            DailyRoiPayout.objects.create(
+                                investment=inv,
+                                payout_date=day,
+                                amount=payout,
+                            )
+                        synced += 1
+                        total_amount += payout
+                        continue
+
+                    if dry:
+                        self.stdout.write(
+                            (
+                                f"[DRY] Would pay {payout} to user {inv.user_id} "
+                                f"for investment {inv.id} on {day}"
+                            )
                         )
-                    )
-                else:
+                        paid += 1
+                        total_amount += payout
+                        continue
+
                     with transaction.atomic():
                         create_transaction(
                             user=inv.user,
                             # Treating ROI as a credit event.
                             tx_type="deposit",
                             amount=float(payout),
-                            reference=(
-                                f"ROI payout {process_date} "
-                                f"for investment {inv.id}"
-                            ),
+                            reference=reference,
+                            notify_admin=False,
+                            notify_user=not no_emails,
                         )
                         DailyRoiPayout.objects.create(
                             investment=inv,
-                            payout_date=process_date,
+                            payout_date=day,
                             amount=payout,
                         )
-                    try:
-                        EmailService.send_roi_payout_notification(
-                            inv.user,
-                            payout,
-                            inv,
-                            process_date,
-                        )
-                    except Exception as exc:  # pragma: no cover
-                        logger.warning(
-                            (
-                                "ROI payout email failed for user %s "
-                                "investment %s: %s"
-                            ),
-                            getattr(inv.user, "email", inv.user_id),
-                            inv.id,
-                            exc,
-                        )
+
+                    if not no_emails:
+                        try:
+                            EmailService.send_roi_payout_notification(
+                                inv.user,
+                                payout,
+                                inv,
+                                day,
+                            )
+                        except Exception as exc:  # pragma: no cover
+                            logger.warning(
+                                (
+                                    "ROI payout email failed for user %s "
+                                    "investment %s: %s"
+                                ),
+                                getattr(inv.user, "email", inv.user_id),
+                                inv.id,
+                                exc,
+                            )
+
+                    paid += 1
+                    total_amount += payout
+
+                if date_mode == "single" and not dry and paid:
                     self.stdout.write(
                         (
                             f"Paid {payout} to user {inv.user_id} "
                             f"(investment {inv.id})"
                         )
                     )
-                paid += 1
-                total_amount += payout
+
             self.stdout.write(
                 self.style.SUCCESS(
                     (
-                        f"Processed {paid} investments. "
+                        f"Processed payouts: {paid}. Synced payout records: {synced}. "
                         f"Total payout: {total_amount}"
                     )
                 )

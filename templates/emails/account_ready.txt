@@ -1,0 +1,25 @@
+Your account is ready - {{ brand_name }}
+
+Dear {{ user.first_name|default:user.email }},
+
+Your {{ brand_name }} account is now set up and ready to access. You can sign in to review your dashboard and account records.
+
+Secure sign-in
+For your security, we recommend setting (or resetting) your password using the secure link below.
+
+Set / Reset Password: {% if password_reset_link %}{{ password_reset_link }}{% else %}{{ site_url }}{{ password_reset_url }}{% endif %}
+Sign In: {% if login_link %}{{ login_link }}{% else %}{{ site_url }}{{ login_url }}{% endif %}
+Dashboard: {% if dashboard_link %}{{ dashboard_link }}{% else %}{{ site_url }}{{ dashboard_url }}{% endif %}
+
+If you did not request this email, you can ignore it or contact support.
+
+Best regards,
+The {{ brand_name }} Team
+
+---
+© {{ current_year }} {{ brand_name }}. All rights reserved.
+Visit our website: {{ site_url }}
+{% if user %}
+This email was sent to {{ user.email }}.
+Manage email preferences: {{ site_url }}/profile/email-preferences/
+{% endif %}

@@ -32,6 +32,7 @@ class EmailService:
     BRAND_NAME = getattr(settings, "BRAND", {}).get("name", "WolvCapital")
     EMAIL_TYPES = {
         "WELCOME": "welcome",
+        "ACCOUNT_READY": "account_ready",
         "TRANSACTION_CREATED": "transaction_created",
         "TRANSACTION_APPROVED": "transaction_approved",
         "TRANSACTION_REJECTED": "transaction_rejected",
@@ -61,13 +62,8 @@ class EmailService:
         email_type: str | None = None,
         user: Any = None,
     ) -> bool:
-        """Send an email using HTML and text templates.
+        """Send an email using HTML and text templates."""
 
-        Args:
-            template_name: Base template name under templates/emails/.
-            to_emails: Single email or iterable of emails.
-            context: Template context (copied to avoid mutation).
-        """
         if isinstance(to_emails, str):
             recipients: list[str] = [to_emails]
         else:
@@ -90,7 +86,6 @@ class EmailService:
             return True  # not an error: user opted out
 
         try:
-            # Build a new context to avoid mutating caller's dict
             full_context = {**context}
             full_context.update(
                 {
@@ -110,7 +105,6 @@ class EmailService:
                 }
             )
 
-            # Render templates
             html_template = f"emails/{template_name}.html"
             html_content: str = render_to_string(html_template, full_context)
 
@@ -120,7 +114,6 @@ class EmailService:
             except Exception:
                 text_content = cls._html_to_text(html_content)
 
-            # Prepare and send message
             msg = EmailMultiAlternatives(
                 subject=subject,
                 body=text_content,
@@ -130,15 +123,11 @@ class EmailService:
             )
             msg.attach_alternative(html_content, "text/html")
 
-            # Add headers to improve deliverability
             is_urgent = email_type in [
                 'SECURITY_ALERT',
                 'ADMIN_ALERT',
             ]
-            site_url = full_context.get(
-                "site_url",
-                "https://wolvcapital.com",
-            )
+            site_url = full_context.get("site_url", "https://wolvcapital.com")
             msg.extra_headers = {
                 'X-Mailer': 'WolvCapital Email System',
                 'X-Priority': '1' if is_urgent else '3',
@@ -159,8 +148,7 @@ class EmailService:
             )
             return False
 
-        except Exception as exc:  # pragma: no cover - integration behavior
-            # Avoid logging sensitive payload; log the error and metadata only
+        except Exception as exc:  # pragma: no cover
             logger.exception(
                 "Error sending email %s to %s: %s",
                 email_type,
@@ -211,6 +199,43 @@ class EmailService:
             context=context,
             subject=f"Welcome to {cls.BRAND_NAME}!",
             email_type="welcome",
+            user=user,
+        )
+
+    @classmethod
+    def send_account_ready_email(
+        cls,
+        user,
+        *,
+        dashboard_url: str = "/dashboard/",
+        login_url: str = "/accounts/login/",
+        password_reset_url: str = "/accounts/password/reset/",
+    ) -> bool:
+        """Send a branded 'account ready' email.
+
+        For security, this email is designed to direct the user to the password
+        reset flow rather than sending credentials over email.
+        """
+        base_url = getattr(
+            settings,
+            "PUBLIC_SITE_URL",
+            getattr(settings, "SITE_URL", "https://wolvcapital.com"),
+        )
+        context = {
+            "user": user,
+            "dashboard_url": dashboard_url,
+            "login_url": login_url,
+            "password_reset_url": password_reset_url,
+            "dashboard_link": f"{base_url}{dashboard_url}",
+            "login_link": f"{base_url}{login_url}",
+            "password_reset_link": f"{base_url}{password_reset_url}",
+        }
+        return cls.send_templated_email(
+            template_name="account_ready",
+            to_emails=getattr(user, "email", ""),
+            context=context,
+            subject=f"Your account is ready - {cls.BRAND_NAME}",
+            email_type=cls.EMAIL_TYPES["ACCOUNT_READY"],
             user=user,
         )
 

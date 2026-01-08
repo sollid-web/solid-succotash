@@ -46,27 +46,6 @@ const nextConfig = {
     // reach Django instead of returning a Next.js 404.
     const backendBase = process.env.NEXT_PUBLIC_API_URL || 'https://solid-succotash-production.up.railway.app'
     return [
-      // Proxy Django admin through the frontend domain.
-      // IMPORTANT: Django's admin expects trailing slashes. If the request hits
-      // /admin/login (no trailing slash), Django may route it to the admin
-      // catch-all which is protected and redirects to login again with a nested
-      // `next` parameter, creating an ever-growing URL.
-      {
-        source: '/admin',
-        destination: `${backendBase.replace(/\/$/, '')}/admin/`,
-      },
-      {
-        source: '/admin/login',
-        destination: `${backendBase.replace(/\/$/, '')}/admin/login/`,
-      },
-      {
-        source: '/admin/logout',
-        destination: `${backendBase.replace(/\/$/, '')}/admin/logout/`,
-      },
-      {
-        source: '/admin/:path*',
-        destination: `${backendBase.replace(/\/$/, '')}/admin/:path*`,
-      },
       // Proxy Django static assets (needed for admin CSS/JS).
       {
         source: '/static/:path*',

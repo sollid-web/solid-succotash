@@ -3,6 +3,26 @@
 # WolvCapital Render.com Startup Script
 echo "🚀 Starting WolvCapital on Render.com..."
 
+# Railway healthchecks time out quickly (see railway.json healthcheckTimeout).
+# On Railway, prefer starting Gunicorn immediately so /healthz/ can pass,
+# and run migrations asynchronously in the background.
+if env | grep -q '^RAILWAY_'; then
+    echo "🚄 Railway detected — fast startup mode"
+    echo "📦 Running migrations in background..."
+    (
+        python manage.py migrate --noinput || echo "⚠️ Migrations failed (background)"
+    ) &
+
+    echo "🚀 Starting Gunicorn server on port $PORT..."
+    exec python -m gunicorn wolvcapital.wsgi:application \
+        --bind 0.0.0.0:${PORT:-8000} \
+        --workers ${WEB_CONCURRENCY:-2} \
+        --timeout 120 \
+        --keep-alive 5 \
+        --limit-request-line 8190 \
+        --max-requests 1000
+fi
+
 # Don't exit on errors during setup - we want to try to start the server even if setup fails
 set +e
 

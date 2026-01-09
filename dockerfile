@@ -15,8 +15,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN python manage.py collectstatic --noinput
-
 # NOTE: Railway will prefer the Dockerfile CMD.
 # Start Gunicorn directly (fast) so healthchecks can pass; run migrations/seeding
 # via platform release phases or Render's start.sh (render.yaml uses that).

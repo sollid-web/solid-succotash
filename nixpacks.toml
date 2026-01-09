@@ -8,7 +8,7 @@ cmds = [
 ]
 
 [phases.build]
-cmds = ["python manage.py collectstatic --noinput"]
+cmds = []
 
 [start]
 cmd = "bash start.sh"

@@ -2,6 +2,7 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from . import views
+from .views import AdminInvestmentPlanViewSet
 from .referrals_endpoints import referrals_rewards, referrals_summary
 
 router = DefaultRouter()
@@ -45,6 +46,11 @@ router.register(
     r"admin/kyc",
     views.AdminKycApplicationViewSet,
     basename="api-admin-kyc",
+)
+router.register(
+    r"admin/plans",
+    AdminInvestmentPlanViewSet,
+    basename="api-admin-plans",
 )
 
 urlpatterns = [

@@ -22,6 +22,16 @@ def healthz(request):
     return JsonResponse({"status": "ok"})
 
 
+def root_healthcheck(request):
+    """Root-level health check endpoint.
+
+    Some platforms probe `/` instead of a configured health path.
+    Keep this lightweight and dependency-free.
+    """
+
+    return HttpResponse("OK", status=200, content_type="text/plain")
+
+
 def agreement_pdf(request, agreement_id: int):
     """Return a PDF for a stored Agreement version.
 

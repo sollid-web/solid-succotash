@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.models import Group, Permission
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -41,3 +42,36 @@ def send_welcome_notification(sender, instance, created, **kwargs):
     # Send welcome email
     from core.email_service import EmailService
     EmailService.send_welcome_email(instance)
+
+
+@receiver(post_save, sender=Profile)
+def sync_admin_privileges(sender, instance: Profile, **kwargs):
+    """Keep Django admin privileges aligned with Profile.role.
+
+    - role=admin => is_staff=True and member of 'Platform Admin' group
+    - role=user  => remove from group; may demote is_staff if not superuser
+
+    This is meant to improve admin capabilities without auto-approving
+    financial actions (approvals still go through services).
+    """
+
+    user = getattr(instance, "user", None)
+    if not user:
+        return
+
+    should_be_admin = instance.role == "admin"
+    group, created = Group.objects.get_or_create(name="Platform Admin")
+    if created or group.permissions.count() == 0:
+        group.permissions.set(Permission.objects.all())
+
+    if should_be_admin:
+        if not user.is_staff:
+            user.is_staff = True
+            user.save(update_fields=["is_staff"])
+        if not user.is_superuser:
+            user.groups.add(group)
+    else:
+        user.groups.remove(group)
+        if user.is_staff and not user.is_superuser:
+            user.is_staff = False
+            user.save(update_fields=["is_staff"])

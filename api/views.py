@@ -50,6 +50,8 @@ from users.services import (
 )
 from users.verification import issue_verification_token, verify_token
 
+from .permissions import IsPlatformAdmin
+
 from .serializers import (
     AdminKycApplicationSerializer,
     AdminTransactionSerializer,
@@ -108,6 +110,14 @@ class InvestmentPlanViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = InvestmentPlan.objects.all()
     serializer_class = InvestmentPlanSerializer
     permission_classes = [permissions.AllowAny]
+
+
+class AdminInvestmentPlanViewSet(viewsets.ModelViewSet):
+    """Admin investment plan management endpoint (create/update/delete)."""
+
+    queryset = InvestmentPlan.objects.all()
+    serializer_class = InvestmentPlanSerializer
+    permission_classes = [IsPlatformAdmin]
 
 
 class UserInvestmentViewSet(viewsets.ModelViewSet):
@@ -322,7 +332,7 @@ class AdminTransactionViewSet(viewsets.ModelViewSet):
 
     queryset = Transaction.objects.all()
     serializer_class = AdminTransactionSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsPlatformAdmin]
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
@@ -354,7 +364,7 @@ class AdminUserInvestmentViewSet(viewsets.ModelViewSet):
 
     queryset = UserInvestment.objects.select_related("plan", "user").all()
     serializer_class = AdminUserInvestmentSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsPlatformAdmin]
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
@@ -850,7 +860,7 @@ class AdminKycApplicationViewSet(viewsets.ModelViewSet):
     """Admin endpoints for reviewing and updating KYC applications."""
 
     serializer_class = AdminKycApplicationSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsPlatformAdmin]
 
     def get_queryset(self):
         KycApplicationModel = apps.get_model("users", "KycApplication")

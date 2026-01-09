@@ -403,6 +403,12 @@ class AgreementIntegrityTests(TestCase):
 
 
 class HealthAndLoggingTests(TestCase):
+    def test_root_healthcheck(self):
+        client = Client()
+        resp = client.get("/")
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content.decode(), "OK")
+
     def test_health_endpoint(self):
         client = Client()
         resp = client.get(reverse("healthz"))

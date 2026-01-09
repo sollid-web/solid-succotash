@@ -15,7 +15,8 @@ def healthcheck(request):
 
 
 urlpatterns = [
-    path("", healthcheck),  # 👈 CRITICAL: root must return 200
+    path("healthz/", healthcheck),   # 👈 REQUIRED by Railway
+    path("", healthcheck),           # 👈 optional but good
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("api/", include("api.urls")),
@@ -24,11 +25,9 @@ urlpatterns = [
     path("api/referrals/", include("referrals.urls")),
 ]
 
-# Serve media files in development
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# Customize admin site
 admin.site.site_header = "WolvCapital Administration"
 admin.site.site_title = "WolvCapital Admin"
 admin.site.index_title = "Welcome to WolvCapital Administration"

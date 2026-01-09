@@ -15,8 +15,8 @@ def healthcheck(request):
 
 
 urlpatterns = [
-    path("healthz/", healthcheck),   # 👈 REQUIRED by Railway
-    path("", healthcheck),           # 👈 optional but good
+    path("healthz/", healthcheck),
+    path("", healthcheck),
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("api/", include("api.urls")),

@@ -1,10 +1,21 @@
 import threading
 import uuid
 
+from django.http import HttpResponse
 from django.db import connection
 from django.utils.deprecation import MiddlewareMixin
 
 _request_local = threading.local()
+
+
+class HealthzMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.path_info == "/healthz/" or request.path_info == "/healthz":
+            return HttpResponse("OK", status=200)
+        return self.get_response(request)
 
 
 def get_request_id():  # helper for formatters

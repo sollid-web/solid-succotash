@@ -7,20 +7,16 @@ from django.db.models.signals import post_migrate
 
 def _determine_site_domain() -> str:
     """Select the best-fit domain for the Sites framework.
-
-    Prefer the custom domain when provided; otherwise fall back to Render's
-    generated URL, and finally use localhost so tests still run happily.
     """
 
-    custom = getattr(settings, "CUSTOM_DOMAIN", None)
-    if custom:
-        # Custom domain may be a comma-separated string; use the first entry.
-        return custom.split(",")[0].strip()
-
-    render_url = getattr(settings, "RENDER_EXTERNAL_URL", None)
-    if render_url:
-        parsed = urlparse(render_url)
-        return parsed.netloc or parsed.path or "localhost"
+    url_value = getattr(settings, "PUBLIC_SITE_URL", None) or getattr(
+        settings, "SITE_URL", None
+    )
+    if url_value:
+        parsed = urlparse(str(url_value))
+        host = parsed.hostname or parsed.netloc or parsed.path
+        if host:
+            return host
 
     return "localhost"
 

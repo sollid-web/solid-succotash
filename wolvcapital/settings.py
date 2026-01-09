@@ -40,7 +40,7 @@ env = Env()
 Env.read_env()  # Load .env early
 
 # Unified DEBUG + SECRET_KEY handling
-DEBUG = env.bool("DEBUG", default=True)
+DEBUG = env.bool("DEBUG", default=False)
 _secret_key_env = env("SECRET_KEY", default=None)
 if _secret_key_env:
     SECRET_KEY = _secret_key_env
@@ -51,148 +51,24 @@ else:
         raise ValueError(
             "SECRET_KEY environment variable required when DEBUG=False"
         )
-CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000"]
+ALLOWED_HOSTS = ["*"]
 
-# Initialize ALLOWED_HOSTS before mutation logic below
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
-
-# Render / deployment host hints (defined before conditional usage later)
-RENDER_EXTERNAL_URL = env("RENDER_EXTERNAL_URL", default=None)
-RENDER_EXTERNAL_HOSTNAME = env("RENDER_EXTERNAL_HOSTNAME", default=None)
-CUSTOM_DOMAIN = env("CUSTOM_DOMAIN", default=None)
-
-DEFAULT_CORS_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.railway.app",
+    "https://wolvcapital.com",
+    "https://www.wolvcapital.com",
 ]
 
-cors_origins_env = os.getenv("CORS_ALLOWED_ORIGINS", "")
-if cors_origins_env:
-    CORS_ALLOWED_ORIGINS = [
-        origin.strip()
-        for origin in cors_origins_env.split(",")
-        if origin.strip()
-    ]
-else:
-    CORS_ALLOWED_ORIGINS = DEFAULT_CORS_ORIGINS.copy()
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://wolvcapital.com",
+    "https://www.wolvcapital.com",
+]
 
-for origin in DEFAULT_CORS_ORIGINS:
-    if origin not in CSRF_TRUSTED_ORIGINS:
-        CSRF_TRUSTED_ORIGINS.append(origin)
-
-# --- GitHub Codespaces support ---
-CODESPACES_DOMAIN = os.getenv("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN")
-IN_CODESPACES = bool(
-    CODESPACES_DOMAIN
-    or os.getenv("CODESPACES")
-    or os.getenv("GITHUB_CODESPACES")
-)
-
-# --- Railway support ---
-# Railway health checks use `healthcheck.railway.app` as the Host header.
-IN_RAILWAY = bool(
-    os.getenv("RAILWAY")
-    or os.getenv("RAILWAY_ENVIRONMENT")
-    or os.getenv("RAILWAY_ENVIRONMENT_NAME")
-    or os.getenv("RAILWAY_PROJECT_ID")
-    or any(k.startswith("RAILWAY_") for k in os.environ)
-)
-
-if IN_RAILWAY:
-    for host in ["healthcheck.railway.app", ".railway.app", ".up.railway.app"]:
-        if host not in ALLOWED_HOSTS:
-            ALLOWED_HOSTS.append(host)
-
-if IN_CODESPACES:
-    ALLOWED_HOSTS += [".app.github.dev"]
-    CSRF_TRUSTED_ORIGINS += ["https://*.app.github.dev"]
-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-    # Keep cookies insecure for development
-    SESSION_COOKIE_SECURE = False
-    CSRF_COOKIE_SECURE = False
-    # Allow session cookies to work in codespaces
-    SESSION_COOKIE_SAMESITE = None
-
-if RENDER_EXTERNAL_URL:
-    p = urlparse(RENDER_EXTERNAL_URL)
-    if p.hostname:
-        ALLOWED_HOSTS.append(p.hostname)
-    if RENDER_EXTERNAL_URL not in CSRF_TRUSTED_ORIGINS:
-        CSRF_TRUSTED_ORIGINS.append(RENDER_EXTERNAL_URL)
-
-# Fallback: allow Render external hostname if provided
-if RENDER_EXTERNAL_HOSTNAME and RENDER_EXTERNAL_HOSTNAME not in ALLOWED_HOSTS:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
-    https_origin = f"https://{RENDER_EXTERNAL_HOSTNAME}"
-    if https_origin not in CSRF_TRUSTED_ORIGINS:
-        CSRF_TRUSTED_ORIGINS.append(https_origin)
-
-if CUSTOM_DOMAIN:
-    raw_domains = [d.strip() for d in CUSTOM_DOMAIN.split(",") if d.strip()]
-    for domain in raw_domains:
-        candidates = {domain}
-        # If caller supplied bare apex, also trust the www subdomain
-        # (and vice versa).
-        if domain.startswith("www."):
-            candidates.add(domain.removeprefix("www."))
-        else:
-            candidates.add(f"www.{domain}")
-
-        for host in candidates:
-            if host not in ALLOWED_HOSTS:
-                ALLOWED_HOSTS.append(host)
-            https_origin = f"https://{host}"
-            if https_origin not in CSRF_TRUSTED_ORIGINS:
-                CSRF_TRUSTED_ORIGINS.append(https_origin)
-            if https_origin not in CORS_ALLOWED_ORIGINS:
-                CORS_ALLOWED_ORIGINS.append(https_origin)
-
-env_allowed_hosts = os.getenv("ALLOWED_HOSTS", "")
-if env_allowed_hosts:
-    ALLOWED_HOSTS += [
-        h.strip() for h in env_allowed_hosts.split(",") if h.strip()
-    ]
-
-extra_hosts = os.getenv("ALLOWED_HOSTS_EXTRA", "")
-if extra_hosts:
-    ALLOWED_HOSTS += [h.strip() for h in extra_hosts.split(",") if h.strip()]
-
-env_csrf_origins = os.getenv("CSRF_TRUSTED_ORIGINS", "")
-if env_csrf_origins:
-    CSRF_TRUSTED_ORIGINS += [
-        o.strip() for o in env_csrf_origins.split(",") if o.strip()
-    ]
-
-extra_origins = os.getenv("CSRF_TRUSTED_ORIGINS_EXTRA", "")
-if extra_origins:
-    CSRF_TRUSTED_ORIGINS += [
-        o.strip() for o in extra_origins.split(",") if o.strip()
-    ]
-
-extra_cors = os.getenv("CORS_ALLOWED_ORIGINS_EXTRA", "")
-if extra_cors:
-    CORS_ALLOWED_ORIGINS += [
-        o.strip() for o in extra_cors.split(",") if o.strip()
-    ]
-
-CORS_ALLOWED_ORIGIN_REGEXES: list[str] = []
-
-if IN_CODESPACES:
-    cors_codespaces_origin = (
-        f"https://{CODESPACES_DOMAIN}" if CODESPACES_DOMAIN else None
-    )
-    if (
-        cors_codespaces_origin
-        and cors_codespaces_origin not in CORS_ALLOWED_ORIGINS
-    ):
-        CORS_ALLOWED_ORIGINS.append(cors_codespaces_origin)
-    CORS_ALLOWED_ORIGIN_REGEXES.append(r"^https://.*\\.app\\.github\\.dev$")
-
-# Allow Vercel preview deployments (*.vercel.app)
-CORS_ALLOWED_ORIGIN_REGEXES.append(r"^https://.*\\.vercel\\.app$")
-
-CORS_ALLOWED_ORIGINS = list(dict.fromkeys(CORS_ALLOWED_ORIGINS))
-CSRF_TRUSTED_ORIGINS = list(dict.fromkeys(CSRF_TRUSTED_ORIGINS))
+CORS_ALLOWED_ORIGIN_REGEXES: list[str] = [
+    r"^https://.*\\.vercel\\.app$",
+]
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = False
@@ -317,6 +193,7 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
+    "wolvcapital.middleware.HealthzMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -361,14 +238,6 @@ if os.getenv("DATABASE_URL"):
             }
         }
 else:
-    # Guard against SQLite fallback in production environments
-    if IN_RAILWAY and not DEBUG:
-        raise ValueError(
-            "Railway production deployment detected without DATABASE_URL! "
-            "Add PostgreSQL service and set DATABASE_URL to prevent data loss. "
-            "Users and investments will be lost on every redeploy with SQLite."
-        )
-
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -467,13 +336,6 @@ AUTHENTICATION_BACKENDS = [
 # Frontend URLs (Next.js handles all user-facing pages)
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
-# Ensure the configured frontend origin is trusted for CORS/CSRF
-_frontend_origin = FRONTEND_URL.rstrip("/")
-if _frontend_origin and _frontend_origin not in CORS_ALLOWED_ORIGINS:
-    CORS_ALLOWED_ORIGINS.append(_frontend_origin)
-if _frontend_origin and _frontend_origin not in CSRF_TRUSTED_ORIGINS:
-    CSRF_TRUSTED_ORIGINS.append(_frontend_origin)
-
 # Redirect to frontend after Django admin/allauth operations
 LOGIN_URL = f"{FRONTEND_URL}/accounts/login"
 LOGIN_REDIRECT_URL = f"{FRONTEND_URL}/dashboard"
@@ -565,62 +427,10 @@ PUBLIC_SITE_URL = os.getenv("PUBLIC_SITE_URL", "https://wolvcapital.com")
 
 # Site URL for email links
 # NOTE: Must always be a string (used in email templates/headers).
-_CODESPACES_SITE_URL = (
-    f"https://{os.getenv('GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN', '')}"
-    if IN_CODESPACES and CODESPACES_DOMAIN
-    else ""
-)
-SITE_URL: str = (
-    os.getenv("SITE_URL")
-    or RENDER_EXTERNAL_URL
-    or _CODESPACES_SITE_URL
-    or PUBLIC_SITE_URL
-)
+SITE_URL: str = os.getenv("SITE_URL") or PUBLIC_SITE_URL
 SITE_URL = str(SITE_URL)
 
 ADMIN_SITE_URL = os.getenv("ADMIN_SITE_URL", SITE_URL)
-
-
-def _add_trusted_origin_and_host(url_value: str | None) -> None:
-    """Add hostname from a URL to ALLOWED_HOSTS and its https origin to CSRF/CORS.
-
-    This prevents 400 Bad Request (DisallowedHost) and CSRF failures when the
-    backend is accessed behind a proxy using the public site domain.
-    """
-
-    if not url_value:
-        return
-
-    raw = str(url_value).strip()
-    if not raw:
-        return
-
-    parsed = urlparse(raw if "://" in raw else f"https://{raw}")
-    host = parsed.hostname
-    if not host:
-        return
-
-    candidates = {host}
-    if host.startswith("www."):
-        candidates.add(host.removeprefix("www."))
-    else:
-        candidates.add(f"www.{host}")
-
-    for candidate in candidates:
-        if candidate and candidate not in ALLOWED_HOSTS:
-            ALLOWED_HOSTS.append(candidate)
-
-    # Trust https origin for CSRF/CORS (admin + any cookie-auth forms)
-    https_origin = f"https://{host}"
-    if https_origin not in CSRF_TRUSTED_ORIGINS:
-        CSRF_TRUSTED_ORIGINS.append(https_origin)
-    if https_origin not in CORS_ALLOWED_ORIGINS:
-        CORS_ALLOWED_ORIGINS.append(https_origin)
-
-
-# Always trust our public site + frontend URL even if CUSTOM_DOMAIN isn't set.
-_add_trusted_origin_and_host(PUBLIC_SITE_URL)
-_add_trusted_origin_and_host(os.getenv("FRONTEND_URL"))
 
 # ------------------------------------------------------------------
 # Business Email Inbox Configuration (IMAP)
@@ -735,9 +545,9 @@ LOGGING = {
 # Security Settings (Production Ready)
 # ------------------------------------------------------------------
 # Always enable security features for production deployment
-SECURE_SSL_REDIRECT = not DEBUG and not IN_CODESPACES and not TESTING
-SESSION_COOKIE_SECURE = not DEBUG and not IN_CODESPACES
-CSRF_COOKIE_SECURE = not DEBUG and not IN_CODESPACES
+SECURE_SSL_REDIRECT = not DEBUG and not TESTING
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
 
 # HSTS Security (HTTP Strict Transport Security)
 SECURE_HSTS_SECONDS = int(

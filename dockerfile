@@ -15,6 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 8000
-
-CMD gunicorn wolvcapital.wsgi:application --bind 0.0.0.0:$PORT
+# NOTE: Railway will prefer the Dockerfile CMD.
+# Start Gunicorn directly (fast) so healthchecks can pass; run migrations/seeding
+# via platform release phases or Render's start.sh (render.yaml uses that).
+CMD ["bash", "-lc", "exec uvicorn wolvcapital.asgi:application --host 0.0.0.0 --port $PORT"]

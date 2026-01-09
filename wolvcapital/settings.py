@@ -40,7 +40,7 @@ env = Env()
 Env.read_env()  # Load .env early
 
 # Unified DEBUG + SECRET_KEY handling
-DEBUG = env.bool("DEBUG", default=False)
+DEBUG = False
 _secret_key_env = env("SECRET_KEY", default=None)
 if _secret_key_env:
     SECRET_KEY = _secret_key_env
@@ -193,7 +193,6 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
-    "wolvcapital.middleware.HealthzMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -278,10 +277,6 @@ WSGI_APPLICATION = "wolvcapital.wsgi.application"
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [str(BASE_DIR / "static")]
 STATIC_ROOT_PATH = BASE_DIR / "staticfiles"
-
-# Ensure STATIC_ROOT exists so whitenoise/tests don't warn about missing
-# directory
-STATIC_ROOT_PATH.mkdir(parents=True, exist_ok=True)
 STATIC_ROOT = str(STATIC_ROOT_PATH)
 
 TESTING = any(
@@ -301,7 +296,6 @@ if not DEBUG and not TESTING:
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT_PATH = BASE_DIR / "media"
-MEDIA_ROOT_PATH.mkdir(parents=True, exist_ok=True)
 MEDIA_ROOT = str(MEDIA_ROOT_PATH)
 
 # ------------------------------------------------------------------
@@ -545,7 +539,7 @@ LOGGING = {
 # Security Settings (Production Ready)
 # ------------------------------------------------------------------
 # Always enable security features for production deployment
-SECURE_SSL_REDIRECT = not DEBUG and not TESTING
+SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 

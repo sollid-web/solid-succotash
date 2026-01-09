@@ -1,21 +1,10 @@
 import threading
 import uuid
 
-from django.http import HttpResponse
 from django.db import connection
 from django.utils.deprecation import MiddlewareMixin
 
 _request_local = threading.local()
-
-
-class HealthzMiddleware:
-    def __init__(self, get_response):
-        self.get_response = get_response
-
-    def __call__(self, request):
-        if request.path_info == "/healthz/" or request.path_info == "/healthz":
-            return HttpResponse("OK", status=200)
-        return self.get_response(request)
 
 
 def get_request_id():  # helper for formatters
@@ -61,15 +50,18 @@ class PostgresRlsSessionMiddleware(MiddlewareMixin):
                 "true" if (user.is_staff or user.is_superuser) else "false"
             )
 
-        with connection.cursor() as cursor:
-            cursor.execute(
-                "SELECT set_config('app.current_user_id', %s, false);",
-                [user_id],
-            )
-            cursor.execute(
-                "SELECT set_config('app.is_admin', %s, false);",
-                [is_admin],
-            )
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "SELECT set_config('app.current_user_id', %s, false);",
+                    [user_id],
+                )
+                cursor.execute(
+                    "SELECT set_config('app.is_admin', %s, false);",
+                    [is_admin],
+                )
+        except Exception:
+            return
 
     def process_response(self, request, response):  # pragma: no cover
         if connection.vendor != "postgresql":
@@ -77,13 +69,16 @@ class PostgresRlsSessionMiddleware(MiddlewareMixin):
 
         # Reset to safe defaults to avoid leaking auth context across requests
         # when connections are re-used.
-        with connection.cursor() as cursor:
-            cursor.execute(
-                "SELECT set_config('app.current_user_id', %s, false);",
-                [""],
-            )
-            cursor.execute(
-                "SELECT set_config('app.is_admin', %s, false);",
-                ["false"],
-            )
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "SELECT set_config('app.current_user_id', %s, false);",
+                    [""],
+                )
+                cursor.execute(
+                    "SELECT set_config('app.is_admin', %s, false);",
+                    ["false"],
+                )
+        except Exception:
+            return response
         return response

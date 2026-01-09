@@ -18,4 +18,4 @@ COPY . .
 # NOTE: Railway will prefer the Dockerfile CMD.
 # Start Gunicorn directly (fast) so healthchecks can pass; run migrations/seeding
 # via platform release phases or Render's start.sh (render.yaml uses that).
-CMD ["bash", "-lc", "exec uvicorn wolvcapital.asgi:application --host 0.0.0.0 --port $PORT"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

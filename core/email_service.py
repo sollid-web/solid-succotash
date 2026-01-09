@@ -137,8 +137,28 @@ class EmailService:
 
             sent_count = msg.send(fail_silently=False)
 
+            anymail_id = None
+            anymail_status = getattr(msg, "anymail_status", None)
+            if anymail_status is not None:
+                anymail_id = getattr(anymail_status, "message_id", None) or getattr(
+                    anymail_status, "id", None
+                )
+
+            resend_id = getattr(msg, "resend_id", None)
+            if not resend_id:
+                headers = getattr(msg, "extra_headers", None) or {}
+                if isinstance(headers, dict):
+                    resend_id = headers.get("X-Resend-Id")
+
             if sent_count and sent_count > 0:
-                logger.info("Email sent: %s -> %s", email_type, recipients)
+                logger.info(
+                    "Email sent: type=%s to=%s backend=%s resend_id=%s anymail_id=%s",
+                    email_type,
+                    recipients,
+                    getattr(settings, "EMAIL_BACKEND", "(unknown)"),
+                    resend_id,
+                    anymail_id,
+                )
                 return True
 
             logger.error(
@@ -164,7 +184,7 @@ class EmailService:
         """
         if not user:
             return False
-            
+
         # Check if user has profile and email preferences
         if hasattr(user, "profile"):
             profile = user.profile
@@ -243,7 +263,7 @@ class EmailService:
     def send_transaction_notification(cls, transaction: Any, status: str, admin_notes: str = "") -> bool:
         """Send transaction notification email based on status."""
         user = transaction.user
-        
+
         if status == "created":
             template = "transaction_created"
             subject = f"Transaction Submitted - {cls.BRAND_NAME}"
@@ -259,7 +279,7 @@ class EmailService:
         else:
             logger.warning("Unknown transaction status: %s", status)
             return False
-            
+
         context = {
             "user": user,
             "transaction": transaction,
@@ -268,14 +288,14 @@ class EmailService:
             "transaction_type": transaction.tx_type,
             "amount": transaction.amount,
         }
-        
+
         logger.info(
             "Sending %s email to %s for transaction %s",
             email_type,
             getattr(user, "email", "unknown"),
             transaction.id,
         )
-        
+
         return cls.send_templated_email(
             template_name=template,
             to_emails=getattr(user, "email", ""),
@@ -285,25 +305,11 @@ class EmailService:
             user=user,
         )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @classmethod
     def send_investment_notification(cls, investment, status: str, admin_notes: str = "") -> bool:
         """Send investment notification email based on status."""
         user = investment.user
-        
+
         if status == "created":
             template = "investment_created"
             subject = f"Investment Submitted - {cls.BRAND_NAME}"
@@ -332,14 +338,14 @@ class EmailService:
             "plan_name": investment.plan.name if investment.plan else "N/A",
             "amount": investment.amount,
         }
-        
+
         logger.info(
             "Sending %s email to %s for investment %s",
             email_type,
             getattr(user, "email", "unknown"),
             investment.id,
         )
-        
+
         return cls.send_templated_email(
             template_name=template,
             to_emails=getattr(user, "email", ""),

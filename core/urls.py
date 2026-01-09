@@ -1,10 +1,11 @@
 from django.urls import path
 
 from . import views
+from .views import healthz
 
 urlpatterns = [
     path("", views.root_healthcheck, name="root_healthcheck"),
-    path("healthz/", views.healthz, name="healthz"),
+    path("healthz/", healthz, name="healthz"),
     path("agreements/<int:agreement_id>/pdf/", views.agreement_pdf, name="agreement_pdf"),
     path("contact/", views.contact_view, name="contact"),
 

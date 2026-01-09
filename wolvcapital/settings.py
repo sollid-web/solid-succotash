@@ -240,6 +240,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "anymail",
     # Local apps
     "core",
     "users",
@@ -496,8 +497,14 @@ ACCOUNT_SIGNUP_REDIRECT_URL = f"{FRONTEND_URL}/accounts/login?signup=success"
 # ------------------------------------------------------------------
 # Email Configuration
 # ------------------------------------------------------------------
+
 # Resend API key (optional). If present in production, we can send via Resend.
 RESEND_API_KEY = os.getenv("RESEND_API_KEY")
+
+# Anymail configuration (Resend)
+ANYMAIL = {
+    "RESEND_API_KEY": os.getenv("RESEND_API_KEY"),
+}
 
 # Email backend selection based on environment
 email_backend_override = os.getenv("EMAIL_BACKEND")
@@ -508,8 +515,8 @@ else:
         # Development: Print emails to console
         EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
     elif RESEND_API_KEY:
-        # Production: Prefer Resend if configured
-        EMAIL_BACKEND = "core.email_backends.resend.ResendEmailBackend"
+        # Production: Prefer Resend (Anymail) if configured
+        EMAIL_BACKEND = "anymail.backends.resend.EmailBackend"
     else:
         # Production fallback: Use SMTP
         EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

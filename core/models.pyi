@@ -55,3 +55,42 @@ class PlatformCertificate(models.Model):
     is_active: bool
     created_at: datetime
     updated_at: datetime
+
+
+class EmailInbox(models.Model):
+    message_id: str
+    subject: str
+    from_email: str
+    from_name: str
+    to_email: str
+    cc: str
+    bcc: str
+    reply_to: str
+    body_text: str
+    body_html: str
+    has_attachments: bool
+    attachment_info: dict
+    status: str
+    priority: str
+    is_starred: bool
+    labels: str
+    folder: str
+    assigned_to: User | None
+    read_at: datetime | None
+    replied_at: datetime | None
+    received_at: datetime
+    ip_address: str | None
+    created_at: datetime
+    updated_at: datetime
+    raw_headers: dict
+    raw_email: str
+
+
+class EmailTemplate(models.Model):
+    name: str
+    subject: str
+    body: str
+    category: str
+    is_active: bool
+    created_at: datetime
+    updated_at: datetime

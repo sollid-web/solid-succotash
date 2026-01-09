@@ -85,9 +85,9 @@ class ResendEmailBackend(BaseEmailBackend):
 
         # If no HTML alternative exists, allow html-only messages
         if html is None and getattr(message, "content_subtype", "plain") == "html":
-            html = message.body
+            html = str(message.body)
         else:
-            text = message.body
+            text = str(message.body)
 
         payload: dict[str, object] = {
             "from": from_email,
@@ -144,6 +144,21 @@ class ResendEmailBackend(BaseEmailBackend):
                     response_json = {}
 
             resend_id = response_json.get("id")
+
+            # Attach provider message id for diagnostics (best-effort).
+            if resend_id:
+                try:
+                    setattr(message, "resend_id", str(resend_id))
+                except Exception:
+                    pass
+                try:
+                    current_headers = getattr(message, "extra_headers", None) or {}
+                    if not isinstance(current_headers, dict):
+                        current_headers = {}
+                    message.extra_headers = dict(current_headers)
+                    message.extra_headers["X-Resend-Id"] = str(resend_id)
+                except Exception:
+                    pass
 
             if 200 <= status < 300:
                 logger.info(

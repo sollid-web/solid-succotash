@@ -7,7 +7,8 @@ Usage:
     python manage.py send_email --to-file emails.txt --subject "News" --message "Newsletter"
 """
 
-from django.core.mail import send_mail
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 from django.core.management.base import BaseCommand
 
 from users.models import User
@@ -84,6 +85,17 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING("No recipients found"))
             return
 
+        self.stdout.write("\nEmail configuration:")
+        self.stdout.write(f"  EMAIL_BACKEND: {getattr(settings, 'EMAIL_BACKEND', '(not set)')}")
+        self.stdout.write(f"  DEFAULT_FROM_EMAIL: {getattr(settings, 'DEFAULT_FROM_EMAIL', '(not set)')}")
+
+        if "console" in str(getattr(settings, "EMAIL_BACKEND", "")).lower():
+            self.stdout.write(
+                self.style.WARNING(
+                    "⚠️ Console backend is active: emails will print to the terminal, not be delivered."
+                )
+            )
+
         # Confirm before sending
         self.stdout.write(self.style.WARNING(f"\nAbout to send email to {len(recipients)} recipient(s):"))
         self.stdout.write(f"Subject: {subject}")
@@ -100,15 +112,40 @@ class Command(BaseCommand):
 
         for email in recipients:
             try:
-                send_mail(
+                msg = EmailMultiAlternatives(
                     subject=subject,
-                    message=message,
-                    from_email=from_email,
-                    recipient_list=[email],
-                    fail_silently=False,
+                    body=message,
+                    from_email=from_email or getattr(settings, 'DEFAULT_FROM_EMAIL', None),
+                    to=[email],
                 )
+                msg.send(fail_silently=False)
+
+                anymail_id = None
+                anymail_status = getattr(msg, "anymail_status", None)
+                if anymail_status is not None:
+                    anymail_id = getattr(anymail_status, "message_id", None) or getattr(
+                        anymail_status, "id", None
+                    )
+                    if not anymail_id:
+                        recipients_status = getattr(anymail_status, "recipients", None)
+                        if isinstance(recipients_status, dict):
+                            rec = recipients_status.get(email)
+                            if rec is not None:
+                                anymail_id = getattr(rec, "message_id", None) or getattr(rec, "id", None)
+
+                resend_id = getattr(msg, 'resend_id', None)
+                if not resend_id:
+                    headers = getattr(msg, 'extra_headers', None) or {}
+                    if isinstance(headers, dict):
+                        resend_id = headers.get('X-Resend-Id')
+
                 success_count += 1
-                self.stdout.write(f"✓ Sent to {email}")
+                if resend_id:
+                    self.stdout.write(f"✓ Sent to {email} (Resend id: {resend_id})")
+                elif anymail_id:
+                    self.stdout.write(f"✓ Sent to {email} (Anymail message id: {anymail_id})")
+                else:
+                    self.stdout.write(f"✓ Sent to {email}")
             except Exception as e:
                 failed.append((email, str(e)))
                 self.stdout.write(self.style.ERROR(f"✗ Failed to send to {email}: {e}"))

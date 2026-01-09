@@ -1,14 +1,6 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
-    "builder": "NIXPACKS",
-    "buildCommand": "pip install --upgrade pip && pip install -r requirements.txt"
-  },
-  "deploy": {
-    "startCommand": "bash start.sh",
-    "healthcheckPath": "/healthz/",
-    "healthcheckTimeout": 100,
-    "restartPolicyType": "ON_FAILURE",
-    "restartPolicyMaxRetries": 10
+    "builder": "DOCKERFILE"
   }
 }

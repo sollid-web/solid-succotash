@@ -8,9 +8,12 @@ echo "🚀 Starting WolvCapital on Render.com..."
 # and run migrations asynchronously in the background.
 if env | grep -q '^RAILWAY_'; then
     echo "🚄 Railway detected — fast startup mode"
-    echo "📦 Running migrations in background..."
+    echo "📦 Running migrations (and setup) in background..."
     (
-        python manage.py migrate --noinput || echo "⚠️ Migrations failed (background)"
+        python manage.py migrate --noinput \
+            && python manage.py collectstatic --noinput \
+            && python manage.py seed_plans \
+            || echo "⚠️ Background setup failed (migrate/collectstatic/seed_plans)"
     ) &
 
     echo "🚀 Starting Gunicorn server on port $PORT..."

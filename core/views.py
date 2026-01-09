@@ -1,4 +1,5 @@
 import logging
+import os
 import tempfile
 
 from django.conf import settings
@@ -19,7 +20,16 @@ logger = logging.getLogger(__name__)
 def healthz(request):
     """Simple health check endpoint that returns JSON."""
 
-    return JsonResponse({"status": "ok"})
+    resp = JsonResponse({"status": "ok"})
+    release = (
+        os.getenv("RAILWAY_GIT_COMMIT_SHA")
+        or os.getenv("GIT_SHA")
+        or os.getenv("RENDER_GIT_COMMIT")
+        or ""
+    )
+    if release:
+        resp["X-App-Release"] = release
+    return resp
 
 
 def root_healthcheck(request):

@@ -1,4 +1,5 @@
 from django.contrib import admin, messages
+from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import format_html
@@ -10,7 +11,7 @@ from .models import (
     Transaction,
     VirtualCard,
 )
-from .services import approve_transaction, reject_transaction
+from .services import approve_transaction, create_transaction, reject_transaction
 
 
 @admin.register(AdminNotification)
@@ -250,7 +251,7 @@ class TransactionAdmin(admin.ModelAdmin):
     )
     readonly_fields = ("id", "created_at", "updated_at")
     date_hierarchy = "created_at"
-    actions = ["approve_transactions", "reject_transactions"]
+    actions = ["admin_approve", "admin_reject", "manual_credit", "manual_debit"]
     fieldsets = (
         (
             None,
@@ -280,11 +281,8 @@ class TransactionAdmin(admin.ModelAdmin):
         ),
     )
 
-    @admin.action(
-        description="Approve selected transactions and update wallets"
-    )
-    def approve_transactions(self, request, queryset):
-        """Approve selected pending transactions and update user wallets"""
+    @admin.action(description="Approve selected transactions (SAFE)")
+    def admin_approve(self, request, queryset):
         approved_count = 0
         failed_count = 0
 
@@ -296,22 +294,17 @@ class TransactionAdmin(admin.ModelAdmin):
                     f"Approved via admin action by {request.user.email}",
                 )
                 approved_count += 1
-            except Exception as e:
+            except ValidationError as exc:
                 failed_count += 1
-                messages.error(request, f"Failed to approve transaction {txn.id}: {str(e)}")
+                messages.error(request, f"Transaction {txn.id}: {exc}")
 
-        if approved_count > 0:
-            messages.success(
-                request,
-                f"Successfully approved {approved_count} transaction(s). User wallets have been updated.",
-            )
+        if approved_count:
+            messages.success(request, f"Approved {approved_count} transaction(s). Wallets updated.")
+        if failed_count:
+            messages.warning(request, f"Failed to approve {failed_count} transaction(s).")
 
-        if failed_count > 0:
-            messages.warning(request, f"Failed to approve {failed_count} transaction(s)")
-
-    @admin.action(description="Reject selected transactions")
-    def reject_transactions(self, request, queryset):
-        """Reject selected pending transactions"""
+    @admin.action(description="Reject selected transactions (SAFE)")
+    def admin_reject(self, request, queryset):
         rejected_count = 0
         failed_count = 0
 
@@ -323,73 +316,69 @@ class TransactionAdmin(admin.ModelAdmin):
                     f"Rejected via admin action by {request.user.email}",
                 )
                 rejected_count += 1
-            except Exception as e:
+            except ValidationError as exc:
                 failed_count += 1
-                messages.error(request, f"Failed to reject transaction {txn.id}: {str(e)}")
+                messages.error(request, f"Transaction {txn.id}: {exc}")
 
-        if rejected_count > 0:
-            messages.success(request, f"Successfully rejected {rejected_count} transaction(s)")
+        if rejected_count:
+            messages.success(request, f"Rejected {rejected_count} transaction(s).")
+        if failed_count:
+            messages.warning(request, f"Failed to reject {failed_count} transaction(s).")
 
-        if failed_count > 0:
-            messages.warning(request, f"Failed to reject {failed_count} transaction(s)")
+    @admin.action(description="Manual CREDIT (Admin safe)")
+    def manual_credit(self, request, queryset):
+        if queryset.count() != 1:
+            self.message_user(request, "Select exactly one transaction.", level="error")
+            return
 
-    def save_model(self, request, obj, form, change):
-        """Ensure manual status changes go through service layer so wallets stay accurate."""
-        if change and obj.pk:
-            original = Transaction.objects.select_related("user").get(pk=obj.pk)
-            new_status = form.cleaned_data.get("status")
-            notes = form.cleaned_data.get("notes", "")
+        tx = queryset.first()
+        try:
+            new_tx = create_transaction(
+                user=tx.user,
+                tx_type="deposit",
+                amount=tx.amount,
+                payment_method="admin_adjustment",
+                reference="Manual admin credit",
+            )
+            approve_transaction(new_tx, request.user, "Manual credit")
+            self.message_user(request, "Wallet credited successfully.")
+        except ValidationError as exc:
+            self.message_user(request, f"Manual credit failed: {exc}", level="error")
 
-            # Apply editable field changes prior to approval/rejection so wallet uses
-            # the final admin-reviewed values (ethical correctness).
-            editable_fields = [
+    @admin.action(description="Manual DEBIT (Admin safe)")
+    def manual_debit(self, request, queryset):
+        if queryset.count() != 1:
+            self.message_user(request, "Select exactly one record.", level="error")
+            return
+
+        tx = queryset.first()
+        try:
+            new_tx = create_transaction(
+                user=tx.user,
+                tx_type="withdrawal",
+                amount=tx.amount,
+                payment_method="admin_adjustment",
+                reference="Manual admin debit",
+            )
+            approve_transaction(new_tx, request.user, "Manual debit")
+            self.message_user(request, "Wallet debited successfully.")
+        except ValidationError as exc:
+            self.message_user(request, f"Manual debit failed: {exc}", level="error")
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            return self.readonly_fields + (
+                "user",
+                "tx_type",
                 "amount",
+                "status",
                 "payment_method",
                 "reference",
                 "tx_hash",
                 "wallet_address_used",
-                "notes",
-            ]
-            changed = []
-            for field in editable_fields:
-                if field in form.cleaned_data:
-                    new_val = form.cleaned_data[field]
-                    if getattr(original, field) != new_val:
-                        setattr(original, field, new_val)
-                        changed.append(field)
-            if changed:
-                original.save(update_fields=changed + ["updated_at"])
-                # Audit log for field updates prior to status change
-                AdminAuditLog.objects.create(
-                    admin=request.user,
-                    entity="transaction",
-                    entity_id=str(original.id),
-                    action="update",
-                    notes=f"Fields changed before status update: {', '.join(changed)}",
-                )
-
-            if original.status == "pending" and new_status == "approved":
-                approve_transaction(
-                    original,
-                    request.user,
-                    notes or f"Approved via admin edit by {request.user.email}",
-                )
-                messages.success(
-                    request,
-                    f"Transaction {original.id} approved and wallet credited using amount ${original.amount}.",
-                )
-                return
-
-            if original.status == "pending" and new_status == "rejected":
-                reject_transaction(
-                    original,
-                    request.user,
-                    notes or f"Rejected via admin edit by {request.user.email}",
-                )
-                messages.info(request, f"Transaction {original.id} rejected.")
-                return
-
-        super().save_model(request, obj, form, change)
+                "approved_by",
+            )
+        return self.readonly_fields
 
 
 @admin.register(AdminAuditLog)

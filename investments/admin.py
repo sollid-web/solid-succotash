@@ -1,7 +1,8 @@
 from django.contrib import admin, messages
+from django.core.exceptions import ValidationError
 
 from .models import InvestmentPlan, UserInvestment
-from .services import approve_investment, reject_investment
+from .services import approve_investment, create_investment, reject_investment
 
 
 @admin.register(InvestmentPlan)
@@ -35,82 +36,55 @@ class UserInvestmentAdmin(admin.ModelAdmin):
     search_fields = ("user__email", "user__first_name", "user__last_name", "plan__name")
     readonly_fields = ("total_return", "created_at")
     date_hierarchy = "created_at"
-    actions = ["approve_investments", "reject_investments"]
+    actions = ["admin_approve", "admin_reject"]
 
     @admin.display(description="Total Return")
     def total_return(self, obj):
         return f"${obj.total_return}"
 
-    @admin.action(description="Approve selected investments")
-    def approve_investments(self, request, queryset):
-        approved = 0
-        failed = 0
-
-        for investment in queryset.select_related("user", "plan").filter(status="pending"):
+    @admin.action(description="Approve selected investments (SAFE)")
+    def admin_approve(self, request, queryset):
+        count = 0
+        for inv in queryset.select_related("user", "plan").filter(status="pending"):
             try:
-                approve_investment(
-                    investment,
-                    request.user,
-                    notes=f"Approved via admin action by {request.user.email}",
-                )
-                approved += 1
-            except Exception as exc:  # pragma: no cover - admin feedback path
-                failed += 1
-                messages.error(request, f"Failed to approve investment {investment.id}: {exc}")
+                approve_investment(inv, request.user, "Approved via admin")
+                count += 1
+            except ValidationError as exc:
+                messages.error(request, f"Investment {inv.id}: {exc}")
+        self.message_user(request, f"{count} investment(s) approved.")
 
-        if approved:
-            messages.success(request, f"Approved {approved} investment(s); wallets debited.")
-        if failed:
-            messages.warning(request, f"{failed} investment(s) could not be approved.")
-
-
-    @admin.action(description="Reject selected investments")
-    def reject_investments(self, request, queryset):
-        rejected = 0
-        failed = 0
-
-        for investment in queryset.filter(status="pending"):
+    @admin.action(description="Reject selected investments (SAFE)")
+    def admin_reject(self, request, queryset):
+        count = 0
+        for inv in queryset.filter(status="pending"):
             try:
-                reject_investment(
-                    investment,
-                    request.user,
-                    notes=f"Rejected via admin action by {request.user.email}",
-                )
-                rejected += 1
-            except Exception as exc:  # pragma: no cover - admin feedback path
-                failed += 1
-                messages.error(request, f"Failed to reject investment {investment.id}: {exc}")
+                reject_investment(inv, request.user, "Rejected via admin")
+                count += 1
+            except ValidationError as exc:
+                messages.error(request, f"Investment {inv.id}: {exc}")
+        self.message_user(request, f"{count} investment(s) rejected.")
 
-        if rejected:
-            messages.success(request, f"Rejected {rejected} investment(s).")
-        if failed:
-            messages.warning(request, f"{failed} investment(s) could not be rejected.")
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            return self.readonly_fields + (
+                "user",
+                "plan",
+                "amount",
+                "status",
+                "started_at",
+                "ends_at",
+            )
+        return self.readonly_fields
 
     def save_model(self, request, obj, form, change):
-        """Ensure manual status edits trigger service logic for balance accuracy."""
-        if change and obj.pk:
-            original = UserInvestment.objects.select_related("user", "plan").get(pk=obj.pk)
-            new_status = form.cleaned_data.get("status")
+        # Creation must flow through the service layer to ensure wallet locks + notifications
+        if not change:
+            try:
+                create_investment(user=obj.user, plan=obj.plan, amount=obj.amount)
+                messages.success(request, "Investment request created and queued for approval.")
+            except ValidationError as exc:
+                messages.error(request, f"Could not create investment: {exc}")
+            return
 
-            if original.status == "pending" and new_status == "approved":
-                # reflect any form changes before service call
-                original.plan = form.cleaned_data.get("plan", original.plan)
-                original.amount = form.cleaned_data.get("amount", original.amount)
-                approve_investment(
-                    original,
-                    request.user,
-                    notes=f"Approved via admin edit by {request.user.email}",
-                )
-                messages.success(request, f"Investment {original.id} approved and wallet debited.")
-                return
-
-            if original.status == "pending" and new_status == "rejected":
-                reject_investment(
-                    original,
-                    request.user,
-                    notes=f"Rejected via admin edit by {request.user.email}",
-                )
-                messages.info(request, f"Investment {original.id} rejected.")
-                return
-
-        super().save_model(request, obj, form, change)
+        # Existing records are locked to readonly; defer to super for completeness
+        return super().save_model(request, obj, form, change)

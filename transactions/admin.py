@@ -380,6 +380,63 @@ class TransactionAdmin(admin.ModelAdmin):
             )
         return self.readonly_fields
 
+    def save_model(self, request, obj, form, change):
+        """Honor admin edits prior to approval via the service layer for safety."""
+        if change and obj.pk:
+            original = Transaction.objects.select_related("user").get(pk=obj.pk)
+            new_status = form.cleaned_data.get("status") if hasattr(form, "cleaned_data") else None
+            notes = form.cleaned_data.get("notes", "") if hasattr(form, "cleaned_data") else ""
+
+            editable_fields = [
+                "amount",
+                "payment_method",
+                "reference",
+                "tx_hash",
+                "wallet_address_used",
+                "notes",
+            ]
+
+            changed = []
+            if hasattr(form, "cleaned_data"):
+                for field in editable_fields:
+                    if field in form.cleaned_data:
+                        new_val = form.cleaned_data[field]
+                        if getattr(original, field) != new_val:
+                            setattr(original, field, new_val)
+                            changed.append(field)
+                if changed:
+                    original.save(update_fields=changed + ["updated_at"])
+                    AdminAuditLog.objects.create(
+                        admin=request.user,
+                        entity="transaction",
+                        entity_id=str(original.id),
+                        action="update",
+                        notes=f"Fields changed before status update: {', '.join(changed)}",
+                    )
+
+            if original.status == "pending" and new_status == "approved":
+                approve_transaction(
+                    original,
+                    request.user,
+                    notes or f"Approved via admin edit by {request.user.email}",
+                )
+                messages.success(
+                    request,
+                    f"Transaction {original.id} approved and wallet credited using amount ${original.amount}.",
+                )
+                return
+
+            if original.status == "pending" and new_status == "rejected":
+                reject_transaction(
+                    original,
+                    request.user,
+                    notes or f"Rejected via admin edit by {request.user.email}",
+                )
+                messages.info(request, f"Transaction {original.id} rejected.")
+                return
+
+        return super().save_model(request, obj, form, change)
+
 
 @admin.register(AdminAuditLog)
 class AdminAuditLogAdmin(admin.ModelAdmin):

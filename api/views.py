@@ -943,7 +943,14 @@ class SignupSerializer(serializers.Serializer):
 def complete_signup(request):
     """Signup: create user, send verification link. Prevents duplicate inactive users."""
     serializer = SignupSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
+    if not serializer.is_valid():
+        error_messages = []
+        for field, messages_list in serializer.errors.items():
+            for msg in messages_list:
+                error_messages.append(f"{field}: {msg}")
+        error_text = "; ".join(error_messages) or "Invalid signup payload"
+        return Response({"error": error_text}, status=status.HTTP_400_BAD_REQUEST)
+
     email = serializer.validated_data["email"].strip()
     password = serializer.validated_data["password"]
     referral_code = serializer.validated_data.get("referral_code", "").strip()

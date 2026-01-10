@@ -37,15 +37,21 @@ if Env is None:
     )
 
 env = Env()
+
 Env.read_env()  # Load .env early
 
 # Unified DEBUG + SECRET_KEY handling
-DEBUG = env.bool("DEBUG", default=False)
+DEBUG = env.bool("DEBUG", default=True)
+SECRET_KEY = env("SECRET_KEY", default=None)
 
-SECRET_KEY = env("SECRET_KEY", default="unsafe-build-secret-key")
-
-if not DEBUG and SECRET_KEY == "unsafe-build-secret-key":
-    raise ValueError("SECRET_KEY environment variable required when DEBUG=False")
+if DEBUG:
+    # Allow fallback dev key for local development
+    if not SECRET_KEY:
+        SECRET_KEY = "dev-fallback-key-unsafe"
+else:
+    # Fail fast in production if SECRET_KEY is missing
+    if not SECRET_KEY:
+        raise ValueError("SECRET_KEY environment variable required when DEBUG=False")
 ALLOWED_HOSTS = ["*"]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -175,7 +181,7 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,
     "UPDATE_LAST_LOGIN": False,
     "ALGORITHM": "HS256",
-    "SIGNING_KEY": os.getenv("SECRET_KEY", "your-secret-key-here"),
+    "SIGNING_KEY": SECRET_KEY,
     "VERIFYING_KEY": None,
     "AUDIENCE": None,
     "ISSUER": None,
@@ -315,13 +321,17 @@ BRAND = {
 # ------------------------------------------------------------------
 # Auth / Allauth
 # ------------------------------------------------------------------
-AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = "users.User"  # Always app_label.ModelName
 
 # Authentication backends
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
+
+# Ensure DJANGO_SETTINGS_MODULE is set for shell/tests
+if not os.environ.get("DJANGO_SETTINGS_MODULE"):
+    os.environ["DJANGO_SETTINGS_MODULE"] = "wolvcapital.settings"
 
 # Frontend URLs (Next.js handles all user-facing pages)
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")

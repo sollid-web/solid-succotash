@@ -1,58 +1,46 @@
-"""Quick test for signup fix"""
+"""Signup flow diagnostic.
+
+Skipped unless RUN_MANUAL_EMAIL_TESTS=1 to avoid DB/test pollution in CI runs.
+"""
+
 import os
-
-import django
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wolvcapital.settings')
-django.setup()
-
 import json
 
+import pytest
+import django
 from django.contrib.auth import get_user_model
 from django.test import Client
 
-User = get_user_model()
+if os.environ.get("RUN_MANUAL_EMAIL_TESTS") != "1":
+    pytest.skip("Signup diagnostic skipped; set RUN_MANUAL_EMAIL_TESTS=1 to run", allow_module_level=True)
 
-# Clean up test user if exists
-User.objects.filter(email='testsignup@example.com').delete()
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wolvcapital.settings")
 
-# Test signup
-client = Client()
-response = client.post(
-    '/api/auth/complete-signup/',
-    data=json.dumps({
-        'email': 'testsignup@example.com',
-        'password': 'testpass12345'
-    }),
-    content_type='application/json'
-)
+django.setup()
 
-print(f"Status Code: {response.status_code}")
-print(f"Response: {response.json()}")
+pytestmark = pytest.mark.django_db
 
-# Check if user was created
-user = User.objects.filter(email='testsignup@example.com').first()
-if user:
-    print(f"✅ User created: {user.email}")
-    print(f"   - Username: {user.username}")
-    print(f"   - Is Active: {user.is_active}")
-    print(f"   - Has password: {user.has_usable_password()}")
-else:
-    print("❌ User was NOT created")
 
-# Test duplicate signup
-print("\nTesting duplicate signup...")
-response2 = client.post(
-    '/api/auth/complete-signup/',
-    data=json.dumps({
-        'email': 'testsignup@example.com',
-        'password': 'anotherpass123'
-    }),
-    content_type='application/json'
-)
-print(f"Status Code: {response2.status_code}")
-print(f"Response: {response2.json()}")
+def test_signup_flow_diagnostic():
+    User = get_user_model()
+    User.objects.filter(email="testsignup@example.com").delete()
 
-# Cleanup
-User.objects.filter(email='testsignup@example.com').delete()
-print("\n✅ Test cleanup complete")
+    client = Client()
+    response = client.post(
+        "/api/auth/complete-signup/",
+        data=json.dumps({"email": "testsignup@example.com", "password": "testpass12345"}),
+        content_type="application/json",
+    )
+
+    assert response.status_code in {200, 201}, response.json()
+    user = User.objects.filter(email="testsignup@example.com").first()
+    assert user is not None
+
+    response2 = client.post(
+        "/api/auth/complete-signup/",
+        data=json.dumps({"email": "testsignup@example.com", "password": "anotherpass123"}),
+        content_type="application/json",
+    )
+    assert response2.status_code in {200, 400, 409}
+
+    User.objects.filter(email="testsignup@example.com").delete()

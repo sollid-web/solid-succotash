@@ -60,7 +60,7 @@ def submit_personal_info(user, personal_info: dict[str, Any]) -> KycApplication:
     # Ensure all values are JSON serializable (convert date/datetime objects to ISO strings)
     sanitized: dict[str, Any] = {}
     for key, value in personal_info.items():
-        if isinstance(value, (date, datetime)):
+        if isinstance(value, date | datetime):
             sanitized[key] = value.isoformat()
         else:
             sanitized[key] = value

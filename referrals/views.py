@@ -6,8 +6,10 @@ from django.db import models
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+
+from api.permissions import IsPlatformAdmin
 
 from .models import Referral, ReferralCode, ReferralReward
 from .services import create_manual_referral_reward, create_referral_if_code
@@ -90,7 +92,7 @@ def signup_referral_hook(request):
 
 
 @api_view(['POST'])
-@permission_classes([IsAdminUser])
+@permission_classes([IsPlatformAdmin])
 def manual_reward(request):
     """
     Admin manually creates referral reward.

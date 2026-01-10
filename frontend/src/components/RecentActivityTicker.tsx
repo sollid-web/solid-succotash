@@ -28,28 +28,31 @@ interface Props {
   className?: string;
 }
 
+type Country = {
+  code: string;
+  name: string;
+  weight: number;
+  names: string[];
+};
+
 // --- Combined-gender country pool with enhanced global diversity ---
-const COUNTRIES = [
-  { code: "US", name: "United States", weight: 0.15, names: ["Brandon","Marcus","Tyler","Joshua","Daniel","Nathan","Justin","Ethan","Samuel","Carlos","Derek","Emily","Sarah","Jessica","Ashley","Brittany","Emma","Olivia","Sophia","Hannah","Michael","David","James"] },
-  { code: "GB", name: "United Kingdom", weight: 0.12, names: ["Oliver","Henry","Jack","Benjamin","Charlie","Theo","Liam","Freddie","George","Amelia","Emily","Grace","Sophie","Chloe","Lily","Mia","Victoria","Poppy","Isabella"] },
-  { code: "DE", name: "Germany", weight: 0.08, names: ["Tobias","Jonas","Karl","Franz","Lukas","Matthias","Felix","Leon","Anna","Julia","Lena","Sophie","Emma","Katharina","Marie","Hannah"] },
-  { code: "FR", name: "France", weight: 0.07, names: ["Antoine","Laurent","Nicolas","Julien","Pierre","Gabriel","Louis","Thomas","Camille","Clara","Léa","Amélie","Chloé","Manon","Emma","Louise"] },
-  { code: "CA", name: "Canada", weight: 0.06, names: ["Liam","Noah","Ethan","Lucas","William","Jack","Owen","Ava","Charlotte","Ella","Harper","Emily","Sophia","Olivia","Emma"] },
-  { code: "AU", name: "Australia", weight: 0.05, names: ["Jack","Oliver","Connor","Henry","William","Thomas","Charlotte","Matilda","Ruby","Isla","Evie","Amelia","Mia","Grace"] },
-  { code: "SG", name: "Singapore", weight: 0.05, names: ["Wei","Ming","Arjun","Kai","Hao","Ryan","Ethan","Li Na","Mei","Jia","Ananya","Siti","Hema","Cheryl","Rachel"] },
-  { code: "IN", name: "India", weight: 0.08, names: ["Amit","Ravi","Sahil","Arjun","Karan","Vikram","Rohan","Aditya","Priya","Aisha","Neha","Divya","Riya","Anjali","Shreya","Pooja"] },
-  { code: "NO", name: "Norway", weight: 0.05, names: ["Soren","Erik","Bjorn","Rolf","Per","Torsten","Olav","Leif","Magnus","Ingrid","Astrid","Liv","Kari","Sigrid","Helene"] },
-  { code: "SE", name: "Sweden", weight: 0.04, names: ["Lars","Anders","Gustav","Erik","Oscar","Johan","Emma","Alice","Maja","Elsa","Wilma","Ebba"] },
-  { code: "NL", name: "Netherlands", weight: 0.04, names: ["Daan","Lucas","Sem","Milan","Levi","Emma","Julia","Sophie","Anna","Lotte","Lisa"] },
-  { code: "ZA", name: "South Africa", weight: 0.04, names: ["Thabo","Sipho","Lerato","Jabu","Liam","Connor","Naledi","Zinhle","Thandi","Ayanda","Zanele","Emma"] },
-  { code: "JP", name: "Japan", weight: 0.03, names: ["Hiroshi","Takeshi","Kenji","Yuki","Haruto","Sakura","Yui","Hina","Aoi","Rin","Mio"] },
-  { code: "KR", name: "South Korea", weight: 0.03, names: ["Min-jun","Ji-hoon","Seo-jun","Jun-seo","Do-yun","Ji-woo","Seo-yeon","Ha-eun","Min-seo","Soo-ah"] },
-  { code: "BR", name: "Brazil", weight: 0.03, names: ["Lucas","Gabriel","Pedro","Matheus","Rafael","Julia","Maria","Ana","Beatriz","Isabella","Laura"] },
-  { code: "MX", name: "Mexico", weight: 0.02, names: ["Miguel","Diego","Carlos","Jose","Luis","Sofia","Maria","Camila","Valentina","Isabella","Ana"] },
-  { code: "IT", name: "Italy", weight: 0.03, names: ["Leonardo","Francesco","Alessandro","Lorenzo","Matteo","Sofia","Giulia","Aurora","Alice","Ginevra"] },
-  { code: "ES", name: "Spain", weight: 0.03, names: ["Hugo","Martin","Lucas","Mateo","Daniel","Lucia","Sofia","Maria","Martina","Paula","Emma"] },
-  { code: "AE", name: "UAE", weight: 0.02, names: ["Ahmed","Mohammed","Omar","Ali","Khalid","Fatima","Aisha","Mariam","Noura","Sara","Layla"] },
+const COUNTRIES: Country[] = [
+  // Withdrawal-prioritized distribution (50% total)
+  { code: "US", name: "United States", weight: 0.09, names: ["Daniel","Marcus","Tyler","Ethan","Joshua","Michael","Sarah","Emily","Jessica","Olivia"] },
+  { code: "GB", name: "United Kingdom", weight: 0.07, names: ["Oliver","Jack","Henry","Liam","George","Amelia","Sophie","Grace","Isabella"] },
+  { code: "DE", name: "Germany", weight: 0.05, names: ["Lukas","Jonas","Felix","Tobias","Leon","Anna","Julia","Lena"] },
+  { code: "FR", name: "France", weight: 0.04, names: ["Thomas","Julien","Pierre","Louis","Gabriel","Camille","Clara","Chloé"] },
+  { code: "CA", name: "Canada", weight: 0.04, names: ["Liam","Noah","Ethan","Owen","Ava","Charlotte","Ella"] },
+  { code: "AU", name: "Australia", weight: 0.03, names: ["Jack","Oliver","Connor","William","Ruby","Isla","Mia"] },
+  { code: "SG", name: "Singapore", weight: 0.03, names: ["Kai","Ryan","Ethan","Wei","Ming","Cheryl","Rachel"] },
+  { code: "IN", name: "India", weight: 0.04, names: ["Arjun","Rohan","Aditya","Karan","Vikram","Priya","Neha"] },
+  { code: "NO", name: "Norway", weight: 0.025, names: ["Erik","Magnus","Leif","Olav","Ingrid","Astrid"] },
+  { code: "SE", name: "Sweden", weight: 0.025, names: ["Oscar","Johan","Gustav","Emma","Maja","Elsa"] },
+  { code: "NL", name: "Netherlands", weight: 0.025, names: ["Daan","Lucas","Milan","Levi","Sophie","Lotte"] },
+  { code: "BR", name: "Brazil", weight: 0.025, names: ["Lucas","Gabriel","Rafael","Pedro","Julia","Beatriz"] }
 ];
+// Remaining 50% → other activities (trading, fees, transfers, internal ops)
+
 
 const DEFAULT_PLANS = ["Pioneer", "Vanguard", "Horizon", "Summit"];
 const AMOUNTS = [100,250,500,750,1000,1500,2000,2500,3500,5000,7500,10000,12500,15000,20000,25000,30000,40000,50000,75000,100000];

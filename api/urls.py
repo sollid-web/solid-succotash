@@ -31,6 +31,12 @@ router.register(
     basename="api-notifications",
 )
 
+router.register(
+    r"support/requests",
+    views.UserSupportRequestViewSet,
+    basename="api-support-requests",
+)
+
 # Admin endpoints
 router.register(
     r"admin/transactions",

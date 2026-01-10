@@ -64,6 +64,7 @@ from .serializers import (
     KycDocumentSerializer,
     KycPersonalInfoSerializer,
     PlatformCertificateSerializer,
+    SupportRequestStatusSerializer,
     TransactionSerializer,
     UserInvestmentSerializer,
     UserNotificationSerializer,
@@ -389,6 +390,16 @@ class AdminUserInvestmentViewSet(viewsets.ModelViewSet):
 
         kwargs["partial"] = partial
         return super().update(request, *args, **kwargs)
+
+
+class UserSupportRequestViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    """Authenticated user can view admin-updated support request status."""
+
+    serializer_class = SupportRequestStatusSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return SupportRequest.objects.filter(user=self.request.user).order_by("-created_at")
 
 
 class SupportRequestView(APIView):

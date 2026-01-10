@@ -4,7 +4,7 @@ from django.db.models import Sum
 from django.utils import timezone
 from rest_framework import serializers
 
-from core.models import Agreement, PlatformCertificate, UserAgreementAcceptance
+from core.models import Agreement, PlatformCertificate, SupportRequest, UserAgreementAcceptance
 from investments.models import InvestmentPlan, UserInvestment
 from transactions.models import CryptocurrencyWallet, Transaction, VirtualCard
 from users.models import KycApplication, Profile, UserNotification, UserWallet
@@ -276,13 +276,8 @@ class AdminUserInvestmentSerializer(serializers.ModelSerializer):
             "created_at",
             "total_return",
         ]
-        read_only_fields = [
-            "user_email",
-            "plan_name",
-            "amount",
-            "created_at",
-            "total_return",
-        ]
+
+        read_only_fields = fields
 
     def get_ends_at(self, obj):
         if (
@@ -294,6 +289,23 @@ class AdminUserInvestmentSerializer(serializers.ModelSerializer):
             expected = obj.started_at + timezone.timedelta(days=int(obj.plan.duration_days))
             return expected
         return obj.ends_at
+
+
+class SupportRequestStatusSerializer(serializers.ModelSerializer):
+    """Expose admin-updated support request fields back to the user."""
+
+    class Meta:
+        model = SupportRequest
+        fields = [
+            "id",
+            "topic",
+            "status",
+            "responded_at",
+            "admin_notes",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = fields
 
 
 class UserNotificationSerializer(serializers.ModelSerializer):

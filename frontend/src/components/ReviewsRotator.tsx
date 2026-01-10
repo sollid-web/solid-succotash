@@ -11,18 +11,19 @@ interface Review {
 }
 
 // Concise, male-only business-level reviews used for the rotator.
-const REVIEWS: Review[] = [
-  { id: 'r001', name: 'Owen B.', location: 'London, UK', quote: 'Reliable payouts and clear reporting — excellent for business.', rating: 5 },
-  { id: 'r002', name: 'Marcus G.', location: 'Oslo, NO', quote: 'Professional team and fast approvals. Highly recommend.', rating: 5 },
-  { id: 'r003', name: 'Liam H.', location: 'New York, US', quote: 'Consistent returns and transparent fees — great partner.', rating: 5 },
-  { id: 'r004', name: 'Ethan S.', location: 'Toronto, CA', quote: 'Smooth onboarding and dependable operations for corporate accounts.', rating: 5 },
-  { id: 'r005', name: 'Noah D.', location: 'Berlin, DE', quote: 'Solid compliance and excellent customer support.', rating: 5 },
-  { id: 'r006', name: 'Mason R.', location: 'Sydney, AU', quote: 'Robust platform with timely settlements — trustable service.', rating: 5 },
-  { id: 'r007', name: 'Lucas F.', location: 'Singapore, SG', quote: 'Clear documentation and strong security practices.', rating: 5 },
-  { id: 'r008', name: 'James K.', location: 'Dublin, IE', quote: 'Efficient workflows and reliable reporting for our team.', rating: 5 },
-  { id: 'r009', name: 'Henry P.', location: 'Stockholm, SE', quote: 'Great for institutional use — attentive support and steady performance.', rating: 5 },
-  { id: 'r010', name: 'Oliver T.', location: 'Zurich, CH', quote: 'High-quality governance and predictable outcomes.', rating: 5 },
+const REVIEWS: Review[] =[
+  { id: 'r001', name: 'Daniel Moore', location: 'London, UK', quote: 'Payouts have been on time and the reports are easy to follow. No issues so far.', rating: 5 },
+  { id: 'r002', name: 'Erik Johansen', location: 'Oslo, NO', quote: 'The team is easy to work with and approvals didn’t take long. Happy with the service.', rating: 5 },
+  { id: 'r003', name: 'Patrick Wilson', location: 'New York, US', quote: 'Fees are clear and results have been consistent. It’s been a good experience overall.', rating: 5 },
+  { id: 'r004', name: 'Andrew Collins', location: 'Toronto, CA', quote: 'Getting started was straightforward. Everything has been running smoothly since.', rating: 5 },
+  { id: 'r005', name: 'Sebastian Klein', location: 'Berlin, DE', quote: 'Support replies quickly and compliance feels solid. Does what we need.', rating: 5 },
+  { id: 'r006', name: 'Thomas Reed', location: 'Sydney, AU', quote: 'The platform feels stable and settlements arrive when expected. Can’t complain.', rating: 5 },
+  { id: 'r007', name: 'Benjamin Lee', location: 'Singapore, SG', quote: 'Docs are clear and security looks well handled. Setup was easier than expected.', rating: 5 },
+  { id: 'r008', name: 'Michael O’Connor', location: 'Dublin, IE', quote: 'Our team picked it up quickly and reporting has been reliable so far.', rating: 5 },
+  { id: 'r009', name: 'Johan Lundqvist', location: 'Stockholm, SE', quote: 'Support has been responsive and performance has been steady. Works for our needs.', rating: 5 },
+  { id: 'r010', name: 'Lukas Meier', location: 'Zurich, CH', quote: 'Everything is pretty predictable, which is what we want. Overall a solid service.', rating: 5 },
 ];
+ 
 
 function Stars({ n }: { n: number }) {
   const items = Array.from({ length: 5 }, (_, i) => i < n);

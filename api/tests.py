@@ -111,6 +111,58 @@ class SupportRequestAPITests(TestCase):
         self.assertTrue(SupportRequest.objects.filter(pk=data["reference"]).exists())
 
 
+class SupportRequestStatusVisibilityAPITests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.user = User.objects.create_user(
+            username="support_user",
+            email="support_user@example.com",
+            password="pass12345",
+        )
+        self.other = User.objects.create_user(
+            username="support_other",
+            email="support_other@example.com",
+            password="pass12345",
+        )
+        self.client = APIClient()
+
+        # Create two requests, one for each user
+        self.mine = SupportRequest.objects.create(
+            user=self.user,
+            contact_email=self.user.email,
+            full_name="Support User",
+            topic="billing",
+            message="Help with billing",
+            status=SupportRequest.STATUS_IN_PROGRESS,
+            admin_notes="We are reviewing your request.",
+        )
+        SupportRequest.objects.create(
+            user=self.other,
+            contact_email=self.other.email,
+            full_name="Other",
+            topic="security",
+            message="Other issue",
+            status=SupportRequest.STATUS_RESOLVED,
+            admin_notes="Resolved.",
+        )
+
+    def test_requires_authentication(self):
+        resp = self.client.get("/api/support/requests/")
+        self.assertIn(resp.status_code, {401, 403})
+
+    def test_user_sees_only_own_support_requests_and_status_fields(self):
+        self.client.login(username="support_user", password="pass12345")
+        resp = self.client.get("/api/support/requests/")
+        self.assertEqual(resp.status_code, 200)
+
+        payload = resp.json()
+        self.assertEqual(len(payload), 1)
+        self.assertEqual(payload[0]["id"], self.mine.id)
+        self.assertIn("status", payload[0])
+        self.assertIn("responded_at", payload[0])
+        self.assertIn("admin_notes", payload[0])
+
+
 class NotificationAPITests(TestCase):
     def setUp(self):
         User = get_user_model()

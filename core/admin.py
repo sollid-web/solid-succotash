@@ -84,17 +84,24 @@ class SupportRequestAdmin(admin.ModelAdmin):
     actions = ['mark_in_progress', 'mark_resolved']
 
     def mark_in_progress(self, request, queryset):
-        updated = queryset.update(status='in_progress', handled_by=request.user)
+        updated = 0
+        for obj in queryset:
+            obj.status = 'in_progress'
+            obj.handled_by = request.user
+            obj.save()
+            updated += 1
         self.message_user(request, f"{updated} support request(s) marked as in progress.")
     mark_in_progress.short_description = "Mark selected as In Progress"
 
     def mark_resolved(self, request, queryset):
-        from django.utils import timezone
-        updated = queryset.update(
-            status='resolved',
-            handled_by=request.user,
-            responded_at=timezone.now()
-        )
+        responded_at = timezone.now()
+        updated = 0
+        for obj in queryset:
+            obj.status = 'resolved'
+            obj.handled_by = request.user
+            obj.responded_at = responded_at
+            obj.save()
+            updated += 1
         self.message_user(request, f"{updated} support request(s) marked as resolved.")
     mark_resolved.short_description = "Mark selected as Resolved"
 
@@ -261,42 +268,80 @@ class EmailInboxAdmin(admin.ModelAdmin):
 
     # Actions
     def mark_as_read(self, request, queryset):
-        updated = queryset.update(status='read', read_at=timezone.now(), assigned_to=request.user)
+        read_at = timezone.now()
+        updated = 0
+        for email in queryset:
+            email.status = 'read'
+            email.read_at = read_at
+            email.assigned_to = request.user
+            email.save()
+            updated += 1
         self.message_user(request, f'{updated} email(s) marked as read.')
     mark_as_read.short_description = 'Mark as Read'
 
     def mark_as_unread(self, request, queryset):
-        updated = queryset.update(status='unread', read_at=None)
+        updated = 0
+        for email in queryset:
+            email.status = 'unread'
+            email.read_at = None
+            email.save()
+            updated += 1
         self.message_user(request, f'{updated} email(s) marked as unread.')
     mark_as_unread.short_description = 'Mark as Unread'
 
     def mark_as_replied(self, request, queryset):
-        updated = queryset.update(status='replied', replied_at=timezone.now())
+        replied_at = timezone.now()
+        updated = 0
+        for email in queryset:
+            email.status = 'replied'
+            email.replied_at = replied_at
+            email.save()
+            updated += 1
         self.message_user(request, f'{updated} email(s) marked as replied.')
     mark_as_replied.short_description = 'Mark as Replied'
 
     def mark_as_archived(self, request, queryset):
-        updated = queryset.update(status='archived')
+        updated = 0
+        for email in queryset:
+            email.status = 'archived'
+            email.save()
+            updated += 1
         self.message_user(request, f'{updated} email(s) archived.')
     mark_as_archived.short_description = 'Archive'
 
     def mark_as_spam(self, request, queryset):
-        updated = queryset.update(status='spam')
+        updated = 0
+        for email in queryset:
+            email.status = 'spam'
+            email.save()
+            updated += 1
         self.message_user(request, f'{updated} email(s) marked as spam.')
     mark_as_spam.short_description = 'Mark as Spam'
 
     def assign_to_me(self, request, queryset):
-        updated = queryset.update(assigned_to=request.user)
+        updated = 0
+        for email in queryset:
+            email.assigned_to = request.user
+            email.save()
+            updated += 1
         self.message_user(request, f'{updated} email(s) assigned to you.')
     assign_to_me.short_description = 'Assign to Me'
 
     def set_priority_high(self, request, queryset):
-        updated = queryset.update(priority='high')
+        updated = 0
+        for email in queryset:
+            email.priority = 'high'
+            email.save()
+            updated += 1
         self.message_user(request, f'{updated} email(s) set to high priority.')
     set_priority_high.short_description = 'Set Priority: High'
 
     def set_priority_normal(self, request, queryset):
-        updated = queryset.update(priority='normal')
+        updated = 0
+        for email in queryset:
+            email.priority = 'normal'
+            email.save()
+            updated += 1
         self.message_user(request, f'{updated} email(s) set to normal priority.')
     set_priority_normal.short_description = 'Set Priority: Normal'
 

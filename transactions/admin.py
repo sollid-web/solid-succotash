@@ -57,19 +57,19 @@ class AdminNotificationAdmin(admin.ModelAdmin):
                 try:
                     url = reverse("admin:transactions_transaction_change", args=[obj.entity_id])
                     return format_html('<a href="{}" class="button">View Transaction</a>', url)
-                except:
+                except Exception:
                     pass
             elif obj.entity_type == "investment":
                 try:
                     url = reverse("admin:investments_userinvestment_change", args=[obj.entity_id])
                     return format_html('<a href="{}" class="button">View Investment</a>', url)
-                except:
+                except Exception:
                     pass
             elif obj.entity_type == "virtual_card":
                 try:
                     url = reverse("admin:transactions_virtualcard_change", args=[obj.entity_id])
                     return format_html('<a href="{}" class="button">View Card</a>', url)
-                except:
+                except Exception:
                     pass
         return "-"
 
@@ -80,14 +80,23 @@ class AdminNotificationAdmin(admin.ModelAdmin):
 
     @admin.action(description="Mark selected notifications as read")
     def mark_as_read(self, request, queryset):
-        updated = queryset.update(is_read=True)
+        updated = 0
+        for notification in queryset:
+            notification.is_read = True
+            notification.save()
+            updated += 1
         self.message_user(request, f"{updated} notifications marked as read.")
 
     @admin.action(description="Mark selected notifications as resolved")
     def mark_as_resolved(self, request, queryset):
-        updated = queryset.update(
-            is_resolved=True, resolved_by=request.user, resolved_at=timezone.now()
-        )
+        resolved_at = timezone.now()
+        updated = 0
+        for notification in queryset:
+            notification.is_resolved = True
+            notification.resolved_by = request.user
+            notification.resolved_at = resolved_at
+            notification.save()
+            updated += 1
         self.message_user(request, f"{updated} notifications marked as resolved.")
 
 

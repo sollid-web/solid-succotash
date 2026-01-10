@@ -188,9 +188,9 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "wolvcapital.middleware.RequestIDMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -271,8 +271,7 @@ WSGI_APPLICATION = "wolvcapital.wsgi.application"
 # ------------------------------------------------------------------
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [str(BASE_DIR / "static")]
-STATIC_ROOT_PATH = BASE_DIR / "staticfiles"
-STATIC_ROOT = str(STATIC_ROOT_PATH)
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 TESTING = any(
     arg in os.environ.get("PYTEST_CURRENT_TEST", "")
@@ -280,14 +279,16 @@ TESTING = any(
 ) or any(c in " ".join(sys.argv) for c in ["test", "pytest"])
 
 if not DEBUG and not TESTING:
-    STATICFILES_STORAGE = (
-        "whitenoise.storage.CompressedManifestStaticFilesStorage"
-    )
-    # Avoid hard 500s if a static path is referenced but missing in the
-    # manifest.
-    # WhiteNoise will fall back to the un-hashed file path instead of raising
-    # ValueError.
     WHITENOISE_MANIFEST_STRICT = False
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT_PATH = BASE_DIR / "media"

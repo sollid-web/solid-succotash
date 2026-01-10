@@ -9,7 +9,6 @@ from .models import UserWallet
 
 User = get_user_model()
 
-
 # Register User WITHOUT profile inline
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -50,49 +49,6 @@ class UserAdmin(admin.ModelAdmin):
         approve_transaction(tx, request.user, notes="Admin credit")
 
         self.message_user(request, "Wallet credited successfully.", level=messages.SUCCESS)
-
-    User = get_user_model()
-
-    # Register User WITHOUT profile inline
-    @admin.register(User)
-    class UserAdmin(admin.ModelAdmin):
-        list_display = ("id", "email", "is_active", "is_staff", "get_wallet_balance")
-        search_fields = ("email",)
-        ordering = ("id",)
-        actions = ("credit_wallet",)
-
-        def get_wallet_balance(self, obj):
-            try:
-                return f"${obj.wallet.balance}"
-            except Exception:
-                return "-"
-
-        get_wallet_balance.short_description = "Wallet Balance"
-
-        @admin.action(description="Credit wallet (SAFE)")
-        def credit_wallet(self, request, queryset):
-            if queryset.count() != 1:
-                self.message_user(request, "Select exactly one user.", level=messages.ERROR)
-                return
-
-            user = queryset.first()
-
-            try:
-                amount = user.wallet.balance
-            except Exception:
-                self.message_user(request, "Selected user does not have a wallet.", level=messages.ERROR)
-                return
-
-            tx = create_transaction(
-                user=user,
-                tx_type="deposit",
-                amount=amount,  # replace via popup later if needed
-                payment_method="admin_adjustment",
-                reference="Admin wallet credit",
-            )
-            approve_transaction(tx, request.user, notes="Admin credit")
-
-            self.message_user(request, "Wallet credited successfully.", level=messages.SUCCESS)
 
 
 class WalletAdjustmentForm(forms.Form):

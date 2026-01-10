@@ -40,17 +40,12 @@ env = Env()
 Env.read_env()  # Load .env early
 
 # Unified DEBUG + SECRET_KEY handling
-DEBUG = False
-_secret_key_env = env("SECRET_KEY", default=None)
-if _secret_key_env:
-    SECRET_KEY = _secret_key_env
-else:
-    if DEBUG:
-        SECRET_KEY = "dev-secret-key-for-testing-only-do-not-use-in-prod"
-    else:
-        raise ValueError(
-            "SECRET_KEY environment variable required when DEBUG=False"
-        )
+DEBUG = env.bool("DEBUG", default=False)
+
+SECRET_KEY = env("SECRET_KEY", default="unsafe-build-secret-key")
+
+if not DEBUG and SECRET_KEY == "unsafe-build-secret-key":
+    raise ValueError("SECRET_KEY environment variable required when DEBUG=False")
 ALLOWED_HOSTS = ["*"]
 
 CSRF_TRUSTED_ORIGINS = [

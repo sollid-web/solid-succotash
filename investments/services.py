@@ -375,9 +375,10 @@ def recalculate_investment_end_date(
 @transaction.atomic
 def credit_roi_payout(payout, actor: User = None):
     """
-    Atomically credit ROI payout to investment owner's wallet.
+    Record daily ROI profit for an investment.
     
-    Creates a completed transaction, updates wallet balance, marks payout processed.
+    Creates a completed profit transaction WITHOUT crediting wallet.
+    Profit stays locked during active plan, becomes withdrawable after expiry.
     Idempotent: returns existing transaction ID if already processed.
     
     Args:
@@ -394,7 +395,7 @@ def credit_roi_payout(payout, actor: User = None):
     if payout.processed_at:
         return payout.transaction_id
     
-    # Lock the payout and wallet rows
+    # Lock the payout row
     payout = DailyRoiPayout.objects.select_for_update().get(pk=payout.pk)
     
     # Double-check inside transaction
@@ -403,25 +404,16 @@ def credit_roi_payout(payout, actor: User = None):
     
     investment_user = cast(User, payout.investment.user)
     
-    # Lock wallet
-    try:
-        wallet = UserWallet.objects.select_for_update().get(user=investment_user)
-    except UserWallet.DoesNotExist:
-        wallet = UserWallet.objects.create(user=investment_user)
-    
-    # Update wallet balance
-    wallet.balance += payout.amount
-    wallet.save(update_fields=["balance", "updated_at"])
-    
-    # Create completed transaction
+    # Create completed profit transaction (wallet untouched)
     txn = Transaction.objects.create(
         user=investment_user,
-        tx_type="deposit",
-        payment_method="bank_transfer",  # ROI is internal credit
+        investment=payout.investment,
+        tx_type="profit",
+        payment_method="bank_transfer",
         amount=payout.amount,
         status="completed",
-        reference=f"ROI payout {payout.payout_date} for investment {payout.investment_id}",
-        notes=f"Auto-credited ROI payout (processed by system)",
+        reference=f"Daily ROI for investment #{payout.investment_id}",
+        notes=f"Daily profit (locked until plan expires)",
     )
     
     # Mark payout as processed
@@ -439,17 +431,7 @@ def credit_roi_payout(payout, actor: User = None):
             notes=f"ROI payout auto-credited: ${payout.amount} for investment {payout.investment_id}",
         )
     
-    # Notify user (in-app)
-    from users.notification_service import notify_wallet_credited
-    
-    try:
-        notify_wallet_credited(
-            investment_user,
-            payout.amount,
-            reason=f"ROI payout for {payout.investment.plan.name}",
-        )
-    except Exception:
-        # Don't fail credit if notification fails
-        pass
+    # Note: No wallet notification since balance isn't updated
+    # Profit is recorded but locked until investment expires
     
     return txn.id

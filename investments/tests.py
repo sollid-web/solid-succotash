@@ -139,9 +139,9 @@ class DailyRoiPayoutTests(TestCase):
         process_date = timezone.now().date().isoformat()
         call_command("payout_roi", date=process_date)
         
-        # ROI payouts are now auto-credited, so wallet should be updated
+        # ROI is recorded as profit, wallet stays untouched (locked until plan expires)
         self.user.wallet.refresh_from_db()
-        self.assertEqual(self.user.wallet.balance, Decimal("5.00"))  # 1% of 500
+        self.assertEqual(self.user.wallet.balance, Decimal("0.00"))
         
         # Check payout record created and processed
         payout = DailyRoiPayout.objects.filter(investment=self.investment).first()
@@ -149,26 +149,25 @@ class DailyRoiPayoutTests(TestCase):
         self.assertIsNotNone(payout.processed_at)
         self.assertIsNotNone(payout.transaction_id)
         
-        # Check completed transaction created
+        # Check completed profit transaction created (not deposit)
         from transactions.models import Transaction
         txn = Transaction.objects.filter(
-            user=self.user, tx_type="deposit", status="completed", reference__contains="ROI payout"
+            user=self.user, tx_type="profit", status="completed", investment=self.investment
         ).first()
         self.assertIsNotNone(txn)
         self.assertEqual(txn.amount, Decimal("5.00"))
         
         first_txn_id = txn.id
-        first_payout_id = payout.id
 
-        # Second run should be idempotent: no new payout, transaction, or wallet change
+        # Second run should be idempotent: no new payout or transaction
         call_command("payout_roi", date=process_date)
         self.assertEqual(DailyRoiPayout.objects.filter(investment=self.investment).count(), 1)
         self.user.wallet.refresh_from_db()
-        self.assertEqual(self.user.wallet.balance, Decimal("5.00"))  # Still same amount
+        self.assertEqual(self.user.wallet.balance, Decimal("0.00"))  # Still zero
         
         # Verify same transaction
         txns = Transaction.objects.filter(
-            user=self.user, tx_type="deposit", status="completed", reference__contains="ROI payout"
+            user=self.user, tx_type="profit", status="completed", investment=self.investment
         )
         self.assertEqual(txns.count(), 1)
         self.assertEqual(txns.first().id, first_txn_id)
@@ -192,16 +191,23 @@ class DailyRoiPayoutTests(TestCase):
         self.assertEqual(payouts.first().payout_date.isoformat(), "2025-12-04")
         self.assertEqual(payouts.last().payout_date.isoformat(), "2025-12-14")
         
-        # All payouts should be processed and have transactions
+        # All payouts should be processed and have profit transactions
         for payout in payouts:
             self.assertIsNotNone(payout.processed_at)
             self.assertIsNotNone(payout.transaction_id)
         
-        # Wallet should be credited with total amount (11 days * 5.00)
+        # Wallet should remain untouched (profit is locked)
         self.user.wallet.refresh_from_db()
-        self.assertEqual(self.user.wallet.balance, Decimal("55.00"))
+        self.assertEqual(self.user.wallet.balance, Decimal("0.00"))
+        
+        # Verify 11 profit transactions created
+        from transactions.models import Transaction
+        profit_txns = Transaction.objects.filter(
+            user=self.user, tx_type="profit", investment=self.investment
+        )
+        self.assertEqual(profit_txns.count(), 11)
 
-        # Second run should not create duplicates or change wallet
+        # Second run should not create duplicates
         call_command(
             "payout_roi",
             start_date="2025-12-04",
@@ -210,7 +216,8 @@ class DailyRoiPayoutTests(TestCase):
         )
         self.assertEqual(DailyRoiPayout.objects.filter(investment=self.investment).count(), 11)
         self.user.wallet.refresh_from_db()
-        self.assertEqual(self.user.wallet.balance, Decimal("55.00"))  # Still same amount
+        self.assertEqual(self.user.wallet.balance, Decimal("0.00"))  # Still zero
+        self.assertEqual(profit_txns.count(), 11)  # Still 11 transactions
 
     @patch("investments.management.commands.payout_roi.EmailService.send_roi_payout_notification")
     def test_daily_payout_sends_email_notification(self, mock_send):

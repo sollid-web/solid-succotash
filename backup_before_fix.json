@@ -1,0 +1,5883 @@
+[
+{
+  "model": "auth.permission",
+  "pk": 1,
+  "fields": {
+    "name": "Can add log entry",
+    "content_type": 1,
+    "codename": "add_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 2,
+  "fields": {
+    "name": "Can change log entry",
+    "content_type": 1,
+    "codename": "change_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 3,
+  "fields": {
+    "name": "Can delete log entry",
+    "content_type": 1,
+    "codename": "delete_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 4,
+  "fields": {
+    "name": "Can view log entry",
+    "content_type": 1,
+    "codename": "view_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 5,
+  "fields": {
+    "name": "Can add permission",
+    "content_type": 2,
+    "codename": "add_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 6,
+  "fields": {
+    "name": "Can change permission",
+    "content_type": 2,
+    "codename": "change_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 7,
+  "fields": {
+    "name": "Can delete permission",
+    "content_type": 2,
+    "codename": "delete_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 8,
+  "fields": {
+    "name": "Can view permission",
+    "content_type": 2,
+    "codename": "view_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 9,
+  "fields": {
+    "name": "Can add group",
+    "content_type": 3,
+    "codename": "add_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 10,
+  "fields": {
+    "name": "Can change group",
+    "content_type": 3,
+    "codename": "change_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 11,
+  "fields": {
+    "name": "Can delete group",
+    "content_type": 3,
+    "codename": "delete_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 12,
+  "fields": {
+    "name": "Can view group",
+    "content_type": 3,
+    "codename": "view_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 13,
+  "fields": {
+    "name": "Can add content type",
+    "content_type": 4,
+    "codename": "add_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 14,
+  "fields": {
+    "name": "Can change content type",
+    "content_type": 4,
+    "codename": "change_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 15,
+  "fields": {
+    "name": "Can delete content type",
+    "content_type": 4,
+    "codename": "delete_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 16,
+  "fields": {
+    "name": "Can view content type",
+    "content_type": 4,
+    "codename": "view_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 17,
+  "fields": {
+    "name": "Can add session",
+    "content_type": 5,
+    "codename": "add_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 18,
+  "fields": {
+    "name": "Can change session",
+    "content_type": 5,
+    "codename": "change_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 19,
+  "fields": {
+    "name": "Can delete session",
+    "content_type": 5,
+    "codename": "delete_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 20,
+  "fields": {
+    "name": "Can view session",
+    "content_type": 5,
+    "codename": "view_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 21,
+  "fields": {
+    "name": "Can add site",
+    "content_type": 6,
+    "codename": "add_site"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 22,
+  "fields": {
+    "name": "Can change site",
+    "content_type": 6,
+    "codename": "change_site"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 23,
+  "fields": {
+    "name": "Can delete site",
+    "content_type": 6,
+    "codename": "delete_site"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 24,
+  "fields": {
+    "name": "Can view site",
+    "content_type": 6,
+    "codename": "view_site"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 25,
+  "fields": {
+    "name": "Can add Token",
+    "content_type": 7,
+    "codename": "add_token"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 26,
+  "fields": {
+    "name": "Can change Token",
+    "content_type": 7,
+    "codename": "change_token"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 27,
+  "fields": {
+    "name": "Can delete Token",
+    "content_type": 7,
+    "codename": "delete_token"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 28,
+  "fields": {
+    "name": "Can view Token",
+    "content_type": 7,
+    "codename": "view_token"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 29,
+  "fields": {
+    "name": "Can add Token",
+    "content_type": 8,
+    "codename": "add_tokenproxy"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 30,
+  "fields": {
+    "name": "Can change Token",
+    "content_type": 8,
+    "codename": "change_tokenproxy"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 31,
+  "fields": {
+    "name": "Can delete Token",
+    "content_type": 8,
+    "codename": "delete_tokenproxy"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 32,
+  "fields": {
+    "name": "Can view Token",
+    "content_type": 8,
+    "codename": "view_tokenproxy"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 33,
+  "fields": {
+    "name": "Can add blacklisted token",
+    "content_type": 9,
+    "codename": "add_blacklistedtoken"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 34,
+  "fields": {
+    "name": "Can change blacklisted token",
+    "content_type": 9,
+    "codename": "change_blacklistedtoken"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 35,
+  "fields": {
+    "name": "Can delete blacklisted token",
+    "content_type": 9,
+    "codename": "delete_blacklistedtoken"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 36,
+  "fields": {
+    "name": "Can view blacklisted token",
+    "content_type": 9,
+    "codename": "view_blacklistedtoken"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 37,
+  "fields": {
+    "name": "Can add outstanding token",
+    "content_type": 10,
+    "codename": "add_outstandingtoken"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 38,
+  "fields": {
+    "name": "Can change outstanding token",
+    "content_type": 10,
+    "codename": "change_outstandingtoken"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 39,
+  "fields": {
+    "name": "Can delete outstanding token",
+    "content_type": 10,
+    "codename": "delete_outstandingtoken"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 40,
+  "fields": {
+    "name": "Can view outstanding token",
+    "content_type": 10,
+    "codename": "view_outstandingtoken"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 41,
+  "fields": {
+    "name": "Can add email address",
+    "content_type": 11,
+    "codename": "add_emailaddress"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 42,
+  "fields": {
+    "name": "Can change email address",
+    "content_type": 11,
+    "codename": "change_emailaddress"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 43,
+  "fields": {
+    "name": "Can delete email address",
+    "content_type": 11,
+    "codename": "delete_emailaddress"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 44,
+  "fields": {
+    "name": "Can view email address",
+    "content_type": 11,
+    "codename": "view_emailaddress"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 45,
+  "fields": {
+    "name": "Can add email confirmation",
+    "content_type": 12,
+    "codename": "add_emailconfirmation"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 46,
+  "fields": {
+    "name": "Can change email confirmation",
+    "content_type": 12,
+    "codename": "change_emailconfirmation"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 47,
+  "fields": {
+    "name": "Can delete email confirmation",
+    "content_type": 12,
+    "codename": "delete_emailconfirmation"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 48,
+  "fields": {
+    "name": "Can view email confirmation",
+    "content_type": 12,
+    "codename": "view_emailconfirmation"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 49,
+  "fields": {
+    "name": "Can add social account",
+    "content_type": 13,
+    "codename": "add_socialaccount"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 50,
+  "fields": {
+    "name": "Can change social account",
+    "content_type": 13,
+    "codename": "change_socialaccount"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 51,
+  "fields": {
+    "name": "Can delete social account",
+    "content_type": 13,
+    "codename": "delete_socialaccount"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 52,
+  "fields": {
+    "name": "Can view social account",
+    "content_type": 13,
+    "codename": "view_socialaccount"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 53,
+  "fields": {
+    "name": "Can add social application",
+    "content_type": 14,
+    "codename": "add_socialapp"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 54,
+  "fields": {
+    "name": "Can change social application",
+    "content_type": 14,
+    "codename": "change_socialapp"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 55,
+  "fields": {
+    "name": "Can delete social application",
+    "content_type": 14,
+    "codename": "delete_socialapp"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 56,
+  "fields": {
+    "name": "Can view social application",
+    "content_type": 14,
+    "codename": "view_socialapp"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 57,
+  "fields": {
+    "name": "Can add social application token",
+    "content_type": 15,
+    "codename": "add_socialtoken"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 58,
+  "fields": {
+    "name": "Can change social application token",
+    "content_type": 15,
+    "codename": "change_socialtoken"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 59,
+  "fields": {
+    "name": "Can delete social application token",
+    "content_type": 15,
+    "codename": "delete_socialtoken"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 60,
+  "fields": {
+    "name": "Can view social application token",
+    "content_type": 15,
+    "codename": "view_socialtoken"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 61,
+  "fields": {
+    "name": "Can add agreement",
+    "content_type": 16,
+    "codename": "add_agreement"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 62,
+  "fields": {
+    "name": "Can change agreement",
+    "content_type": 16,
+    "codename": "change_agreement"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 63,
+  "fields": {
+    "name": "Can delete agreement",
+    "content_type": 16,
+    "codename": "delete_agreement"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 64,
+  "fields": {
+    "name": "Can view agreement",
+    "content_type": 16,
+    "codename": "view_agreement"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 65,
+  "fields": {
+    "name": "Can add user agreement acceptance",
+    "content_type": 17,
+    "codename": "add_useragreementacceptance"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 66,
+  "fields": {
+    "name": "Can change user agreement acceptance",
+    "content_type": 17,
+    "codename": "change_useragreementacceptance"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 67,
+  "fields": {
+    "name": "Can delete user agreement acceptance",
+    "content_type": 17,
+    "codename": "delete_useragreementacceptance"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 68,
+  "fields": {
+    "name": "Can view user agreement acceptance",
+    "content_type": 17,
+    "codename": "view_useragreementacceptance"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 69,
+  "fields": {
+    "name": "Can add support request",
+    "content_type": 18,
+    "codename": "add_supportrequest"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 70,
+  "fields": {
+    "name": "Can change support request",
+    "content_type": 18,
+    "codename": "change_supportrequest"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 71,
+  "fields": {
+    "name": "Can delete support request",
+    "content_type": 18,
+    "codename": "delete_supportrequest"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 72,
+  "fields": {
+    "name": "Can view support request",
+    "content_type": 18,
+    "codename": "view_supportrequest"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 73,
+  "fields": {
+    "name": "Can add user",
+    "content_type": 19,
+    "codename": "add_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 74,
+  "fields": {
+    "name": "Can change user",
+    "content_type": 19,
+    "codename": "change_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 75,
+  "fields": {
+    "name": "Can delete user",
+    "content_type": 19,
+    "codename": "delete_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 76,
+  "fields": {
+    "name": "Can view user",
+    "content_type": 19,
+    "codename": "view_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 77,
+  "fields": {
+    "name": "Can add profile",
+    "content_type": 20,
+    "codename": "add_profile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 78,
+  "fields": {
+    "name": "Can change profile",
+    "content_type": 20,
+    "codename": "change_profile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 79,
+  "fields": {
+    "name": "Can delete profile",
+    "content_type": 20,
+    "codename": "delete_profile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 80,
+  "fields": {
+    "name": "Can view profile",
+    "content_type": 20,
+    "codename": "view_profile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 81,
+  "fields": {
+    "name": "Can add user wallet",
+    "content_type": 21,
+    "codename": "add_userwallet"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 82,
+  "fields": {
+    "name": "Can change user wallet",
+    "content_type": 21,
+    "codename": "change_userwallet"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 83,
+  "fields": {
+    "name": "Can delete user wallet",
+    "content_type": 21,
+    "codename": "delete_userwallet"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 84,
+  "fields": {
+    "name": "Can view user wallet",
+    "content_type": 21,
+    "codename": "view_userwallet"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 85,
+  "fields": {
+    "name": "Can add User Notification",
+    "content_type": 22,
+    "codename": "add_usernotification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 86,
+  "fields": {
+    "name": "Can change User Notification",
+    "content_type": 22,
+    "codename": "change_usernotification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 87,
+  "fields": {
+    "name": "Can delete User Notification",
+    "content_type": 22,
+    "codename": "delete_usernotification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 88,
+  "fields": {
+    "name": "Can view User Notification",
+    "content_type": 22,
+    "codename": "view_usernotification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 89,
+  "fields": {
+    "name": "Can add user investment",
+    "content_type": 23,
+    "codename": "add_userinvestment"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 90,
+  "fields": {
+    "name": "Can change user investment",
+    "content_type": 23,
+    "codename": "change_userinvestment"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 91,
+  "fields": {
+    "name": "Can delete user investment",
+    "content_type": 23,
+    "codename": "delete_userinvestment"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 92,
+  "fields": {
+    "name": "Can view user investment",
+    "content_type": 23,
+    "codename": "view_userinvestment"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 93,
+  "fields": {
+    "name": "Can add investment plan",
+    "content_type": 24,
+    "codename": "add_investmentplan"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 94,
+  "fields": {
+    "name": "Can change investment plan",
+    "content_type": 24,
+    "codename": "change_investmentplan"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 95,
+  "fields": {
+    "name": "Can delete investment plan",
+    "content_type": 24,
+    "codename": "delete_investmentplan"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 96,
+  "fields": {
+    "name": "Can view investment plan",
+    "content_type": 24,
+    "codename": "view_investmentplan"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 97,
+  "fields": {
+    "name": "Can add daily roi payout",
+    "content_type": 25,
+    "codename": "add_dailyroipayout"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 98,
+  "fields": {
+    "name": "Can change daily roi payout",
+    "content_type": 25,
+    "codename": "change_dailyroipayout"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 99,
+  "fields": {
+    "name": "Can delete daily roi payout",
+    "content_type": 25,
+    "codename": "delete_dailyroipayout"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 100,
+  "fields": {
+    "name": "Can view daily roi payout",
+    "content_type": 25,
+    "codename": "view_dailyroipayout"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 101,
+  "fields": {
+    "name": "Can add admin audit log",
+    "content_type": 26,
+    "codename": "add_adminauditlog"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 102,
+  "fields": {
+    "name": "Can change admin audit log",
+    "content_type": 26,
+    "codename": "change_adminauditlog"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 103,
+  "fields": {
+    "name": "Can delete admin audit log",
+    "content_type": 26,
+    "codename": "delete_adminauditlog"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 104,
+  "fields": {
+    "name": "Can view admin audit log",
+    "content_type": 26,
+    "codename": "view_adminauditlog"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 105,
+  "fields": {
+    "name": "Can add transaction",
+    "content_type": 27,
+    "codename": "add_transaction"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 106,
+  "fields": {
+    "name": "Can change transaction",
+    "content_type": 27,
+    "codename": "change_transaction"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 107,
+  "fields": {
+    "name": "Can delete transaction",
+    "content_type": 27,
+    "codename": "delete_transaction"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 108,
+  "fields": {
+    "name": "Can view transaction",
+    "content_type": 27,
+    "codename": "view_transaction"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 109,
+  "fields": {
+    "name": "Can add Cryptocurrency Wallet",
+    "content_type": 28,
+    "codename": "add_cryptocurrencywallet"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 110,
+  "fields": {
+    "name": "Can change Cryptocurrency Wallet",
+    "content_type": 28,
+    "codename": "change_cryptocurrencywallet"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 111,
+  "fields": {
+    "name": "Can delete Cryptocurrency Wallet",
+    "content_type": 28,
+    "codename": "delete_cryptocurrencywallet"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 112,
+  "fields": {
+    "name": "Can view Cryptocurrency Wallet",
+    "content_type": 28,
+    "codename": "view_cryptocurrencywallet"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 113,
+  "fields": {
+    "name": "Can add Virtual Card",
+    "content_type": 29,
+    "codename": "add_virtualcard"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 114,
+  "fields": {
+    "name": "Can change Virtual Card",
+    "content_type": 29,
+    "codename": "change_virtualcard"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 115,
+  "fields": {
+    "name": "Can delete Virtual Card",
+    "content_type": 29,
+    "codename": "delete_virtualcard"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 116,
+  "fields": {
+    "name": "Can view Virtual Card",
+    "content_type": 29,
+    "codename": "view_virtualcard"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 117,
+  "fields": {
+    "name": "Can add Admin Notification",
+    "content_type": 30,
+    "codename": "add_adminnotification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 118,
+  "fields": {
+    "name": "Can change Admin Notification",
+    "content_type": 30,
+    "codename": "change_adminnotification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 119,
+  "fields": {
+    "name": "Can delete Admin Notification",
+    "content_type": 30,
+    "codename": "delete_adminnotification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 120,
+  "fields": {
+    "name": "Can view Admin Notification",
+    "content_type": 30,
+    "codename": "view_adminnotification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 121,
+  "fields": {
+    "name": "Can add kyc application",
+    "content_type": 31,
+    "codename": "add_kycapplication"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 122,
+  "fields": {
+    "name": "Can change kyc application",
+    "content_type": 31,
+    "codename": "change_kycapplication"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 123,
+  "fields": {
+    "name": "Can delete kyc application",
+    "content_type": 31,
+    "codename": "delete_kycapplication"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 124,
+  "fields": {
+    "name": "Can view kyc application",
+    "content_type": 31,
+    "codename": "view_kycapplication"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 125,
+  "fields": {
+    "name": "Can add email template",
+    "content_type": 32,
+    "codename": "add_emailtemplate"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 126,
+  "fields": {
+    "name": "Can change email template",
+    "content_type": 32,
+    "codename": "change_emailtemplate"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 127,
+  "fields": {
+    "name": "Can delete email template",
+    "content_type": 32,
+    "codename": "delete_emailtemplate"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 128,
+  "fields": {
+    "name": "Can view email template",
+    "content_type": 32,
+    "codename": "view_emailtemplate"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 129,
+  "fields": {
+    "name": "Can add Email",
+    "content_type": 33,
+    "codename": "add_emailinbox"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 130,
+  "fields": {
+    "name": "Can change Email",
+    "content_type": 33,
+    "codename": "change_emailinbox"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 131,
+  "fields": {
+    "name": "Can delete Email",
+    "content_type": 33,
+    "codename": "delete_emailinbox"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 132,
+  "fields": {
+    "name": "Can view Email",
+    "content_type": 33,
+    "codename": "view_emailinbox"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 133,
+  "fields": {
+    "name": "Can add incoming email",
+    "content_type": 34,
+    "codename": "add_incomingemail"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 134,
+  "fields": {
+    "name": "Can change incoming email",
+    "content_type": 34,
+    "codename": "change_incomingemail"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 135,
+  "fields": {
+    "name": "Can delete incoming email",
+    "content_type": 34,
+    "codename": "delete_incomingemail"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 136,
+  "fields": {
+    "name": "Can view incoming email",
+    "content_type": 34,
+    "codename": "view_incomingemail"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 137,
+  "fields": {
+    "name": "Can add email attachment",
+    "content_type": 35,
+    "codename": "add_emailattachment"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 138,
+  "fields": {
+    "name": "Can change email attachment",
+    "content_type": 35,
+    "codename": "change_emailattachment"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 139,
+  "fields": {
+    "name": "Can delete email attachment",
+    "content_type": 35,
+    "codename": "delete_emailattachment"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 140,
+  "fields": {
+    "name": "Can view email attachment",
+    "content_type": 35,
+    "codename": "view_emailattachment"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 141,
+  "fields": {
+    "name": "Can add platform certificate",
+    "content_type": 36,
+    "codename": "add_platformcertificate"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 142,
+  "fields": {
+    "name": "Can change platform certificate",
+    "content_type": 36,
+    "codename": "change_platformcertificate"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 143,
+  "fields": {
+    "name": "Can delete platform certificate",
+    "content_type": 36,
+    "codename": "delete_platformcertificate"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 144,
+  "fields": {
+    "name": "Can view platform certificate",
+    "content_type": 36,
+    "codename": "view_platformcertificate"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 145,
+  "fields": {
+    "name": "Can add email verification",
+    "content_type": 37,
+    "codename": "add_emailverification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 146,
+  "fields": {
+    "name": "Can change email verification",
+    "content_type": 37,
+    "codename": "change_emailverification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 147,
+  "fields": {
+    "name": "Can delete email verification",
+    "content_type": 37,
+    "codename": "delete_emailverification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 148,
+  "fields": {
+    "name": "Can view email verification",
+    "content_type": 37,
+    "codename": "view_emailverification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 149,
+  "fields": {
+    "name": "Can add referral setting",
+    "content_type": 38,
+    "codename": "add_referralsetting"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 150,
+  "fields": {
+    "name": "Can change referral setting",
+    "content_type": 38,
+    "codename": "change_referralsetting"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 151,
+  "fields": {
+    "name": "Can delete referral setting",
+    "content_type": 38,
+    "codename": "delete_referralsetting"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 152,
+  "fields": {
+    "name": "Can view referral setting",
+    "content_type": 38,
+    "codename": "view_referralsetting"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 153,
+  "fields": {
+    "name": "Can add referral",
+    "content_type": 39,
+    "codename": "add_referral"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 154,
+  "fields": {
+    "name": "Can change referral",
+    "content_type": 39,
+    "codename": "change_referral"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 155,
+  "fields": {
+    "name": "Can delete referral",
+    "content_type": 39,
+    "codename": "delete_referral"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 156,
+  "fields": {
+    "name": "Can view referral",
+    "content_type": 39,
+    "codename": "view_referral"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 157,
+  "fields": {
+    "name": "Can add referral code",
+    "content_type": 40,
+    "codename": "add_referralcode"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 158,
+  "fields": {
+    "name": "Can change referral code",
+    "content_type": 40,
+    "codename": "change_referralcode"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 159,
+  "fields": {
+    "name": "Can delete referral code",
+    "content_type": 40,
+    "codename": "delete_referralcode"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 160,
+  "fields": {
+    "name": "Can view referral code",
+    "content_type": 40,
+    "codename": "view_referralcode"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 161,
+  "fields": {
+    "name": "Can add referral reward",
+    "content_type": 41,
+    "codename": "add_referralreward"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 162,
+  "fields": {
+    "name": "Can change referral reward",
+    "content_type": 41,
+    "codename": "change_referralreward"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 163,
+  "fields": {
+    "name": "Can delete referral reward",
+    "content_type": 41,
+    "codename": "delete_referralreward"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 164,
+  "fields": {
+    "name": "Can view referral reward",
+    "content_type": 41,
+    "codename": "view_referralreward"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 1,
+  "fields": {
+    "app_label": "admin",
+    "model": "logentry"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 2,
+  "fields": {
+    "app_label": "auth",
+    "model": "permission"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 3,
+  "fields": {
+    "app_label": "auth",
+    "model": "group"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 4,
+  "fields": {
+    "app_label": "contenttypes",
+    "model": "contenttype"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 5,
+  "fields": {
+    "app_label": "sessions",
+    "model": "session"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 6,
+  "fields": {
+    "app_label": "sites",
+    "model": "site"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 7,
+  "fields": {
+    "app_label": "authtoken",
+    "model": "token"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 8,
+  "fields": {
+    "app_label": "authtoken",
+    "model": "tokenproxy"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 9,
+  "fields": {
+    "app_label": "token_blacklist",
+    "model": "blacklistedtoken"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 10,
+  "fields": {
+    "app_label": "token_blacklist",
+    "model": "outstandingtoken"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 11,
+  "fields": {
+    "app_label": "account",
+    "model": "emailaddress"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 12,
+  "fields": {
+    "app_label": "account",
+    "model": "emailconfirmation"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 13,
+  "fields": {
+    "app_label": "socialaccount",
+    "model": "socialaccount"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 14,
+  "fields": {
+    "app_label": "socialaccount",
+    "model": "socialapp"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 15,
+  "fields": {
+    "app_label": "socialaccount",
+    "model": "socialtoken"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 16,
+  "fields": {
+    "app_label": "core",
+    "model": "agreement"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 17,
+  "fields": {
+    "app_label": "core",
+    "model": "useragreementacceptance"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 18,
+  "fields": {
+    "app_label": "core",
+    "model": "supportrequest"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 19,
+  "fields": {
+    "app_label": "users",
+    "model": "user"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 20,
+  "fields": {
+    "app_label": "users",
+    "model": "profile"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 21,
+  "fields": {
+    "app_label": "users",
+    "model": "userwallet"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 22,
+  "fields": {
+    "app_label": "users",
+    "model": "usernotification"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 23,
+  "fields": {
+    "app_label": "investments",
+    "model": "userinvestment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 24,
+  "fields": {
+    "app_label": "investments",
+    "model": "investmentplan"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 25,
+  "fields": {
+    "app_label": "investments",
+    "model": "dailyroipayout"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 26,
+  "fields": {
+    "app_label": "transactions",
+    "model": "adminauditlog"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 27,
+  "fields": {
+    "app_label": "transactions",
+    "model": "transaction"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 28,
+  "fields": {
+    "app_label": "transactions",
+    "model": "cryptocurrencywallet"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 29,
+  "fields": {
+    "app_label": "transactions",
+    "model": "virtualcard"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 30,
+  "fields": {
+    "app_label": "transactions",
+    "model": "adminnotification"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 31,
+  "fields": {
+    "app_label": "users",
+    "model": "kycapplication"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 32,
+  "fields": {
+    "app_label": "core",
+    "model": "emailtemplate"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 33,
+  "fields": {
+    "app_label": "core",
+    "model": "emailinbox"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 34,
+  "fields": {
+    "app_label": "core",
+    "model": "incomingemail"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 35,
+  "fields": {
+    "app_label": "core",
+    "model": "emailattachment"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 36,
+  "fields": {
+    "app_label": "core",
+    "model": "platformcertificate"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 37,
+  "fields": {
+    "app_label": "users",
+    "model": "emailverification"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 38,
+  "fields": {
+    "app_label": "referrals",
+    "model": "referralsetting"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 39,
+  "fields": {
+    "app_label": "referrals",
+    "model": "referral"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 40,
+  "fields": {
+    "app_label": "referrals",
+    "model": "referralcode"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 41,
+  "fields": {
+    "app_label": "referrals",
+    "model": "referralreward"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "sbsvyd9dlksbvj4id6yqe8gxwl3dujsn",
+  "fields": {
+    "session_data": ".eJxVjDsOwjAQBe_iGlnGn90NJX3OYK1_OIAcKU4qxN0hUgpo38y8l_C8rdVvPS9-SuIiBnH63QLHR247SHdut1nGua3LFOSuyIN2Oc4pP6-H-3dQuddvbQACKMXgmBKhjqwRMxVlLBEmhQUIrU3BoBlcMdkRkcUQGQqUsxbvD8NJNxE:1vck9m:QTdaPBL67aiyxXtuKXpLab49mdWhZOTkHgxQRZrP4uM",
+    "expire_date": "2026-01-12T12:57:58.272Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "vere2pluzwfaf4givyb1ddvehcrynyta",
+  "fields": {
+    "session_data": ".eJxVjMEOwiAQRP-Fs2nYslDqTX-ELLAEYkMTCyfjv9uaHvQ4b2beSzjqLbu-8dOVKK4CxOWXeQoPrkdBy3LggUJYe23Dd3PW23DbE9dWArWy1vv5-lNl2vLuGePskVgDqGQJNRgPI6qZVAJGJqtQBTmqCZO0xlgdtWFtrJw8MSCI9wefcjtM:1vMdMi:zN0w8hMpZKMm6BBVe5EFobmUArT3jDcyNuOPIQm9oSY",
+    "expire_date": "2025-11-29T02:28:44.472Z"
+  }
+},
+{
+  "model": "sites.site",
+  "pk": 1,
+  "fields": {
+    "domain": "wolvcapital.com",
+    "name": "WolvCapital"
+  }
+},
+{
+  "model": "authtoken.token",
+  "pk": "f3b8afd40a008145832f76a9689b8bf633158c4d",
+  "fields": {
+    "user": 1,
+    "created": "2025-11-22T02:28:44.454Z"
+  }
+},
+{
+  "model": "core.supportrequest",
+  "pk": 1,
+  "fields": {
+    "user": null,
+    "full_name": "Test User",
+    "contact_email": "testuser@example.com",
+    "topic": "Test Support Request",
+    "source_url": "",
+    "message": "This is a test message to verify the contact form functionality.",
+    "status": "pending",
+    "admin_notes": "",
+    "handled_by": null,
+    "responded_at": null,
+    "ip_address": null,
+    "user_agent": "",
+    "created_at": "2025-11-26T14:20:22.005Z",
+    "updated_at": "2025-11-26T14:20:22.005Z"
+  }
+},
+{
+  "model": "core.supportrequest",
+  "pk": 2,
+  "fields": {
+    "user": null,
+    "full_name": "Test User",
+    "contact_email": "testuser@example.com",
+    "topic": "Question about investments",
+    "source_url": "",
+    "message": "I would like to know more about your investment plans and minimum deposit requirements.",
+    "status": "pending",
+    "admin_notes": "",
+    "handled_by": null,
+    "responded_at": null,
+    "ip_address": null,
+    "user_agent": "",
+    "created_at": "2025-11-26T14:20:22.142Z",
+    "updated_at": "2025-11-26T14:20:22.142Z"
+  }
+},
+{
+  "model": "core.supportrequest",
+  "pk": 3,
+  "fields": {
+    "user": 1,
+    "full_name": "Test User",
+    "contact_email": "test@wolvcapital.com",
+    "topic": "Account inquiry",
+    "source_url": "",
+    "message": "I have a question about my account balance.",
+    "status": "pending",
+    "admin_notes": "",
+    "handled_by": null,
+    "responded_at": null,
+    "ip_address": null,
+    "user_agent": "",
+    "created_at": "2025-11-26T14:20:22.161Z",
+    "updated_at": "2025-11-26T14:20:22.161Z"
+  }
+},
+{
+  "model": "core.supportrequest",
+  "pk": 4,
+  "fields": {
+    "user": null,
+    "full_name": "Test User",
+    "contact_email": "testuser@example.com",
+    "topic": "Test Support Request",
+    "source_url": "",
+    "message": "This is a test message to verify the contact form functionality.",
+    "status": "pending",
+    "admin_notes": "",
+    "handled_by": null,
+    "responded_at": null,
+    "ip_address": null,
+    "user_agent": "",
+    "created_at": "2025-11-29T02:38:28.170Z",
+    "updated_at": "2025-11-29T02:38:28.170Z"
+  }
+},
+{
+  "model": "core.supportrequest",
+  "pk": 5,
+  "fields": {
+    "user": null,
+    "full_name": "Test User",
+    "contact_email": "testuser@example.com",
+    "topic": "Question about investments",
+    "source_url": "",
+    "message": "I would like to know more about your investment plans and minimum deposit requirements.",
+    "status": "pending",
+    "admin_notes": "",
+    "handled_by": null,
+    "responded_at": null,
+    "ip_address": null,
+    "user_agent": "",
+    "created_at": "2025-11-29T02:38:28.279Z",
+    "updated_at": "2025-11-29T02:38:28.279Z"
+  }
+},
+{
+  "model": "core.supportrequest",
+  "pk": 6,
+  "fields": {
+    "user": 1,
+    "full_name": "Test User",
+    "contact_email": "test@wolvcapital.com",
+    "topic": "Account inquiry",
+    "source_url": "",
+    "message": "I have a question about my account balance.",
+    "status": "pending",
+    "admin_notes": "",
+    "handled_by": null,
+    "responded_at": null,
+    "ip_address": null,
+    "user_agent": "",
+    "created_at": "2025-11-29T02:38:28.296Z",
+    "updated_at": "2025-11-29T02:38:28.296Z"
+  }
+},
+{
+  "model": "core.emailinbox",
+  "pk": 1,
+  "fields": {
+    "message_id": "test-001@wolvcapital.com",
+    "subject": "Investment Inquiry - High Net Worth Client",
+    "from_email": "john.smith@example.com",
+    "from_name": "John Smith",
+    "to_email": "invest@wolvcapital.com",
+    "cc": "",
+    "bcc": "",
+    "reply_to": "",
+    "body_text": "Hello,\n\nI am interested in your investment plans. I have approximately $50,000 to invest and would like to know more about the Summit plan.\n\nCould you please provide:\n1. Expected ROI timeline\n2. Risk assessment\n3. Withdrawal terms\n4. Minimum lock-in period\n\nLooking forward to your response.\n\nBest regards,\nJohn Smith\nCEO, Tech Innovations Inc.",
+    "body_html": "",
+    "has_attachments": false,
+    "attachment_info": {},
+    "status": "unread",
+    "priority": "high",
+    "is_starred": true,
+    "labels": "",
+    "folder": "inbox",
+    "assigned_to": null,
+    "read_at": null,
+    "replied_at": null,
+    "received_at": "2025-11-25T14:01:52.830Z",
+    "ip_address": null,
+    "created_at": "2025-11-25T16:01:52.835Z",
+    "updated_at": "2025-11-25T16:01:52.835Z",
+    "raw_headers": {},
+    "raw_email": ""
+  }
+},
+{
+  "model": "core.emailinbox",
+  "pk": 2,
+  "fields": {
+    "message_id": "test-002@wolvcapital.com",
+    "subject": "Question about withdrawal process",
+    "from_email": "sarah.jones@example.com",
+    "from_name": "Sarah Jones",
+    "to_email": "support@wolvcapital.com",
+    "cc": "",
+    "bcc": "",
+    "reply_to": "",
+    "body_text": "Hi Support Team,\n\nI submitted a withdrawal request 3 days ago (Reference: WD-12345) but haven't received confirmation yet.\n\nCan you please check the status?\n\nThanks,\nSarah Jones",
+    "body_html": "",
+    "has_attachments": false,
+    "attachment_info": {},
+    "status": "read",
+    "priority": "normal",
+    "is_starred": false,
+    "labels": "",
+    "folder": "inbox",
+    "assigned_to": 2,
+    "read_at": "2025-11-25T04:01:52.830Z",
+    "replied_at": null,
+    "received_at": "2025-11-24T16:01:52.830Z",
+    "ip_address": null,
+    "created_at": "2025-11-25T16:01:52.874Z",
+    "updated_at": "2025-11-25T16:01:52.874Z",
+    "raw_headers": {},
+    "raw_email": ""
+  }
+},
+{
+  "model": "core.emailinbox",
+  "pk": 3,
+  "fields": {
+    "message_id": "test-003@wolvcapital.com",
+    "subject": "Account verification issue",
+    "from_email": "mike.wilson@example.com",
+    "from_name": "Mike Wilson",
+    "to_email": "support@wolvcapital.com",
+    "cc": "admin@wolvcapital.com",
+    "bcc": "",
+    "reply_to": "",
+    "body_text": "Dear WolvCapital,\n\nI've been trying to verify my account for the past 24 hours but the verification email never arrives.\n\nI've checked spam folder and all email settings. Please help!\n\nAccount email: mike.wilson@example.com\n\nThanks,\nMike",
+    "body_html": "",
+    "has_attachments": false,
+    "attachment_info": {},
+    "status": "unread",
+    "priority": "urgent",
+    "is_starred": true,
+    "labels": "",
+    "folder": "inbox",
+    "assigned_to": null,
+    "read_at": null,
+    "replied_at": null,
+    "received_at": "2025-11-25T11:01:52.830Z",
+    "ip_address": null,
+    "created_at": "2025-11-25T16:01:52.887Z",
+    "updated_at": "2025-11-25T16:01:52.887Z",
+    "raw_headers": {},
+    "raw_email": ""
+  }
+},
+{
+  "model": "core.emailinbox",
+  "pk": 4,
+  "fields": {
+    "message_id": "test-004@wolvcapital.com",
+    "subject": "Partnership Opportunity",
+    "from_email": "business@investmentfirm.com",
+    "from_name": "Investment Partners LLC",
+    "to_email": "partnerships@wolvcapital.com",
+    "cc": "",
+    "bcc": "",
+    "reply_to": "",
+    "body_text": "Hello WolvCapital Team,\n\nWe represent a group of high net worth individuals interested in your investment platform.\n\nWe would like to discuss:\n- Bulk investment options\n- Custom investment plans\n- Partnership opportunities\n\nPlease schedule a call at your earliest convenience.\n\nBest regards,\nInvestment Partners LLC",
+    "body_html": "",
+    "has_attachments": false,
+    "attachment_info": {},
+    "status": "replied",
+    "priority": "high",
+    "is_starred": false,
+    "labels": "",
+    "folder": "inbox",
+    "assigned_to": 2,
+    "read_at": null,
+    "replied_at": "2025-11-24T16:01:52.830Z",
+    "received_at": "2025-11-23T16:01:52.830Z",
+    "ip_address": null,
+    "created_at": "2025-11-25T16:01:52.900Z",
+    "updated_at": "2025-11-25T16:01:52.900Z",
+    "raw_headers": {},
+    "raw_email": ""
+  }
+},
+{
+  "model": "core.emailinbox",
+  "pk": 5,
+  "fields": {
+    "message_id": "test-005@wolvcapital.com",
+    "subject": "Suspicious login attempt",
+    "from_email": "security@wolvcapital.com",
+    "from_name": "WolvCapital Security",
+    "to_email": "admin@wolvcapital.com",
+    "cc": "",
+    "bcc": "",
+    "reply_to": "",
+    "body_text": "SECURITY ALERT\n\nSuspicious login detected:\n- IP: 192.168.1.100\n- Location: Unknown\n- Time: 2 hours ago\n- User: investor@example.com\n\nPlease review immediately.\n\nWolvCapital Security System",
+    "body_html": "",
+    "has_attachments": false,
+    "attachment_info": {},
+    "status": "read",
+    "priority": "urgent",
+    "is_starred": true,
+    "labels": "",
+    "folder": "inbox",
+    "assigned_to": 2,
+    "read_at": "2025-11-25T15:46:52.830Z",
+    "replied_at": null,
+    "received_at": "2025-11-25T15:31:52.830Z",
+    "ip_address": null,
+    "created_at": "2025-11-25T16:01:52.914Z",
+    "updated_at": "2025-11-25T16:01:52.914Z",
+    "raw_headers": {},
+    "raw_email": ""
+  }
+},
+{
+  "model": "core.emailinbox",
+  "pk": 6,
+  "fields": {
+    "message_id": "test-006@wolvcapital.com",
+    "subject": "Monthly newsletter subscription",
+    "from_email": "newsletter@example.com",
+    "from_name": "Newsletter Subscriber",
+    "to_email": "marketing@wolvcapital.com",
+    "cc": "",
+    "bcc": "",
+    "reply_to": "",
+    "body_text": "Please add me to your monthly investment newsletter. Thanks!",
+    "body_html": "",
+    "has_attachments": false,
+    "attachment_info": {},
+    "status": "archived",
+    "priority": "low",
+    "is_starred": false,
+    "labels": "",
+    "folder": "inbox",
+    "assigned_to": null,
+    "read_at": null,
+    "replied_at": null,
+    "received_at": "2025-11-22T16:01:52.830Z",
+    "ip_address": null,
+    "created_at": "2025-11-25T16:01:52.927Z",
+    "updated_at": "2025-11-25T16:01:52.927Z",
+    "raw_headers": {},
+    "raw_email": ""
+  }
+},
+{
+  "model": "core.emailtemplate",
+  "pk": 1,
+  "fields": {
+    "name": "Welcome Email",
+    "subject": "Welcome to WolvCapital!",
+    "body": "Dear {{name}},\n\nWelcome to WolvCapital! We're excited to have you join our investment platform.\n\nYour account has been successfully created. You can now:\n- Browse our investment plans\n- Make deposits\n- Track your portfolio\n\nIf you have any questions, our support team is here to help 24/7.\n\nBest regards,\nWolvCapital Team",
+    "category": "Onboarding",
+    "is_active": true,
+    "created_by": 2,
+    "created_at": "2025-11-25T16:01:52.951Z",
+    "updated_at": "2025-11-25T16:01:52.951Z"
+  }
+},
+{
+  "model": "core.emailtemplate",
+  "pk": 2,
+  "fields": {
+    "name": "Withdrawal Approved",
+    "subject": "Withdrawal Request Approved - {{reference}}",
+    "body": "Dear {{name}},\n\nGreat news! Your withdrawal request has been approved.\n\nDetails:\n- Reference: {{reference}}\n- Amount: ${{amount}}\n- Expected arrival: 2-3 business days\n\nYou'll receive a confirmation email once the transfer is complete.\n\nBest regards,\nWolvCapital Finance Team",
+    "category": "Transactions",
+    "is_active": true,
+    "created_by": 2,
+    "created_at": "2025-11-25T16:01:52.965Z",
+    "updated_at": "2025-11-25T16:01:52.965Z"
+  }
+},
+{
+  "model": "core.emailtemplate",
+  "pk": 3,
+  "fields": {
+    "name": "Investment Confirmation",
+    "subject": "Investment Confirmed - {{plan_name}}",
+    "body": "Dear {{name}},\n\nYour investment has been successfully confirmed!\n\nInvestment Details:\n- Plan: {{plan_name}}\n- Amount: ${{amount}}\n- Start Date: {{start_date}}\n- Expected Returns: {{roi}}%\n\nThank you for trusting WolvCapital with your investment.\n\nBest regards,\nWolvCapital Investment Team",
+    "category": "Investments",
+    "is_active": true,
+    "created_by": 2,
+    "created_at": "2025-11-25T16:01:52.977Z",
+    "updated_at": "2025-11-25T16:01:52.977Z"
+  }
+},
+{
+  "model": "core.emailtemplate",
+  "pk": 4,
+  "fields": {
+    "name": "Support Response",
+    "subject": "Re: {{original_subject}}",
+    "body": "Dear {{name}},\n\nThank you for contacting WolvCapital support.\n\n{{response_text}}\n\nIf you have any additional questions, please don't hesitate to reach out.\n\nBest regards,\n{{agent_name}}\nWolvCapital Support Team",
+    "category": "Support",
+    "is_active": true,
+    "created_by": 2,
+    "created_at": "2025-11-25T16:01:52.989Z",
+    "updated_at": "2025-11-25T16:01:52.989Z"
+  }
+},
+{
+  "model": "core.incomingemail",
+  "pk": 1,
+  "fields": {
+    "subject": "Re: TESTER",
+    "sender": "ozoani nnabuike <ozoaninnabuike@gmail.com>",
+    "recipients": "\"support@wolvcapital.com support@wolvcapital.com\" <support@wolvcapital.com>",
+    "body": "??\r\n\r\nOn Wed, 26 Nov 2025, 3:09 am support@wolvcapital.com support@wolvcapital.com,\r\n<support@wolvcapital.com> wrote:\r\n\r\n> *??*\r\n>\r\n>\r\n>\r\n> On 11/26/2025 2:21 AM WAT support@wolvcapital.com support@wolvcapital.com\r\n> <support@wolvcapital.com> wrote:\r\n>\r\n>\r\n> TESTER\r\n>\r\n>\r\n",
+    "raw_date": "Wed, 26 Nov 2025 05:55:50 +0100",
+    "received_by": "support@wolvcapital.com",
+    "created_at": "2025-11-26T05:44:49.398Z"
+  }
+},
+{
+  "model": "core.incomingemail",
+  "pk": 2,
+  "fields": {
+    "subject": "Hello",
+    "sender": "ozoani nnabuike <ozoaninnabuike@gmail.com>",
+    "recipients": "admin@wolvcapital.com",
+    "body": "Hello\r\n",
+    "raw_date": "Wed, 26 Nov 2025 16:56:12 +0100",
+    "received_by": "support@wolvcapital.com",
+    "created_at": "2025-11-26T15:58:07.282Z"
+  }
+},
+{
+  "model": "users.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$720000$yvwf3YsW2Hy1huzv3CQnqY$u0hNQd3ME9j2XPmu7Yyxp14nZKD8pxCXwhthQLUpDzU=",
+    "last_login": "2025-11-22T02:28:44.420Z",
+    "is_superuser": false,
+    "username": "",
+    "first_name": "Test",
+    "last_name": "User",
+    "email": "test@wolvcapital.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-22T02:27:25.780Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$720000$uvLxDSJLJjF80f4vsj4HRR$/Zel1Y79i+gu9aoXypU8mkzI185a93uFBqeIrptDhTM=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "admin_aef34137",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@test.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-11-25T16:01:51.722Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$720000$q89DA0MqfYIFv4ZlsMe9jy$Em1c2BFh97G8H3p4px1mxY0BvNxdHzCxk4gx0VQ9W5I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "testverify@example.com",
+    "first_name": "",
+    "last_name": "",
+    "email": "testverify@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-11-30T20:42:13.156Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 8,
+  "fields": {
+    "password": "pbkdf2_sha256$720000$GnVRrP2UbRzJawwaH5cLfq$BfbMHfbcvmFv07AuTJ3X6Ky+3kzPHSJ/r5D0KC2cbHY=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@wolvcapital.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-01-03T18:23:07.309Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 9,
+  "fields": {
+    "password": "pbkdf2_sha256$720000$cIR0MhsJFwu2anLp2HWJeC$jFSzFKCRob9bMU0O58TwUQvEpRVyuzPuHkB4ErBHN3M=",
+    "last_login": "2026-01-05T12:57:22.605Z",
+    "is_superuser": true,
+    "username": "support",
+    "first_name": "",
+    "last_name": "",
+    "email": "support@wolvcapital.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-01-05T12:12:12.172Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 10,
+  "fields": {
+    "password": "pbkdf2_sha256$720000$RraO4jwkwuTztCXZIeyKl1$s+7T26y30PSvpix5O8GO2LDqcPWYe+EtEqK+LYgQbtc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "ozoaninnabuike@gmail.com",
+    "first_name": "",
+    "last_name": "",
+    "email": "ozoaninnabuike@gmail.com",
+    "is_staff": false,
+    "is_active": false,
+    "date_joined": "2026-01-05T16:05:08.904Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 11,
+  "fields": {
+    "password": "pbkdf2_sha256$720000$IF2k5jQY8tAi5wfyzMwu9z$0Kk5KTq96y/4NNlovtNmH1uAuPfoigkVMXxPI1yvqUE=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "localtest+6da15cdd@example.com",
+    "first_name": "",
+    "last_name": "",
+    "email": "localtest+6da15cdd@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-06T16:40:00.034Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 12,
+  "fields": {
+    "password": "pbkdf2_sha256$720000$vBWZTnGygGXr5VhWLfAasd$pNVXqmMKCtRUnPq5fCsN6fS1I1o6jO5+qztUzV3oqgg=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "localtest+cac3ee93@example.com",
+    "first_name": "",
+    "last_name": "",
+    "email": "localtest+cac3ee93@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-06T18:04:54.532Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 13,
+  "fields": {
+    "password": "pbkdf2_sha256$720000$RNkpSxODPTxkBZKMFvLtFy$bm6rdajnRhjd84+LUzUxJJ+uOKVnam8tFhkj5oxJrQE=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "localtest+c6671f4f@example.com",
+    "first_name": "",
+    "last_name": "",
+    "email": "localtest+c6671f4f@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-07T00:18:47.277Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 14,
+  "fields": {
+    "password": "pbkdf2_sha256$720000$yoHsggjTLZE6IHRYIUUrYi$duXyeW0rb/qVVSooltH73tN3A0O0iU+/7Yl3AoBc71I=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "localtest+8891d53b@example.com",
+    "first_name": "",
+    "last_name": "",
+    "email": "localtest+8891d53b@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-07T00:23:07.901Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 15,
+  "fields": {
+    "password": "pbkdf2_sha256$720000$tUzsMEElncr20eO8oDY7eV$doVa8T07qvmbtgWfImzlO8FAcxCk7n3n0yVqzNLBfUY=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "localtest+2b64c652@example.com",
+    "first_name": "",
+    "last_name": "",
+    "email": "localtest+2b64c652@example.com",
+    "is_staff": false,
+    "is_active": false,
+    "date_joined": "2026-01-07T00:32:38.525Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 16,
+  "fields": {
+    "password": "pbkdf2_sha256$720000$bG0HJjmdLpKnwCHqJouoci$tQsEnRnOHcb5skz/LNcUflIH4mMOlJ7q7WDLCrvM/lk=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "uitest+1e394e0f@example.com",
+    "first_name": "",
+    "last_name": "",
+    "email": "uitest+1e394e0f@example.com",
+    "is_staff": false,
+    "is_active": false,
+    "date_joined": "2026-01-07T01:25:05.156Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 17,
+  "fields": {
+    "password": "pbkdf2_sha256$720000$osgaO4x3cuNtTOD5ZusuR6$3CaxraC45HJf971cp00owcmkyLD6ItEg/KUjyEBxFQM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "placeholder-teddybjorn72",
+    "first_name": "",
+    "last_name": "",
+    "email": "teddybjorn72@live.no",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-08T10:26:28.939Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.profile",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "role": "user",
+    "full_name": "",
+    "created_at": "2025-11-22T02:27:25.789Z",
+    "email_notifications_enabled": true,
+    "email_welcome": true,
+    "email_transactions": true,
+    "email_investments": true,
+    "email_roi_payouts": true,
+    "email_wallet_updates": true,
+    "email_security_alerts": true,
+    "email_marketing": false,
+    "email_verified": false
+  }
+},
+{
+  "model": "users.profile",
+  "pk": 2,
+  "fields": {
+    "user": 2,
+    "role": "user",
+    "full_name": "",
+    "created_at": "2025-11-25T16:01:51.796Z",
+    "email_notifications_enabled": true,
+    "email_welcome": true,
+    "email_transactions": true,
+    "email_investments": true,
+    "email_roi_payouts": true,
+    "email_wallet_updates": true,
+    "email_security_alerts": true,
+    "email_marketing": false,
+    "email_verified": false
+  }
+},
+{
+  "model": "users.profile",
+  "pk": 7,
+  "fields": {
+    "user": 7,
+    "role": "user",
+    "full_name": "",
+    "created_at": "2025-11-30T20:42:14.190Z",
+    "email_notifications_enabled": true,
+    "email_welcome": true,
+    "email_transactions": true,
+    "email_investments": true,
+    "email_roi_payouts": true,
+    "email_wallet_updates": true,
+    "email_security_alerts": true,
+    "email_marketing": false,
+    "email_verified": true
+  }
+},
+{
+  "model": "users.profile",
+  "pk": 8,
+  "fields": {
+    "user": 8,
+    "role": "admin",
+    "full_name": "",
+    "created_at": "2026-01-03T18:23:09.697Z",
+    "email_notifications_enabled": true,
+    "email_welcome": true,
+    "email_transactions": true,
+    "email_investments": true,
+    "email_roi_payouts": true,
+    "email_wallet_updates": true,
+    "email_security_alerts": true,
+    "email_marketing": false,
+    "email_verified": false
+  }
+},
+{
+  "model": "users.profile",
+  "pk": 9,
+  "fields": {
+    "user": 9,
+    "role": "user",
+    "full_name": "",
+    "created_at": "2026-01-05T12:12:15.102Z",
+    "email_notifications_enabled": true,
+    "email_welcome": true,
+    "email_transactions": true,
+    "email_investments": true,
+    "email_roi_payouts": true,
+    "email_wallet_updates": true,
+    "email_security_alerts": true,
+    "email_marketing": false,
+    "email_verified": false
+  }
+},
+{
+  "model": "users.profile",
+  "pk": 10,
+  "fields": {
+    "user": 10,
+    "role": "user",
+    "full_name": "",
+    "created_at": "2026-01-05T16:05:10.923Z",
+    "email_notifications_enabled": true,
+    "email_welcome": true,
+    "email_transactions": true,
+    "email_investments": true,
+    "email_roi_payouts": true,
+    "email_wallet_updates": true,
+    "email_security_alerts": true,
+    "email_marketing": false,
+    "email_verified": false
+  }
+},
+{
+  "model": "users.profile",
+  "pk": 11,
+  "fields": {
+    "user": 11,
+    "role": "user",
+    "full_name": "",
+    "created_at": "2026-01-06T16:40:00.848Z",
+    "email_notifications_enabled": true,
+    "email_welcome": true,
+    "email_transactions": true,
+    "email_investments": true,
+    "email_roi_payouts": true,
+    "email_wallet_updates": true,
+    "email_security_alerts": true,
+    "email_marketing": false,
+    "email_verified": true
+  }
+},
+{
+  "model": "users.profile",
+  "pk": 12,
+  "fields": {
+    "user": 12,
+    "role": "user",
+    "full_name": "",
+    "created_at": "2026-01-06T18:04:55.506Z",
+    "email_notifications_enabled": true,
+    "email_welcome": true,
+    "email_transactions": true,
+    "email_investments": true,
+    "email_roi_payouts": true,
+    "email_wallet_updates": true,
+    "email_security_alerts": true,
+    "email_marketing": false,
+    "email_verified": true
+  }
+},
+{
+  "model": "users.profile",
+  "pk": 13,
+  "fields": {
+    "user": 13,
+    "role": "user",
+    "full_name": "",
+    "created_at": "2026-01-07T00:18:48.922Z",
+    "email_notifications_enabled": true,
+    "email_welcome": true,
+    "email_transactions": true,
+    "email_investments": true,
+    "email_roi_payouts": true,
+    "email_wallet_updates": true,
+    "email_security_alerts": true,
+    "email_marketing": false,
+    "email_verified": true
+  }
+},
+{
+  "model": "users.profile",
+  "pk": 14,
+  "fields": {
+    "user": 14,
+    "role": "user",
+    "full_name": "",
+    "created_at": "2026-01-07T00:23:09.103Z",
+    "email_notifications_enabled": true,
+    "email_welcome": true,
+    "email_transactions": true,
+    "email_investments": true,
+    "email_roi_payouts": true,
+    "email_wallet_updates": true,
+    "email_security_alerts": true,
+    "email_marketing": false,
+    "email_verified": true
+  }
+},
+{
+  "model": "users.profile",
+  "pk": 15,
+  "fields": {
+    "user": 15,
+    "role": "user",
+    "full_name": "",
+    "created_at": "2026-01-07T00:32:39.681Z",
+    "email_notifications_enabled": true,
+    "email_welcome": true,
+    "email_transactions": true,
+    "email_investments": true,
+    "email_roi_payouts": true,
+    "email_wallet_updates": true,
+    "email_security_alerts": true,
+    "email_marketing": false,
+    "email_verified": false
+  }
+},
+{
+  "model": "users.profile",
+  "pk": 16,
+  "fields": {
+    "user": 16,
+    "role": "user",
+    "full_name": "",
+    "created_at": "2026-01-07T01:25:06.443Z",
+    "email_notifications_enabled": true,
+    "email_welcome": true,
+    "email_transactions": true,
+    "email_investments": true,
+    "email_roi_payouts": true,
+    "email_wallet_updates": true,
+    "email_security_alerts": true,
+    "email_marketing": false,
+    "email_verified": false
+  }
+},
+{
+  "model": "users.profile",
+  "pk": 17,
+  "fields": {
+    "user": 17,
+    "role": "user",
+    "full_name": "Teddy",
+    "created_at": "2026-01-08T10:26:28.955Z",
+    "email_notifications_enabled": false,
+    "email_welcome": true,
+    "email_transactions": true,
+    "email_investments": true,
+    "email_roi_payouts": true,
+    "email_wallet_updates": true,
+    "email_security_alerts": true,
+    "email_marketing": false,
+    "email_verified": false
+  }
+},
+{
+  "model": "users.userwallet",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "balance": "0.00",
+    "updated_at": "2025-11-22T02:27:25.797Z"
+  }
+},
+{
+  "model": "users.userwallet",
+  "pk": 2,
+  "fields": {
+    "user": 2,
+    "balance": "0.00",
+    "updated_at": "2025-11-25T16:01:51.865Z"
+  }
+},
+{
+  "model": "users.userwallet",
+  "pk": 7,
+  "fields": {
+    "user": 7,
+    "balance": "0.00",
+    "updated_at": "2025-11-30T20:42:14.208Z"
+  }
+},
+{
+  "model": "users.userwallet",
+  "pk": 8,
+  "fields": {
+    "user": 8,
+    "balance": "0.00",
+    "updated_at": "2026-01-03T18:23:09.739Z"
+  }
+},
+{
+  "model": "users.userwallet",
+  "pk": 9,
+  "fields": {
+    "user": 9,
+    "balance": "0.00",
+    "updated_at": "2026-01-05T12:12:15.139Z"
+  }
+},
+{
+  "model": "users.userwallet",
+  "pk": 10,
+  "fields": {
+    "user": 10,
+    "balance": "0.00",
+    "updated_at": "2026-01-05T16:05:10.940Z"
+  }
+},
+{
+  "model": "users.userwallet",
+  "pk": 11,
+  "fields": {
+    "user": 11,
+    "balance": "0.00",
+    "updated_at": "2026-01-06T16:40:00.870Z"
+  }
+},
+{
+  "model": "users.userwallet",
+  "pk": 12,
+  "fields": {
+    "user": 12,
+    "balance": "0.00",
+    "updated_at": "2026-01-06T18:04:55.524Z"
+  }
+},
+{
+  "model": "users.userwallet",
+  "pk": 13,
+  "fields": {
+    "user": 13,
+    "balance": "0.00",
+    "updated_at": "2026-01-07T00:18:48.964Z"
+  }
+},
+{
+  "model": "users.userwallet",
+  "pk": 14,
+  "fields": {
+    "user": 14,
+    "balance": "0.00",
+    "updated_at": "2026-01-07T00:23:09.131Z"
+  }
+},
+{
+  "model": "users.userwallet",
+  "pk": 15,
+  "fields": {
+    "user": 15,
+    "balance": "0.00",
+    "updated_at": "2026-01-07T00:32:39.740Z"
+  }
+},
+{
+  "model": "users.userwallet",
+  "pk": 16,
+  "fields": {
+    "user": 16,
+    "balance": "0.00",
+    "updated_at": "2026-01-07T01:25:06.473Z"
+  }
+},
+{
+  "model": "users.userwallet",
+  "pk": 17,
+  "fields": {
+    "user": 17,
+    "balance": "3201.00",
+    "updated_at": "2026-01-08T12:52:50.676Z"
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": "0027c76c-c1b5-42e1-b23a-3bcef24a4bf0",
+  "fields": {
+    "user": 1,
+    "notification_type": "investment_approved",
+    "title": "Test Investment Approved",
+    "message": "This is test message #1",
+    "action_url": "",
+    "entity_type": "test",
+    "entity_id": "test-1",
+    "priority": "medium",
+    "is_read": false,
+    "read_at": null,
+    "created_at": "2025-11-22T03:32:37.800Z",
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": "0051235b-e752-4b02-8d6f-ba649d09b3f4",
+  "fields": {
+    "user": 1,
+    "notification_type": "welcome",
+    "title": "Welcome to WolvCapital!",
+    "message": "Welcome to WolvCapital! Your account has been successfully created. Start exploring our investment plans and begin your journey to financial growth.",
+    "action_url": "/plans/",
+    "entity_type": "",
+    "entity_id": "",
+    "priority": "medium",
+    "is_read": false,
+    "read_at": null,
+    "created_at": "2025-11-22T02:27:25.801Z",
+    "expires_at": "2025-11-29T02:27:25.801Z"
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": "05db96db-91b9-4ba6-8676-28c61c8af9ae",
+  "fields": {
+    "user": 1,
+    "notification_type": "deposit_approved",
+    "title": "Test Transaction Approved",
+    "message": "Your test deposit of $100 has been approved.",
+    "action_url": "",
+    "entity_type": "transaction",
+    "entity_id": "test-123",
+    "priority": "medium",
+    "is_read": false,
+    "read_at": null,
+    "created_at": "2025-11-22T03:31:43.609Z",
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": "1dc1d13a-80e4-418c-ac40-d9ea6418d496",
+  "fields": {
+    "user": 1,
+    "notification_type": "deposit_approved",
+    "title": "Test Transaction Approved",
+    "message": "Your test deposit of $100 has been approved.",
+    "action_url": "",
+    "entity_type": "transaction",
+    "entity_id": "test-123",
+    "priority": "medium",
+    "is_read": false,
+    "read_at": null,
+    "created_at": "2025-11-22T03:32:37.742Z",
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": "2799d227-6fcb-4fb3-a1ee-5efe21f4d512",
+  "fields": {
+    "user": 1,
+    "notification_type": "welcome",
+    "title": "Test Welcome",
+    "message": "This is test message #4",
+    "action_url": "",
+    "entity_type": "test",
+    "entity_id": "test-4",
+    "priority": "medium",
+    "is_read": true,
+    "read_at": "2025-11-22T03:32:37.934Z",
+    "created_at": "2025-11-22T03:32:37.881Z",
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": "326885b3-7482-4a24-ab9e-541bd46c4a50",
+  "fields": {
+    "user": 1,
+    "notification_type": "system_alert",
+    "title": "Test System Alert",
+    "message": "This is test message #3",
+    "action_url": "",
+    "entity_type": "test",
+    "entity_id": "test-3",
+    "priority": "medium",
+    "is_read": false,
+    "read_at": null,
+    "created_at": "2025-11-22T03:32:37.859Z",
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": "5c1b46b3-39d7-4af7-9484-eec982b70a2b",
+  "fields": {
+    "user": 1,
+    "notification_type": "investment_approved",
+    "title": "Test Investment Approved",
+    "message": "This is test message #1",
+    "action_url": "",
+    "entity_type": "test",
+    "entity_id": "test-1",
+    "priority": "medium",
+    "is_read": false,
+    "read_at": null,
+    "created_at": "2025-11-22T03:31:43.761Z",
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": "6c9b3fbe-c084-4357-ab9b-44a12974297e",
+  "fields": {
+    "user": 17,
+    "notification_type": "deposit_approved",
+    "title": "Deposit Approved",
+    "message": "Your deposit of $25000.0 has been approved and added to your wallet.\n\nAdmin notes: Historical funding restoration",
+    "action_url": "/dashboard/checkout/success?status=completed&txId=3a8a0ce4-a2a2-4661-893c-ba2bf7d48d0c&amount=25000.0&email=teddybjorn72%40live.no&name=Teddy",
+    "entity_type": "transaction",
+    "entity_id": "3a8a0ce4-a2a2-4661-893c-ba2bf7d48d0c",
+    "priority": "high",
+    "is_read": false,
+    "read_at": null,
+    "created_at": "2026-01-08T12:52:50.565Z",
+    "expires_at": "2026-02-07T12:52:50.565Z"
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": "7224e13a-bd1d-4664-b5b8-27776aa62eac",
+  "fields": {
+    "user": 7,
+    "notification_type": "welcome",
+    "title": "Welcome to WolvCapital!",
+    "message": "Welcome to WolvCapital! Your account has been successfully created. Start exploring our investment plans and begin your journey to financial growth.",
+    "action_url": "/plans/",
+    "entity_type": "",
+    "entity_id": "",
+    "priority": "medium",
+    "is_read": false,
+    "read_at": null,
+    "created_at": "2025-11-30T20:42:14.217Z",
+    "expires_at": "2025-12-07T20:42:14.217Z"
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": "8ad32409-0d9c-4346-a818-5ba0679e0d62",
+  "fields": {
+    "user": 2,
+    "notification_type": "welcome",
+    "title": "Welcome to WolvCapital!",
+    "message": "Welcome to WolvCapital! Your account has been successfully created. Start exploring our investment plans and begin your journey to financial growth.",
+    "action_url": "/plans/",
+    "entity_type": "",
+    "entity_id": "",
+    "priority": "medium",
+    "is_read": false,
+    "read_at": null,
+    "created_at": "2025-11-25T16:01:51.917Z",
+    "expires_at": "2025-12-02T16:01:51.916Z"
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": "9d648d67-0411-4421-b8f8-2c17f57f8b92",
+  "fields": {
+    "user": 1,
+    "notification_type": "roi_payout",
+    "title": "Test Roi Payout",
+    "message": "This is test message #2",
+    "action_url": "",
+    "entity_type": "test",
+    "entity_id": "test-2",
+    "priority": "medium",
+    "is_read": false,
+    "read_at": null,
+    "created_at": "2025-11-22T03:31:43.839Z",
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": "b8291699-a424-4685-be7e-8c1497d2c423",
+  "fields": {
+    "user": 1,
+    "notification_type": "welcome",
+    "title": "Test Welcome",
+    "message": "This is test message #4",
+    "action_url": "",
+    "entity_type": "test",
+    "entity_id": "test-4",
+    "priority": "medium",
+    "is_read": true,
+    "read_at": "2025-11-22T03:31:44.148Z",
+    "created_at": "2025-11-22T03:31:43.954Z",
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": "c83995b0-5aa6-4fcb-9f45-57454f8d080f",
+  "fields": {
+    "user": 1,
+    "notification_type": "roi_payout",
+    "title": "Test Roi Payout",
+    "message": "This is test message #2",
+    "action_url": "",
+    "entity_type": "test",
+    "entity_id": "test-2",
+    "priority": "medium",
+    "is_read": false,
+    "read_at": null,
+    "created_at": "2025-11-22T03:32:37.822Z",
+    "expires_at": null
+  }
+},
+{
+  "model": "users.usernotification",
+  "pk": "eb92c457-abc5-47f1-b9fb-e7ea1c8c6f91",
+  "fields": {
+    "user": 1,
+    "notification_type": "system_alert",
+    "title": "Test System Alert",
+    "message": "This is test message #3",
+    "action_url": "",
+    "entity_type": "test",
+    "entity_id": "test-3",
+    "priority": "medium",
+    "is_read": false,
+    "read_at": null,
+    "created_at": "2025-11-22T03:31:43.911Z",
+    "expires_at": null
+  }
+},
+{
+  "model": "users.emailverification",
+  "pk": 1,
+  "fields": {
+    "user": 7,
+    "token": "RaF3kxIdfbtHhFEaG-0-t0c1plAieRH9TE_2UWnxU3s",
+    "expires_at": "2025-11-30T22:42:14.608Z",
+    "used_at": "2025-11-30T20:42:14.652Z",
+    "created_at": "2025-11-30T20:42:14.609Z"
+  }
+},
+{
+  "model": "users.emailverification",
+  "pk": 2,
+  "fields": {
+    "user": 10,
+    "token": "GOehETKu4tKaKMnfiuJBLphWDPbrsDHYoVIwxX37D4g",
+    "expires_at": "2026-01-05T18:05:10.951Z",
+    "used_at": null,
+    "created_at": "2026-01-05T16:05:10.951Z"
+  }
+},
+{
+  "model": "users.emailverification",
+  "pk": 3,
+  "fields": {
+    "user": 11,
+    "token": "W4dzEJqwt7YTv-TdV9wcmBCXkGXJag5x-wZqxn4iaSU",
+    "expires_at": "2026-01-06T18:40:00.884Z",
+    "used_at": "2026-01-06T16:40:01.120Z",
+    "created_at": "2026-01-06T16:40:00.884Z"
+  }
+},
+{
+  "model": "users.emailverification",
+  "pk": 4,
+  "fields": {
+    "user": 12,
+    "token": "eFUDuDlKb8DKJQLiYsujfrZGeSvIrP-E0dlPprb83Yk",
+    "expires_at": "2026-01-06T20:04:55.539Z",
+    "used_at": "2026-01-06T18:04:55.906Z",
+    "created_at": "2026-01-06T18:04:55.540Z"
+  }
+},
+{
+  "model": "users.emailverification",
+  "pk": 5,
+  "fields": {
+    "user": 13,
+    "token": "E8bjjRsjByVxP7H5xz0dSEVl3xCLmZoKbXWLmAsTmQQ",
+    "expires_at": "2026-01-07T02:18:48.985Z",
+    "used_at": "2026-01-07T00:18:50.682Z",
+    "created_at": "2026-01-07T00:18:48.985Z"
+  }
+},
+{
+  "model": "users.emailverification",
+  "pk": 6,
+  "fields": {
+    "user": 14,
+    "token": "Ptc9pM2aHry6qryW3GqiLDAVHBi72XLXO_9Qs0GdUCU",
+    "expires_at": "2026-01-07T02:23:09.148Z",
+    "used_at": "2026-01-07T00:23:09.508Z",
+    "created_at": "2026-01-07T00:23:09.148Z"
+  }
+},
+{
+  "model": "users.emailverification",
+  "pk": 7,
+  "fields": {
+    "user": 15,
+    "token": "NCeFxpipYOJJpPcA3NM5XfV2Zxx--x9QpDacUs0sYbI",
+    "expires_at": "2026-01-07T02:32:39.823Z",
+    "used_at": null,
+    "created_at": "2026-01-07T00:32:39.824Z"
+  }
+},
+{
+  "model": "users.emailverification",
+  "pk": 8,
+  "fields": {
+    "user": 16,
+    "token": "HyY_t2Fa2yhV__YnhQv3pjqVdGzx0AtAWs2fGd2J3FQ",
+    "expires_at": "2026-01-07T03:25:06.490Z",
+    "used_at": null,
+    "created_at": "2026-01-07T01:25:06.490Z"
+  }
+},
+{
+  "model": "investments.investmentplan",
+  "pk": 1,
+  "fields": {
+    "name": "Pioneer",
+    "description": "Entry-level plan for new investors (90-day term).",
+    "daily_roi": "1.00",
+    "duration_days": 90,
+    "min_amount": "100.00",
+    "max_amount": "999.00",
+    "created_at": "2025-11-22T02:26:24.902Z"
+  }
+},
+{
+  "model": "investments.investmentplan",
+  "pk": 2,
+  "fields": {
+    "name": "Vanguard",
+    "description": "Balanced growth plan (150-day term).",
+    "daily_roi": "1.25",
+    "duration_days": 150,
+    "min_amount": "1000.00",
+    "max_amount": "4999.00",
+    "created_at": "2025-11-22T02:26:24.926Z"
+  }
+},
+{
+  "model": "investments.investmentplan",
+  "pk": 3,
+  "fields": {
+    "name": "Horizon",
+    "description": "Advanced plan for experienced investors (180-day term).",
+    "daily_roi": "1.50",
+    "duration_days": 180,
+    "min_amount": "5000.00",
+    "max_amount": "14999.00",
+    "created_at": "2025-11-22T02:26:24.947Z"
+  }
+},
+{
+  "model": "investments.investmentplan",
+  "pk": 4,
+  "fields": {
+    "name": "Summit",
+    "description": "Premium annual plan for high allocations (365-day term).",
+    "daily_roi": "2.00",
+    "duration_days": 365,
+    "min_amount": "15000.00",
+    "max_amount": "100000.00",
+    "created_at": "2025-11-22T02:26:25.000Z"
+  }
+},
+{
+  "model": "investments.userinvestment",
+  "pk": 1,
+  "fields": {
+    "user": 17,
+    "plan": 2,
+    "amount": "4999.00",
+    "status": "approved",
+    "started_at": "2025-11-20T00:00:00Z",
+    "ends_at": "2026-04-19T00:00:00Z",
+    "created_at": "2025-11-20T00:00:00Z"
+  }
+},
+{
+  "model": "investments.userinvestment",
+  "pk": 2,
+  "fields": {
+    "user": 17,
+    "plan": 3,
+    "amount": "9000.00",
+    "status": "approved",
+    "started_at": "2025-11-23T00:00:00Z",
+    "ends_at": "2026-05-22T00:00:00Z",
+    "created_at": "2025-11-23T00:00:00Z"
+  }
+},
+{
+  "model": "investments.userinvestment",
+  "pk": 3,
+  "fields": {
+    "user": 17,
+    "plan": 3,
+    "amount": "7800.00",
+    "status": "approved",
+    "started_at": "2025-11-28T00:00:00Z",
+    "ends_at": "2026-05-27T00:00:00Z",
+    "created_at": "2025-11-28T00:00:00Z"
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 1,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-11-20",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.629Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 2,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-11-21",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.645Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 3,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-11-22",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.662Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 4,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-11-23",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.678Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 5,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-11-24",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.694Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 6,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-11-25",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.710Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 7,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-11-26",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.726Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 8,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-11-27",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.741Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 9,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-11-28",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.757Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 10,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-11-29",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.773Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 11,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-11-30",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.788Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 12,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-12-01",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.805Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 13,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-12-02",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.821Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 14,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-12-03",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.837Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 15,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-12-04",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.854Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 16,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-12-05",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.869Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 17,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-12-06",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.885Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 18,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-12-07",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.901Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 19,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-12-08",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.915Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 20,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-12-09",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.930Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 21,
+  "fields": {
+    "investment": 1,
+    "payout_date": "2025-12-10",
+    "amount": "62.49",
+    "created_at": "2026-01-08T12:53:26.943Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 22,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-11-23",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:26.959Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 23,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-11-24",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:26.975Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 24,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-11-25",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:26.990Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 25,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-11-26",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.005Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 26,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-11-27",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.029Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 27,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-11-28",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.046Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 28,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-11-29",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.060Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 29,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-11-30",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.074Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 30,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-01",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.092Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 31,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-02",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.112Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 32,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-03",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.131Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 33,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-04",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.147Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 34,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-05",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.164Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 35,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-06",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.191Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 36,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-07",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.268Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 37,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-08",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.395Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 38,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-09",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.445Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 39,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-10",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.510Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 40,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-11",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.570Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 41,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-12",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.611Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 42,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-13",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.657Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 43,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-14",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.676Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 44,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-15",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.694Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 45,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-16",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.710Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 46,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-17",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.725Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 47,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-18",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.740Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 48,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-19",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.755Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 49,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-20",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.770Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 50,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-21",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.785Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 51,
+  "fields": {
+    "investment": 2,
+    "payout_date": "2025-12-22",
+    "amount": "135.00",
+    "created_at": "2026-01-08T12:53:27.803Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 52,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-11-28",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:27.820Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 53,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-11-29",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:27.835Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 54,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-11-30",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:27.849Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 55,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-01",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:27.867Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 56,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-02",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:27.881Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 57,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-03",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:27.897Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 58,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-04",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:27.913Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 59,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-05",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:27.928Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 60,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-06",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:27.943Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 61,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-07",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:27.958Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 62,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-08",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:27.974Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 63,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-09",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:27.993Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 64,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-10",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.010Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 65,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-11",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.047Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 66,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-12",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.063Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 67,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-13",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.087Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 68,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-14",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.106Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 69,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-15",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.121Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 70,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-16",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.138Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 71,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-17",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.152Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 72,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-18",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.167Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 73,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-19",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.181Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 74,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-20",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.196Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 75,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-21",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.211Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 76,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-22",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.226Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 77,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-23",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.241Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 78,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-24",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.256Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 79,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-25",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.271Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 80,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-26",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.287Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "investments.dailyroipayout",
+  "pk": 81,
+  "fields": {
+    "investment": 3,
+    "payout_date": "2025-12-27",
+    "amount": "117.00",
+    "created_at": "2026-01-08T12:53:28.303Z",
+    "processed_at": null,
+    "transaction_id": null
+  }
+},
+{
+  "model": "transactions.cryptocurrencywallet",
+  "pk": 1,
+  "fields": {
+    "currency": "BTC",
+    "wallet_address": "bc1qf5f0ktzd6evgvp2vljlkrehek5zgjc8wzalltj",
+    "network": "Bitcoin",
+    "is_active": true,
+    "created_at": "2025-11-17T03:40:38.463Z",
+    "updated_at": "2025-11-17T03:40:38.463Z"
+  }
+},
+{
+  "model": "transactions.cryptocurrencywallet",
+  "pk": 2,
+  "fields": {
+    "currency": "ETH",
+    "wallet_address": "0x805F3317c3cE7c22e3ee26AF88fd869f8895cc56",
+    "network": "ERC-20",
+    "is_active": true,
+    "created_at": "2025-11-17T03:40:38.466Z",
+    "updated_at": "2025-11-17T03:40:38.466Z"
+  }
+},
+{
+  "model": "transactions.cryptocurrencywallet",
+  "pk": 3,
+  "fields": {
+    "currency": "USDT",
+    "wallet_address": "Fd6bYJ4rHZVo5sVxjytmpRMB71Rbh99obASnav3YnvWf",
+    "network": "Solana",
+    "is_active": true,
+    "created_at": "2025-11-17T03:40:38.467Z",
+    "updated_at": "2025-11-17T03:40:38.467Z"
+  }
+},
+{
+  "model": "transactions.cryptocurrencywallet",
+  "pk": 4,
+  "fields": {
+    "currency": "USDC",
+    "wallet_address": "Fd6bYJ4rHZVo5sVxjytmpRMB71Rbh99obASnav3YnvWf",
+    "network": "Solana",
+    "is_active": true,
+    "created_at": "2025-11-17T03:40:38.469Z",
+    "updated_at": "2025-11-17T03:40:38.469Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "033e0374-a602-4dee-bdda-91454eb1a51d",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-07 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.231Z",
+    "updated_at": "2026-01-08T12:53:27.231Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "034dd55f-8d60-4c7a-b947-fc8249f1c8a7",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-16 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.135Z",
+    "updated_at": "2026-01-08T12:53:28.135Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "062945f2-b524-4f97-b3c6-8ddb577d0148",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-22 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.801Z",
+    "updated_at": "2026-01-08T12:53:27.801Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "08152189-cfb6-404a-a751-5a4f987b8517",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-26 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.284Z",
+    "updated_at": "2026-01-08T12:53:28.285Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "0d28d4f3-7706-48d6-88d1-12955f1bf4ee",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-06 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.940Z",
+    "updated_at": "2026-01-08T12:53:27.941Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "11457376-626a-42de-8101-15d5d1f72aa4",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-09 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.435Z",
+    "updated_at": "2026-01-08T12:53:27.437Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "13041560-4976-404f-bdc7-73894ddad0fe",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-11-30 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.847Z",
+    "updated_at": "2026-01-08T12:53:27.847Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "1624a3d3-128d-4809-8bc1-0a4630482054",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-01 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.864Z",
+    "updated_at": "2026-01-08T12:53:27.864Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "1c2b705a-b0f4-4e20-8d9c-e6cea567324a",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-12 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.060Z",
+    "updated_at": "2026-01-08T12:53:28.060Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "1f93dfe7-2a17-4954-ade5-ae06c0a996a4",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-04 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.144Z",
+    "updated_at": "2026-01-08T12:53:27.145Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "204ac58b-6166-4e2b-8139-2ddfbabe0a57",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-11-24 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.691Z",
+    "updated_at": "2026-01-08T12:53:26.692Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "23624cc0-5567-4e61-b537-7e2e2cce3f6d",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-27 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.301Z",
+    "updated_at": "2026-01-08T12:53:28.301Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "252a4928-a3b8-4786-8f00-a8a9aa6bc22f",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-12-10 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.941Z",
+    "updated_at": "2026-01-08T12:53:26.941Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "26ce9e2c-712e-47d6-9b08-f24c4387f3e8",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-07 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.955Z",
+    "updated_at": "2026-01-08T12:53:27.955Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "2e62d3a1-ba25-4f40-bcda-37e9187a0a0b",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-11 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.564Z",
+    "updated_at": "2026-01-08T12:53:27.565Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "2ef02952-d472-420f-8d1b-ec4552f6595a",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-05 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.161Z",
+    "updated_at": "2026-01-08T12:53:27.162Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "304270e0-cc4e-43f3-971b-ea559a9ab0aa",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-11-27 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.739Z",
+    "updated_at": "2026-01-08T12:53:26.739Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "312cfc3c-997b-45ff-9b30-b3cf6aaed55b",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-13 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.654Z",
+    "updated_at": "2026-01-08T12:53:27.655Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "3182a93e-4c00-49e3-9590-43fce28cbe47",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-11-27 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.025Z",
+    "updated_at": "2026-01-08T12:53:27.026Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "36b099a4-c45e-4f6d-ad36-2e23fbc160a5",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-20 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.768Z",
+    "updated_at": "2026-01-08T12:53:27.768Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "3a8a0ce4-a2a2-4661-893c-ba2bf7d48d0c",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "25000.00",
+    "reference": "Historical funding deposit for placeholder-teddybjorn72",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "approved",
+    "notes": "Historical funding restoration",
+    "approved_by": 2,
+    "created_at": "2026-01-08T12:52:50.540Z",
+    "updated_at": "2026-01-08T12:52:50.559Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "3b9c5439-e678-4758-b8cd-afabca4c9028",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-25 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.269Z",
+    "updated_at": "2026-01-08T12:53:28.269Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "432ee173-ecd9-4366-be3d-0c54278070a1",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-11-29 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.058Z",
+    "updated_at": "2026-01-08T12:53:27.058Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "4530f771-c0d9-4db1-a8fa-b8a9b7b78bfb",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-04 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.911Z",
+    "updated_at": "2026-01-08T12:53:27.911Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "4dee200d-330f-4071-ae7c-41b910668879",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-05 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.926Z",
+    "updated_at": "2026-01-08T12:53:27.926Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "4f7ec35a-9f5f-4f55-9a09-a41f6359def8",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-19 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.178Z",
+    "updated_at": "2026-01-08T12:53:28.179Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "51bb6788-08a6-42f4-993d-4cf8a7200ce8",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-11-30 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.786Z",
+    "updated_at": "2026-01-08T12:53:26.786Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "54c6e68d-a061-4fcc-9b2f-300ed12360c5",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-19 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.752Z",
+    "updated_at": "2026-01-08T12:53:27.753Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "5561333f-e101-4f62-bae4-3165db83c407",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-11-24 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.972Z",
+    "updated_at": "2026-01-08T12:53:26.973Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "562d3e81-b32f-4588-b8e9-e3d43c63ba3b",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-09 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.988Z",
+    "updated_at": "2026-01-08T12:53:27.988Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "57031162-0b4a-41d6-b009-0d07c279a6a9",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-12-01 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.803Z",
+    "updated_at": "2026-01-08T12:53:26.803Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "5a1519da-bea4-4bd1-aa9f-e55d1684d537",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-13 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.081Z",
+    "updated_at": "2026-01-08T12:53:28.081Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "5a642640-615b-42fa-b0c7-57a47e37d7fd",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-11-28 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.043Z",
+    "updated_at": "2026-01-08T12:53:27.044Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "5b271e2a-5966-4b57-a7d0-2bf5ee8b095d",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-06 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.186Z",
+    "updated_at": "2026-01-08T12:53:27.187Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "5b8c7b1e-af9f-4890-a180-43c4a052642a",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-11-20 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.625Z",
+    "updated_at": "2026-01-08T12:53:26.626Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "5be6385b-a6cb-48a5-9bc2-7cf8a1767a0a",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-16 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.708Z",
+    "updated_at": "2026-01-08T12:53:27.708Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "6303cced-7fc5-4a45-b68e-83cd8ccb0df4",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-10 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.007Z",
+    "updated_at": "2026-01-08T12:53:28.008Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "688959a0-6ac6-4588-8602-f72a6f422c54",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-08 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.971Z",
+    "updated_at": "2026-01-08T12:53:27.971Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "6a4a1842-85fd-4537-aaf3-0e012e6f96c6",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-02 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.879Z",
+    "updated_at": "2026-01-08T12:53:27.879Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "6bed209e-29e7-4215-ad21-20e1e39f2cfe",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-11-30 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.072Z",
+    "updated_at": "2026-01-08T12:53:27.072Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "7616f92c-5c4b-4a06-a904-171f958cef77",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-21 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.782Z",
+    "updated_at": "2026-01-08T12:53:27.782Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "769df01e-14ff-43bb-8bf0-4193e42dee7f",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-11-23 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.676Z",
+    "updated_at": "2026-01-08T12:53:26.676Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "7d4b77d6-5984-400d-9fe2-cd963e9faf0f",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-11-28 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.755Z",
+    "updated_at": "2026-01-08T12:53:26.755Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "81391267-6864-40ea-b192-493c5c0762ec",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-11 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.030Z",
+    "updated_at": "2026-01-08T12:53:28.041Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "8847315b-a074-4f98-94fe-634f0d2b7679",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-03 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.895Z",
+    "updated_at": "2026-01-08T12:53:27.895Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "89b18738-c0f5-4c1d-9f04-d67ea2ad3eab",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-12-06 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.881Z",
+    "updated_at": "2026-01-08T12:53:26.882Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "8f103823-ab9f-4717-912a-23bb07e1c67f",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-18 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.164Z",
+    "updated_at": "2026-01-08T12:53:28.164Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "918d6401-5549-439b-aba4-6de0c43f5c58",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-12 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.593Z",
+    "updated_at": "2026-01-08T12:53:27.594Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "95cf222a-faa1-47a4-b667-4496643e6d50",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-12-07 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.898Z",
+    "updated_at": "2026-01-08T12:53:26.898Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "9603e49b-36ec-44f7-998d-8b097aa05601",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-15 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.691Z",
+    "updated_at": "2026-01-08T12:53:27.691Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "96eda1c2-1976-4fb6-b8fe-bbda764d67d8",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-11-26 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.723Z",
+    "updated_at": "2026-01-08T12:53:26.724Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "97a92033-1020-4325-98de-35158b13ccf7",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-03 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.128Z",
+    "updated_at": "2026-01-08T12:53:27.128Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "97fe6d44-031a-46fc-b60f-c31c51901738",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-21 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.209Z",
+    "updated_at": "2026-01-08T12:53:28.209Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "9e10a02f-018d-44b4-828d-3e5cedafd952",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-11-25 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.708Z",
+    "updated_at": "2026-01-08T12:53:26.708Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "ac29b2fb-5613-4052-85ab-8cce4bf37f81",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-12-04 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.850Z",
+    "updated_at": "2026-01-08T12:53:26.851Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "ac637dcd-2f8f-4446-aab3-8012ae9a4486",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-11-29 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.771Z",
+    "updated_at": "2026-01-08T12:53:26.771Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "ac888d28-3c82-4dd8-8e23-dae98075b865",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-11-22 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.660Z",
+    "updated_at": "2026-01-08T12:53:26.660Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "b63674e5-6f5a-4b05-89c8-3f8b74ef6518",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-18 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.737Z",
+    "updated_at": "2026-01-08T12:53:27.737Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "b641497e-0198-4a11-a92f-c3806769b55c",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-10 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.485Z",
+    "updated_at": "2026-01-08T12:53:27.486Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "b891d932-e66b-4ce5-b459-5da22b9f2d3b",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-17 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.150Z",
+    "updated_at": "2026-01-08T12:53:28.150Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "b9c488c9-139c-48e0-a034-b2c608279a8d",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-11-25 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.987Z",
+    "updated_at": "2026-01-08T12:53:26.988Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "bc30e317-0a2e-428e-8f99-af3cf0631841",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-20 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.193Z",
+    "updated_at": "2026-01-08T12:53:28.194Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "bfcbd918-89b7-44c2-b351-944a6941c848",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-11-21 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.643Z",
+    "updated_at": "2026-01-08T12:53:26.643Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "c8713b22-88ff-4f72-aef1-9b700dbaea24",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-24 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.253Z",
+    "updated_at": "2026-01-08T12:53:28.254Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "c9a47237-528c-4d2f-9ebc-0ab5c6b7161f",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-23 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.239Z",
+    "updated_at": "2026-01-08T12:53:28.239Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "cae92875-690d-4075-8308-0d509c20900e",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-14 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.673Z",
+    "updated_at": "2026-01-08T12:53:27.673Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "cb843127-8561-4a01-8795-e6ac16a13f96",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-17 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.723Z",
+    "updated_at": "2026-01-08T12:53:27.723Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "d03ba5d8-246e-4779-a74f-298160b99ad1",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-01 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.089Z",
+    "updated_at": "2026-01-08T12:53:27.089Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "d0a605c9-5e21-4ae7-9509-c5dba3dd39e2",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-11-23 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.956Z",
+    "updated_at": "2026-01-08T12:53:26.956Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "d42d1832-2224-412f-a80d-2f63666e71cc",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-12-05 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.866Z",
+    "updated_at": "2026-01-08T12:53:26.866Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "dbadc50d-1042-47ae-ba4b-27340934ea99",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-11-26 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.003Z",
+    "updated_at": "2026-01-08T12:53:27.003Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "e1737a6d-e6b3-4ac4-a8e1-864a9f379ca0",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-02 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.109Z",
+    "updated_at": "2026-01-08T12:53:27.109Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "e1a5a6f2-b38a-423f-a635-a5e6af4be183",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-12-08 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.913Z",
+    "updated_at": "2026-01-08T12:53:26.913Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "e4026680-6d1c-4219-b434-c2428556c316",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-14 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.104Z",
+    "updated_at": "2026-01-08T12:53:28.104Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "e60b46bf-ba39-408c-9ffe-9b2d7f3385b8",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-15 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.119Z",
+    "updated_at": "2026-01-08T12:53:28.119Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "eafe7c2b-a8e6-42d6-999e-f49bace98336",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-11-28 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.818Z",
+    "updated_at": "2026-01-08T12:53:27.818Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "ef093071-8eb5-444f-a113-451a15139577",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-12-22 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:28.224Z",
+    "updated_at": "2026-01-08T12:53:28.224Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "f01064bc-e06b-4d4f-9057-61909a659e2c",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-12-03 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.835Z",
+    "updated_at": "2026-01-08T12:53:26.835Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "f5b319ba-544c-4689-ab6c-cc4fc0ea4816",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "117.00",
+    "reference": "ROI payout 2025-11-29 for investment 3",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.831Z",
+    "updated_at": "2026-01-08T12:53:27.831Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "fc57e3c6-e28b-47c9-b840-49be42250ffb",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-12-02 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.819Z",
+    "updated_at": "2026-01-08T12:53:26.819Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "fc799fd0-38fa-4c62-9d56-4d8d19268098",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "135.00",
+    "reference": "ROI payout 2025-12-08 for investment 2",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:27.364Z",
+    "updated_at": "2026-01-08T12:53:27.365Z"
+  }
+},
+{
+  "model": "transactions.transaction",
+  "pk": "fd5e25da-1743-4915-9d95-7dce6e3eff7b",
+  "fields": {
+    "user": 17,
+    "tx_type": "deposit",
+    "payment_method": "bank_transfer",
+    "amount": "62.49",
+    "reference": "ROI payout 2025-12-09 for investment 1",
+    "tx_hash": "",
+    "wallet_address_used": "",
+    "status": "pending",
+    "notes": "",
+    "approved_by": null,
+    "created_at": "2026-01-08T12:53:26.927Z",
+    "updated_at": "2026-01-08T12:53:26.927Z"
+  }
+},
+{
+  "model": "transactions.adminauditlog",
+  "pk": "1527797a-bd51-435f-843c-35ff351a9140",
+  "fields": {
+    "admin": 8,
+    "entity": "investment",
+    "entity_id": "3",
+    "action": "recalculate_end_date",
+    "notes": "Plan terms synced; recalculated ends_at",
+    "created_at": "2026-01-09T04:00:11.130Z"
+  }
+},
+{
+  "model": "transactions.adminauditlog",
+  "pk": "196b2372-3d08-4dcc-9700-d89f614108a9",
+  "fields": {
+    "admin": 8,
+    "entity": "investment",
+    "entity_id": "2",
+    "action": "recalculate_end_date",
+    "notes": "Plan terms synced; recalculated ends_at",
+    "created_at": "2026-01-09T04:00:11.114Z"
+  }
+},
+{
+  "model": "transactions.adminauditlog",
+  "pk": "3ef2e522-82f3-427d-a7a8-9d8f5a0cb14e",
+  "fields": {
+    "admin": 2,
+    "entity": "investment",
+    "entity_id": "1",
+    "action": "approve",
+    "notes": "Historical investment restoration",
+    "created_at": "2026-01-08T12:52:50.632Z"
+  }
+},
+{
+  "model": "transactions.adminauditlog",
+  "pk": "48a3908b-5726-4643-8b40-d3c715f127cc",
+  "fields": {
+    "admin": 2,
+    "entity": "transaction",
+    "entity_id": "3a8a0ce4-a2a2-4661-893c-ba2bf7d48d0c",
+    "action": "approve",
+    "notes": "Historical funding restoration",
+    "created_at": "2026-01-08T12:52:50.561Z"
+  }
+},
+{
+  "model": "transactions.adminauditlog",
+  "pk": "8077b0df-5652-479d-85f8-de74c175536b",
+  "fields": {
+    "admin": 8,
+    "entity": "investment",
+    "entity_id": "1",
+    "action": "recalculate_end_date",
+    "notes": "Plan terms synced; recalculated ends_at",
+    "created_at": "2026-01-09T04:00:11.019Z"
+  }
+},
+{
+  "model": "transactions.adminauditlog",
+  "pk": "c0231c03-a80c-4055-ae8e-3d9a9e2399f5",
+  "fields": {
+    "admin": 2,
+    "entity": "investment",
+    "entity_id": "3",
+    "action": "approve",
+    "notes": "Historical investment restoration",
+    "created_at": "2026-01-08T12:52:50.678Z"
+  }
+},
+{
+  "model": "transactions.adminauditlog",
+  "pk": "d022b91d-f8eb-4059-a9ec-a015a58dc456",
+  "fields": {
+    "admin": 2,
+    "entity": "investment",
+    "entity_id": "2",
+    "action": "approve",
+    "notes": "Historical investment restoration",
+    "created_at": "2026-01-08T12:52:50.653Z"
+  }
+},
+{
+  "model": "referrals.referralsetting",
+  "pk": 1,
+  "fields": {
+    "key": "signup_bonus",
+    "value": {
+      "amount": 10,
+      "currency": "USD",
+      "enabled": false,
+      "require_kyc": true
+    },
+    "updated_at": "2025-11-30T05:36:03.285Z"
+  }
+},
+{
+  "model": "referrals.referralsetting",
+  "pk": 2,
+  "fields": {
+    "key": "deposit_reward",
+    "value": {
+      "percent": 2.5,
+      "enabled": true,
+      "apply_once": true,
+      "min_deposit": 10,
+      "max_reward_amount": 100
+    },
+    "updated_at": "2025-11-30T05:36:03.303Z"
+  }
+},
+{
+  "model": "referrals.referralsetting",
+  "pk": 3,
+  "fields": {
+    "key": "fraud_protection",
+    "value": {
+      "prevent_same_ip": true,
+      "max_referrals_per_ip": 3,
+      "require_deposit_verification": true
+    },
+    "updated_at": "2025-11-30T05:36:03.314Z"
+  }
+}
+]

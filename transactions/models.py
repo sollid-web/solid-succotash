@@ -49,9 +49,17 @@ class CryptocurrencyWallet(models.Model):
 
 
 class Transaction(models.Model):
+    investment = models.ForeignKey(
+        "investments.UserInvestment",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+
     TYPE_CHOICES = [
         ("deposit", "Deposit"),
         ("withdrawal", "Withdrawal"),
+        ("profit", "Profit"),
     ]
 
     PAYMENT_METHOD_CHOICES = [

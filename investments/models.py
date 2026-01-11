@@ -95,13 +95,12 @@ class UserInvestment(models.Model):
                 days=self.plan.duration_days
             )
 
-        if self.started_at and self.status in [
-            self.STATUS_PENDING,
+        # Only auto-complete if past end date; do NOT auto-transition approved→active
+        # (that would break ROI payout which filters status="approved")
+        if self.ends_at and timezone.now() >= self.ends_at and self.status in [
             self.STATUS_APPROVED,
+            self.STATUS_ACTIVE,
         ]:
-            self.status = self.STATUS_ACTIVE
-
-        if self.ends_at and timezone.now() >= self.ends_at:
             self.status = self.STATUS_COMPLETED
 
         super().save(*args, **kwargs)
@@ -134,6 +133,16 @@ class DailyRoiPayout(models.Model):
     payout_date = models.DateField()
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
+    processed_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="When this payout was credited to wallet (idempotency)",
+    )
+    transaction_id = models.UUIDField(
+        null=True,
+        blank=True,
+        help_text="Related completed Transaction record",
+    )
 
     class Meta:
         unique_together = ("investment", "payout_date")

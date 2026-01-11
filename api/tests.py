@@ -63,6 +63,7 @@ class AdminInvestmentsAPITests(TestCase):
             email="api_admin@example.com",
             password="pass12345",
             is_staff=True,
+            is_superuser=True,
         )
         self.user = User.objects.create_user(
             username="api_norm", email="api_norm@example.com", password="pass12345"
@@ -79,13 +80,13 @@ class AdminInvestmentsAPITests(TestCase):
         UserInvestment.objects.create(user=self.user, plan=plan, amount=Decimal("150"))
 
     def test_admin_access(self):
-        self.client.login(username="api_admin", password="pass12345")
+        self.client.force_authenticate(user=self.admin)
         resp = self.client.get("/api/admin/investments/")
         self.assertEqual(resp.status_code, 200)
         self.assertGreaterEqual(len(resp.json()), 1)
 
     def test_non_admin_forbidden(self):
-        self.client.login(username="api_norm", password="pass12345")
+        self.client.force_authenticate(user=self.user)
         resp = self.client.get("/api/admin/investments/")
         self.assertNotEqual(resp.status_code, 200)
 

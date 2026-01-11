@@ -5,17 +5,12 @@ URL configuration for WolvCapital investment platform.
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.http import HttpResponse
 from django.urls import include, path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
-def healthcheck(request):
-    return HttpResponse("OK", status=200)
-
-
 urlpatterns = [
-    path("healthz", healthcheck),
+    path("", include("core.urls")),  # Root, /healthz/, /agreements/x/pdf/, /contact/, /inbox/
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("api/", include("api.urls")),

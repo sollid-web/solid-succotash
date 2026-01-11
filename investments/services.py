@@ -370,3 +370,86 @@ def recalculate_investment_end_date(
     )
 
     return investment
+
+
+@transaction.atomic
+def credit_roi_payout(payout, actor: User = None):
+    """
+    Atomically credit ROI payout to investment owner's wallet.
+    
+    Creates a completed transaction, updates wallet balance, marks payout processed.
+    Idempotent: returns existing transaction ID if already processed.
+    
+    Args:
+        payout: DailyRoiPayout instance
+        actor: Optional User who triggered the credit (for audit)
+    
+    Returns:
+        UUID of the created/existing Transaction
+    """
+    from .models import DailyRoiPayout
+    from transactions.models import Transaction
+    
+    # Early exit if already processed (idempotency)
+    if payout.processed_at:
+        return payout.transaction_id
+    
+    # Lock the payout and wallet rows
+    payout = DailyRoiPayout.objects.select_for_update().get(pk=payout.pk)
+    
+    # Double-check inside transaction
+    if payout.processed_at:
+        return payout.transaction_id
+    
+    investment_user = cast(User, payout.investment.user)
+    
+    # Lock wallet
+    try:
+        wallet = UserWallet.objects.select_for_update().get(user=investment_user)
+    except UserWallet.DoesNotExist:
+        wallet = UserWallet.objects.create(user=investment_user)
+    
+    # Update wallet balance
+    wallet.balance += payout.amount
+    wallet.save(update_fields=["balance", "updated_at"])
+    
+    # Create completed transaction
+    txn = Transaction.objects.create(
+        user=investment_user,
+        tx_type="deposit",
+        payment_method="bank_transfer",  # ROI is internal credit
+        amount=payout.amount,
+        status="completed",
+        reference=f"ROI payout {payout.payout_date} for investment {payout.investment_id}",
+        notes=f"Auto-credited ROI payout (processed by system)",
+    )
+    
+    # Mark payout as processed
+    payout.processed_at = timezone.now()
+    payout.transaction_id = txn.id
+    payout.save(update_fields=["processed_at", "transaction_id"])
+    
+    # Create audit log only if actor provided
+    if actor:
+        AdminAuditLog.objects.create(
+            admin=actor,
+            entity="roi_payout",
+            entity_id=str(payout.id),
+            action="auto_credit",
+            notes=f"ROI payout auto-credited: ${payout.amount} for investment {payout.investment_id}",
+        )
+    
+    # Notify user (in-app)
+    from users.notification_service import notify_wallet_credited
+    
+    try:
+        notify_wallet_credited(
+            investment_user,
+            payout.amount,
+            reason=f"ROI payout for {payout.investment.plan.name}",
+        )
+    except Exception:
+        # Don't fail credit if notification fails
+        pass
+    
+    return txn.id

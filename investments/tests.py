@@ -2,13 +2,11 @@ from decimal import Decimal
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
 from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
 
 from investments.services import create_investment, reject_investment
-from users.models import UserWallet
 
 from .models import DailyRoiPayout, InvestmentPlan, UserInvestment
 
@@ -30,6 +28,7 @@ class HistoricalInvestmentCreationTests(TestCase):
             email="hist_admin@example.com",
             password="pass12345",
             is_staff=True,
+            is_superuser=True,
         )
 
         self.plan = InvestmentPlan.objects.create(
@@ -139,27 +138,40 @@ class DailyRoiPayoutTests(TestCase):
     def test_daily_payout_idempotent(self):
         process_date = timezone.now().date().isoformat()
         call_command("payout_roi", date=process_date)
-        # Because all financial operations require manual admin approval, the created
-        # payout transaction(s) remain pending and wallet should not be auto-credited.
+        
+        # ROI payouts are now auto-credited, so wallet should be updated
         self.user.wallet.refresh_from_db()
-        self.assertEqual(self.user.wallet.balance, Decimal("0.00"))
-        self.assertEqual(DailyRoiPayout.objects.filter(investment=self.investment).count(), 1)
-        # Capture number of pending deposit transactions referencing ROI payout
+        self.assertEqual(self.user.wallet.balance, Decimal("5.00"))  # 1% of 500
+        
+        # Check payout record created and processed
+        payout = DailyRoiPayout.objects.filter(investment=self.investment).first()
+        self.assertIsNotNone(payout)
+        self.assertIsNotNone(payout.processed_at)
+        self.assertIsNotNone(payout.transaction_id)
+        
+        # Check completed transaction created
         from transactions.models import Transaction
+        txn = Transaction.objects.filter(
+            user=self.user, tx_type="deposit", status="completed", reference__contains="ROI payout"
+        ).first()
+        self.assertIsNotNone(txn)
+        self.assertEqual(txn.amount, Decimal("5.00"))
+        
+        first_txn_id = txn.id
+        first_payout_id = payout.id
 
-        txns = Transaction.objects.filter(
-            user=self.user, tx_type="deposit", reference__contains="ROI payout"
-        )
-        self.assertGreaterEqual(txns.count(), 1)
-        first_txn_ids = list(txns.values_list("id", flat=True))
-
-        # Second run should be idempotent: no new DailyRoiPayout and no new transactions
+        # Second run should be idempotent: no new payout, transaction, or wallet change
         call_command("payout_roi", date=process_date)
         self.assertEqual(DailyRoiPayout.objects.filter(investment=self.investment).count(), 1)
-        txns_after = Transaction.objects.filter(
-            user=self.user, tx_type="deposit", reference__contains="ROI payout"
+        self.user.wallet.refresh_from_db()
+        self.assertEqual(self.user.wallet.balance, Decimal("5.00"))  # Still same amount
+        
+        # Verify same transaction
+        txns = Transaction.objects.filter(
+            user=self.user, tx_type="deposit", status="completed", reference__contains="ROI payout"
         )
-        self.assertEqual(list(txns_after.values_list("id", flat=True)), first_txn_ids)
+        self.assertEqual(txns.count(), 1)
+        self.assertEqual(txns.first().id, first_txn_id)
 
     def test_backfill_range_is_idempotent_and_capped_to_investment_window(self):
         # Force a stable window in the past so we can backfill deterministically.
@@ -179,8 +191,17 @@ class DailyRoiPayoutTests(TestCase):
         self.assertEqual(payouts.count(), 11)  # 2025-12-04 .. 2025-12-14 inclusive
         self.assertEqual(payouts.first().payout_date.isoformat(), "2025-12-04")
         self.assertEqual(payouts.last().payout_date.isoformat(), "2025-12-14")
+        
+        # All payouts should be processed and have transactions
+        for payout in payouts:
+            self.assertIsNotNone(payout.processed_at)
+            self.assertIsNotNone(payout.transaction_id)
+        
+        # Wallet should be credited with total amount (11 days * 5.00)
+        self.user.wallet.refresh_from_db()
+        self.assertEqual(self.user.wallet.balance, Decimal("55.00"))
 
-        # Second run should not create duplicates.
+        # Second run should not create duplicates or change wallet
         call_command(
             "payout_roi",
             start_date="2025-12-04",
@@ -188,6 +209,8 @@ class DailyRoiPayoutTests(TestCase):
             no_emails=True,
         )
         self.assertEqual(DailyRoiPayout.objects.filter(investment=self.investment).count(), 11)
+        self.user.wallet.refresh_from_db()
+        self.assertEqual(self.user.wallet.balance, Decimal("55.00"))  # Still same amount
 
     @patch("investments.management.commands.payout_roi.EmailService.send_roi_payout_notification")
     def test_daily_payout_sends_email_notification(self, mock_send):
@@ -228,15 +251,10 @@ class InvestmentRejectionTests(TestCase):
         self.wallet.save(update_fields=["balance"])
 
     def test_reject_investment(self):
-        inv = create_investment(self.user, self.plan, 200)
+        inv = create_investment(self.user, self.plan, Decimal("200"))
         self.assertEqual(inv.status, "pending")
         reject_investment(inv, self.admin, "Docs missing")
         inv.refresh_from_db()
         self.assertEqual(inv.status, "rejected")
         self.assertIsNone(inv.started_at)
         self.assertIsNone(inv.ends_at)
-
-
-from django.test import TestCase
-
-# Create your tests here.

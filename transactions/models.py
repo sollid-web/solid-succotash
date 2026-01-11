@@ -66,6 +66,7 @@ class Transaction(models.Model):
         ("pending", "Pending"),
         ("approved", "Approved"),
         ("rejected", "Rejected"),
+        ("completed", "Completed"),
     ]
 
     id: models.UUIDField = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -333,6 +334,7 @@ class AdminAuditLog(models.Model):
         ("plan", "Plan"),
         ("user", "User"),
         ("kyc", "KYC Application"),
+        ("roi_payout", "ROI Payout"),
     ]
 
     ACTION_CHOICES = [
@@ -340,6 +342,8 @@ class AdminAuditLog(models.Model):
         ("reject", "Reject"),
         ("update", "Update"),
         ("create", "Create"),
+        ("auto_credit", "Auto Credit"),
+        ("recalculate_end_date", "Recalculate End Date"),
     ]
 
     id: models.UUIDField = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

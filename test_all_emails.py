@@ -1,8 +1,5 @@
 """Manual email diagnostics.
 
-Skipped by default to keep CI/tests clean. Enable with RUN_MANUAL_EMAIL_TESTS=1.
-"""Manual email diagnostics.
-
 These are intentionally skipped in CI to avoid side effects.
 Enable with RUN_MANUAL_EMAIL_TESTS=1.
 
@@ -21,7 +18,6 @@ from django.utils import timezone
 from core.email_service import EmailService
 from investments.models import InvestmentPlan, UserInvestment
 from transactions.models import Transaction
-
 
 RUN_MANUAL_EMAIL_TESTS = os.getenv("RUN_MANUAL_EMAIL_TESTS") == "1"
 

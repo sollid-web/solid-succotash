@@ -1,16 +1,13 @@
 import logging
-from datetime import date
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
 
 from django.core.management.base import BaseCommand
-from django.db import transaction
 from django.utils import timezone
 
 from core.email_service import EmailService
 from investments.models import DailyRoiPayout, UserInvestment
-from transactions.models import Transaction
-from transactions.services import create_transaction
+from investments.services import credit_roi_payout
 from wolvcapital.rls import rls_admin_context
 
 logger = logging.getLogger(__name__)
@@ -149,31 +146,31 @@ class Command(BaseCommand):
 
                     reference = f"ROI payout {day} for investment {inv.id}"
 
-                    # If the transaction exists (but payout record is missing), sync the payout record only.
-                    existing_txn = Transaction.objects.filter(
-                        user=inv.user,
-                        tx_type="deposit",
-                        reference=reference,
+                    # Check if payout record exists but isn't processed yet
+                    existing_payout = DailyRoiPayout.objects.filter(
+                        investment=inv,
+                        payout_date=day,
                     ).first()
 
-                    if existing_txn:
+                    if existing_payout:
+                        if existing_payout.processed_at:
+                            # Already credited, skip
+                            synced += 1
+                            total_amount += existing_payout.amount
+                            continue
+                        
+                        # Payout exists but not processed - credit it now
                         if dry:
                             self.stdout.write(
-                                (
-                                    f"[DRY] Would sync DailyRoiPayout {payout} for user {inv.user_id} "
-                                    f"investment {inv.id} date {day} (txn exists)"
-                                )
+                                f"[DRY] Would credit existing payout {payout} for investment {inv.id} date {day}"
                             )
                         else:
-                            DailyRoiPayout.objects.create(
-                                investment=inv,
-                                payout_date=day,
-                                amount=payout,
-                            )
+                            credit_roi_payout(existing_payout)
                         synced += 1
                         total_amount += payout
                         continue
 
+                    # Create new payout and credit immediately
                     if dry:
                         self.stdout.write(
                             (
@@ -185,21 +182,15 @@ class Command(BaseCommand):
                         total_amount += payout
                         continue
 
-                    with transaction.atomic():
-                        create_transaction(
-                            user=inv.user,
-                            # Treating ROI as a credit event.
-                            tx_type="deposit",
-                            amount=float(payout),
-                            reference=reference,
-                            notify_admin=False,
-                            notify_user=not no_emails,
-                        )
-                        DailyRoiPayout.objects.create(
-                            investment=inv,
-                            payout_date=day,
-                            amount=payout,
-                        )
+                    # Create payout record
+                    new_payout = DailyRoiPayout.objects.create(
+                        investment=inv,
+                        payout_date=day,
+                        amount=payout,
+                    )
+                    
+                    # Auto-credit to wallet
+                    credit_roi_payout(new_payout)
 
                     if not no_emails:
                         try:

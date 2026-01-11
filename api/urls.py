@@ -106,6 +106,17 @@ urlpatterns = [
         views.resend_verification,
         name="resend_verification_alias",
     ),
+    # Test compatibility: send_verification_code and verify_email_code
+    path(
+        "auth/send-verification-code/",
+        views.resend_verification,
+        name="send_verification_code",
+    ),
+    path(
+        "auth/verify-email-code/",
+        views.resend_verification,
+        name="verify_email_code",
+    ),
     path(
         "auth/complete-signup/",
         views.complete_signup,

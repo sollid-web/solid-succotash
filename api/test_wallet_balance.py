@@ -94,15 +94,14 @@ class WalletBalanceAPITests(TestCase):
             email="wallet_api_admin@example.com",
             password="pass12345",
             is_staff=True,
+            is_superuser=True,
         )
         self.user_client = APIClient()
         self.admin_client = APIClient()
         self.user_client.login(
             username="wallet_api_user", password="pass12345"
         )
-        self.admin_client.login(
-            username="wallet_api_admin", password="pass12345"
-        )
+        self.admin_client.force_login(self.admin)
 
     def test_wallet_balance_after_admin_approves_deposit(self):
         # User creates deposit transaction (pending)

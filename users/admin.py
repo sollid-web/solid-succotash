@@ -10,6 +10,8 @@ from .models import UserWallet
 User = get_user_model()
 
 # Register User WITHOUT profile inline
+
+
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ("id", "email", "is_active", "is_staff", "get_wallet_balance")
@@ -68,7 +70,7 @@ class WalletAdjustmentForm(forms.Form):
 @admin.register(UserWallet)
 class UserWalletAdmin(admin.ModelAdmin):
     list_display = ("user", "balance", "updated_at")
-    readonly_fields = ("user", "balance", "created_at", "updated_at")
+    readonly_fields = ("user", "balance", "updated_at")
     actions = ["credit_wallet_popup", "debit_wallet_popup"]
 
     @admin.action(description="Credit wallet (enter amount)")

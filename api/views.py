@@ -198,15 +198,10 @@ class UserDashboardAnalyticsView(APIView):
         start_dt = timezone.now() - timezone.timedelta(days=days - 1)
         start_date = start_dt.date()
 
-        def _scoped_queryset(model):
-            """Prefer DB-enforced scoping (RLS) on Postgres; fall back to user filter."""
-
-            if connection.vendor == "postgresql":
-                return model.objects.all()
-            return model.objects.filter(user=request.user)
-
-        tx_qs = _scoped_queryset(Transaction).filter(created_at__date__gte=start_date)
-        inv_qs = _scoped_queryset(UserInvestment).filter(created_at__date__gte=start_date)
+        # CRITICAL: Always filter by user - RLS policies are NOT configured in database
+        # This ensures data isolation regardless of database vendor
+        tx_qs = Transaction.objects.filter(user=request.user, created_at__date__gte=start_date)
+        inv_qs = UserInvestment.objects.filter(user=request.user, created_at__date__gte=start_date)
 
         tx_by_day = {
             row["day"]: row["count"]
@@ -243,7 +238,7 @@ class UserDashboardAnalyticsView(APIView):
                 withdrawals = int(row["count"])
 
         inv_status_rows = list(
-            _scoped_queryset(UserInvestment).values("status").annotate(count=Count("id"))
+            UserInvestment.objects.filter(user=request.user).values("status").annotate(count=Count("id"))
         )
         active = 0
         completed = 0
@@ -259,12 +254,12 @@ class UserDashboardAnalyticsView(APIView):
                 pending += count_val
 
         tx_recent = list(
-            _scoped_queryset(Transaction)
+            Transaction.objects.filter(user=request.user)
             .order_by("-created_at")
             .values("created_at", "tx_type", "status")[:10]
         )
         inv_recent = list(
-            _scoped_queryset(UserInvestment)
+            UserInvestment.objects.filter(user=request.user)
             .select_related("plan")
             .order_by("-created_at")
             .values("created_at", "status", "plan__name")[:10]
@@ -311,7 +306,7 @@ class UserDashboardAnalyticsView(APIView):
                 "recent_activity": recent_activity,
                 "scoping": {
                     "db_vendor": connection.vendor,
-                    "rls_expected": connection.vendor == "postgresql",
+                    "user_filtered": True,
                 },
             }
         )

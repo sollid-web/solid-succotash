@@ -132,51 +132,24 @@ class Command(BaseCommand):
                 if payout <= 0:
                     continue
 
-                existing_dates = set(
-                    DailyRoiPayout.objects.filter(
-                        investment=inv,
-                        payout_date__gte=effective_start,
-                        payout_date__lte=effective_end,
-                    ).values_list("payout_date", flat=True)
-                )
-
                 for day in self._iter_dates(effective_start, effective_end):
-                    if day in existing_dates:
-                        continue
-
-                    reference = f"ROI payout {day} for investment {inv.id}"
-
-                    # Check if payout record exists but isn't processed yet
+                    # Check if payout already exists for this date (prevent duplicates)
                     existing_payout = DailyRoiPayout.objects.filter(
                         investment=inv,
                         payout_date=day,
                     ).first()
 
                     if existing_payout:
-                        if existing_payout.processed_at:
-                            # Already credited, skip
-                            synced += 1
-                            total_amount += existing_payout.amount
-                            continue
-                        
-                        # Payout exists but not processed - credit it now
-                        if dry:
-                            self.stdout.write(
-                                f"[DRY] Would credit existing payout {payout} for investment {inv.id} date {day}"
-                            )
-                        else:
-                            credit_roi_payout(existing_payout)
+                        # Payout record exists - skip to avoid duplicates
                         synced += 1
-                        total_amount += payout
+                        total_amount += existing_payout.amount
                         continue
 
                     # Create new payout and credit immediately
                     if dry:
                         self.stdout.write(
-                            (
-                                f"[DRY] Would pay {payout} to user {inv.user_id} "
-                                f"for investment {inv.id} on {day}"
-                            )
+                            f"[DRY] Would pay {payout} to user {inv.user_id} "
+                            f"for investment {inv.id} on {day}"
                         )
                         paid += 1
                         total_amount += payout
@@ -188,8 +161,8 @@ class Command(BaseCommand):
                         payout_date=day,
                         amount=payout,
                     )
-                    
-                    # Auto-credit to wallet
+
+                    # Auto-credit to wallet (creates linked Transaction row)
                     credit_roi_payout(new_payout)
 
                     if not no_emails:
@@ -216,18 +189,13 @@ class Command(BaseCommand):
 
                 if date_mode == "single" and not dry and paid:
                     self.stdout.write(
-                        (
-                            f"Paid {payout} to user {inv.user_id} "
-                            f"(investment {inv.id})"
-                        )
+                        f"Paid {payout} to user {inv.user_id} (investment {inv.id})"
                     )
 
             self.stdout.write(
                 self.style.SUCCESS(
-                    (
-                        f"Processed payouts: {paid}. Synced payout records: {synced}. "
-                        f"Total payout: {total_amount}"
-                    )
+                    f"Processed payouts: {paid}. Synced payout records: {synced}. "
+                    f"Total payout: {total_amount}"
                 )
             )
             if dry:

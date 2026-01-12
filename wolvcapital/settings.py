@@ -545,8 +545,13 @@ LOGGING = {
 # ------------------------------------------------------------------
 # Security Settings (Production Ready)
 # ------------------------------------------------------------------
-# Always enable security features for production deployment
-SECURE_SSL_REDIRECT = False
+# Enable security features only in production (when DEBUG=False)
+# In development (DEBUG=True), these are intentionally disabled for localhost testing
+
+# SSL/HTTPS redirect - enabled in production via environment variable or when DEBUG=False
+SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=not DEBUG)
+
+# Secure cookies - only over HTTPS in production
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 

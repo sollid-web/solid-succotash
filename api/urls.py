@@ -1,8 +1,9 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
+from investments.views import MyInvestmentsView
+
 from . import views
-from .views import AdminInvestmentPlanViewSet
 from .referrals_endpoints import referrals_rewards, referrals_summary
 
 router = DefaultRouter()
@@ -55,12 +56,13 @@ router.register(
 )
 router.register(
     r"admin/plans",
-    AdminInvestmentPlanViewSet,
+    views.AdminInvestmentPlanViewSet,
     basename="api-admin-plans",
 )
 
 urlpatterns = [
     path("", include(router.urls)),
+    path("investments/my/", MyInvestmentsView.as_view(), name="api-my-investments"),
     path("wallet/", views.WalletView.as_view(), name="api-wallet"),
     path(
         "analytics/overview/",

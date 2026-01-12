@@ -40,6 +40,9 @@ interface InvestmentPlanDetails {
   max_amount?: string
 }
 
+
+type InvestmentLifecycleStatus = "ACTIVE" | "COMPLETED" | "UPCOMING"
+
 interface Investment {
   id: number
   plan_name?: string
@@ -51,6 +54,7 @@ interface Investment {
   daily_roi?: string
   duration_days?: number
   plan?: InvestmentPlanDetails
+  derived_status: InvestmentLifecycleStatus
 }
 
 interface Transaction {
@@ -141,19 +145,29 @@ export default function DashboardPage() {
             setWallet(walletData)
           }
 
+
           // Fetch investments
-          const investmentsResponse = await fetch(`${apiBase}/api/investments/`, {
-            method: 'GET',
+          const investmentsResponse = await fetch(`${apiBase}/api/investments/my/`, {
+            method: "GET",
             headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Token ${token}`,
+              "Content-Type": "application/json",
+              Authorization: `Token ${token}`,
             },
-            credentials: 'include',
+            credentials: "include",
           })
 
           if (investmentsResponse.ok) {
             const investmentsData = await investmentsResponse.json()
-            setInvestments(investmentsData)
+
+            // DRF may return either a list or { results: [...] }
+            const rows = Array.isArray(investmentsData)
+              ? investmentsData
+              : (investmentsData?.results ?? [])
+
+            setInvestments(rows)
+          } else {
+            // optional: clear to avoid stale UI
+            setInvestments([])
           }
 
           // Fetch transactions (recent)
@@ -451,7 +465,7 @@ export default function DashboardPage() {
                 </svg>
               </div>
             </div>
-            <p className="text-3xl font-bold text-purple-600">${investments.filter(inv => inv.status === 'approved').reduce((sum, inv) => sum + parseFloat(inv.amount || '0'), 0).toFixed(2)}</p>
+            <p className="text-3xl font-bold text-purple-600">${investments .filter(inv => inv.derived_status === "ACTIVE").reduce((sum, inv) => sum + Number(inv.amount || 0), 0) .toFixed(2)}</p>
             <p className="text-xs text-gray-500 mt-2">Active investments</p>
           </div>
         </section>

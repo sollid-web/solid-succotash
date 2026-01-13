@@ -126,7 +126,60 @@ class UserInvestmentSerializer(serializers.ModelSerializer):
 
 
 class TransactionSerializer(serializers.ModelSerializer):
-    class Meta:
+        def validate(self, attrs):
+            """
+            Enforce: withdrawals allowed ONLY from profit of EXPIRED plans.
+            """
+            from django.utils import timezone
+            from django.db.models import Sum
+            from transactions.models import Transaction
+            tx_type = attrs.get("tx_type") or getattr(self.instance, "tx_type", None)
+
+            # Only enforce rule for withdrawals
+            if tx_type != "withdrawal":
+                return attrs
+
+            request = self.context.get("request")
+            user = request.user if request else None
+            if not user:
+                raise serializers.ValidationError("Authentication required.")
+
+            investment = attrs.get("investment") or getattr(self.instance, "investment", None)
+            if not investment:
+                raise serializers.ValidationError({"investment": "Withdrawal must be linked to an investment."})
+
+            now = timezone.now()
+            if not investment.ends_at or investment.ends_at > now:
+                raise serializers.ValidationError("Withdrawals are only allowed after the investment expires.")
+
+            # compute available profit from EXPIRED investments only
+            expired_profit = Transaction.objects.filter(
+                user=user,
+                tx_type="profit",
+                status__in=["approved", "completed"],
+                investment__ends_at__lte=now,
+            ).aggregate(total=Sum("amount"))["total"] or 0
+
+            already_withdrawn = Transaction.objects.filter(
+                user=user,
+                tx_type="withdrawal",
+                status__in=["pending", "approved", "completed"],
+                investment__ends_at__lte=now,
+            ).aggregate(total=Sum("amount"))["total"] or 0
+
+            available = expired_profit - already_withdrawn
+            amount = attrs.get("amount") or 0
+
+            if amount <= 0:
+                raise serializers.ValidationError({"amount": "Amount must be greater than zero."})
+
+            if amount > available:
+                raise serializers.ValidationError(
+                    {"amount": f"Insufficient withdrawable profit. Available: {available:.2f}"}
+                )
+
+            return attrs
+P    class Meta:
         model = Transaction
         fields = [
             "id",

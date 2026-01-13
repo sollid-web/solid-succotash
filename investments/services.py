@@ -17,80 +17,7 @@ def _ensure_aware(dt):
     if dt is None:
         return None
     if timezone.is_aware(dt):
-        return dt
-    return timezone.make_aware(dt)
 
-
-@transaction.atomic
-def create_approved_investment_at(
-    *,
-    user: User,
-    plan: InvestmentPlan,
-    amount: Decimal | float,
-    admin_user: User,
-    started_at,
-    notes: str = "",
-    notify_user: bool = False,
-    notify_admin: bool = False,
-) -> UserInvestment:
-    """
-    Create an already-approved investment with a historical start date.
-
-    This is intended for controlled administrative restoration/correction.
-    It debits the user's wallet under lock and records an audit log entry.
-
-    Defaults to not sending emails/notifications.
-    """
-
-    amount_decimal = amount if isinstance(amount, Decimal) else Decimal(str(amount))
-    if amount_decimal <= 0:
-        raise ValidationError("Investment amount must be positive")
-
-    # Validate amount within plan limits
-    if amount_decimal < plan.min_amount:
-        raise ValidationError(f"Minimum investment amount is ${plan.min_amount}")
-    if amount_decimal > plan.max_amount:
-        raise ValidationError(f"Maximum investment amount is ${plan.max_amount}")
-
-    started_at = _ensure_aware(started_at)
-    if not started_at:
-        raise ValidationError("started_at is required")
-
-    # Lock wallet and debit
-    try:
-        wallet = UserWallet.objects.select_for_update().get(user=user)
-    except UserWallet.DoesNotExist:
-        wallet = UserWallet.objects.create(user=user)
-
-    if wallet.balance < amount_decimal:
-        raise ValidationError(
-            "Insufficient wallet balance for approval. Balance "
-            f"${wallet.balance}, required ${amount_decimal}"
-        )
-
-    wallet.balance -= amount_decimal
-    wallet.save(update_fields=["balance", "updated_at"])
-
-    investment = UserInvestment.objects.create(
-        user=user,
-        plan=plan,
-        amount=amount_decimal,
-        status="approved",
-        started_at=started_at,
-        ends_at=started_at + timedelta(days=plan.duration_days),
-        created_at=started_at,
-    )
-
-    AdminAuditLog.objects.create(
-        admin=admin_user,
-        entity="investment",
-        entity_id=str(investment.id),
-        action="approve",
-        notes=notes or "Historical investment restoration",
-    )
-
-    if notify_user:
-        from users.notification_service import notify_investment_approved, notify_wallet_debited
 
         notify_investment_approved(cast(User, investment.user), investment, notes)
         notify_wallet_debited(
@@ -388,22 +315,31 @@ def credit_roi_payout(payout, actor: User = None):
     Returns:
         UUID of the created/existing Transaction
     """
+
     from .models import DailyRoiPayout
     from transactions.models import Transaction
-    
+    from django.utils import timezone
+
+    inv = payout.investment
+    now = timezone.now()
+
+    # ROI for ACTIVE plans must never credit wallet.
+    # We still record the payout + transaction as "profit" (locked).
+    is_active = bool(inv.ends_at and now < inv.ends_at)
+
     # Early exit if already processed (idempotency)
     if payout.processed_at:
         return payout.transaction_id
-    
+
     # Lock the payout row
     payout = DailyRoiPayout.objects.select_for_update().get(pk=payout.pk)
-    
+
     # Double-check inside transaction
     if payout.processed_at:
         return payout.transaction_id
-    
+
     investment_user = cast(User, payout.investment.user)
-    
+
     # Create completed profit transaction (wallet untouched)
     txn = Transaction.objects.create(
         user=investment_user,
@@ -415,6 +351,10 @@ def credit_roi_payout(payout, actor: User = None):
         reference=f"Daily ROI for investment #{payout.investment_id}",
         notes=f"Daily profit (locked until plan expires)",
     )
+
+    # Do NOT credit wallet for ROI payouts (profit stays locked in records).
+    # Wallet release (if any) must be handled separately on plan expiry/withdrawal rules.
+    pass
     
     # Mark payout as processed
     payout.processed_at = timezone.now()

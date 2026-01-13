@@ -4,19 +4,26 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import format_html
 
-from .models import (
+from transactions.models import (
     AdminAuditLog,
     AdminNotification,
     CryptocurrencyWallet,
     Transaction,
     VirtualCard,
 )
-from .services import approve_transaction, create_transaction, reject_transaction
+from transactions.services import (
+    approve_transaction,
+    reject_transaction,
+    create_transaction,
+)
 
+# ------------------------------------------------------------------
+# ADMIN NOTIFICATIONS
+# ------------------------------------------------------------------
 
 @admin.register(AdminNotification)
 class AdminNotificationAdmin(admin.ModelAdmin):
-    list_display = [
+    list_display = (
         "title",
         "notification_type",
         "user",
@@ -25,310 +32,158 @@ class AdminNotificationAdmin(admin.ModelAdmin):
         "is_resolved",
         "created_at",
         "action_links",
-    ]
-    list_filter = [
+    )
+    list_filter = (
         "notification_type",
         "priority",
         "is_read",
         "is_resolved",
         "created_at",
-    ]
-    search_fields = ["title", "message", "user__email"]
-    readonly_fields = ["created_at", "resolved_at"]
-    ordering = ["-created_at"]
-
-    fieldsets = (
-        (
-            "Notification Details",
-            {"fields": ("notification_type", "title", "message", "priority")},
-        ),
-        ("Related Entity", {"fields": ("user", "entity_type", "entity_id")}),
-        (
-            "Status",
-            {"fields": ("is_read", "is_resolved", "resolved_by", "resolved_at")},
-        ),
-        ("Timestamps", {"fields": ("created_at",)}),
     )
+    search_fields = ("title", "message", "user__email")
+    readonly_fields = ("created_at", "resolved_at")
+    ordering = ("-created_at",)
 
     @admin.display(description="Actions")
     def action_links(self, obj):
-        """Display action links for the notification"""
-        if obj.entity_type and obj.entity_id:
-            if obj.entity_type == "transaction":
-                try:
-                    url = reverse("admin:transactions_transaction_change", args=[obj.entity_id])
-                    return format_html('<a href="{}" class="button">View Transaction</a>', url)
-                except Exception:
-                    pass
-            elif obj.entity_type == "investment":
-                try:
-                    url = reverse("admin:investments_userinvestment_change", args=[obj.entity_id])
-                    return format_html('<a href="{}" class="button">View Investment</a>', url)
-                except Exception:
-                    pass
-            elif obj.entity_type == "virtual_card":
-                try:
-                    url = reverse("admin:transactions_virtualcard_change", args=[obj.entity_id])
-                    return format_html('<a href="{}" class="button">View Card</a>', url)
-                except Exception:
-                    pass
+        if obj.entity_type == "transaction":
+            return format_html(
+                '<a href="{}">View Transaction</a>',
+                reverse("admin:transactions_transaction_change", args=[obj.entity_id]),
+            )
+        if obj.entity_type == "investment":
+            return format_html(
+                '<a href="{}">View Investment</a>',
+                reverse("admin:investments_userinvestment_change", args=[obj.entity_id]),
+            )
         return "-"
-
-    def get_queryset(self, request):
-        return super().get_queryset(request).select_related("user", "resolved_by")
 
     actions = ["mark_as_read", "mark_as_resolved"]
 
-    @admin.action(description="Mark selected notifications as read")
+    @admin.action(description="Mark selected as read")
     def mark_as_read(self, request, queryset):
-        updated = 0
-        for notification in queryset:
-            notification.is_read = True
-            notification.save()
-            updated += 1
-        self.message_user(request, f"{updated} notifications marked as read.")
+        queryset.update(is_read=True)
+        self.message_user(request, "Notifications marked as read.")
 
-    @admin.action(description="Mark selected notifications as resolved")
+    @admin.action(description="Mark selected as resolved")
     def mark_as_resolved(self, request, queryset):
-        resolved_at = timezone.now()
-        updated = 0
-        for notification in queryset:
-            notification.is_resolved = True
-            notification.resolved_by = request.user
-            notification.resolved_at = resolved_at
-            notification.save()
-            updated += 1
-        self.message_user(request, f"{updated} notifications marked as resolved.")
+        queryset.update(
+            is_resolved=True,
+            resolved_by=request.user,
+            resolved_at=timezone.now(),
+        )
+        self.message_user(request, "Notifications marked as resolved.")
 
+
+# ------------------------------------------------------------------
+# VIRTUAL CARDS
+# ------------------------------------------------------------------
 
 @admin.register(VirtualCard)
 class VirtualCardAdmin(admin.ModelAdmin):
-    list_display = [
+    list_display = (
         "user",
         "card_type",
         "masked_card_number",
-        "cardholder_name",
         "balance",
         "status",
         "is_active",
         "created_at",
-    ]
-    list_filter = ["card_type", "status", "is_active", "created_at"]
-    search_fields = ["user__email", "cardholder_name", "card_number"]
-    readonly_fields = [
-        "id",
-        "card_number",
-        "cvv",
-        "expiry_month",
-        "expiry_year",
-        "created_at",
-        "updated_at",
-        "expires_at",
-    ]
-    list_per_page = 25
-
-    fieldsets = (
-        (
-            None,
-            {"fields": ("user", "card_type", "purchase_amount", "status", "is_active")},
-        ),
-        (
-            "Card Details",
-            {
-                "fields": (
-                    "card_number",
-                    "cardholder_name",
-                    "expiry_month",
-                    "expiry_year",
-                    "cvv",
-                    "balance",
-                ),
-                "classes": ("collapse",),
-            },
-        ),
-        ("Admin Fields", {"fields": ("approved_by", "notes")}),
-        (
-            "Timestamps",
-            {
-                "fields": ("id", "created_at", "updated_at", "expires_at"),
-                "classes": ("collapse",),
-            },
-        ),
     )
+    list_filter = ("card_type", "status", "is_active")
+    search_fields = ("user__email", "cardholder_name")
 
-    @admin.display(description="Card Number")
+    @admin.display(description="Card")
     def masked_card_number(self, obj):
         return obj.get_masked_number()
 
-    actions = ["approve_cards", "reject_cards", "generate_card_details"]
+    actions = ["approve_cards", "reject_cards"]
 
-    @admin.action(description="Approve selected virtual cards")
+    @admin.action(description="Approve selected cards")
     def approve_cards(self, request, queryset):
-        count = 0
         for card in queryset.filter(status="pending"):
             card.status = "approved"
             card.approved_by = request.user
             card.is_active = True
-            if not card.card_number:
-                card.generate_card_details()
             card.save()
-            count += 1
+        self.message_user(request, "Cards approved.")
 
-        self.message_user(request, f"Successfully approved {count} virtual card(s)")
-
-    @admin.action(description="Reject selected virtual cards")
+    @admin.action(description="Reject selected cards")
     def reject_cards(self, request, queryset):
-        count = 0
-        for card in queryset.filter(status="pending"):
-            card.status = "rejected"
-            card.approved_by = request.user
-            card.save()
-            count += 1
+        queryset.filter(status="pending").update(status="rejected")
+        self.message_user(request, "Cards rejected.")
 
-        self.message_user(request, f"Successfully rejected {count} virtual card(s)")
 
-    @admin.action(description="Generate card details for approved cards")
-    def generate_card_details(self, request, queryset):
-        count = 0
-        for card in queryset.filter(status__in=["approved", "active"]):
-            if not card.card_number:
-                card.generate_card_details()
-                count += 1
-
-        self.message_user(request, f"Generated card details for {count} card(s)")
-
+# ------------------------------------------------------------------
+# CRYPTO WALLETS
+# ------------------------------------------------------------------
 
 @admin.register(CryptocurrencyWallet)
 class CryptocurrencyWalletAdmin(admin.ModelAdmin):
-    list_display = [
-        "currency",
-        "display_wallet_address",
-        "network",
-        "is_active",
-        "updated_at",
-    ]
-    list_filter = ["currency", "is_active", "network"]
-    list_editable = ["is_active"]
-    search_fields = ["currency", "wallet_address", "network"]
-    readonly_fields = ["created_at", "updated_at"]
+    list_display = ("currency", "network", "short_address", "is_active", "updated_at")
+    list_filter = ("currency", "network", "is_active")
 
-    fieldsets = (
-        (None, {"fields": ("currency", "wallet_address", "network", "is_active")}),
-        (
-            "Timestamps",
-            {"fields": ("created_at", "updated_at"), "classes": ("collapse",)},
-        ),
-    )
+    @admin.display(description="Wallet")
+    def short_address(self, obj):
+        return f"{obj.wallet_address[:10]}..."
 
-    @admin.display(description="Wallet Address")
-    def display_wallet_address(self, obj):
-        return format_html(
-            '<span title="{}">{}<strong>...</strong></span>',
-            obj.wallet_address,
-            obj.wallet_address[:15],
-        )
 
+# ------------------------------------------------------------------
+# TRANSACTIONS (CORE FINANCE CONTROL)
+# ------------------------------------------------------------------
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
     list_display = (
         "user",
         "tx_type",
-        "payment_method",
         "amount",
         "status",
+        "payment_method",
         "approved_by",
         "created_at",
     )
-    list_filter = ("tx_type", "payment_method", "status", "created_at", "approved_by")
-    search_fields = (
-        "user__email",
-        "user__first_name",
-        "user__last_name",
-        "reference",
-        "tx_hash",
-        "id",
-    )
+    list_filter = ("tx_type", "status", "payment_method", "created_at")
+    search_fields = ("user__email", "reference", "tx_hash")
     readonly_fields = ("id", "created_at", "updated_at")
-    date_hierarchy = "created_at"
-    actions = ["admin_approve", "admin_reject", "manual_credit", "manual_debit"]
-    fieldsets = (
-        (
-            None,
-            {
-                "fields": (
-                    "id",
-                    "user",
-                    "tx_type",
-                    "payment_method",
-                    "amount",
-                    "reference",
-                    "status",
-                )
-            },
-        ),
-        (
-            "Crypto Details",
-            {
-                "fields": ("tx_hash", "wallet_address_used"),
-                "classes": ("collapse",),
-                "description": "Cryptocurrency transaction details (if applicable)",
-            },
-        ),
-        (
-            "Admin Info",
-            {"fields": ("notes", "approved_by", "created_at", "updated_at")},
-        ),
-    )
 
-    @admin.action(description="Approve selected transactions (SAFE)")
+    actions = [
+        "admin_approve",
+        "admin_reject",
+        "manual_credit",
+        "manual_debit",
+    ]
+
+    # ---------------- SAFE ACTIONS ----------------
+
+    @admin.action(description="Approve selected (SAFE)")
     def admin_approve(self, request, queryset):
-        approved_count = 0
-        failed_count = 0
-
-        for txn in queryset.filter(status="pending"):
+        success, failed = 0, 0
+        for tx in queryset.filter(status="pending"):
             try:
-                approve_transaction(
-                    txn,
-                    request.user,
-                    f"Approved via admin action by {request.user.email}",
-                )
-                approved_count += 1
+                approve_transaction(tx, request.user, "Approved via admin")
+                success += 1
             except ValidationError as exc:
-                failed_count += 1
-                messages.error(request, f"Transaction {txn.id}: {exc}")
+                failed += 1
+                messages.error(request, f"{tx.id}: {exc}")
 
-        if approved_count:
-            messages.success(request, f"Approved {approved_count} transaction(s). Wallets updated.")
-        if failed_count:
-            messages.warning(request, f"Failed to approve {failed_count} transaction(s).")
+        if success:
+            messages.success(request, f"Approved {success} transaction(s).")
+        if failed:
+            messages.warning(request, f"{failed} failed.")
 
-    @admin.action(description="Reject selected transactions (SAFE)")
+    @admin.action(description="Reject selected (SAFE)")
     def admin_reject(self, request, queryset):
-        rejected_count = 0
-        failed_count = 0
+        for tx in queryset.filter(status="pending"):
+            reject_transaction(tx, request.user, "Rejected via admin")
+        messages.info(request, "Transactions rejected.")
 
-        for txn in queryset.filter(status="pending"):
-            try:
-                reject_transaction(
-                    txn,
-                    request.user,
-                    f"Rejected via admin action by {request.user.email}",
-                )
-                rejected_count += 1
-            except ValidationError as exc:
-                failed_count += 1
-                messages.error(request, f"Transaction {txn.id}: {exc}")
+    # ---------------- MANUAL OVERRIDES ----------------
 
-        if rejected_count:
-            messages.success(request, f"Rejected {rejected_count} transaction(s).")
-        if failed_count:
-            messages.warning(request, f"Failed to reject {failed_count} transaction(s).")
-
-    @admin.action(description="Manual CREDIT (Admin safe)")
+    @admin.action(description="Manual CREDIT (Admin)")
     def manual_credit(self, request, queryset):
         if queryset.count() != 1:
-            self.message_user(request, "Select exactly one transaction.", level="error")
+            self.message_user(request, "Select exactly one row.", level="error")
             return
 
         tx = queryset.first()
@@ -341,14 +196,14 @@ class TransactionAdmin(admin.ModelAdmin):
                 reference="Manual admin credit",
             )
             approve_transaction(new_tx, request.user, "Manual credit")
-            self.message_user(request, "Wallet credited successfully.")
+            self.message_user(request, "Wallet credited.")
         except ValidationError as exc:
-            self.message_user(request, f"Manual credit failed: {exc}", level="error")
+            self.message_user(request, str(exc), level="error")
 
-    @admin.action(description="Manual DEBIT (Admin safe)")
+    @admin.action(description="Manual DEBIT (Admin)")
     def manual_debit(self, request, queryset):
         if queryset.count() != 1:
-            self.message_user(request, "Select exactly one record.", level="error")
+            self.message_user(request, "Select exactly one row.", level="error")
             return
 
         tx = queryset.first()
@@ -361,88 +216,18 @@ class TransactionAdmin(admin.ModelAdmin):
                 reference="Manual admin debit",
             )
             approve_transaction(new_tx, request.user, "Manual debit")
-            self.message_user(request, "Wallet debited successfully.")
+            self.message_user(request, "Wallet debited.")
         except ValidationError as exc:
-            self.message_user(request, f"Manual debit failed: {exc}", level="error")
+            self.message_user(request, str(exc), level="error")
 
-    def get_readonly_fields(self, request, obj=None):
-        if obj:
-            return self.readonly_fields + (
-                "user",
-                "tx_type",
-                "amount",
-                "status",
-                "payment_method",
-                "reference",
-                "tx_hash",
-                "wallet_address_used",
-                "approved_by",
-            )
-        return self.readonly_fields
 
-    def save_model(self, request, obj, form, change):
-        """Honor admin edits prior to approval via the service layer for safety."""
-        if change and obj.pk:
-            original = Transaction.objects.select_related("user").get(pk=obj.pk)
-            new_status = form.cleaned_data.get("status") if hasattr(form, "cleaned_data") else None
-            notes = form.cleaned_data.get("notes", "") if hasattr(form, "cleaned_data") else ""
-
-            editable_fields = [
-                "amount",
-                "payment_method",
-                "reference",
-                "tx_hash",
-                "wallet_address_used",
-                "notes",
-            ]
-
-            changed = []
-            if hasattr(form, "cleaned_data"):
-                for field in editable_fields:
-                    if field in form.cleaned_data:
-                        new_val = form.cleaned_data[field]
-                        if getattr(original, field) != new_val:
-                            setattr(original, field, new_val)
-                            changed.append(field)
-                if changed:
-                    original.save(update_fields=changed + ["updated_at"])
-                    AdminAuditLog.objects.create(
-                        admin=request.user,
-                        entity="transaction",
-                        entity_id=str(original.id),
-                        action="update",
-                        notes=f"Fields changed before status update: {', '.join(changed)}",
-                    )
-
-            if original.status == "pending" and new_status == "approved":
-                approve_transaction(
-                    original,
-                    request.user,
-                    notes or f"Approved via admin edit by {request.user.email}",
-                )
-                messages.success(
-                    request,
-                    f"Transaction {original.id} approved and wallet credited using amount ${original.amount}.",
-                )
-                return
-
-            if original.status == "pending" and new_status == "rejected":
-                reject_transaction(
-                    original,
-                    request.user,
-                    notes or f"Rejected via admin edit by {request.user.email}",
-                )
-                messages.info(request, f"Transaction {original.id} rejected.")
-                return
-
-        return super().save_model(request, obj, form, change)
-
+# ------------------------------------------------------------------
+# AUDIT LOG (READ ONLY)
+# ------------------------------------------------------------------
 
 @admin.register(AdminAuditLog)
 class AdminAuditLogAdmin(admin.ModelAdmin):
     list_display = ("admin", "entity", "entity_id", "action", "created_at")
-    list_filter = ("entity", "action", "created_at", "admin")
-    search_fields = ("admin__email", "entity_id", "notes")
     readonly_fields = (
         "id",
         "admin",
@@ -452,7 +237,6 @@ class AdminAuditLogAdmin(admin.ModelAdmin):
         "notes",
         "created_at",
     )
-    date_hierarchy = "created_at"
 
     def has_add_permission(self, request):
         return False

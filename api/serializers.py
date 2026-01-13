@@ -179,7 +179,9 @@ class TransactionSerializer(serializers.ModelSerializer):
                 )
 
             return attrs
-P    class Meta:
+
+
+class Meta:
         model = Transaction
         fields = [
             "id",

@@ -1,6 +1,57 @@
+
+
+
+from decimal import Decimal
+from django.db.models import Sum
+from django.apps import apps
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
+
+
+UserInvestment = apps.get_model("investments", "UserInvestment")
+DailyRoiPayout = apps.get_model("investments", "DailyRoiPayout")
+UserWallet = apps.get_model("users", "UserWallet")
+
+
+class DashboardOverview(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        u = request.user
+
+        # Wallet (source of truth)
+        wallet_balance = (
+            UserWallet.objects.filter(user=u).values_list("balance", flat=True).first()
+            or Decimal("0.00")
+        )
+
+        # Active principal only
+        principal_total = (
+            UserInvestment.objects.filter(user=u, status="active")
+            .aggregate(total=Sum("amount"))["total"]
+            or Decimal("0.00")
+        )
+
+        # Profit from payouts only (do NOT mix with principal)
+        roi_total = (
+            DailyRoiPayout.objects.filter(investment__user=u)
+            .aggregate(total=Sum("amount"))["total"]
+            or Decimal("0.00")
+        )
+
+        return Response({
+            "wallet_balance": str(wallet_balance),
+            "principal_total": str(principal_total),
+            "roi_total": str(roi_total),
+            # Optional UI cards: if you keep them, make clear they are legacy-incomplete
+            "total_deposits": "0.00",
+            "total_withdrawals": "0.00",
+        })
+
+
 
 from referrals.models import Referral, ReferralCode, ReferralReward
 

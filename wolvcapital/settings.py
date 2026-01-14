@@ -56,6 +56,7 @@ ALLOWED_HOSTS = ["*"]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.railway.app",
+    "https://solid-succotash-production.up.railway.app",
     "https://wolvcapital.com",
     "https://www.wolvcapital.com",
 ]
@@ -65,10 +66,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "https://wolvcapital.com",
     "https://www.wolvcapital.com",
+    "https://solid-succotash-production.up.railway.app",
 ]
 
 CORS_ALLOWED_ORIGIN_REGEXES: list[str] = [
     r"^https://.*\\.vercel\\.app$",
+    # Add more frontend deploy domains here if needed
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -578,7 +581,7 @@ SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_SAMESITE = "Lax"
 CSRF_USE_SESSIONS = False
-CSRF_COOKIE_HTTPONLY = False
+# Do not override CSRF_COOKIE_HTTPONLY here; keep it True for security
 
 # Session basics
 SESSION_ENGINE = (

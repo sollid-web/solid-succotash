@@ -126,7 +126,7 @@ class UserInvestmentSerializer(serializers.ModelSerializer):
 
 
 class TransactionSerializer(serializers.ModelSerializer):
-        def validate(self, attrs):
+    def validate(self, attrs):
             """
             Enforce: withdrawals allowed ONLY from profit of EXPIRED plans.
             """
@@ -178,10 +178,10 @@ class TransactionSerializer(serializers.ModelSerializer):
                     {"amount": f"Insufficient withdrawable profit. Available: {available:.2f}"}
                 )
 
-            return attrs
 
+        return attrs
 
-class Meta:
+    class Meta:
         model = Transaction
         fields = [
             "id",

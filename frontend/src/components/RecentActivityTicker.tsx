@@ -106,10 +106,10 @@ function generateRandomActivity(plans: string[]): Activity {
 // --- Component: single activity view with stylish animation (30s default interval) ---
 const RecentActivitySingle: React.FC<Props> = ({
   plans = DEFAULT_PLANS,
-  minIntervalMs = 30000, // default fixed to 30 seconds
-  maxIntervalMs = 30000, // default fixed to 30 seconds
+  minIntervalMs = 80000, // default fixed to 30 seconds
+  maxIntervalMs = 90000, // default fixed to 30 seconds
   soundPath = "/sounds/chime.wav",
-  soundVolume = 0.35,
+  soundVolume = 0.10,
   preventRepeatMs = 2000,
   initialDelayMs = 800,
   className,

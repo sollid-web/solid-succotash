@@ -136,6 +136,10 @@ class Transaction(models.Model):
                 check=models.Q(amount__gt=Decimal("0.00")),
                 name="positive_transaction_amount",
             ),
+            models.UniqueConstraint(
+                fields=["reference"],
+                name="uniq_transaction_reference",
+            ),
         ]
         indexes = [
             models.Index(fields=["user", "status"]),

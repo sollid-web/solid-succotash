@@ -125,27 +125,20 @@ class UserInvestment(models.Model):
 
 
 class DailyRoiPayout(models.Model):
-    investment = models.ForeignKey(
-        UserInvestment,
-        on_delete=models.CASCADE,
-        related_name="daily_payouts",
-    )
+    investment = models.ForeignKey(UserInvestment, on_delete=models.CASCADE)
     payout_date = models.DateField()
-    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    amount = models.DecimalField(max_digits=18, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
-    processed_at = models.DateTimeField(
-        null=True,
-        blank=True,
-        help_text="When this payout was credited to wallet (idempotency)",
-    )
-    transaction_id = models.UUIDField(
-        null=True,
-        blank=True,
-        help_text="Related completed Transaction record",
-    )
+    credited_at = models.DateTimeField(null=True, blank=True, help_text="When this payout was credited to wallet")
+    credited_tx = models.UUIDField(null=True, blank=True, help_text="Related Transaction record")
 
     class Meta:
-        unique_together = ("investment", "payout_date")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["investment", "payout_date"],
+                name="uniq_roi_payout_per_investment_per_day",
+            )
+        ]
         ordering = ["-payout_date", "-created_at"]
 
     def __str__(self):

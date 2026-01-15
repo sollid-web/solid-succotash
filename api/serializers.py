@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from attr import attrs
 from django.db.models import Sum
 from django.utils import timezone
 from rest_framework import serializers
@@ -178,8 +179,7 @@ class TransactionSerializer(serializers.ModelSerializer):
                     {"amount": f"Insufficient withdrawable profit. Available: {available:.2f}"}
                 )
 
-
-        return attrs
+            return attrs
 
     class Meta:
         model = Transaction

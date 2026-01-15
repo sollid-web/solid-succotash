@@ -5,6 +5,10 @@ from typing import cast
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.utils import timezone
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+from django.utils import timezone
 
 from transactions.models import AdminAuditLog
 from transactions.notifications import create_admin_notification
@@ -299,79 +303,63 @@ def recalculate_investment_end_date(
     return investment
 
 
+
 @transaction.atomic
 def credit_roi_payout(payout, actor: User = None):
     """
     Record daily ROI profit for an investment.
-    
-    Creates a completed profit transaction WITHOUT crediting wallet.
-    Profit stays locked during active plan, becomes withdrawable after expiry.
-    Idempotent: returns existing transaction ID if already processed.
-    
-    Args:
-        payout: DailyRoiPayout instance
-        actor: Optional User who triggered the credit (for audit)
-    
-    Returns:
-        UUID of the created/existing Transaction
-    """
 
+    Creates a completed profit transaction WITHOUT crediting wallet.
+    Profit stays locked during active plan; wallet release handled elsewhere.
+
+    Idempotent:
+    - If payout already has credited_at/credited_tx, returns it.
+    - Locks payout row to prevent concurrent double-processing.
+    """
     from .models import DailyRoiPayout
     from transactions.models import Transaction
-    from django.utils import timezone
+
+    # Lock the payout row first (strongest guarantee)
+    payout = DailyRoiPayout.objects.select_for_update().select_related(
+        "investment", "investment__user"
+    ).get(pk=payout.pk)
+
+    # Idempotent exit
+    if payout.credited_at and payout.credited_tx:
+        return payout.credited_tx
 
     inv = payout.investment
-    now = timezone.now()
+    investment_user = inv.user
 
-    # ROI for ACTIVE plans must never credit wallet.
-    # We still record the payout + transaction as "profit" (locked).
-    is_active = bool(inv.ends_at and now < inv.ends_at)
+    # Make a UNIQUE reference per payout (prevents duplicates if retried)
+    ref = f"ROI:{payout.id}"  # or f"ROI:{inv.id}:{payout.payout_date.isoformat()}"
 
-    # Early exit if already processed (idempotency)
-    if payout.processed_at:
-        return payout.transaction_id
-
-    # Lock the payout row
-    payout = DailyRoiPayout.objects.select_for_update().get(pk=payout.pk)
-
-    # Double-check inside transaction
-    if payout.processed_at:
-        return payout.transaction_id
-
-    investment_user = cast(User, payout.investment.user)
-
-    # Create completed profit transaction (wallet untouched)
+    # Create transaction (profit locked; wallet untouched)
     txn = Transaction.objects.create(
         user=investment_user,
-        investment=payout.investment,
+        investment=inv,
         tx_type="profit",
         payment_method="bank_transfer",
         amount=payout.amount,
         status="completed",
-        reference=f"Daily ROI for investment #{payout.investment_id}",
-        notes=f"Daily profit (locked until plan expires)",
+        reference=ref,
+        notes=f"Daily profit locked until plan expires (payout_date={payout.payout_date})",
     )
 
-    # Do NOT credit wallet for ROI payouts (profit stays locked in records).
-    # Wallet release (if any) must be handled separately on plan expiry/withdrawal rules.
-    pass
-    
     # Mark payout as processed
-    payout.processed_at = timezone.now()
-    payout.transaction_id = txn.id
-    payout.save(update_fields=["processed_at", "transaction_id"])
-    
-    # Create audit log only if actor provided
+    payout.credited_at = timezone.now()
+    payout.credited_tx = txn.id
+    payout.save(update_fields=["credited_at", "credited_tx"])
+
+    # Optional audit log (only if actor provided)
     if actor:
+        from audits.models import AdminAuditLog  # adjust import path
         AdminAuditLog.objects.create(
             admin=actor,
             entity="roi_payout",
             entity_id=str(payout.id),
-            action="auto_credit",
-            notes=f"ROI payout auto-credited: ${payout.amount} for investment {payout.investment_id}",
+            action="profit_recorded",
+            notes=f"ROI payout recorded: {payout.amount} for investment {inv.id} on {payout.payout_date}",
         )
-    
-    # Note: No wallet notification since balance isn't updated
-    # Profit is recorded but locked until investment expires
-    
+
     return txn.id

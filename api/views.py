@@ -1,4 +1,5 @@
 import hashlib
+from decimal import Decimal
 
 from django.apps import apps
 from django.conf import settings
@@ -6,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.cache import cache
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import connection
-from django.db.models import Count
+from django.db.models import Count, Sum
 from django.db.models.functions import TruncDate
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -24,7 +25,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.models import Agreement, SupportRequest, UserAgreementAcceptance
-from investments.models import InvestmentPlan, UserInvestment
+from investments.models import DailyRoiPayout, InvestmentPlan, UserInvestment
 from investments.services import (
     approve_investment,
     create_investment,
@@ -51,7 +52,6 @@ from users.services import (
 from users.verification import issue_verification_token, verify_token
 
 from .permissions import IsPlatformAdmin
-
 from .serializers import (
     AdminKycApplicationSerializer,
     AdminTransactionSerializer,
@@ -183,12 +183,16 @@ class TransactionViewSet(viewsets.ModelViewSet):
 class UserDashboardAnalyticsView(APIView):
     """Authenticated, user-scoped analytics for the dashboard.
 
-    Descriptive only (counts and statuses). No projections.
+    This endpoint is read-only analytics + summary fields for the current user.
+    It MUST be user-filtered (no RLS in DB).
     """
 
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
+        # ----------------------------
+        # Window selection (days)
+        # ----------------------------
         days_raw = request.query_params.get("days", "30")
         try:
             days = max(7, min(365, int(days_raw)))
@@ -198,22 +202,30 @@ class UserDashboardAnalyticsView(APIView):
         start_dt = timezone.now() - timezone.timedelta(days=days - 1)
         start_date = start_dt.date()
 
-        # CRITICAL: Always filter by user - RLS policies are NOT configured in database
-        # This ensures data isolation regardless of database vendor
+        # ----------------------------
+        # Querysets (always user-scoped)
+        # ----------------------------
         tx_qs = Transaction.objects.filter(user=request.user, created_at__date__gte=start_date)
         inv_qs = UserInvestment.objects.filter(user=request.user, created_at__date__gte=start_date)
 
+        # ----------------------------
+        # Activity over time (tx + investments created)
+        # ----------------------------
         tx_by_day = {
             row["day"]: row["count"]
-            for row in tx_qs.annotate(day=TruncDate("created_at"))
-            .values("day")
-            .annotate(count=Count("id"))
+            for row in (
+                tx_qs.annotate(day=TruncDate("created_at"))
+                .values("day")
+                .annotate(count=Count("id"))
+            )
         }
         inv_by_day = {
             row["day"]: row["count"]
-            for row in inv_qs.annotate(day=TruncDate("created_at"))
-            .values("day")
-            .annotate(count=Count("id"))
+            for row in (
+                inv_qs.annotate(day=TruncDate("created_at"))
+                .values("day")
+                .annotate(count=Count("id"))
+            )
         }
 
         activity_over_time = []
@@ -226,69 +238,185 @@ class UserDashboardAnalyticsView(APIView):
                 }
             )
 
+        # ----------------------------
+        # Transaction breakdown (counts)
+        # NOTE: profits must NOT be shown as withdrawals.
+        # ----------------------------
         tx_breakdown_rows = list(
-            tx_qs.values("tx_type").annotate(count=Count("id"))
+            Transaction.objects.filter(user=request.user)
+            .values("tx_type")
+            .annotate(count=Count("id"))
         )
+
         deposits = 0
         withdrawals = 0
+        profits = 0
         for row in tx_breakdown_rows:
-            if row["tx_type"] == "deposit":
-                deposits = int(row["count"])
-            elif row["tx_type"] == "withdrawal":
-                withdrawals = int(row["count"])
+            t = row.get("tx_type")
+            c = int(row.get("count") or 0)
+            if t == "deposit":
+                deposits += c
+            elif t == "withdrawal":
+                withdrawals += c
+            elif t == "profit":
+                profits += c
 
+        # ----------------------------
+        # Investment status overview
+        # Your DB uses status='active' for running plans.
+        # ----------------------------
         inv_status_rows = list(
-            UserInvestment.objects.filter(user=request.user).values("status").annotate(count=Count("id"))
+            UserInvestment.objects.filter(user=request.user)
+            .values("status")
+            .annotate(count=Count("id"))
         )
+
         active = 0
         completed = 0
         pending = 0
         for row in inv_status_rows:
-            status_val = row["status"]
-            count_val = int(row["count"])
-            if status_val == "approved":
+            status_val = row.get("status")
+            count_val = int(row.get("count") or 0)
+            if status_val in {"active", "approved"}:
                 active += count_val
-            elif status_val == "completed":
+            elif status_val in {"completed", "expired"}:
                 completed += count_val
             elif status_val == "pending":
                 pending += count_val
 
+        # ----------------------------
+        # Recent activity (transactions + investments)
+        # Fix: profit must be labeled as ROI profit, not withdrawal.
+        # ----------------------------
         tx_recent = list(
             Transaction.objects.filter(user=request.user)
             .order_by("-created_at")
-            .values("created_at", "tx_type", "status")[:10]
+            .values("created_at", "tx_type", "status", "amount", "reference")[:10]
         )
         inv_recent = list(
             UserInvestment.objects.filter(user=request.user)
             .select_related("plan")
             .order_by("-created_at")
-            .values("created_at", "status", "plan__name")[:10]
+            .values("created_at", "status", "amount", "plan__name", "started_at", "ends_at")[:10]
         )
+
+        tx_label_map = {
+            "deposit": "Deposit",
+            "withdrawal": "Withdrawal",
+            "profit": "ROI Profit (Locked)",
+        }
 
         recent_activity = []
         for row in tx_recent:
-            created_at = row["created_at"]
-            tx_type = row["tx_type"]
+            created_at = row.get("created_at")
+            tx_type = row.get("tx_type")
+            label = tx_label_map.get(tx_type, (tx_type or "transaction").replace("_", " ").title())
             recent_activity.append(
                 {
                     "date": created_at.isoformat() if created_at else "",
-                    "action_type": "Deposit" if tx_type == "deposit" else "Withdrawal",
-                    "status": row["status"],
+                    "action_type": label,
+                    "status": row.get("status"),
+                    "amount": str(row.get("amount") or Decimal("0.00")),
+                    "reference": row.get("reference") or "",
                 }
             )
         for row in inv_recent:
-            created_at = row["created_at"]
+            created_at = row.get("created_at")
             plan_name = row.get("plan__name") or "Investment"
             recent_activity.append(
                 {
                     "date": created_at.isoformat() if created_at else "",
-                    "action_type": f"Investment ({plan_name})",
-                    "status": row["status"],
+                    "action_type": f"Plan: {plan_name}",
+                    "status": row.get("status"),
+                    "amount": str(row.get("amount") or Decimal("0.00")),
+                    "reference": "",
                 }
             )
 
-        recent_activity.sort(key=lambda x: x["date"], reverse=True)
-        recent_activity = recent_activity[:10]
+        # Keep activity list short and sorted (most recent first)
+        recent_activity = sorted(
+            recent_activity,
+            key=lambda x: x.get("date") or "",
+            reverse=True,
+        )[:10]
+
+        # ----------------------------
+        # Summary totals for dashboard cards
+        # - wallet_balance: actual withdrawable wallet balance
+        # - total_invested: sum of active/approved investments
+        # - locked_profit_total: sum of profit transactions (ROI locked)
+        # - active_investments: details for plan cards
+        # ----------------------------
+        wallet, _ = UserWallet.objects.get_or_create(user=request.user)
+        wallet_balance = getattr(wallet, "balance", Decimal("0.00")) or Decimal("0.00")
+
+        active_invs = (
+            UserInvestment.objects.filter(user=request.user, status__in=["active", "approved"])
+            .select_related("plan")
+            .order_by("-started_at", "-created_at")
+        )
+
+        total_invested = active_invs.aggregate(total=Sum("amount")).get("total") or Decimal("0.00")
+
+        locked_profit_total = (
+            Transaction.objects.filter(user=request.user, tx_type="profit", status="completed")
+            .aggregate(total=Sum("amount"))
+            .get("total")
+            or Decimal("0.00")
+        )
+
+        today = timezone.now().date()
+        active_investments = []
+        for inv in active_invs:
+            if not inv.plan or not inv.started_at or not inv.ends_at:
+                continue
+
+            start = inv.started_at.date()
+            end = inv.ends_at.date()
+            duration_days = max((end - start).days, 0)
+
+            days_elapsed = (today - start).days + 1
+            if days_elapsed < 0:
+                days_elapsed = 0
+            if duration_days and days_elapsed > duration_days:
+                days_elapsed = duration_days
+            days_left = max(duration_days - days_elapsed, 0)
+
+            daily_roi_percent = Decimal(str(inv.plan.daily_roi or 0))
+            daily_earnings = (inv.amount * (daily_roi_percent / Decimal("100"))).quantize(Decimal("0.01"))
+
+            earned = (
+                DailyRoiPayout.objects.filter(investment=inv)
+                .aggregate(total=Sum("amount"))
+                .get("total")
+                or Decimal("0.00")
+            ).quantize(Decimal("0.01"))
+
+            expected_profit = (daily_earnings * Decimal(duration_days)).quantize(Decimal("0.01"))
+            expected_total = (inv.amount + expected_profit).quantize(Decimal("0.01"))
+
+            progress_percent = 0
+            if duration_days > 0:
+                progress_percent = int((Decimal(days_elapsed) / Decimal(duration_days)) * Decimal("100"))
+
+            active_investments.append(
+                {
+                    "id": str(inv.id),
+                    "plan_name": inv.plan.name,
+                    "status": inv.status,
+                    "amount": str(inv.amount),
+                    "daily_roi_percent": str(daily_roi_percent),
+                    "daily_earnings": str(daily_earnings),
+                    "started_at": inv.started_at.isoformat(),
+                    "ends_at": inv.ends_at.isoformat(),
+                    "duration_days": duration_days,
+                    "days_elapsed": days_elapsed,
+                    "days_left": days_left,
+                    "progress_percent": progress_percent,
+                    "total_earned_locked": str(earned),
+                    "expected_total": str(expected_total),
+                }
+            )
 
         return Response(
             {
@@ -297,6 +425,7 @@ class UserDashboardAnalyticsView(APIView):
                 "transaction_breakdown": {
                     "deposits": deposits,
                     "withdrawals": withdrawals,
+                    "profits": profits,
                 },
                 "investment_status_overview": {
                     "active": active,
@@ -304,6 +433,11 @@ class UserDashboardAnalyticsView(APIView):
                     "pending": pending,
                 },
                 "recent_activity": recent_activity,
+                # Dashboard cards (NEW)
+                "wallet_balance": str(Decimal(wallet_balance).quantize(Decimal("0.01"))),
+                "total_invested": str(Decimal(total_invested).quantize(Decimal("0.01"))),
+                "locked_profit_total": str(Decimal(locked_profit_total).quantize(Decimal("0.01"))),
+                "active_investments": active_investments,
                 "scoping": {
                     "db_vendor": connection.vendor,
                     "user_filtered": True,

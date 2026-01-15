@@ -1,5 +1,9 @@
+from decimal import Decimal
+
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
+from django.db import transaction
+from django.db.models import F
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import format_html
@@ -13,9 +17,43 @@ from transactions.models import (
 )
 from transactions.services import (
     approve_transaction,
-    reject_transaction,
     create_transaction,
+    reject_transaction,
 )
+from users.models import UserWallet
+
+# ------------------------------------------------------------------
+# WALLET HELPERS (ADMIN FINANCE WORKFLOW)
+# ------------------------------------------------------------------
+
+
+def _get_wallet_for_update(user):
+    """Get (or create) the user's wallet and lock the row for safe balance updates."""
+    wallet, _ = UserWallet.objects.select_for_update().get_or_create(user=user)
+    return wallet
+
+
+def _credit_wallet(user, amount):
+    """Credit user wallet by amount (atomic safe update)."""
+    if amount is None or amount <= Decimal("0.00"):
+        raise ValidationError("Invalid amount for wallet credit.")
+    _get_wallet_for_update(user)
+    UserWallet.objects.filter(user=user).update(balance=F("balance") + amount)
+
+
+def _debit_wallet(user, amount):
+    """Debit user wallet by amount, enforcing sufficient funds."""
+    if amount is None or amount <= Decimal("0.00"):
+        raise ValidationError("Invalid amount for wallet debit.")
+    wallet = _get_wallet_for_update(user)
+    wallet.refresh_from_db(fields=["balance"])
+    current = wallet.balance or Decimal("0.00")
+    if current < amount:
+        raise ValidationError(
+            f"Insufficient wallet balance. Wallet balance is ${current}; withdrawal requires ${amount}."
+        )
+    UserWallet.objects.filter(pk=wallet.pk).update(balance=F("balance") - amount)
+
 
 # ------------------------------------------------------------------
 # ADMIN NOTIFICATIONS
@@ -158,17 +196,38 @@ class TransactionAdmin(admin.ModelAdmin):
 
     @admin.action(description="Approve selected (SAFE)")
     def admin_approve(self, request, queryset):
+
         success, failed = 0, 0
+        # Approval must also update the user's wallet balance.
+        # Otherwise deposits look "approved" but wallet stays $0.00 and users cannot invest.
         for tx in queryset.filter(status="pending"):
             try:
-                approve_transaction(tx, request.user, "Approved via admin")
+                with transaction.atomic():
+                    # Lock tx row and wallet row in same transaction to prevent double credits/debits.
+                    tx = Transaction.objects.select_for_update().get(pk=tx.pk)
+
+                    if tx.status != "pending":
+                        continue
+
+                    # Withdrawals: enforce sufficient balance BEFORE approving.
+                    if tx.tx_type == "withdrawal":
+                        _debit_wallet(tx.user, tx.amount)
+                        approve_transaction(tx, request.user, "Approved via admin")
+                    # Deposits: approve then credit wallet.
+                    elif tx.tx_type == "deposit":
+                        approve_transaction(tx, request.user, "Approved via admin")
+                        _credit_wallet(tx.user, tx.amount)
+                    else:
+                        # profit/fee/etc: approve but don't touch wallet
+                        approve_transaction(tx, request.user, "Approved via admin")
+
                 success += 1
             except ValidationError as exc:
                 failed += 1
                 messages.error(request, f"{tx.id}: {exc}")
 
         if success:
-            messages.success(request, f"Approved {success} transaction(s).")
+            messages.success(request, f"Approved {success} transaction(s) and updated wallets where applicable.")
         if failed:
             messages.warning(request, f"{failed} failed.")
 
@@ -195,8 +254,10 @@ class TransactionAdmin(admin.ModelAdmin):
                 payment_method="admin_adjustment",
                 reference="Manual admin credit",
             )
-            approve_transaction(new_tx, request.user, "Manual credit")
-            self.message_user(request, "Wallet credited.")
+            with transaction.atomic():
+                approve_transaction(new_tx, request.user, "Manual credit")
+                _credit_wallet(new_tx.user, new_tx.amount)
+            self.message_user(request, "Wallet updated.")
         except ValidationError as exc:
             self.message_user(request, str(exc), level="error")
 
@@ -215,8 +276,10 @@ class TransactionAdmin(admin.ModelAdmin):
                 payment_method="admin_adjustment",
                 reference="Manual admin debit",
             )
-            approve_transaction(new_tx, request.user, "Manual debit")
-            self.message_user(request, "Wallet debited.")
+            with transaction.atomic():
+                _debit_wallet(new_tx.user, new_tx.amount)
+                approve_transaction(new_tx, request.user, "Manual debit")
+            self.message_user(request, "Wallet updated.")
         except ValidationError as exc:
             self.message_user(request, str(exc), level="error")
 

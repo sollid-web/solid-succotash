@@ -1,74 +1,43 @@
+from __future__ import annotations
+
 from datetime import timedelta
 from decimal import Decimal
 from typing import cast
 
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from django.utils import timezone
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
 from django.utils import timezone
 
 from transactions.models import AdminAuditLog
 from transactions.notifications import create_admin_notification
-from users.models import User, UserWallet
+from users.models import UserWallet
 
-from .models import InvestmentPlan, UserInvestment
+from .models import DailyRoiPayout, InvestmentPlan, UserInvestment
 
-
-def _ensure_aware(dt):
-    if dt is None:
-        return None
-    if timezone.is_aware(dt):
-
-
-        notify_investment_approved(cast(User, investment.user), investment, notes)
-        notify_wallet_debited(
-            cast(User, investment.user),
-            amount_decimal,
-            reason=f"Investment approved for {plan.name}",
-        )
-
-        from core.email_service import EmailService
-
-        EmailService.send_investment_notification(investment, "approved", notes)
-
-    if notify_admin:
-        from core.email_service import EmailService
-
-        try:
-            EmailService.send_admin_alert(
-                subject="Historical Investment Restored",
-                message=(
-                    f"Investment {investment.id} for user {user.email or user.username} "
-                    f"was restored as approved. Amount: ${amount_decimal}. "
-                    f"Plan: {plan.name}. Started: {started_at.isoformat()}."
-                ),
-            )
-        except Exception:
-            pass
-
-    return investment
+User = get_user_model()
 
 
 @transaction.atomic
 def approve_investment(
-    investment: UserInvestment, admin_user: User, notes: str = ""
+    investment: UserInvestment,
+    admin_user,
+    notes: str = "",
 ) -> UserInvestment:
+    """Approve a *pending* investment and debit the user's AVAILABLE wallet balance.
+
+    Money model:
+    - Wallet = AVAILABLE (spendable)
+    - Principal becomes LOCKED once investment is approved
     """
-    Approve an investment, set dates, and debit the user's wallet.
-    """
+
     if investment.status != "pending":
         raise ValidationError("Can only approve pending investments")
 
     investment_user = cast(User, investment.user)
 
-    # Lock the user's wallet row to keep balances consistent during approval
-    try:
-        wallet = UserWallet.objects.select_for_update().get(user=investment_user)
-    except UserWallet.DoesNotExist:
-        wallet = UserWallet.objects.create(user=investment_user)
+    # Lock wallet row to prevent race conditions.
+    wallet, _ = UserWallet.objects.select_for_update().get_or_create(user=investment_user)
 
     investment_amount = (
         investment.amount
@@ -78,18 +47,21 @@ def approve_investment(
 
     if wallet.balance < investment_amount:
         raise ValidationError(
-            f"Insufficient wallet balance for approval. Balance ${wallet.balance}, required ${investment_amount}"
+            f"Insufficient wallet balance for approval. "
+            f"Balance ${wallet.balance}, required ${investment_amount}"
         )
-    wallet.balance -= investment_amount
+
+    # Debit AVAILABLE wallet (principal becomes locked in investment)
+    wallet.balance = (wallet.balance - investment_amount).quantize(Decimal("0.01"))
     wallet.save(update_fields=["balance", "updated_at"])
 
-    # Set investment dates
+    # Set dates and mark approved
     investment.status = "approved"
     investment.started_at = timezone.now()
     investment.ends_at = investment.started_at + timedelta(days=investment.plan.duration_days)
-    investment.save()
+    investment.save(update_fields=["status", "started_at", "ends_at"])
 
-    # Create audit log
+    # Audit log
     AdminAuditLog.objects.create(
         admin=admin_user,
         entity="investment",
@@ -98,43 +70,44 @@ def approve_investment(
         notes=notes,
     )
 
-    # Mark related admin notifications as resolved
-    from transactions.models import AdminNotification
-
-    AdminNotification.objects.filter(
-        entity_type="investment", entity_id=str(investment.id), is_resolved=False
-    ).update(is_resolved=True, resolved_by=admin_user, resolved_at=timezone.now())
-
-    # Send user notification (in-app)
-    from users.notification_service import notify_investment_approved
-
-    notify_investment_approved(investment_user, investment, notes)
-
-    from users.notification_service import notify_wallet_debited
-
-    notify_wallet_debited(
-        investment_user,
-        investment_amount,
-        reason=f"Investment approved for {investment.plan.name}",
-    )
-
-    # Send email notification
-    from core.email_service import EmailService
-
-    EmailService.send_investment_notification(investment, "approved", notes)
-
-    # Admin email alert for investment approval (manual oversight)
+    # Resolve admin notifications (if present)
     try:
+        from transactions.models import AdminNotification
+
+        AdminNotification.objects.filter(
+            entity_type="investment",
+            entity_id=str(investment.id),
+            is_resolved=False,
+        ).update(is_resolved=True, resolved_by=admin_user, resolved_at=timezone.now())
+    except Exception:
+        pass
+
+    # In-app notifications
+    try:
+        from users.notification_service import notify_investment_approved, notify_wallet_debited
+
+        notify_investment_approved(investment_user, investment, notes)
+        notify_wallet_debited(
+            investment_user,
+            investment_amount,
+            reason=f"Investment approved for {investment.plan.name}",
+        )
+    except Exception:
+        pass
+
+    # Email notification (do not break flow if email fails)
+    try:
+        from core.email_service import EmailService
+
+        EmailService.send_investment_notification(investment, "approved", notes)
         EmailService.send_admin_alert(
             subject="Investment Approved",
             message=(
-                "Investment "
-                f"{investment.id} for user {investment_user.email} was approved. "
+                f"Investment {investment.id} for user {investment_user.email} was approved. "
                 f"Amount: ${investment_amount}. Plan: {investment.plan.name}."
             ),
         )
     except Exception:
-        # Do not break approval flow if admin alert fails
         pass
 
     return investment
@@ -142,21 +115,20 @@ def approve_investment(
 
 @transaction.atomic
 def reject_investment(
-    investment: UserInvestment, admin_user: User, notes: str = ""
+    investment: UserInvestment,
+    admin_user,
+    notes: str = "",
 ) -> UserInvestment:
-    """
-    Reject an investment.
-    """
+    """Reject a *pending* investment."""
+
     if investment.status != "pending":
         raise ValidationError("Can only reject pending investments")
 
     investment_user = cast(User, investment.user)
 
-    # Update investment
     investment.status = "rejected"
-    investment.save()
+    investment.save(update_fields=["status"])
 
-    # Create audit log
     AdminAuditLog.objects.create(
         admin=admin_user,
         entity="investment",
@@ -165,32 +137,33 @@ def reject_investment(
         notes=notes,
     )
 
-    # Mark related admin notifications as resolved
-    from transactions.models import AdminNotification
-
-    AdminNotification.objects.filter(
-        entity_type="investment", entity_id=str(investment.id), is_resolved=False
-    ).update(is_resolved=True, resolved_by=admin_user, resolved_at=timezone.now())
-
-    # Send user notification (in-app)
-    from users.notification_service import notify_investment_rejected
-
-    notify_investment_rejected(investment_user, investment, notes)
-
-    # Send email notification
-    from core.email_service import EmailService
-
-    EmailService.send_investment_notification(investment, "rejected", notes)
-
-    # Admin email alert for investment rejection (manual oversight)
     try:
+        from transactions.models import AdminNotification
+
+        AdminNotification.objects.filter(
+            entity_type="investment",
+            entity_id=str(investment.id),
+            is_resolved=False,
+        ).update(is_resolved=True, resolved_by=admin_user, resolved_at=timezone.now())
+    except Exception:
+        pass
+
+    try:
+        from users.notification_service import notify_investment_rejected
+
+        notify_investment_rejected(investment_user, investment, notes)
+    except Exception:
+        pass
+
+    try:
+        from core.email_service import EmailService
+
+        EmailService.send_investment_notification(investment, "rejected", notes)
         EmailService.send_admin_alert(
             subject="Investment Rejected",
             message=(
-                "Investment "
-                f"{investment.id} for user {investment_user.email} was rejected. "
-                f"Amount: ${investment.amount}. Plan: {investment.plan.name}. "
-                f"Notes: {notes or 'N/A'}."
+                f"Investment {investment.id} for user {investment_user.email} was rejected. "
+                f"Amount: ${investment.amount}. Plan: {investment.plan.name}. Notes: {notes or 'N/A'}."
             ),
         )
     except Exception:
@@ -200,31 +173,28 @@ def reject_investment(
 
 
 def create_investment(
-    user: User,
+    user,
     plan: InvestmentPlan,
-    amount: float,
+    amount: float | Decimal,
 ) -> UserInvestment:
-    """
-    Create a new investment request and notify admins.
-    """
-    amount_decimal = (
-        amount if isinstance(amount, Decimal) else Decimal(str(amount))
-    )
-    amount_display = amount_decimal.quantize(Decimal("0.01"))
+    """Create a new *pending* investment request.
 
-    # Validate amount within plan limits
-    if amount_decimal < plan.min_amount:
-        raise ValidationError(
-            f"Minimum investment amount is ${plan.min_amount}"
-        )
+    IMPORTANT:
+    - This does NOT debit the wallet.
+    - Wallet is debited ONLY on approve_investment() (admin workflow).
+    """
 
-    if amount_decimal > plan.max_amount:
-        raise ValidationError(
-            f"Maximum investment amount is ${plan.max_amount}"
-        )
+    amount_decimal = amount if isinstance(amount, Decimal) else Decimal(str(amount))
+    amount_decimal = amount_decimal.quantize(Decimal("0.01"))
 
     if amount_decimal <= 0:
         raise ValidationError("Investment amount must be positive")
+
+    if amount_decimal < plan.min_amount:
+        raise ValidationError(f"Minimum investment amount is ${plan.min_amount}")
+
+    if amount_decimal > plan.max_amount:
+        raise ValidationError(f"Maximum investment amount is ${plan.max_amount}")
 
     wallet, _ = UserWallet.objects.get_or_create(user=user)
     if wallet.balance < amount_decimal:
@@ -237,15 +207,15 @@ def create_investment(
         user=user,
         plan=plan,
         amount=amount_decimal,
+        status="pending",
     )
 
-    # Create admin notification
+    # Admin notification
     priority = "high" if amount_decimal >= Decimal("15000") else "medium"
-    title = f"New Investment Request: ${amount_display}"
+    title = f"New Investment Request: ${amount_decimal}"
     message = (
-        f"User {user.email} has submitted an investment request for "
-        f"${amount_display} in the {plan.name} plan "
-        f"({plan.daily_roi}% daily for {plan.duration_days} days)."
+        f"User {getattr(user, 'email', None) or getattr(user, 'username', '')} submitted an investment request for "
+        f"${amount_decimal} in the {plan.name} plan ({plan.daily_roi}% daily for {plan.duration_days} days)."
     )
 
     create_admin_notification(
@@ -258,10 +228,13 @@ def create_investment(
         priority=priority,
     )
 
-    # Send email notification for investment creation
-    from core.email_service import EmailService
+    # User email (optional)
+    try:
+        from core.email_service import EmailService
 
-    EmailService.send_investment_notification(investment, "created")
+        EmailService.send_investment_notification(investment, "created")
+    except Exception:
+        pass
 
     return investment
 
@@ -270,13 +243,10 @@ def create_investment(
 def recalculate_investment_end_date(
     *,
     investment: UserInvestment,
-    admin_user: User,
+    admin_user,
     notes: str = "",
 ) -> UserInvestment:
-    """Recalculate `ends_at` from `started_at + plan.duration_days`.
-
-    Intended for controlled administrative corrections when plan terms were
-    previously mis-seeded or when end dates are inconsistent.
+    """Recalculate ends_at from started_at + duration_days.
 
     This does NOT change wallet balances.
     """
@@ -303,23 +273,16 @@ def recalculate_investment_end_date(
     return investment
 
 
-
 @transaction.atomic
-def credit_roi_payout(payout, actor: User = None):
-    """
-    Record daily ROI profit for an investment.
+def credit_roi_payout(payout: DailyRoiPayout, actor=None):
+    """Record daily ROI profit for an investment WITHOUT crediting wallet.
 
-    Creates a completed profit transaction WITHOUT crediting wallet.
-    Profit stays locked during active plan; wallet release handled elsewhere.
-
-    Idempotent:
-    - If payout already has credited_at/credited_tx, returns it.
-    - Locks payout row to prevent concurrent double-processing.
+    Profit stays LOCKED while the plan is active.
+    Wallet release should be handled separately when the investment expires.
     """
-    from .models import DailyRoiPayout
+
     from transactions.models import Transaction
 
-    # Lock the payout row first (strongest guarantee)
     payout = DailyRoiPayout.objects.select_for_update().select_related(
         "investment", "investment__user"
     ).get(pk=payout.pk)
@@ -331,10 +294,9 @@ def credit_roi_payout(payout, actor: User = None):
     inv = payout.investment
     investment_user = inv.user
 
-    # Make a UNIQUE reference per payout (prevents duplicates if retried)
-    ref = f"ROI:{payout.id}"  # or f"ROI:{inv.id}:{payout.payout_date.isoformat()}"
+    # Unique per payout
+    ref = f"ROI:{payout.id}"
 
-    # Create transaction (profit locked; wallet untouched)
     txn = Transaction.objects.create(
         user=investment_user,
         investment=inv,
@@ -346,14 +308,11 @@ def credit_roi_payout(payout, actor: User = None):
         notes=f"Daily profit locked until plan expires (payout_date={payout.payout_date})",
     )
 
-    # Mark payout as processed
     payout.credited_at = timezone.now()
     payout.credited_tx = txn.id
     payout.save(update_fields=["credited_at", "credited_tx"])
 
-    # Optional audit log (only if actor provided)
     if actor:
-        from audits.models import AdminAuditLog  # adjust import path
         AdminAuditLog.objects.create(
             admin=actor,
             entity="roi_payout",

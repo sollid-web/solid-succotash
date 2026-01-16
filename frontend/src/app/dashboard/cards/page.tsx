@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { getApiBaseUrl } from '@/lib/config'
+import { getApiBaseUrl } from '@/lib/api'
 
 type Card = {
   id: string

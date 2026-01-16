@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { getApiBaseUrl } from "@/lib/config"
+import { getApiBaseUrl } from "@/lib/api"
 
 interface SummaryData {
   code: string

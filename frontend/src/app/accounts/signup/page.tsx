@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getApiBaseUrl } from '@/lib/config'
+import { getApiBaseUrl } from '@/lib/api'
 import { useRouter } from 'next/navigation'
 
 export default function SignupPage() {

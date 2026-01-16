@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { getApiBaseUrl } from '@/lib/config'
+import { getApiBaseUrl } from '@/lib/api'
 
 type Card = {
   id: string

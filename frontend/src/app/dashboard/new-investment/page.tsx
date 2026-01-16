@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { getApiBaseUrl } from '@/lib/config'
+import { getApiBaseUrl } from '@/lib/api'
 import Link from 'next/link'
 
 interface Plan {

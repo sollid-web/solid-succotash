@@ -1,947 +1,428 @@
-'use client'
+"use client";
 
-import { useEffect, useMemo, useState } from 'react'
-import Link from 'next/link'
-import FlipCard from '@/components/FlipCard'
-import AccountVerificationStatus from '@/components/AccountVerificationStatus'
-import { getApiBaseUrl } from '@/lib/config'
-import ChartCard from '@/components/dashboard/ChartCard'
-import ActivityOverTimeChart, {
-  type ActivityOverTimePoint,
-} from '@/components/dashboard/ActivityOverTimeChart'
-import TransactionBreakdownDonut from '@/components/dashboard/TransactionBreakdownDonut'
-import InvestmentStatusOverview from '@/components/dashboard/InvestmentStatusOverview'
-import RecentActivityTable, {
-  type RecentActivityRow,
-} from '@/components/dashboard/RecentActivityTable'
+import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 
-interface UserData {
-  id: number
-  email: string
-  first_name: string
-  last_name: string
-  is_staff: boolean
-  is_superuser: boolean
-}
+
+import { getApiBaseUrl } from "@/lib/api";
+/**
+ * Dashboard (simple + stable)
+ * - No custom components (FlipCard / ChartCard / Recharts)
+ * - Dedicated "Locked ROI" card
+ * - Active plans list with details
+ */
 
 interface WalletData {
-  balance: string
-  total_deposits: string
-  total_withdrawals: string
+  balance: number;
+  total_deposits: number;
+  total_withdrawals: number;
 }
 
-interface InvestmentPlanDetails {
-  id: number
-  name: string
-  description?: string
-  daily_roi: string
-  duration_days: number
-  min_amount?: string
-  max_amount?: string
-}
+type TxType =
+  | "deposit"
+  | "withdrawal"
+  | "profit"
+  | "investment"
+  | "bonus"
+  | "fee"
+  | string;
 
-
-type InvestmentLifecycleStatus = "ACTIVE" | "COMPLETED" | "UPCOMING"
-
-interface Investment {
-  id: number
-  plan_name?: string
-  amount: string
-  status: string
-  created_at: string
-  started_at: string
-  ends_at: string
-  daily_roi?: string
-  duration_days?: number
-  plan?: InvestmentPlanDetails
-  derived_status: InvestmentLifecycleStatus
-}
+type TxStatus =
+  | "pending"
+  | "approved"
+  | "completed"
+  | "rejected"
+  | "failed"
+  | string;
 
 interface Transaction {
-  id: string
-  tx_type: 'deposit' | 'withdrawal'
-  amount: string
-  reference: string
-  payment_method: string
-  tx_hash: string
-  wallet_address_used: string
-  status: 'pending' | 'approved' | 'rejected'
-  created_at: string
-  updated_at: string
+  id: string;
+  tx_type: TxType;
+  amount: number;
+  status: TxStatus;
+  created_at: string;
+  reference?: string;
+  description?: string;
 }
 
-interface DashboardAnalyticsResponse {
-  activity_over_time: ActivityOverTimePoint[]
-  transaction_breakdown: {
-    deposits: number
-    withdrawals: number
-  }
-  investment_status_overview: {
-    active: number
-    completed: number
-    pending: number
-  }
-  recent_activity: RecentActivityRow[]
+interface Plan {
+  name?: string;
+  daily_roi?: number;
+  roi_rate?: number;
+  duration_days?: number;
+}
+
+interface Investment {
+  id: number | string;
+  amount: number;
+  status: string;
+  created_at?: string;
+  started_at?: string;
+  ends_at?: string;
+
+  // Some APIs return a nested plan
+  plan?: Plan;
+
+  // Some APIs return flattened plan fields
+  plan_name?: string;
+  plan_daily_roi?: number;
+  plan_duration_days?: number;
+
+  // Optional computed fields
+  total_earned?: number;
+  expected_total?: number;
+}
+
+function money(n: number) {
+  if (!Number.isFinite(n)) return "$0.00";
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(n);
+}
+
+function safeDate(input?: string) {
+  if (!input) return null;
+  const d = new Date(input);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+function daysBetween(a: Date, b: Date) {
+  const ms = 24 * 60 * 60 * 1000;
+  return Math.floor((b.getTime() - a.getTime()) / ms);
+}
+
+function formatDate(d: Date | null) {
+  if (!d) return "-";
+  return d.toLocaleDateString("en-GB", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
 }
 
 export default function DashboardPage() {
-  const [user, setUser] = useState<UserData | null>(null)
-  const [wallet, setWallet] = useState<WalletData | null>(null)
-  const [investments, setInvestments] = useState<Investment[]>([])
-  const [transactions, setTransactions] = useState<Transaction[]>([])
-  const [analytics, setAnalytics] = useState<DashboardAnalyticsResponse | null>(
-    null
-  )
-  const [referral, setReferral] = useState<{ code: string | null, stats: { total_referrals: number, credited: number, pending: number, rewards_total: string } } | null>(null)
-  const [referralLoading, setReferralLoading] = useState(false)
-  const [generatingCode, setGeneratingCode] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  const [activated, setActivated] = useState(false)
-  const apiBase = useMemo(() => getApiBaseUrl(), [])
-
-  // Minimum deposit for lowest plan (hardcoded, or fetch from API if needed)
-  const MIN_DEPOSIT = 100.00;
+  const [wallet, setWallet] = useState<WalletData | null>(null);
+  const [investments, setInvestments] = useState<Investment[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Activation logic: must have at least one deposit >= MIN_DEPOSIT
-    const hasQualifyingDeposit = transactions.some(
-      (tx) => tx.tx_type === 'deposit' && tx.status === 'approved' && parseFloat(tx.amount) >= MIN_DEPOSIT
-    );
-    setActivated(hasQualifyingDeposit);
+    let cancelled = false;
+
+    async function load() {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const base = getApiBaseUrl();
+
+        const [walletRes, invRes, txRes] = await Promise.all([
+          fetch(`${base}/api/dashboard/wallet/`, {
+            credentials: "include",
+          }),
+          fetch(`${base}/api/investments/my/`, {
+            credentials: "include",
+          }),
+          fetch(`${base}/api/transactions/my/`, {
+            credentials: "include",
+          }),
+        ]);
+
+        if (!walletRes.ok) throw new Error(`Wallet fetch failed (${walletRes.status})`);
+        if (!invRes.ok) throw new Error(`Investments fetch failed (${invRes.status})`);
+        if (!txRes.ok) throw new Error(`Transactions fetch failed (${txRes.status})`);
+
+        const walletJson = (await walletRes.json()) as WalletData;
+        const invJson = (await invRes.json()) as Investment[];
+        const txJson = (await txRes.json()) as Transaction[];
+
+        if (cancelled) return;
+
+        setWallet(walletJson);
+        setInvestments(Array.isArray(invJson) ? invJson : []);
+        setTransactions(Array.isArray(txJson) ? txJson : []);
+      } catch (e: any) {
+        if (cancelled) return;
+        setError(e?.message || "Failed to load dashboard data");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const activeInvestments = useMemo(() => {
+    return investments.filter((i) => ["active", "approved"].includes(String(i.status)));
+  }, [investments]);
+
+  const totalInvested = useMemo(() => {
+    return activeInvestments.reduce((sum, i) => sum + (Number(i.amount) || 0), 0);
+  }, [activeInvestments]);
+
+  const lockedRoi = useMemo(() => {
+    return transactions
+      .filter(
+        (t) =>
+          String(t.tx_type) === "profit" &&
+          ["approved", "completed"].includes(String(t.status))
+      )
+      .reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
   }, [transactions]);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem('authToken')
-
-      try {
-        // Fetch user info
-        const userResponse = await fetch(`${apiBase}/api/auth/me/`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(token && { 'Authorization': `Token ${token}` }),
-          },
-          credentials: 'include',
-        })
-
-        if (userResponse.ok) {
-          const userData = await userResponse.json()
-          setUser(userData)
-
-          // Fetch wallet data
-          const walletResponse = await fetch(`${apiBase}/api/wallet/`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Token ${token}`,
-            },
-            credentials: 'include',
-          })
-
-          if (walletResponse.ok) {
-            const walletData = await walletResponse.json()
-            setWallet(walletData)
-          }
-
-
-          // Fetch investments
-          const investmentsResponse = await fetch(`${apiBase}/api/investments/my/`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Token ${token}`,
-            },
-            credentials: "include",
-          })
-
-          if (investmentsResponse.ok) {
-            const investmentsData = await investmentsResponse.json()
-
-            // DRF may return either a list or { results: [...] }
-            const rows = Array.isArray(investmentsData)
-              ? investmentsData
-              : (investmentsData?.results ?? [])
-
-            setInvestments(rows)
-          } else {
-            // optional: clear to avoid stale UI
-            setInvestments([])
-          }
-
-          // Fetch transactions (recent)
-          const txResponse = await fetch(`${apiBase}/api/transactions/`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Token ${token}`,
-            },
-            credentials: 'include',
-          })
-
-          if (txResponse.ok) {
-            const txData: Transaction[] = await txResponse.json()
-            setTransactions(Array.isArray(txData) ? txData.slice(0, 5) : [])
-          }
-
-          // Fetch dashboard analytics (counts only)
-          const analyticsResp = await fetch(
-            `${apiBase}/api/analytics/overview/`,
-            {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${token}`,
-              },
-              credentials: 'include',
-            }
-          )
-
-          if (analyticsResp.ok) {
-            const analyticsData: DashboardAnalyticsResponse =
-              await analyticsResp.json()
-            setAnalytics(analyticsData)
-          }
-
-          // Fetch referral summary + rewards to compute credited/pending
-          try {
-            setReferralLoading(true)
-            const [summaryResp, rewardsResp] = await Promise.all([
-              fetch(`${apiBase}/api/referrals/summary/`, {
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Token ${token}`,
-                },
-                credentials: 'include',
-              }),
-              fetch(`${apiBase}/api/referrals/rewards/`, {
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Token ${token}`,
-                },
-                credentials: 'include',
-              }),
-            ])
-
-            if (summaryResp.ok) {
-              const summary = await summaryResp.json()
-              let credited = 0
-              let pending = 0
-              let rewardsTotalAmount = 0
-              if (rewardsResp.ok) {
-                const rewardsData = await rewardsResp.json()
-                const results = Array.isArray(rewardsData?.results) ? rewardsData.results : []
-                for (const r of results) {
-                  if (r?.approved) credited++
-                  else pending++
-                  const amt = parseFloat(String(r?.amount ?? '0'))
-                  if (!isNaN(amt)) rewardsTotalAmount += amt
-                }
-              }
-
-              const mapped = {
-                code: summary.code || null,
-                stats: {
-                  total_referrals: summary.referred_count ?? 0,
-                  credited,
-                  pending,
-                  rewards_total: rewardsTotalAmount.toFixed(2),
-                },
-              }
-              setReferral(mapped)
-            }
-          } finally {
-            setReferralLoading(false)
-          }
-        } else {
-          setError('Please log in to access the dashboard')
-          // Redirect to login after a delay
-          setTimeout(() => {
-            window.location.href = '/accounts/login'
-          }, 2000)
-        }
-      } catch (err) {
-        setError('Failed to load user data')
-        console.error('Dashboard error:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchUserData()
-  }, [apiBase])
-
-  const handleLogout = async () => {
-    const token = localStorage.getItem('authToken')
-
-    try {
-      await fetch(`${apiBase}/api/auth/logout/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token && { 'Authorization': `Token ${token}` }),
-        },
-        credentials: 'include',
-      })
-    } catch (err) {
-      console.error('Logout error:', err)
-    } finally {
-      localStorage.removeItem('authToken')
-      // Clear the client cookie used by middleware
-      document.cookie = 'authToken=; Max-Age=0; Path=/; SameSite=Lax; Secure'
-      window.location.href = '/accounts/login'
-    }
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-[#2563eb] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md">
-          <div className="text-red-500 text-center mb-4">
-            <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-          </div>
-          <h2 className="text-2xl font-bold text-gray-800 text-center mb-2">{error}</h2>
-          <p className="text-gray-600 text-center mb-6">Redirecting to login...</p>
-          <Link href="/accounts/login" className="block w-full bg-[#2563eb] text-white py-3 rounded-xl text-center font-semibold hover:bg-[#1d4ed8] transition">
-            Go to Login
-          </Link>
-        </div>
-      </div>
-    )
-  }
-
-  const handleGenerateReferralCode = async () => {
-    const token = localStorage.getItem('authToken')
-    if (!token) return
-    try {
-      setGeneratingCode(true)
-      const resp = await fetch(`${apiBase}/api/referrals/generate-code/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Token ${token}`,
-        },
-        credentials: 'include',
-      })
-      if (resp.ok) {
-        const data = await resp.json()
-        // Refresh summary after generating code
-        setReferral((prev) => ({
-          code: data.code,
-          stats: prev?.stats || { total_referrals: 0, credited: 0, pending: 0, rewards_total: '0' },
-        }))
-      }
-    } catch (e) {
-      console.error('Failed to generate referral code', e)
-    } finally {
-      setGeneratingCode(false)
-    }
-  }
-
-  const handleCopyReferralLink = async () => {
-    if (!referral?.code) return
-    const link = `${window.location.origin}/accounts/signup?ref=${encodeURIComponent(referral.code)}`
-    try {
-      await navigator.clipboard.writeText(link)
-      alert('Referral link copied to clipboard')
-    } catch (e) {
-      console.error('Clipboard error', e)
-    }
-  }
-
-  const handleShareReferral = async () => {
-    if (!referral?.code) return
-    const link = `${window.location.origin}/accounts/signup?ref=${encodeURIComponent(referral.code)}`
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: 'Join me on WolvCapital', text: 'Sign up and start investing with WolvCapital.', url: link })
-      } catch (e) {
-        // user may cancel share
-      }
-    } else {
-      await handleCopyReferralLink()
-    }
-  }
+  const recentTransactions = useMemo(() => {
+    return [...transactions].sort((a, b) => {
+      const da = safeDate(a.created_at)?.getTime() || 0;
+      const db = safeDate(b.created_at)?.getTime() || 0;
+      return db - da;
+    });
+  }, [transactions]);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <Link href="/dashboard" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-xl flex items-center justify-center">
-                <span className="text-xl font-bold text-white">W</span>
-              </div>
-              <span className="text-2xl font-bold text-[#0b2f6b]">WolvCapital</span>
+      <header className="bg-white border-b">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold">
+              W
+            </div>
+            <div>
+              <div className="font-semibold">WolvCapital</div>
+              <div className="text-xs text-gray-500">Investment Dashboard</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/investments"
+              className="px-3 py-2 rounded-md bg-blue-600 text-white text-sm hover:bg-blue-700"
+            >
+              New Investment
             </Link>
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition font-semibold"
+            <Link
+              href="/logout"
+              className="px-3 py-2 rounded-md bg-red-600 text-white text-sm hover:bg-red-700"
             >
               Logout
-            </button>
+            </Link>
           </div>
         </div>
       </header>
 
+      <main className="max-w-6xl mx-auto px-4 py-6">
+        {error ? (
+          <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
+            {error}
+          </div>
+        ) : null}
 
-      {/* Main Content (always visible, activation only restricts actions) */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-8">
-        {/* Welcome Section */}
-        <section className="bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] rounded-3xl shadow-xl p-6 sm:p-8 text-white mb-4 sm:mb-8">
-          <h1 className="text-2xl sm:text-4xl font-bold mb-2">
-            Welcome back, {user?.first_name || (user?.email ? user.email.split('@')[0] : 'User')}!
-          </h1>
-          <p className="text-base sm:text-xl opacity-90">Your secure investment dashboard overview</p>
-        </section>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+          <StatCard
+            title="Current Balance"
+            value={money(wallet?.balance ?? 0)}
+            subtitle="Available funds"
+          />
+          <StatCard
+            title="Total Deposits"
+            value={money(wallet?.total_deposits ?? 0)}
+            subtitle="Approved deposits"
+          />
+          <StatCard
+            title="Total Withdrawals"
+            value={money(wallet?.total_withdrawals ?? 0)}
+            subtitle="Approved withdrawals"
+          />
+          <StatCard
+            title="Total Invested"
+            value={money(totalInvested)}
+            subtitle="Active investments"
+          />
+          <StatCard
+            title="Locked ROI"
+            value={money(lockedRoi)}
+            subtitle="Profit earned (locked)"
+          />
+        </div>
 
-        {/* Account Verification Status */}
-        <AccountVerificationStatus />
+        <section className="mb-10">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-xl font-semibold">Active Plans</h2>
+            <Link href="/investments" className="text-sm text-blue-600 hover:underline">
+              View all
+            </Link>
+          </div>
 
-        {/* Transaction Statistics Section */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-4">
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-gray-600 font-semibold text-sm">Current Balance</h3>
-              <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                </svg>
-              </div>
+          {loading ? (
+            <div className="rounded-lg border bg-white p-6">Loading…</div>
+          ) : activeInvestments.length === 0 ? (
+            <div className="rounded-lg border bg-white p-6 text-gray-600">
+              No active plans yet.
             </div>
-            <p className="text-3xl font-bold text-blue-600">${wallet ? parseFloat(wallet.balance || '0').toFixed(2) : '0.00'}</p>
-            <p className="text-xs text-gray-500 mt-2">Available funds</p>
-          </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {activeInvestments.map((inv) => {
+                const planName =
+                  inv.plan_name || inv.plan?.name || `Plan #${String(inv.id)}`;
+                const dailyRoi =
+                  Number(inv.plan_daily_roi ?? inv.plan?.daily_roi ?? inv.plan?.roi_rate) ||
+                  0;
+                const durationDays =
+                  Number(inv.plan_duration_days ?? inv.plan?.duration_days) || 0;
 
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-gray-600 font-semibold text-sm">Total Deposits</h3>
-              <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
-                <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
-                </svg>
-              </div>
-            </div>
-            <p className="text-3xl font-bold text-emerald-600">${transactions.filter(tx => tx.tx_type === 'deposit' && tx.status === 'approved').reduce((sum, tx) => sum + parseFloat(tx.amount || '0'), 0).toFixed(2)}</p>
-            <p className="text-xs text-gray-500 mt-2">Approved deposits</p>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-gray-600 font-semibold text-sm">Total Withdrawals</h3>
-              <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
-                <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 13l-5 5m0 0l-5-5m5 5V6" />
-                </svg>
-              </div>
-            </div>
-            <p className="text-3xl font-bold text-orange-600">${transactions.filter(tx => tx.tx_type === 'withdrawal' && tx.status === 'approved').reduce((sum, tx) => sum + parseFloat(tx.amount || '0'), 0).toFixed(2)}</p>
-            <p className="text-xs text-gray-500 mt-2">Approved withdrawals</p>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-gray-600 font-semibold text-sm">Total Invested</h3>
-              <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-                <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 012-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
-              </div>
-            </div>
-            <p className="text-3xl font-bold text-purple-600">${investments .filter(inv => inv.derived_status === "ACTIVE").reduce((sum, inv) => sum + Number(inv.amount || 0), 0) .toFixed(2)}</p>
-            <p className="text-xs text-gray-500 mt-2">Active investments</p>
-          </div>
-        </section>
-
-        {/* Analytics Overview (counts only) */}
-        <section className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg sm:text-2xl font-bold text-gray-800">
-              Analytics Overview
-            </h2>
-            <p className="text-xs sm:text-sm text-gray-500">
-              Activity and status counts
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <ChartCard
-              title="Activity Over Time"
-              subtitle="Daily account actions (recent)"
-            >
-              <ActivityOverTimeChart
-                data={analytics?.activity_over_time ?? []}
-              />
-            </ChartCard>
-
-            <ChartCard
-              title="Transaction Breakdown"
-              subtitle="Deposit vs withdrawal counts"
-            >
-              <TransactionBreakdownDonut
-                deposits={analytics?.transaction_breakdown?.deposits ?? 0}
-                withdrawals={
-                  analytics?.transaction_breakdown?.withdrawals ?? 0
+                const started = safeDate(inv.started_at) || safeDate(inv.created_at);
+                let end = safeDate(inv.ends_at);
+                if (!end && started && durationDays > 0) {
+                  end = new Date(started);
+                  end.setDate(end.getDate() + durationDays);
                 }
-              />
-            </ChartCard>
 
-            <ChartCard
-              title="Investment Status Overview"
-              subtitle="Active, completed, and pending counts"
-            >
-              <InvestmentStatusOverview
-                active={analytics?.investment_status_overview?.active ?? 0}
-                completed={
-                  analytics?.investment_status_overview?.completed ?? 0
-                }
-                pending={analytics?.investment_status_overview?.pending ?? 0}
-              />
-            </ChartCard>
-          </div>
-        </section>
+                const today = new Date();
+                const elapsed = started ? Math.max(0, daysBetween(started, today)) : 0;
+                const left = end ? Math.max(0, daysBetween(today, end)) : 0;
 
-        {/* Active Investment Plans Section */}
-        <section className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">Active Investment Plans</h2>
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-500">
-                {investments ? investments.filter(inv => inv.status === 'approved').length : 0} active
-              </span>
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            </div>
-          </div>
-          
-          {investments && investments.filter(inv => inv.status === 'approved').length > 0 ? (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {investments.filter(inv => inv.status === 'approved').map((investment) => {
-                const startDate = investment.started_at ? new Date(investment.started_at) : null
-                const endDate = investment.ends_at ? new Date(investment.ends_at) : null
-                const now = new Date()
-                const planName = investment.plan?.name ?? investment.plan_name ?? 'Investment Plan'
-                const totalDays = investment.plan?.duration_days ?? investment.duration_days ?? 0
-                const investmentAmount = parseFloat(investment.amount || '0')
-                const dailyRoiPercent = parseFloat(String(investment.plan?.daily_roi ?? investment.daily_roi ?? 0))
-                const dailyEarning = investmentAmount * (dailyRoiPercent / 100)
-                const daysLeft = endDate ? Math.max(0, Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))) : 0
-                const daysElapsed = Math.min(totalDays, Math.max(0, totalDays - daysLeft))
-                const progressPercentage = totalDays > 0 ? Math.min(100, (daysElapsed / totalDays) * 100) : 0
-                const isCompleted = daysLeft === 0 && endDate && now >= endDate
-                const totalEarned = dailyEarning * daysElapsed
-                const expectedTotal = investmentAmount * (1 + (dailyRoiPercent / 100) * totalDays)
-                
+                // Optional fields (only show if backend provides them)
+                const totalEarned = Number(inv.total_earned);
+                const expectedTotal = Number(inv.expected_total);
+
                 return (
-                  <div key={investment.id} className="border-2 border-gray-100 rounded-2xl p-6 hover:border-blue-200 transition-all duration-300 hover:shadow-lg">
-                    {/* Investment Header */}
-                    <div className="flex items-start justify-between mb-4">
+                  <div
+                    key={String(inv.id)}
+                    className="rounded-xl border bg-white p-5 shadow-sm"
+                  >
+                    <div className="flex items-start justify-between gap-3">
                       <div>
-                        <h3 className="text-xl font-bold text-gray-800 mb-1">{planName}</h3>
-                        <div className="flex items-center space-x-2">
-                          <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                            isCompleted 
-                              ? 'bg-green-100 text-green-700' 
-                              : 'bg-blue-100 text-blue-700'
-                          }`}>
-                            {isCompleted ? 'Completed' : 'Active'}
+                        <div className="text-lg font-semibold">{planName}</div>
+                        <div className="mt-1 flex items-center gap-2 text-sm text-gray-600">
+                          <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-blue-700">
+                            {String(inv.status).toUpperCase()}
                           </span>
-                          <span className="text-sm text-gray-500">
-                            {dailyRoiPercent}% daily ROI
+                          <span>
+                            {dailyRoi > 0 ? `${dailyRoi}% daily ROI` : "Daily ROI"}
                           </span>
                         </div>
                       </div>
+
                       <div className="text-right">
-                        <p className="text-sm text-gray-500">Investment Amount</p>
-                        <p className="text-2xl font-bold text-gray-800">${parseFloat(investment.amount || '0').toLocaleString()}</p>
+                        <div className="text-xs text-gray-500">Investment Amount</div>
+                        <div className="text-2xl font-semibold">{money(Number(inv.amount) || 0)}</div>
                       </div>
                     </div>
 
-                    {/* Progress Bar */}
-                    <div className="mb-4">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-medium text-gray-600">Progress</span>
-                        <span className="text-sm text-gray-500">{daysElapsed}/{totalDays} days</span>
-                      </div>
-                      <progress
-                        value={Math.max(0, Math.min(100, progressPercentage))}
-                        max={100}
-                        className={`progress-bar ${isCompleted ? 'progress-bar--completed' : 'progress-bar--active'}`}
+                    <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                      <InfoRow label="Started" value={formatDate(started)} />
+                      <InfoRow label="End Date" value={formatDate(end)} />
+                      <InfoRow
+                        label="Duration"
+                        value={durationDays > 0 ? `${durationDays} days` : "-"}
                       />
-                      <div className="flex justify-between mt-2 text-sm">
-                        <span className="text-gray-500">
-                          Started: {startDate ? startDate.toLocaleDateString() : 'N/A'}
-                        </span>
-                        <span className={`font-medium ${isCompleted ? 'text-green-600' : 'text-blue-600'}`}>
-                          {isCompleted ? 'Completed' : `${daysLeft} days left`}
-                        </span>
-                      </div>
+                      <InfoRow
+                        label="Progress"
+                        value={durationDays > 0 ? `${Math.min(elapsed, durationDays)}/${durationDays} days` : "-"}
+                      />
+                      <InfoRow label="Days left" value={durationDays > 0 ? String(left) : "-"} />
+                      <InfoRow
+                        label="Daily ROI"
+                        value={dailyRoi > 0 ? `${dailyRoi}%` : "-"}
+                      />
                     </div>
 
-                    {/* Earnings Tiles */}
-                    <div className="grid grid-cols-2 gap-4 mt-4">
-                      <div className="rounded-2xl p-4 bg-green-50 border border-green-100">
-                        <p className="text-sm text-gray-600">Total Earned</p>
-                        <p className="text-2xl font-bold text-green-700">${totalEarned.toFixed(2)}</p>
-                        <p className="text-sm text-green-700">${dailyEarning.toFixed(2)}/day</p>
-                      </div>
-                      <div className="rounded-2xl p-4 bg-blue-50 border border-blue-100 text-center">
-                        <p className="text-sm text-gray-600">Expected Total</p>
-                        <p className="text-2xl font-bold text-blue-700">${expectedTotal.toFixed(2)}</p>
-                        <p className="text-sm text-blue-700">At completion</p>
-                      </div>
-                    </div>
-
-                    {/* Investment Details */}
-                    <div className="border-t border-gray-100 pt-4">
-                      <div className="grid grid-cols-3 gap-4 text-center">
-                        <div>
-                          <p className="text-xs text-gray-500 mb-1">Duration</p>
-                          <p className="text-sm font-semibold text-gray-700">{totalDays} days</p>
+                    {(Number.isFinite(totalEarned) || Number.isFinite(expectedTotal)) && (
+                      <div className="mt-4 grid grid-cols-2 gap-3">
+                        <div className="rounded-lg bg-green-50 p-4">
+                          <div className="text-xs text-green-700">Total Earned</div>
+                          <div className="text-xl font-semibold text-green-800">
+                            {Number.isFinite(totalEarned) ? money(totalEarned) : "-"}
+                          </div>
                         </div>
-                        <div>
-                          <p className="text-xs text-gray-500 mb-1">Daily ROI</p>
-                          <p className="text-sm font-semibold text-gray-700">
-                            {dailyRoiPercent}%
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-gray-500 mb-1">End Date</p>
-                          <p className="text-sm font-semibold text-gray-700">
-                            {endDate ? endDate.toLocaleDateString() : 'N/A'}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Action Button */}
-                    {isCompleted && (
-                      <div className="mt-4 pt-4 border-t border-gray-100">
-                        <div className="flex items-center justify-center space-x-2 text-green-600">
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                          <span className="text-sm font-semibold">Investment Completed</span>
+                        <div className="rounded-lg bg-indigo-50 p-4">
+                          <div className="text-xs text-indigo-700">Expected Total</div>
+                          <div className="text-xl font-semibold text-indigo-800">
+                            {Number.isFinite(expectedTotal) ? money(expectedTotal) : "-"}
+                          </div>
                         </div>
                       </div>
                     )}
                   </div>
-                )
+                );
               })}
             </div>
-          ) : (
-            <div className="text-center py-12">
-              <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
-                <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2-2V7a2 2 0 012-2h2a2 2 0 002 2v2a2 2 0 002 2h2a2 2 0 012-2V7a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 00-2 2h-2a2 2 0 00-2 2v6a2 2 0 01-2 2H9z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">No Active Investments</h3>
-              <p className="text-gray-500 mb-6">You don't have any active investment plans yet. Start investing today!</p>
-              <Link
-                href="/dashboard/new-investment"
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105"
-              >
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-                Start Your First Investment
-              </Link>
-            </div>
           )}
         </section>
 
-        {/* Referral Program Section */}
-        <section className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 mb-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6 items-center">
-            <div className="lg:col-span-2 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-800">Referral Program</h2>
-              <Link href="/referrals" className="text-[#2563eb] text-sm hover:underline">Learn more</Link>
-            </div>
-            <div className="hidden lg:block">
-              {/* Stylish banner embed; replace with your asset path */}
-              <Link href="/referral" className="block">
-                <img
-                  src="/images/referral-hero-wolvcapital.png"
-                  alt="Earn when you invite investors"
-                  className="w-full h-28 object-cover rounded-xl shadow-md hover:shadow-lg transition"
-                />
-              </Link>
-            </div>
+        <section>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-xl font-semibold">Recent Activity</h2>
+            <Link href="/transactions" className="text-sm text-blue-600 hover:underline">
+              View all
+            </Link>
           </div>
 
-          {referralLoading ? (
-            <p className="text-gray-500">Loading referral details...</p>
-          ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Code + Actions */}
-              <div className="lg:col-span-1 border-2 border-gray-100 rounded-2xl p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">Your Referral Code</h3>
-                {referral?.code ? (
-                  <div>
-                    <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 mb-3">
-                      <span className="font-mono text-lg tracking-wider text-gray-800">{referral.code}</span>
-                      <span className="px-2 py-1 rounded-full text-xs bg-emerald-100 text-emerald-700">Active</span>
-                    </div>
-                    <div className="flex gap-3">
-                      <button onClick={handleCopyReferralLink} className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold">Copy Link</button>
-                      <button onClick={handleShareReferral} className="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition font-semibold">Share</button>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-3">Referral link: {typeof window !== 'undefined' ? `${window.location.origin}/accounts/signup?ref=${referral.code}` : ''}</p>
-                  </div>
+          <div className="rounded-xl border bg-white shadow-sm overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50 text-gray-700">
+                <tr>
+                  <th className="text-left px-4 py-3">Date</th>
+                  <th className="text-left px-4 py-3">Type</th>
+                  <th className="text-left px-4 py-3">Status</th>
+                  <th className="text-right px-4 py-3">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr>
+                    <td className="px-4 py-4" colSpan={4}>
+                      Loading…
+                    </td>
+                  </tr>
+                ) : recentTransactions.length === 0 ? (
+                  <tr>
+                    <td className="px-4 py-4 text-gray-600" colSpan={4}>
+                      No transactions yet.
+                    </td>
+                  </tr>
                 ) : (
-                  <div>
-                    <p className="text-gray-600 mb-4">Generate your unique code to start earning rewards when friends join.</p>
-                    <button onClick={handleGenerateReferralCode} disabled={generatingCode} className="px-4 py-2 bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white rounded-lg font-semibold hover:shadow-lg transition disabled:opacity-60">
-                      {generatingCode ? 'Generating…' : 'Generate Code'}
-                    </button>
-                  </div>
+                  recentTransactions.slice(0, 10).map((tx) => {
+                    const d = safeDate(tx.created_at);
+                    return (
+                      <tr key={tx.id} className="border-t">
+                        <td className="px-4 py-3 whitespace-nowrap">{d ? d.toLocaleString() : "-"}</td>
+                        <td className="px-4 py-3 whitespace-nowrap">{String(tx.tx_type)}</td>
+                        <td className="px-4 py-3 whitespace-nowrap">{String(tx.status)}</td>
+                        <td className="px-4 py-3 text-right whitespace-nowrap">{money(Number(tx.amount) || 0)}</td>
+                      </tr>
+                    );
+                  })
                 )}
-              </div>
-
-              {/* Stats */}
-              <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-blue-50 rounded-2xl p-5 text-center">
-                  <p className="text-sm text-blue-700 mb-1">Total Referrals</p>
-                  <p className="text-3xl font-extrabold text-blue-900">{referral?.stats?.total_referrals ?? 0}</p>
-                </div>
-                <div className="bg-emerald-50 rounded-2xl p-5 text-center">
-                  <p className="text-sm text-emerald-700 mb-1">Credited</p>
-                  <p className="text-3xl font-extrabold text-emerald-900">{referral?.stats?.credited ?? 0}</p>
-                </div>
-                <div className="bg-amber-50 rounded-2xl p-5 text-center">
-                  <p className="text-sm text-amber-700 mb-1">Pending</p>
-                  <p className="text-3xl font-extrabold text-amber-900">{referral?.stats?.pending ?? 0}</p>
-                </div>
-                <div className="bg-purple-50 rounded-2xl p-5 text-center">
-                  <p className="text-sm text-purple-700 mb-1">Total Rewards</p>
-                  <p className="text-3xl font-extrabold text-purple-900">${referral?.stats?.rewards_total ? parseFloat(referral.stats.rewards_total).toFixed(2) : '0.00'}</p>
-                </div>
-              </div>
-            </div>
-          )}
-        </section>
-
-        {/* Virtual Card Section */}
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Virtual Card Display */}
-          <div className="bg-white rounded-3xl shadow-xl p-8">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-800">Your Virtual Card</h2>
-              <div className="px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-sm font-semibold">
-                Not Active
-              </div>
-            </div>
-            <p className="text-gray-600 mb-6">Activate your WolvCapital virtual Visa card for global transactions</p>
-            
-            <div className="flex justify-center mb-6">
-              <FlipCard 
-                maxWidth={480}
-                aspectWidth={480}
-                aspectHeight={300}
-                animationMs={800}
-                perspective={1200}
-                borderRadius={24}
-                shadow="0 12px 30px rgba(11,47,107,0.35)"
-              />
-            </div>
-            <p className="text-sm text-gray-500 text-center mb-6">Tap to flip the WolvCapital Visa card preview — purchase below to unlock real usage.</p>
-            
-            <div className="grid grid-cols-2 gap-4 text-center mb-6">
-              <div className="p-3 bg-blue-50 rounded-xl">
-                <p className="text-sm text-gray-600">Monthly Limit</p>
-                <p className="text-lg font-bold text-blue-600">$50,000</p>
-              </div>
-              <div className="p-3 bg-green-50 rounded-xl">
-                <p className="text-sm text-gray-600">Activation Fee</p>
-                <p className="text-lg font-bold text-green-600">$1,000</p>
-              </div>
-            </div>
-
-            <Link
-              href="/dashboard/purchase-card"
-              className="w-full bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 flex items-center justify-center space-x-2"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-              </svg>
-              <span>Purchase Card - $1,000</span>
-            </Link>
-          </div>
-
-          {/* Card Benefits */}
-          <div className="bg-white rounded-3xl shadow-xl p-8">
-            <h3 className="text-xl font-bold text-gray-800 mb-6">Premium Card Benefits</h3>
-            
-            <div className="space-y-6">
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-800 mb-1">Global Transactions</h4>
-                  <p className="text-sm text-gray-600">Make purchases worldwide with instant processing and competitive exchange rates</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-800 mb-1">Unlimited Withdrawals</h4>
-                  <p className="text-sm text-gray-600">Access your funds anytime with no withdrawal limits or restrictions</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-800 mb-1">Account Upgrade</h4>
-                  <p className="text-sm text-gray-600">Unlock premium features and higher investment limits with card activation</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-800 mb-1">Instant Processing</h4>
-                  <p className="text-sm text-gray-600">Lightning-fast transactions for seamless online purchases and payments</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-100">
-              <div className="flex items-center space-x-3">
-                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                </svg>
-                <div>
-                  <p className="font-semibold text-blue-900">Premium Member Exclusive</p>
-                  <p className="text-sm text-blue-700">Join our elite members with enhanced privileges</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Recent Transactions Section */}
-        <section className="bg-white rounded-3xl shadow-xl p-6 sm:p-8 flex flex-col gap-4">
-          <div className="flex items-center justify-between mb-2 sm:mb-6">
-            <h2 className="text-lg sm:text-2xl font-bold text-gray-800">
-              Recent Activity
-            </h2>
-          </div>
-
-          <RecentActivityTable rows={analytics?.recent_activity ?? []} />
-        </section>
-
-        {/* Quick Actions Section */}
-        <section className="bg-white rounded-3xl shadow-xl p-6 sm:p-8">
-          <h2 className="text-lg sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Quick Actions</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Link href="/dashboard/new-investment" className="p-4 sm:p-6 border-2 border-gray-200 rounded-2xl hover:border-[#2563eb] hover:shadow-lg transition text-center group">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-4 group-hover:bg-[#2563eb] transition">
-                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-[#2563eb] group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-gray-800 mb-1 sm:mb-2">New Investment</h3>
-              <p className="text-xs sm:text-sm text-gray-600">Select a compliant investment plan and amount</p>
-            </Link>
-            <Link href="/dashboard/deposit" className="p-4 sm:p-6 border-2 border-gray-200 rounded-2xl hover:border-[#2563eb] hover:shadow-lg transition text-center group">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-4 group-hover:bg-[#2563eb] transition">
-                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-emerald-600 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-gray-800 mb-1 sm:mb-2">Deposit</h3>
-              <p className="text-xs sm:text-sm text-gray-600">Fund your wallet securely</p>
-            </Link>
-            <Link href="/dashboard/withdraw" className="p-4 sm:p-6 border-2 border-gray-200 rounded-2xl hover:border-[#2563eb] hover:shadow-lg transition text-center group">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-4 group-hover:bg-[#2563eb] transition">
-                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 20V4m8 8H4" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-gray-800 mb-1 sm:mb-2">Withdraw</h3>
-              <p className="text-xs sm:text-sm text-gray-600">Request a payout (subject to compliance review)</p>
-            </Link>
-            <Link href="/dashboard/support" className="p-4 sm:p-6 border-2 border-gray-200 rounded-2xl hover:border-[#2563eb] hover:shadow-lg transition text-center group">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-4 group-hover:bg-[#2563eb] transition">
-                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-green-600 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-gray-800 mb-1 sm:mb-2">Support</h3>
-              <p className="text-xs sm:text-sm text-gray-600">Get help from our compliance and investor support teams</p>
-            </Link>
+              </tbody>
+            </table>
           </div>
         </section>
       </main>
-      <style jsx>{`
-        .progress-bar {
-          width: 100%;
-          height: 0.75rem;
-          border-radius: 9999px;
-          background-color: #e5e7eb;
-          overflow: hidden;
-          appearance: none;
-        }
-        .progress-bar::-webkit-progress-bar {
-          background-color: #e5e7eb;
-          border-radius: 9999px;
-        }
-        .progress-bar::-webkit-progress-value {
-          border-radius: 9999px;
-          transition: width 0.3s ease;
-        }
-        .progress-bar--active::-webkit-progress-value {
-          background-color: #3b82f6;
-        }
-        .progress-bar--completed::-webkit-progress-value {
-          background-color: #22c55e;
-        }
-        .progress-bar::-moz-progress-bar {
-          border-radius: 9999px;
-          transition: width 0.3s ease;
-        }
-        .progress-bar--active::-moz-progress-bar {
-          background-color: #3b82f6;
-        }
-        .progress-bar--completed::-moz-progress-bar {
-          background-color: #22c55e;
-        }
-      `}</style>
     </div>
-  )
+  );
 }
 
+function StatCard(props: { title: string; value: string; subtitle: string }) {
+  return (
+    <div className="rounded-xl border bg-white p-5 shadow-sm">
+      <div className="text-sm text-gray-600">{props.title}</div>
+      <div className="mt-2 text-3xl font-semibold">{props.value}</div>
+      <div className="mt-1 text-xs text-gray-500">{props.subtitle}</div>
+    </div>
+  );
+}
+
+function InfoRow(props: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between gap-3 rounded-lg bg-gray-50 px-3 py-2">
+      <div className="text-gray-600">{props.label}</div>
+      <div className="font-medium text-gray-900">{props.value}</div>
+    </div>
+  );
+}

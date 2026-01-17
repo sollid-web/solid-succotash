@@ -64,14 +64,21 @@ export default function LoginPage() {
       const data = await response.json()
 
       if (response.ok && data.success) {
-        // Store token if provided
-        if (data.token) {
-          localStorage.setItem('authToken', data.token)
-          // Also set a cookie so middleware can protect routes (non-HttpOnly client cookie)
-          const maxAgeDays = 1
-          const maxAge = maxAgeDays * 24 * 60 * 60
-          document.cookie = `authToken=${data.token}; Max-Age=${maxAge}; Path=/; SameSite=Lax; Secure`
+        // --- persist tokens (support old + new key names) ---
+        const access = data?.access || data?.token || data?.authToken;
+        const refresh = data?.refresh;
+
+        if (access) {
+          localStorage.setItem("access_token", access);
+          localStorage.setItem("authToken", access); // keep legacy key in sync
         }
+
+        if (refresh) {
+          localStorage.setItem("refresh_token", refresh);
+        }
+
+        // optional: if your backend returns expiry/created, ignore safely
+        
         // Redirect to dashboard (support return path)
         const params = new URLSearchParams(window.location.search)
         const nextPath = params.get('next') || '/dashboard'

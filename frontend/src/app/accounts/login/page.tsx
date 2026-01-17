@@ -107,49 +107,48 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
 
+    console.log("Submitting login to:", `${apiBase}/api/auth/login/`, { email });
+
     try {
       const response = await fetch(`${apiBase}/api/auth/login/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // Keep include if your backend also sets cookies; harmless even if not used.
-        credentials: "include",
+        // IMPORTANT: remove credentials unless you are truly using cookie sessions
+        // credentials: "include",
         body: JSON.stringify({ email, password }),
       });
 
-      let data: LoginResponse = {};
-      try {
-        data = (await response.json()) as LoginResponse;
-      } catch {
-        // If backend returned HTML or empty, keep data empty and use status text
-        data = {};
-      }
+      const raw = await response.text();
+      let data: any = null;
+      try { data = raw ? JSON.parse(raw) : null; } catch { data = null; }
 
-      if (response.ok) {
-        const { access, refresh } = extractTokens(data);
+      console.log("Login status:", response.status);
+      console.log("Login response raw:", raw);
+      console.log("Login response json:", data);
 
-        if (!access) {
-          // Backend said OK but did not provide JWT. This means your backend is not returning tokens.
-          setError(
-            "Login succeeded but no access token was returned by the backend. Your /api/auth/login/ response must include { access, refresh } (or token)."
-          );
-          setLoading(false);
-          return;
-        }
-
-        storeTokens(access, refresh);
-
-        const params = new URLSearchParams(window.location.search);
-        const nextPath = params.get("next") || "/dashboard";
-        window.location.href = nextPath;
+      if (!response.ok) {
+        setError(data?.error || data?.detail || data?.message || raw || `Login failed (${response.status})`);
+        setLoading(false);
         return;
       }
 
-      // Not OK
-      if (data?.inactive) {
-        setError("Your account is not verified. Check your email or resend the verification link below.");
-      } else {
-        setError(getErrorMessage(data, `Login failed (${response.status}). Please try again.`));
+      // Accept multiple backend shapes
+      const access = data?.access || data?.token || data?.authToken;
+      const refresh = data?.refresh;
+
+      if (!access) {
+        setError(`Login succeeded but no access token returned. Raw: ${raw}`);
+        setLoading(false);
+        return;
       }
+
+      localStorage.setItem("access_token", access);
+      localStorage.setItem("authToken", access);
+      if (refresh) localStorage.setItem("refresh_token", refresh);
+
+      // Go to dashboard
+      const params = new URLSearchParams(window.location.search);
+      window.location.href = params.get("next") || "/dashboard";
     } catch (err) {
       console.error("Login error:", err);
       setError("Network error. Please check your connection and try again.");

@@ -109,36 +109,45 @@ export default function LoginPage() {
 
     console.log("Submitting login to:", `${apiBase}/api/auth/login/`, { email });
 
+    const controller = new AbortController();
+    const t = setTimeout(() => controller.abort(), 15000);
+
     try {
       const response = await fetch(`${apiBase}/api/auth/login/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // IMPORTANT: remove credentials unless you are truly using cookie sessions
-        // credentials: "include",
         body: JSON.stringify({ email, password }),
+        signal: controller.signal,
       });
 
       const raw = await response.text();
       let data: any = null;
-      try { data = raw ? JSON.parse(raw) : null; } catch { data = null; }
+      try {
+        data = raw ? JSON.parse(raw) : null;
+      } catch {
+        data = null;
+      }
 
       console.log("Login status:", response.status);
       console.log("Login response raw:", raw);
       console.log("Login response json:", data);
 
       if (!response.ok) {
-        setError(data?.error || data?.detail || data?.message || raw || `Login failed (${response.status})`);
-        setLoading(false);
+        setError(
+          data?.error ||
+            data?.detail ||
+            data?.message ||
+            raw ||
+            `Login failed (${response.status})`
+        );
         return;
       }
 
-      // Accept multiple backend shapes
       const access = data?.access || data?.token || data?.authToken;
       const refresh = data?.refresh;
 
       if (!access) {
         setError(`Login succeeded but no access token returned. Raw: ${raw}`);
-        setLoading(false);
         return;
       }
 
@@ -146,13 +155,13 @@ export default function LoginPage() {
       localStorage.setItem("authToken", access);
       if (refresh) localStorage.setItem("refresh_token", refresh);
 
-      // Go to dashboard
       const params = new URLSearchParams(window.location.search);
       window.location.href = params.get("next") || "/dashboard";
-    } catch (err) {
+    } catch (err: any) {
       console.error("Login error:", err);
-      setError("Network error. Please check your connection and try again.");
+      setError(err?.name === "AbortError" ? "Login request timed out." : "Network error. Please try again.");
     } finally {
+      clearTimeout(t);
       setLoading(false);
     }
   };

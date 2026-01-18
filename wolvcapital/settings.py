@@ -166,8 +166,6 @@ ALERT_THRESHOLDS = {
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "wolvcapital.authentication.RlsJwtAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-        "wolvcapital.authentication.RlsTokenAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",

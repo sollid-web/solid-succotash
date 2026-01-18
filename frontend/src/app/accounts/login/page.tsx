@@ -113,10 +113,10 @@ export default function LoginPage() {
     const t = setTimeout(() => controller.abort(), 15000);
 
     try {
-      const response = await apiFetch("/api/auth/login/", {
+      const response = await apiFetch("/api/auth/jwt/create/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username: email, password }),
         signal: controller.signal,
       });
 

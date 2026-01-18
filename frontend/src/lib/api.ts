@@ -1,7 +1,6 @@
 // src/lib/api.ts
 
 const DEFAULT_API_BASE = "https://solid-succotash-production.up.railway.app";
-const CSRF_COOKIE_NAME = "csrftoken";
 
 export function getApiBaseUrl() {
   // Use a single env var to avoid mixed backends.
@@ -21,16 +20,6 @@ export function buildApiUrl(path: string) {
   return `${base}${p}`;
 }
 
-function readCookie(name: string): string | null {
-  if (typeof document === "undefined") return null;
-  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
-  return match ? decodeURIComponent(match[1]) : null;
-}
-
-function isUnsafeMethod(method: string) {
-  return ["POST", "PUT", "PATCH", "DELETE"].includes(method.toUpperCase());
-}
-
 export function apiFetch(path: string, init: RequestInit = {}) {
   const url = path.startsWith("http") ? path : buildApiUrl(path);
   const headers = new Headers(init.headers || {});
@@ -39,17 +28,15 @@ export function apiFetch(path: string, init: RequestInit = {}) {
     headers.set("Accept", "application/json");
   }
 
-  const method = (init.method || "GET").toUpperCase();
-  if (isUnsafeMethod(method)) {
-    const csrfToken = readCookie(CSRF_COOKIE_NAME);
-    if (csrfToken && !headers.has("X-CSRFToken")) {
-      headers.set("X-CSRFToken", csrfToken);
+  if (!headers.has("Authorization") && typeof window !== "undefined") {
+    const token = window.localStorage.getItem("authToken");
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
     }
   }
 
   return fetch(url, {
     ...init,
     headers,
-    credentials: "include",
   });
 }

@@ -28,7 +28,12 @@ export function apiFetch(path: string, init: RequestInit = {}) {
     headers.set("Accept", "application/json");
   }
 
-  if (!headers.has("Authorization") && typeof window !== "undefined") {
+  const lowerUrl = url.toLowerCase();
+  const skipAuth =
+    lowerUrl.includes("/api/auth/jwt/create/") ||
+    lowerUrl.includes("/api/auth/jwt/refresh/");
+
+  if (!skipAuth && !headers.has("Authorization") && typeof window !== "undefined") {
     const token = window.localStorage.getItem("authToken");
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);

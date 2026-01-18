@@ -1,10 +1,8 @@
 from django.urls import include, path
 from rest_framework_simplejwt.views import TokenRefreshView
-
-from .jwt import EmailOrUsernameTokenObtainPairView
-
-from .jwt import EmailOrUsernameTokenObtainPairView
 from rest_framework.routers import DefaultRouter
+
+from .jwt import EmailOrUsernameTokenObtainPairView
 
 from investments.views import MyInvestmentsView
 
@@ -67,16 +65,6 @@ router.register(
 
 urlpatterns = [
     path("", include(router.urls)),
-    path(
-        "auth/jwt/create/",
-        EmailOrUsernameTokenObtainPairView.as_view(),
-        name="api-jwt-create",
-    ),
-    path(
-        "auth/jwt/refresh/",
-        TokenRefreshView.as_view(),
-        name="api-jwt-refresh",
-    ),
     path(
         "auth/jwt/create/",
         EmailOrUsernameTokenObtainPairView.as_view(),

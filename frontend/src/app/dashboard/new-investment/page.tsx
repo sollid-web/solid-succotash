@@ -22,6 +22,26 @@ export default function NewInvestmentPage() {
   const [message, setMessage] = useState<string>('')
   const [error, setError] = useState<string>('')
 
+  const readErrorMessage = async (res: Response) => {
+    const text = await res.text()
+    if (!text) return `Request failed (${res.status})`
+    try {
+      const data = JSON.parse(text)
+      if (data?.detail) return String(data.detail)
+      if (data?.error) return String(data.error)
+      if (Array.isArray(data?.non_field_errors) && data.non_field_errors[0]) {
+        return String(data.non_field_errors[0])
+      }
+      const fieldErrors = Object.entries(data)
+        .filter(([, v]) => Array.isArray(v) && v.length)
+        .map(([k, v]) => `${k}: ${(v as string[]).join(', ')}`)
+      if (fieldErrors.length) return fieldErrors.join(' | ')
+      return text
+    } catch {
+      return text
+    }
+  }
+
   useEffect(() => {
     const load = async () => {
       try {
@@ -51,12 +71,12 @@ export default function NewInvestmentPage() {
         },
         body: JSON.stringify({ plan_id: Number(planId), amount: Number(amount) }),
       })
-      const data = await res.json()
       if (res.ok) {
         setMessage('Investment created successfully.')
         setTimeout(() => (window.location.href = '/dashboard'), 1000)
       } else {
-        setError(data?.detail || data?.non_field_errors?.[0] || 'Failed to create investment')
+        const msg = await readErrorMessage(res)
+        setError(msg || 'Failed to create investment')
       }
     } catch (err) {
       setError('Network error. Please try again.')

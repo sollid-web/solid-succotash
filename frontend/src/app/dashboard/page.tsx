@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { apiFetch } from "@/lib/api";
 
@@ -98,6 +99,7 @@ function formatDate(d: Date | null) {
 }
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [wallet, setWallet] = useState<WalletData | null>(null);
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -190,6 +192,15 @@ export default function DashboardPage() {
     });
   }, [transactions]);
 
+  const handleLogout = () => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+    }
+    router.push("/accounts/login");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white border-b">
@@ -205,17 +216,18 @@ export default function DashboardPage() {
           </div>
           <div className="flex items-center gap-3">
             <Link
-              href="/investments"
+              href="/dashboard/new-investment"
               className="px-3 py-2 rounded-md bg-blue-600 text-white text-sm hover:bg-blue-700"
             >
               New Investment
             </Link>
-            <Link
-              href="/logout"
+            <button
+              type="button"
+              onClick={handleLogout}
               className="px-3 py-2 rounded-md bg-red-600 text-white text-sm hover:bg-red-700"
             >
               Logout
-            </Link>
+            </button>
           </div>
         </div>
       </header>
@@ -238,7 +250,7 @@ export default function DashboardPage() {
         <section className="mb-10">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xl font-semibold">Active Plans</h2>
-            <Link href="/investments" className="text-sm text-blue-600 hover:underline">
+            <Link href="/dashboard/new-investment" className="text-sm text-blue-600 hover:underline">
               View all
             </Link>
           </div>
@@ -328,7 +340,7 @@ export default function DashboardPage() {
         <section>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xl font-semibold">Recent Activity</h2>
-            <Link href="/transactions" className="text-sm text-blue-600 hover:underline">
+            <Link href="/dashboard/transactions" className="text-sm text-blue-600 hover:underline">
               View all
             </Link>
           </div>

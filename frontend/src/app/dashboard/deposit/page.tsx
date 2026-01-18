@@ -25,6 +25,26 @@ export default function DepositPage() {
   const [showWallets, setShowWallets] = useState(false)
   const [copiedAddress, setCopiedAddress] = useState('')
 
+  const readErrorMessage = async (res: Response) => {
+    const text = await res.text()
+    if (!text) return `Request failed (${res.status})`
+    try {
+      const data = JSON.parse(text)
+      if (data?.detail) return String(data.detail)
+      if (data?.error) return String(data.error)
+      if (Array.isArray(data?.non_field_errors) && data.non_field_errors[0]) {
+        return String(data.non_field_errors[0])
+      }
+      const fieldErrors = Object.entries(data)
+        .filter(([, v]) => Array.isArray(v) && v.length)
+        .map(([k, v]) => `${k}: ${(v as string[]).join(', ')}`)
+      if (fieldErrors.length) return fieldErrors.join(' | ')
+      return text
+    } catch {
+      return text
+    }
+  }
+
   useEffect(() => {
     const loadWallets = async () => {
       try {
@@ -94,12 +114,12 @@ export default function DepositPage() {
           wallet_address_used: walletAddress,
         }),
       })
-      const data = await res.json()
       if (res.ok) {
         setMessage('Deposit request submitted. Awaiting approval.')
         setTimeout(() => (window.location.href = '/dashboard'), 1000)
       } else {
-        setError(data?.detail || data?.non_field_errors?.[0] || 'Failed to submit deposit')
+        const msg = await readErrorMessage(res)
+        setError(msg || 'Failed to submit deposit')
       }
     } catch {
       setError('Network error. Please try again.')

@@ -554,9 +554,9 @@ LOGGING = {
 # SSL/HTTPS redirect - enabled in production via environment variable or when DEBUG=False
 SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=not DEBUG)
 
-# Secure cookies - only over HTTPS in production
-SESSION_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_SECURE = not DEBUG
+# Secure cookies - overrideable via env for deployments
+SESSION_COOKIE_SECURE = env.bool("SESSION_COOKIE_SECURE", default=not DEBUG)
+CSRF_COOKIE_SECURE = env.bool("CSRF_COOKIE_SECURE", default=not DEBUG)
 
 # HSTS Security (HTTP Strict Transport Security)
 SECURE_HSTS_SECONDS = int(
@@ -572,16 +572,22 @@ SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 SECURE_BROWSER_XSS_FILTER = True
 
 # Additional cookie security
-CSRF_COOKIE_HTTPONLY = True
+# NOTE: CSRF cookie must be readable by frontend to set X-CSRFToken.
+CSRF_COOKIE_HTTPONLY = False
 SESSION_COOKIE_HTTPONLY = True
 
 # ------------------------------------------------------------------
-# Cookie / CSRF tweaks for Render
+# Cookie / CSRF tweaks for cross-site frontend
 # ------------------------------------------------------------------
-SESSION_COOKIE_SAMESITE = "Lax"
-CSRF_COOKIE_SAMESITE = "Lax"
+SESSION_COOKIE_SAMESITE = env(
+    "SESSION_COOKIE_SAMESITE",
+    default=("None" if not DEBUG else "Lax"),
+)
+CSRF_COOKIE_SAMESITE = env(
+    "CSRF_COOKIE_SAMESITE",
+    default=("None" if not DEBUG else "Lax"),
+)
 CSRF_USE_SESSIONS = False
-# Do not override CSRF_COOKIE_HTTPONLY here; keep it True for security
 
 # Session basics
 SESSION_ENGINE = (

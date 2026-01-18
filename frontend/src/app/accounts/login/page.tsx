@@ -116,7 +116,7 @@ export default function LoginPage() {
       const response = await apiFetch("/api/auth/jwt/create/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: email, password }),
+        body: JSON.stringify({ email, password }),
         signal: controller.signal,
       });
 

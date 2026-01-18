@@ -30,17 +30,6 @@ export function middleware(request: NextRequest) {
     res.cookies.set('wolvcapital_locale', locale, { path: '/', maxAge: 60*60*24*365 })
   }
 
-  // Only guard /dashboard routes
-  if (pathname.startsWith('/dashboard')) {
-    const token = request.cookies.get('authToken')?.value
-    if (!token) {
-      const loginUrl = new URL('/accounts/login', request.url)
-      // Add return path so we can navigate back after login
-      loginUrl.searchParams.set('next', pathname)
-      return NextResponse.redirect(loginUrl)
-    }
-  }
-
   return res
 }
 

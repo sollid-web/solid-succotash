@@ -151,6 +151,7 @@ def create_transaction(
     payment_method: str = "bank_transfer",
     tx_hash: str = "",
     wallet_address_used: str = "",
+    investment=None,
     notify_admin: bool = True,
     notify_user: bool = True,
 ) -> Transaction:
@@ -177,6 +178,7 @@ def create_transaction(
         reference=reference,
         tx_hash=tx_hash,
         wallet_address_used=wallet_address_used,
+        investment=investment,
     )
 
     if notify_admin:

@@ -2,8 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { buildApiUrl } from "@/lib/api";
-import { authHeaders } from "@/lib/auth";
+import { apiFetch } from "@/lib/api";
 
 type WalletResponse = {
   balance?: string | number;
@@ -62,10 +61,8 @@ export default function WithdrawPage() {
     let cancelled = false;
 
     async function apiGet<T>(path: string): Promise<T> {
-      const res = await fetch(buildApiUrl(path), {
+      const res = await apiFetch(path, {
         method: "GET",
-        headers: authHeaders(),
-        credentials: "include",
         cache: "no-store",
       });
       if (!res.ok) {
@@ -125,11 +122,11 @@ export default function WithdrawPage() {
       // IMPORTANT:
       // If your backend uses a different route, change ONLY this path:
       // Examples: "/api/withdrawals/request/" or "/api/withdrawals/create/"
-      const res = await fetch(buildApiUrl("/api/withdrawals/"), {
+      const res = await apiFetch("/api/transactions/", {
         method: "POST",
-        headers: authHeaders({ "Content-Type": "application/json" }),
-        credentials: "include",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          tx_type: "withdrawal",
           investment_id: investment,
           amount: amt,
           reference: reference || "",

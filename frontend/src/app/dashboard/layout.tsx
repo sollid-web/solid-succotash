@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from 'react';
-import { getApiBaseUrl } from '@/lib/api';
+import { apiFetch } from '@/lib/api';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import RecentActivityTicker from '@/components/RecentActivityTicker';
@@ -17,20 +17,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     // Enhanced authentication check
     const checkAuth = async () => {
       try {
-        const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-        if (!token) {
-          throw new Error('No token found');
-        }
-
-        // Verify token with backend
-        const apiBase = getApiBaseUrl();
-        
-        const response = await fetch(`${apiBase}/api/auth/me/`, {
+        const response = await apiFetch('/api/auth/me/', {
           headers: {
-            'Authorization': `Token ${token}`,
             'Content-Type': 'application/json'
-          },
-          credentials: 'include'
+          }
         });
 
         if (!response.ok) {
@@ -56,17 +46,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const handleLogout = async () => {
     try {
-      const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
-      const apiBase = getApiBaseUrl();
-      
       // API logout
-      await fetch(`${apiBase}/api/auth/logout/`, {
+      await apiFetch('/api/auth/logout/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...(token ? { 'Authorization': `Token ${token}` } : {}),
         },
-        credentials: 'include',
       });
     } catch (error) {
       console.warn('Logout API call failed:', error);
@@ -187,6 +172,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             }`}>
               KYC Verification
             </Link>
+            {(user?.is_staff || user?.is_superuser) && (
+              <Link href="/admin/withdrawals" className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                pathname === '/admin/withdrawals' 
+                  ? 'border-[#2563eb] text-[#2563eb]' 
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}>
+                Admin Withdrawals
+              </Link>
+            )}
           </div>
         </div>
       </nav>

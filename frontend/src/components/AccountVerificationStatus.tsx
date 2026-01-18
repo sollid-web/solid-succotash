@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { getApiBaseUrl } from '@/lib/api'
+import { apiFetch } from '@/lib/api'
 
 interface VerificationStatus {
   email_verified: boolean
@@ -19,18 +19,7 @@ export default function AccountVerificationStatus() {
   useEffect(() => {
     const fetchVerificationStatus = async () => {
       try {
-        const token = localStorage.getItem('token')
-        if (!token) {
-          setLoading(false)
-          return
-        }
-
-        const apiBase = getApiBaseUrl()
-        const response = await fetch(`${apiBase}/api/auth/me/`, {
-          headers: {
-            Authorization: `Token ${token}`
-          }
-        })
+        const response = await apiFetch('/api/auth/me/')
 
         if (response.ok) {
           const data = await response.json()

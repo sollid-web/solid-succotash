@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import PublicLayout from "@/components/PublicLayout"
+import { apiFetch, getApiBaseUrl } from "@/lib/api"
 
 // Force dynamic rendering since we use search params
 export const dynamic = 'force-dynamic'
@@ -26,24 +27,7 @@ function VerifyEmailContent() {
     }
 
     // Call the backend API to verify the token
-    // Robust fallback: prefer NEXT_PUBLIC_API_URL, else guess api.* from current domain
-    const envApi = (process as any)?.env?.NEXT_PUBLIC_API_URL
-    const isProdLike = typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
-
-    const defaultProdApiBase = 'https://solid-succotash-production.up.railway.app'
-
-    const guessedSameOriginApiBase = (() => {
-      if (typeof window === 'undefined') return ''
-      const origin = window.location.origin
-      const host = window.location.hostname
-      // If the frontend is being served from the API host already, use same-origin.
-      if (host.includes('up.railway.app') || host.startsWith('api.')) return origin
-      return ''
-    })()
-
-    const apiBase = envApi && envApi.trim()
-      ? envApi.replace(/\/$/, '')
-      : (isProdLike ? (guessedSameOriginApiBase || defaultProdApiBase) : 'http://localhost:8000')
+    const apiBase = getApiBaseUrl()
     const verifyUrl = `${apiBase}/api/auth/verify-email/?token=${encodeURIComponent(token)}`
     
     console.log('Email Verification Debug:')
@@ -51,7 +35,7 @@ function VerifyEmailContent() {
     console.log('- Verify URL:', verifyUrl)
     console.log('- Token (first 20 chars):', token.substring(0, 20))
     
-    fetch(verifyUrl, {
+    apiFetch(verifyUrl, {
       headers: {
         'Accept': 'application/json',
       },

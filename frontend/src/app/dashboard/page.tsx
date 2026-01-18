@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { getApiBaseUrl } from "@/lib/api";
+import { apiFetch } from "@/lib/api";
 
 /**
  * Dashboard (simple + stable)
@@ -97,16 +97,6 @@ function formatDate(d: Date | null) {
   });
 }
 
-function getStoredAccessToken(): string | null {
-  // Accept multiple keys because your codebase uses different ones in places.
-  return (
-    (typeof window !== "undefined" && window.localStorage.getItem("access_token")) ||
-    (typeof window !== "undefined" && window.localStorage.getItem("authToken")) ||
-    (typeof window !== "undefined" && window.localStorage.getItem("token")) ||
-    null
-  );
-}
-
 export default function DashboardPage() {
   const [wallet, setWallet] = useState<WalletData | null>(null);
   const [investments, setInvestments] = useState<Investment[]>([]);
@@ -122,43 +112,39 @@ export default function DashboardPage() {
       setError(null);
 
       try {
-        const token = getStoredAccessToken();
-        if (!token) {
-          throw new Error("Session expired or missing. Please log in again.");
-        }
-
-        const base = getApiBaseUrl();
-        const headers: HeadersInit = {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        };
-
-        const [walletRes, invRes, txRes] = await Promise.all([
-          fetch(`${base}/api/dashboard/wallet/`, { headers }),
-          fetch(`${base}/api/investments/my/`, { headers }),
-          fetch(`${base}/api/transactions/my/`, { headers }),
+        const [walletResult, invResult, txResult] = await Promise.allSettled([
+          apiFetch("/api/wallet/"),
+          apiFetch("/api/investments/my/"),
+          apiFetch("/api/transactions/"),
         ]);
+
+        const walletRes = walletResult.status === "fulfilled" ? walletResult.value : null;
+        const invRes = invResult.status === "fulfilled" ? invResult.value : null;
+        const txRes = txResult.status === "fulfilled" ? txResult.value : null;
 
         // If token is invalid/expired, backend returns 401.
         const anyUnauthorized =
-          walletRes.status === 401 ||
-          invRes.status === 401 ||
-          txRes.status === 401 ||
-          walletRes.status === 403 ||
-          invRes.status === 403 ||
-          txRes.status === 403;
+          walletRes?.status === 401 ||
+          invRes?.status === 401 ||
+          txRes?.status === 401 ||
+          walletRes?.status === 403 ||
+          invRes?.status === 403 ||
+          txRes?.status === 403;
 
         if (anyUnauthorized) {
           throw new Error("Session expired or missing. Please log in again.");
         }
 
-        if (!walletRes.ok) throw new Error(`Wallet fetch failed (${walletRes.status})`);
-        if (!invRes.ok) throw new Error(`Investments fetch failed (${invRes.status})`);
-        if (!txRes.ok) throw new Error(`Transactions fetch failed (${txRes.status})`);
+        if (!walletRes || !walletRes.ok) {
+          throw new Error(`Wallet fetch failed (${walletRes?.status || "network"})`);
+        }
+        if (!invRes || !invRes.ok) {
+          throw new Error(`Investments fetch failed (${invRes?.status || "network"})`);
+        }
 
         const walletJson = (await walletRes.json()) as WalletData;
         const invJson = (await invRes.json()) as Investment[];
-        const txJson = (await txRes.json()) as Transaction[];
+        const txJson = txRes && txRes.ok ? ((await txRes.json()) as Transaction[]) : [];
 
         if (cancelled) return;
 

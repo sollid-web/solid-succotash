@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useMemo } from 'react'
-import { getApiBaseUrl } from '@/lib/api'
+import { apiFetch } from '@/lib/api'
 import Link from 'next/link'
 
 interface Transaction {
@@ -19,7 +19,6 @@ interface Transaction {
 }
 
 export default function TransactionsPage() {
-  const apiBase = useMemo(() => getApiBaseUrl(), [])
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -31,19 +30,12 @@ export default function TransactionsPage() {
 
   useEffect(() => {
     const fetchTransactions = async () => {
-      const token = localStorage.getItem('authToken')
-      if (!token) {
-        window.location.href = '/accounts/login?next=/dashboard/transactions'
-        return
-      }
-
       try {
-        const res = await fetch(`${apiBase}/api/transactions/`, {
+        const qs = filterType !== 'all' ? `?tx_type=${encodeURIComponent(filterType)}` : ''
+        const res = await apiFetch(`/api/transactions/${qs}`, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Token ${token}`,
           },
-          credentials: 'include',
         })
 
         if (res.ok) {
@@ -61,7 +53,7 @@ export default function TransactionsPage() {
     }
 
     fetchTransactions()
-  }, [apiBase])
+  }, [filterType])
 
   // Filter and sort transactions
   const filteredTransactions = useMemo(() => {

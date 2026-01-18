@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { getApiBaseUrl } from "@/lib/api"
+import { apiFetch } from "@/lib/api"
 
 interface SummaryData {
   code: string
@@ -15,7 +15,6 @@ interface SummaryData {
 }
 
 export default function ReferralSummaryCard() {
-  const apiBase = useMemo(() => getApiBaseUrl(), [])
   const [summary, setSummary] = useState<SummaryData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>("")
@@ -23,20 +22,12 @@ export default function ReferralSummaryCard() {
 
   useEffect(() => {
     const run = async () => {
-      const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null
-      if (!token) {
-        setError("Please log in to view your referral stats.")
-        setLoading(false)
-        return
-      }
       try {
-        const resp = await fetch(`${apiBase}/api/referrals/summary/`, {
+        const resp = await apiFetch("/api/referrals/summary/", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Token ${token}`,
           },
-          credentials: "include",
         })
         if (!resp.ok) {
           throw new Error(`Failed to load summary: ${resp.status}`)
@@ -51,7 +42,7 @@ export default function ReferralSummaryCard() {
       }
     }
     run()
-  }, [apiBase])
+  }, [])
 
   const handleCopyLink = async () => {
     if (!summary?.code || typeof window === "undefined") return

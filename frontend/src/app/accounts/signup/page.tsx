@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getApiBaseUrl } from '@/lib/api'
+import { apiFetch, getApiBaseUrl } from '@/lib/api'
 import { useRouter } from 'next/navigation'
 
 export default function SignupPage() {
@@ -33,7 +33,7 @@ export default function SignupPage() {
     }
     try {
       console.log('Attempting signup with API:', apiBase)
-      const resp = await fetch(`${apiBase}/api/auth/complete-signup/`, {
+      const resp = await apiFetch('/api/auth/complete-signup/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, referral_code: referralCode || undefined })

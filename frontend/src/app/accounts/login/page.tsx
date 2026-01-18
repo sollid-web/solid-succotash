@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { getApiBaseUrl } from "@/lib/api";
+import { apiFetch, getApiBaseUrl } from "@/lib/api";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -97,7 +97,7 @@ export default function LoginPage() {
       return;
     }
 
-    fetch(`${apiBase}/healthz/`, { method: "GET" }).catch(() => {
+    apiFetch("/healthz/", { method: "GET" }).catch(() => {
       setError((prev) => prev || "Network error. Please check your connection and try again.");
     });
   }, [apiBase]);
@@ -113,7 +113,7 @@ export default function LoginPage() {
     const t = setTimeout(() => controller.abort(), 15000);
 
     try {
-      const response = await fetch(`${apiBase}/api/auth/login/`, {
+      const response = await apiFetch("/api/auth/login/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -174,11 +174,10 @@ export default function LoginPage() {
     }
 
     try {
-      const res = await fetch(`${apiBase}/api/auth/verification/resend/`, {
+      const res = await apiFetch("/api/auth/verification/resend/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
-        credentials: "include",
       });
 
       let data: any = {};

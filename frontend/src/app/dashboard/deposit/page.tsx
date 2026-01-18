@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
-import { getApiBaseUrl } from '@/lib/api'
+import { useEffect, useState } from 'react'
+import { apiFetch, buildApiUrl } from '@/lib/api'
 import Link from 'next/link'
 
 interface CompanyWallet {
@@ -13,7 +13,6 @@ interface CompanyWallet {
 }
 
 export default function DepositPage() {
-  const apiBase = useMemo(() => getApiBaseUrl(), [])
   const [amount, setAmount] = useState('')
   const [method, setMethod] = useState('BTC')
   const [reference, setReference] = useState('')
@@ -29,14 +28,13 @@ export default function DepositPage() {
   useEffect(() => {
     const loadWallets = async () => {
       try {
-        console.log('Loading wallets from:', `${apiBase}/api/crypto-wallets/`)
-        const res = await fetch(`${apiBase}/api/crypto-wallets/`, {
+        console.log('Loading wallets from:', buildApiUrl('/api/crypto-wallets/'))
+        const res = await apiFetch('/api/crypto-wallets/', {
           method: 'GET',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
-          credentials: 'include',
         })
         console.log('Wallet fetch response status:', res.status)
         if (res.ok) {
@@ -58,7 +56,7 @@ export default function DepositPage() {
       }
     }
     loadWallets()
-  }, [apiBase, method])
+  }, [method])
 
   const copyToClipboard = async (text: string, label: string) => {
     try {
@@ -82,18 +80,11 @@ export default function DepositPage() {
     if (!amount) return setError('Please enter an amount')
     if (!reference) return setError('Please provide a reference or note')
 
-    const token = localStorage.getItem('authToken')
-    if (!token) {
-      window.location.href = '/accounts/login?next=/dashboard/deposit'
-      return
-    }
-
     setLoading(true)
     try {
-      const res = await fetch(`${apiBase}/api/transactions/`, {
+      const res = await apiFetch('/api/transactions/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Token ${token}` },
-        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           tx_type: 'deposit',
           amount: Number(amount),

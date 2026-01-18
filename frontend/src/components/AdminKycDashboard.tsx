@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { getApiBaseUrl } from '@/lib/api'
+import { apiFetch } from '@/lib/api'
 
 interface KycApplication {
   id: string
@@ -29,14 +29,7 @@ export default function AdminKycDashboard() {
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const token = localStorage.getItem('authToken')
-        const apiBase = getApiBaseUrl()
-
-        const response = await fetch(`${apiBase}/api/admin/kyc/`, {
-          headers: {
-            Authorization: `Token ${token}`
-          }
-        })
+        const response = await apiFetch('/api/admin/kyc/')
 
         if (!response.ok) {
           throw new Error('Failed to fetch KYC applications')
@@ -63,13 +56,9 @@ export default function AdminKycDashboard() {
 
     setActionLoading(true)
     try {
-      const token = localStorage.getItem('authToken')
-      const apiBase = getApiBaseUrl()
-
-      const response = await fetch(`${apiBase}/api/admin/kyc/${appId}/`, {
+      const response = await apiFetch(`/api/admin/kyc/${appId}/`, {
         method: 'PATCH',
         headers: {
-          Authorization: `Token ${token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -103,13 +92,9 @@ export default function AdminKycDashboard() {
 
     setActionLoading(true)
     try {
-      const token = localStorage.getItem('authToken')
-      const apiBase = getApiBaseUrl()
-
-      const response = await fetch(`${apiBase}/api/admin/kyc/${appId}/`, {
+      const response = await apiFetch(`/api/admin/kyc/${appId}/`, {
         method: 'PATCH',
         headers: {
-          Authorization: `Token ${token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({

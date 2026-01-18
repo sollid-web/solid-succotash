@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { getApiBaseUrl } from '@/lib/api'
+import { apiFetch } from '@/lib/api'
 
 type Card = {
   id: string
@@ -29,16 +29,7 @@ export default function CardsPage() {
     let active = true
     ;(async () => {
       try {
-        const token = localStorage.getItem('authToken')
-        if (!token) {
-          window.location.href = '/accounts/login?next=/dashboard/cards'
-          return
-        }
-        const apiBase = getApiBaseUrl()
-        const resp = await fetch(`${apiBase}/api/virtual-cards/`, {
-          headers: { 'Authorization': `Token ${token}` },
-          credentials: 'include',
-        })
+        const resp = await apiFetch('/api/virtual-cards/')
         const data = await resp.json()
         if (!resp.ok) throw new Error(data?.detail || 'Failed to load cards')
         if (!active) return

@@ -158,13 +158,18 @@ class TransactionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Transaction.objects.filter(user=self.request.user)
+        qs = Transaction.objects.filter(user=self.request.user)
+        tx_type = (self.request.query_params.get("tx_type") or "").strip()
+        if tx_type:
+            qs = qs.filter(tx_type=tx_type)
+        return qs
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         validated = serializer.validated_data
+        investment = validated.get("investment")
 
         try:
             txn = create_transaction(
@@ -175,6 +180,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
                 payment_method=validated.get("payment_method", "bank_transfer"),
                 tx_hash=validated.get("tx_hash", ""),
                 wallet_address_used=validated.get("wallet_address_used", ""),
+                investment=investment,
             )
         except DjangoValidationError as exc:
             raise ValidationError(exc.messages)
@@ -341,6 +347,16 @@ class AdminTransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = AdminTransactionSerializer
     permission_classes = [IsPlatformAdmin]
+    
+    def get_queryset(self):
+        qs = super().get_queryset()
+        tx_type = (self.request.query_params.get("tx_type") or "").strip()
+        status_param = (self.request.query_params.get("status") or "").strip()
+        if tx_type:
+            qs = qs.filter(tx_type=tx_type)
+        if status_param:
+            qs = qs.filter(status=status_param)
+        return qs
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)

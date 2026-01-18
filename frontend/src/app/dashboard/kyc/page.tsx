@@ -1,7 +1,7 @@
   'use client'  
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
-import { getApiBaseUrl } from '@/lib/api'
+import { apiFetch } from '@/lib/api'
 
 interface KYCStep {
   id: number
@@ -103,7 +103,6 @@ export default function KYCPage() {
   const [latestApplication, setLatestApplication] = useState<KycApplication | null>(null)
   const [loadingStatus, setLoadingStatus] = useState(true)
   const [fetchError, setFetchError] = useState('')
-  const apiBase = useMemo(() => getApiBaseUrl(), [])
 
   const [selectedStep, setSelectedStep] = useState(2)
   const [personalInfo, setPersonalInfo] = useState({
@@ -206,25 +205,14 @@ export default function KYCPage() {
     }
   }, [latestApplication])
 
-  const getToken = () => (typeof window === 'undefined' ? null : localStorage.getItem('authToken'))
-
   const fetchKycStatus = useCallback(async () => {
-    const token = getToken()
-    if (!token) {
-      setFetchError('Please log in to view your KYC status.')
-      setLoadingStatus(false)
-      return
-    }
-
     try {
       setFetchError('')
-      const response = await fetch(`${apiBase}/api/kyc/`, {
+      const response = await apiFetch('/api/kyc/', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Token ${token}`
         },
-        credentials: 'include'
       })
 
       if (!response.ok) {
@@ -240,7 +228,7 @@ export default function KYCPage() {
     } finally {
       setLoadingStatus(false)
     }
-  }, [apiBase])
+  }, [])
 
   useEffect(() => {
     fetchKycStatus()
@@ -318,13 +306,6 @@ export default function KYCPage() {
       return
     }
 
-    const token = getToken()
-    if (!token) {
-      setMessageTone('error')
-      setSubmitMessage('Session expired. Please log in again.')
-      return
-    }
-
     setIsSubmitting(true)
     setMessageTone('success')
     setSubmitMessage('')
@@ -338,13 +319,11 @@ export default function KYCPage() {
     }
 
     try {
-      const response = await fetch(`${apiBase}/api/kyc/personal-info/`, {
+      const response = await apiFetch('/api/kyc/personal-info/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Token ${token}`,
         },
-        credentials: 'include',
         body: JSON.stringify(payload),
       })
 
@@ -379,24 +358,16 @@ export default function KYCPage() {
       alert('Please upload both required documents')
       return
     }
-    const token = getToken()
-    if (!token) {
-      alert('Please log in again to continue.')
-      return
-    }
-
     setIsSubmitting(true)
     setMessageTone('success')
     setSubmitMessage('')
 
     try {
-      const response = await fetch(`${apiBase}/api/kyc/documents/`, {
+      const response = await apiFetch('/api/kyc/documents/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Token ${token}`
         },
-        credentials: 'include',
         body: JSON.stringify({
           government_id: uploadedFiles.governmentId,
           proof_of_address: uploadedFiles.proofOfAddress

@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
-import { getApiBaseUrl } from '@/lib/api'
+import { useEffect, useState } from 'react'
+import { apiFetch } from '@/lib/api'
 import Link from 'next/link'
 
 interface Plan {
@@ -15,7 +15,6 @@ interface Plan {
 }
 
 export default function NewInvestmentPage() {
-  const apiBase = useMemo(() => getApiBaseUrl(), [])
   const [plans, setPlans] = useState<Plan[]>([])
   const [planId, setPlanId] = useState<number | ''>('' as any)
   const [amount, setAmount] = useState('')
@@ -26,7 +25,7 @@ export default function NewInvestmentPage() {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await fetch(`${apiBase}/api/plans/`)
+        const res = await apiFetch('/api/plans/')
         if (res.ok) {
           const data = await res.json()
           setPlans(data)
@@ -34,7 +33,7 @@ export default function NewInvestmentPage() {
       } catch {}
     }
     load()
-  }, [apiBase])
+  }, [])
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -43,21 +42,13 @@ export default function NewInvestmentPage() {
     if (!planId) return setError('Please select a plan')
     if (!amount) return setError('Please enter an amount')
 
-    const token = localStorage.getItem('authToken')
-    if (!token) {
-      window.location.href = '/accounts/login?next=/dashboard/new-investment'
-      return
-    }
-
     setLoading(true)
     try {
-      const res = await fetch(`${apiBase}/api/investments/`, {
+      const res = await apiFetch('/api/investments/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Token ${token}`,
         },
-        credentials: 'include',
         body: JSON.stringify({ plan_id: Number(planId), amount: Number(amount) }),
       })
       const data = await res.json()

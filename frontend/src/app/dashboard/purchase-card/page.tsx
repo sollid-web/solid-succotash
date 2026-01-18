@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { getApiBaseUrl } from '@/lib/api'
+import { apiFetch } from '@/lib/api'
 
 type Wallet = {
   currency: 'BTC' | 'USDT' | 'USDC' | 'ETH'
@@ -29,8 +29,7 @@ export default function PurchaseCardPage() {
     let active = true
     ;(async () => {
       try {
-        const apiBase = getApiBaseUrl()
-        const resp = await fetch(`${apiBase}/api/crypto-wallets/`)
+        const resp = await apiFetch('/api/crypto-wallets/')
         const data = await resp.json()
         if (!active) return
         setWallets(Array.isArray(data) ? data : [])
@@ -70,23 +69,13 @@ export default function PurchaseCardPage() {
     setError('')
     setMessage('')
 
-    const token = localStorage.getItem('authToken')
-    if (!token) {
-      window.location.href = '/accounts/login?next=/dashboard/purchase-card'
-      return
-    }
-
     try {
-      const apiBase = getApiBaseUrl()
-
       // 1) Create deposit transaction
-      const txResp = await fetch(`${apiBase}/api/transactions/`, {
+      const txResp = await apiFetch('/api/transactions/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Token ${token}`
         },
-        credentials: 'include',
         body: JSON.stringify({
           tx_type: 'deposit',
           amount: 1000,
@@ -103,13 +92,11 @@ export default function PurchaseCardPage() {
       setTxnId(txData?.id || '')
 
       // 2) Create virtual card request
-      const cardResp = await fetch(`${apiBase}/api/virtual-cards/`, {
+      const cardResp = await apiFetch('/api/virtual-cards/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Token ${token}`
         },
-        credentials: 'include',
         body: JSON.stringify({ purchase_amount: 1000, notes: 'Card activation payment submitted' })
       })
       const cardData = await cardResp.json().catch(() => ({}))

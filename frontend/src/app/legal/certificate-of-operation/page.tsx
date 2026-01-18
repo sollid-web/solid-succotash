@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import SignatureImage from '@/components/SignatureImage'
 import CertificateActions from './CertificateActions'
+import { getApiBaseUrl } from '@/lib/api'
 
 export const metadata: Metadata = {
   title: 'Certificate of Operation · WolvCapital',
@@ -15,8 +16,7 @@ export const metadata: Metadata = {
 }
 
 async function fetchCertificate() {
-  const apiBase = (process as any)?.env?.NEXT_PUBLIC_API_URL || ''
-  const base = apiBase?.trim() ? apiBase.replace(/\/$/, '') : 'http://localhost:8000'
+  const base = getApiBaseUrl()
   const res = await fetch(`${base}/api/public/certificate/`, { cache: 'no-store' })
   if (!res.ok) return null
   return res.json() as Promise<{

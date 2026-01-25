@@ -2,10 +2,9 @@ import logging
 from datetime import date, datetime
 from decimal import Decimal
 
-
 from django.core.management.base import BaseCommand
+from django.db import connection, transaction
 from django.utils import timezone
-from django.db import transaction, connection
 
 from core.email_service import EmailService
 from investments.models import DailyRoiPayout, UserInvestment

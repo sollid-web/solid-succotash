@@ -10,8 +10,8 @@ const failOpen: ValidationStatus = {
   validation_completed: true,
 };
 
-function buildCookieHeader(): string {
-  const store = cookies();
+async function buildCookieHeader(): Promise<string> {
+  const store = await cookies();
   const all = store.getAll();
   if (!all.length) {
     return "";
@@ -25,7 +25,7 @@ export async function getValidationStatus(): Promise<ValidationStatus> {
     return failOpen;
   }
 
-  const cookieHeader = buildCookieHeader();
+  const cookieHeader = await buildCookieHeader();
 
   try {
     const response = await fetch(`${baseUrl.replace(/\/$/, "")}/api/me/validation-status`, {

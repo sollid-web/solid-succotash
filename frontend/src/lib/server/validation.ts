@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { buildApiUrl } from "@/lib/api";
 
 type ValidationStatus = {
   validation_required: boolean;
@@ -20,15 +21,10 @@ async function buildCookieHeader(): Promise<string> {
 }
 
 export async function getValidationStatus(): Promise<ValidationStatus> {
-  const baseUrl = process.env.DJANGO_BASE_URL;
-  if (!baseUrl) {
-    return failOpen;
-  }
-
   const cookieHeader = await buildCookieHeader();
 
   try {
-    const response = await fetch(`${baseUrl.replace(/\/$/, "")}/api/me/validation-status`, {
+    const response = await fetch(buildApiUrl("/api/me/validation-status"), {
       method: "GET",
       headers: cookieHeader ? { Cookie: cookieHeader } : {},
       cache: "no-store",

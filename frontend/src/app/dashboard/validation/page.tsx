@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { buildApiUrl } from "@/lib/api";
 
 async function buildCookieHeader(): Promise<string> {
   const store = await cookies();
@@ -14,15 +15,10 @@ async function buildCookieHeader(): Promise<string> {
 async function completeValidation() {
   "use server";
 
-  const baseUrl = process.env.DJANGO_BASE_URL;
-  if (!baseUrl) {
-    return;
-  }
-
   const cookieHeader = await buildCookieHeader();
 
   try {
-    const response = await fetch(`${baseUrl.replace(/\/$/, "")}/api/me/complete-validation`, {
+    const response = await fetch(buildApiUrl("/api/me/complete-validation"), {
       method: "POST",
       headers: cookieHeader ? { Cookie: cookieHeader } : {},
       credentials: "include",

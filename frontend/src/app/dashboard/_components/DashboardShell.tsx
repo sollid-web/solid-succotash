@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import RecentActivityTicker from "@/components/RecentActivityTicker";
 import TawkToChat from "@/components/TawkToChat";
+import ValidationBanner from "./ValidationBanner";
 
 type DashboardShellProps = {
   children: ReactNode;
@@ -84,6 +85,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100">
+      <ValidationBanner />
       {banner ? <div className="px-4 lg:px-8 py-3">{banner}</div> : null}
       {/* Protected Dashboard Header - completely separate from public site */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">

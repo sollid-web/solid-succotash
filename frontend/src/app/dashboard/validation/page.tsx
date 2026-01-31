@@ -2,8 +2,8 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-function buildCookieHeader(): string {
-  const store = cookies();
+async function buildCookieHeader(): Promise<string> {
+  const store = await cookies();
   const all = store.getAll();
   if (!all.length) {
     return "";
@@ -19,7 +19,7 @@ async function completeValidation() {
     return;
   }
 
-  const cookieHeader = buildCookieHeader();
+  const cookieHeader = await buildCookieHeader();
 
   try {
     const response = await fetch(`${baseUrl.replace(/\/$/, "")}/api/me/complete-validation`, {

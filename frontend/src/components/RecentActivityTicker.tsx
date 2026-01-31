@@ -42,6 +42,12 @@ const COUNTRIES: Country[] = [
 ];
 // Remaining 50% → other activities (trading, fees, transfers, internal ops)
 
+const FALLBACK_COUNTRY: Country = {
+  code: "US",
+  name: "United States",
+  weight: 1,
+  names: ["Alex", "Jordan", "Taylor", "Casey", "Morgan", "Avery"],
+};
 
 const DEFAULT_PLANS = ["Pioneer", "Vanguard", "Horizon", "Summit"];
 const AMOUNTS = [100,250,500,750,1000,1500,2000,2500,3500,5000,7500,10000,12500,15000,20000,25000,30000,40000,50000,75000,100000];
@@ -50,13 +56,16 @@ const TIME_AGO_OPTIONS = ["just now","moments ago","1 min ago","2 mins ago","3 m
 let GLOBAL_ID = Date.now() % 1000000;
 
 function pickWeightedCountry() {
+  if (!COUNTRIES.length) {
+    return FALLBACK_COUNTRY;
+  }
   const total = COUNTRIES.reduce((s, c) => s + c.weight, 0);
   let r = Math.random() * total;
   for (const c of COUNTRIES) {
     if (r <= c.weight) return c;
     r -= c.weight;
   }
-  return COUNTRIES[COUNTRIES.length - 1];
+  return COUNTRIES[COUNTRIES.length - 1] || FALLBACK_COUNTRY;
 }
 function pickRandom<T>(arr: T[]) { return arr[Math.floor(Math.random()*arr.length)]; }
 function randBetween(min:number,max:number){ return Math.round(min + Math.random()*(max-min)); }

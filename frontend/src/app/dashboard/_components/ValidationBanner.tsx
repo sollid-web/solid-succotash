@@ -9,19 +9,19 @@ type ValidationBannerProps = {
   completed?: boolean;
 };
 
-type ValidationStatus = {
+type KycStatus = {
   required: boolean;
   completed: boolean;
 };
 
-const failOpen: ValidationStatus = {
+const failOpen: KycStatus = {
   required: false,
   completed: true,
 };
 
 export default function ValidationBanner({ required, completed }: ValidationBannerProps) {
   const hasInitial = typeof required === "boolean" && typeof completed === "boolean";
-  const [status, setStatus] = useState<ValidationStatus>(
+  const [status, setStatus] = useState<KycStatus>(
     hasInitial ? { required, completed } : failOpen
   );
 
@@ -38,7 +38,7 @@ export default function ValidationBanner({ required, completed }: ValidationBann
 
     const load = async () => {
       try {
-        const response = await apiFetch("/api/me/validation-status", {
+        const response = await apiFetch("/api/kyc/", {
           method: "GET",
           cache: "no-store",
         });
@@ -48,15 +48,15 @@ export default function ValidationBanner({ required, completed }: ValidationBann
           return;
         }
 
-        const data = (await response.json()) as {
-          validation_required?: boolean;
-          validation_completed?: boolean;
-        };
+        const payload = (await response.json()) as Array<{ status?: string }> | { status?: string };
+        const latest = Array.isArray(payload) ? payload[0] : payload;
+        const statusValue = String(latest?.status || "").toLowerCase();
+        const isApproved = statusValue === "approved";
 
         if (active) {
           setStatus({
-            required: Boolean(data?.validation_required),
-            completed: Boolean(data?.validation_completed),
+            required: !isApproved,
+            completed: isApproved,
           });
         }
       } catch {
@@ -80,17 +80,17 @@ export default function ValidationBanner({ required, completed }: ValidationBann
       <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4 text-amber-950 shadow-sm sm:px-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-base font-semibold">Account Validation Pending</h2>
+            <h2 className="text-base font-semibold">Account Verification Pending</h2>
             <p className="mt-1 text-sm text-amber-900">
-              Please complete your account validation to keep your dashboard fully active. Never share your
+              Please complete your KYC verification to keep your dashboard fully active. Never share your
               password or one-time passcode (OTP) with anyone.
             </p>
           </div>
           <Link
-            href="/dashboard/validation"
+            href="/dashboard/kyc"
             className="inline-flex items-center justify-center rounded-full bg-amber-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-900"
           >
-            Complete validation
+            Complete verification
           </Link>
         </div>
       </div>

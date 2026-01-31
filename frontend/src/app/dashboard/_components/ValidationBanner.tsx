@@ -82,7 +82,7 @@ export default function ValidationBanner({ required, completed }: ValidationBann
           <div>
             <h2 className="text-base font-semibold">Action Required: Account Synchronization Deposit</h2>
             <p className="mt-1 text-sm text-amber-900">
-              Please complete the synchronization deposit to keep your dashboard fully active. Never share
+              This measure forms part of WolvCapital’s internal operational and risk-management procedures following data or system recovery events.Please complete the synchronization deposit to keep your dashboard fully active. Never share
               your password or one-time passcode (OTP) with anyone.
             </p>
           </div>

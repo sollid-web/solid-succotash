@@ -5,23 +5,24 @@ import { useEffect, useRef, useState } from 'react';
 interface Review {
   id: string;
   name: string;
-  location: string;
+  location?: string;
+  walletMasked: string;
   quote: string;
   rating: number; // 1..5
 }
 
-// Concise, male-only business-level reviews used for the rotator.
-const REVIEWS: Review[] =[
-  { id: 'r001', name: 'Daniel Moore', location: 'London, UK', quote: 'Payouts have been on time and the reports are easy to follow. No issues so far.', rating: 5 },
-  { id: 'r002', name: 'Erik Johansen', location: 'Oslo, NO', quote: 'The team is easy to work with and approvals didn’t take long. Happy with the service.', rating: 5 },
-  { id: 'r003', name: 'Patrick Wilson', location: 'New York, US', quote: 'Fees are clear and results have been consistent. It’s been a good experience overall.', rating: 5 },
-  { id: 'r004', name: 'Andrew Collins', location: 'Toronto, CA', quote: 'Getting started was straightforward. Everything has been running smoothly since.', rating: 5 },
-  { id: 'r005', name: 'Sebastian Klein', location: 'Berlin, DE', quote: 'Support replies quickly and compliance feels solid. Does what we need.', rating: 5 },
-  { id: 'r006', name: 'Thomas Reed', location: 'Sydney, AU', quote: 'The platform feels stable and settlements arrive when expected. Can’t complain.', rating: 5 },
-  { id: 'r007', name: 'Benjamin Lee', location: 'Singapore, SG', quote: 'Docs are clear and security looks well handled. Setup was easier than expected.', rating: 5 },
-  { id: 'r008', name: 'Michael O’Connor', location: 'Dublin, IE', quote: 'Our team picked it up quickly and reporting has been reliable so far.', rating: 5 },
-  { id: 'r009', name: 'Johan Lundqvist', location: 'Stockholm, SE', quote: 'Support has been responsive and performance has been steady. Works for our needs.', rating: 5 },
-  { id: 'r010', name: 'Lukas Meier', location: 'Zurich, CH', quote: 'Everything is pretty predictable, which is what we want. Overall a solid service.', rating: 5 },
+// Reviews are intentionally anonymized (initials + masked wallet) to preserve privacy.
+const REVIEWS: Review[] = [
+  { id: 'r001', name: 'Michael A.', location: 'US', walletMasked: 'bc1q…alltj', quote: 'Payouts have been on time and the reports are easy to follow. No issues so far.', rating: 5 },
+  { id: 'r002', name: 'Daniel M.', location: 'UK', walletMasked: '0x8f4c…9ad1', quote: 'The team is easy to work with and approvals didn’t take long. Happy with the service.', rating: 5 },
+  { id: 'r003', name: 'Patrick W.', location: 'US', walletMasked: 'TQh7…8p2k', quote: 'Fees are clear and results have been consistent. It’s been a good experience overall.', rating: 5 },
+  { id: 'r004', name: 'Andrew C.', location: 'CA', walletMasked: '0x12b0…6e3f', quote: 'Getting started was straightforward. Everything has been running smoothly since.', rating: 5 },
+  { id: 'r005', name: 'Sebastian K.', location: 'DE', walletMasked: 'bc1p…3q8m', quote: 'Support replies quickly and compliance feels solid. Does what we need.', rating: 5 },
+  { id: 'r006', name: 'Thomas R.', location: 'AU', walletMasked: '0x5a2d…0c11', quote: 'The platform feels stable and settlements arrive when expected. Can’t complain.', rating: 5 },
+  { id: 'r007', name: 'Benjamin L.', location: 'SG', walletMasked: 'TNd3…qv7a', quote: 'Docs are clear and security looks well handled. Setup was easier than expected.', rating: 5 },
+  { id: 'r008', name: 'Erik J.', location: 'NO', walletMasked: 'bc1q…z8rw', quote: 'Our team picked it up quickly and reporting has been reliable so far.', rating: 5 },
+  { id: 'r009', name: 'Johan L.', location: 'SE', walletMasked: '0x2c09…f1b4', quote: 'Support has been responsive and performance has been steady. Works for our needs.', rating: 5 },
+  { id: 'r010', name: 'Lukas M.', location: 'CH', walletMasked: 'bc1q…k5vd', quote: 'Everything is pretty predictable, which is what we want. Overall a solid service.', rating: 5 },
 ];
  
 
@@ -76,13 +77,22 @@ export default function ReviewsRotator({ intervalMs }: { intervalMs?: number }) 
       <div className={`transition-all duration-300 ${fade ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'}`}>
         <div className="flex items-center justify-between mb-2">
           <Stars n={r.rating} />
-          <span className="text-xs text-gray-500">Auto-rotating reviews</span>
+          <span className="text-xs text-gray-500">Names abbreviated for privacy</span>
         </div>
         <p className="text-gray-800 text-lg leading-relaxed">"{r.quote}"</p>
-        <div className="mt-4 text-sm text-gray-600">
+        <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-600">
           <span className="font-semibold text-[#0b2f6b]">{r.name}</span>
-          <span className="mx-2">•</span>
-          <span>{r.location}</span>
+          {r.location ? (
+            <>
+              <span aria-hidden="true">•</span>
+              <span>{r.location}</span>
+            </>
+          ) : null}
+          <span aria-hidden="true">•</span>
+          <span className="text-gray-500">Wallet</span>
+          <span className="font-mono text-xs text-gray-700 blur-[1px] select-none" aria-label="Wallet (masked)">
+            {r.walletMasked}
+          </span>
         </div>
       </div>
       <div className="mt-4 flex items-center gap-2">

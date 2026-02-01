@@ -57,6 +57,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+  const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID
+  const linkedInPartnerId = process.env.NEXT_PUBLIC_LINKEDIN_PARTNER_ID
+  const hotjarId = process.env.NEXT_PUBLIC_HOTJAR_ID
+  const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID
 
   return (
     <html lang="en">
@@ -135,6 +139,83 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-white">
         <SegmentProvider writeKey={process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY || ''}>
+          {metaPixelId ? (
+            <>
+              <Script
+                id="meta-pixel"
+                strategy="afterInteractive"
+                dangerouslySetInnerHTML={{
+                  __html: `
+                    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+                    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+                    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script',
+                    'https://connect.facebook.net/en_US/fbevents.js');
+                    fbq('init', '${metaPixelId}');
+                    fbq('track', 'PageView');
+                  `,
+                }}
+              />
+            </>
+          ) : null}
+
+          {linkedInPartnerId ? (
+            <Script
+              id="linkedin-insight"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  _linkedin_partner_id = "${linkedInPartnerId}";
+                  window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+                  window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+                  (function(l) {
+                    if (!l) return;
+                    var s = document.getElementsByTagName("script")[0];
+                    var b = document.createElement("script");
+                    b.type = "text/javascript"; b.async = true;
+                    b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+                    s.parentNode.insertBefore(b, s);
+                  })(window);
+                `,
+              }}
+            />
+          ) : null}
+
+          {hotjarId ? (
+            <Script
+              id="hotjar"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  (function(h,o,t,j,a,r){
+                    h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                    h._hjSettings={hjid:${Number(hotjarId)},hjsv:6};
+                    a=o.getElementsByTagName('head')[0];
+                    r=o.createElement('script');r.async=1;
+                    r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                    a.appendChild(r);
+                  })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+                `,
+              }}
+            />
+          ) : null}
+
+          {clarityProjectId ? (
+            <Script
+              id="clarity"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  (function(c,l,a,r,i,t,y){
+                    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+                  })(window, document, "clarity", "script", "${clarityProjectId}");
+                `,
+              }}
+            />
+          ) : null}
+
           {measurementId ? (
             <>
               <Script

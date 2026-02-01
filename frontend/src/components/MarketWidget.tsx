@@ -14,27 +14,38 @@ type Coin = {
 export default function MarketWidget() {
   const [coins, setCoins] = useState<Coin[]>([]);
   const [updatedAt, setUpdatedAt] = useState<string>("");
+  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
 
-  async function fetchMarket() {
+  async function fetchMarket(signal?: AbortSignal) {
     try {
-      const res = await fetch(
-        "https://api.coingecko.com/api/v3/coins/markets" +
-          "?vs_currency=usd&ids=bitcoin,ethereum" +
-          "&sparkline=true&price_change_percentage=24h"
-      );
+      const res = await fetch("/market-data?ids=bitcoin,ethereum", {
+        method: "GET",
+        headers: { Accept: "application/json" },
+        cache: "no-store",
+        signal,
+      });
+
+      if (!res.ok) {
+        throw new Error(`Market request failed (${res.status})`);
+      }
 
       const data = await res.json();
       setCoins(data);
       setUpdatedAt(new Date().toUTCString());
+      setStatus("ready");
     } catch (err) {
-      console.error("Market fetch failed", err);
+      setStatus((prev) => (prev === "ready" ? "ready" : "error"));
     }
   }
 
   useEffect(() => {
-    fetchMarket();
-    const interval = setInterval(fetchMarket, 120000); // auto-update
-    return () => clearInterval(interval);
+    const controller = new AbortController();
+    fetchMarket(controller.signal);
+    const interval = setInterval(() => fetchMarket(controller.signal), 120000); // auto-update
+    return () => {
+      controller.abort();
+      clearInterval(interval);
+    };
   }, []);
 
   return (
@@ -43,15 +54,26 @@ export default function MarketWidget() {
     >
       <h3 className="mb-3 font-semibold">Market Overview</h3>
 
+      {status === "loading" ? (
+        <p className="text-sm text-gray-600">Loading live market data…</p>
+      ) : null}
+      {status === "error" ? (
+        <p className="text-sm text-gray-600">
+          Market data temporarily unavailable. Please try again shortly.
+        </p>
+      ) : null}
+
       {coins.map((coin) => {
-        const prices = coin.sparkline_in_7d.price;
+        const prices = Array.isArray(coin?.sparkline_in_7d?.price) ? coin.sparkline_in_7d.price : [];
+        if (!prices.length) return null;
         const min = Math.min(...prices);
         const max = Math.max(...prices);
+        const range = Math.max(1e-9, max - min);
 
         const points = prices
           .map((p, i) => {
             const x = (i / prices.length) * 100;
-            const y = 30 - ((p - min) / (max - min)) * 30;
+            const y = 30 - ((p - min) / range) * 30;
             return `${x},${y}`;
           })
           .join(" ");

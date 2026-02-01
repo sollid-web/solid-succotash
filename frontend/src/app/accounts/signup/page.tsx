@@ -6,6 +6,13 @@ import Link from 'next/link'
 import { apiFetch, getApiBaseUrl } from '@/lib/api'
 import { useRouter } from 'next/navigation'
 
+function trackEvent(name: string, props?: Record<string, unknown>) {
+  if (typeof window === 'undefined') return
+  const w = window as any
+  if (typeof w.gtag === 'function') w.gtag('event', name, props || {})
+  if (typeof w.analytics?.track === 'function') w.analytics.track(name, props || {})
+}
+
 export default function SignupPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -15,23 +22,34 @@ export default function SignupPage() {
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
   const [step, setStep] = useState<'form' | 'sent'>('form')
+  const [selectedPlan, setSelectedPlan] = useState('')
 
   const apiBase = getApiBaseUrl()
   const router = useRouter()
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const plan = new URLSearchParams(window.location.search).get('plan') || ''
+    setSelectedPlan(plan)
+    trackEvent('signup_view', { page: 'signup', plan: plan || undefined })
+  }, [])
 
   const completeSignup = async () => {
     setLoading(true); setError(''); setMessage('')
     if (password.length < 8) {
       setLoading(false)
       setError('Password must be at least 8 characters.')
+      trackEvent('signup_validation_error', { reason: 'password_too_short' })
       return
     }
     if (password !== confirmPassword) {
       setLoading(false)
       setError('Passwords do not match.')
+      trackEvent('signup_validation_error', { reason: 'password_mismatch' })
       return
     }
     try {
+      trackEvent('signup_submit', { page: 'signup', plan: selectedPlan || undefined })
       console.log('Attempting signup with API:', apiBase)
       const resp = await apiFetch('/api/auth/complete-signup/', {
         method: 'POST',
@@ -43,12 +61,15 @@ export default function SignupPage() {
       console.log('Signup response data:', data)
       if (!resp.ok) {
         setError(data?.error || 'Signup failed. Please try again.')
+        trackEvent('signup_error', { status: resp.status, plan: selectedPlan || undefined })
         return
       }
+      trackEvent('signup_success', { plan: selectedPlan || undefined })
       setStep('sent')
     } catch (e: any) {
       console.error('Signup error:', e)
       setError(e?.message || 'Failed to complete signup. Please check your connection.')
+      trackEvent('signup_error', { message: e?.message || 'network_error', plan: selectedPlan || undefined })
     } finally { setLoading(false) }
   }
 

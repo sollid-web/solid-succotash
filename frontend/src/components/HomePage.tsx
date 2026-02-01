@@ -2,74 +2,487 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import FlipCard from './FlipCard'
-import { useTranslation } from '@/i18n/TranslationProvider'
 import ReviewsRotator from '@/components/ReviewsRotator'
 import LiveMarketTicker from '@/components/LiveMarketTicker'
 import MarketWidget from '@/components/MarketWidget'
 import TrustSection from '@/components/TrustSection'
 import ProfessionalFooter from '@/components/ProfessionalFooter'
-import LanguageSwitcher from '@/components/LanguageSwitcher'
 import { UserPlus, Briefcase, CreditCard, TrendingUp, Shield, Lock, FileCheck, Clock, Bitcoin, HelpCircle, CheckCircle2, ShieldCheck, Globe, Users } from 'lucide-react'
 // NavBar and any live transaction banners are intentionally omitted for a cleaner, faster initial render.
 
+type RoiPlan = {
+  id: 'pioneer' | 'vanguard' | 'horizon' | 'summit'
+  name: string
+  dailyRoiPct: number
+  minDepositUsd: number
+  durationDaysLabel: string
+  accent: 'blue' | 'indigo' | 'emerald' | 'amber'
+}
+
+const ROI_PLANS: RoiPlan[] = [
+  { id: 'pioneer', name: 'Pioneer', dailyRoiPct: 1, minDepositUsd: 100, durationDaysLabel: '90 days', accent: 'blue' },
+  { id: 'vanguard', name: 'Vanguard', dailyRoiPct: 1.25, minDepositUsd: 1000, durationDaysLabel: '150 days', accent: 'indigo' },
+  { id: 'horizon', name: 'Horizon', dailyRoiPct: 1.5, minDepositUsd: 5000, durationDaysLabel: '180 days', accent: 'emerald' },
+  { id: 'summit', name: 'Summit VIP', dailyRoiPct: 2, minDepositUsd: 15000, durationDaysLabel: '365 days', accent: 'amber' },
+]
+
+const FALLBACK_WEEKLY_PAYOUT_USD = 247_100
+
+function formatUsd(value: number) {
+  if (!Number.isFinite(value)) return '$—'
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(value)
+}
+
+function estimateSimpleRoi(amountUsd: number, days: number, dailyRoiPct: number) {
+  const safeAmount = Number.isFinite(amountUsd) ? Math.max(0, amountUsd) : 0
+  const safeDays = Number.isFinite(days) ? Math.max(0, Math.floor(days)) : 0
+  const safeDaily = Number.isFinite(dailyRoiPct) ? Math.max(0, dailyRoiPct) : 0
+  const profit = safeAmount * (safeDaily / 100) * safeDays
+  return { profit, total: safeAmount + profit }
+}
+
+function trackEvent(name: string, props?: Record<string, unknown>) {
+  if (typeof window === 'undefined') return
+  const w = window as any
+  if (typeof w.gtag === 'function') w.gtag('event', name, props || {})
+  if (typeof w.analytics?.track === 'function') w.analytics.track(name, props || {})
+}
+
 export default function HomePage() {
-  const { t } = useTranslation()
+  const heroRef = useRef<HTMLElement | null>(null)
+  const [showStickyCta, setShowStickyCta] = useState(false)
+  const [showExitIntent, setShowExitIntent] = useState(false)
+
+  const [depositUsdInput, setDepositUsdInput] = useState('1000')
+  const [days, setDays] = useState(10)
+  const [selectedPlanId, setSelectedPlanId] = useState<RoiPlan['id']>('vanguard')
+
+  const depositUsd = useMemo(() => {
+    const parsed = Number(depositUsdInput)
+    if (!Number.isFinite(parsed)) return 0
+    return Math.max(0, parsed)
+  }, [depositUsdInput])
+
+  const weeklyPayoutUsdRaw = process.env.NEXT_PUBLIC_WEEKLY_PAYOUT_USD
+  const weeklyPayoutUsdParsed = weeklyPayoutUsdRaw ? Number(weeklyPayoutUsdRaw) : NaN
+  const weeklyPayoutUsd = Number.isFinite(weeklyPayoutUsdParsed) ? weeklyPayoutUsdParsed : FALLBACK_WEEKLY_PAYOUT_USD
+  const weeklyPayoutIsExample = !Number.isFinite(weeklyPayoutUsdParsed)
+
+  const scrollToPlans = (source: 'hero' | 'sticky' | 'exit_intent') => {
+    trackEvent('cta_click', { location: source, cta: 'start_earning_now' })
+    const el = document.getElementById('roi-plans')
+    if (!el) return
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  const resetCalculator = () => {
+    setDepositUsdInput('1000')
+    setDays(10)
+    setSelectedPlanId('vanguard')
+    trackEvent('plan_calculator_reset', { page: 'home' })
+  }
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const mq = window.matchMedia?.('(max-width: 767px)')
+    const isMobile = mq ? mq.matches : true
+    if (!isMobile) return
+
+    if (typeof IntersectionObserver !== 'undefined' && heroRef.current) {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          setShowStickyCta(entry.intersectionRatio < 0.35)
+        },
+        { threshold: [0, 0.2, 0.35, 0.6] },
+      )
+      observer.observe(heroRef.current)
+      return () => observer.disconnect()
+    }
+
+    const onScroll = () => setShowStickyCta((window.scrollY || 0) > 240)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const thresholds = [25, 50, 75, 90]
+    const fired = new Set<number>()
+
+    const onScroll = () => {
+      const doc = document.documentElement
+      const scrollTop = window.scrollY || doc.scrollTop || 0
+      const max = Math.max(1, doc.scrollHeight - window.innerHeight)
+      const pct = Math.round((scrollTop / max) * 100)
+      for (const t of thresholds) {
+        if (pct >= t && !fired.has(t)) {
+          fired.add(t)
+          trackEvent('scroll_depth', { percent: t, page: 'home' })
+        }
+      }
+    }
+
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const timer = window.setTimeout(() => trackEvent('time_on_page', { seconds: 30, page: 'home' }), 30_000)
+    return () => window.clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const finePointer = window.matchMedia?.('(pointer:fine)')?.matches
+    if (!finePointer) return
+    if (window.sessionStorage.getItem('wolvcapital.exitIntentSeen') === '1') return
+
+    const onMouseOut = (e: MouseEvent) => {
+      if (e.clientY > 0) return
+      if ((e.relatedTarget as Node | null) !== null) return
+      window.sessionStorage.setItem('wolvcapital.exitIntentSeen', '1')
+      trackEvent('exit_intent_open', { page: 'home' })
+      setShowExitIntent(true)
+    }
+
+    document.addEventListener('mouseout', onMouseOut)
+    return () => document.removeEventListener('mouseout', onMouseOut)
+  }, [])
+
+  useEffect(() => {
+    if (!showExitIntent) return
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        trackEvent('exit_intent_close', { action: 'escape' })
+        setShowExitIntent(false)
+      }
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [showExitIntent])
+
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section with Background Image and Text Overlay */}
-      <section className="relative min-h-screen flex items-center">
+    <div className="min-h-screen bg-white pb-[calc(env(safe-area-inset-bottom)+5rem)] md:pb-0">
+      {/* Hero Section (Above-the-Fold) */}
+      <section ref={heroRef} className="relative min-h-[calc(100vh-5rem)] flex items-center overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
-          {/* Mobile and Desktop - Using same hero image */}
           <Image
             src="/images/home-hero.jpg"
-            alt="WolvCapital digital investment platform hero image, U.S. fintech company"
+            alt="WolvCapital digital investment platform hero image"
             fill
             className="object-cover object-center"
             priority
             quality={90}
           />
-          {/* Gradient Overlay for Text Readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0b2f6b]/90 via-[#0b2f6b]/70 to-[#2563eb]/50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0b2f6b]/95 via-[#0b2f6b]/75 to-[#2563eb]/55" />
         </div>
 
-        {/* Content Overlay */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-              {t('hero.welcome').split(' ').slice(0,2).join(' ') || 'Welcome to'}
-              <span className="block mt-1 sm:mt-2 bg-gradient-to-r from-blue-200 to-blue-100 bg-clip-text text-transparent">
-                WolvCapital
-              </span>
-            </h1>
-            <p className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl text-blue-100 mb-6 sm:mb-8 max-w-3xl mx-auto leading-relaxed px-4">
-              Invest confidently with WolvCapital, a U.S. digital investment platform delivering secure cryptocurrency investment opportunities, transparent performance, and regulated financial solutions for institutional and individual investors.
-            </p>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center py-12 sm:py-16 lg:py-20">
+            <div className="lg:col-span-7 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs sm:text-sm font-semibold text-white/95 backdrop-blur">
+                <ShieldCheck className="h-4 w-4 text-emerald-200" aria-hidden="true" />
+                <span>Secure • Transparent • KYC-Verified</span>
+              </div>
 
-            <Link
-              href="/accounts/signup"
-              className="inline-block bg-white text-[#0b2f6b] px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-full text-sm sm:text-base md:text-lg font-bold hover:bg-blue-50 transition-all transform hover:scale-105 shadow-2xl"
-            >
-              Create Account
-            </Link>
+              <h1 className="mt-5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-white">
+                Earn 1%–2% Daily ROI on Your Crypto — Withdraw Anytime<span className="align-super text-base">*</span>
+              </h1>
+              <p className="mt-4 text-base sm:text-lg md:text-xl text-blue-100 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                Secure, Transparent, KYC-Verified. Start with USDT or BTC.
+              </p>
+
+              <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
+                <button
+                  type="button"
+                  onClick={() => scrollToPlans('hero')}
+                  className="inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-sm sm:text-base font-extrabold text-[#0b2f6b] hover:bg-blue-50 transition-all shadow-2xl"
+                >
+                  Start Earning Now
+                  <span className="ml-2 text-[#2563eb]" aria-hidden="true">
+                    →
+                  </span>
+                </button>
+                <Link
+                  href="/accounts/signup"
+                  onClick={() => trackEvent('cta_click', { location: 'hero', cta: 'create_free_account' })}
+                  className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#fde047] to-[#facc15] px-7 py-3.5 text-sm sm:text-base font-extrabold text-[#0b2f6b] hover:shadow-2xl transition-all"
+                >
+                  Create Your Free Account
+                </Link>
+              </div>
+
+              <div className="mt-5 flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-2 text-xs sm:text-sm text-white/90">
+                <span className="inline-flex items-center gap-2">
+                  <Lock className="h-4 w-4 text-white/80" aria-hidden="true" />
+                  256-bit encryption
+                </span>
+                <span className="inline-flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-white/80" aria-hidden="true" />
+                  Cold storage protected
+                </span>
+                <span className="inline-flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-white/80" aria-hidden="true" />
+                  Real-time risk monitoring
+                </span>
+              </div>
+
+              <p className="mt-4 text-[11px] sm:text-xs text-white/80 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                *Withdrawal requests are subject to plan terms, KYC verification, and manual review. Returns shown are estimates for educational purposes and are not guaranteed.
+              </p>
+            </div>
+
+            <div className="lg:col-span-5 space-y-4">
+              <div className="rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur shadow-xl">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-semibold tracking-wide text-blue-100 uppercase">Payout tracker</p>
+                    <p className="mt-1 text-3xl font-extrabold text-white">{formatUsd(weeklyPayoutUsd)}</p>
+                    <p className="mt-1 text-xs text-white/80">Paid to investors in the last 7 days</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs text-white/80">Updated</p>
+                    <p className="text-xs font-semibold text-white">Daily</p>
+                    {weeklyPayoutIsExample ? <p className="mt-1 text-[11px] text-white/70">Example figure</p> : null}
+                  </div>
+                </div>
+
+                <div className="mt-4 grid grid-cols-2 gap-3">
+                  <div className="rounded-xl bg-white/10 p-3">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-white/90">
+                      <FileCheck className="h-4 w-4 text-emerald-200" aria-hidden="true" />
+                      KYC compliant
+                    </div>
+                    <p className="mt-1 text-[11px] text-white/75">Identity checks before activation</p>
+                  </div>
+                  <div className="rounded-xl bg-white/10 p-3">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-white/90">
+                      <ShieldCheck className="h-4 w-4 text-blue-200" aria-hidden="true" />
+                      AML protocols
+                    </div>
+                    <p className="mt-1 text-[11px] text-white/75">Transaction monitoring & review</p>
+                  </div>
+                </div>
+              </div>
+
+              <ReviewsRotator />
+            </div>
           </div>
         </div>
       </section>
 
-  {/* Live transactions ticker removed per request (performance + visual focus) */}
+      {/* Investment Plans (Interactive Selector) */}
+      <section id="roi-plans" className="py-12 sm:py-16 bg-white">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-10">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0b2f6b]">Choose your daily ROI plan</h2>
+              <p className="mt-3 text-sm sm:text-base text-gray-600 max-w-3xl mx-auto">
+                Select a plan, set an amount, and see a simple projection. You can review plans without creating an account.
+              </p>
+              <div className="mt-3">
+                <Link href="/plans" className="text-sm font-semibold text-[#0b2f6b] underline underline-offset-4 hover:no-underline">
+                  View plan terms & disclosures
+                </Link>
+              </div>
+            </div>
 
-      {/* OG Image Display */}
-      <div className="w-full flex justify-center items-center py-8 bg-gray-50">
-        <Image
-          src="/og-images/home-og.png"
-          alt="Secure Digital Asset Investment — WolvCapital"
-          width={1200}
-          height={630}
-          priority
-          className="rounded-2xl shadow-2xl max-w-full h-auto"
-        />
-      </div>
+            <div className="rounded-3xl border border-gray-200 bg-gray-50 p-6 sm:p-8">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-end">
+                <div className="lg:col-span-4">
+                  <label className="block text-sm font-bold text-gray-900 mb-2">Deposit amount (USD)</label>
+                  <input
+                    inputMode="decimal"
+                    type="number"
+                    min={0}
+                    step={50}
+                    value={depositUsdInput}
+                    onChange={(e) => {
+                      setDepositUsdInput(e.target.value)
+                      trackEvent('plan_calculator_change', { field: 'deposit_usd', page: 'home' })
+                    }}
+                    className="w-full rounded-xl border-2 border-gray-200 bg-white px-4 py-3 text-gray-900 focus:border-blue-600 focus:ring focus:ring-blue-200 transition-all"
+                    placeholder="1000"
+                  />
+                  <p className="mt-2 text-xs text-gray-500">Estimates update instantly (not financial advice).</p>
+                </div>
+
+                <div className="lg:col-span-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="block text-sm font-bold text-gray-900">Timeline (days)</label>
+                    <span className="text-sm font-semibold text-[#0b2f6b]">{days} days</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={1}
+                    max={30}
+                    step={1}
+                    value={days}
+                    onChange={(e) => {
+                      setDays(Number(e.target.value))
+                      trackEvent('plan_calculator_change', { field: 'days', page: 'home' })
+                    }}
+                    className="w-full accent-[#0b2f6b]"
+                    aria-label="Timeline in days"
+                  />
+                  <div className="mt-2 flex items-center justify-between text-xs text-gray-500">
+                    <span>1</span>
+                    <span>30</span>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-4">
+                  <div className="rounded-2xl bg-white border border-gray-200 p-5">
+                    <div className="text-xs font-bold text-gray-500 uppercase tracking-wide">Selected plan</div>
+                    <div className="mt-1 text-lg font-extrabold text-[#0b2f6b]">
+                      {ROI_PLANS.find((p) => p.id === selectedPlanId)?.name || 'Plan'}
+                      <span className="ml-2 text-sm font-bold text-gray-600">
+                        ({ROI_PLANS.find((p) => p.id === selectedPlanId)?.dailyRoiPct}% daily)
+                      </span>
+                    </div>
+                    <div className="mt-3 text-sm text-gray-700 leading-relaxed">
+                      {(() => {
+                        const plan = ROI_PLANS.find((p) => p.id === selectedPlanId)
+                        if (!plan) return null
+                        const effectiveAmount = Math.max(depositUsd, plan.minDepositUsd)
+                        const { profit, total } = estimateSimpleRoi(effectiveAmount, days, plan.dailyRoiPct)
+                        return (
+                          <>
+                            <div className="flex items-center justify-between">
+                              <span className="text-gray-600">Projection</span>
+                              <span className="font-bold text-gray-900">{formatUsd(profit)} profit</span>
+                            </div>
+                            <div className="mt-1 flex items-center justify-between">
+                              <span className="text-gray-600">{formatUsd(effectiveAmount)} →</span>
+                              <span className="font-extrabold text-[#0b2f6b]">{formatUsd(total)} total</span>
+                            </div>
+                          </>
+                        )
+                      })()}
+                    </div>
+                    <p className="mt-3 text-xs text-gray-500">Estimates are illustrative only. Outcomes can vary and are not guaranteed.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {ROI_PLANS.map((plan) => {
+                  const isSelected = plan.id === selectedPlanId
+                  const meetsMin = depositUsd >= plan.minDepositUsd
+                  const effectiveAmount = Math.max(depositUsd, plan.minDepositUsd)
+                  const { profit, total } = estimateSimpleRoi(effectiveAmount, days, plan.dailyRoiPct)
+
+                  const accentRing =
+                    plan.accent === 'blue'
+                      ? 'ring-blue-400/60'
+                      : plan.accent === 'indigo'
+                        ? 'ring-indigo-400/60'
+                        : plan.accent === 'emerald'
+                          ? 'ring-emerald-400/60'
+                          : 'ring-amber-300/70'
+
+                  return (
+                    <div
+                      key={plan.id}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => {
+                        setSelectedPlanId(plan.id)
+                        trackEvent('plan_selected', { plan_id: plan.id, daily_roi_pct: plan.dailyRoiPct, page: 'home' })
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault()
+                          setSelectedPlanId(plan.id)
+                          trackEvent('plan_selected', { plan_id: plan.id, daily_roi_pct: plan.dailyRoiPct, page: 'home' })
+                        }
+                      }}
+                      className={`cursor-pointer rounded-2xl border border-gray-200 bg-white p-5 transition-all hover:shadow-md focus:outline-none focus:ring-4 focus:ring-blue-200 ${
+                        isSelected ? `ring-2 ${accentRing}` : ''
+                      }`}
+                      aria-pressed={String(isSelected) as any}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <div className="text-sm font-extrabold text-[#0b2f6b]">{plan.name}</div>
+                          <div className="mt-1 text-xs font-semibold text-gray-600">
+                            {plan.dailyRoiPct}% daily • {plan.durationDaysLabel}
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-xs text-gray-500">Min</div>
+                          <div className="text-sm font-bold text-gray-900">{formatUsd(plan.minDepositUsd)}</div>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 rounded-xl bg-gray-50 border border-gray-200 p-3">
+                        <div className="text-xs text-gray-600">
+                          {formatUsd(effectiveAmount)} → <span className="font-extrabold text-[#0b2f6b]">{formatUsd(total)}</span> in {days} days
+                        </div>
+                        <div className="mt-1 text-sm font-bold text-gray-900">{formatUsd(profit)} profit</div>
+                        {!meetsMin ? (
+                          <p className="mt-2 text-[11px] text-amber-700">
+                            Enter at least {formatUsd(plan.minDepositUsd)} to use this plan.
+                          </p>
+                        ) : null}
+                      </div>
+
+                      <div className="mt-4 flex gap-2">
+                        <Link
+                          href={`/plans/${plan.id}`}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            trackEvent('plan_review_click', { plan_id: plan.id, page: 'home' })
+                          }}
+                          className="inline-flex flex-1 items-center justify-center rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-50"
+                        >
+                          Review
+                        </Link>
+                        <Link
+                          href={`/accounts/signup?plan=${encodeURIComponent(plan.id)}`}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            trackEvent('plan_get_started_click', { plan_id: plan.id, daily_roi_pct: plan.dailyRoiPct, page: 'home' })
+                          }}
+                          className="inline-flex flex-1 items-center justify-center rounded-xl bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] px-4 py-2.5 text-sm font-bold text-white hover:shadow-lg transition-all"
+                        >
+                          Get Started
+                        </Link>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+
+              <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <p className="text-xs text-gray-500">
+                  Tip: compare plans first, then create your account when you’re ready.
+                </p>
+                <button
+                  type="button"
+                  onClick={resetCalculator}
+                  className="text-xs font-semibold text-gray-700 underline underline-offset-4 hover:no-underline"
+                >
+                  Reset calculator
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Live transactions ticker removed per request (performance + visual focus) */}
 
       {/* SEO Content Section */}
       <section className="py-16 bg-white">
@@ -164,10 +577,6 @@ export default function HomePage() {
               <p className="text-sm sm:text-base text-gray-600">Tap the card below to view both sides. WolvCapital virtual cards are designed for secure, compliant digital asset spending.</p>
             </div>
             <FlipCard />
-            {/* Reviews carousel placed below the Visa card */}
-            <div className="mt-12">
-              <ReviewsRotator />
-            </div>
           </div>
         </div>
       </section>
@@ -560,7 +969,7 @@ export default function HomePage() {
       <section className="py-24 bg-gradient-to-br from-[#0b2f6b] via-[#1d4ed8] to-[#2563eb] text-white">
         <div className="container mx-auto px-4 lg:px-8 text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 sm:mb-6">Begin Your Secure Investment Experience</h2>
-          <p className="text-base sm:text-lg md:text-xl text-gray-200 mb-6 sm:mb-10 max-w-3xl mx-auto">Join a growing community of investors who trust WolvCapital, a regulated U.S. fintech company, for transparent, secure digital investment solutions and cryptocurrency portfolio management.</p>
+          <p className="text-base sm:text-lg md:text-xl text-gray-200 mb-6 sm:mb-10 max-w-3xl mx-auto">Join a growing community of investors who trust WolvCapital for transparent, secure digital investment solutions and cryptocurrency portfolio management.</p>
           <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center">
             <Link href="/plans" className="bg-white text-[#0b2f6b] px-6 sm:px-10 py-3 sm:py-4 rounded-full text-base sm:text-lg font-bold hover:shadow-2xl transition-all duration-300 hover:scale-105">View Plans</Link>
             <Link href="/accounts/signup" className="bg-gradient-to-r from-[#fde047] to-[#facc15] text-[#0b2f6b] px-6 sm:px-10 py-3 sm:py-4 rounded-full text-base sm:text-lg font-bold hover:shadow-2xl transition-all duration-300 hover:scale-105">Open Account</Link>
@@ -572,6 +981,77 @@ export default function HomePage() {
 
       {/* Professional Footer */}
       <ProfessionalFooter />
+
+      {/* Sticky CTA (mobile) */}
+      <div
+        className={`md:hidden fixed inset-x-0 bottom-0 z-[60] transition-transform duration-300 ${
+          showStickyCta && !showExitIntent ? 'translate-y-0' : 'translate-y-full'
+        }`}
+        role="region"
+        aria-label="Quick actions"
+      >
+        <div className="border-t border-gray-200 bg-white/95 backdrop-blur">
+          <div className="container mx-auto px-4 py-3 flex gap-3">
+            <button
+              type="button"
+              onClick={() => scrollToPlans('sticky')}
+              className="flex-1 rounded-full bg-[#0b2f6b] px-4 py-3 text-sm font-extrabold text-white shadow-lg"
+            >
+              Start Earning Now
+            </button>
+            <Link
+              href="/accounts/signup"
+              onClick={() => trackEvent('cta_click', { location: 'sticky', cta: 'create_free_account' })}
+              className="flex-1 rounded-full bg-gradient-to-r from-[#fde047] to-[#facc15] px-4 py-3 text-sm font-extrabold text-[#0b2f6b] text-center shadow-lg"
+            >
+              Create Free Account
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Exit intent modal (desktop) */}
+      {showExitIntent ? (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center px-4" role="dialog" aria-modal="true">
+          <div
+            className="absolute inset-0 bg-black/60"
+            onClick={() => {
+              trackEvent('exit_intent_close', { action: 'backdrop' })
+              setShowExitIntent(false)
+            }}
+          />
+          <div className="relative w-full max-w-lg rounded-3xl bg-white p-6 sm:p-8 shadow-2xl">
+            <h3 className="text-xl sm:text-2xl font-extrabold text-[#0b2f6b]">Wait — see how much you could earn</h3>
+            <p className="mt-2 text-sm sm:text-base text-gray-700 leading-relaxed">
+              Use the ROI calculator to compare plans and view a simple projection. No signup required to view plan terms.
+            </p>
+            <div className="mt-6 flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  trackEvent('exit_intent_cta_click', { cta: 'open_calculator', page: 'home' })
+                  setShowExitIntent(false)
+                  scrollToPlans('exit_intent')
+                }}
+                className="flex-1 rounded-full bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] px-6 py-3 text-sm font-extrabold text-white"
+              >
+                Open ROI Calculator
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  trackEvent('exit_intent_close', { action: 'dismiss' })
+                  setShowExitIntent(false)
+                }}
+                className="flex-1 rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-extrabold text-gray-700 hover:bg-gray-50"
+              >
+                No thanks
+              </button>
+            </div>
+            <p className="mt-4 text-xs text-gray-500">This is not financial advice. Digital assets are volatile and returns are not guaranteed.</p>
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }

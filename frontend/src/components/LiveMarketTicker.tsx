@@ -38,8 +38,8 @@ const ASSETS: Array<{ id: AssetKey; label: string; symbol: string }> = [
   { id: 'binancecoin', label: 'BNB', symbol: 'BNB' },
 ]
 
-const COINGECKO_MARKETS_URL = (idsCsv: string) =>
-  `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${encodeURIComponent(idsCsv)}&sparkline=true&price_change_percentage=24h`
+const MARKET_DATA_URL = (idsCsv: string) =>
+  `/market-data?ids=${encodeURIComponent(idsCsv)}`
 
 function formatUsd(value: number) {
   return new Intl.NumberFormat('en-US', {
@@ -113,14 +113,14 @@ export default function LiveMarketTicker({ refreshMs = 90_000 }: LiveMarketTicke
       const attemptAt = new Date()
       try {
         const idsCsv = ASSETS.map((a) => a.id).join(',')
-        const res = await fetch(COINGECKO_MARKETS_URL(idsCsv), {
+        const res = await fetch(MARKET_DATA_URL(idsCsv), {
           method: 'GET',
           headers: { Accept: 'application/json' },
           cache: 'no-store',
           signal: controller.signal,
         })
 
-        if (!res.ok) throw new Error(`CoinGecko request failed (${res.status})`)
+        if (!res.ok) throw new Error(`Market data request failed (${res.status})`)
 
         const rows = (await res.json()) as MarketRow[]
         const byId = new Map(rows.map((r) => [r.id, r]))

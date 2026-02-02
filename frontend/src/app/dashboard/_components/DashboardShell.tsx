@@ -228,9 +228,6 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
       {/* Dashboard-specific Activity Ticker */}
       <RecentActivityTicker />
 
-      {/* TawkTo Live Chat Support */}
-      <TawkToChat />
-
       {/* Dashboard Footer */}
       <footer className="bg-white border-t border-gray-200 mt-12">
         <div className="max-w-7xl mx-auto px-4 lg:px-8 py-6">

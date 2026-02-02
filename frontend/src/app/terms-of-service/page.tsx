@@ -104,14 +104,60 @@ export default function TermsOfServicePage() {
             </div>
 
             <div>
-              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">5. Account Security</h2>
+              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">5. Terms & Conditions Addendum</h2>
+              <p className="text-lg text-gray-700 leading-relaxed mb-4">
+                <span className="font-semibold">Addendum:</span> Capital Participation, Compounding &amp; Withdrawals
+              </p>
+              <p className="text-lg text-gray-700 leading-relaxed mb-6">
+                This Addendum forms part of Wolv Capital’s Terms and Conditions and applies to all investors effective immediately (Addendum Effective Date: February 2, 2026).
+              </p>
+
+              <ol className="space-y-6 text-lg text-gray-700 list-decimal pl-6">
+                <li>
+                  <span className="font-semibold text-gray-900">Nature of the Platform</span>
+                  <p className="mt-2 leading-relaxed">
+                    Wolv Capital operates as a crypto trading and portfolio management platform. Returns distributed to investors are derived from active trading activities and portfolio deployment.
+                    The platform does not guarantee fixed, instant, or automated payouts.
+                  </p>
+                </li>
+                <li>
+                  <span className="font-semibold text-gray-900">Capital Participation &amp; Compounding</span>
+                  <p className="mt-2 leading-relaxed">
+                    Investors may choose to compound profits, make additional capital deposits, or maintain their current position. Compounding alone does not independently expand portfolio capacity.
+                    Accounts with limited capital participation may experience adjusted growth rates and extended liquidity timelines.
+                  </p>
+                </li>
+                <li>
+                  <span className="font-semibold text-gray-900">Withdrawals &amp; Maturity</span>
+                  <p className="mt-2 leading-relaxed">
+                    Investment plan maturity indicates eligibility for withdrawal review, not immediate disbursement. All withdrawals are processed according to operational liquidity availability,
+                    portfolio cycle completion, and internal risk management protocols.
+                  </p>
+                </li>
+                <li>
+                  <span className="font-semibold text-gray-900">Liquidity Management</span>
+                  <p className="mt-2 leading-relaxed">
+                    Wolv Capital reserves the right to schedule withdrawals to protect platform stability, ensure fair execution across investors, and maintain sustainable trading operations.
+                  </p>
+                </li>
+                <li>
+                  <span className="font-semibold text-gray-900">No Obligation to Reinvest</span>
+                  <p className="mt-2 leading-relaxed">
+                    Investors are under no obligation to make additional deposits. Participation decisions remain voluntary. Continued participation constitutes acceptance of the platform’s operational model and timelines.
+                  </p>
+                </li>
+              </ol>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">6. Account Security</h2>
               <p className="text-lg text-gray-700 leading-relaxed">
                 You are responsible for protecting your login credentials and account access. Notify support immediately if unauthorized activity is suspected.
               </p>
             </div>
 
             <div>
-              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">6. Prohibited Activities</h2>
+              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">7. Prohibited Activities</h2>
               <p className="text-lg text-gray-700 leading-relaxed mb-4">
                 The following actions are strictly prohibited:
               </p>
@@ -124,7 +170,7 @@ export default function TermsOfServicePage() {
             </div>
 
             <div>
-              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">7. Changes to Terms</h2>
+              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">8. Changes to Terms</h2>
               <p className="text-lg text-gray-700 leading-relaxed">
                 WolvCapital may update these terms at any time. Continued use of the platform after changes constitutes acceptance.
               </p>

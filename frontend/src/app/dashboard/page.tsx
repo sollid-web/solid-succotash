@@ -174,6 +174,16 @@ export default function DashboardPage() {
     return activeInvestments.reduce((sum, i) => sum + (Number(i.amount) || 0), 0);
   }, [activeInvestments]);
 
+  const lockedRoi = useMemo(() => {
+    return transactions
+      .filter(
+        (t) =>
+          String(t.tx_type) === "profit" &&
+          ["approved", "completed"].includes(String(t.status))
+      )
+      .reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
+  }, [transactions]);
+
   const recentTransactions = useMemo(() => {
     return [...transactions].sort((a, b) => {
       const da = safeDate(a.created_at)?.getTime() || 0;

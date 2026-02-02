@@ -98,7 +98,7 @@ export default function CheckoutSuccessPage() {
         <div className="flex gap-4 justify-center mt-8">
           <Link
             href="/dashboard"
-            className="px-6 py-3 bg-[#0b2f6b] text-white rounded-lg hover:bg-[#0a2858] transition-colors"
+            className="btn-cta-sky inline-flex items-center justify-center px-6 py-3 rounded-lg font-semibold"
           >
             Return to Dashboard
           </Link>

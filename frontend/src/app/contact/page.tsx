@@ -125,7 +125,7 @@ export default function ContactPage() {
                     <label htmlFor="message" className="block text-sm font-bold text-gray-700 mb-2">Message *</label>
                     <textarea id="message" rows={6} className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-[#2563eb] focus:outline-none transition resize-none" placeholder="Please provide details regarding your inquiry." required />
                   </div>
-                  <button type="submit" className="w-full bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">Submit</button>
+                  <button type="submit" className="btn-cta-sky w-full py-4 rounded-xl font-bold text-lg">Submit</button>
                   <p className="text-sm text-gray-600 text-center">All fields are required. Your information is handled in accordance with our privacy policy.</p>
                 </form>
               </div>

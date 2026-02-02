@@ -13,16 +13,16 @@ interface Review {
 
 // Reviews are intentionally anonymized (initials + masked wallet) to preserve privacy.
 const REVIEWS: Review[] = [
-  { id: 'r001', name: 'Michael A.', location: 'US', walletMasked: 'bc1q…alltj', quote: 'Payouts have been on time and the reports are easy to follow. No issues so far.', rating: 5 },
-  { id: 'r002', name: 'Daniel M.', location: 'UK', walletMasked: '0x8f4c…9ad1', quote: 'The team is easy to work with and approvals didn’t take long. Happy with the service.', rating: 5 },
-  { id: 'r003', name: 'Patrick W.', location: 'US', walletMasked: 'TQh7…8p2k', quote: 'Fees are clear and results have been consistent. It’s been a good experience overall.', rating: 5 },
-  { id: 'r004', name: 'Andrew C.', location: 'CA', walletMasked: '0x12b0…6e3f', quote: 'Getting started was straightforward. Everything has been running smoothly since.', rating: 5 },
-  { id: 'r005', name: 'Sebastian K.', location: 'DE', walletMasked: 'bc1p…3q8m', quote: 'Support replies quickly and compliance feels solid. Does what we need.', rating: 5 },
-  { id: 'r006', name: 'Thomas R.', location: 'AU', walletMasked: '0x5a2d…0c11', quote: 'The platform feels stable and settlements arrive when expected. Can’t complain.', rating: 5 },
-  { id: 'r007', name: 'Benjamin L.', location: 'SG', walletMasked: 'TNd3…qv7a', quote: 'Docs are clear and security looks well handled. Setup was easier than expected.', rating: 5 },
-  { id: 'r008', name: 'Erik J.', location: 'NO', walletMasked: 'bc1q…z8rw', quote: 'Our team picked it up quickly and reporting has been reliable so far.', rating: 5 },
-  { id: 'r009', name: 'Johan L.', location: 'SE', walletMasked: '0x2c09…f1b4', quote: 'Support has been responsive and performance has been steady. Works for our needs.', rating: 5 },
-  { id: 'r010', name: 'Lukas M.', location: 'CH', walletMasked: 'bc1q…k5vd', quote: 'Everything is pretty predictable, which is what we want. Overall a solid service.', rating: 5 },
+  { id: 'r001', name: 'Daniel M.', location: 'London, UK', walletMasked: '0x8f4c…9ad1', quote: 'Payouts have matched what was shown in my dashboard, and the weekly summary is easy to read.', rating: 5 },
+  { id: 'r002', name: 'Michael A.', location: 'US', walletMasked: 'bc1q…alltj', quote: 'Signup and verification were straightforward. I got answers when I had questions.', rating: 5 },
+  { id: 'r003', name: 'Patrick W.', location: 'US', walletMasked: 'TQh7…8p2k', quote: 'I like that the terms are clear. Nothing felt hidden when I deposited.', rating: 4 },
+  { id: 'r004', name: 'Andrew C.', location: 'CA', walletMasked: '0x12b0…6e3f', quote: 'The interface is clean and it’s easy to track what’s happening day to day.', rating: 5 },
+  { id: 'r005', name: 'Sebastian K.', location: 'DE', walletMasked: 'bc1p…3q8m', quote: 'Support was responsive. The process feels structured and not rushed.', rating: 5 },
+  { id: 'r006', name: 'Thomas R.', location: 'AU', walletMasked: '0x5a2d…0c11', quote: 'So far it’s been stable. I check in a few times a week and the updates make sense.', rating: 5 },
+  { id: 'r007', name: 'Benjamin L.', location: 'SG', walletMasked: 'TNd3…qv7a', quote: 'The docs helped me get set up without guessing. Security info is explained in plain terms.', rating: 5 },
+  { id: 'r008', name: 'Erik J.', location: 'NO', walletMasked: 'bc1q…z8rw', quote: 'Reporting is consistent and I can export what I need. That’s mainly why I’m still using it.', rating: 5 },
+  { id: 'r009', name: 'Johan L.', location: 'SE', walletMasked: '0x2c09…f1b4', quote: 'When something wasn’t clear, support pointed me to the right page. No back-and-forth.', rating: 5 },
+  { id: 'r010', name: 'Lukas M.', location: 'CH', walletMasked: 'bc1q…k5vd', quote: 'It does what it says: plan details, tracking, and a predictable workflow. That’s enough for me.', rating: 5 },
 ];
  
 

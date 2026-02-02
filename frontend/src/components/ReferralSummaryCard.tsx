@@ -68,7 +68,7 @@ export default function ReferralSummaryCard() {
     return (
       <div className="bg-white rounded-2xl shadow-lg p-6">
         <p className="text-gray-600 mb-3">{error}</p>
-        <Link href="/accounts/login" className="px-4 py-2 bg-blue-600 text-white rounded-lg">Log in</Link>
+        <Link href="/accounts/login" className="btn-cta-sky px-4 py-2 rounded-lg font-semibold">Log in</Link>
       </div>
     )
   }
@@ -85,7 +85,7 @@ export default function ReferralSummaryCard() {
             </div>
             <button
               onClick={handleCopyLink}
-              className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="btn-cta-sky px-3 py-2 rounded-lg font-semibold"
             >
               {copied ? "Copied" : "Copy Link"}
             </button>

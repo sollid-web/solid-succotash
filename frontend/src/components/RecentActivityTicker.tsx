@@ -37,8 +37,14 @@ type Country = {
 
 // --- Combined-gender country pool with enhanced global diversity ---
 const COUNTRIES: Country[] = [
-  // Withdrawal-prioritized distribution (50% total)
-
+  { code: "US", name: "United States", weight: 8, names: ["Jordan P.", "Sam K.", "Taylor R.", "Alex M.", "Casey D.", "Morgan L."] },
+  { code: "GB", name: "United Kingdom", weight: 5, names: ["Daniel M.", "Hannah T.", "Chris B.", "Olivia S.", "Ryan H."] },
+  { code: "CA", name: "Canada", weight: 4, names: ["Andrew C.", "Sarah L.", "Noah G.", "Emma W."] },
+  { code: "DE", name: "Germany", weight: 3, names: ["Sebastian K.", "Lena F.", "Jonas S.", "Mia H."] },
+  { code: "AU", name: "Australia", weight: 3, names: ["Thomas R.", "Ava P.", "Jack D.", "Chloe M."] },
+  { code: "SG", name: "Singapore", weight: 2, names: ["Benjamin L.", "Wei J.", "Amelia N."] },
+  { code: "NG", name: "Nigeria", weight: 2, names: ["Ife A.", "Chinedu O.", "Zainab K."] },
+  { code: "ZA", name: "South Africa", weight: 2, names: ["Thabo M.", "Nomsa K.", "Daniela P."] },
 ];
 // Remaining 50% → other activities (trading, fees, transfers, internal ops)
 
@@ -81,11 +87,11 @@ function generateRandomActivity(plans: string[]): Activity {
 
   if (type === "plan") {
     plan = pickRandom(plans);
-    message = `${name} (${country.name}) started ${plan}`;
+    message = `${name} chose the ${plan} plan`;
   } else {
     amount = pickRandom(AMOUNTS);
-    const action = type === "deposit" ? "deposited" : "withdrew";
-    message = `${name} (${country.name}) ${action} $${amount.toLocaleString()}`;
+    const action = type === "deposit" ? "submitted a deposit" : "requested a withdrawal";
+    message = `${name} ${action} of $${amount.toLocaleString()}`;
   }
 
   return {
@@ -104,9 +110,9 @@ function generateRandomActivity(plans: string[]): Activity {
 // --- Component: single activity view with stylish animation (30s default interval) ---
 const RecentActivitySingle: React.FC<Props> = ({
   plans = DEFAULT_PLANS,
-  minIntervalMs = 80000, // default fixed to 30 seconds
-  maxIntervalMs = 90000, // default fixed to 30 seconds
-  soundPath = "/sounds/chime.wav",
+  minIntervalMs = 60_000,
+  maxIntervalMs = 90_000,
+  soundPath = "",
   soundVolume = 0.10,
   preventRepeatMs = 2000,
   initialDelayMs = 800,
@@ -180,7 +186,7 @@ const RecentActivitySingle: React.FC<Props> = ({
         />
         <div className="text">
           <div className="main" title={activity.message}>{activity.message}</div>
-          <div className="meta">{activity.type === "plan" ? activity.plan : `${activity.country} • ${activity.timeAgo}`}</div>
+          <div className="meta">{`Example • ${activity.country} • ${activity.timeAgo}`}</div>
         </div>
       </div>
 

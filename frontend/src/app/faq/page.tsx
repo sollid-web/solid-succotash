@@ -162,7 +162,7 @@ export default function FAQPage(): JSX.Element {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link 
                 href="/contact"
-                className="inline-block bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-8 py-4 rounded-full text-lg font-bold hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                className="btn-cta-sky inline-block px-8 py-4 rounded-full text-lg font-bold"
               >
                 Contact Support
               </Link>

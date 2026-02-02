@@ -217,7 +217,7 @@ export default function DashboardPage() {
           <div className="flex items-center gap-3">
             <Link
               href="/dashboard/new-investment"
-              className="px-3 py-2 rounded-md bg-blue-600 text-white text-sm hover:bg-blue-700"
+              className="btn-cta-sky inline-flex items-center justify-center px-3 py-2 rounded-md text-sm font-semibold"
             >
               New Investment
             </Link>

@@ -8,7 +8,7 @@ export default function CertificateActions() {
       <button
         type="button"
         onClick={() => window.print()}
-        className="px-4 py-2 rounded-md text-white bg-[#0b2f6b] hover:bg-[#0a285c] text-sm font-semibold shadow"
+        className="btn-cta-sky inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-semibold"
       >
         Print / Save PDF
       </button>

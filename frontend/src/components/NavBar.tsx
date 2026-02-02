@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from '@/i18n/TranslationProvider'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 
@@ -15,6 +15,9 @@ export default function NavBar() {
   const pathname = usePathname()
   const { t } = useTranslation()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => setIsMounted(true), [])
 
   const navItems = [
     { href: '/', label: t('nav.home') },
@@ -45,7 +48,7 @@ export default function NavBar() {
                 href={item.href}
                 className={classNames(
                   'font-medium transition',
-                  pathname === item.href ? 'text-[#0b2f6b] font-semibold' : 'text-gray-700 hover:text-[#0b2f6b]'
+                  isMounted && pathname === item.href ? 'text-[#0b2f6b] font-semibold' : 'text-gray-700 hover:text-[#0b2f6b]'
                 )}
               >
                 {item.label}
@@ -79,7 +82,7 @@ export default function NavBar() {
             <Link href="/accounts/login" className="text-[#0b2f6b] font-semibold hover:text-[#2563eb] transition">
               {t('nav.login')}
             </Link>
-            <Link href="/accounts/signup" className="bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-6 py-2.5 rounded-full font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105">
+            <Link href="/accounts/signup" className="btn-cta-sky px-6 py-2.5 rounded-full font-semibold">
               {t('nav.signup')}
             </Link>
           </div>
@@ -95,7 +98,7 @@ export default function NavBar() {
                   href={item.href}
                   className={classNames(
                     'block px-3 py-2 rounded-md font-medium transition',
-                    pathname === item.href 
+                    isMounted && pathname === item.href 
                       ? 'text-[#0b2f6b] bg-blue-50 font-semibold' 
                       : 'text-gray-700 hover:text-[#0b2f6b] hover:bg-gray-50'
                   )}
@@ -116,7 +119,7 @@ export default function NavBar() {
                 </Link>
                 <Link 
                   href="/accounts/signup" 
-                  className="block w-full text-center bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-4 py-3 rounded-full font-semibold hover:shadow-lg transition"
+                  className="btn-cta-sky block w-full text-center px-4 py-3 rounded-full font-semibold"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {t('nav.signup')}

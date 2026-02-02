@@ -112,7 +112,7 @@ export default function NewInvestmentPage() {
           <p className="text-xs text-gray-500 mt-2">Must be within the plan's min/max limits.</p>
         </div>
 
-        <button type="submit" disabled={loading} className="bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-6 py-3 rounded-xl font-semibold disabled:opacity-50">
+        <button type="submit" disabled={loading} className="btn-cta-sky px-6 py-3 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
           {loading ? 'Submitting...' : 'Create Investment'}
         </button>
       </form>

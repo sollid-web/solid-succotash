@@ -243,7 +243,7 @@ export default function AdminKycDashboard() {
                 ) : (
                   <button
                     onClick={() => setSelectedApp(app)}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                    className="btn-cta-sky px-4 py-2 rounded-lg font-semibold"
                   >
                     Review Application
                   </button>

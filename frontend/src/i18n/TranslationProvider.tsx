@@ -49,7 +49,11 @@ function detectInitialLocale(): string {
 }
 
 export const TranslationProvider = ({ children }: { children: ReactNode }) => {
-  const [locale, setLocaleState] = useState<string>(detectInitialLocale());
+  const [locale, setLocaleState] = useState<string>('en');
+
+  useEffect(() => {
+    setLocaleState(detectInitialLocale());
+  }, []);
 
   const setLocale = (loc: string) => {
     const normalized = normalizeLocale(loc);

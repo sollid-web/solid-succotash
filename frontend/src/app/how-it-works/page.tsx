@@ -52,7 +52,7 @@ export default function HowItWorksPage() {
             <div className="flex flex-wrap justify-center gap-4 mt-8">
               <Link 
                 href="/accounts/signup" 
-                className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl shadow-2xl hover:shadow-blue-500/50 hover:scale-105 transition-all duration-300"
+                className="btn-cta-sky inline-flex items-center justify-center px-8 py-4 text-lg font-bold rounded-xl"
               >
                 Get Started Now
               </Link>

@@ -104,7 +104,7 @@ function VerifyEmailContent() {
             <p className="text-sm text-gray-500 mb-6">Redirecting to login in 3 seconds...</p>
             <Link
               href={redirectUrl}
-              className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
+              className="btn-cta-sky inline-block px-8 py-3 rounded-lg font-semibold"
             >
               Go to Login Now
             </Link>
@@ -133,7 +133,7 @@ function VerifyEmailContent() {
             <div className="space-y-3">
               <Link
                 href="/accounts/login"
-                className="block w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
+                className="btn-cta-sky block w-full px-6 py-3 rounded-lg font-semibold"
               >
                 Go to Login
               </Link>

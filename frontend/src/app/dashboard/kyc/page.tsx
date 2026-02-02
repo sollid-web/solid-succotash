@@ -548,7 +548,7 @@ export default function KYCPage() {
             <button 
               onClick={handlePersonalInfoSubmit}
               disabled={isSubmitting}
-              className="w-full bg-[#2563eb] text-white py-3 rounded-lg hover:bg-[#1d4ed8] transition font-semibold disabled:opacity-50"
+              className="btn-cta-sky inline-flex w-full items-center justify-center py-3 rounded-lg transition font-semibold disabled:opacity-50"
             >
               {isSubmitting ? 'Saving...' : 'Save Information'}
             </button>
@@ -665,7 +665,7 @@ export default function KYCPage() {
             <button 
               onClick={handleDocumentSubmit}
               disabled={isSubmitting || !uploadedFiles.governmentId || !uploadedFiles.proofOfAddress}
-              className="w-full bg-[#2563eb] text-white py-3 rounded-lg hover:bg-[#1d4ed8] transition font-semibold disabled:opacity-50"
+              className="btn-cta-sky inline-flex w-full items-center justify-center py-3 rounded-lg transition font-semibold disabled:opacity-50"
             >
               {isSubmitting ? 'Submitting...' : 'Submit Documents'}
             </button>

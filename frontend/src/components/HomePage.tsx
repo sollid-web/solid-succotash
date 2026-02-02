@@ -145,12 +145,19 @@ export default function HomePage() {
     if (typeof window === 'undefined') return
     const finePointer = window.matchMedia?.('(pointer:fine)')?.matches
     if (!finePointer) return
-    if (window.sessionStorage.getItem('wolvcapital.exitIntentSeen') === '1') return
+
+    const exitIntentKey = 'wolvcapital.exitIntentSeen'
+    if (window.sessionStorage.getItem(exitIntentKey) === '1') return
 
     const onMouseOut = (e: MouseEvent) => {
+      if (window.sessionStorage.getItem(exitIntentKey) === '1') {
+        document.removeEventListener('mouseout', onMouseOut)
+        return
+      }
       if (e.clientY > 0) return
       if ((e.relatedTarget as Node | null) !== null) return
-      window.sessionStorage.setItem('wolvcapital.exitIntentSeen', '1')
+      window.sessionStorage.setItem(exitIntentKey, '1')
+      document.removeEventListener('mouseout', onMouseOut)
       trackEvent('exit_intent_open', { page: 'home' })
       setShowExitIntent(true)
     }
@@ -164,6 +171,7 @@ export default function HomePage() {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         trackEvent('exit_intent_close', { action: 'escape' })
+        if (typeof window !== 'undefined') window.sessionStorage.setItem('wolvcapital.exitIntentSeen', '1')
         setShowExitIntent(false)
       }
     }
@@ -207,17 +215,17 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => scrollToPlans('hero')}
-                  className="inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-sm sm:text-base font-extrabold text-[#0b2f6b] hover:bg-blue-50 transition-all shadow-2xl"
+                  className="btn-cta-sky inline-flex items-center justify-center rounded-full px-7 py-3.5 text-sm sm:text-base font-extrabold"
                 >
                   Start Earning Now
-                  <span className="ml-2 text-[#2563eb]" aria-hidden="true">
+                  <span className="ml-2 text-[#0b2f6b]/70" aria-hidden="true">
                     →
                   </span>
                 </button>
                 <Link
                   href="/accounts/signup"
                   onClick={() => trackEvent('cta_click', { location: 'hero', cta: 'create_free_account' })}
-                  className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#fde047] to-[#facc15] px-7 py-3.5 text-sm sm:text-base font-extrabold text-[#0b2f6b] hover:shadow-2xl transition-all"
+                  className="btn-cta-sky inline-flex items-center justify-center rounded-full px-7 py-3.5 text-sm sm:text-base font-extrabold"
                 >
                   Create Your Free Account
                 </Link>
@@ -242,41 +250,55 @@ export default function HomePage() {
                 *Withdrawal requests are subject to plan terms, KYC verification, and manual review. Returns shown are estimates for educational purposes and are not guaranteed.
               </p>
             </div>
+          </div>
+        </div>
+      </section>
 
-            <div className="lg:col-span-5 space-y-4">
-              <div className="rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur shadow-xl">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-semibold tracking-wide text-blue-100 uppercase">Payout tracker</p>
-                    <p className="mt-1 text-3xl font-extrabold text-white">{formatUsd(weeklyPayoutUsd)}</p>
-                    <p className="mt-1 text-xs text-white/80">Paid to investors in the last 7 days</p>
+      {/* Live proof (moved below hero for clarity) */}
+      <section aria-label="Proof and trust" className="py-10 sm:py-12 bg-white">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+              <div className="lg:col-span-5">
+                <div className="h-full rounded-3xl border border-gray-200 bg-gradient-to-br from-white to-sky-50 p-6 sm:p-8 shadow-sm">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-xs font-semibold tracking-wide text-gray-500 uppercase">Live payout tracker</p>
+                      <p className="mt-2 text-3xl sm:text-4xl font-extrabold text-[#0b2f6b]">{formatUsd(weeklyPayoutUsd)}</p>
+                      <p className="mt-2 text-sm text-gray-600">Paid to investors in the last 7 days</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-gray-500">Updated</p>
+                      <p className="text-xs font-semibold text-gray-900">Daily</p>
+                      {weeklyPayoutIsExample ? <p className="mt-1 text-[11px] text-gray-500">Example figure</p> : null}
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-xs text-white/80">Updated</p>
-                    <p className="text-xs font-semibold text-white">Daily</p>
-                    {weeklyPayoutIsExample ? <p className="mt-1 text-[11px] text-white/70">Example figure</p> : null}
-                  </div>
-                </div>
 
-                <div className="mt-4 grid grid-cols-2 gap-3">
-                  <div className="rounded-xl bg-white/10 p-3">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-white/90">
-                      <FileCheck className="h-4 w-4 text-emerald-200" aria-hidden="true" />
-                      KYC compliant
+                  <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="rounded-2xl border border-gray-200 bg-white p-4">
+                      <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
+                        <FileCheck className="h-4 w-4 text-emerald-600" aria-hidden="true" />
+                        KYC compliant
+                      </div>
+                      <p className="mt-1 text-xs text-gray-600">Identity checks before activation</p>
                     </div>
-                    <p className="mt-1 text-[11px] text-white/75">Identity checks before activation</p>
-                  </div>
-                  <div className="rounded-xl bg-white/10 p-3">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-white/90">
-                      <ShieldCheck className="h-4 w-4 text-blue-200" aria-hidden="true" />
-                      AML protocols
+                    <div className="rounded-2xl border border-gray-200 bg-white p-4">
+                      <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
+                        <ShieldCheck className="h-4 w-4 text-sky-600" aria-hidden="true" />
+                        AML protocols
+                      </div>
+                      <p className="mt-1 text-xs text-gray-600">Transaction monitoring & review</p>
                     </div>
-                    <p className="mt-1 text-[11px] text-white/75">Transaction monitoring & review</p>
                   </div>
+
+                  <p className="mt-5 text-xs text-gray-500 leading-relaxed">
+                    Figures shown are for transparency and may reflect estimates. Digital assets are volatile and returns are not guaranteed.
+                  </p>
                 </div>
               </div>
-
-              <ReviewsRotator />
+              <div className="lg:col-span-7">
+                <ReviewsRotator />
+              </div>
             </div>
           </div>
         </div>
@@ -455,7 +477,7 @@ export default function HomePage() {
                             e.stopPropagation()
                             trackEvent('plan_get_started_click', { plan_id: plan.id, daily_roi_pct: plan.dailyRoiPct, page: 'home' })
                           }}
-                          className="inline-flex flex-1 items-center justify-center rounded-xl bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] px-4 py-2.5 text-sm font-bold text-white hover:shadow-lg transition-all"
+                          className="btn-cta-sky inline-flex flex-1 items-center justify-center rounded-xl px-4 py-2.5 text-sm font-bold"
                         >
                           Get Started
                         </Link>
@@ -606,7 +628,7 @@ export default function HomePage() {
                 <div className="mt-6">
                   <Link
                     href="/plans"
-                    className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] px-6 py-3 text-sm sm:text-base font-bold text-white hover:shadow-lg transition-all"
+                    className="btn-cta-sky inline-flex items-center justify-center rounded-full px-6 py-3 text-sm sm:text-base font-bold"
                   >
                     View Plans
                   </Link>
@@ -668,7 +690,7 @@ export default function HomePage() {
           </div>
 
           <div className="text-center">
-            <Link href="/how-it-works" className="inline-block bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-8 py-4 rounded-full text-lg font-bold hover:shadow-2xl transition-all duration-300 hover:scale-105">
+            <Link href="/how-it-works" className="btn-cta-sky inline-block px-8 py-4 rounded-full text-lg font-bold">
               Learn More About Our Process
             </Link>
           </div>
@@ -770,7 +792,7 @@ export default function HomePage() {
               <p className="text-lg text-gray-700 mb-6">
                 WolvCapital is committed to maintaining a secure, transparent, and reliable ecosystem for digital asset investors worldwide.
               </p>
-              <Link href="/security" className="inline-block bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-8 py-4 rounded-full text-lg font-bold hover:shadow-2xl transition-all duration-300 hover:scale-105">
+              <Link href="/security" className="btn-cta-sky inline-block px-8 py-4 rounded-full text-lg font-bold">
                 View Our Security Measures
               </Link>
             </div>
@@ -914,7 +936,7 @@ export default function HomePage() {
           </div>
 
           <div className="text-center">
-            <Link href="/faq" className="inline-block bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-8 py-4 rounded-full text-lg font-bold hover:shadow-2xl transition-all duration-300 hover:scale-105">
+            <Link href="/faq" className="btn-cta-sky inline-block px-8 py-4 rounded-full text-lg font-bold">
               View All FAQs
             </Link>
           </div>
@@ -934,7 +956,7 @@ export default function HomePage() {
                 <li>Track stats and rewards in your account</li>
               </ul>
               <div className="flex flex-wrap gap-3">
-                <Link href="/referrals" className="bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] text-white px-6 py-3 rounded-full font-bold hover:shadow-lg transition-all">Learn More</Link>
+                <Link href="/referrals" className="btn-cta-sky px-6 py-3 rounded-full font-bold">Learn More</Link>
                 <a href="/referrals-brochure.html" target="_blank" rel="noopener" className="bg-white border border-gray-200 text-[#0b2f6b] px-6 py-3 rounded-full font-bold hover:shadow-lg transition-all">Download Brochure</a>
               </div>
               <p className="text-xs text-gray-500 mt-3">Rewards are never auto-approved; all payouts require administrative review.</p>
@@ -972,7 +994,7 @@ export default function HomePage() {
           <p className="text-base sm:text-lg md:text-xl text-gray-200 mb-6 sm:mb-10 max-w-3xl mx-auto">Join a growing community of investors who trust WolvCapital for transparent, secure digital investment solutions and cryptocurrency portfolio management.</p>
           <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center">
             <Link href="/plans" className="bg-white text-[#0b2f6b] px-6 sm:px-10 py-3 sm:py-4 rounded-full text-base sm:text-lg font-bold hover:shadow-2xl transition-all duration-300 hover:scale-105">View Plans</Link>
-            <Link href="/accounts/signup" className="bg-gradient-to-r from-[#fde047] to-[#facc15] text-[#0b2f6b] px-6 sm:px-10 py-3 sm:py-4 rounded-full text-base sm:text-lg font-bold hover:shadow-2xl transition-all duration-300 hover:scale-105">Open Account</Link>
+            <Link href="/accounts/signup" className="btn-cta-sky inline-flex items-center justify-center px-6 sm:px-10 py-3 sm:py-4 rounded-full text-base sm:text-lg font-bold">Open Account</Link>
           </div>
         </div>
       </section>
@@ -995,14 +1017,14 @@ export default function HomePage() {
             <button
               type="button"
               onClick={() => scrollToPlans('sticky')}
-              className="flex-1 rounded-full bg-[#0b2f6b] px-4 py-3 text-sm font-extrabold text-white shadow-lg"
+              className="btn-cta-sky flex-1 rounded-full px-4 py-3 text-sm font-extrabold"
             >
               Start Earning Now
             </button>
             <Link
               href="/accounts/signup"
               onClick={() => trackEvent('cta_click', { location: 'sticky', cta: 'create_free_account' })}
-              className="flex-1 rounded-full bg-gradient-to-r from-[#fde047] to-[#facc15] px-4 py-3 text-sm font-extrabold text-[#0b2f6b] text-center shadow-lg"
+              className="btn-cta-sky flex-1 rounded-full px-4 py-3 text-sm font-extrabold text-center"
             >
               Create Free Account
             </Link>
@@ -1017,6 +1039,7 @@ export default function HomePage() {
             className="absolute inset-0 bg-black/60"
             onClick={() => {
               trackEvent('exit_intent_close', { action: 'backdrop' })
+              if (typeof window !== 'undefined') window.sessionStorage.setItem('wolvcapital.exitIntentSeen', '1')
               setShowExitIntent(false)
             }}
           />
@@ -1033,7 +1056,7 @@ export default function HomePage() {
                   setShowExitIntent(false)
                   scrollToPlans('exit_intent')
                 }}
-                className="flex-1 rounded-full bg-gradient-to-r from-[#0b2f6b] via-[#2563eb] to-[#1d4ed8] px-6 py-3 text-sm font-extrabold text-white"
+                className="btn-cta-sky flex-1 rounded-full px-6 py-3 text-sm font-extrabold"
               >
                 Open ROI Calculator
               </button>
@@ -1041,6 +1064,7 @@ export default function HomePage() {
                 type="button"
                 onClick={() => {
                   trackEvent('exit_intent_close', { action: 'dismiss' })
+                  if (typeof window !== 'undefined') window.sessionStorage.setItem('wolvcapital.exitIntentSeen', '1')
                   setShowExitIntent(false)
                 }}
                 className="flex-1 rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-extrabold text-gray-700 hover:bg-gray-50"

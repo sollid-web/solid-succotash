@@ -19,6 +19,12 @@
   --brand-gradient-hover: linear-gradient(135deg, #071d42 0%, #0b2f6b 100%);
   --hero-gradient: linear-gradient(180deg, rgba(7, 29, 66, 0.85) 0%, rgba(11, 47, 107, 0.95) 100%);
   --gold-gradient: linear-gradient(135deg, #FFD700, #FFA500);
+
+  /* CTA Sky Blue (silky) */
+  --cta-sky-1: #e7f7ff;
+  --cta-sky-2: #cfeeff;
+  --cta-sky-3: #a7dcff;
+  --cta-sky-4: #7cc7ff;
 }
 
 /* Base Styles */
@@ -57,6 +63,32 @@ body {
     background: var(--brand-gradient-hover);
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 12px 35px rgba(11, 47, 107, 0.4);
+  }
+
+  /* Silky Sky CTA (primary) */
+  .btn-cta-sky {
+    background: linear-gradient(180deg, var(--cta-sky-1) 0%, var(--cta-sky-2) 100%);
+    border: 1px solid rgba(11, 47, 107, 0.16);
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.12);
+    color: var(--brand-primary);
+    transform: translateZ(0);
+    transition: box-shadow 200ms ease, background 200ms ease, border-color 200ms ease, transform 120ms ease;
+  }
+
+  .btn-cta-sky:hover {
+    background: linear-gradient(180deg, var(--cta-sky-2) 0%, var(--cta-sky-3) 100%);
+    border-color: rgba(11, 47, 107, 0.22);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.14);
+  }
+
+  .btn-cta-sky:active {
+    transform: translateY(1px);
+    box-shadow: 0 6px 14px rgba(37, 99, 235, 0.12);
+  }
+
+  .btn-cta-sky:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(167, 220, 255, 0.6), 0 12px 26px rgba(37, 99, 235, 0.18);
   }
   
   .btn-brand-secondary {

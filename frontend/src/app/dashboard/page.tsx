@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { LogOut, Plus } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 
 /**
@@ -175,16 +174,6 @@ export default function DashboardPage() {
     return activeInvestments.reduce((sum, i) => sum + (Number(i.amount) || 0), 0);
   }, [activeInvestments]);
 
-  const pendingWithdrawals = useMemo(() => {
-    return transactions
-      .filter(
-        (t) =>
-          String(t.tx_type) === "withdrawal" &&
-          String(t.status) === "pending"
-      )
-      .reduce((sum, t) => sum + (Number(t.amount) || 0), 0);
-  }, [transactions]);
-
   const recentTransactions = useMemo(() => {
     return [...transactions].sort((a, b) => {
       const da = safeDate(a.created_at)?.getTime() || 0;
@@ -215,39 +204,37 @@ export default function DashboardPage() {
               <div className="text-xs text-gray-500">Investment Dashboard</div>
             </div>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-3">
             <Link
               href="/dashboard/new-investment"
-              className="btn-cta-sky inline-flex h-10 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold"
+              className="btn-cta-sky inline-flex items-center justify-center px-3 py-2 rounded-md text-sm font-semibold"
             >
-              <Plus className="h-4 w-4" aria-hidden="true" />
-              <span className="hidden sm:inline">New Investment</span>
+              New Investment
             </Link>
             <button
               type="button"
               onClick={handleLogout}
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-red-600 px-4 text-sm font-semibold text-white hover:bg-red-700"
-              aria-label="Logout"
+              className="px-3 py-2 rounded-md bg-red-600 text-white text-sm hover:bg-red-700"
             >
-              <LogOut className="h-4 w-4" aria-hidden="true" />
-              <span className="hidden sm:inline">Logout</span>
+              Logout
             </button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 py-6 space-y-6">
+      <main className="max-w-6xl mx-auto px-4 py-6">
         {error ? (
           <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
             {error}
           </div>
         ) : null}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           <StatCard title="Current Balance" value={money(wallet?.balance ?? 0)} subtitle="Available funds" />
+          <StatCard title="Total Deposits" value={money(wallet?.total_deposits ?? 0)} subtitle="Approved deposits" />
+          <StatCard title="Total Withdrawals" value={money(wallet?.total_withdrawals ?? 0)} subtitle="Approved withdrawals" />
           <StatCard title="Total Invested" value={money(totalInvested)} subtitle="Active investments" />
-          <StatCard title="Approved Withdrawals" value={money(wallet?.total_withdrawals ?? 0)} subtitle="Completed payouts" />
-          <StatCard title="Pending Withdrawals" value={money(pendingWithdrawals)} subtitle="Awaiting review" />
+          <StatCard title="Locked ROI" value={money(lockedRoi)} subtitle="Profit earned (locked)" />
         </div>
 
         <section className="mb-10">
@@ -395,9 +382,9 @@ export default function DashboardPage() {
 
 function StatCard(props: { title: string; value: string; subtitle: string }) {
   return (
-    <div className="rounded-xl border border-[#dbe8ff] bg-[#eef5ff] p-4 shadow-sm">
+    <div className="rounded-xl border bg-white p-5 shadow-sm">
       <div className="text-sm text-gray-600">{props.title}</div>
-      <div className="text-2xl font-semibold mt-2 text-[#0b2f6b]">{props.value}</div>
+      <div className="text-2xl font-semibold mt-2">{props.value}</div>
       <div className="text-xs text-gray-500 mt-1">{props.subtitle}</div>
     </div>
   );

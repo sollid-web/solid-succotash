@@ -14,9 +14,11 @@ type FlipCardProps = {
 };
 
 export default function FlipCard({
-  maxWidth = 480,
-  aspectWidth = 480,
-  aspectHeight = 300,
+  // Note: browsers can't guarantee true physical size across devices, but we use the ISO/IEC 7810 ID-1 aspect ratio.
+  // Print mode uses 85.6mm width for a closer-to-real-size result.
+  maxWidth = 360,
+  aspectWidth = 856,
+  aspectHeight = 540,
   animationMs = 800,
   perspective = 1000,
   borderRadius = 20,
@@ -50,6 +52,10 @@ export default function FlipCard({
         .is-flipped { transform: rotateY(180deg); }
         .flip-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: ${borderRadius}px; overflow: hidden; box-shadow: ${shadow}; }
         .flip-back { transform: rotateY(180deg); }
+
+        @media print {
+          .flip-card { max-width: 85.6mm; }
+        }
       `}</style>
       <div className="flip-card cursor-pointer">
         <div className="flip-outer">

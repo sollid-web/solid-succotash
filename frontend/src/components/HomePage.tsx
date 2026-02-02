@@ -454,7 +454,7 @@ export default function HomePage() {
                         </div>
                         <div className="mt-1 text-sm font-bold text-gray-900">{formatUsd(profit)} profit</div>
                         {!meetsMin ? (
-                          <p className="mt-2 text-[11px] text-amber-700">
+                          <p className="mt-2 text-[11px] text-gray-600">
                             Enter at least {formatUsd(plan.minDepositUsd)} to use this plan.
                           </p>
                         ) : null}
@@ -524,23 +524,23 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6">
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
               <h3 className="text-xl font-bold text-[#0b2f6b] mb-4">Predictable Daily ROI</h3>
               <p className="text-gray-700">
                 Our fixed and flexible plans provide structured returns ranging from 1% to 2% daily, depending on the selected tier. Investors retain control of their capital, profits, and withdrawal schedules.
               </p>
             </div>
 
-            <div className="bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl p-6">
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
               <h3 className="text-xl font-bold text-[#0b2f6b] mb-4">Battle-Tested Infrastructure</h3>
               <p className="text-gray-700">
                 WolvCapital operates on secure, cloud-based architecture with 99.9% uptime, ensuring uninterrupted platform performance during deposits, withdrawals, or active investment periods.
               </p>
             </div>
 
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6">
-              <div className="relative w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
-                <div className="absolute inset-0 bg-purple-400 rounded-2xl blur-sm opacity-50"></div>
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
+              <div className="relative w-14 h-14 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-2xl flex items-center justify-center mb-4 shadow-lg">
+                <div className="absolute inset-0 bg-[#2563eb]/35 rounded-2xl blur-sm opacity-50"></div>
                 <Globe className="relative w-8 h-8 text-white" strokeWidth={2.5} />
               </div>
               <h3 className="text-xl font-bold text-[#0b2f6b] mb-4">Global Investor Network</h3>
@@ -572,8 +572,8 @@ export default function HomePage() {
             </div>
 
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100">
-              <div className="w-16 h-16 bg-gradient-to-br from-[#fde047] to-[#facc15] rounded-2xl flex items-center justify-center mb-6">
-                <svg className="w-8 h-8 text-[#0b2f6b]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-16 h-16 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-2xl flex items-center justify-center mb-6">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
               </div>
@@ -588,15 +588,19 @@ export default function HomePage() {
                 </svg>
               </div>
               <h3 className="text-2xl font-bold text-[#0b2f6b] mb-4">Virtual Card Solutions</h3>
-              <p className="text-gray-600 leading-relaxed">Access premium virtual Visa cards for secure global transactions. Enjoy instant activation, 24/7 support, and enhanced spending controls.</p>
+              <p className="text-gray-600 leading-relaxed">
+                Use a virtual card for online spending and controlled payments (where available). Card issuance and availability are subject to eligibility checks, partner terms, and compliance review.
+              </p>
             </div>
           </div>
 
           {/* Interactive Virtual Card Demo */}
           <div className="mt-16">
             <div className="text-center mb-6 sm:mb-8">
-              <h3 className="text-2xl sm:text-3xl font-bold text-[#0b2f6b] mb-2 sm:mb-3">Preview Our Virtual Card Experience</h3>
-              <p className="text-sm sm:text-base text-gray-600">Tap the card below to view both sides. WolvCapital virtual cards are designed for secure, compliant digital asset spending.</p>
+              <h3 className="text-2xl sm:text-3xl font-bold text-[#0b2f6b] mb-2 sm:mb-3">Virtual Card Preview</h3>
+              <p className="text-sm sm:text-base text-gray-600">
+                Tap the card below to view both sides. This is a visual preview; features and limits depend on verification level and program availability.
+              </p>
             </div>
             <FlipCard />
           </div>
@@ -660,9 +664,9 @@ export default function HomePage() {
 
             {/* Step 2 */}
             <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-[#2563eb] to-[#1d4ed8] rounded-full flex items-center justify-center mx-auto mb-4 relative">
+              <div className="w-20 h-20 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-full flex items-center justify-center mx-auto mb-4 relative">
                 <Briefcase className="w-10 h-10 text-white" aria-hidden="true" />
-                <span className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center text-[#2563eb] font-bold shadow-lg">2</span>
+                <span className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center text-[#0b2f6b] font-bold shadow-lg">2</span>
               </div>
               <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">Choose Plan</h3>
               <p className="text-gray-600">Select from our professionally structured investment plans based on your goals.</p>
@@ -670,9 +674,9 @@ export default function HomePage() {
 
             {/* Step 3 */}
             <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-purple-700 rounded-full flex items-center justify-center mx-auto mb-4 relative">
+              <div className="w-20 h-20 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-full flex items-center justify-center mx-auto mb-4 relative">
                 <CreditCard className="w-10 h-10 text-white" aria-hidden="true" />
-                <span className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center text-purple-600 font-bold shadow-lg">3</span>
+                <span className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center text-[#0b2f6b] font-bold shadow-lg">3</span>
               </div>
               <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">Deposit Funds</h3>
               <p className="text-gray-600">Fund your wallet securely. All deposits are manually reviewed and approved.</p>
@@ -680,9 +684,9 @@ export default function HomePage() {
 
             {/* Step 4 */}
             <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-green-600 to-green-700 rounded-full flex items-center justify-center mx-auto mb-4 relative">
+              <div className="w-20 h-20 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-full flex items-center justify-center mx-auto mb-4 relative">
                 <TrendingUp className="w-10 h-10 text-white" aria-hidden="true" />
-                <span className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center text-green-600 font-bold shadow-lg">4</span>
+                <span className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center text-[#0b2f6b] font-bold shadow-lg">4</span>
               </div>
               <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">Track Returns</h3>
               <p className="text-gray-600">Monitor your investment performance with real-time dashboard analytics.</p>
@@ -711,8 +715,8 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
               <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-start gap-4">
-                  <div className="relative w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <div className="absolute inset-0 bg-blue-400 rounded-2xl blur-sm opacity-50"></div>
+                  <div className="relative w-14 h-14 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <div className="absolute inset-0 bg-[#2563eb]/35 rounded-2xl blur-sm opacity-50"></div>
                     <UserPlus className="relative w-8 h-8 text-white" aria-hidden="true" strokeWidth={2.5} />
                   </div>
                   <div>
@@ -724,8 +728,8 @@ export default function HomePage() {
 
               <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-start gap-4">
-                  <div className="relative w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <div className="absolute inset-0 bg-green-400 rounded-2xl blur-sm opacity-50"></div>
+                  <div className="relative w-14 h-14 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <div className="absolute inset-0 bg-[#2563eb]/35 rounded-2xl blur-sm opacity-50"></div>
                     <Shield className="relative w-8 h-8 text-white" aria-hidden="true" strokeWidth={2.5} />
                   </div>
                   <div>
@@ -737,8 +741,8 @@ export default function HomePage() {
 
               <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-start gap-4">
-                  <div className="relative w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <div className="absolute inset-0 bg-purple-400 rounded-2xl blur-sm opacity-50"></div>
+                  <div className="relative w-14 h-14 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <div className="absolute inset-0 bg-[#2563eb]/35 rounded-2xl blur-sm opacity-50"></div>
                     <Lock className="relative w-8 h-8 text-white" aria-hidden="true" strokeWidth={2.5} />
                   </div>
                   <div>
@@ -750,8 +754,8 @@ export default function HomePage() {
 
               <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-start gap-4">
-                  <div className="relative w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <div className="absolute inset-0 bg-amber-400 rounded-2xl blur-sm opacity-50"></div>
+                  <div className="relative w-14 h-14 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <div className="absolute inset-0 bg-[#2563eb]/35 rounded-2xl blur-sm opacity-50"></div>
                     <ShieldCheck className="relative w-8 h-8 text-white" aria-hidden="true" strokeWidth={2.5} />
                   </div>
                   <div>
@@ -763,8 +767,8 @@ export default function HomePage() {
 
               <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-start gap-4">
-                  <div className="relative w-14 h-14 bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <div className="absolute inset-0 bg-red-400 rounded-2xl blur-sm opacity-50"></div>
+                  <div className="relative w-14 h-14 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <div className="absolute inset-0 bg-[#2563eb]/35 rounded-2xl blur-sm opacity-50"></div>
                     <Clock className="relative w-8 h-8 text-white" aria-hidden="true" strokeWidth={2.5} />
                   </div>
                   <div>
@@ -776,8 +780,8 @@ export default function HomePage() {
 
               <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all">
                 <div className="flex items-start gap-4">
-                  <div className="relative w-14 h-14 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <div className="absolute inset-0 bg-indigo-400 rounded-2xl blur-sm opacity-50"></div>
+                  <div className="relative w-14 h-14 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <div className="absolute inset-0 bg-[#2563eb]/35 rounded-2xl blur-sm opacity-50"></div>
                     <FileCheck className="relative w-8 h-8 text-white" aria-hidden="true" strokeWidth={2.5} />
                   </div>
                   <div>
@@ -807,45 +811,45 @@ export default function HomePage() {
             <div className="bg-white rounded-3xl p-8 shadow-2xl border-2 border-gray-200">
               <h3 className="text-2xl font-bold text-[#0b2f6b] mb-6 text-center">Security At A Glance</h3>
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl text-center">
+                <div className="bg-white border border-gray-200 p-6 rounded-2xl text-center">
                   <div className="flex justify-center mb-3">
-                    <div className="relative w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
-                      <div className="absolute inset-0 bg-green-400 rounded-2xl blur opacity-40"></div>
+                    <div className="relative w-16 h-16 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-2xl flex items-center justify-center shadow-lg">
+                      <div className="absolute inset-0 bg-[#2563eb]/30 rounded-2xl blur opacity-40"></div>
                       <Lock className="relative w-9 h-9 text-white" strokeWidth={2.5} />
                     </div>
                   </div>
-                  <div className="text-3xl font-bold text-green-700 mb-2">256-bit</div>
-                  <div className="text-sm text-green-600 font-semibold">SSL Encryption</div>
+                  <div className="text-3xl font-bold text-[#0b2f6b] mb-2">256-bit</div>
+                  <div className="text-sm text-gray-600 font-semibold">SSL Encryption</div>
                 </div>
-                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl text-center">
+                <div className="bg-white border border-gray-200 p-6 rounded-2xl text-center">
                   <div className="flex justify-center mb-3">
-                    <div className="relative w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg">
-                      <div className="absolute inset-0 bg-blue-400 rounded-2xl blur opacity-40"></div>
+                    <div className="relative w-16 h-16 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-2xl flex items-center justify-center shadow-lg">
+                      <div className="absolute inset-0 bg-[#2563eb]/30 rounded-2xl blur opacity-40"></div>
                       <ShieldCheck className="relative w-9 h-9 text-white" strokeWidth={2.5} />
                     </div>
                   </div>
-                  <div className="text-3xl font-bold text-blue-700 mb-2">AML/KYC</div>
-                  <div className="text-sm text-blue-600 font-semibold">Fully Compliant</div>
+                  <div className="text-3xl font-bold text-[#0b2f6b] mb-2">AML/KYC</div>
+                  <div className="text-sm text-gray-600 font-semibold">Compliance Checks</div>
                 </div>
-                <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-2xl text-center">
+                <div className="bg-white border border-gray-200 p-6 rounded-2xl text-center">
                   <div className="flex justify-center mb-3">
-                    <div className="relative w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
-                      <div className="absolute inset-0 bg-purple-400 rounded-2xl blur opacity-40"></div>
+                    <div className="relative w-16 h-16 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-2xl flex items-center justify-center shadow-lg">
+                      <div className="absolute inset-0 bg-[#2563eb]/30 rounded-2xl blur opacity-40"></div>
                       <Clock className="relative w-9 h-9 text-white" strokeWidth={2.5} />
                     </div>
                   </div>
-                  <div className="text-3xl font-bold text-purple-700 mb-2">24/7</div>
-                  <div className="text-sm text-purple-600 font-semibold">Monitoring</div>
+                  <div className="text-3xl font-bold text-[#0b2f6b] mb-2">24/7</div>
+                  <div className="text-sm text-gray-600 font-semibold">Monitoring</div>
                 </div>
-                <div className="bg-gradient-to-br from-orange-50 to-amber-50 p-6 rounded-2xl text-center">
+                <div className="bg-white border border-gray-200 p-6 rounded-2xl text-center">
                   <div className="flex justify-center mb-3">
-                    <div className="relative w-16 h-16 bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl flex items-center justify-center shadow-lg">
-                      <div className="absolute inset-0 bg-orange-400 rounded-2xl blur opacity-40"></div>
+                    <div className="relative w-16 h-16 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-2xl flex items-center justify-center shadow-lg">
+                      <div className="absolute inset-0 bg-[#2563eb]/30 rounded-2xl blur opacity-40"></div>
                       <Users className="relative w-9 h-9 text-white" strokeWidth={2.5} />
                     </div>
                   </div>
-                  <div className="text-3xl font-bold text-orange-700 mb-2">45,000+</div>
-                  <div className="text-sm text-orange-600 font-semibold">Global Investors</div>
+                  <div className="text-3xl font-bold text-[#0b2f6b] mb-2">45,000+</div>
+                  <div className="text-sm text-gray-600 font-semibold">Global Investors</div>
                 </div>
               </div>
             </div>
@@ -874,10 +878,10 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all border border-gray-200 hover:border-green-600">
+            <div className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all border border-gray-200 hover:border-[#0b2f6b]">
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Shield className="w-6 h-6 text-green-600" aria-hidden="true" />
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Shield className="w-6 h-6 text-[#0b2f6b]" aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">Is WolvCapital regulated?</h3>
@@ -886,10 +890,10 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all border border-gray-200 hover:border-purple-600">
+            <div className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all border border-gray-200 hover:border-[#0b2f6b]">
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Clock className="w-6 h-6 text-purple-600" aria-hidden="true" />
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Clock className="w-6 h-6 text-[#0b2f6b]" aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">How long do withdrawals take?</h3>
@@ -898,10 +902,10 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all border border-gray-200 hover:border-amber-600">
+            <div className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all border border-gray-200 hover:border-[#0b2f6b]">
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <CreditCard className="w-6 h-6 text-amber-600" aria-hidden="true" />
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <CreditCard className="w-6 h-6 text-[#0b2f6b]" aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">What are the minimum and maximum investment amounts?</h3>
@@ -910,10 +914,10 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all border border-gray-200 hover:border-indigo-600">
+            <div className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all border border-gray-200 hover:border-[#0b2f6b]">
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Lock className="w-6 h-6 text-indigo-600" aria-hidden="true" />
+                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Lock className="w-6 h-6 text-[#0b2f6b]" aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">How is my account secured?</h3>
@@ -922,10 +926,10 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all border border-gray-200 hover:border-blue-600">
+            <div className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-all border border-gray-200 hover:border-[#0b2f6b]">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <UserPlus className="w-6 h-6 text-blue-600" aria-hidden="true" />
+                  <UserPlus className="w-6 h-6 text-[#0b2f6b]" aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-[#0b2f6b] mb-3">Which countries does WolvCapital serve?</h3>
@@ -969,17 +973,17 @@ export default function HomePage() {
                 <h3 className="text-xl font-bold text-[#0b2f6b]">Referral Highlights</h3>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="p-4 bg-blue-50 rounded-2xl text-center">
-                  <p className="text-sm text-blue-700">Manual Review</p>
-                  <p className="text-2xl font-extrabold text-blue-900">100%</p>
+                <div className="p-4 bg-gray-50 border border-gray-200 rounded-2xl text-center">
+                  <p className="text-sm text-gray-600">Manual Review</p>
+                  <p className="text-2xl font-extrabold text-[#0b2f6b]">100%</p>
                 </div>
-                <div className="p-4 bg-emerald-50 rounded-2xl text-center">
-                  <p className="text-sm text-emerald-700">Transparent</p>
-                  <p className="text-2xl font-extrabold text-emerald-900">Always</p>
+                <div className="p-4 bg-gray-50 border border-gray-200 rounded-2xl text-center">
+                  <p className="text-sm text-gray-600">Transparent</p>
+                  <p className="text-2xl font-extrabold text-[#0b2f6b]">Always</p>
                 </div>
-                <div className="p-4 bg-amber-50 rounded-2xl text-center">
-                  <p className="text-sm text-amber-700">Secure</p>
-                  <p className="text-2xl font-extrabold text-amber-900">By Design</p>
+                <div className="p-4 bg-gray-50 border border-gray-200 rounded-2xl text-center">
+                  <p className="text-sm text-gray-600">Secure</p>
+                  <p className="text-2xl font-extrabold text-[#0b2f6b]">By Design</p>
                 </div>
               </div>
             </div>

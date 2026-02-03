@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import RiskDisclaimer from '@/components/RiskDisclaimer'
 
 export const metadata = {
@@ -86,39 +85,19 @@ export default function PlansPage() {
       <div className="h-20" />
 
       {/* Hero Section */}
-      <section className="relative w-full min-h-[320px] sm:min-h-[360px] md:min-h-[420px] flex items-center justify-center mb-8 mt-24 overflow-hidden rounded-3xl shadow-xl">
-        <Image
-          src="/images/plans-hero.jpg"
-          alt="WolvCapital Investment Plans Hero"
-          fill
-          priority
-          className="object-cover object-center w-full h-full absolute inset-0 z-0"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/30 z-10" />
-        <div className="relative z-20 w-full text-center px-4 py-12 sm:py-20">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white drop-shadow-2xl mb-4 [text-shadow:_2px_2px_4px_rgb(0_0_0_/_80%)]">
+      <section className="relative w-full min-h-[260px] sm:min-h-[320px] md:min-h-[360px] flex items-center justify-center mb-10 mt-24 overflow-hidden rounded-3xl shadow-lg bg-gradient-to-br from-[#0b2f6b] via-[#1d4ed8] to-[#2563eb]">
+        <div className="relative z-10 w-full text-center px-4 py-12 sm:py-16">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
             Investment Plans
           </h1>
-          <p className="text-lg sm:text-xl md:text-2xl text-white drop-shadow-xl mb-4 [text-shadow:_1px_1px_3px_rgb(0_0_0_/_70%)]">
+          <p className="text-lg sm:text-xl md:text-2xl text-white/95 mb-4">
             Understand the structure, terms, and review process before you decide.
           </p>
-          <p className="text-base sm:text-lg md:text-xl text-white/95 drop-shadow-lg mt-2 max-w-2xl mx-auto [text-shadow:_1px_1px_2px_rgb(0_0_0_/_60%)]">
+          <p className="text-base sm:text-lg md:text-xl text-white/90 mt-2 max-w-2xl mx-auto">
             This page provides educational information about plan structures, eligibility, and key terms. Digital assets are volatile and outcomes are not guaranteed.
           </p>
         </div>
       </section>
-
-      {/* OG Image Display Below Hero */}
-      <div className="w-full flex justify-center items-center mb-8">
-        <Image
-          src="/og-images/plans-og.png"
-          alt="WolvCapital Investment Plans – OpenGraph image"
-          width={1200}
-          height={630}
-          priority
-          className="rounded-2xl shadow-xl w-full max-w-2xl h-auto object-cover object-center border-4 border-blue-100"
-        />
-      </div>
 
       {/* Intro */}
       <section className="py-10 sm:py-14 bg-white">

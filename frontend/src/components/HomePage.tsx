@@ -433,7 +433,7 @@ export default function HomePage() {
                       className={`cursor-pointer rounded-2xl border border-gray-200 bg-white p-5 transition-all hover:shadow-md focus:outline-none focus:ring-4 focus:ring-blue-200 ${
                         isSelected ? `ring-2 ${accentRing}` : ''
                       }`}
-                      aria-pressed={isSelected ? 'true' : 'false'}
+                      aria-pressed={isSelected}
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div>

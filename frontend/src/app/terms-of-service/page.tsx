@@ -28,7 +28,7 @@ export default function TermsOfServicePage() {
           <h1 className="text-5xl lg:text-6xl font-extrabold mb-6">Terms of Service</h1>
           <p className="text-xl text-gray-200">Effective Date: October 2025</p>
           <div className="mt-8 flex justify-center">
-            <div className="relative w-full max-w-[480px] aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 mx-auto flex items-center justify-center">
+            <div className="relative w-full max-w-[560px] aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 mx-auto flex items-center justify-center">
               <Image
                 src="/images/legal/legal-terms-hero.jpg"
                 alt="WolvCapital Terms of Service — participation and compliance"
@@ -41,18 +41,6 @@ export default function TermsOfServicePage() {
           </div>
         </div>
       </section>
-
-      {/* OG Image Display */}
-      <div className="w-full flex justify-center items-center py-8 bg-gray-50">
-        <Image
-          src="/og-images/terms-og.png"
-          alt="Terms of Service – User Agreement & Platform Rules"
-          width={1200}
-          height={630}
-          priority
-          className="rounded-2xl shadow-2xl max-w-full h-auto"
-        />
-      </div>
 
       {/* Content */}
       <main className="min-h-screen bg-white">

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { apiFetch } from "@/lib/api";
 
@@ -99,7 +98,6 @@ function formatDate(d: Date | null) {
 }
 
 export default function DashboardPage() {
-  const router = useRouter();
   const [wallet, setWallet] = useState<WalletData | null>(null);
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -192,46 +190,8 @@ export default function DashboardPage() {
     });
   }, [transactions]);
 
-  const handleLogout = () => {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
-    }
-    router.push("/accounts/login");
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold">
-              W
-            </div>
-            <div>
-              <div className="font-semibold">WolvCapital</div>
-              <div className="text-xs text-gray-500">Investment Dashboard</div>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/dashboard/new-investment"
-              className="btn-cta-sky inline-flex items-center justify-center px-3 py-2 rounded-md text-sm font-semibold"
-            >
-              New Investment
-            </Link>
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="px-3 py-2 rounded-md bg-red-600 text-white text-sm hover:bg-red-700"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
-
       <main className="max-w-6xl mx-auto px-4 py-6">
         {error ? (
           <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">

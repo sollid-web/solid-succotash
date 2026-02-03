@@ -19,6 +19,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
   const pathname = usePathname();
   const [checking, setChecking] = useState(true);
   const [user, setUser] = useState<any>(null);
+  const [kycVerified, setKycVerified] = useState<boolean | null>(null);
 
   useEffect(() => {
     // Enhanced authentication check
@@ -50,6 +51,33 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
 
     checkAuth();
   }, [pathname, router]);
+
+  useEffect(() => {
+    let active = true;
+    const loadKyc = async () => {
+      try {
+        const response = await apiFetch("/api/kyc/", {
+          method: "GET",
+          cache: "no-store",
+        });
+        if (!response.ok || response.status === 401) {
+          if (active) setKycVerified(false);
+          return;
+        }
+        const payload = (await response.json()) as Array<{ status?: string }> | { status?: string };
+        const latest = Array.isArray(payload) ? payload[0] : payload;
+        const statusValue = String(latest?.status || "").toLowerCase();
+        const isApproved = statusValue === "approved";
+        if (active) setKycVerified(isApproved);
+      } catch {
+        if (active) setKycVerified(false);
+      }
+    };
+    loadKyc();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -113,8 +141,14 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
                     ? `${user.first_name || ""} ${user.last_name || ""}`.trim()
                     : (user?.email ? user.email.split("@")[0] : "User")}
                 </p>
-                <p className="text-xs text-gray-500">Dashboard</p>
+                <p className="text-xs text-gray-500">
+                  Account Status: {kycVerified ? "Verified" : "Not verified"}
+                </p>
               </div>
+            </div>
+
+            <div className="md:hidden text-xs text-gray-500">
+              Account Status: {kycVerified ? "Verified" : "Not verified"}
             </div>
 
             <button

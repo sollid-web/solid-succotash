@@ -18,13 +18,14 @@ interface Activity {
 
 interface Props {
   plans?: string[];
-  // Interval is now fixed to 30s by default (both min & max set to 30000)
   minIntervalMs?: number;
   maxIntervalMs?: number;
   soundPath?: string;
   soundVolume?: number;
   preventRepeatMs?: number;
   initialDelayMs?: number;
+  displayDurationMs?: number;
+  label?: string;
   className?: string;
 }
 
@@ -110,19 +111,23 @@ function generateRandomActivity(plans: string[]): Activity {
 // --- Component: single activity view with stylish animation (30s default interval) ---
 const RecentActivitySingle: React.FC<Props> = ({
   plans = DEFAULT_PLANS,
-  minIntervalMs = 60_000,
-  maxIntervalMs = 90_000,
+  minIntervalMs = 120_000,
+  maxIntervalMs = 180_000,
   soundPath = "",
   soundVolume = 0.10,
   preventRepeatMs = 2000,
   initialDelayMs = 800,
+  displayDurationMs = 6500,
+  label = "Recent Platform Activity",
   className,
 }) => {
   const [activity, setActivity] = useState<Activity | null>(null);
   const [visible, setVisible] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const lastPlayedRef = useRef(0);
   const timerRef = useRef<number | null>(null);
+  const hideTimerRef = useRef<number | null>(null);
   const recentRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
@@ -135,11 +140,13 @@ const RecentActivitySingle: React.FC<Props> = ({
 
     const startTimeout = window.setTimeout(() => {
       setVisible(true);
+      setDismissed(false);
       if (audioRef.current) tryPlaySound(audioRef.current, preventRepeatMs, lastPlayedRef);
+      hideTimerRef.current = window.setTimeout(() => setVisible(false), displayDurationMs);
     }, initialDelayMs);
 
     const schedule = () => {
-      const delay = randBetween(minIntervalMs, maxIntervalMs); // both are 30000 by default now
+      const delay = randBetween(minIntervalMs, maxIntervalMs);
       timerRef.current = window.setTimeout(() => {
         setVisible(false);
         window.setTimeout(() => {
@@ -156,7 +163,10 @@ const RecentActivitySingle: React.FC<Props> = ({
           }
           setActivity(next);
           setVisible(true);
+          setDismissed(false);
           if (audioRef.current) tryPlaySound(audioRef.current, preventRepeatMs, lastPlayedRef);
+          if (hideTimerRef.current) window.clearTimeout(hideTimerRef.current);
+          hideTimerRef.current = window.setTimeout(() => setVisible(false), displayDurationMs);
           schedule();
         }, 420);
       }, delay);
@@ -167,9 +177,10 @@ const RecentActivitySingle: React.FC<Props> = ({
     return () => {
       clearTimeout(startTimeout as number);
       if (timerRef.current) clearTimeout(timerRef.current);
+      if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [plans, minIntervalMs, maxIntervalMs, soundPath, soundVolume, preventRepeatMs, initialDelayMs]);
+  }, [plans, minIntervalMs, maxIntervalMs, soundPath, soundVolume, preventRepeatMs, initialDelayMs, displayDurationMs]);
 
   if (!activity) return null;
 
@@ -177,7 +188,7 @@ const RecentActivitySingle: React.FC<Props> = ({
 
   return (
     <div className={`single-wrapper ${className || ""}`} aria-live="polite" aria-atomic="true">
-      <div className={`card ${classType} ${visible ? "enter" : "exit"}`} key={activity.id}>
+      <div className={`card ${classType} ${visible && !dismissed ? "enter" : "exit"}`} key={activity.id}>
         <img
           src={`/flags/${activity.countryCode}.svg`}
           alt={activity.country}
@@ -186,8 +197,16 @@ const RecentActivitySingle: React.FC<Props> = ({
         />
         <div className="text">
           <div className="main" title={activity.message}>{activity.message}</div>
-          <div className="meta">{`Example • ${activity.country} • ${activity.timeAgo}`}</div>
+          <div className="meta">{`${label} • ${activity.country} • ${activity.timeAgo}`}</div>
         </div>
+        <button
+          type="button"
+          className="close"
+          aria-label="Dismiss notification"
+          onClick={() => setDismissed(true)}
+        >
+          ×
+        </button>
       </div>
 
       <style jsx>{`
@@ -196,7 +215,7 @@ const RecentActivitySingle: React.FC<Props> = ({
           left: 1rem;
           bottom: 1.25rem;
           z-index: 99999;
-          pointer-events: none;
+          pointer-events: auto;
           max-width: 420px;
           width: auto;
         }
@@ -218,7 +237,7 @@ const RecentActivitySingle: React.FC<Props> = ({
           align-items: center;
           min-width: 240px;
           max-width: 440px;
-          pointer-events: none;
+          pointer-events: auto;
           transition: transform 380ms cubic-bezier(.22,.9,.35,1), opacity 380ms ease, box-shadow 380ms ease;
           opacity: 0;
           transform: translateY(10px) scale(0.98);
@@ -260,6 +279,21 @@ const RecentActivitySingle: React.FC<Props> = ({
           color: rgba(255,255,255,0.85);
           font-weight: 500;
         }
+        .close {
+          margin-left: 0.35rem;
+          border: 0;
+          background: rgba(255,255,255,0.12);
+          color: #fff;
+          width: 22px;
+          height: 22px;
+          border-radius: 999px;
+          font-size: 16px;
+          line-height: 1;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+        }
 
         .card.plan { 
           background: linear-gradient(135deg, rgba(37,99,235,0.96), rgba(29,78,216,0.94));
@@ -270,8 +304,8 @@ const RecentActivitySingle: React.FC<Props> = ({
           box-shadow: 0 12px 32px rgba(5,150,105,0.4), 0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
         }
         .card.withdrawal { 
-          background: linear-gradient(135deg, rgba(220,38,38,0.96), rgba(185,28,28,0.94));
-          box-shadow: 0 12px 32px rgba(220,38,38,0.35), 0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
+          background: linear-gradient(135deg, rgba(245,158,11,0.96), rgba(217,119,6,0.94));
+          box-shadow: 0 12px 32px rgba(245,158,11,0.35), 0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
         @media (max-width: 640px) {

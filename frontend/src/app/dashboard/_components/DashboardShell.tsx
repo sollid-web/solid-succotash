@@ -6,7 +6,6 @@ import { apiFetch } from "@/lib/api";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import RecentActivityTicker from "@/components/RecentActivityTicker";
-import TawkToChat from "@/components/TawkToChat";
 import ValidationBanner from "./ValidationBanner";
 
 type DashboardShellProps = {
@@ -260,7 +259,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
       </main>
 
       {/* Dashboard-specific Activity Ticker */}
-      <RecentActivityTicker />
+      <RecentActivityTicker minIntervalMs={150000} maxIntervalMs={220000} displayDurationMs={6500} />
 
       {/* Dashboard Footer */}
       <footer className="bg-white border-t border-gray-200 mt-12">

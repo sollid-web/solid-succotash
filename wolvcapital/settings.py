@@ -5,6 +5,8 @@ from datetime import timedelta
 from pathlib import Path
 from typing import Any
 
+import dj_database_url
+
 Env: Any
 try:
     from environ import Env as _Env
@@ -199,17 +201,14 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 # ------------------------------------------------------------------
-# Database (PostgreSQL via env vars)
+# Database (PostgreSQL via DATABASE_URL)
 # ------------------------------------------------------------------
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST", "127.0.0.1"),
-        "PORT": os.getenv("DB_PORT", "5432"),
-    }
+    "default": dj_database_url.parse(
+        os.environ["DATABASE_URL"],
+        conn_max_age=600,
+        ssl_require=True,
+    )
 }
 
 # ------------------------------------------------------------------

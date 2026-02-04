@@ -1,12 +1,9 @@
 # ---------- Render / Production Hardening ----------
-import importlib
 import os
 import sys
 from datetime import timedelta
 from pathlib import Path
-from types import ModuleType
 from typing import Any
-from urllib.parse import urlparse
 
 Env: Any
 try:
@@ -16,14 +13,6 @@ except Exception:  # pragma: no cover
     Env = None
 else:
     Env = _Env
-
-# dj-database-url is optional in some environments; import and fall back
-# gracefully.
-dj_database_url: ModuleType | None
-try:
-    dj_database_url = importlib.import_module("dj_database_url")
-except Exception:  # pragma: no cover - only relevant without dependency
-    dj_database_url = None
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -210,42 +199,18 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 # ------------------------------------------------------------------
-# Database (Postgres in prod, SQLite locally)
+# Database (PostgreSQL via env vars)
 # ------------------------------------------------------------------
-if os.getenv("DATABASE_URL"):
-    if dj_database_url:
-        DATABASES = {
-            "default": dj_database_url.parse(
-                os.environ["DATABASE_URL"], conn_max_age=600, ssl_require=True
-            )
-        }
-    else:
-        # Minimal fallback parser for DATABASE_URL when dj-database-url isn't
-        # installed.
-        # Supports common PostgreSQL URLs like:
-        # postgres://user:pass@host:port/dbname
-        p = urlparse(os.environ["DATABASE_URL"])
-        db_name = p.path.lstrip("/") if p.path else ""
-        db_engine = "django.db.backends.postgresql"
-        DATABASES = {
-            "default": {
-                "ENGINE": db_engine,
-                "NAME": db_name,
-                "USER": p.username or "",
-                "PASSWORD": p.password or "",
-                "HOST": p.hostname or "",
-                "PORT": str(p.port) if p.port else "",
-                "CONN_MAX_AGE": 600,
-                "OPTIONS": {"sslmode": "require"},
-            }
-        }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": str(BASE_DIR / "db.sqlite3"),
-        }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST", "127.0.0.1"),
+        "PORT": os.getenv("DB_PORT", "5432"),
     }
+}
 
 # ------------------------------------------------------------------
 # Templates

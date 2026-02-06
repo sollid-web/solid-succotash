@@ -205,10 +205,10 @@ export default function HomePage() {
               </div>
 
               <h1 className="mt-5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-white">
-                Earn 1%–2% Daily ROI on Your Crypto — Withdraw Anytime<span className="align-super text-base">*</span>
+                A clearer, more structured way to invest in crypto
               </h1>
               <p className="mt-4 text-base sm:text-lg md:text-xl text-blue-100 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                Secure, Transparent, KYC-Verified. Start with USDT or BTC.
+                Built for investors who value discipline, transparency, and long-term growth.
               </p>
 
               <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
@@ -217,7 +217,7 @@ export default function HomePage() {
                   onClick={() => scrollToPlans('hero')}
                   className="btn-cta-sky inline-flex items-center justify-center rounded-full px-7 py-3.5 text-sm sm:text-base font-extrabold"
                 >
-                  Start Earning Now
+                  Explore Investment Plans
                   <span className="ml-2 text-[#0b2f6b]/70" aria-hidden="true">
                     →
                   </span>

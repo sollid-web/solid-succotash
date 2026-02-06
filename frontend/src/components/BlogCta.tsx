@@ -16,9 +16,9 @@ type BlogCtaProps = {
 }
 
 export default function BlogCta({
-  title = 'Have questions before you commit funds?',
-  description = 'Contact WolvCapital for clarification on platform policies, security controls, and withdrawal processes. We provide information to help you make informed decisions.',
-  href = '/contact',
+  title = 'Ready to invest with more clarity and structure?',
+  description = "Explore WolvCapital's investment plans designed for disciplined growth.",
+  href = '/plans',
 }: BlogCtaProps) {
   const handleClick = () => {
     if (typeof window === 'undefined') return
@@ -37,7 +37,7 @@ export default function BlogCta({
             onClick={handleClick}
             className="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-semibold text-[#0b2f6b] hover:text-[#2563eb] hover:border-gray-300 transition"
           >
-            Contact WolvCapital
+            Explore WolvCapital's investment plans
             <span aria-hidden className="ml-2">→</span>
           </Link>
         </div>

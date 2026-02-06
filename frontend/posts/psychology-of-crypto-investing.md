@@ -23,6 +23,8 @@ If you want the broader consistency challenge, read [Why Most Beginners Quit Cry
 - avoid constant monitoring
 - focus on long-term goals
 
+For a practical approach to calmer decisions, read [How to Avoid Emotional Decisions in Crypto](/blog/how-to-avoid-emotional-decisions-in-crypto).
+
 ## Final thoughts
 Controlling emotions is a major advantage.
 

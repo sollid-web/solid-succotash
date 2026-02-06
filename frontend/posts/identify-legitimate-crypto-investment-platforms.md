@@ -17,6 +17,8 @@ Legitimate platforms clearly explain:
 
 A lack of clarity is often a warning sign.
 
+If you're comparing platform models, see [Centralized vs Decentralized Crypto Platforms](/blog/centralized-vs-decentralized-crypto-platforms).
+
 ## 2. Clear Terms and Policies
 Review the platform’s:
 - Terms of service

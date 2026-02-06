@@ -16,6 +16,8 @@ Users manage assets themselves.
 ## What's better for beginners?
 Simplicity and safety often matter more than control early on.
 
+If you are deciding between platform models, compare [Centralized vs Decentralized Crypto Investing](/blog/centralized-vs-decentralized-crypto-investing).
+
 If you want the security perspective first, read [How Security Works in Crypto Investment Platforms](/blog/how-security-works-in-crypto-investment-platforms).
 
 ## Final thoughts

@@ -16,6 +16,8 @@ In crypto investment platforms, transparency influences user confidence and long
 
 If you are comparing platforms, see [How to Identify Legitimate Crypto Investment Platforms](/blog/identify-legitimate-crypto-investment-platforms).
 
+For model differences, see [Centralized vs Decentralized Crypto Platforms](/blog/centralized-vs-decentralized-crypto-platforms).
+
 ## Why It Matters
 Transparency reduces confusion and builds realistic expectations.
 

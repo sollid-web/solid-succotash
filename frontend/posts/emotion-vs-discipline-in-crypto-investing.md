@@ -18,6 +18,8 @@ Beginners often struggle not with knowledge, but with reactions.
 ## Why discipline wins
 Discipline creates consistency regardless of market mood.
 
+If you want practical steps to reduce reactions, read [How to Avoid Emotional Decisions in Crypto](/blog/how-to-avoid-emotional-decisions-in-crypto).
+
 If you want the psychology foundation first, read [The Psychology of Crypto Investing](/blog/psychology-of-crypto-investing).
 
 ## Final thoughts

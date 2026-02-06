@@ -11,6 +11,8 @@ Education is the strongest risk-reduction tool available.
 
 If you are still building vocabulary, start with [Common Crypto Terms Beginners Must Know](/blog/common-crypto-terms-beginners-must-know).
 
+To avoid common misconceptions, read [Crypto Myths Beginners Still Believe](/blog/crypto-myths-beginners-still-believe).
+
 ## Knowledge reduces emotional decisions
 Understanding markets helps beginners:
 

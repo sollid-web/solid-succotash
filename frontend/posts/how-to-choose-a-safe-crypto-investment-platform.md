@@ -20,6 +20,8 @@ A safe platform prioritizes:
 ## Why beginners need more than features
 Beginners benefit from platforms that reduce complexity instead of increasing it.
 
+If you are comparing models, see [Centralized vs Decentralized Crypto Investing](/blog/centralized-vs-decentralized-crypto-investing).
+
 If you want to start with the safety basics, read [Is Crypto Investing Safe for Beginners? A Clear, Honest Guide](/blog/is-crypto-investing-safe-for-beginners).
 
 ## Final thoughts

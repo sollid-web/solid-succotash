@@ -9,6 +9,8 @@ Crypto offers many ways to invest, but not all are beginner-friendly.
 
 Understanding the difference between short-term and long-term strategies helps avoid costly mistakes.
 
+If you are still comparing asset types, read [What Makes Crypto Different From Stocks?](/blog/what-makes-crypto-different-from-stocks).
+
 If you are still deciding on a starting amount, see [How Much Should a Beginner Invest in Crypto?](/blog/how-much-should-a-beginner-invest-in-crypto).
 
 ## Short-term investing

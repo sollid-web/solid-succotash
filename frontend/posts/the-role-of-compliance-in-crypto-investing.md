@@ -25,3 +25,7 @@ For an investor protection perspective, see [How We Think About Investor Protect
 
 Choose a platform that values accountability.
 [Explore WolvCapital's compliant investing approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

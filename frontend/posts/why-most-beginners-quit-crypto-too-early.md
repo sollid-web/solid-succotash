@@ -31,3 +31,7 @@ Next, explore [The Psychology of Crypto Investing](/blog/psychology-of-crypto-in
 
 Build confidence with a structured crypto approach.
 [Explore WolvCapital's beginner-friendly plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

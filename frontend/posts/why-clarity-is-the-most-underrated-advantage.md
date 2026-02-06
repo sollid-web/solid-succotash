@@ -28,3 +28,7 @@ Next, see responsibility in action in [What Responsible Crypto Investing Looks L
 
 Choose clarity over complexity.
 [Explore WolvCapital's transparent investing approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

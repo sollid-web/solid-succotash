@@ -24,3 +24,7 @@ Next, explore long-term outcomes in [Why Long-Term Strategies Win](/blog/why-lon
 
 Build consistency with a structured investing approach.
 [Explore WolvCapital's plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

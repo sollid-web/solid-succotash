@@ -25,3 +25,7 @@ To learn without unnecessary losses, continue with [How to Learn Crypto Without 
 
 Looking for a thoughtful, responsible approach to crypto?
 [Explore disciplined investing with WolvCapital.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

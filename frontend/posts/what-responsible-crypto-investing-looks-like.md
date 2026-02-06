@@ -25,3 +25,7 @@ Next, continue the long-term mindset in [Why Long-Term Thinking Matters](/blog/w
 
 Invest responsibly with a structured approach.
 [Explore WolvCapital's investment plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

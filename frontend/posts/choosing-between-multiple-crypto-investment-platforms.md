@@ -26,3 +26,7 @@ Next, learn why beginners lose money in [Why Most Beginners Lose Money in Crypto
 
 Make a confident choice with a structured platform.
 [Explore WolvCapital's investment plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

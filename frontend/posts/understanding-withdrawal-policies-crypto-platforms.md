@@ -43,3 +43,7 @@ Withdrawal clarity reflects operational discipline. Investors should always revi
 - [How Transparency Builds Trust in Crypto Investment Platforms](/blog/transparency-and-trust-crypto-investment-platforms)
 
 Educational resources and platform documentation provide essential context for informed decisions.
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

@@ -24,3 +24,7 @@ Next, learn compounding basics in [Compounding Explained in Crypto](/blog/compou
 
 Prefer transparent, structured ROI models?
 [Explore WolvCapital's approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

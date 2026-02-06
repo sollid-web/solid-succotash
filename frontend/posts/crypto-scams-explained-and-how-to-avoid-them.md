@@ -30,3 +30,7 @@ Next, learn how to verify platforms in [How to Verify a Crypto Investment Platfo
 
 Invest through platforms focused on trust and protection.
 [Explore WolvCapital's security-first approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

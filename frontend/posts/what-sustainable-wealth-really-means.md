@@ -25,3 +25,7 @@ Next, learn why structure builds confidence in [Why Structure Builds Confidence]
 
 Build wealth with structure and clarity.
 [Explore WolvCapital's investment plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

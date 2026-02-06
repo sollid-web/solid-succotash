@@ -25,3 +25,7 @@ To go deeper on daily models, read [How Daily ROI Models Work](/blog/how-daily-r
 
 Prefer realistic, structured investment expectations?
 [Explore WolvCapital's approach to ROI.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

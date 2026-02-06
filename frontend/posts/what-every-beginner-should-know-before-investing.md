@@ -25,3 +25,7 @@ Prepared beginners invest better.
 
 Start your crypto journey with clarity and structure.
 [Explore WolvCapital's investment plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

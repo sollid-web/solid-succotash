@@ -40,3 +40,7 @@ If you are wondering how much to start with, see [How Much Should a Beginner Inv
 
 Prefer a calmer approach to crypto investing?
 [Explore structured plans designed for consistency.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

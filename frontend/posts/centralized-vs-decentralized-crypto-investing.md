@@ -28,3 +28,7 @@ Next, see how beginner mistakes happen in [Why Most Beginners Lose Money in Cryp
 
 Start with structure, then expand.
 [Explore WolvCapital's investment plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

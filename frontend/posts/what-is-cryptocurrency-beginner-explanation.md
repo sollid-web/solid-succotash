@@ -47,3 +47,7 @@ To build on the fundamentals, it helps to understand [how crypto markets actuall
 
 New to crypto investing?
 [Learn how structured investment platforms help beginners start safely.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

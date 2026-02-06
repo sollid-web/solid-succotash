@@ -25,3 +25,7 @@ Next, see how trust is built in [How Trust Is Built in Financial Platforms](/blo
 
 Invest with confidence through structure.
 [Explore WolvCapital's disciplined approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

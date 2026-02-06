@@ -51,3 +51,7 @@ With education, patience, and the right systems, beginners can approach crypto i
 
 Ready to invest with more clarity and structure?
 [Explore WolvCapital's investment plans designed for disciplined growth.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

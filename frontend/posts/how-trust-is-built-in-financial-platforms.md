@@ -25,3 +25,7 @@ Next, focus on foundations in [What Beginners Should Focus on First](/blog/what-
 
 Choose a platform built on trust and transparency.
 [Explore WolvCapital's philosophy.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

@@ -35,3 +35,7 @@ To understand why many beginners drop off early, read [Why Most Beginners Quit C
 
 Looking for a safer entry into crypto investing?
 [Explore structured plans designed for beginners.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

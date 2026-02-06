@@ -25,3 +25,7 @@ Next, finish with the essentials in [What Every Beginner Should Know Before Inve
 
 Be part of the future of disciplined crypto investing.
 [Explore WolvCapital's platform.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

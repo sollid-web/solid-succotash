@@ -28,3 +28,7 @@ Next, compare options in [Choosing Between Multiple Crypto Investment Platforms]
 
 Invest through platforms built for resilience.
 [Explore WolvCapital's long-term approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

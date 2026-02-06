@@ -27,3 +27,7 @@ Next, revisit why beginners lose money in [Why Most Beginners Lose Money in Cryp
 
 Choose disciplined investing without unnecessary risk.
 [Explore WolvCapital's investment plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

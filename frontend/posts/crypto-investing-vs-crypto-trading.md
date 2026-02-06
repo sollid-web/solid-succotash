@@ -28,3 +28,7 @@ When you are ready to pick a platform, see [How to Choose a Safe Crypto Investme
 
 Choose a calmer, structured crypto investing path.
 [Explore WolvCapital's investment plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

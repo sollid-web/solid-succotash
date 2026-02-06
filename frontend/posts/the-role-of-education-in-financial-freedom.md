@@ -25,3 +25,7 @@ Next, learn why not all growth is good in [Why Not All Growth Is Good Growth](/b
 
 Invest with knowledge and structure.
 [Explore WolvCapital's educational approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

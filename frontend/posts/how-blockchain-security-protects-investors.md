@@ -39,3 +39,7 @@ To evaluate platforms safely, see [How to Choose a Safe Crypto Investment Platfo
 
 Invest through platforms that combine technology with structure.
 [Discover WolvCapital's approach to secure investing.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

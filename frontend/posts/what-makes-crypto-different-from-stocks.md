@@ -43,3 +43,7 @@ To see how risk works in crypto specifically, read [Understanding Risk in Digita
 
 Want guidance navigating crypto's unique landscape?
 [Explore structured investing with WolvCapital.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

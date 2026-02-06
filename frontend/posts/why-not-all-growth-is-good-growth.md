@@ -22,3 +22,7 @@ Next, learn how to avoid greed in [Avoiding Greed in Crypto Markets](/blog/avoid
 
 Choose sustainable crypto growth with structure.
 [Explore WolvCapital's investment plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

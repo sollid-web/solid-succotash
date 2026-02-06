@@ -25,3 +25,7 @@ Next, expand the long-term view in [What Sustainable Wealth Really Means](/blog/
 
 Explore investment plans built for sustainable growth.
 [Discover WolvCapital's structured approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

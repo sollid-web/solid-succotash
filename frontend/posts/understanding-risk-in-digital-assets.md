@@ -30,3 +30,7 @@ To see how risk can lead to big losses, read [Can You Lose All Your Money in Cry
 
 Prefer a more controlled approach to crypto investing?
 [See how structured plans help manage risk.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

@@ -25,3 +25,7 @@ Next, learn how we think about protection in [How We Think About Investor Protec
 
 Invest with a platform guided by principles.
 [Explore WolvCapital's approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

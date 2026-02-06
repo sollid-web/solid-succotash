@@ -26,3 +26,7 @@ Crypto investing remains a consideration for informed participants who prioritiz
 - [How Market Volatility Affects Digital Asset Investments](/blog/market-volatility-digital-asset-investments)
 - [What to Know Before Investing in Crypto Platforms](/blog/what-to-know-before-investing-in-crypto-platforms)
 - [Common Mistakes New Investors Make on Crypto Platforms](/blog/common-mistakes-new-crypto-investors)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

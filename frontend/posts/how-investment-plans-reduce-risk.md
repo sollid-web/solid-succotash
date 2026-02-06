@@ -27,3 +27,7 @@ Next, go deeper on risk in [Risk Management in Crypto Explained](/blog/risk-mana
 
 Explore investment plans designed for stability.
 [Discover WolvCapital's structured options.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

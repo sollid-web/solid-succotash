@@ -25,3 +25,7 @@ Next, learn how compliance supports safety in [The Role of Compliance in Crypto 
 
 Choose platforms built for longevity and accountability.
 [Explore WolvCapital's compliant framework.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

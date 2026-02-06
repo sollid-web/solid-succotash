@@ -25,3 +25,7 @@ Next, learn why fewer decisions help in [Why Fewer Decisions Lead to Better Resu
 
 Adopt a disciplined investing mindset.
 [Explore WolvCapital's structured plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

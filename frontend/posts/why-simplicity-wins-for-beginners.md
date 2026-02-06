@@ -25,3 +25,7 @@ Next, continue the mindset journey in [How to Invest in Crypto Without Stress](/
 
 Invest with clarity and simplicity.
 [Explore WolvCapital's structured plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

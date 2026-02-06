@@ -28,3 +28,10 @@ Trust is earned through clarity, not promises.
 - [How to Identify Legitimate Crypto Investment Platforms](/blog/identify-legitimate-crypto-investment-platforms)
 - [Understanding Withdrawal Policies on Crypto Investment Platforms](/blog/understanding-withdrawal-policies-crypto-platforms)
 - [What to Know Before Investing in Crypto Platforms](/blog/what-to-know-before-investing-in-crypto-platforms)
+
+Ready to invest with more clarity and structure?
+[Explore WolvCapital's investment plans designed for disciplined growth.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

@@ -30,3 +30,7 @@ Next, learn what steady progress looks like in [What Sustainable Crypto Growth L
 
 Invest with a long-term, disciplined mindset.
 [Explore WolvCapital's structured investment plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

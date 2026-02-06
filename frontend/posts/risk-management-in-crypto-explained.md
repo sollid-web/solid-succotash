@@ -25,3 +25,7 @@ Next, learn why leverage hurts beginners in [Why Beginners Should Avoid Leverage
 
 Invest with risk awareness built in.
 [Explore WolvCapital's structured investing model.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

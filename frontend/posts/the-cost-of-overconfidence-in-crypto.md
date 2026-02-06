@@ -30,3 +30,7 @@ Next, reinforce the beginner-risk context in [Why Most Beginners Lose Money in C
 
 Build confidence through structure, not luck.
 [Explore WolvCapital's disciplined investing approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

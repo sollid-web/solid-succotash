@@ -35,3 +35,7 @@ Understanding platform models supports better alignment with personal investment
 - [How to Identify Legitimate Crypto Investment Platforms](/blog/identify-legitimate-crypto-investment-platforms)
 - [How Transparency Builds Trust in Crypto Investment Platforms](/blog/transparency-and-trust-crypto-investment-platforms)
 - [What to Know Before Investing in Crypto Platforms](/blog/what-to-know-before-investing-in-crypto-platforms)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

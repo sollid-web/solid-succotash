@@ -29,3 +29,7 @@ Next, go deeper on structure in [The Importance of Structured Investing](/blog/t
 
 Avoid common beginner mistakes with a structured approach.
 [Explore WolvCapital's investment plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

@@ -25,3 +25,7 @@ Next, learn when to adjust strategies in [When to Adjust Your Investment Strateg
 
 Set smarter goals with a structured approach.
 [Explore WolvCapital's investment plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

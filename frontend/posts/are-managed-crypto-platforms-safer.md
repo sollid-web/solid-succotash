@@ -27,3 +27,7 @@ Next, see why guided platforms work in [Why Beginners Prefer Guided Crypto Inves
 
 Explore a guided approach to crypto investing.
 [Discover WolvCapital's structured plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

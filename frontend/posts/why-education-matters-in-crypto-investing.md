@@ -34,3 +34,7 @@ When you are ready to take the next step, read [How to Start Crypto Investing Wi
 
 Invest through platforms that prioritize education and clarity.
 [Discover WolvCapital's beginner-focused approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

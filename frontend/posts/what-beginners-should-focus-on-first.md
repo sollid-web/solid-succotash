@@ -28,3 +28,7 @@ Next, learn why we built WolvCapital in [Why We Built WolvCapital](/blog/why-we-
 
 Start with clarity and structure.
 [Explore WolvCapital's beginner-focused approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

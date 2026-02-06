@@ -34,3 +34,7 @@ When you are ready to choose a time horizon, compare [Short-Term vs Long-Term Cr
 
 Start small, stay consistent.
 [See how structured investment plans support beginners.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

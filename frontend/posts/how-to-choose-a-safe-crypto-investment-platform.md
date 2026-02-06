@@ -31,3 +31,7 @@ To evaluate platform credibility next, read [What Makes a Crypto Platform Trustw
 
 Explore a structured, security-focused approach to crypto investing.
 [Discover WolvCapital's investment plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

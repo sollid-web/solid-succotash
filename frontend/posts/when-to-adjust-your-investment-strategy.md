@@ -27,3 +27,7 @@ Next, see how professionals approach risk in [How Professionals Think About Risk
 
 Prefer strategies built for stability and clarity?
 [Explore WolvCapital's disciplined approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

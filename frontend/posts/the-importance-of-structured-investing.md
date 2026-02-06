@@ -27,3 +27,7 @@ Next, see how plans reduce risk in [How Investment Plans Reduce Risk](/blog/how-
 
 Invest with structure instead of guesswork.
 [Explore WolvCapital's disciplined approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

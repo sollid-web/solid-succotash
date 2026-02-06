@@ -22,3 +22,7 @@ Next, see how education drives freedom in [The Role of Education in Financial Fr
 
 Simplify your investing decisions.
 [Explore WolvCapital's structured approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

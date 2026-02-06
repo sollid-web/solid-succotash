@@ -25,3 +25,7 @@ Next, learn how returns are generated in [How Crypto Investment Platforms Genera
 
 Invest with clarity, not guesswork.
 [Explore WolvCapital's transparent investment plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

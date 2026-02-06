@@ -25,3 +25,7 @@ Next, compare approaches in [Active vs Structured Crypto Investing](/blog/active
 
 Explore long-term, structured crypto investing.
 [Discover WolvCapital's approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

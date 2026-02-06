@@ -47,3 +47,7 @@ To see how security fits into the big picture, continue with [How Blockchain Sec
 
 Want a simpler way to invest without learning everything at once?
 [Explore structured investment plans built for beginners.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

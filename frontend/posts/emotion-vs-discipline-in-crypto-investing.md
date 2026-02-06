@@ -29,3 +29,7 @@ Next, learn why staying consistent beats timing in [Why Consistency Beats Timing
 
 Reduce emotional pressure with a structured strategy.
 [Explore WolvCapital's approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

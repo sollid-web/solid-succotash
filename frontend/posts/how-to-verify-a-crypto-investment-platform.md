@@ -26,3 +26,7 @@ Next, learn about scams in [Crypto Scams Explained and How to Avoid Them](/blog/
 
 Looking for a platform built on verifiable trust?
 [Explore WolvCapital's transparent model.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

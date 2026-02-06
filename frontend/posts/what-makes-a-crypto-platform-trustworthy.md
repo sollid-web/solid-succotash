@@ -29,3 +29,7 @@ Next, learn the warning signs in [Red Flags to Avoid in Crypto Investment Platfo
 
 Choose a platform built on trust and transparency.
 [Explore WolvCapital's approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

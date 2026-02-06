@@ -28,3 +28,7 @@ To compare approaches, see [Crypto Investing vs Crypto Trading](/blog/crypto-inv
 
 Invest with discipline, not impulse.
 [Explore WolvCapital's structured plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

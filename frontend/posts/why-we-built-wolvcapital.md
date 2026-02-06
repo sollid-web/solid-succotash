@@ -25,3 +25,7 @@ Next, learn our guiding beliefs in [Our Philosophy on Crypto Investing](/blog/ou
 
 Explore investing built around clarity and discipline.
 [Discover WolvCapital.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

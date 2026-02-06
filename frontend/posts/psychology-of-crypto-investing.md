@@ -32,3 +32,7 @@ To see how psychology leads to excessive activity, continue with [Why Beginners 
 
 Prefer investing with less emotional pressure?
 [Explore structured crypto investing.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

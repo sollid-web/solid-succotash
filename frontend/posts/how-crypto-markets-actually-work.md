@@ -44,3 +44,7 @@ Crypto markets are not chaotic. They are dynamic. Understanding how they work al
 
 Looking for a more structured way to invest in crypto?
 [Explore WolvCapital's disciplined investment plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

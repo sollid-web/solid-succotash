@@ -30,3 +30,7 @@ Next, explore sustainable wealth in [What Sustainable Wealth Really Means](/blog
 
 Invest with discipline, not impulse.
 [Explore WolvCapital's structured approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

@@ -28,3 +28,7 @@ For deeper scam awareness, see [Crypto Scams Explained and How to Avoid Them](/b
 
 Prefer a platform designed to reduce beginner risk?
 [Discover structured investing with WolvCapital.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

@@ -28,3 +28,7 @@ Next, go deeper on clarity in [Why Clarity Is the Most Underrated Advantage](/bl
 
 Explore a calmer, structured way to invest in crypto.
 [Discover WolvCapital's approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

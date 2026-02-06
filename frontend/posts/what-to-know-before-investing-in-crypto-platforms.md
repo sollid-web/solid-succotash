@@ -54,3 +54,7 @@ Informed decisions reduce unnecessary risk. Understanding how an investment plat
 - [How Transparency Builds Trust in Crypto Investment Platforms](/blog/transparency-and-trust-crypto-investment-platforms)
 
 If you would like to learn more about how WolvCapital structures its investment process, you can explore our platform or contact our support team for clarification.
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

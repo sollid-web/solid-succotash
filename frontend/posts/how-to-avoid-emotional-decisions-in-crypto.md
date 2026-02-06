@@ -25,3 +25,7 @@ Next, see why simplicity matters in [Why Simplicity Wins for Beginners](/blog/wh
 
 Invest with clarity, not emotion.
 [Explore WolvCapital's structured plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

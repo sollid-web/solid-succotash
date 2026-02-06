@@ -25,3 +25,7 @@ Next, continue with [How to Invest in Crypto Without Stress](/blog/how-to-invest
 
 Build confidence with a structured crypto investing approach.
 [Explore WolvCapital's investment plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

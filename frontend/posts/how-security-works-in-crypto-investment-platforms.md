@@ -28,3 +28,7 @@ Next, learn the compliance basics in [KYC and AML Explained for Beginners](/blog
 
 Invest through platforms that prioritize security at every level.
 [Explore WolvCapital's security-focused design.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

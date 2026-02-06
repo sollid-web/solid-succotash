@@ -25,3 +25,7 @@ Next, learn from past mistakes in [Lessons From Failed Crypto Investors](/blog/l
 
 Explore long-term crypto investing with structure.
 [Discover WolvCapital's approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

@@ -28,3 +28,7 @@ Next, explore failure scenarios in [Can Crypto Investment Platforms Fail?](/blog
 
 Choose platforms designed to reduce unnecessary risk.
 [Explore WolvCapital's structured approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

@@ -26,3 +26,7 @@ Next, learn how to verify a platform in [How to Verify a Crypto Investment Platf
 
 Looking for a platform built around clarity and preparation?
 [Explore WolvCapital's investment plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

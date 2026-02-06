@@ -25,3 +25,7 @@ Next, explore the future in [The Future of Structured Crypto Investing](/blog/th
 
 Choose a platform that prioritizes investor protection.
 [Explore WolvCapital's security-first approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

@@ -25,3 +25,7 @@ For the regulation context, see [Why Regulation Matters in Crypto](/blog/why-reg
 
 Choose compliant platforms built for long-term reliability.
 [Explore WolvCapital's approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

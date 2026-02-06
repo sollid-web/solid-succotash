@@ -25,3 +25,7 @@ When you are ready to start with confidence, read [How to Start Crypto Investing
 
 Learn crypto the structured way.
 [Discover WolvCapital's beginner-focused approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

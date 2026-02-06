@@ -27,3 +27,7 @@ Next, learn how funds are protected in [How Crypto Platforms Protect User Funds]
 
 Choose simplicity while you learn.
 [Explore beginner-friendly crypto investing with WolvCapital.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

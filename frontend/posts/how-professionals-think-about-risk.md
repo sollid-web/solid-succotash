@@ -28,3 +28,7 @@ Next, reinforce risk controls in [Risk Management in Crypto Explained](/blog/ris
 
 Adopt a professional mindset through structured investing.
 [Explore WolvCapital's approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

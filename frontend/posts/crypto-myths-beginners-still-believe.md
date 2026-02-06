@@ -31,3 +31,7 @@ To see how myths can lead to overactivity, continue with [Why Beginners Overtrad
 
 Want a clearer, more realistic approach to crypto investing?
 [Discover structured investing with WolvCapital.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

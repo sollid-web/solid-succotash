@@ -28,3 +28,7 @@ Next, review deposit readiness in [What to Look for Before Depositing Funds](/bl
 
 Invest through platforms designed with security first.
 [Explore WolvCapital's approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

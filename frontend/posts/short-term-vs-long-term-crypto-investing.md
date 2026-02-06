@@ -38,3 +38,7 @@ That learning process is critical, so continue with [Why Education Matters in Cr
 
 Looking for a long-term approach to crypto?
 [Explore investment plans built for sustainable growth.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

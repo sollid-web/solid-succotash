@@ -25,3 +25,7 @@ Next, study cycles in [What We've Learned From Market Cycles](/blog/what-weve-le
 
 Avoid common pitfalls with a disciplined investing approach.
 [Explore WolvCapital's structured plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

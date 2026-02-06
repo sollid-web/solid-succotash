@@ -24,3 +24,7 @@ Next, reinforce the patience mindset in [The Role of Patience in Investing](/blo
 
 Explore investment plans designed for consistent growth.
 [Discover WolvCapital's approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

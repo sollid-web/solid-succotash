@@ -25,3 +25,7 @@ Next, build discipline in [How to Think Like a Disciplined Investor](/blog/how-t
 
 Invest with perspective, not panic.
 [Explore WolvCapital's long-term approach.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

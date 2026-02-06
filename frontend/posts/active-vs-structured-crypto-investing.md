@@ -28,3 +28,7 @@ Next, learn why simplicity works in [Why Simplicity Wins for Beginners](/blog/wh
 
 Choose a structured investing path built for consistency.
 [Explore WolvCapital's investment plans.](/plans)
+
+Learn more about WolvCapital on the homepage.
+[Visit WolvCapital.](/)
+

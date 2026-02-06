@@ -15,7 +15,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Collect static files AT BUILD TIME
-RUN DEBUG=1 SECRET_KEY=unsafe-build-secret-key python manage.py collectstatic --noinput
-
-CMD ["sh", "-c", "gunicorn wolvcapital.wsgi:application --bind 0.0.0.0:${PORT}"]
+CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn wolvcapital.wsgi:application --bind 0.0.0.0:${PORT}"]

@@ -13,6 +13,8 @@ Market risk gets attention, but platform risk is just as important.
 - security infrastructure
 - governance and transparency
 
+For a concrete example of protections, see [How Crypto Investment Platforms Protect User Funds](/blog/how-crypto-investment-platforms-protect-user-funds).
+
 ## How beginners reduce platform risk
 
 - choose established platforms
@@ -31,4 +33,3 @@ Choose platforms designed to reduce unnecessary risk.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

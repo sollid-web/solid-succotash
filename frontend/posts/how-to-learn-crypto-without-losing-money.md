@@ -15,6 +15,8 @@ If you are deciding when to pause or wait, see [When Not to Invest in Crypto](/b
 - small investments
 - structured platforms
 
+If you want a practical mistake checklist, read [Common Mistakes New Investors Make on Crypto Platforms](/blog/common-mistakes-new-crypto-investors).
+
 ## Why structure helps learning
 Structure reduces mistakes while building experience.
 
@@ -28,4 +30,3 @@ Learn crypto the structured way.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

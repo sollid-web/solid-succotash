@@ -15,6 +15,8 @@ Timing requires predicting short-term movements accurately, consistently.
 ## Why consistency works
 Consistency reduces stress and smooths market volatility over time.
 
+For goal setting that supports consistency, read [How to Set Realistic Crypto Investment Goals](/blog/how-to-set-realistic-crypto-investment-goals).
+
 If you want the discipline mindset first, read [Emotion vs Discipline in Crypto Investing](/blog/emotion-vs-discipline-in-crypto-investing).
 
 ## Final thoughts
@@ -27,4 +29,3 @@ Build consistency with a structured investing approach.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

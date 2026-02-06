@@ -19,6 +19,8 @@ Professionals do not avoid risk. They manage it.
 - prioritize consistency
 - avoid overconfidence
 
+A key beginner safeguard is avoiding leverage; see [Why Beginners Should Avoid Leverage](/blog/why-beginners-should-avoid-leverage).
+
 If you want the adjustment baseline first, read [When to Adjust Your Investment Strategy](/blog/when-to-adjust-your-investment-strategy).
 
 ## Final thoughts
@@ -31,4 +33,3 @@ Adopt a professional mindset through structured investing.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

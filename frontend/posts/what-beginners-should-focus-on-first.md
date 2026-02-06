@@ -21,8 +21,12 @@ Beginners often focus on the wrong things.
 
 If you want the confidence baseline first, read [How to Start Crypto Investing With Confidence](/blog/how-to-start-crypto-investing-with-confidence).
 
+To understand common pitfalls, read [Why Most Beginners Lose Money in Crypto](/blog/why-most-beginners-lose-money-in-crypto).
+
 ## Final thoughts
 Strong foundations support growth.
+
+For a complete pre-investing checklist, read [What Every Beginner Should Know Before Investing](/blog/what-every-beginner-should-know-before-investing).
 
 Next, learn why we built WolvCapital in [Why We Built WolvCapital](/blog/why-we-built-wolvcapital).
 
@@ -31,4 +35,3 @@ Start with clarity and structure.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

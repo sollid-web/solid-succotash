@@ -16,7 +16,11 @@ Discipline is a mindset before it is a strategy.
 ## Why mindset matters
 Behavior determines results more than tools.
 
+Market history reinforces this; see [What We've Learned From Market Cycles](/blog/what-weve-learned-from-market-cycles).
+
 If you want the emotional control baseline first, read [Emotion vs Discipline in Crypto Investing](/blog/emotion-vs-discipline-in-crypto-investing).
+
+To understand common pitfalls, read [Why Most Beginners Lose Money in Crypto](/blog/why-most-beginners-lose-money-in-crypto).
 
 ## Final thoughts
 Thinking well precedes investing well.
@@ -28,4 +32,3 @@ Adopt a disciplined investing mindset.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

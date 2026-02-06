@@ -13,10 +13,14 @@ Short-term thinking creates urgency. Long-term thinking creates stability.
 - reduced emotional pressure
 - sustainable growth
 
+For a responsibility baseline, see [What Responsible Crypto Investing Looks Like](/blog/what-responsible-crypto-investing-looks-like).
+
 ## Why beginners benefit most
 Long-term thinking forgives early mistakes.
 
 If you want the strategy baseline first, read [Why Long-Term Strategies Win](/blog/why-long-term-strategies-win).
+
+To understand common pitfalls, read [Why Most Beginners Lose Money in Crypto](/blog/why-most-beginners-lose-money-in-crypto).
 
 ## Final thoughts
 Time rewards patience.
@@ -28,4 +32,3 @@ Explore long-term crypto investing with structure.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

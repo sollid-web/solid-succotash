@@ -16,6 +16,8 @@ Transparency reduces uncertainty, and uncertainty causes fear.
 ## Why transparency builds confidence
 Clear information leads to better decisions.
 
+For a legacy transparency view, see [How Transparency Builds Trust in Crypto Investment Platforms](/blog/transparency-and-trust-crypto-investment-platforms).
+
 If you want to evaluate platform trust first, read [What Makes a Crypto Platform Trustworthy?](/blog/what-makes-a-crypto-platform-trustworthy).
 
 ## Final thoughts
@@ -28,4 +30,3 @@ Invest with clarity, not guesswork.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

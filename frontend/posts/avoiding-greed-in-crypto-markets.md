@@ -21,7 +21,11 @@ In crypto markets, unchecked greed leads to unnecessary risk.
 - reassess goals
 - prioritize sustainability
 
+For a sustainability lens, read [Why Not All Growth Is Good Growth](/blog/why-not-all-growth-is-good-growth).
+
 If you want the overconfidence baseline first, read [The Cost of Overconfidence in Crypto](/blog/the-cost-of-overconfidence-in-crypto).
+
+If you're starting at the basics, read [Is Crypto Investing Safe for Beginners? A Clear, Honest Guide](/blog/is-crypto-investing-safe-for-beginners).
 
 ## Final thoughts
 Discipline protects progress.
@@ -33,4 +37,3 @@ Invest with discipline, not impulse.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

@@ -16,7 +16,11 @@ Wealth is not built overnight. It is built intentionally.
 ## Why beginners misjudge wealth
 Short-term wins distort expectations.
 
+For practical guardrails against impulse, read [Avoiding Greed in Crypto Markets](/blog/avoiding-greed-in-crypto-markets).
+
 If you want the growth baseline first, read [What Sustainable Crypto Growth Looks Like](/blog/what-sustainable-crypto-growth-looks-like).
+
+For platform selection basics, see [How to Choose a Safe Crypto Investment Platform](/blog/how-to-choose-a-safe-crypto-investment-platform).
 
 ## Final thoughts
 Sustainable wealth supports peace of mind.
@@ -28,4 +32,3 @@ Build wealth with structure and clarity.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

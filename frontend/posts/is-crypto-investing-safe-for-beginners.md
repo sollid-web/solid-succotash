@@ -24,6 +24,8 @@ These risks are real but manageable.
 
 If price swings feel intimidating, [crypto volatility explained simply](/blog/crypto-volatility-explained-simply) can make the movement feel more predictable.
 
+If you want to clear up common misconceptions, read [Crypto Myths Beginners Still Believe](/blog/crypto-myths-beginners-still-believe).
+
 ## What actually causes beginners to lose money
 Most beginners do not lose money because crypto is unsafe. They lose money because they:
 
@@ -54,4 +56,3 @@ Ready to invest with more clarity and structure?
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

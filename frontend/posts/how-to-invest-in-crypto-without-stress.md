@@ -21,6 +21,8 @@ Stress does not come from crypto itself. It comes from uncertainty, overexposure
 
 If you want the simplicity baseline first, read [Why Simplicity Wins for Beginners](/blog/why-simplicity-wins-for-beginners).
 
+For platform selection basics, see [How to Choose a Safe Crypto Investment Platform](/blog/how-to-choose-a-safe-crypto-investment-platform).
+
 ## Final thoughts
 Calm investing leads to clearer decisions.
 

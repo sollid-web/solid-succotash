@@ -13,6 +13,8 @@ Crypto offers multiple investment models, but not all suit beginners.
 - structured
 - beginner-friendly
 
+For a platform-model comparison, read [Centralized vs Decentralized Crypto Platforms: Key Differences](/blog/centralized-vs-decentralized-crypto-platforms).
+
 ## Decentralized investing
 
 - flexible
@@ -31,4 +33,3 @@ Start with structure, then expand.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

@@ -18,6 +18,8 @@ It keeps decisions consistent during uncertainty.
 
 If you want the origin story first, read [Why We Built WolvCapital](/blog/why-we-built-wolvcapital).
 
+To understand common pitfalls, read [Why Most Beginners Lose Money in Crypto](/blog/why-most-beginners-lose-money-in-crypto).
+
 ## Final thoughts
 A strong philosophy builds long-term trust.
 

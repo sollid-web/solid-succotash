@@ -11,6 +11,8 @@ Beginners who start with clarity make better decisions.
 
 If you want to understand why so many beginners drop off early, read [Why Most Beginners Quit Crypto Too Early](/blog/why-most-beginners-quit-crypto-too-early).
 
+For the next step in mindset, see [Building Confidence as a Crypto Investor](/blog/building-confidence-as-a-crypto-investor).
+
 ## Steps to start confidently
 
 - learn the basics
@@ -31,4 +33,3 @@ Start your crypto journey with clarity and structure.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

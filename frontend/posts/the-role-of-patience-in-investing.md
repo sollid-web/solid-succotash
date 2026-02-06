@@ -15,6 +15,8 @@ In crypto, impatience often causes more losses than market volatility.
 - short-term noise creates stress
 - long-term trends reward consistency
 
+To see how patience compounds over time, read [Compounding Explained in Crypto](/blog/compounding-explained-in-crypto).
+
 ## How beginners build patience
 
 - set realistic expectations
@@ -33,4 +35,3 @@ Invest with a long-term, disciplined mindset.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

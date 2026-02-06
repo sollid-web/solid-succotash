@@ -14,6 +14,8 @@ Verification protects investors before money is committed.
 - confirm compliance signals
 - evaluate support accessibility
 
+For a pre-deposit checklist, see [What to Look for Before Depositing Funds on a Crypto Platform](/blog/what-to-check-before-depositing-crypto).
+
 ## Why verification matters
 It filters out unreliable platforms early.
 
@@ -29,4 +31,3 @@ Looking for a platform built on verifiable trust?
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

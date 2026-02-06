@@ -11,6 +11,8 @@ Understanding volatility helps you react calmly instead of emotionally.
 
 If you want the market basics first, read [How Crypto Markets Actually Work](/blog/how-crypto-markets-actually-work).
 
+For a deeper market-volatility overview, read [How Market Volatility Affects Digital Asset Investments](/blog/market-volatility-digital-asset-investments).
+
 ## Why crypto is volatile
 Crypto markets are influenced by:
 
@@ -38,9 +40,10 @@ Volatility is part of crypto, but it does not have to control you.
 
 If you are wondering how much to start with, see [How Much Should a Beginner Invest in Crypto?](/blog/how-much-should-a-beginner-invest-in-crypto).
 
+If you're worried about worst-case outcomes, read [Can You Lose All Your Money in Crypto?](/blog/can-you-lose-all-your-money-in-crypto).
+
 Prefer a calmer approach to crypto investing?
 [Explore structured plans designed for consistency.](/plans)
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

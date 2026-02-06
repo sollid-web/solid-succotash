@@ -19,6 +19,8 @@ Understanding how platforms protect users builds confidence.
 ## Security is ongoing
 Good platforms update security continuously.
 
+For the regulatory context behind these protections, read [Why Regulation Matters in Crypto Investing](/blog/why-regulation-matters-in-crypto-investing).
+
 If you want the technology foundation first, read [How Blockchain Security Protects Investors](/blog/how-blockchain-security-protects-investors).
 
 ## Final thoughts
@@ -31,4 +33,3 @@ Invest through platforms that prioritize security at every level.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

@@ -16,6 +16,8 @@ Knowing red flags protects beginners.
 - pressure tactics
 - lack of transparency
 
+For a deeper legitimacy checklist, read [How to Identify Legitimate Crypto Investment Platforms](/blog/identify-legitimate-crypto-investment-platforms).
+
 ## Why beginners are most vulnerable
 Inexperience makes it harder to detect warning signs.
 
@@ -31,4 +33,3 @@ Prefer a platform designed to reduce beginner risk?
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

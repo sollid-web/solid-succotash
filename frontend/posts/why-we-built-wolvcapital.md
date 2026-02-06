@@ -18,6 +18,8 @@ Structure, transparency, and discipline come first.
 
 If you want the confidence baseline first, read [Why Structure Builds Confidence](/blog/why-structure-builds-confidence).
 
+To understand common pitfalls, read [Why Most Beginners Lose Money in Crypto](/blog/why-most-beginners-lose-money-in-crypto).
+
 ## Final thoughts
 Platforms should support investors, not pressure them.
 

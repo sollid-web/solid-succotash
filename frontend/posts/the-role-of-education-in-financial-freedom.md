@@ -16,7 +16,11 @@ Financial freedom begins with understanding.
 ## Education vs speculation
 Education compounds. Speculation exhausts.
 
+If you want to simplify decisions, read [Why Fewer Decisions Lead to Better Results](/blog/why-fewer-decisions-lead-to-better-results).
+
 If you want the beginner-education baseline first, read [Why Education Matters in Crypto Investing](/blog/why-education-matters-in-crypto-investing).
+
+For platform selection basics, see [How to Choose a Safe Crypto Investment Platform](/blog/how-to-choose-a-safe-crypto-investment-platform).
 
 ## Final thoughts
 Learning is an investment.
@@ -28,4 +32,3 @@ Invest with knowledge and structure.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

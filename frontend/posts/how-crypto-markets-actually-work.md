@@ -11,6 +11,8 @@ Understanding how crypto markets function removes much of that fear.
 
 If you are still learning the basics, start with [What Is Cryptocurrency? A Beginner Explanation](/blog/what-is-cryptocurrency-beginner-explanation).
 
+For a broader volatility lens, read [How Market Volatility Affects Digital Asset Investments](/blog/market-volatility-digital-asset-investments).
+
 ## What drives crypto prices
 Crypto prices move based on:
 
@@ -47,4 +49,3 @@ Looking for a more structured way to invest in crypto?
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

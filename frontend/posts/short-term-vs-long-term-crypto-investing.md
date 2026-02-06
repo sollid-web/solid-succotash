@@ -11,6 +11,8 @@ Understanding the difference between short-term and long-term strategies helps a
 
 If you are still comparing asset types, read [What Makes Crypto Different From Stocks?](/blog/what-makes-crypto-different-from-stocks).
 
+For a direct comparison, see [Crypto Investing vs Crypto Trading](/blog/crypto-investing-vs-crypto-trading).
+
 If you are still deciding on a starting amount, see [How Much Should a Beginner Invest in Crypto?](/blog/how-much-should-a-beginner-invest-in-crypto).
 
 ## Short-term investing
@@ -41,4 +43,3 @@ Looking for a long-term approach to crypto?
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

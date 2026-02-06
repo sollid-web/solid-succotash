@@ -18,6 +18,8 @@ Trust supports long-term relationships.
 
 If you want the platform-trust baseline first, read [What Makes a Crypto Platform Trustworthy?](/blog/what-makes-a-crypto-platform-trustworthy).
 
+If you're starting at the basics, read [Is Crypto Investing Safe for Beginners? A Clear, Honest Guide](/blog/is-crypto-investing-safe-for-beginners).
+
 ## Final thoughts
 Trust compounds like capital.
 

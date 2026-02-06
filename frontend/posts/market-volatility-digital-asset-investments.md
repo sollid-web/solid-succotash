@@ -21,7 +21,7 @@ Volatility impacts:
 - Risk exposure
 - Timing decisions
 
-If you are evaluating whether participation makes sense at all, see [Is Crypto Investing Still Worth Considering in 2025?](/blog/is-crypto-investing-worth-it-2025).
+If you want the beginner-safety baseline first, see [Is Crypto Investing Safe for Beginners? A Clear, Honest Guide](/blog/is-crypto-investing-safe-for-beginners).
 
 Educational market data sources such as CoinGecko help contextualize price movements.
 
@@ -29,10 +29,8 @@ Educational market data sources such as CoinGecko help contextualize price movem
 Volatility is inherent in digital assets. Awareness and education remain key to responsible participation.
 
 ## Related Articles
-- [Is Crypto Investing Still Worth Considering in 2025?](/blog/is-crypto-investing-worth-it-2025)
-- [Common Mistakes New Investors Make on Crypto Platforms](/blog/common-mistakes-new-crypto-investors)
-- [What to Know Before Investing in Crypto Platforms](/blog/what-to-know-before-investing-in-crypto-platforms)
+- [How to Choose a Safe Crypto Investment Platform](/blog/how-to-choose-a-safe-crypto-investment-platform)
+- [Why Most Beginners Lose Money in Crypto](/blog/why-most-beginners-lose-money-in-crypto)
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

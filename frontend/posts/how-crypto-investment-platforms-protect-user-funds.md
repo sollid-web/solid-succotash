@@ -19,6 +19,10 @@ For beginners, understanding how platforms do this builds confidence and trust.
 ## Why fund protection varies by platform
 Not all platforms invest equally in security infrastructure.
 
+If you want to compare custody models, read [Custody vs Non-Custody Crypto Platforms](/blog/custody-vs-non-custody-crypto-platforms).
+
+For withdrawal policy details, read [Understanding Withdrawal Policies on Crypto Investment Platforms](/blog/understanding-withdrawal-policies-crypto-platforms).
+
 If you want the security foundation first, read [How Security Works in Crypto Investment Platforms](/blog/how-security-works-in-crypto-investment-platforms).
 
 ## Final thoughts
@@ -31,4 +35,3 @@ Invest through platforms designed with security first.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

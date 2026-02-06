@@ -23,6 +23,8 @@ If you want the beginner-mistakes context first, read [Why Most Beginners Lose M
 ## Final thoughts
 Structure supports learning and long-term consistency.
 
+For where this trend is headed, read [The Future of Structured Crypto Investing](/blog/the-future-of-structured-crypto-investing).
+
 Next, see how plans reduce risk in [How Investment Plans Reduce Risk](/blog/how-investment-plans-reduce-risk).
 
 Invest with structure instead of guesswork.
@@ -30,4 +32,3 @@ Invest with structure instead of guesswork.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

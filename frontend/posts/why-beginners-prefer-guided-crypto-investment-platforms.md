@@ -13,6 +13,8 @@ Beginners do not fail because they lack intelligence. They fail because they lac
 - simplified processes
 - clearer expectations
 
+If you want a broader safety view, read [Are Managed Crypto Platforms Safer?](/blog/are-managed-crypto-platforms-safer).
+
 ## Guidance vs control
 Guidance supports beginners without removing autonomy.
 
@@ -28,4 +30,3 @@ Explore a guided, beginner-friendly investing experience.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

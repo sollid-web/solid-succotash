@@ -18,6 +18,8 @@ For beginners, losses often come faster.
 ## Safer alternatives
 Beginners benefit more from structured, unleveraged approaches.
 
+Overconfidence often drives leverage; read [The Cost of Overconfidence in Crypto](/blog/the-cost-of-overconfidence-in-crypto).
+
 If you want the risk-management baseline first, read [Risk Management in Crypto Explained](/blog/risk-management-in-crypto-explained).
 
 ## Final thoughts
@@ -30,4 +32,3 @@ Choose disciplined investing without unnecessary risk.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

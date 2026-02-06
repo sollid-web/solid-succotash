@@ -11,6 +11,8 @@ There is no universal number, but there is a smart approach.
 
 If volatility is still intimidating, start with [Crypto Volatility Explained Simply](/blog/crypto-volatility-explained-simply).
 
+If your finances or emotions feel unstable, read [When Not to Invest in Crypto](/blog/when-not-to-invest-in-crypto).
+
 ## Start with what you can afford to learn with
 Beginners should invest amounts that:
 
@@ -37,4 +39,3 @@ Start small, stay consistent.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

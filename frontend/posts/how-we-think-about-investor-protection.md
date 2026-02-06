@@ -16,7 +16,11 @@ Investor protection is not optional. It is foundational.
 ## Why protection builds confidence
 Protected investors invest more calmly.
 
+For the guiding principles behind these choices, read [Our Philosophy on Crypto Investing](/blog/our-philosophy-on-crypto-investing).
+
 If you want the compliance baseline first, read [The Role of Compliance in Crypto Investing](/blog/the-role-of-compliance-in-crypto-investing).
+
+For platform selection basics, see [How to Choose a Safe Crypto Investment Platform](/blog/how-to-choose-a-safe-crypto-investment-platform).
 
 ## Final thoughts
 Protection supports long-term relationships.
@@ -28,4 +32,3 @@ Choose a platform that prioritizes investor protection.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

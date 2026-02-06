@@ -18,6 +18,8 @@ It provides stability during volatility.
 
 If you want the confidence baseline first, read [Building Confidence as a Crypto Investor](/blog/building-confidence-as-a-crypto-investor).
 
+For platform selection basics, see [How to Choose a Safe Crypto Investment Platform](/blog/how-to-choose-a-safe-crypto-investment-platform).
+
 ## Final thoughts
 Confidence grows through consistency.
 

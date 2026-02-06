@@ -21,6 +21,8 @@ Clarity reduces fear more effectively than confidence.
 
 If you want the transparency baseline first, read [Why Transparency Matters in Crypto Investing](/blog/why-transparency-matters-in-crypto-investing).
 
+If you're starting at the basics, read [Is Crypto Investing Safe for Beginners? A Clear, Honest Guide](/blog/is-crypto-investing-safe-for-beginners).
+
 ## Final thoughts
 Clarity compounds just like capital.
 

@@ -18,6 +18,8 @@ More accessible, safer entry points.
 
 If you want the structure baseline first, read [The Importance of Structured Investing](/blog/the-importance-of-structured-investing).
 
+If you're starting at the basics, read [Is Crypto Investing Safe for Beginners? A Clear, Honest Guide](/blog/is-crypto-investing-safe-for-beginners).
+
 ## Final thoughts
 Structure is the future, not a limitation.
 

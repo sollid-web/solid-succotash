@@ -19,6 +19,8 @@ Most severe losses come from:
 - using unverified platforms
 - emotional decision-making
 
+For a broader mistake checklist, read [Common Mistakes New Investors Make on Crypto Platforms](/blog/common-mistakes-new-crypto-investors).
+
 Crypto itself is not the cause. Behavior is.
 
 ## How beginners reduce the risk
@@ -38,4 +40,3 @@ Looking for a safer entry into crypto investing?
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

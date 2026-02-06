@@ -13,10 +13,14 @@ Markets move in cycles. Emotions repeat.
 - discipline survives
 - structure outlasts speculation
 
+If you want real-world missteps, read [Lessons From Failed Crypto Investors](/blog/lessons-from-failed-crypto-investors).
+
 ## Why cycles matter to beginners
 Understanding cycles prevents panic.
 
 If you want the long-term mindset first, read [Why Long-Term Thinking Matters](/blog/why-long-term-thinking-matters).
+
+To understand common pitfalls, read [Why Most Beginners Lose Money in Crypto](/blog/why-most-beginners-lose-money-in-crypto).
 
 ## Final thoughts
 Cycles reward patience and preparation.
@@ -28,4 +32,3 @@ Invest with perspective, not panic.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

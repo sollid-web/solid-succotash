@@ -13,6 +13,8 @@ Trust is not claimed. It is demonstrated over time.
 - consistency
 - accountability
 
+For a legacy transparency example, read [How Transparency Builds Trust in Crypto Investment Platforms](/blog/transparency-and-trust-crypto-investment-platforms).
+
 ## Why trust matters more than speed
 Trust supports long-term relationships.
 
@@ -30,4 +32,3 @@ Choose a platform built on trust and transparency.
 
 Learn more about WolvCapital on the homepage.
 [Visit WolvCapital.](/)
-

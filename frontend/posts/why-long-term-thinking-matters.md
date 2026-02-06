@@ -20,6 +20,8 @@ Long-term thinking forgives early mistakes.
 
 If you want the strategy baseline first, read [Why Long-Term Strategies Win](/blog/why-long-term-strategies-win).
 
+For a broader market perspective, read [Is Crypto Investing Still Worth Considering in 2025?](/blog/is-crypto-investing-worth-it-2025).
+
 To understand common pitfalls, read [Why Most Beginners Lose Money in Crypto](/blog/why-most-beginners-lose-money-in-crypto).
 
 ## Final thoughts

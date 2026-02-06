@@ -26,6 +26,8 @@ If price swings feel intimidating, [crypto volatility explained simply](/blog/cr
 
 If you want to clear up common misconceptions, read [Crypto Myths Beginners Still Believe](/blog/crypto-myths-beginners-still-believe).
 
+For a broader 2025 perspective, read [Is Crypto Investing Still Worth Considering in 2025?](/blog/is-crypto-investing-worth-it-2025).
+
 ## What actually causes beginners to lose money
 Most beginners do not lose money because crypto is unsafe. They lose money because they:
 

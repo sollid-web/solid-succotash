@@ -54,7 +54,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   const post = await getPostBySlug(slug)
   if (!post) notFound()
 
-  const publishedTime = new Date(post.date).toISOString()
+  const publishedTime = new Date(post.publishedAt).toISOString()
 
   return (
     <div className="min-h-screen bg-white">
@@ -92,7 +92,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             <span aria-hidden className="mx-2">/</span>
             <span className="text-gray-600">Article</span>
           </div>
-          <p className="text-sm text-gray-500">{post.date}</p>
+          <p className="text-sm text-gray-500">{post.publishedAt}</p>
           <h1 className="mt-3 text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0b2f6b]">
             {post.title}
           </h1>

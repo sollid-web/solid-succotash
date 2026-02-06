@@ -86,7 +86,9 @@ export type BlogPostMeta = {
   slug: string
   title: string
   description: string
-  date: string // ISO yyyy-mm-dd or full ISO string
+  date: string // ISO yyyy-mm-dd (derived from publishedAt)
+  publishedAt: string // ISO yyyy-mm-dd
+  updatedAt: string // ISO yyyy-mm-dd
   coverImage?: string
   coverImageAlt?: string
 }
@@ -121,17 +123,28 @@ function parseAndValidateFrontmatter(slug: string, raw: string): { meta: BlogPos
   const title = typeof data.title === 'string' ? data.title.trim() : ''
   const description = typeof data.description === 'string' ? data.description.trim() : ''
   const dateRaw = typeof data.date === 'string' ? data.date.trim() : ''
+  const publishedAtRaw = typeof data.publishedAt === 'string' ? data.publishedAt.trim() : ''
+  const updatedAtRaw = typeof data.updatedAt === 'string' ? data.updatedAt.trim() : ''
 
   const coverImageRaw = typeof data.coverImage === 'string' ? data.coverImage.trim() : ''
   const coverImageAltRaw = typeof data.coverImageAlt === 'string' ? data.coverImageAlt.trim() : ''
 
   if (!title) throw new Error(`Post ${slug} is missing frontmatter field: title`)
   if (!description) throw new Error(`Post ${slug} is missing frontmatter field: description`)
-  if (!dateRaw) throw new Error(`Post ${slug} is missing frontmatter field: date`)
+  if (!publishedAtRaw && !dateRaw) {
+    throw new Error(`Post ${slug} is missing frontmatter field: publishedAt`)
+  }
 
-  const date = new Date(dateRaw)
-  if (Number.isNaN(date.getTime())) {
-    throw new Error(`Post ${slug} has invalid frontmatter date: ${dateRaw}`)
+  const publishedAtValue = publishedAtRaw || dateRaw
+  const publishedAtDate = new Date(publishedAtValue)
+  if (Number.isNaN(publishedAtDate.getTime())) {
+    throw new Error(`Post ${slug} has invalid frontmatter publishedAt: ${publishedAtValue}`)
+  }
+
+  const updatedAtValue = updatedAtRaw || publishedAtValue
+  const updatedAtDate = new Date(updatedAtValue)
+  if (Number.isNaN(updatedAtDate.getTime())) {
+    throw new Error(`Post ${slug} has invalid frontmatter updatedAt: ${updatedAtValue}`)
   }
 
   const coverImage = (() => {
@@ -149,7 +162,9 @@ function parseAndValidateFrontmatter(slug: string, raw: string): { meta: BlogPos
       title,
       description,
       // Store as YYYY-MM-DD for stable sorting and display.
-      date: date.toISOString().slice(0, 10),
+      date: publishedAtDate.toISOString().slice(0, 10),
+      publishedAt: publishedAtDate.toISOString().slice(0, 10),
+      updatedAt: updatedAtDate.toISOString().slice(0, 10),
       ...(coverImage ? { coverImage } : {}),
       ...(coverImageAlt ? { coverImageAlt } : {}),
     },
@@ -166,7 +181,7 @@ export function getAllPostsMeta(): BlogPostMeta[] {
     return parseAndValidateFrontmatter(slug, raw).meta
   })
 
-  posts.sort((a, b) => b.date.localeCompare(a.date))
+  posts.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
   return posts
 }
 

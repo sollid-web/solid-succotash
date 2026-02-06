@@ -47,7 +47,7 @@ export default function BlogIndexPage() {
                     </Link>
                   </h2>
                   <p className="mt-2 text-sm text-gray-500">
-                    <time dateTime={post.date}>{post.date}</time>
+                    <time dateTime={post.publishedAt}>{post.publishedAt}</time>
                   </p>
                   <p className="mt-3 text-gray-700 leading-relaxed">{post.description}</p>
                   <div className="mt-4">

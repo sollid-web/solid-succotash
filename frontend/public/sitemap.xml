@@ -1,59 +1,403 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
   <url>
     <loc>https://www.wolvcapital.com/</loc>
-    <priority>1.0</priority>
+    <lastmod>2026-02-06</lastmod>
   </url>
-
   <url>
     <loc>https://www.wolvcapital.com/about</loc>
-    <priority>0.9</priority>
+    <lastmod>2026-02-06</lastmod>
   </url>
-
   <url>
     <loc>https://www.wolvcapital.com/plans</loc>
-    <priority>0.9</priority>
+    <lastmod>2026-02-06</lastmod>
   </url>
-
-  <url>
-    <loc>https://www.wolvcapital.com/referral</loc>
-    <priority>0.9</priority>
-  </url>
-
   <url>
     <loc>https://www.wolvcapital.com/terms-of-service</loc>
-    <priority>0.8</priority>
+    <lastmod>2026-02-06</lastmod>
   </url>
-
   <url>
     <loc>https://www.wolvcapital.com/privacy</loc>
-    <priority>0.8</priority>
+    <lastmod>2026-02-06</lastmod>
   </url>
-
   <url>
     <loc>https://www.wolvcapital.com/risk-disclosure</loc>
-    <priority>0.8</priority>
+    <lastmod>2026-02-06</lastmod>
   </url>
-
   <url>
     <loc>https://www.wolvcapital.com/contact</loc>
-    <priority>0.8</priority>
+    <lastmod>2026-02-06</lastmod>
   </url>
-
   <url>
     <loc>https://www.wolvcapital.com/how-it-works</loc>
-    <priority>0.7</priority>
+    <lastmod>2026-02-06</lastmod>
   </url>
-
   <url>
     <loc>https://www.wolvcapital.com/faq</loc>
-    <priority>0.7</priority>
+    <lastmod>2026-02-06</lastmod>
   </url>
-
   <url>
     <loc>https://www.wolvcapital.com/security</loc>
-    <priority>0.7</priority>
+    <lastmod>2026-02-06</lastmod>
   </url>
-
+  <url>
+    <loc>https://www.wolvcapital.com/blog</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/identify-legitimate-crypto-investment-platforms</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/understanding-withdrawal-policies-crypto-platforms</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/common-mistakes-new-crypto-investors</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/market-volatility-digital-asset-investments</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/centralized-vs-decentralized-crypto-platforms</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/what-to-know-before-investing-in-crypto-platforms</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/what-to-check-before-depositing-crypto</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/transparency-and-trust-crypto-investment-platforms</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/is-crypto-investing-worth-it-2025</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/is-crypto-investing-safe-for-beginners</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/what-is-cryptocurrency-beginner-explanation</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-crypto-markets-actually-work</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/common-crypto-terms-beginners-must-know</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-blockchain-security-protects-investors</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/crypto-volatility-explained-simply</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-much-should-a-beginner-invest-in-crypto</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/short-term-vs-long-term-crypto-investing</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/why-education-matters-in-crypto-investing</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/what-makes-crypto-different-from-stocks</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/can-you-lose-all-your-money-in-crypto</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/understanding-risk-in-digital-assets</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/why-most-beginners-quit-crypto-too-early</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/crypto-myths-beginners-still-believe</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-to-start-crypto-investing-with-confidence</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/psychology-of-crypto-investing</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/why-beginners-overtrade-crypto</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/when-not-to-invest-in-crypto</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-to-learn-crypto-without-losing-money</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/crypto-investing-vs-crypto-trading</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-to-choose-a-safe-crypto-investment-platform</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/what-makes-a-crypto-platform-trustworthy</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/red-flags-to-avoid-in-crypto-investment-platforms</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-security-works-in-crypto-investment-platforms</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/kyc-and-aml-explained-for-beginners</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/why-transparency-matters-in-crypto-investing</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/are-managed-crypto-platforms-safer</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-crypto-investment-platforms-generate-roi</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/custody-vs-non-custody-crypto-platforms</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/centralized-vs-decentralized-crypto-investing</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-crypto-investment-platforms-protect-user-funds</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/what-to-look-for-before-depositing-funds</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/understanding-platform-risk</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/why-beginners-prefer-guided-crypto-investment-platforms</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/crypto-scams-explained-and-how-to-avoid-them</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/why-regulation-matters-in-crypto-investing</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/can-crypto-investment-platforms-fail</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-to-verify-a-crypto-investment-platform</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/the-role-of-compliance-in-crypto-investing</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/choosing-between-multiple-crypto-investment-platforms</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/why-most-beginners-lose-money-in-crypto</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/the-importance-of-structured-investing</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/emotion-vs-discipline-in-crypto-investing</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-investment-plans-reduce-risk</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/why-consistency-beats-timing</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-daily-roi-models-work</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/risk-management-in-crypto-explained</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-to-set-realistic-crypto-investment-goals</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/why-long-term-strategies-win</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-to-avoid-emotional-decisions-in-crypto</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/the-role-of-patience-in-investing</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/when-to-adjust-your-investment-strategy</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/compounding-explained-in-crypto</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/active-vs-structured-crypto-investing</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/why-simplicity-wins-for-beginners</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-professionals-think-about-risk</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/what-sustainable-crypto-growth-looks-like</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/why-beginners-should-avoid-leverage</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/the-cost-of-overconfidence-in-crypto</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/building-confidence-as-a-crypto-investor</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-to-invest-in-crypto-without-stress</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/why-clarity-is-the-most-underrated-advantage</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/what-responsible-crypto-investing-looks-like</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/why-long-term-thinking-matters</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/lessons-from-failed-crypto-investors</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/what-weve-learned-from-market-cycles</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-to-think-like-a-disciplined-investor</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/why-fewer-decisions-lead-to-better-results</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/the-role-of-education-in-financial-freedom</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/why-not-all-growth-is-good-growth</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/avoiding-greed-in-crypto-markets</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/what-sustainable-wealth-really-means</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/why-structure-builds-confidence</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-trust-is-built-in-financial-platforms</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/what-beginners-should-focus-on-first</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/why-we-built-wolvcapital</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/our-philosophy-on-crypto-investing</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/how-we-think-about-investor-protection</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/the-future-of-structured-crypto-investing</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
+  <url>
+    <loc>https://www.wolvcapital.com/blog/what-every-beginner-should-know-before-investing</loc>
+    <lastmod>2026-02-06</lastmod>
+  </url>
 </urlset>

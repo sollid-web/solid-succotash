@@ -2,10 +2,9 @@ import type { Metadata } from 'next'
 import HomePage from '@/components/HomePage'
 import PublicLayout from '@/components/PublicLayout'
 export const metadata: Metadata = {
-  title: 'WolvCapital — Secure Digital Asset Investment Platform | Earn 1%–2% Daily ROI',
-  description:
-    'Invest in secure digital assets with WolvCapital. Enjoy transparent plans, daily ROI up to 2%, AML/KYC compliance, 256-bit encryption, and 24/7 monitoring. Join 45,000+ verified investors globally.',
-  keywords: 'digital asset investment, crypto investment platform, secure investment returns, daily ROI crypto, WolvCapital, asset management platform, verified investors, AML compliant investment',
+  title: 'Wolvcapital | Structured Crypto Investment Platform',
+  description:'Structured crypto investment plans designed for transparency, disciplined risk management, and long-term growth.',
+  keywords: 'digital asset investment, crypto investment platform, crypto portfolio management, daily ROI crypto, WolvCapital, crypto risk management, verified investors, KYC compliant platform, crypto trading strategies, AML compliant investment, wolvcapital',
   openGraph: {
     title: 'Secure Digital Asset Investment | WolvCapital',
     description:

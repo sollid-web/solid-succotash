@@ -1,6 +1,6 @@
 ---
 title: "How to Build Wealth With Structured Crypto Investing"
-excerpt: "Learn how structured crypto investing reduces emotional decision-making, manages risk, and supports sustainable long-term wealth growth."
+description: "Learn how structured crypto investing reduces emotional decision-making, manages risk, and supports sustainable long-term wealth growth."
 publishedAt: "2026-02-13"
 updatedAt: "2026-02-13"
 author: "WolvCapital Team"

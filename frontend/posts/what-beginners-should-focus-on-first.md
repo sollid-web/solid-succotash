@@ -1,7 +1,7 @@
 ---
 title: "What Beginners Should Focus on First"
 description: "Learn what beginners should focus on first when starting crypto investing."
-publishedAt: "2026-03-07"
+publishedAt: "2025-03-07"
 updatedAt: "2026-02-06"
 ---
 

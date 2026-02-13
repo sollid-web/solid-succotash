@@ -1,7 +1,7 @@
 ---
 title: "Our Philosophy on Crypto Investing"
 description: "Learn WolvCapital's philosophy on crypto investing and why structure matters."
-publishedAt: "2026-03-11"
+publishedAt: "2025-03-11"
 updatedAt: "2026-02-06"
 ---
 

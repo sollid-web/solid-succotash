@@ -1,7 +1,7 @@
 ---
 title: "What Every Beginner Should Know Before Investing"
 description: "Learn the most important things every beginner should know before investing in crypto."
-publishedAt: "2026-03-17"
+publishedAt: "2025-03-17"
 updatedAt: "2026-02-06"
 ---
 

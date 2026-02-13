@@ -1,7 +1,7 @@
 ---
 title: "Why Structure Builds Confidence"
 description: "Learn how structure builds confidence in crypto investing for beginners."
-publishedAt: "2026-03-03"
+publishedAt: "2025-03-03"
 updatedAt: "2026-02-06"
 ---
 

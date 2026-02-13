@@ -1,7 +1,7 @@
 ---
 title: "How We Think About Investor Protection"
 description: "Learn how investor protection is approached at WolvCapital and why it matters."
-publishedAt: "2026-03-13"
+publishedAt: "2025-03-13"
 updatedAt: "2026-02-06"
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: "How Trust Is Built in Financial Platforms"
 description: "Learn how trust is built in financial platforms and why it matters in crypto investing."
-publishedAt: "2026-03-05"
+publishedAt: "2025-03-05"
 updatedAt: "2026-02-06"
 ---
 

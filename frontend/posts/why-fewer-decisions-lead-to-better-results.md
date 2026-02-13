@@ -1,7 +1,7 @@
 ---
 title: "Why Fewer Decisions Lead to Better Results"
 description: "Learn why reducing decisions improves crypto investing outcomes for beginners."
-publishedAt: "2026-02-21"
+publishedAt: "2025-02-21"
 updatedAt: "2026-02-06"
 ---
 

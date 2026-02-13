@@ -1,7 +1,7 @@
 ---
 title: "Why We Built WolvCapital"
 description: "Learn why WolvCapital was built and the philosophy behind its structured crypto investing approach."
-publishedAt: "2026-03-09"
+publishedAt: "2025-03-09"
 updatedAt: "2026-02-06"
 ---
 

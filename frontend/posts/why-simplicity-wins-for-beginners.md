@@ -1,7 +1,7 @@
 ---
 title: "Why Simplicity Wins for Beginners"
 description: "Learn why simplicity leads to better outcomes for beginner crypto investors."
-publishedAt: "2026-01-24"
+publishedAt: "2025-01-24"
 updatedAt: "2026-02-06"
 ---
 

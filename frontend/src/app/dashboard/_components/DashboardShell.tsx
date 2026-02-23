@@ -6,7 +6,6 @@ import { apiFetch } from "@/lib/api";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import RecentActivityTicker from "@/components/RecentActivityTicker";
-import ValidationBanner from "./ValidationBanner";
 
 type DashboardShellProps = {
   children: ReactNode;

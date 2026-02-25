@@ -1,7 +1,7 @@
 ---
 title: "How to Think Like a Disciplined Investor"
 description: "Learn how disciplined investors think and how beginners can adopt the same mindset."
-publishedAt: "2026-02-19"
+publishedAt: "2025-02-19"
 updatedAt: "2026-02-06"
 ---
 

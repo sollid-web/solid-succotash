@@ -1,7 +1,7 @@
 ---
 title: "What We've Learned From Market Cycles"
 description: "Learn what crypto market cycles teach investors and how beginners can apply these lessons."
-publishedAt: "2026-02-17"
+publishedAt: "2025-02-17"
 updatedAt: "2026-02-06"
 ---
 

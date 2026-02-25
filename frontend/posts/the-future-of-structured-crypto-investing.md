@@ -1,7 +1,7 @@
 ---
 title: "The Future of Structured Crypto Investing"
 description: "Learn how structured crypto investing is shaping the future for beginners."
-publishedAt: "2026-03-15"
+publishedAt: "2025-03-15"
 updatedAt: "2026-02-06"
 ---
 

@@ -1,5 +1,0 @@
-import React from "react";
-type ValidationBannerProps = { required?: boolean; completed?: boolean };
-export default function ValidationBanner(_: ValidationBannerProps) {
-  return null;
-}

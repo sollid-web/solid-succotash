@@ -1,7 +1,7 @@
 ---
 title: "Avoiding Greed in Crypto Markets"
 description: "Learn how greed affects crypto investing and how beginners can avoid costly decisions."
-publishedAt: "2026-02-27"
+publishedAt: "2025-02-27"
 updatedAt: "2026-02-06"
 ---
 

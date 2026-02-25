@@ -1,7 +1,7 @@
 ---
 title: "Lessons From Failed Crypto Investors"
 description: "Learn key lessons from failed crypto investors and how beginners can avoid similar mistakes."
-publishedAt: "2026-02-15"
+publishedAt: "2026-02-12"
 updatedAt: "2026-02-06"
 ---
 

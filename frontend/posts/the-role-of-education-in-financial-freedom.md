@@ -1,7 +1,7 @@
 ---
 title: "The Role of Education in Financial Freedom"
 description: "Learn how education supports financial freedom and smarter crypto investing."
-publishedAt: "2026-02-23"
+publishedAt: "2025-02-23"
 updatedAt: "2026-02-06"
 ---
 

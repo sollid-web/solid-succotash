@@ -1,7 +1,7 @@
 ---
 title: "Why Not All Growth Is Good Growth"
 description: "Learn why sustainable growth matters more than rapid growth in crypto investing."
-publishedAt: "2026-02-25"
+publishedAt: "2025-02-25"
 updatedAt: "2026-02-06"
 ---
 

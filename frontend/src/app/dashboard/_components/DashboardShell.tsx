@@ -6,6 +6,10 @@ import { apiFetch } from "@/lib/api";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import RecentActivityTicker from "@/components/RecentActivityTicker";
+<<<<<<< HEAD
+=======
+
+>>>>>>> solid-succotash/HEAD
 type DashboardShellProps = {
   children: ReactNode;
   banner?: ReactNode;

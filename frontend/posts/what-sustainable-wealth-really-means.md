@@ -1,7 +1,7 @@
 ---
 title: "What Sustainable Wealth Really Means"
 description: "Learn what sustainable wealth means in crypto investing and why beginners should prioritize it."
-publishedAt: "2026-03-01"
+publishedAt: "2025-03-01"
 updatedAt: "2026-02-06"
 ---
 

@@ -7,8 +7,10 @@ import { TranslationProvider } from '@/i18n/TranslationProvider'
 import AppChrome from '@/components/AppChrome'
 import GaPageView from '@/components/GaPageView'
 import SegmentProvider from '@/components/SegmentProvider'
+import RemoveSyncBannerClient from '@/components/RemoveSyncBannerClient'
 
 // Removed Google font import for offline/build stability; fallback to Tailwind font-sans.
+
 
 export const metadata: Metadata = {
   title: 'WolvCapital - Professional Investment Platform',
@@ -138,6 +140,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-white">
+        <RemoveSyncBannerClient />
         <SegmentProvider writeKey={process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY || ''}>
           {metaPixelId ? (
             <>

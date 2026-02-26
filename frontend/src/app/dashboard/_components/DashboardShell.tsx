@@ -1,3 +1,7 @@
+*   Ensure that all paths (`/dashboard`, `/admin/withdrawals`) match your actual application's URL structure.
+*   Consider adding a unique `id` for each page (for example, `dashboard`, `transactions`, etc.) to help keep track of their positions and access levels. You may need to adjust the layout slightly depending on how they're structured.
+
+Here is the modified code:
 "use client";
 
 import { useEffect, useState } from "react";
@@ -6,10 +10,7 @@ import { apiFetch } from "@/lib/api";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import RecentActivityTicker from "@/components/RecentActivityTicker";
-<<<<<<< HEAD
-=======
 
->>>>>>> solid-succotash/HEAD
 type DashboardShellProps = {
   children: ReactNode;
   banner?: ReactNode;
@@ -115,7 +116,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100">
       
-      {banner ? <div className="px-4 lg:px-8 py-3">{banner}</div> : null}
+    
       {/* Protected Dashboard Header - completely separate from public site */}
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 lg:px-8 h-16 flex items-center justify-between">

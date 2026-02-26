@@ -7,7 +7,6 @@ import { apiFetch } from '@/lib/api'
 type Withdrawal = {
   id: string
   user_email: string
-  tx_type: 'withdrawal'
   amount: string
   reference: string
   status: 'pending' | 'approved' | 'rejected' | 'completed'
@@ -27,9 +26,7 @@ export default function AdminWithdrawalsPage() {
     setError('')
     try {
       const res = await apiFetch('/api/admin/transactions/?tx_type=withdrawal&status=pending')
-      if (!res.ok) {
-        throw new Error(`Failed to load withdrawals (${res.status})`)
-      }
+      if (!res.ok) throw new Error(`Failed to load (${res.status})`)
       const data = await res.json()
       setRows(Array.isArray(data) ? data : [])
     } catch (e: any) {
@@ -43,10 +40,6 @@ export default function AdminWithdrawalsPage() {
     load()
   }, [])
 
-  const updateNotes = (id: string, val: string) => {
-    setNotesById((prev) => ({ ...prev, [id]: val }))
-  }
-
   const submitAction = async (id: string, status: 'approved' | 'rejected') => {
     setActionId(id)
     setError('')
@@ -59,101 +52,74 @@ export default function AdminWithdrawalsPage() {
           notes: notesById[id] || '',
         }),
       })
-      if (!res.ok) {
-        const text = await res.text()
-        throw new Error(text || `Failed to ${status} withdrawal`)
-      }
-      setRows((prev) => prev.filter((row) => row.id !== id))
+
+      if (!res.ok) throw new Error(`Failed to ${status}`)
+
+      setRows(prev => prev.filter(r => r.id !== id))
     } catch (e: any) {
-      setError(e?.message || `Failed to ${status} withdrawal`)
+      setError(e?.message || `Failed to ${status}`)
     } finally {
       setActionId(null)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="text-lg font-semibold">Pending Withdrawals</div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={load}
-              className="px-3 py-2 rounded-md border border-gray-300 text-sm"
-              disabled={loading}
-            >
-              Refresh
-            </button>
-            <Link href="/dashboard" className="text-sm text-blue-600 hover:underline">
-              Dashboard
-            </Link>
-          </div>
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-5xl mx-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-xl font-semibold">Pending Withdrawals</h1>
+          <Link href="/dashboard" className="text-blue-600 text-sm underline">
+            Dashboard
+          </Link>
         </div>
-      </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-6">
-        {error && (
-          <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-            {error}
-          </div>
-        )}
+        {error && <div className="mb-4 text-red-600 text-sm">{error}</div>}
 
         {loading ? (
-          <div className="rounded-md border bg-white p-6">Loading…</div>
+          <div>Loading...</div>
         ) : rows.length === 0 ? (
-          <div className="rounded-md border bg-white p-6 text-gray-600">No pending withdrawals.</div>
+          <div>No pending withdrawals.</div>
         ) : (
-          <div className="space-y-4">
-            {rows.map((row) => (
-              <div key={row.id} className="rounded-lg border bg-white p-4">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <div className="text-sm text-gray-500">User</div>
-                    <div className="font-medium">{row.user_email}</div>
+          rows.map(row => (
+            <div key={row.id} className="bg-white p-4 border rounded mb-4">
+              <div className="flex justify-between">
+                <div>
+                  <div className="font-medium">{row.user_email}</div>
+                  <div className="text-sm text-gray-500">
+                    ${row.amount} • {new Date(row.created_at).toLocaleString()}
                   </div>
-                  <div>
-                    <div className="text-sm text-gray-500">Amount</div>
-                    <div className="font-semibold">${row.amount}</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-500">Requested</div>
-                    <div className="text-sm">{new Date(row.created_at).toLocaleString()}</div>
-                  </div>
-                </div>
-                <div className="mt-3 text-sm text-gray-600">
-                  Reference: {row.reference}
-                </div>
-                <div className="mt-3">
-                  <label className="block text-xs text-gray-500 mb-1">Admin notes</label>
-                  <input
-                    type="text"
-                    value={notesById[row.id] || ''}
-                    onChange={(e) => updateNotes(row.id, e.target.value)}
-                    className="w-full border rounded px-3 py-2 text-sm"
-                    placeholder="Optional notes"
-                  />
-                </div>
-                <div className="mt-3 flex gap-2">
-                  <button
-                    onClick={() => submitAction(row.id, 'approved')}
-                    disabled={actionId === row.id}
-                    className="px-3 py-2 rounded bg-green-600 text-white text-sm disabled:opacity-50"
-                  >
-                    Approve
-                  </button>
-                  <button
-                    onClick={() => submitAction(row.id, 'rejected')}
-                    disabled={actionId === row.id}
-                    className="px-3 py-2 rounded bg-red-600 text-white text-sm disabled:opacity-50"
-                  >
-                    Reject
-                  </button>
                 </div>
               </div>
-            ))}
-          </div>
+
+              <input
+                className="mt-3 border rounded px-3 py-2 w-full text-sm"
+                placeholder="Admin notes"
+                value={notesById[row.id] || ''}
+                onChange={(e) =>
+                  setNotesById(prev => ({ ...prev, [row.id]: e.target.value }))
+                }
+              />
+
+              <div className="mt-3 flex gap-2">
+                <button
+                  disabled={actionId === row.id}
+                  onClick={() => submitAction(row.id, 'approved')}
+                  className="px-3 py-2 bg-green-600 text-white rounded text-sm"
+                >
+                  Approve
+                </button>
+                <button
+                  disabled={actionId === row.id}
+                  onClick={() => submitAction(row.id, 'rejected')}
+                  className="px-3 py-2 bg-red-600 text-white rounded text-sm"
+                >
+                  Reject
+                </button>
+              </div>
+            </div>
+          ))
         )}
-      </main>
+      </div>
     </div>
   )
 }

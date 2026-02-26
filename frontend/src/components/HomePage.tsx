@@ -28,7 +28,7 @@ const ROI_PLANS: RoiPlan[] = [
   { id: 'summit', name: 'Summit VIP', dailyRoiPct: 2, minDepositUsd: 15000, durationDaysLabel: '365 days', accent: 'amber' },
 ]
 
-const FALLBACK_WEEKLY_PAYOUT_USD = 247_100
+const FALLBACK_WEEKLY_PAYOUT_USD = 647_100
 
 function formatUsd(value: number) {
   if (!Number.isFinite(value)) return '$—'

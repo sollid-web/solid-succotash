@@ -1,7 +1,4 @@
-*   Ensure that all paths (`/dashboard`, `/admin/withdrawals`) match your actual application's URL structure.
-*   Consider adding a unique `id` for each page (for example, `dashboard`, `transactions`, etc.) to help keep track of their positions and access levels. You may need to adjust the layout slightly depending on how they're structured.
 
-Here is the modified code:
 "use client";
 
 import { useEffect, useState } from "react";

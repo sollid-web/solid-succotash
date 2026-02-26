@@ -1,12 +1,11 @@
 'use client'
-
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import TrustpilotInvite from '@/components/TrustpilotInvite'
 import { trackEvent } from '@/lib/segment'
 
-export default function CheckoutSuccessPage() {
+function CheckoutSuccessContent() {
   const searchParams = useSearchParams()
   const [transactionStatus, setTransactionStatus] = useState<string | null>(null)
   const [transactionId, setTransactionId] = useState<string | null>(null)
@@ -17,11 +16,10 @@ export default function CheckoutSuccessPage() {
     const amount = searchParams.get('amount')
     const userEmail = searchParams.get('email')
     const userName = searchParams.get('name')
-    
+
     setTransactionStatus(status)
     setTransactionId(txId)
 
-    // Track transaction completion in Segment (Trustpilot integration)
     if (status === 'completed' && txId) {
       trackEvent('Order Completed', {
         orderId: txId,
@@ -43,26 +41,12 @@ export default function CheckoutSuccessPage() {
         {isCompleted ? (
           <>
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg
-                className="w-8 h-8 text-green-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
+              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              Transaction Completed
-            </h1>
-            <p className="text-gray-600 mb-2">
-              Your transaction has been successfully processed.
-            </p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">Transaction Completed</h1>
+            <p className="text-gray-600 mb-2">Your transaction has been successfully processed.</p>
             {transactionId && (
               <p className="text-sm text-gray-500 mb-6">
                 Transaction ID: <span className="font-mono">{transactionId}</span>
@@ -72,23 +56,11 @@ export default function CheckoutSuccessPage() {
         ) : (
           <>
             <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg
-                className="w-8 h-8 text-yellow-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
+              <svg className="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              Transaction Pending
-            </h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">Transaction Pending</h1>
             <p className="text-gray-600 mb-6">
               Your transaction is being processed. You will receive a notification once it is completed.
             </p>
@@ -113,5 +85,13 @@ export default function CheckoutSuccessPage() {
 
       {isCompleted && <TrustpilotInvite />}
     </div>
+  )
+}
+
+export default function CheckoutSuccessPage() {
+  return (
+    <Suspense fallback={<div className="max-w-2xl mx-auto py-12 px-4 text-center text-gray-500">Loading...</div>}>
+      <CheckoutSuccessContent />
+    </Suspense>
   )
 }

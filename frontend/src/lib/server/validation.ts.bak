@@ -1,4 +1,0 @@
-export async function getValidationStatus() {
-  return { validation_required: false, validation_completed: true };
-}
-export { getValidationStatus as fetchValidationStatus };

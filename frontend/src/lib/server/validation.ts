@@ -1,4 +1,4 @@
-// Validation check removed - deprecated
+// Deprecated - removed
 export async function getValidationStatus() {
   return null;
 }

@@ -1,6 +1,5 @@
 from decimal import Decimal
 
-from attr import attrs
 from django.db.models import Sum
 from django.utils import timezone
 from rest_framework import serializers
@@ -8,7 +7,7 @@ from rest_framework import serializers
 from core.models import Agreement, PlatformCertificate, SupportRequest, UserAgreementAcceptance
 from investments.models import InvestmentPlan, UserInvestment
 from transactions.models import CryptocurrencyWallet, Transaction, VirtualCard
-from users.models import KycApplication, Profile, UserNotification, UserWallet
+from users.models import KycApplication, KycDocument, Profile, UserNotification, UserWallet
 
 
 class AgreementSerializer(serializers.ModelSerializer):
@@ -292,6 +291,88 @@ class KycDocumentSerializer(serializers.Serializer):
                 "Both government ID and proof of address metadata are required."
             )
         return attrs
+
+
+class KycDocumentModelSerializer(serializers.ModelSerializer):
+    """Serializer for user submissions of KYC documents"""
+    user_email = serializers.EmailField(source="user.email", read_only=True)
+    reviewed_by_email = serializers.EmailField(
+        source="reviewed_by.email", read_only=True, allow_null=True
+    )
+
+    class Meta:
+        model = KycDocument
+        fields = [
+            "id",
+            "user_email",
+            "document_type",
+            "document_file",
+            "status",
+            "submitted_at",
+            "reviewed_at",
+            "reviewed_by_email",
+            "rejection_reason",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = [
+            "id",
+            "user_email",
+            "status",
+            "submitted_at",
+            "reviewed_at",
+            "reviewed_by_email",
+            "rejection_reason",
+            "created_at",
+            "updated_at",
+        ]
+
+
+class AdminKycDocumentSerializer(serializers.ModelSerializer):
+    """Admin serializer for reviewing and managing KYC documents"""
+    user_email = serializers.EmailField(source="user.email", read_only=True)
+    reviewed_by_email = serializers.EmailField(
+        source="reviewed_by.email", read_only=True, allow_null=True
+    )
+    approval_action = serializers.ChoiceField(
+        choices=["approve", "reject"],
+        write_only=True,
+        required=False,
+    )
+    approval_notes = serializers.CharField(
+        write_only=True,
+        required=False,
+        allow_blank=True,
+    )
+
+    class Meta:
+        model = KycDocument
+        fields = [
+            "id",
+            "user_email",
+            "document_type",
+            "document_file",
+            "status",
+            "submitted_at",
+            "reviewed_at",
+            "reviewed_by_email",
+            "rejection_reason",
+            "created_at",
+            "updated_at",
+            "approval_action",
+            "approval_notes",
+        ]
+        read_only_fields = [
+            "id",
+            "user_email",
+            "document_type",
+            "submitted_at",
+            "reviewed_at",
+            "reviewed_by_email",
+            "rejection_reason",
+            "created_at",
+            "updated_at",
+        ]
 
 
 class AdminTransactionSerializer(serializers.ModelSerializer):

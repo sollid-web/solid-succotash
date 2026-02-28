@@ -209,6 +209,118 @@ class KycApplication(models.Model):
         ]
 
 
+class KycDocument(models.Model):
+    """Stores individual KYC documents submitted by users"""
+
+    DOCUMENT_TYPE_CHOICES = [
+        ("passport", "Passport"),
+        ("national_id", "National ID"),
+        ("drivers_license", "Driver's License"),
+    ]
+
+    STATUS_CHOICES = [
+        ("pending", "Pending Review"),
+        ("approved", "Approved"),
+        ("rejected", "Rejected"),
+    ]
+
+    id: models.UUIDField = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False
+    )
+    user: models.ForeignKey = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="kyc_documents",
+    )
+    kyc_application: models.ForeignKey = models.ForeignKey(
+        KycApplication,
+        on_delete=models.CASCADE,
+        related_name="documents",
+        null=True,
+        blank=True,
+    )
+    document_type: models.CharField = models.CharField(
+        max_length=20,
+        choices=DOCUMENT_TYPE_CHOICES,
+        help_text="Type of government-issued ID",
+    )
+    document_file: models.FileField = models.FileField(
+        upload_to="kyc_documents/%Y/%m/%d/",
+        help_text="Scanned copy of the document",
+    )
+    status: models.CharField = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="pending",
+    )
+    submitted_at: models.DateTimeField = models.DateTimeField(
+        default=timezone.now,
+        help_text="When the document was submitted",
+    )
+    reviewed_at: models.DateTimeField = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="When the document was reviewed",
+    )
+    reviewed_by: models.ForeignKey = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="reviewed_kyc_documents",
+    )
+    rejection_reason: models.TextField = models.TextField(
+        blank=True,
+        help_text="Reason for rejection if applicable",
+    )
+    created_at: models.DateTimeField = models.DateTimeField(default=timezone.now)
+    updated_at: models.DateTimeField = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user.email} - {self.get_document_type_display()} ({self.status})"
+
+    def approve(self, admin_user, notes: str = ""):
+        """Mark document as approved by an admin"""
+        if not admin_user or not getattr(admin_user, "is_staff", False):
+            raise ValueError("Admin privileges are required to approve documents")
+        if self.status != "pending":
+            raise ValueError(f"Cannot approve document with status '{self.status}'")
+
+        self.status = "approved"
+        self.reviewed_by = admin_user
+        self.reviewed_at = timezone.now()
+        self.rejection_reason = ""
+        self.save()
+
+    def reject(self, admin_user, reason: str = ""):
+        """Mark document as rejected by an admin"""
+        if not admin_user or not getattr(admin_user, "is_staff", False):
+            raise ValueError("Admin privileges are required to reject documents")
+        if self.status != "pending":
+            raise ValueError(f"Cannot reject document with status '{self.status}'")
+        if not reason:
+            raise ValueError("Rejection reason is required")
+
+        self.status = "rejected"
+        self.reviewed_by = admin_user
+        self.reviewed_at = timezone.now()
+        self.rejection_reason = reason
+        self.save()
+
+    class Meta:
+        db_table = "users_kyc_document"
+        verbose_name = "KYC Document"
+        verbose_name_plural = "KYC Documents"
+        ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["user", "status"]),
+            models.Index(fields=["document_type"]),
+            models.Index(fields=["status"]),
+            models.Index(fields=["created_at"]),
+        ]
+        unique_together = [["user", "document_type"]]
+
+
 class EmailVerification(models.Model):
     """Email verification tokens for account activation"""
     user = models.ForeignKey(

@@ -5,7 +5,7 @@ from django.shortcuts import render
 
 from transactions.services import approve_transaction, create_transaction
 
-from .models import UserWallet
+from .models import UserWallet, KycDocument, KycApplication
 
 User = get_user_model()
 
@@ -140,3 +140,27 @@ class UserWalletAdmin(admin.ModelAdmin):
                 "action": tx_type,
             },
         )
+
+
+@admin.register(KycDocument)
+class KycDocumentAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "document_type", "status", "submitted_at", "reviewed_by")
+    readonly_fields = ("user", "document_type", "document_file", "submitted_at", "reviewed_at", "reviewed_by", "rejection_reason")
+    search_fields = ("user__email",)
+    list_filter = ("status", "document_type")
+    ordering = ("-submitted_at",)
+
+
+@admin.register(KycApplication)
+class KycApplicationAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "status", "last_submitted_at", "reviewed_by")
+    readonly_fields = ("id", "user", "personal_info", "document_info", "created_at", "updated_at")
+    search_fields = ("user__email",)
+    list_filter = ("status",)
+    ordering = ("-created_at",)
+    fieldsets = (
+        ("User", {"fields": ("id", "user")}),
+        ("Status", {"fields": ("status", "reviewed_by", "reviewed_at", "reviewer_notes", "rejection_reason")}),
+        ("Submissions", {"fields": ("personal_info", "document_info", "personal_info_submitted_at", "document_submitted_at", "last_submitted_at")}),
+        ("Timestamps", {"fields": ("created_at", "updated_at")}),
+    )

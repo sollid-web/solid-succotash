@@ -37,15 +37,18 @@ from transactions.services import (
     create_virtual_card_request,
     reject_transaction,
 )
-from users.models import Profile, UserNotification, UserWallet
+from users.models import KycDocument, Profile, UserNotification, UserWallet
 from users.notification_service import mark_all_read as service_mark_all_read
 from users.notification_service import (
     mark_notification_read as service_mark_notification_read,
 )
 from users.services import (
     approve_kyc_application,
+    approve_kyc_document,
     reject_kyc_application,
+    reject_kyc_document,
     submit_document_info,
+    submit_kyc_document,
     submit_personal_info,
 )
 from users.verification import issue_verification_token, verify_token
@@ -53,6 +56,7 @@ from users.verification import issue_verification_token, verify_token
 from .permissions import IsPlatformAdmin
 from .serializers import (
     AdminKycApplicationSerializer,
+    AdminKycDocumentSerializer,
     AdminTransactionSerializer,
     AdminUserInvestmentSerializer,
     AgreementSerializer,
@@ -60,6 +64,7 @@ from .serializers import (
     EmailPreferencesSerializer,
     InvestmentPlanSerializer,
     KycApplicationSerializer,
+    KycDocumentModelSerializer,
     KycDocumentSerializer,
     KycPersonalInfoSerializer,
     PlatformCertificateSerializer,
@@ -917,6 +922,78 @@ class AdminKycApplicationViewSet(viewsets.ModelViewSet):
                     reject_kyc_application(instance, request.user, reason or notes)
                 else:
                     raise ValidationError("Unsupported status change requested.")
+            except DjangoValidationError as exc:
+                raise ValidationError(exc.messages)
+
+            instance.refresh_from_db()
+            serializer = self.get_serializer(instance)
+            return Response(serializer.data)
+
+        kwargs["partial"] = partial
+        return super().update(request, *args, **kwargs)
+
+
+
+class KycDocumentViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet,
+):
+    """User-facing endpoints for submitting and managing KYC documents."""
+
+    serializer_class = KycDocumentModelSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return KycDocument.objects.filter(user=self.request.user).order_by("-created_at")
+
+    def create(self, request, *args, **kwargs):
+        """Submit or update a KYC document"""
+        document_type = request.data.get("document_type")
+        document_file = request.FILES.get("document_file")
+
+        try:
+            document = submit_kyc_document(request.user, document_type, document_file)
+        except DjangoValidationError as exc:
+            raise ValidationError(exc.messages)
+
+        serializer = self.get_serializer(document)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class AdminKycDocumentViewSet(viewsets.ModelViewSet):
+    """Admin endpoints for reviewing and managing KYC documents."""
+
+    serializer_class = AdminKycDocumentSerializer
+    permission_classes = [IsPlatformAdmin]
+
+    def get_queryset(self):
+        return KycDocument.objects.select_related("user", "reviewed_by").order_by(
+            "-created_at"
+        )
+
+    def update(self, request, *args, **kwargs):
+        """Approve or reject a KYC document"""
+        partial = kwargs.pop("partial", False)
+        instance = self.get_object()
+        approval_action = request.data.get("approval_action")
+        approval_notes = request.data.get("approval_notes", "")
+
+        if approval_action:
+            try:
+                if approval_action == "approve":
+                    approve_kyc_document(instance, request.user, approval_notes)
+                elif approval_action == "reject":
+                    if not approval_notes:
+                        raise ValidationError(
+                            {"approval_notes": ["Rejection reason is required."]}
+                        )
+                    reject_kyc_document(instance, request.user, approval_notes)
+                else:
+                    raise ValidationError(
+                        {"approval_action": ["Must be 'approve' or 'reject'."]}
+                    )
             except DjangoValidationError as exc:
                 raise ValidationError(exc.messages)
 

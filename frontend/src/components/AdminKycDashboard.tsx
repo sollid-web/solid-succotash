@@ -4,24 +4,24 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { apiFetch } from '@/lib/api'
 
-interface KycApplication {
+interface KycDocument {
   id: string
   user_email: string
-  status: 'draft' | 'pending' | 'approved' | 'rejected'
-  personal_info: Record<string, any> | null
-  document_info: Record<string, any> | null
-  last_submitted_at: string | null
-  reviewed_by_email: string | null
+  document_type: 'passport' | 'national_id' | 'drivers_license'
+  status: 'pending' | 'approved' | 'rejected'
+  submitted_at: string
   reviewed_at: string | null
-  reviewer_notes: string
+  reviewed_by_email: string | null
+  rejection_reason: string
   created_at: string
+  updated_at: string
 }
 
 export default function AdminKycDashboard() {
-  const [applications, setApplications] = useState<KycApplication[]>([])
+  const [applications, setApplications] = useState<KycDocument[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [selectedApp, setSelectedApp] = useState<KycApplication | null>(null)
+  const [selectedApp, setSelectedApp] = useState<KycDocument | null>(null)
   const [approvalNotes, setApprovalNotes] = useState('')
   const [rejectionReason, setRejectionReason] = useState('')
   const [actionLoading, setActionLoading] = useState(false)
@@ -29,16 +29,16 @@ export default function AdminKycDashboard() {
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const response = await apiFetch('/api/admin/kyc/')
+        const response = await apiFetch('/api/admin/kyc-documents/?status=pending')
 
         if (!response.ok) {
-          throw new Error('Failed to fetch KYC applications')
+          throw new Error('Failed to fetch KYC documents')
         }
 
         const data = await response.json()
         setApplications(data)
       } catch (err) {
-        setError('Failed to load KYC applications')
+        setError('Failed to load KYC documents')
         console.error(err)
       } finally {
         setLoading(false)
@@ -48,7 +48,7 @@ export default function AdminKycDashboard() {
     fetchApplications()
   }, [])
 
-  const handleApprove = async (appId: string) => {
+  const handleApprove = async (docId: string) => {
     if (!approvalNotes.trim()) {
       alert('Please add approval notes')
       return
@@ -56,35 +56,35 @@ export default function AdminKycDashboard() {
 
     setActionLoading(true)
     try {
-      const response = await apiFetch(`/api/admin/kyc/${appId}/`, {
+      const response = await apiFetch(`/api/admin/kyc-documents/${docId}/`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          status: 'approved',
-          notes: approvalNotes
+          approval_action: 'approve',
+          approval_notes: approvalNotes
         })
       })
 
       if (!response.ok) {
-        throw new Error('Failed to approve application')
+        throw new Error('Failed to approve document')
       }
 
       // Refresh the list
       const updated = await response.json()
-      setApplications(prev => prev.map(app => app.id === appId ? updated : app))
+      setApplications(prev => prev.map(app => app.id === docId ? updated : app))
       setSelectedApp(null)
       setApprovalNotes('')
-      alert('KYC application approved successfully!')
+      alert('KYC document approved successfully!')
     } catch (err) {
-      alert('Error approving application: ' + (err as Error).message)
+      alert('Error approving document: ' + (err as Error).message)
     } finally {
       setActionLoading(false)
     }
   }
 
-  const handleReject = async (appId: string) => {
+  const handleReject = async (docId: string) => {
     if (!rejectionReason.trim()) {
       alert('Please provide a rejection reason')
       return
@@ -92,28 +92,28 @@ export default function AdminKycDashboard() {
 
     setActionLoading(true)
     try {
-      const response = await apiFetch(`/api/admin/kyc/${appId}/`, {
+      const response = await apiFetch(`/api/admin/kyc-documents/${docId}/`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          status: 'rejected',
-          reason: rejectionReason
+          approval_action: 'reject',
+          approval_notes: rejectionReason
         })
       })
 
       if (!response.ok) {
-        throw new Error('Failed to reject application')
+        throw new Error('Failed to reject document')
       }
 
       const updated = await response.json()
-      setApplications(prev => prev.map(app => app.id === appId ? updated : app))
+      setApplications(prev => prev.map(app => app.id === docId ? updated : app))
       setSelectedApp(null)
       setRejectionReason('')
-      alert('KYC application rejected')
+      alert('KYC document rejected')
     } catch (err) {
-      alert('Error rejecting application: ' + (err as Error).message)
+      alert('Error rejecting document: ' + (err as Error).message)
     } finally {
       setActionLoading(false)
     }
@@ -141,7 +141,7 @@ export default function AdminKycDashboard() {
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p>Loading KYC applications...</p>
+          <p>Loading KYC documents...</p>
         </div>
       </div>
     )
@@ -153,7 +153,7 @@ export default function AdminKycDashboard() {
       <div className="grid grid-cols-3 gap-4 md:gap-6">
         <div className="bg-yellow-50 rounded-lg p-4 md:p-6 border-l-4 border-yellow-400">
           <div className="text-3xl font-bold text-yellow-600">{pendingApps.length}</div>
-          <div className="text-sm text-yellow-700">Pending Review</div>
+          <div className="text-sm text-yellow-700">Pending Documents</div>
         </div>
         <div className="bg-green-50 rounded-lg p-4 md:p-6 border-l-4 border-green-400">
           <div className="text-3xl font-bold text-green-600">{approvedApps.length}</div>
@@ -165,11 +165,11 @@ export default function AdminKycDashboard() {
         </div>
       </div>
 
-      {/* Pending Applications */}
+      {/* Pending Documents */}
       {pendingApps.length > 0 && (
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="bg-yellow-50 px-6 py-4 border-b border-yellow-200">
-            <h3 className="text-xl font-bold text-yellow-900">Pending KYC Applications</h3>
+            <h3 className="text-xl font-bold text-yellow-900">Pending KYC Documents</h3>
           </div>
           <div className="divide-y">
             {pendingApps.map(app => (
@@ -178,7 +178,7 @@ export default function AdminKycDashboard() {
                   <div>
                     <p className="font-semibold text-lg">{app.user_email}</p>
                     <p className="text-sm text-gray-600">
-                      Submitted {app.last_submitted_at ? new Date(app.last_submitted_at).toLocaleDateString() : 'unknown'}
+                      Document: {app.document_type.replace(/_/g, ' ').toUpperCase()} · Submitted {new Date(app.submitted_at).toLocaleDateString()}
                     </p>
                   </div>
                   <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(app.status)}`}>
@@ -189,10 +189,14 @@ export default function AdminKycDashboard() {
                 {selectedApp?.id === app.id ? (
                   <div className="bg-gray-50 p-4 rounded-lg space-y-4">
                     <div>
-                      <h4 className="font-semibold mb-2">Personal Information</h4>
-                      <pre className="bg-white p-3 rounded text-sm overflow-auto max-h-40">
-                        {JSON.stringify(app.personal_info, null, 2)}
-                      </pre>
+                      <h4 className="font-semibold mb-2">Document Details</h4>
+                      <div className="bg-white p-3 rounded text-sm space-y-2">
+                        <p><strong>Type:</strong> {app.document_type.replace(/_/g, ' ').toUpperCase()}</p>
+                        <p><strong>Submitted:</strong> {new Date(app.submitted_at).toLocaleString()}</p>
+                        {app.rejection_reason && (
+                          <p className="text-red-600"><strong>Previous Rejection:</strong> {app.rejection_reason}</p>
+                        )}
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -245,7 +249,7 @@ export default function AdminKycDashboard() {
                     onClick={() => setSelectedApp(app)}
                     className="btn-cta-sky px-4 py-2 rounded-lg font-semibold"
                   >
-                    Review Application
+                    Review Document
                   </button>
                 )}
               </div>

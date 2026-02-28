@@ -30,6 +30,9 @@ router.register(
 )
 router.register(r"kyc", views.KycApplicationViewSet, basename="api-kyc")
 router.register(
+    r"kyc-documents", views.KycDocumentViewSet, basename="api-kyc-documents"
+)
+router.register(
     r"notifications",
     views.UserNotificationViewSet,
     basename="api-notifications",
@@ -56,6 +59,11 @@ router.register(
     r"admin/kyc",
     views.AdminKycApplicationViewSet,
     basename="api-admin-kyc",
+)
+router.register(
+    r"admin/kyc-documents",
+    views.AdminKycDocumentViewSet,
+    basename="api-admin-kyc-documents",
 )
 router.register(
     r"admin/plans",

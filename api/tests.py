@@ -309,3 +309,221 @@ class KycDocumentsAPITests(TestCase):
         }
         resp = self.client.post("/api/kyc/documents/", payload, format="json")
         self.assertEqual(resp.status_code, 400)
+
+
+class KycAdminWorkflowAPITests(TestCase):
+    """Full KYC admin workflow using file upload endpoints and admin approval."""
+
+    def setUp(self):
+        User = get_user_model()
+        self.user_password = "userpass123"
+        self.user = User.objects.create_user(
+            username="flow_user",
+            email="flow_user@example.com",
+            password=self.user_password,
+        )
+
+        self.admin = User.objects.create_user(
+            username="flow_admin",
+            email="flow_admin@example.com",
+            password="adminpass123",
+            is_staff=True,
+            is_superuser=True,
+        )
+
+        self.client = APIClient()
+        self.admin_client = APIClient()
+
+    def _get_jwt_for_user(self, username_or_email, password):
+        resp = self.client.post(
+            "/api/auth/jwt/create/",
+            {"email": username_or_email, "password": password},
+            format="json",
+        )
+        self.assertEqual(resp.status_code, 200)
+        return resp.json()["access"]
+
+    def test_user_submits_document_and_admin_approves_then_application_approved(self):
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from users.models import KycApplication
+
+        # User obtains JWT and sets Authorization header
+        access = self._get_jwt_for_user(self.user.email, self.user_password)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+
+        # Submit a document file
+        uploaded = SimpleUploadedFile("passport.png", b"fakepngdata", content_type="image/png")
+        resp = self.client.post(
+            "/api/kyc-documents/",
+            {"document_type": "passport", "document_file": uploaded},
+            format="multipart",
+        )
+        self.assertEqual(resp.status_code, 201)
+        data = resp.json()
+        self.assertEqual(data["status"], "pending")
+
+        doc_id = data["id"]
+
+        # Admin lists pending documents
+        self.admin_client.force_authenticate(user=self.admin)
+        list_resp = self.admin_client.get("/api/admin/kyc-documents/?status=pending")
+        self.assertEqual(list_resp.status_code, 200)
+        items = list_resp.json()
+        self.assertTrue(any(str(item.get("id")) == str(doc_id) for item in items))
+
+        # Admin approves the document
+        approve_resp = self.admin_client.patch(
+            f"/api/admin/kyc-documents/{doc_id}/",
+            {"approval_action": "approve", "approval_notes": "Looks good"},
+            format="json",
+        )
+        self.assertEqual(approve_resp.status_code, 200)
+        self.assertEqual(approve_resp.json()["status"], "approved")
+
+        # Document should now show as approved when user lists their documents
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+        doc_resp = self.client.get(f"/api/kyc-documents/{doc_id}/")
+        self.assertEqual(doc_resp.status_code, 200)
+        self.assertEqual(doc_resp.json()["status"], "approved")
+
+    def test_rejection_flow(self):
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from users.models import KycApplication
+
+        access = self._get_jwt_for_user(self.user.email, self.user_password)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+
+        uploaded = SimpleUploadedFile("id.jpg", b"fakejpg", content_type="image/jpeg")
+        resp = self.client.post(
+            "/api/kyc-documents/",
+            {"document_type": "national_id", "document_file": uploaded},
+            format="multipart",
+        )
+        self.assertEqual(resp.status_code, 201)
+        doc_id = resp.json()["id"]
+
+        # Admin rejects document
+        self.admin_client.force_authenticate(user=self.admin)
+        rej_resp = self.admin_client.patch(
+            f"/api/admin/kyc-documents/{doc_id}/",
+            {"approval_action": "reject", "approval_notes": "Blurry image"},
+            format="json",
+        )
+        self.assertEqual(rej_resp.status_code, 200)
+        self.assertEqual(rej_resp.json()["status"], "rejected")
+
+        # Document should now show as rejected when user lists their documents
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+        doc_resp = self.client.get(f"/api/kyc-documents/{doc_id}/")
+        self.assertEqual(doc_resp.status_code, 200)
+        self.assertEqual(doc_resp.json()["status"], "rejected")
+        self.assertEqual(doc_resp.json()["rejection_reason"], "Blurry image")
+
+    def test_duplicate_submission(self):
+        """Uploading the same document type twice should update existing entry."""
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        # first submission
+        access = self._get_jwt_for_user(self.user.email, self.user_password)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+        first_file = SimpleUploadedFile("id1.png", b"first", content_type="image/png")
+        resp1 = self.client.post(
+            "/api/kyc-documents/",
+            {"document_type": "passport", "document_file": first_file},
+            format="multipart",
+        )
+        self.assertEqual(resp1.status_code, 201)
+        data1 = resp1.json()
+        self.assertEqual(data1["status"], "pending")
+        # second submission with same type
+        second_file = SimpleUploadedFile("id2.png", b"second", content_type="image/png")
+        resp2 = self.client.post(
+            "/api/kyc-documents/",
+            {"document_type": "passport", "document_file": second_file},
+            format="multipart",
+        )
+        self.assertEqual(resp2.status_code, 201)
+        data2 = resp2.json()
+        # should refer to same id and be pending
+        self.assertEqual(data1["id"], data2["id"])
+        self.assertEqual(data2["status"], "pending")
+
+    def test_invalid_file_type(self):
+        """Reject upload if the file content type is not allowed."""
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        access = self._get_jwt_for_user(self.user.email, self.user_password)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+        bad_file = SimpleUploadedFile("script.exe", b"executable", content_type="application/octet-stream")
+        resp = self.client.post(
+            "/api/kyc-documents/",
+            {"document_type": "passport", "document_file": bad_file},
+            format="multipart",
+        )
+        self.assertEqual(resp.status_code, 400)
+        # response may be a list of errors or dict; ensure invalid-type message present
+        body = resp.json()
+        if isinstance(body, dict):
+            self.assertTrue(any("Invalid file type" in str(v) for v in body.values()))
+        else:
+            self.assertTrue(any("Invalid file type" in str(item) for item in body))
+
+    def test_file_too_large(self):
+        """Reject upload if the file is larger than limit."""
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        access = self._get_jwt_for_user(self.user.email, self.user_password)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+        large_content = b"x" * (6 * 1024 * 1024)  # 6MB
+        large_file = SimpleUploadedFile("big.png", large_content, content_type="image/png")
+        resp = self.client.post(
+            "/api/kyc-documents/",
+            {"document_type": "passport", "document_file": large_file},
+            format="multipart",
+        )
+        self.assertEqual(resp.status_code, 400)
+        body = resp.json()
+        if isinstance(body, dict):
+            self.assertTrue(any("File too large" in str(v) for v in body.values()))
+        else:
+            self.assertTrue(any("File too large" in str(item) for item in body))
+
+    def test_unauthenticated_submit(self):
+        """Must be logged in to submit documents."""
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        file = SimpleUploadedFile("id.png", b"data", content_type="image/png")
+        resp = self.client.post(
+            "/api/kyc-documents/",
+            {"document_type": "passport", "document_file": file},
+            format="multipart",
+        )
+        self.assertEqual(resp.status_code, 401)
+
+    def test_regular_user_cannot_access_admin_endpoint(self):
+        """Normal users should not access admin document APIs."""
+        access = self._get_jwt_for_user(self.user.email, self.user_password)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+        resp = self.client.get("/api/admin/kyc-documents/")
+        self.assertIn(resp.status_code, (401, 403))
+
+    def test_user_cannot_see_other_users_documents(self):
+        """Users should only see their own documents."""
+        from django.contrib.auth import get_user_model
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        User = get_user_model()
+        # provide username since custom user extends AbstractUser
+        other = User.objects.create_user(
+            email="other@example.com", username="other", password="pass1234"
+        )
+        # create doc for other user
+        self.admin_client.force_authenticate(user=self.admin)
+        other_file = SimpleUploadedFile("o.png", b"o", content_type="image/png")
+        self.admin_client.post(
+            "/api/kyc-documents/",
+            {"document_type": "passport", "document_file": other_file},
+            format="multipart",
+        )
+        # login as original user and list
+        access = self._get_jwt_for_user(self.user.email, self.user_password)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+        list_resp = self.client.get("/api/kyc-documents/")
+        self.assertEqual(list_resp.status_code, 200)
+        items = list_resp.json()
+        self.assertTrue(all(item["user_email"] == self.user.email for item in items))

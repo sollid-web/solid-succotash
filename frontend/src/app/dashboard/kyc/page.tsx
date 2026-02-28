@@ -61,7 +61,7 @@ const DEFAULT_KYC_STEPS: KYCStep[] = [
     title: 'Enhanced Verification',
     description: 'Additional verification for higher limits (optional)',
     status: 'required',
-    required: false
+    required: true
   }
 ]
 
@@ -250,6 +250,7 @@ export default function KYCPage() {
       setUploadedFiles(prev => ({
         ...prev,
         [type]: {
+          file,
           name: file.name,
           type: file.type,
           size: file.size,
@@ -363,38 +364,44 @@ export default function KYCPage() {
     setSubmitMessage('')
 
     try {
-      const response = await apiFetch('/api/kyc/documents/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          government_id: uploadedFiles.governmentId,
-          proof_of_address: uploadedFiles.proofOfAddress
-        })
-      })
+      // backend expects one file per request; map our two types
+      const docs: Array<['governmentId' | 'proofOfAddress', string]> = [
+        ['governmentId', 'passport'],
+        ['proofOfAddress', 'national_id'],
+      ]
 
-      if (!response.ok) {
-        let detail = ''
-        if (response.status >= 500) {
-          detail = 'Server error accepting document metadata. Please retry shortly.'
-        } else {
-          detail = await extractErrorMessage(response)
+      for (const [key, docType] of docs) {
+        const fileData = uploadedFiles[key]
+        if (!fileData || !fileData.file) continue
+
+        const form = new FormData()
+        form.append('document_type', docType)
+        form.append('document_file', fileData.file)
+
+        const resp = await apiFetch('/api/kyc-documents/', {
+          method: 'POST',
+          body: form,
+        })
+
+        if (!resp.ok) {
+          let detail = ''
+          if (resp.status >= 500) {
+            detail = 'Server error uploading document. Please retry shortly.'
+          } else {
+            detail = await extractErrorMessage(resp)
+          }
+          throw new Error(detail)
         }
-        setMessageTone('error')
-        setSubmitMessage(detail)
-        return
       }
 
-      const data = await response.json()
-      setLatestApplication(data)
+      await fetchKycStatus()
       setMessageTone('success')
       setSubmitMessage('Documents uploaded successfully! Your KYC is under review.')
       setTimeout(() => setSubmitMessage(''), 3000)
     } catch (error) {
       console.error('KYC document upload error:', error)
       setMessageTone('error')
-      setSubmitMessage('Unable to upload document metadata. Please try again.')
+      setSubmitMessage((error as Error).message || 'Unable to upload documents. Please try again.')
     } finally {
       setIsSubmitting(false)
     }

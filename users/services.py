@@ -10,7 +10,7 @@ from django.utils import timezone
 from transactions.models import AdminAuditLog, AdminNotification
 from transactions.notifications import create_admin_notification
 
-from .models import KycApplication
+from .models import KycApplication, KycDocument
 from .notification_service import (
     notify_kyc_approved,
     notify_kyc_rejected,
@@ -175,6 +175,7 @@ def reject_kyc_application(
     # Admin email alert for rejected KYC
     try:
         from core.email_service import EmailService
+
         EmailService.send_admin_alert(
             subject="KYC Rejected",
             message=(
@@ -184,4 +185,118 @@ def reject_kyc_application(
         )
     except Exception:
         pass
+
     return application
+
+
+@transaction.atomic
+def submit_kyc_document(user, document_type: str, document_file) -> KycDocument:
+    """Create or update a KYC document submission"""
+    if not document_type or document_type not in dict(KycDocument.DOCUMENT_TYPE_CHOICES):
+        raise ValidationError(
+            f"Invalid document type. Must be one of: {', '.join([t[0] for t in KycDocument.DOCUMENT_TYPE_CHOICES])}"
+        )
+
+    if not document_file:
+        raise ValidationError("Document file is required.")
+
+    # validate file type and size early so we don't create application if bad
+    allowed_types = ["image/png", "image/jpeg", "application/pdf"]
+    content_type = getattr(document_file, "content_type", None)
+    if content_type not in allowed_types:
+        raise ValidationError({"document_file": ["Invalid file type."]})
+
+    max_size = 5 * 1024 * 1024  # 5MB
+    size = getattr(document_file, "size", 0)
+    if size > max_size:
+        raise ValidationError({"document_file": ["File too large. Maximum is 5MB."]})
+
+    # Get or create KycApplication for this user
+    kyc_application, _ = KycApplication.objects.select_for_update().get_or_create(user=user)
+
+    # Create or update document
+    document, created = KycDocument.objects.select_for_update().get_or_create(
+        user=user,
+        document_type=document_type,
+        defaults={
+            "kyc_application": kyc_application,
+            "document_file": document_file,
+            "status": "pending",
+        },
+    )
+
+    if not created:
+        # Update existing document with new file
+        document.document_file = document_file
+        document.status = "pending"
+        document.submitted_at = timezone.now()
+        document.reviewed_by = None
+        document.reviewed_at = None
+        document.rejection_reason = ""
+        document.save()
+
+    _create_admin_alert(kyc_application, f"{document.get_document_type_display()} document")
+    notify_kyc_submitted(user, kyc_application)
+
+    return document
+
+
+@transaction.atomic
+def approve_kyc_document(document: KycDocument, admin_user, notes: str = "") -> KycDocument:
+    """Approve a KYC document submission"""
+    _require_admin(admin_user)
+
+    if document.status != "pending":
+        raise ValidationError(f"Only pending documents can be approved. Current status: {document.status}")
+
+    document.approve(admin_user)
+
+    AdminAuditLog.objects.create(
+        admin=admin_user,
+        entity="kyc_document",
+        entity_id=str(document.id),
+        action="approve",
+        notes=notes,
+    )
+
+    # Notify user
+    try:
+        kyc_app = document.kyc_application or KycApplication.objects.filter(user=document.user).first()
+        if kyc_app:
+            notify_kyc_approved(document.user, kyc_app, notes)
+    except Exception:
+        pass
+
+    return document
+
+
+@transaction.atomic
+def reject_kyc_document(document: KycDocument, admin_user, reason: str) -> KycDocument:
+    """Reject a KYC document submission"""
+    _require_admin(admin_user)
+
+    if document.status != "pending":
+        raise ValidationError(f"Only pending documents can be rejected. Current status: {document.status}")
+
+    if not reason:
+        raise ValidationError("Rejection reason is required.")
+
+    document.reject(admin_user, reason)
+
+    AdminAuditLog.objects.create(
+        admin=admin_user,
+        entity="kyc_document",
+        entity_id=str(document.id),
+        action="reject",
+        notes=reason,
+    )
+
+    # Notify user
+    try:
+        kyc_app = document.kyc_application or KycApplication.objects.filter(user=document.user).first()
+        if kyc_app:
+            notify_kyc_rejected(document.user, kyc_app, reason)
+    except Exception:
+        pass
+
+    return document

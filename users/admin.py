@@ -2,6 +2,10 @@ from django import forms
 from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
+from django.utils.html import format_html
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.urls import path
 
 from transactions.services import approve_transaction, create_transaction
 
@@ -144,11 +148,97 @@ class UserWalletAdmin(admin.ModelAdmin):
 
 @admin.register(KycDocument)
 class KycDocumentAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "document_type", "status", "submitted_at", "reviewed_by")
-    readonly_fields = ("user", "document_type", "document_file", "submitted_at", "reviewed_at", "reviewed_by", "rejection_reason")
-    search_fields = ("user__email",)
-    list_filter = ("status", "document_type")
+    list_display = (
+        "id",
+        "user",
+        "document_type",
+        "colored_status",
+        "submitted_at",
+        "reviewed_by",
+        "action_buttons",
+    )
+    readonly_fields = (
+        "user",
+        "document_type",
+        "document_file",
+        "submitted_at",
+        "reviewed_at",
+        "reviewed_by",
+        "rejection_reason",
+    )
+    search_fields = ("user__email", "user__username")
+    list_filter = (
+        "status",
+        "document_type",
+        ("submitted_at", admin.DateFieldListFilter),
+    )
     ordering = ("-submitted_at",)
+    actions = ["approve_selected", "reject_selected"]
+
+    def colored_status(self, obj):
+        # color coding for status
+        colors = {"pending": "#F59E0B", "approved": "#10B981", "rejected": "#EF4444"}
+        color = colors.get(obj.status, "#000000")
+        return format_html("<span style='color: {}; font-weight:600;'>{}</span>", color, obj.get_status_display())
+
+    colored_status.short_description = "Status"
+    colored_status.admin_order_field = "status"
+
+    def action_buttons(self, obj):
+        if obj.status == "pending":
+            approve_url = reverse("admin:users_kycdocument_approve", args=[obj.pk])
+            reject_url = reverse("admin:users_kycdocument_reject", args=[obj.pk])
+            return format_html(
+                "<a class='button' href='{}'>Approve</a> &nbsp; <a class='button' href='{}'>Reject</a>",
+                approve_url,
+                reject_url,
+            )
+        return "-"
+
+    action_buttons.short_description = "Actions"
+    action_buttons.allow_tags = True
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom = [
+            path("<path:object_id>/approve/", self.admin_site.admin_view(self.process_approve), name="users_kycdocument_approve"),
+            path("<path:object_id>/reject/", self.admin_site.admin_view(self.process_reject), name="users_kycdocument_reject"),
+        ]
+        return custom + urls
+
+    def process_approve(self, request, object_id, *args, **kwargs):
+        obj = self.get_object(request, object_id)
+        if obj and obj.status == "pending":
+            from users.services import approve_kyc_document
+            approve_kyc_document(obj, request.user)
+            self.message_user(request, "Document approved", level=messages.SUCCESS)
+        return HttpResponseRedirect(request.META.get("HTTP_REFERER", "."))
+
+    def process_reject(self, request, object_id, *args, **kwargs):
+        obj = self.get_object(request, object_id)
+        if request.method == "POST":
+            reason = request.POST.get("reason", "")
+            from users.services import reject_kyc_document
+            reject_kyc_document(obj, request.user, reason)
+            self.message_user(request, "Document rejected", level=messages.SUCCESS)
+            return HttpResponseRedirect(request.META.get("HTTP_REFERER", "."))
+        context = {"object": obj}
+        return render(request, "admin/kyc_reject_form.html", context)
+
+    @admin.action(description="Approve selected documents")
+    def approve_selected(self, request, queryset):
+        from users.services import approve_kyc_document
+        for obj in queryset.filter(status="pending"):
+            approve_kyc_document(obj, request.user)
+        self.message_user(request, f"{queryset.count()} document(s) approved", level=messages.SUCCESS)
+
+    @admin.action(description="Reject selected documents")
+    def reject_selected(self, request, queryset):
+        # simple rejection without reason for bulk; admin can edit reason later
+        from users.services import reject_kyc_document
+        for obj in queryset.filter(status="pending"):
+            reject_kyc_document(obj, request.user, "")
+        self.message_user(request, f"{queryset.count()} document(s) rejected", level=messages.SUCCESS)
 
 
 @admin.register(KycApplication)

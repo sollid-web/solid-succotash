@@ -95,6 +95,8 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # Installed apps / middleware
 # ------------------------------------------------------------------
 INSTALLED_APPS = [
+    # jazzmin must come before contrib.admin so it can override templates
+    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -149,6 +151,59 @@ ALERT_THRESHOLDS = {
     ),
     # High daily ROI payout alert (single payout amount)
     "high_roi_payout": _int_env("ALERT_THRESHOLD_HIGH_ROI_PAYOUT", 5000),
+}
+
+# ------------------------------------------------------------------
+# Jazzmin (modern admin theme) configuration
+# ------------------------------------------------------------------
+# see https://django-jazzmin.readthedocs.io/ for options
+
+JAZZMIN_SETTINGS = {
+    "site_title": "WolvCapital Admin",
+    "site_header": "WolvCapital Admin",
+    "site_brand": "WolvCapital Admin",
+    # path under STATIC_URL
+    "site_logo": "images/logos/wolvcapital-logo.svg",
+    "login_logo": "images/logos/wolvcapital-logo.svg",
+    "welcome_sign": "Welcome to WolvCapital administration",
+    "search_model": "auth.User",
+    "show_sidebar": True,
+    "navigation_expanded": False,
+    # ordering of sections in sidebar
+    "order_with_respect_to": [
+        "auth",
+        "users",
+        "users.kycdocument",
+        "investments",
+        "referrals",
+        "core",
+    ],
+    # custom links inside app sections
+    "custom_links": {
+        "core": [
+            {"name": "Email Templates", "url": "/admin/core/emailtemplate/", "icon": "fas fa-envelope"},
+            {"name": "Support Requests", "url": "/admin/core/supportrequest/", "icon": "fas fa-life-ring"},
+        ],
+    },
+    "icons": {
+        "users": "fas fa-users",
+        "users.kycdocument": "fas fa-file-alt",
+        "investments": "fas fa-chart-line",
+        "referrals": "fas fa-user-friends",
+        "core": "fas fa-cogs",
+    },
+    # show pending badge for KYC documents
+    "badge": {
+        "users.kycdocument": {"filter": {"status": "pending"}},
+    },
+    "quick_links": [
+        {"name": "View site", "url": "/", "new_window": True, "icon": "fas fa-home"},
+        {"name": "Support inbox", "url": "/admin/core/supportrequest/", "icon": "fas fa-life-ring"},
+    ],
+    # show recent actions panel on dashboard
+    "dashboard": {
+        "show_recent_actions": True,
+    },
 }
 
 # ------------------------------------------------------------------

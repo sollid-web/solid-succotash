@@ -1,0 +1,32 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}KYC Approved - {{ brand_name }}{% endblock %}
+
+{% block content %}
+<h2 style="color: #10B981;">✅ KYC Application Approved</h2>
+
+<p>Dear {{ user.first_name|default:user.email }},</p>
+
+<p>We're happy to let you know that your KYC application has been approved! You now have full access to all features.</p>
+
+<table class="details-table">
+    <tr>
+        <td>Approved On:</td>
+        <td>{{ application.reviewed_at|date:"F d, Y \a\t g:i A" }}</td>
+    </tr>
+    {% if notes %}
+    <tr>
+        <td>Notes:</td>
+        <td>{{ notes }}</td>
+    </tr>
+    {% endif %}
+</table>
+
+<p>Thank you for providing the required information. If you have any questions, feel free to reach out via support.</p>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}/dashboard/" style="display: inline-block; padding: 14px 28px; background-color: #10B981; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px;">Go to Dashboard</a>
+</div>
+
+<p>Best regards,<br>The {{ brand_name }} Team</p>
+{% endblock %}

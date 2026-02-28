@@ -78,6 +78,21 @@ def submit_personal_info(user, personal_info: dict[str, Any]) -> KycApplication:
     if _should_notify_pending(previous_status, application.status):
         notify_kyc_submitted(user, application)
 
+    # Send email notification to user about KYC submission
+    try:
+        from core.email_service import EmailService
+
+        EmailService.send_templated_email(
+            template_name="kyc_submitted",
+            to_emails=getattr(user, "email", ""),
+            context={"user": user, "application": application, "stage": "personal_info"},
+            subject=f"KYC Submitted - {EmailService.BRAND_NAME}",
+            email_type="kyc_submitted",
+            user=user,
+        )
+    except Exception:
+        pass
+
     _create_admin_alert(application, "personal information")
     return application
 
@@ -103,6 +118,20 @@ def submit_document_info(user, document_info: dict[str, Any]) -> KycApplication:
     if _should_notify_pending(previous_status, application.status):
         notify_kyc_submitted(user, application)
 
+    # Send email notification to user about KYC document submission
+    try:
+        from core.email_service import EmailService
+
+        EmailService.send_templated_email(
+            template_name="kyc_submitted",
+            to_emails=getattr(user, "email", ""),
+            context={"user": user, "application": application, "stage": "documents"},
+            subject=f"KYC Documents Submitted - {EmailService.BRAND_NAME}",
+            email_type="kyc_submitted",
+            user=user,
+        )
+    except Exception:
+        pass
     _create_admin_alert(application, "identity documents")
     return application
 
@@ -131,6 +160,20 @@ def approve_kyc_application(application: KycApplication, admin_user, notes: str 
 
     _resolve_admin_notifications(application, admin_user)
     notify_kyc_approved(application.user, application, notes)
+    # Email user about application approval
+    try:
+        from core.email_service import EmailService
+
+        EmailService.send_templated_email(
+            template_name="kyc_approved",
+            to_emails=getattr(application.user, "email", ""),
+            context={"user": application.user, "application": application, "notes": notes},
+            subject=f"KYC Approved - {EmailService.BRAND_NAME}",
+            email_type="kyc_approved",
+            user=application.user,
+        )
+    except Exception:
+        pass
     # Admin email alert for approved KYC
     try:
         from core.email_service import EmailService
@@ -182,6 +225,25 @@ def reject_kyc_application(
                 f"KYC application {application.id} for user {application.user.email} was rejected. "
                 f"Reason: {application.rejection_reason or 'N/A'}"
             ),
+        )
+    except Exception:
+        pass
+
+    # Email user about application rejection
+    try:
+        from core.email_service import EmailService
+
+        EmailService.send_templated_email(
+            template_name="kyc_rejected",
+            to_emails=getattr(application.user, "email", ""),
+            context={
+                "user": application.user,
+                "application": application,
+                "reason": application.rejection_reason,
+            },
+            subject=f"KYC Rejected - {EmailService.BRAND_NAME}",
+            email_type="kyc_rejected",
+            user=application.user,
         )
     except Exception:
         pass
@@ -238,6 +300,21 @@ def submit_kyc_document(user, document_type: str, document_file) -> KycDocument:
     _create_admin_alert(kyc_application, f"{document.get_document_type_display()} document")
     notify_kyc_submitted(user, kyc_application)
 
+    # Email user to confirm document upload
+    try:
+        from core.email_service import EmailService
+
+        EmailService.send_templated_email(
+            template_name="kyc_document_submitted",
+            to_emails=getattr(user, "email", ""),
+            context={"user": user, "application": kyc_application, "document": document},
+            subject=f"KYC Document Received - {EmailService.BRAND_NAME}",
+            email_type="kyc_submitted",
+            user=user,
+        )
+    except Exception:
+        pass
+
     return document
 
 
@@ -264,6 +341,20 @@ def approve_kyc_document(document: KycDocument, admin_user, notes: str = "") -> 
         kyc_app = document.kyc_application or KycApplication.objects.filter(user=document.user).first()
         if kyc_app:
             notify_kyc_approved(document.user, kyc_app, notes)
+            # Email user about document approval
+            try:
+                from core.email_service import EmailService
+
+                EmailService.send_templated_email(
+                    template_name="kyc_document_approved",
+                    to_emails=getattr(document.user, "email", ""),
+                    context={"user": document.user, "application": kyc_app, "document": document, "notes": notes},
+                    subject=f"KYC Document Approved - {EmailService.BRAND_NAME}",
+                    email_type="kyc_approved",
+                    user=document.user,
+                )
+            except Exception:
+                pass
     except Exception:
         pass
 
@@ -296,6 +387,20 @@ def reject_kyc_document(document: KycDocument, admin_user, reason: str) -> KycDo
         kyc_app = document.kyc_application or KycApplication.objects.filter(user=document.user).first()
         if kyc_app:
             notify_kyc_rejected(document.user, kyc_app, reason)
+            # Email user about document rejection
+            try:
+                from core.email_service import EmailService
+
+                EmailService.send_templated_email(
+                    template_name="kyc_document_rejected",
+                    to_emails=getattr(document.user, "email", ""),
+                    context={"user": document.user, "application": kyc_app, "document": document, "reason": reason},
+                    subject=f"KYC Document Rejected - {EmailService.BRAND_NAME}",
+                    email_type="kyc_rejected",
+                    user=document.user,
+                )
+            except Exception:
+                pass
     except Exception:
         pass
 

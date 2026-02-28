@@ -1,0 +1,28 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}KYC Application Rejected - {{ brand_name }}{% endblock %}
+
+{% block content %}
+<h2 style="color: #EF4444;">❌ KYC Application Rejected</h2>
+
+<p>Dear {{ user.first_name|default:user.email }},</p>
+
+<p>Unfortunately, after reviewing your KYC application, we were unable to approve it at this time.</p>
+
+{% if notes %}
+<div class="warning-box">
+    <h3 style="color: #F59E0B;">Review Notes</h3>
+    <p>{{ notes }}</p>
+</div>
+{% endif %}
+
+<p>You may resubmit your information or upload new documents if necessary. Visit the KYC section of your dashboard to make changes.</p>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}/dashboard/kyc/" style="display: inline-block; padding: 14px 28px; background-color: #F59E0B; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px;">Manage KYC</a>
+</div>
+
+<p>We're here to help if you need assistance.</p>
+
+<p>Best regards,<br>The {{ brand_name }} Team</p>
+{% endblock %}

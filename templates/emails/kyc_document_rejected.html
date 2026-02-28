@@ -1,0 +1,28 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}KYC Document Rejected - {{ brand_name }}{% endblock %}
+
+{% block content %}
+<h2 style="color: #EF4444;">❌ Document Rejected</h2>
+
+<p>Dear {{ user.first_name|default:user.email }},</p>
+
+<p>We have reviewed your {{ document.get_document_type_display|lower }} and it unfortunately does not meet our requirements.</p>
+
+{% if notes %}
+<div class="warning-box">
+    <h3 style="color: #F59E0B;">Review Notes</h3>
+    <p>{{ notes }}</p>
+</div>
+{% endif %}
+
+<p>Please upload a new document or double-check that the current one is clear and valid. You can manage your documents from the KYC section of the dashboard.</p>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}/dashboard/kyc/" style="display: inline-block; padding: 14px 28px; background-color: #F59E0B; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px;">Manage KYC Documents</a>
+</div>
+
+<p>We're here to help if you need assistance.</p>
+
+<p>Best regards,<br>The {{ brand_name }} Team</p>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}KYC Document Approved - {{ brand_name }}{% endblock %}
+
+{% block content %}
+<h2 style="color: #10B981;">✅ Document Approved</h2>
+
+<p>Dear {{ user.first_name|default:user.email }},</p>
+
+<p>Your {{ document.get_document_type_display|lower }} has been reviewed and approved as part of your KYC application.</p>
+
+<table class="details-table">
+    <tr>
+        <td>Document Type:</td>
+        <td>{{ document.get_document_type_display }}</td>
+    </tr>
+    <tr>
+        <td>Approved On:</td>
+        <td>{{ document.reviewed_at|date:"F d, Y \a\t g:i A" }}</td>
+    </tr>
+    {% if notes %}
+    <tr>
+        <td>Notes:</td>
+        <td>{{ notes }}</td>
+    </tr>
+    {% endif %}
+</table>
+
+<p>If all required documents are approved, your full KYC application status may be updated shortly. You can check your KYC dashboard for the latest information.</p>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}/dashboard/kyc/" style="display: inline-block; padding: 14px 28px; background-color: #10B981; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px;">View KYC Status</a>
+</div>
+
+<p>Best regards,<br>The {{ brand_name }} Team</p>
+{% endblock %}

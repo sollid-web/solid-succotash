@@ -1,0 +1,29 @@
+KYC Document Submitted - {{ brand_name }}
+
+Dear {{ user.first_name|default:user.email }},
+
+Thank you for uploading your {{ document.get_document_type_display|lower }}. The document has been attached to your KYC application and is now under review.
+
+Document Uploaded
+Your document is in queue for our compliance team's review.
+
+Document Details:
+- Document Type: {{ document.get_document_type_display }}
+- Submitted: {{ document.submitted_at|date:"F d, Y \a\t g:i A"|default:"Today" }}
+
+We'll notify you once this document is approved or if more information is required.
+
+View KYC Status: {{ site_url }}/dashboard/kyc/
+
+Thank you for using {{ brand_name }}!
+
+Best regards,
+The {{ brand_name }} Team
+
+---
+© {{ current_year }} {{ brand_name }}. All rights reserved.
+Visit our website: {{ site_url }}
+{% if user %}
+This email was sent to {{ user.email }}. 
+Manage email preferences: {{ site_url }}/profile/email-preferences/
+{% endif %}

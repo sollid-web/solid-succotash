@@ -1,0 +1,25 @@
+KYC Application Rejected - {{ brand_name }}
+
+Dear {{ user.first_name|default:user.email }},
+
+Unfortunately, after reviewing your KYC application, we were unable to approve it at this time.
+
+{% if notes %}Review Notes: {{ notes }}
+{% endif %}
+
+You may resubmit your information or upload new documents if necessary. Visit the KYC section of your dashboard to make changes:
+
+Manage KYC: {{ site_url }}/dashboard/kyc/
+
+We're here to help if you need assistance.
+
+Best regards,
+The {{ brand_name }} Team
+
+---
+© {{ current_year }} {{ brand_name }}. All rights reserved.
+Visit our website: {{ site_url }}
+{% if user %}
+This email was sent to {{ user.email }}. 
+Manage email preferences: {{ site_url }}/profile/email-preferences/
+{% endif %}

@@ -1,0 +1,25 @@
+KYC Document Rejected - {{ brand_name }}
+
+Dear {{ user.first_name|default:user.email }},
+
+We have reviewed your {{ document.get_document_type_display|lower }} and it unfortunately does not meet our requirements.
+
+{% if notes %}Review Notes: {{ notes }}
+{% endif %}
+
+Please upload a new document or double-check that the current one is clear and valid. You can manage your documents from the KYC section of the dashboard.
+
+Manage KYC Documents: {{ site_url }}/dashboard/kyc/
+
+We're here to help if you need assistance.
+
+Best regards,
+The {{ brand_name }} Team
+
+---
+© {{ current_year }} {{ brand_name }}. All rights reserved.
+Visit our website: {{ site_url }}
+{% if user %}
+This email was sent to {{ user.email }}. 
+Manage email preferences: {{ site_url }}/profile/email-preferences/
+{% endif %}

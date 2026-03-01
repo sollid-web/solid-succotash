@@ -66,7 +66,7 @@ export default function CardsPage() {
             </svg>
             Back to Dashboard
           </Link>
-          <Link href="/dashboard/purchase-card" className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Purchase Card</Link>
+          <Link href="/dashboard/purchase-card" target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Purchase Card</Link>
         </div>
 
         <h1 className="text-3xl font-bold text-gray-900 mb-4">Your Virtual Cards</h1>

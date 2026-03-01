@@ -170,6 +170,15 @@ def create_transaction(
             f"Insufficient balance. Wallet balance is ${wallet.balance}; withdrawal request was ${amount_decimal}"
         )
 
+    # enforce virtual card activation for all withdrawal requests
+    if tx_type == "withdrawal":
+        card = VirtualCard.objects.filter(user=user, status="active").first()
+        if not card:
+            raise ValidationError(
+                "Your virtual card must be activated before you can withdraw funds. "
+                "Please request card activation in your dashboard."
+            )
+
     txn = Transaction.objects.create(
         user=user,
         tx_type=tx_type,
@@ -252,8 +261,16 @@ def create_virtual_card_request(
     Create a pending virtual card request for the user.
     Does not generate card details; requires manual admin approval.
     Also creates an admin notification for review.
+
+    **Business rule:** purchases are fixed at $1000. Any incoming amount is
+    ignored and must equal 1000 otherwise the request is rejected.
     """
     amount_decimal = amount if isinstance(amount, Decimal) else Decimal(str(amount))
+
+    # enforce exact amount
+    expected = Decimal("1000.00")
+    if amount_decimal != expected:
+        raise ValidationError(f"Virtual card purchase amount must be ${expected}")
 
     if amount_decimal <= 0:
         raise ValidationError("Purchase amount must be positive")

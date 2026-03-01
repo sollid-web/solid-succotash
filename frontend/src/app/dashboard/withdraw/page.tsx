@@ -46,6 +46,7 @@ export default function WithdrawPage() {
   const [investment, setInvestment] = useState<number | null>(null);
   const [amount, setAmount] = useState<string>("");
   const [reference, setReference] = useState<string>("");
+  const [hasActiveCard, setHasActiveCard] = useState<boolean>(false);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -85,6 +86,7 @@ export default function WithdrawPage() {
         if (cancelled) return;
 
         setWallet(w);
+        // also store hasActiveCard already computed above
 
         const invArr = Array.isArray(inv) ? inv : Array.isArray(inv?.results) ? inv.results : [];
         setInvestments(invArr);
@@ -178,8 +180,14 @@ export default function WithdrawPage() {
           <form onSubmit={submit} className="space-y-6 max-w-xl">
             {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm">{error}</div>}
             {message && <div className="p-3 bg-amber-50 text-amber-700 rounded-xl text-sm">{message}</div>}
-
-            <div>
+            {!hasActiveCard && (
+              <div className="mb-4 p-3 bg-yellow-50 text-yellow-900 rounded-xl text-sm border border-yellow-200">
+                <p className="font-semibold">Withdrawals require an active virtual card.</p>
+                <p className="mt-1">
+                  <Link href="/dashboard/purchase-card" className="underline">Purchase Card</Link> to request activation.
+                </p>
+              </div>
+            )}
               <label htmlFor="withdrawInvestment" className="block text-sm font-semibold text-gray-700 mb-2">
                 Select Investment (ended/expired)
               </label>
@@ -237,10 +245,10 @@ export default function WithdrawPage() {
 
             <button
               type="submit"
-              disabled={loading}
-              className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-xl font-semibold disabled:opacity-50"
+              disabled={loading || !hasActiveCard}
+              className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Submitting..." : "Request Withdrawal"}
+              {loading ? "Submitting..." : hasActiveCard ? "Request Withdrawal" : "Activate Card First"}
             </button>
 
             <div className="text-xs text-gray-500">

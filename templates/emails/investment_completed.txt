@@ -1,0 +1,11 @@
+Investment Completed
+
+Your investment in the {{ investment.plan.name }} plan has completed.
+
+Amount: ${{ investment.amount }}
+Duration: {{ investment.plan.duration_days }} days
+Daily ROI: {{ investment.plan.daily_roi }}%
+
+Total projected return: {{ investment.total_return }}.
+
+Thank you for investing with {{ brand_name }}.

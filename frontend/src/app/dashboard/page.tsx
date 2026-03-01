@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { apiFetch } from "@/lib/api";
+import VirtualCardWidget from "@/components/VirtualCardWidget";
 
 /**
  * Dashboard (simple + stable)
@@ -358,6 +359,9 @@ export default function DashboardPage() {
         </section>
 
         <section>
+                      <section className="mb-10">
+                        <VirtualCardWidget />
+                      </section>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xl font-semibold">Recent Activity</h2>
             <Link href="/dashboard/transactions" className="text-sm text-blue-600 hover:underline">

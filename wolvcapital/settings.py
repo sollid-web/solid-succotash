@@ -314,7 +314,7 @@ TESTING = any(
     for arg in ["::"]
 ) or any(c in " ".join(sys.argv) for c in ["test", "pytest"])
 
-    WHITENOISE_MANIFEST_STRICT = False
+WHITENOISE_MANIFEST_STRICT = False
 
 STORAGES = {
     "default": {

@@ -371,7 +371,15 @@ export default function KYCPage() {
       ]
 
       for (const [key, docType] of docs) {
-        const fileData = uploadedFiles[key]
+        // our `uploadedFiles` map is keyed by the input name, but the stored
+        // value is a small object that additionally carries the actual
+        // `File` instance.  the existing `DocumentMetadata` type doesn't
+        // include that field which leads to a type error during the build.
+        // rather than widening the type across the entire app (which isn't
+        // used anywhere else) we simply cast to `any` here so the compiler
+        // stops complaining while retaining runtime safety via the null
+        // check below.
+        const fileData: any = uploadedFiles[key]
         if (!fileData || !fileData.file) continue
 
         const form = new FormData()

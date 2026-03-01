@@ -373,7 +373,8 @@ export default function DashboardPage() {
           )}
         </section>
 
-        <div className="flex items-center justify-between mb-3">
+        <section className="mb-10">
+          <div className="flex items-center justify-between mb-3">
             <h2 className="text-xl font-semibold">Recent Activity</h2>
             <Link href="/dashboard/transactions" className="text-sm text-blue-600 hover:underline">
               View all
@@ -391,19 +392,23 @@ export default function DashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {loading ? (
+                {loading && (
                   <tr>
                     <td className="px-4 py-4" colSpan={4}>
                       Loading…
                     </td>
                   </tr>
-                ) : recentTransactions.length === 0 ? (
+                )}
+
+                {!loading && recentTransactions.length === 0 && (
                   <tr>
                     <td className="px-4 py-4 text-gray-600" colSpan={4}>
                       No transactions yet.
                     </td>
                   </tr>
-                ) : (
+                )}
+
+                {!loading && recentTransactions.length > 0 &&
                   recentTransactions.slice(0, 10).map((tx) => {
                     const d = safeDate(tx.created_at);
                     return (
@@ -414,8 +419,7 @@ export default function DashboardPage() {
                         <td className="px-4 py-3 text-right whitespace-nowrap">{money(Number(tx.amount) || 0)}</td>
                       </tr>
                     );
-                  })
-                )}
+                  })}
               </tbody>
             </table>
           </div>

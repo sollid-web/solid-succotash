@@ -78,15 +78,25 @@ export default function WithdrawPage() {
       setMessage("");
 
       try {
-        const [w, inv] = await Promise.all([
+        const [w, inv, cardsRes] = await Promise.all([
           apiGet<WalletResponse>("/api/wallet/"),
           apiGet<any>("/api/investments/my/"),
+          apiFetch("/api/virtual-cards/"),
         ]);
+
+        if (!cardsRes.ok) {
+          // ignore card errors, we just default to false
+          console.warn("failed to fetch cards", cardsRes.status);
+        } else {
+          const cardsData = await cardsRes.json();
+          const cardsArr = Array.isArray(cardsData) ? cardsData : [];
+          const active = cardsArr.some((c: any) => c.status === "active");
+          if (!cancelled) setHasActiveCard(active);
+        }
 
         if (cancelled) return;
 
         setWallet(w);
-        // also store hasActiveCard already computed above
 
         const invArr = Array.isArray(inv) ? inv : Array.isArray(inv?.results) ? inv.results : [];
         setInvestments(invArr);
@@ -188,6 +198,8 @@ export default function WithdrawPage() {
                 </p>
               </div>
             )}
+
+            <div>
               <label htmlFor="withdrawInvestment" className="block text-sm font-semibold text-gray-700 mb-2">
                 Select Investment (ended/expired)
               </label>

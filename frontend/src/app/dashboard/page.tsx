@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { apiFetch } from "@/lib/api";
-import VirtualCardWidget from "@/components/VirtualCardWidget";
 
 /**
  * Dashboard (simple + stable)
@@ -214,9 +213,20 @@ export default function DashboardPage() {
             </Link>
           </div>
 
-          {/* virtual card callout placed before statistics */}
-          <div className="mb-6">
-            <VirtualCardWidget />
+          {/* Quick link to virtual card page */}
+          <div className="mb-6 rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-6 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">💳 Virtual Card</h3>
+                <p className="text-sm text-gray-600 mt-1">Activate your digital card or view details</p>
+              </div>
+              <Link
+                href="/dashboard/my-card"
+                className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all"
+              >
+                View Card →
+              </Link>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -361,10 +371,6 @@ export default function DashboardPage() {
               })}
             </div>
           )}
-        </section>
-
-        <section className="mb-10">
-          <VirtualCardWidget />
         </section>
 
         <div className="flex items-center justify-between mb-3">

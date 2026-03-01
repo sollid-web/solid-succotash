@@ -214,6 +214,11 @@ export default function DashboardPage() {
             </Link>
           </div>
 
+          {/* virtual card callout placed before statistics */}
+          <div className="mb-6">
+            <VirtualCardWidget />
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <StatCard title="Total Invested" value={money(totalInvested)} subtitle="Active investments" emphasis />
             <StatCard title="Locked ROI" value={money(lockedRoi)} subtitle="Profit earned (locked)" emphasis />
@@ -358,11 +363,11 @@ export default function DashboardPage() {
           )}
         </section>
 
-        <section>
-                      <section className="mb-10">
-                        <VirtualCardWidget />
-                      </section>
-          <div className="flex items-center justify-between mb-3">
+        <section className="mb-10">
+          <VirtualCardWidget />
+        </section>
+
+        <div className="flex items-center justify-between mb-3">
             <h2 className="text-xl font-semibold">Recent Activity</h2>
             <Link href="/dashboard/transactions" className="text-sm text-blue-600 hover:underline">
               View all

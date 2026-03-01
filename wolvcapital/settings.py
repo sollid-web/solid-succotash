@@ -314,19 +314,14 @@ TESTING = any(
     for arg in ["::"]
 ) or any(c in " ".join(sys.argv) for c in ["test", "pytest"])
 
-WHITENOISE_MANIFEST_STRICT = False
 
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
     "staticfiles": {
-        "BACKEND": (
-            "django.contrib.staticfiles.storage.StaticFilesStorage"
-            if (DEBUG or TESTING)
-            else "whitenoise.storage.CompressedManifestStaticFilesStorage"
-        ),
-    },
+    "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+},
+
 }
 
 MEDIA_URL = "/media/"

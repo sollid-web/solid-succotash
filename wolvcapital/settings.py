@@ -314,7 +314,6 @@ TESTING = any(
     for arg in ["::"]
 ) or any(c in " ".join(sys.argv) for c in ["test", "pytest"])
 
-if not DEBUG and not TESTING:
     WHITENOISE_MANIFEST_STRICT = False
 
 STORAGES = {

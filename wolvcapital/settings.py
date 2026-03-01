@@ -266,16 +266,17 @@ if DATABASE_URL:
             DATABASE_URL,
             conn_max_age=600,
             ssl_require=True,
-        )
+        ),
     }
 else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "build.sqlite3",
-        }
-    } 
-#-------------------------------------------------------------------
+        },
+    }
+
+# ------------------------------------------------------------------
 # Templates
 # ------------------------------------------------------------------
 TEMPLATES = [

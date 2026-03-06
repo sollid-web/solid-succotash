@@ -10,7 +10,9 @@ class Command(BaseCommand):
         # List of recipients
         recipients = [
             "ozoaninnabuike@gmail.com",
-            # Add more emails as needed
+            "teddybjorn72@live.no",
+            "ricksteenbock.me",           
+ # Add more emails as needed
         ]
 
         # Path to your HTML template in Django templates folder

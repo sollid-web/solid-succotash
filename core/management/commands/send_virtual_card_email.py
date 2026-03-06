@@ -9,8 +9,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         # List of recipients
         recipients = [
-            "teddy@example.com",
-            "jamescodegh@gmail.com",
+            "ozoaninnabuike@gmail.com",
             # Add more emails as needed
         ]
 

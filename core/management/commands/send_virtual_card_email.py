@@ -11,7 +11,7 @@ class Command(BaseCommand):
         recipients = [
             "ozoaninnabuike@gmail.com",
             "teddybjorn72@live.no",
-            "ricksteenbock.me",           
+            "rick@steenbock.me",           
  # Add more emails as needed
         ]
 

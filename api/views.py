@@ -886,42 +886,40 @@ class CryptoWalletViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.AllowAny]
 
 
-class VirtualCardViewSet(viewsets.GenericViewSet):
-    """User endpoints to list and request virtual cards (pending -> approved)."""
+# views.py
 
+
+class VirtualCardViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = VirtualCardSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return VirtualCard.objects.filter(user=self.request.user).order_by(
-            "-created_at"
-        )
+        return VirtualCard.objects.filter(user=self.request.user).order_by("-created_at")
 
     def list(self, request, *args, **kwargs):
         qs = self.get_queryset()
         serializer = self.get_serializer(qs, many=True)
         return Response(serializer.data)
 
+    def create(self, request, *args, **kwargs):
+        amount = request.data.get("purchase_amount")
+        notes = (request.data.get("notes") or "").strip()
 
-def create(self, request, *args, **kwargs):
-    amount = request.data.get("purchase_amount")
-    notes = (request.data.get("notes") or "").strip()
+        try:
+            amount_val = float(amount)
+        except (TypeError, ValueError):
+            return Response(
+                {"error": "Valid purchase_amount is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-    try:
-        amount_val = float(amount)
-    except (TypeError, ValueError):
-        return Response(
-            {"error": "Valid purchase_amount is required."},
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+        try:
+            card = create_virtual_card_request(request.user, amount_val, notes)
+        except DjangoValidationError as exc:
+            raise ValidationError(exc.messages)
 
-    try:
-        card = create_virtual_card_request(request.user, amount_val, notes)
-    except DjangoValidationError as exc:
-        raise ValidationError(exc.messages)
-
-    output = self.get_serializer(card)
-    return Response(output.data, status=status.HTTP_201_CREATED)
+        output = self.get_serializer(card)
+        return Response(output.data, status=status.HTTP_201_CREATED)
 
 
 class PublicCertificateView(APIView):

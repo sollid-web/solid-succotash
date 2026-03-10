@@ -80,11 +80,15 @@ from .serializers import (
 class AgreementViewSet(viewsets.ReadOnlyModelViewSet):
     """Expose active legal agreements and handle user acceptance."""
 
-    queryset = Agreement.objects.filter(is_active=True).order_by("-effective_date", "-created_at")
+    queryset = Agreement.objects.filter(is_active=True).order_by(
+        "-effective_date", "-created_at"
+    )
     serializer_class = AgreementSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    @action(detail=True, methods=["post"], permission_classes=[permissions.IsAuthenticated])
+    @action(
+        detail=True, methods=["post"], permission_classes=[permissions.IsAuthenticated]
+    )
     def accept(self, request, pk=None):
         agreement = self.get_object()
         user = request.user
@@ -93,20 +97,32 @@ class AgreementViewSet(viewsets.ReadOnlyModelViewSet):
             user=user,
             agreement=agreement,
             defaults={
-                "ip_address": (request.META.get("HTTP_X_FORWARDED_FOR", "").split(",")[0] or request.META.get("REMOTE_ADDR")),
+                "ip_address": (
+                    request.META.get("HTTP_X_FORWARDED_FOR", "").split(",")[0]
+                    or request.META.get("REMOTE_ADDR")
+                ),
                 "user_agent": request.META.get("HTTP_USER_AGENT", ""),
-                "agreement_hash": hashlib.sha256(agreement.body.encode("utf-8")).hexdigest(),
+                "agreement_hash": hashlib.sha256(
+                    agreement.body.encode("utf-8")
+                ).hexdigest(),
                 "agreement_version": agreement.version,
             },
         )
 
         if not created and acceptance.agreement_hash == "":
-            acceptance.agreement_hash = hashlib.sha256(agreement.body.encode("utf-8")).hexdigest()
+            acceptance.agreement_hash = hashlib.sha256(
+                agreement.body.encode("utf-8")
+            ).hexdigest()
             acceptance.agreement_version = agreement.version
             acceptance.save(update_fields=["agreement_hash", "agreement_version"])
 
-        serializer = self.get_serializer(agreement, context={**self.get_serializer_context(), "request": request})
-        return Response(serializer.data, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
+        serializer = self.get_serializer(
+            agreement, context={**self.get_serializer_context(), "request": request}
+        )
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
+        )
 
 
 class InvestmentPlanViewSet(viewsets.ReadOnlyModelViewSet):
@@ -132,7 +148,9 @@ class UserInvestmentViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return UserInvestment.objects.select_related("plan").filter(user=self.request.user)
+        return UserInvestment.objects.select_related("plan").filter(
+            user=self.request.user
+        )
 
     @action(detail=False, methods=["get"], url_path="my")
     def my(self, request, *args, **kwargs):
@@ -143,7 +161,9 @@ class UserInvestmentViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        plan = get_object_or_404(InvestmentPlan, id=serializer.validated_data["plan_id"])
+        plan = get_object_or_404(
+            InvestmentPlan, id=serializer.validated_data["plan_id"]
+        )
         amount = serializer.validated_data["amount"]
 
         try:
@@ -153,7 +173,9 @@ class UserInvestmentViewSet(viewsets.ModelViewSet):
 
         output_serializer = self.get_serializer(investment)
         headers = self.get_success_headers(output_serializer.data)
-        return Response(output_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(
+            output_serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
@@ -192,7 +214,9 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
         output_serializer = self.get_serializer(txn)
         headers = self.get_success_headers(output_serializer.data)
-        return Response(output_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(
+            output_serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
 
 
 class UserDashboardAnalyticsView(APIView):
@@ -215,8 +239,12 @@ class UserDashboardAnalyticsView(APIView):
 
         # CRITICAL: Always filter by user - RLS policies are NOT configured in database
         # This ensures data isolation regardless of database vendor
-        tx_qs = Transaction.objects.filter(user=request.user, created_at__date__gte=start_date)
-        inv_qs = UserInvestment.objects.filter(user=request.user, created_at__date__gte=start_date)
+        tx_qs = Transaction.objects.filter(
+            user=request.user, created_at__date__gte=start_date
+        )
+        inv_qs = UserInvestment.objects.filter(
+            user=request.user, created_at__date__gte=start_date
+        )
 
         tx_by_day = {
             row["day"]: row["count"]
@@ -241,9 +269,7 @@ class UserDashboardAnalyticsView(APIView):
                 }
             )
 
-        tx_breakdown_rows = list(
-            tx_qs.values("tx_type").annotate(count=Count("id"))
-        )
+        tx_breakdown_rows = list(tx_qs.values("tx_type").annotate(count=Count("id")))
         deposits = 0
         withdrawals = 0
         for row in tx_breakdown_rows:
@@ -253,7 +279,9 @@ class UserDashboardAnalyticsView(APIView):
                 withdrawals = int(row["count"])
 
         inv_status_rows = list(
-            UserInvestment.objects.filter(user=request.user).values("status").annotate(count=Count("id"))
+            UserInvestment.objects.filter(user=request.user)
+            .values("status")
+            .annotate(count=Count("id"))
         )
         active = 0
         completed = 0
@@ -287,7 +315,19 @@ class UserDashboardAnalyticsView(APIView):
             recent_activity.append(
                 {
                     "date": created_at.isoformat() if created_at else "",
-                    "action_type": ("Deposit" if tx_type == "deposit" else "Withdrawal" if tx_type == "withdrawal" else "ROI" if tx_type == "profit" else (tx_type or "Transaction").title()),
+                    "action_type": (
+                        "Deposit"
+                        if tx_type == "deposit"
+                        else (
+                            "Withdrawal"
+                            if tx_type == "withdrawal"
+                            else (
+                                "ROI"
+                                if tx_type == "profit"
+                                else (tx_type or "Transaction").title()
+                            )
+                        )
+                    ),
                     "status": row["status"],
                 }
             )
@@ -322,10 +362,12 @@ class UserDashboardAnalyticsView(APIView):
                 "totals": {
                     "locked_roi_total": Transaction.objects.filter(
                         user=request.user, tx_type="profit", status="completed"
-                    ).aggregate(total=Sum("amount"))["total"] or 0,
+                    ).aggregate(total=Sum("amount"))["total"]
+                    or 0,
                     "total_invested": UserInvestment.objects.filter(
                         user=request.user, status__in=["active", "approved"]
-                    ).aggregate(total=Sum("amount"))["total"] or 0,
+                    ).aggregate(total=Sum("amount"))["total"]
+                    or 0,
                 },
                 "scoping": {
                     "db_vendor": connection.vendor,
@@ -352,7 +394,7 @@ class AdminTransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = AdminTransactionSerializer
     permission_classes = [IsPlatformAdmin]
-    
+
     def get_queryset(self):
         qs = super().get_queryset()
         tx_type = (self.request.query_params.get("tx_type") or "").strip()
@@ -420,14 +462,18 @@ class AdminUserInvestmentViewSet(viewsets.ModelViewSet):
         return super().update(request, *args, **kwargs)
 
 
-class UserSupportRequestViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class UserSupportRequestViewSet(
+    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+):
     """Authenticated user can view admin-updated support request status."""
 
     serializer_class = SupportRequestStatusSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return SupportRequest.objects.filter(user=self.request.user).order_by("-created_at")
+        return SupportRequest.objects.filter(user=self.request.user).order_by(
+            "-created_at"
+        )
 
 
 class SupportRequestView(APIView):
@@ -440,10 +486,15 @@ class SupportRequestView(APIView):
 
         message = (payload.get("message") or "").strip()
         if not message:
-            return Response({"error": "Support message cannot be empty."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Support message cannot be empty."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         topic = (payload.get("topic") or "").strip()
-        source_url = (payload.get("source_url") or request.META.get("HTTP_REFERER") or "").strip()
+        source_url = (
+            payload.get("source_url") or request.META.get("HTTP_REFERER") or ""
+        ).strip()
         contact_email = (payload.get("contact_email") or "").strip()
         full_name = (payload.get("full_name") or "").strip()
         current_user = request.user if request.user.is_authenticated else None
@@ -452,8 +503,12 @@ class SupportRequestView(APIView):
             if not contact_email:
                 contact_email = current_user.email or ""
             if not full_name:
-                profile_name = getattr(getattr(current_user, "profile", None), "full_name", "")
-                full_name = current_user.get_full_name() or profile_name or current_user.email
+                profile_name = getattr(
+                    getattr(current_user, "profile", None), "full_name", ""
+                )
+                full_name = (
+                    current_user.get_full_name() or profile_name or current_user.email
+                )
         elif not contact_email:
             return Response(
                 {"error": "Please include an email so our team can respond."},
@@ -495,12 +550,18 @@ class UserNotificationViewSet(viewsets.GenericViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return UserNotification.objects.filter(user=self.request.user).order_by("-created_at")
+        return UserNotification.objects.filter(user=self.request.user).order_by(
+            "-created_at"
+        )
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
 
-        unread_only = (request.query_params.get("unread_only") or "").lower() in {"1", "true", "yes"}
+        unread_only = (request.query_params.get("unread_only") or "").lower() in {
+            "1",
+            "true",
+            "yes",
+        }
         if unread_only:
             queryset = queryset.filter(is_read=False)
 
@@ -525,7 +586,9 @@ class UserNotificationViewSet(viewsets.GenericViewSet):
     def mark_read(self, request, pk=None):
         updated = service_mark_notification_read(pk, request.user)
         if updated is None:
-            return Response({"error": "Notification not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "Notification not found."}, status=status.HTTP_404_NOT_FOUND
+            )
 
         serializer = self.get_serializer(updated)
         return Response(serializer.data)
@@ -564,7 +627,9 @@ class EmailPreferencesView(APIView):
 
     def patch(self, request):
         profile = self._get_profile(request)
-        serializer = EmailPreferencesSerializer(profile, data=request.data, partial=True)
+        serializer = EmailPreferencesSerializer(
+            profile, data=request.data, partial=True
+        )
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -591,7 +656,7 @@ def login_view(request):
     if not email or not password:
         return Response(
             {"error": "Email and password are required."},
-            status=status.HTTP_400_BAD_REQUEST
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
     def _get_client_ip(req) -> str:
@@ -628,6 +693,7 @@ def login_view(request):
 
     # Early lookup to distinguish inactive from bad credentials
     from django.contrib.auth import get_user_model
+
     UserModel = get_user_model()
     existing = UserModel.objects.filter(email=normalized_email).first()
     if existing and not existing.is_active:
@@ -669,7 +735,10 @@ def login_view(request):
         )
     if not user.is_active:
         return Response(
-            {"error": "Account not verified. Please check your email for a verification link or resend it.", "inactive": True},
+            {
+                "error": "Account not verified. Please check your email for a verification link or resend it.",
+                "inactive": True,
+            },
             status=status.HTTP_401_UNAUTHORIZED,
         )
 
@@ -714,15 +783,17 @@ def current_user_view(request):
     user = request.user
     profile = getattr(user, "profile", None)
     email_verified = bool(getattr(profile, "email_verified", False))
-    return Response({
-        "id": user.id,
-        "email": user.email,
-        "first_name": user.first_name,
-        "last_name": user.last_name,
-        "is_staff": user.is_staff,
-        "is_superuser": user.is_superuser,
-        "email_verified": email_verified,
-    })
+    return Response(
+        {
+            "id": user.id,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "is_staff": user.is_staff,
+            "is_superuser": user.is_superuser,
+            "email_verified": email_verified,
+        }
+    )
 
 
 @api_view(["POST"])
@@ -735,7 +806,7 @@ def token_generate_view(request):
     if not email or not password:
         return Response(
             {"error": "Email and password are required."},
-            status=status.HTTP_400_BAD_REQUEST
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
     # Authenticate user
@@ -746,19 +817,20 @@ def token_generate_view(request):
         Token.objects.filter(user=user).delete()
         token = Token.objects.create(user=user)
 
-        return Response({
-            "token": token.key,
-            "user": {
-                "id": user.id,
-                "email": user.email,
-                "first_name": user.first_name,
-                "last_name": user.last_name,
+        return Response(
+            {
+                "token": token.key,
+                "user": {
+                    "id": user.id,
+                    "email": user.email,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                },
             }
-        })
+        )
     else:
         return Response(
-            {"error": "Invalid email or password."},
-            status=status.HTTP_401_UNAUTHORIZED
+            {"error": "Invalid email or password."}, status=status.HTTP_401_UNAUTHORIZED
         )
 
 
@@ -772,15 +844,17 @@ def token_refresh_view(request):
     Token.objects.filter(user=user).delete()
     token = Token.objects.create(user=user)
 
-    return Response({
-        "token": token.key,
-        "user": {
-            "id": user.id,
-            "email": user.email,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
+    return Response(
+        {
+            "token": token.key,
+            "user": {
+                "id": user.id,
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+            },
         }
-    })
+    )
 
 
 @api_view(["POST"])
@@ -790,16 +864,18 @@ def token_verify_view(request):
     user = request.user
     profile = getattr(user, "profile", None)
     email_verified = bool(getattr(profile, "email_verified", False))
-    return Response({
-        "valid": True,
-        "user": {
-            "id": user.id,
-            "email": user.email,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "email_verified": email_verified,
+    return Response(
+        {
+            "valid": True,
+            "user": {
+                "id": user.id,
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "email_verified": email_verified,
+            },
         }
-    })
+    )
 
 
 class CryptoWalletViewSet(viewsets.ReadOnlyModelViewSet):
@@ -817,30 +893,35 @@ class VirtualCardViewSet(viewsets.GenericViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return VirtualCard.objects.filter(user=self.request.user).order_by("-created_at")
+        return VirtualCard.objects.filter(user=self.request.user).order_by(
+            "-created_at"
+        )
 
     def list(self, request, *args, **kwargs):
         qs = self.get_queryset()
         serializer = self.get_serializer(qs, many=True)
         return Response(serializer.data)
 
-    def create(self, request, *args, **kwargs):
-        amount = request.data.get("purchase_amount")
-        notes = (request.data.get("notes") or "").strip()
 
-        try:
-            amount_val = float(amount)
-        except (TypeError, ValueError):
-            return Response({"error": "Valid purchase_amount is required."}, status=status.HTTP_400_BAD_REQUEST)
+def create(self, request, *args, **kwargs):
+    amount = request.data.get("purchase_amount")
+    notes = (request.data.get("notes") or "").strip()
 
-        try:
-            card = create_virtual_card_request(request.user, amount_val, notes)
-        except DjangoValidationError as exc:
-            raise ValidationError(exc.messages)
+    try:
+        amount_val = float(amount)
+    except (TypeError, ValueError):
+        return Response(
+            {"error": "Valid purchase_amount is required."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
-        output = self.get_serializer(card)
-        headers = self.get_success_headers(output.data)
-        return Response(output.data, status=status.HTTP_201_CREATED, headers=headers)
+    try:
+        card = create_virtual_card_request(request.user, amount_val, notes)
+    except DjangoValidationError as exc:
+        raise ValidationError(exc.messages)
+
+    output = self.get_serializer(card)
+    return Response(output.data, status=status.HTTP_201_CREATED)
 
 
 class PublicCertificateView(APIView):
@@ -856,12 +937,17 @@ class PublicCertificateView(APIView):
             .first()
         )
         if not cert:
-            return Response({"detail": "No active certificate configured."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"detail": "No active certificate configured."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
         serializer = PlatformCertificateSerializer(cert)
         return Response(serializer.data)
 
 
-class KycApplicationViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class KycApplicationViewSet(
+    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+):
     """User-facing endpoints for managing their KYC application."""
 
     serializer_class = KycApplicationSerializer
@@ -869,7 +955,9 @@ class KycApplicationViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, vi
 
     def get_queryset(self):
         KycApplicationModel = apps.get_model("users", "KycApplication")
-        return KycApplicationModel.objects.filter(user=self.request.user).order_by("-created_at")
+        return KycApplicationModel.objects.filter(user=self.request.user).order_by(
+            "-created_at"
+        )
 
     @action(detail=False, methods=["post"], url_path="personal-info")
     def submit_personal_info(self, request):
@@ -903,9 +991,9 @@ class AdminKycApplicationViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         KycApplicationModel = apps.get_model("users", "KycApplication")
-        return KycApplicationModel.objects.select_related("user", "reviewed_by").order_by(
-            "-created_at"
-        )
+        return KycApplicationModel.objects.select_related(
+            "user", "reviewed_by"
+        ).order_by("-created_at")
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
@@ -933,7 +1021,6 @@ class AdminKycApplicationViewSet(viewsets.ModelViewSet):
         return super().update(request, *args, **kwargs)
 
 
-
 class KycDocumentViewSet(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
@@ -946,7 +1033,9 @@ class KycDocumentViewSet(
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return KycDocument.objects.filter(user=self.request.user).order_by("-created_at")
+        return KycDocument.objects.filter(user=self.request.user).order_by(
+            "-created_at"
+        )
 
     def create(self, request, *args, **kwargs):
         """Submit or update a KYC document"""
@@ -1019,15 +1108,31 @@ def resend_verification(request):
     serializer.is_valid(raise_exception=True)
     email = serializer.validated_data["email"].strip()
     from django.contrib.auth import get_user_model
+
     UserModel = get_user_model()
     user = UserModel.objects.filter(email=email).first()
     if not user:
-        return Response({"success": True, "message": "If an account exists, a verification email has been sent."}, status=status.HTTP_200_OK)
+        return Response(
+            {
+                "success": True,
+                "message": "If an account exists, a verification email has been sent.",
+            },
+            status=status.HTTP_200_OK,
+        )
     if user.is_active:
-        return Response({"success": True, "message": "Account already verified. You can log in."}, status=status.HTTP_200_OK)
+        return Response(
+            {"success": True, "message": "Account already verified. You can log in."},
+            status=status.HTTP_200_OK,
+        )
     # Issue a fresh token and send email
     issue_verification_token(user)
-    return Response({"success": True, "message": "Verification email resent. Please check your inbox."}, status=status.HTTP_200_OK)
+    return Response(
+        {
+            "success": True,
+            "message": "Verification email resent. Please check your inbox.",
+        },
+        status=status.HTTP_200_OK,
+    )
 
 
 class SignupSerializer(serializers.Serializer):
@@ -1056,31 +1161,41 @@ def complete_signup(request):
     referral_code = serializer.validated_data.get("referral_code", "").strip()
 
     from django.contrib.auth import get_user_model
+
     User = get_user_model()
 
     # Prevent duplicate signup for existing users (active or inactive)
     existing = User.objects.filter(email=email).first()
     if existing:
         if not existing.is_active:
-            return Response({"error": "An account with this email already exists but is not yet verified. Please check your email for a verification link or resend it."}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({"error": "An account with this email already exists."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {
+                    "error": "An account with this email already exists but is not yet verified. Please check your email for a verification link or resend it."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        return Response(
+            {"error": "An account with this email already exists."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     # Create new inactive user
     try:
         user = User.objects.create_user(
-            username=email,
-            email=email,
-            password=password,
-            is_active=False
+            username=email, email=email, password=password, is_active=False
         )
     except Exception as e:
-        return Response({"error": f"Failed to create account: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"error": f"Failed to create account: {str(e)}"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     # Attach referral if a valid code was provided
     referral_attached = False
     if referral_code:
         try:
             from referrals.services import create_referral_if_code
+
             ref = create_referral_if_code(user, referral_code)
             if ref:
                 referral_attached = True
@@ -1089,7 +1204,10 @@ def complete_signup(request):
 
     # Send verification email
     issue_verification_token(user)
-    return Response({"status": "verification_sent", "referral_attached": referral_attached}, status=status.HTTP_200_OK)
+    return Response(
+        {"status": "verification_sent", "referral_attached": referral_attached},
+        status=status.HTTP_200_OK,
+    )
 
 
 @csrf_exempt
@@ -1104,6 +1222,7 @@ def verify_email_link(request):
     on a raw DRF response.
     """
     import logging
+
     logger = logging.getLogger(__name__)
 
     token = request.GET.get("token", "")
@@ -1116,8 +1235,12 @@ def verify_email_link(request):
         logger.info("Email verification attempt with no token provided")
 
     public_site_url = str(getattr(settings, "PUBLIC_SITE_URL", "") or "").rstrip("/")
-    login_redirect = f"{public_site_url}/accounts/login" if public_site_url else "/accounts/login"
-    signup_redirect = f"{public_site_url}/accounts/signup" if public_site_url else "/accounts/signup"
+    login_redirect = (
+        f"{public_site_url}/accounts/login" if public_site_url else "/accounts/login"
+    )
+    signup_redirect = (
+        f"{public_site_url}/accounts/signup" if public_site_url else "/accounts/signup"
+    )
 
     # If a user hits this endpoint directly in a browser, redirect them to the
     # frontend UI which will call this endpoint expecting JSON.
@@ -1129,7 +1252,9 @@ def verify_email_link(request):
 
         ui_base = public_site_url or ""
         if token:
-            return HttpResponseRedirect(f"{ui_base}/accounts/verify-email?token={token}")
+            return HttpResponseRedirect(
+                f"{ui_base}/accounts/verify-email?token={token}"
+            )
         return HttpResponseRedirect(f"{ui_base}/accounts/verify-email")
 
     if not token:
@@ -1140,7 +1265,7 @@ def verify_email_link(request):
                 "error": "Verification token is required.",
                 "redirect_url": signup_redirect,
             },
-            status=status.HTTP_400_BAD_REQUEST
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
     try:
@@ -1155,39 +1280,60 @@ def verify_email_link(request):
             if hasattr(user, "is_verified") and not getattr(user, "is_verified", False):
                 user.is_verified = True
                 updated = True
-            if hasattr(user, "email_verified") and not getattr(user, "email_verified", False):
+            if hasattr(user, "email_verified") and not getattr(
+                user, "email_verified", False
+            ):
                 user.email_verified = True
                 updated = True
             if updated:
                 user.save()
             logger.info(f"Email verification successful for user: {user.email}")
-            return Response({
-                "success": True,
-                "message": "Email verified successfully! You can now log in to your account.",
-                "redirect_url": f"{login_redirect}?verified=1",
-            }, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    "success": True,
+                    "message": "Email verified successfully! You can now log in to your account.",
+                    "redirect_url": f"{login_redirect}?verified=1",
+                },
+                status=status.HTTP_200_OK,
+            )
 
         # If token is used/expired, check if user is already active
         EmailVerification = apps.get_model("users", "EmailVerification")
-        ev_any = EmailVerification.objects.filter(token=token).order_by("-created_at").first()
+        ev_any = (
+            EmailVerification.objects.filter(token=token)
+            .order_by("-created_at")
+            .first()
+        )
         if ev_any and ev_any.user.is_active:
-            logger.info("Email verification token already used; user %s is active", ev_any.user.email)
-            return Response({
-                "success": True,
-                "message": "Your email is already verified. You can now log in.",
-                "redirect_url": login_redirect,
-            }, status=status.HTTP_200_OK)
+            logger.info(
+                "Email verification token already used; user %s is active",
+                ev_any.user.email,
+            )
+            return Response(
+                {
+                    "success": True,
+                    "message": "Your email is already verified. You can now log in.",
+                    "redirect_url": login_redirect,
+                },
+                status=status.HTTP_200_OK,
+            )
 
         logger.warning("Email verification failed: Invalid or expired token")
-        return Response({
-            "success": False,
-            "error": "Invalid or expired verification link. Please request a new one.",
-            "redirect_url": signup_redirect,
-        }, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {
+                "success": False,
+                "error": "Invalid or expired verification link. Please request a new one.",
+                "redirect_url": signup_redirect,
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
     except Exception:
         logger.error("Email verification error", exc_info=True)
-        return Response({
-            "success": False,
-            "error": "Verification failed. Please request a new link or contact support.",
-            "redirect_url": signup_redirect,
-        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(
+            {
+                "success": False,
+                "error": "Verification failed. Please request a new link or contact support.",
+                "redirect_url": signup_redirect,
+            },
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )

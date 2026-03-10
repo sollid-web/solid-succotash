@@ -7,18 +7,17 @@ import FlipCard from '@/components/FlipCard'
 
 interface Card {
   id: string
+  last4?: string
+  exp_month?: number
+  exp_year?: number
+  brand?: string
   card_type: string
-  card_number: string
-  cardholder_name: string
-  expiry_month: string
-  expiry_year: string
-  cvv: string
-  balance: string
-  purchase_amount: string
   status: 'pending' | 'approved' | 'rejected' | 'active' | 'suspended' | 'expired'
-  is_active: boolean
+  purchase_amount: string
+  balance?: string
+  current_balance?: string
   created_at: string
-  updated_at: string
+  activated_at?: string
 }
 
 export default function MyCardPage() {
@@ -30,7 +29,7 @@ export default function MyCardPage() {
     let active = true
     ;(async () => {
       try {
-        const res = await apiFetch('/api/virtual-cards/')
+        const res = await apiFetch('/api/cards/')
         if (!res.ok) throw new Error('Failed to load cards')
         const data = await res.json()
         const cards = Array.isArray(data) ? data : []
@@ -148,7 +147,7 @@ export default function MyCardPage() {
 
                   <div>
                     <div className="text-sm font-semibold text-gray-700 mb-2">Current Balance</div>
-                    <p className="text-lg font-bold text-green-700">${parseFloat(card.balance).toFixed(2)}</p>
+                    <p className="text-lg font-bold text-green-700">${parseFloat(card.current_balance || card.balance || '0').toFixed(2)}</p>
                   </div>
 
                   {card.card_number && (

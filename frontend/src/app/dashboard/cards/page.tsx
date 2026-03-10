@@ -29,7 +29,7 @@ export default function CardsPage() {
     let active = true
     ;(async () => {
       try {
-        const resp = await apiFetch('/api/virtual-cards/')
+        const resp = await apiFetch('/api/cards/')
         const data = await resp.json()
         if (!resp.ok) throw new Error(data?.detail || 'Failed to load cards')
         if (!active) return

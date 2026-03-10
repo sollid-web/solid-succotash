@@ -7,18 +7,16 @@ import { apiFetch } from '@/lib/api'
 
 type Card = {
   id: string
+  last4?: string
+  exp_month?: number
+  exp_year?: number
+  brand?: string
   card_type: string
-  card_number: string
-  cardholder_name: string
-  expiry_month: string
-  expiry_year: string
-  cvv: string
-  balance: string
-  purchase_amount: string
   status: 'pending' | 'approved' | 'rejected' | 'active' | 'suspended' | 'expired'
-  is_active: boolean
+  purchase_amount: string
+  current_balance?: string
   created_at: string
-  updated_at: string
+  activated_at?: string
 }
 
 export default function CardDetailPage() {
@@ -32,7 +30,7 @@ export default function CardDetailPage() {
     let active = true
     ;(async () => {
       try {
-        const resp = await apiFetch(`/api/virtual-cards/${id}/`)
+        const resp = await apiFetch(`/api/cards/${id}/`)
         const data = await resp.json()
         if (!resp.ok) throw new Error(data?.detail || 'Failed to load card')
         if (!active) return
@@ -76,17 +74,17 @@ export default function CardDetailPage() {
               <div className="text-sm text-gray-500">Purchase Amount</div>
               <div className="font-mono">${card.purchase_amount}</div>
             </div>
-            {card.card_number && (
+            {card.last4 && (
               <div className="p-3 bg-gray-50 rounded-lg">
                 <div className="text-sm text-gray-500">Card Number</div>
-                <div className="font-mono">****-****-****-{card.card_number.slice(-4)}</div>
+                <div className="font-mono">****-****-****-{card.last4}</div>
                 <div className="mt-2 text-sm text-gray-500">Expiry</div>
-                <div className="font-mono">{card.expiry_month}/{card.expiry_year} · CVV {card.cvv}</div>
+                <div className="font-mono">{card.exp_month}/{card.exp_year}</div>
               </div>
             )}
             <div className="flex items-center justify-between">
               <div className="text-sm text-gray-500">Balance</div>
-              <div className="font-semibold">${card.balance}</div>
+              <div className="font-semibold">${card.current_balance || card.balance || '0'}</div>
             </div>
             <div className="text-xs text-gray-500">ID: {card.id}</div>
           </div>

@@ -36,6 +36,8 @@ DEBUG = env.bool("DEBUG", default=True)
 SECRET_KEY = env("SECRET_KEY", default=None)
 
 # ── Stripe Keys ──────────────────────────────────
+# Secret key used server‑side (never expose in frontend)
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY', default='sk_test_xxx_REPLACE_ME_xxx')
 STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET', default='whsec_YOUR_SECRET')
 STRIPE_PUBLISHABLE_KEY = env('STRIPE_PUBLISHABLE_KEY', default='pk_test_YOUR_KEY')
 

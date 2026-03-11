@@ -20,3 +20,4 @@ tzdata==2025.2
 uvicorn
 whitenoise==6.6.0
 django-jazzmin==3.0.3
+stripe==6.0.0

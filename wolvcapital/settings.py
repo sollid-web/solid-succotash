@@ -35,6 +35,10 @@ Env.read_env()  # Load .env early
 DEBUG = env.bool("DEBUG", default=True)
 SECRET_KEY = env("SECRET_KEY", default=None)
 
+# ── Stripe Keys ──────────────────────────────────
+STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET', default='whsec_YOUR_SECRET')
+STRIPE_PUBLISHABLE_KEY = env('STRIPE_PUBLISHABLE_KEY', default='pk_test_YOUR_KEY')
+
 if DEBUG:
     # Allow fallback dev key for local development
     if not SECRET_KEY:
@@ -121,6 +125,7 @@ INSTALLED_APPS = [
     "transactions",
     "api",
     "referrals",
+    "cards",          # ← Add this new app
 ]
 
 # Alert thresholds for high-priority admin email notifications

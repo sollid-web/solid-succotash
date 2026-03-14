@@ -15,6 +15,7 @@ type Card = {
   status: 'pending' | 'approved' | 'rejected' | 'active' | 'suspended' | 'expired'
   purchase_amount: string
   current_balance?: string
+  balance?: string
   created_at: string
   activated_at?: string
 }

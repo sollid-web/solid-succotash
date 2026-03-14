@@ -15,6 +15,9 @@ interface Card {
   status: 'pending' | 'approved' | 'rejected' | 'active' | 'suspended' | 'expired'
   purchase_amount: string
   balance?: string
+  card_number?: string
+  expiry_month?: string
+  expiry_year?: string
   current_balance?: string
   created_at: string
   activated_at?: string

@@ -1,7 +1,8 @@
 ---
 title: "Common Mistakes New Investors Make on Crypto Platforms"
 description: "Frequent errors new investors encounter when using crypto investment platforms and how to avoid them."
-date: "2024-12-01"
+publishedAt: "2024-12-01"
+updatedAt: "2024-12-01"
 ---
 
 Entering the crypto investment space without adequate understanding often leads to avoidable mistakes.

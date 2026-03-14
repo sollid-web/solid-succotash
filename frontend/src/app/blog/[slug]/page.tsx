@@ -24,9 +24,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const post = await getPostBySlug(slug)
   if (!post) return {}
 
-  const url = `/blog/${post.slug}`
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, '') ?? 'https://wolvcapital.com'
+  const url = `${baseUrl}/blog/${post.slug}`
 
   const pageTitle = `${post.title} | WolvCapital Blog`
+
+  const openGraphImages = post.coverImage
+    ? [
+        {
+          url: post.coverImage,
+          alt: post.coverImageAlt || post.title,
+        },
+      ]
+    : undefined
 
   return {
     title: pageTitle,
@@ -40,11 +50,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       url,
       siteName: 'WolvCapital',
       type: 'article',
+      images: openGraphImages,
     },
     twitter: {
-      card: 'summary',
+      card: 'summary_large_image',
       title: pageTitle,
       description: post.description,
+      images: openGraphImages,
     },
   }
 }
@@ -55,6 +67,9 @@ export default async function BlogPostPage({ params }: PageProps) {
   if (!post) notFound()
 
   const publishedTime = new Date(post.publishedAt).toISOString()
+  const modifiedTime = new Date(post.updatedAt).toISOString()
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, '') ?? 'https://wolvcapital.com'
+  const canonicalUrl = `${baseUrl}/blog/${post.slug}`
 
   return (
     <div className="min-h-screen bg-white">
@@ -68,17 +83,80 @@ export default async function BlogPostPage({ params }: PageProps) {
             headline: post.title,
             description: post.description,
             datePublished: publishedTime,
-            dateModified: publishedTime,
+            dateModified: modifiedTime,
+            image: post.coverImage ?? undefined,
             author: [{ '@type': 'Organization', name: 'WolvCapital' }],
             publisher: {
               '@type': 'Organization',
               name: 'WolvCapital',
-              url: 'https://wolvcapital.com',
+              url: baseUrl,
             },
             mainEntityOfPage: {
               '@type': 'WebPage',
-              '@id': `https://wolvcapital.com/blog/${post.slug}`,
+              '@id': canonicalUrl,
             },
+          }),
+        }}
+      />
+
+      <Script
+        id="blog-breadcrumb-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: baseUrl,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Blog',
+                item: `${baseUrl}/blog`,
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: post.title,
+                item: canonicalUrl,
+              },
+            ],
+          }),
+        }}
+      />
+
+      <Script
+        id="blog-breadcrumb-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: baseUrl,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Blog',
+                item: `${baseUrl}/blog`,
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: post.title,
+                item: canonicalUrl,
+              },
+            ],
           }),
         }}
       />

@@ -1,7 +1,8 @@
 ---
 title: "How Market Volatility Affects Digital Asset Investments"
 description: "An overview of how cryptocurrency market fluctuations influence digital asset investment outcomes."
-date: "2024-12-10"
+publishedAt: "2024-12-10"
+updatedAt: "2024-12-10"
 ---
 
 Volatility is a defining characteristic of cryptocurrency markets. Price movements can be rapid and unpredictable.

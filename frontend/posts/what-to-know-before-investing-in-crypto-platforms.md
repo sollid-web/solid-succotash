@@ -1,7 +1,8 @@
 ---
 title: "What to Know Before Investing in Crypto Platforms"
 description: "Key factors every investor should understand before committing funds to a cryptocurrency investment platform."
-date: "2025-01-01"
+publishedAt: "2025-01-01"
+updatedAt: "2025-01-01"
 ---
 
 Cryptocurrency investment platforms are growing rapidly, but not all of them operate the same way. Before committing funds, investors should understand several critical factors that influence both risk and decision-making.

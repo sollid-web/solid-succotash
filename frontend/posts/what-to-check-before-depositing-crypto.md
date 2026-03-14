@@ -1,7 +1,8 @@
 ---
 title: "What to Look for Before Depositing Funds on a Crypto Platform"
 description: "Key considerations investors should review before making deposits on crypto investment platforms."
-date: "2025-01-05"
+publishedAt: "2025-01-05"
+updatedAt: "2025-01-05"
 ---
 
 Depositing funds is a significant decision. Preparation reduces unnecessary risk.

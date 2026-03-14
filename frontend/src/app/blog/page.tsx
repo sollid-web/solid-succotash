@@ -33,17 +33,17 @@ export default function BlogIndexPage() {
                 name: 'Home',
                 item: baseUrl,
               },
-              {n-Text Object: AudioObject, ImageObject, VideoObject
+              {
 
                 '@type': 'ListItem',
                 position: 2,
                 name: 'Blog',
                 item: canonicalUrl,
-              &rbrace;,
+              },
             ],
-          &rbrace;),
-        &rbrace;&rbrace;
-      /{'>'}
+          }),
+        }}
+      />
       <section className="pt-28 pb-10 bg-gray-50">
         <div className="container mx-auto px-4 lg:px-8 max-w-3xl">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0b2f6b]">

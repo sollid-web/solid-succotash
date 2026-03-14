@@ -100,63 +100,27 @@ export default async function BlogPostPage({ params }: PageProps) {
       />
 
       <Script
-        id="blog-breadcrumb-jsonld"
+        id="blog-article-jsonld"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
-            '@type': 'BreadcrumbList',
-            itemListElement: [
-              {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Home',
-                item: baseUrl,
-              },
-              {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'Blog',
-                item: `${baseUrl}/blog`,
-              },
-              {
-                '@type': 'ListItem',
-                position: 3,
-                name: post.title,
-                item: canonicalUrl,
-              },
-            ],
-          }),
-        }}
-      />
-
-      <Script
-        id="blog-breadcrumb-jsonld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'BreadcrumbList',
-            itemListElement: [
-              {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Home',
-                item: baseUrl,
-              },
-              {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'Blog',
-                item: `${baseUrl}/blog`,
-              },
-              {
-                '@type': 'ListItem',
-                position: 3,
-                name: post.title,
-                item: canonicalUrl,
-              },
-            ],
+            '@type': 'Article',
+            headline: post.title,
+            description: post.description,
+            datePublished: publishedTime,
+            dateModified: modifiedTime,
+            image: post.coverImage ?? undefined,
+            author: [{ '@type': 'Organization', name: 'WolvCapital' }],
+            publisher: {
+              '@type': 'Organization',
+              name: 'WolvCapital',
+              url: baseUrl,
+            },
+            mainEntityOfPage: {
+              '@type': 'WebPage',
+              '@id': canonicalUrl,
+            },
           }),
         }}
       />

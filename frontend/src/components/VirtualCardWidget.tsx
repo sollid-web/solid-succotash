@@ -17,7 +17,7 @@ export default function VirtualCardWidget() {
     let active = true
     ;(async () => {
       try {
-        const res = await fetch('/api/virtual-cards/', { credentials: 'include' })
+        const res = await fetch('/api/cards/', { credentials: 'include' })
         if (!res.ok) throw new Error('Failed to load cards')
         const data = await res.json()
         if (active) setCards(Array.isArray(data) ? data : [])

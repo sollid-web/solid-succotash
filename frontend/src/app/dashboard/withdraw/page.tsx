@@ -81,7 +81,7 @@ export default function WithdrawPage() {
         const [w, inv, cardsRes] = await Promise.all([
           apiGet<WalletResponse>("/api/wallet/"),
           apiGet<any>("/api/investments/my/"),
-          apiFetch("/api/virtual-cards/"),
+          apiFetch("/api/cards/"),
         ]);
 
         if (!cardsRes.ok) {

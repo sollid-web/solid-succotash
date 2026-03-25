@@ -79,8 +79,34 @@ const PLANS = [
 ] as const
 
 export default function PlansPage() {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, '') ?? 'https://wolvcapital.com'
+  const canonicalUrl = `${baseUrl}/plans`
+
   return (
     <div className="min-h-screen bg-white relative">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: baseUrl,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Plans',
+                item: canonicalUrl,
+              },
+            ],
+          }),
+        }}
+      />
       {/* spacer for fixed global NavBar */}
       <div className="h-20" />
 

@@ -1,7 +1,8 @@
 ---
 title: "How Transparency Builds Trust in Crypto Investment Platforms"
 description: "Why transparency and clear communication are essential in crypto investment environments."
-date: "2025-01-15"
+publishedAt: "2025-01-15"
+updatedAt: "2025-01-15"
 ---
 
 Trust is built through consistent transparency.

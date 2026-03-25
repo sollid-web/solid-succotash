@@ -1,11 +1,11 @@
-"use client"
-
-import React from "react"
 import Image from 'next/image'
 import Link from 'next/link'
 import { Shield, Lock, TrendingUp, Clock, CreditCard, HelpCircle, Users, FileCheck, Globe } from 'lucide-react'
 
 export default function FAQPage(): JSX.Element {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, '') ?? 'https://wolvcapital.com'
+  const canonicalUrl = `${baseUrl}/faq`
+
   const faqs = [
     {
       icon: <Users className="w-6 h-6" />,
@@ -98,6 +98,29 @@ export default function FAQPage(): JSX.Element {
 
   return (
     <div className="min-h-screen relative">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: baseUrl,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'FAQ',
+                item: canonicalUrl,
+              },
+            ],
+          }),
+        }}
+      />
       {/* Full-page background hero image */}
       <div className="fixed inset-0 z-0">
         <Image

@@ -17,5 +17,8 @@
         "MD036": false,
         "MD040": false,
         "MD022": false
+    },
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff"
     }
 }

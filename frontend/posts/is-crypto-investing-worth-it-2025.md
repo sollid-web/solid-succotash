@@ -1,7 +1,8 @@
 ---
 title: "Is Crypto Investing Still Worth Considering in 2025?"
 description: "An educational perspective on factors investors should consider when evaluating crypto investing in 2025."
-date: "2025-01-25"
+publishedAt: "2025-01-25"
+updatedAt: "2025-01-25"
 ---
 
 As digital assets mature, many investors ask whether crypto investing remains relevant.

@@ -1,7 +1,8 @@
 ---
 title: "How to Identify Legitimate Crypto Investment Platforms"
 description: "Key factors investors should evaluate to distinguish legitimate crypto investment platforms from unreliable ones."
-date: "2024-11-10"
+publishedAt: "2024-11-10"
+updatedAt: "2024-11-10"
 ---
 
 The growth of cryptocurrency investing has led to an increase in platforms offering various investment services. While innovation has expanded access, it has also made due diligence more important than ever.

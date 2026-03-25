@@ -75,7 +75,7 @@ export default function PurchaseCardPage() {
     setMessage('')
 
     try {
-      const res = await apiFetch('/api/virtual-cards/', {
+      const res = await apiFetch('/api/cards/request/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -1,7 +1,8 @@
 ---
 title: "Understanding Withdrawal Policies on Crypto Investment Platforms"
 description: "Why withdrawal terms and timelines are critical factors when evaluating crypto investment platforms."
-date: "2024-11-18"
+publishedAt: "2024-11-18"
+updatedAt: "2024-11-18"
 ---
 
 Withdrawal policies are one of the most important — and often overlooked — aspects of crypto investment platforms.

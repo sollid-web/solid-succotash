@@ -61,7 +61,8 @@ class EmailService:
         from_email: str | None = None,
         email_type: str | None = None,
         user: Any = None,
-    ) -> bool:
+        bcc: list | None = None,
+ ) -> bool:
         """Send an email using HTML and text templates."""
 
         if isinstance(to_emails, str):
@@ -120,7 +121,7 @@ class EmailService:
                 from_email=from_email,
                 to=recipients,
                 reply_to=["support@mail.wolvcapital.com"],
-            )
+            )   bcc=bcc,
             msg.attach_alternative(html_content, "text/html")
 
             is_urgent = email_type in [

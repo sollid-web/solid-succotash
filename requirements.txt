@@ -6,3 +6,4 @@ dj-database-url
 python-dotenv
 whitenoise
 django-environ
+django-jazzmin

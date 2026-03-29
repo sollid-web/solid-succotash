@@ -88,7 +88,7 @@ class EmailService:
             body=text_content or html_content,
             from_email=cls.DEFAULT_FROM_EMAIL,
             to=recipients,
-            bcc=actual_bcc,
+            bcc=bcc,
         )
         message.attach_alternative(html_content, "text/html")
 

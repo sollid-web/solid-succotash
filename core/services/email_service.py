@@ -43,7 +43,8 @@ class EmailService:
         to_emails: str | list[str],
         context: dict[str, Any] | None = None,
         subject: str | None = None,
-    ) -> bool:
+        bcc: list[str] | None = None,
+ ) -> bool:
         """Render templates and send a multi-part email (text + HTML)."""
         if isinstance(to_emails, str):
             recipients: list[str] = [to_emails]
@@ -87,7 +88,7 @@ class EmailService:
             body=text_content or html_content,
             from_email=cls.DEFAULT_FROM_EMAIL,
             to=recipients,
-            bcc=bcc,
+            bcc=actual_bcc,
         )
         message.attach_alternative(html_content, "text/html")
 

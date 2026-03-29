@@ -631,3 +631,7 @@ SESSION_SAVE_EVERY_REQUEST = (
 )  # Save session on every request to maintain login
 SESSION_COOKIE_NAME = "wolvcapital_sessionid"
 SESSION_COOKIE_DOMAIN = None  # Let Django handle this automatically
+# ... last existing line in settings.py ...
+
+TRUSTPILOT_BCC_ADDRESS = "wolvcapital.com+bebbe29c9e@invite.trustpilot.com"
+

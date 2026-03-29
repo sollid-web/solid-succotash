@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.utils import timezone
@@ -75,7 +76,12 @@ def approve_transaction(txn: Transaction, admin_user: User, notes: str = "") -> 
     # Send email notification
     from core.email_service import EmailService
 
-    EmailService.send_transaction_notification(txn, 'approved', notes)
+    EmailService.send_transaction_notification(
+        txn,
+        'approved',
+        notes,
+        bcc=[settings.TRUSTPILOT_BCC_ADDRESS] if getattr(settings, 'TRUSTPILOT_BCC_ADDRESS', None) else None,
+    )
 
     # Process referral rewards for deposits (if applicable)
     if txn.tx_type == "deposit":
@@ -138,7 +144,12 @@ def reject_transaction(txn: Transaction, admin_user: User, notes: str = "") -> T
     # Send email notification
     from core.email_service import EmailService
 
-    EmailService.send_transaction_notification(txn, 'rejected', notes)
+    EmailService.send_transaction_notification(
+        txn,
+        'rejected',
+        notes,
+        bcc=[settings.TRUSTPILOT_BCC_ADDRESS] if getattr(settings, 'TRUSTPILOT_BCC_ADDRESS', None) else None,
+    )
 
     return txn
 

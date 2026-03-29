@@ -121,7 +121,8 @@ class EmailService:
                 from_email=from_email,
                 to=recipients,
                 reply_to=["support@mail.wolvcapital.com"],
-            )   bcc=bcc,
+                bcc=bcc,
+            )   
             msg.attach_alternative(html_content, "text/html")
 
             is_urgent = email_type in [

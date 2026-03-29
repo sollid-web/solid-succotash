@@ -220,3 +220,11 @@ class EmailService:
             "dashboard_url": "/dashboard/",
         }
         return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)
+def send_email(subject, to, body=None, bcc=None, template_name=None, context=None):
+    return EmailService._send(
+        template_name=template_name or "system",
+        to_emails=to,
+        context=context or {"body": body},
+        subject=subject,
+        bcc=bcc,
+    )

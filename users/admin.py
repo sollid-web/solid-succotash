@@ -13,11 +13,14 @@ from .models import UserWallet, KycDocument, KycApplication
 
 User = get_user_model()
 
+from django.contrib.auth.forms import UserCreationForm
+
 # Register User WITHOUT profile inline
 
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
+    form = UserCreationForm
     list_display = ("id", "email", "is_active", "is_staff", "get_wallet_balance")
     search_fields = ("email",)
     ordering = ("id",)
@@ -25,9 +28,11 @@ class UserAdmin(admin.ModelAdmin):
 
     def get_wallet_balance(self, obj):
         try:
-            return f"${obj.wallet.balance}"
-        except Exception:
-            return "-"
+            wallet = obj.wallet
+            return f"${wallet.balance}"
+        except Exception as e:
+            # Wallet might not exist yet for newly created users
+            return "Pending"
 
     get_wallet_balance.short_description = "Wallet Balance"
 

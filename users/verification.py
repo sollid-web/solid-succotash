@@ -39,10 +39,9 @@ def issue_verification_token(user) -> EmailVerification:
     verify_url = f"{public_base_url}/accounts/verify-email?token={token}"
     send_email(
         template_name="email_verification",
-        to_emails=user.email,
+        to=user.email,
         context={"user": user, "verify_url": verify_url, "username": user.username or user.email},
         subject="Verify your WolvCapital email address",
-        from_email="WolvCapital <support@mail.wolvcapital.com>",
     )
     return ev
 

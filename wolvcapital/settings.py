@@ -127,7 +127,6 @@ INSTALLED_APPS = [
     "transactions",
     "api",
     "referrals",
-    "cards",          # ← Add this new app
 ]
 
 # Alert thresholds for high-priority admin email notifications

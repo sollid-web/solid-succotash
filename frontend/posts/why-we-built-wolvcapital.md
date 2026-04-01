@@ -1,175 +1,25 @@
-## title: Why We Built WolvCapital (and What We Refuse to Be)
-
-![Why We Built WolvCapital (and What We Refuse to Be)](https://api.junia.ai/storage/v1/object/sign/user-generated-images/1e27fe57-b102-45ac-a079-29968f223bb1/5c844b52-abf3-4598-9520-c899e051abed.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8yNzIwYzE2OC0wMDRlLTQzZDItYjk3Yi03ZWQzMDE4NzU5NzciLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ1c2VyLWdlbmVyYXRlZC1pbWFnZXMvMWUyN2ZlNTctYjEwMi00NWFjLWEwNzktMjk5NjhmMjIzYmIxLzVjODQ0YjUyLWFiZjMtNDU5OC05NTIwLWM4OTllMDUxYWJlZC5wbmciLCJpYXQiOjE3NzQ5OTQyOTQsImV4cCI6MjA5MDM1NDI5NH0.8r95YkH5AUDVl_3lFsxfNxa533FJNlYd3Wg68lpNCNQ)
-
-Most firms have a clean origin story. A pitch deck moment. A “we saw a gap in the market” sentence that sounds good on LinkedIn.
-
-Ours is less neat.
-
-WolvCapital started because we were tired of watching the same cycle play out, over and over, in slightly different suits.
-
-People work hard. They save. They try to invest. They get sold something they do not fully understand. Or they get nudged into risk that looks fine on a chart but feels like panic at 2:00 a.m. when the market drops. Or they get ignored until they have a “big enough” account.
-
-And on the other side, you have founders and operators building real businesses. Revenue. Payroll. Customers. Actual stress. They go looking for capital or guidance and run into gatekeeping, vague promises, fees that stack quietly, and advice that seems tailored to the advisor’s incentives more than the company’s reality.
-
-So we built WolvCapital to be a different kind of shop. Not louder. Not more “innovative” in the way that just means a new dashboard and the same old behavior.
-
-Different in the boring ways that actually matter.
-
-And to make that real, we had to get painfully clear about two things:
-
-1.  What we are here to build.
-2.  What we refuse to become.
-
-This is that line in the sand.
-
-## The real problem is not a lack of information
-
-Everyone has information now. Too much, honestly.
-
-You can pull up macro data, earnings calls, [portfolio allocation models](https://canadiancouchpotato.com/2014/02/18/ask-the-spud-is-there-an-optimal-portfolio/), [risk parity threads](https://www.bogleheads.org/forum/viewtopic.php?t=391295), and ten thousand confident opinions before you finish your coffee. It’s not 2005 anymore. Nobody is starving for access.
-
-What people are starving for is alignment.
-
-They want a capital partner, or an investing partner, who is not playing a hidden game. Who will say “I don’t know” when the answer is not knowable. Who will not dress up marketing as certainty.
-
-And they want process. Not vibes.
-
-A lot of the financial world is either:
-
-*   **High gloss, low substance.** Big promises, pretty charts, and a lot of storytelling that conveniently ignores drawdowns and second order effects.
-*   **High complexity, low clarity.** You get a maze of products and terminology that makes you feel dumb if you ask basic questions. Which is a red flag, by the way.
-*   **Or high pressure, low trust.** Limited time offer energy. “Now is the window.” “Smart money is moving.” That whole thing.
-
-We built WolvCapital because we think the best work happens when you can slow down, get honest, and make decisions you can live with.
-
-Even when they are not flashy.
-
-## We built WolvCapital for people who take the long way on purpose
-
-Some firms are built to maximize assets under management. Some are built to maximize deal flow. Some are built to maximize exits, headlines, and optionality.
-
-We are building WolvCapital for people who actually want to [compound](https://www.harbourvest.com/insights-news/insights/the-power-of-compounding-in-evergreen-solutions/) capital. Yes. But also judgment. Systems. Reputation. Relationships.
-
-Compounding is not sexy. It’s repetitive. It’s saying no. It’s avoiding mistakes that do not look like mistakes in the moment.
-
-And the people who do that well usually share a few traits:
-
-*   They care about [downside](https://gqg.com/downside-risk-management/), not just upside.
-*   They like clarity more than complexity.
-*   They do not want to be sold to.
-*   They want the reasoning, not just the conclusion.
-*   They value consistency, even if it looks boring next to a “moonshot” narrative.
-
-That’s our lane.
-
-Which also means we are not for everyone, and we’re fine with that. Actually, we need that to be true. A firm that tries to fit everyone tends to end up serving the loudest incentives.
-
-## The core idea: trust is built in the small decisions
-
-It’s easy to say “we put clients first.” Everyone says that. Every website on earth says that.
-
-The hard part is what you do when “client first” costs you something — time, revenue, ego, or a deal you wanted to be true.
-
-So we try to build the firm around small decisions that force good behavior:
-
-*   Explaining the tradeoffs, not just the recommendation.
-*   Documenting what we believe, and what would make us change our mind.
-*   Being upfront about uncertainty — especially uncertainty.
-*   Being willing to sit on our hands when the best move is to do nothing.
-*   Not hiding behind jargon when something is simply risky.
-
-You can tell a lot about a firm by what happens when the market gets ugly; or when a plan is not working; or when a client is anxious and just needs an honest conversation.
-
-That’s where the real product is.
-
-## What we refuse to be (this is the important part)
-
-A lot of companies define themselves by what they do — services, products, offerings.
-
-We think it’s just as important to define what you will *not* do because that’s where incentives creep in.
-
-So here it is: The list of stuff we refuse to be:
-
-### 1. We refuse to be a “performance story” shop
-
-If you want a firm that markets itself on cherry-picked returns, perfectly timed entries, and hindsight graphics making everything look obvious — we are not that.
-
-Markets are humbling; any honest investor knows that.
-
-Yes, performance matters — obviously — but once performance becomes your marketing engine you get behavior optimizing for optics instead of outcomes:
-
-*   Risk hidden in “smart” structures
-*   Leverage that looks fine until it isn’t
-*   Short-term decisions dressed up as strategy
-*   And lots of selective memory
-
-We’d rather be boring and right about risk than exciting and wrong about reality or upside.
-
-Not because we're pessimists but because we respect math and human psychology: surviving bad seasons lets you benefit from good ones.
-
-### A real relationship, not a funnel
-
-You can tell when you’re being funneled: scripted calls; manufactured urgency; paths always leading back to one product.
-
-We’re not building that.
-
-We want conversations feeling like real conversations — sometimes messy; sometimes slow; sometimes full of follow-ups — because that's how good decisions get made.
-
-## The kind of clients and partners we work best with
-
-This isn’t exactly a checklist but close:
-
-We work best with people who:
-
-*   Want plans they can stick with
-*   Can handle nuance and tradeoffs
-*   Value transparency even when it isn't comforting
-*   Care about building wealth deliberately like building a business
-*   Aren't looking for someone else to blame
-*   Are willing do unglamorous work staying consistent
-
-Honestly? We love working with builders — operators who've been through cycles — who know difference between movement & progress
-
-## A quick note on values because “values” gets abused
-
-Every company has values pages now; half written in ten minutes!
-
-Here are ours without poster-speak:
-
-*   **Say the quiet part out loud** — especially incentives & risk
-*   **Do not manufacture certainty** — if unknowable call it unknowable
-*   **Keep it explainable** — if we can't explain it we can't justify it
-*   **Respect downside** — downside ruins lives; take seriously
-*   **Act like trust is fragile** — because it really is
-
-We try living these; mess up sometimes; but correct fast & stay accountable
-
-## So why did we really build WolvCapital?
-
-Because we wanted a firm we'd trust with our own family’s money & reputations;
-
-A firm without shouting;
-
-One able look someone in eye & explain what we're doing + why + what could go wrong + how we'll respond;
-
-And one refusing ever becoming what it set out to fix
-
-That last part's key: businesses drift; incentives
+---
+title: "Why We Built WolvCapital (and What We Refuse to Be)"
+date: "2026-03-31"
+description: "WolvCapital's founding philosophy and core principles"
+author: "WolvCapital"
+---
 
 # Why We Built WolvCapital (and What We Refuse to Be)
 
-![Why We Built WolvCapital (and What We Refuse to Be)](https://api.junia.ai/storage/v1/object/sign/user-generated-images/1e27fe57-b102-45ac-a079-29968f223bb1/5c844b52-abf3-4598-9520-c899e051abed.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8yNzIwYzE2OC0wMDRlLTQzZDItYjk3Yi03ZWQzMDE4NzU5NzciLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ1c2VyLWdlbmVyYXRlZC1pbWFnZXMvMWUyN2ZlNTctYjEwMi00NWFjLWEwNzktMjk5NjhmMjIzYmIxLzVjODQ0YjUyLWFiZjMtNDU5OC05NTIwLWM4OTllMDUxYWJlZC5wbmciLCJpYXQiOjE3NzQ5OTQyOTQsImV4cCI6MjA5MDM1NDI5NH0.8r95YkH5AUDVl_3lFsxfNxa533FJNlYd3Wg68lpNCNQ)Most firms have a clean origin story. A pitch deck moment. A “we saw a gap in the market” sentence that sounds good on LinkedIn.
+![Why We Built WolvCapital (and What We Refuse to Be)](https://api.junia.ai/storage/v1/object/sign/user-generated-images/1e27fe57-b102-45ac-a079-29968f223bb1/5c844b52-abf3-4598-9520-c899e051abed.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8yNzIwYzE2OC0wMDRlLTQzZDItYjk3Yi03ZWQzMDE4NzU5NzciLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ1c2VyLWdlbmVyYXRlZC1pbWFnZXMvMWUyN2ZlNTctYjEwMi00NWFjLWEwNzktMjk5NjhmMjIzYmIxLzVjODQ0YjUyLWFiZjMtNDU5OC05NTIwLWM4OTllMDUxYWJlZC5wbmciLCJpYXQiOjE3NzQ5OTQyOTQsImV4cCI6MjA5MDM1NDI5NH0.8r95YkH5AUDVl_3lFsxfNxa533FJNlYd3Wg68lpNCNQ)
+
+Most firms have a clean origin story. A pitch deck moment. A "we saw a gap in the market" sentence that sounds good on LinkedIn.
 
 Ours is less neat.
 
 WolvCapital started because we were tired of watching the same cycle play out, over and over, in slightly different suits.
 
-People work hard. They save. They try to invest. They get sold something they do not fully understand. Or they get nudged into risk that looks fine on a chart but feels like panic at 2:00 a.m. when the market drops. Or they get ignored until they have a “big enough” account.
+People work hard. They save. They try to invest. They get sold something they do not fully understand. Or they get nudged into risk that looks fine on a chart but feels like panic at 2:00 a.m. when the market drops. Or they get ignored until they have a "big enough" account.
 
-And on the other side, you have founders and operators building real businesses. Revenue. Payroll. Customers. Actual stress. They go looking for capital or guidance and run into gatekeeping, vague promises, fees that stack quietly, and advice that seems tailored to the advisor’s incentives more than the company’s reality.
+And on the other side, you have founders and operators building real businesses. Revenue. Payroll. Customers. Actual stress. They go looking for capital or guidance and run into gatekeeping, vague promises, fees that stack quietly, and advice that seems tailored to the advisor's incentives more than the company's reality.
 
-So we built WolvCapital to be a different kind of shop. Not louder. Not more “innovative” in the way that just means a new dashboard and the same old behavior.
+So we built WolvCapital to be a different kind of shop. Not louder. Not more "innovative" in the way that just means a new dashboard and the same old behavior.
 
 Different in the boring ways that actually matter.
 
@@ -184,11 +34,11 @@ This is that line in the sand.
 
 Everyone has information now. Too much, honestly.
 
-You can pull up macro data, earnings calls, [portfolio allocation models](https://canadiancouchpotato.com/2014/02/18/ask-the-spud-is-there-an-optimal-portfolio/), [risk parity threads](https://www.bogleheads.org/forum/viewtopic.php?t=391295), and ten thousand confident opinions before you finish your coffee. It’s not 2005 anymore. Nobody is starving for access.
+You can pull up macro data, earnings calls, [portfolio allocation models](https://canadiancouchpotato.com/2014/02/18/ask-the-spud-is-there-an-optimal-portfolio/), [risk parity threads](https://www.bogleheads.org/forum/viewtopic.php?t=391295), and ten thousand confident opinions before you finish your coffee. It's not 2005 anymore. Nobody is starving for access.
 
 What people are starving for is alignment.
 
-They want a capital partner, or an investing partner, who is not playing a hidden game. Who will say “I don’t know” when the answer is not knowable. Who will not dress up marketing as certainty.
+They want a capital partner, or an investing partner, who is not playing a hidden game. Who will say "I don't know" when the answer is not knowable. Who will not dress up marketing as certainty.
 
 And they want process. Not vibes.
 
@@ -196,7 +46,7 @@ A lot of the financial world is either:
 
 *   **High gloss, low substance.** Big promises, pretty charts, and a lot of storytelling that conveniently ignores drawdowns and second order effects.
 *   **High complexity, low clarity.** You get a maze of products and terminology that makes you feel dumb if you ask basic questions. Which is a red flag, by the way.
-*   **Or high pressure, low trust.** Limited time offer energy. “Now is the window.” “Smart money is moving.” That whole thing.
+*   **Or high pressure, low trust.** Limited time offer energy. "Now is the window." "Smart money is moving." That whole thing.
 
 We built WolvCapital because we think the best work happens when you can slow down, get honest, and make decisions you can live with.
 
@@ -208,7 +58,7 @@ Some firms are built to maximize assets under management. Some are built to maxi
 
 We are building WolvCapital for people who actually want to [compound](https://www.harbourvest.com/insights-news/insights/the-power-of-compounding-in-evergreen-solutions/) capital. Yes. But also judgment. Systems. Reputation. Relationships.
 
-Compounding is not sexy. It’s repetitive. It’s saying no. It’s avoiding mistakes that do not look like mistakes in the moment.
+Compounding is not sexy. It's repetitive. It's saying no. It's avoiding mistakes that do not look like mistakes in the moment.
 
 And the people who do that well usually share a few traits:
 
@@ -216,17 +66,17 @@ And the people who do that well usually share a few traits:
 *   They like clarity more than complexity.
 *   They do not want to be sold to.
 *   They want the reasoning, not just the conclusion.
-*   They value consistency, even if it looks boring next to a “moonshot” narrative.
+*   They value consistency, even if it looks boring next to a "moonshot" narrative.
 
-That’s our lane.
+That's our lane.
 
-Which also means we are not for everyone, and we’re fine with that. Actually, we need that to be true. A firm that tries to fit everyone tends to end up serving the loudest incentives.
+Which also means we are not for everyone, and we're fine with that. Actually, we need that to be true. A firm that tries to fit everyone tends to end up serving the loudest incentives.
 
 ## The core idea: trust is built in the small decisions
 
-It’s easy to say “we put clients first.” Everyone says that. Every website on earth says that.
+It's easy to say "we put clients first." Everyone says that. Every website on earth says that.
 
-The hard part is what you do when “client first” costs you something. Time. Revenue. Ego. A deal you wanted to be true.
+The hard part is what you do when "client first" costs you something. Time. Revenue. Ego. A deal you wanted to be true.
 
 So we try to build the firm around small decisions that force good behavior.
 
@@ -240,17 +90,17 @@ Things like:
 
 You can tell a lot about a firm by what happens when the market gets ugly. Or when a plan is not working. Or when a client is anxious and just needs an honest conversation.
 
-That’s where the real product is.
+That's where the real product is.
 
 ## What we refuse to be (this is the important part)
 
 A lot of companies define themselves by what they do. Services, products, offerings.
 
-We think it’s just as important to define what you will not do, because that’s where incentives creep in.
+We think it's just as important to define what you will not do, because that's where incentives creep in.
 
 So here it is. The list. The stuff we refuse to be.
 
-### 1. We refuse to be a “performance story” shop
+### 1. We refuse to be a "performance story" shop
 
 If you want a firm that markets itself on cherry picked returns, perfectly timed entries, and hindsight graphics that make everything look obvious, we are not that.
 
@@ -258,10 +108,10 @@ Markets are humbling. Any honest investor knows that.
 
 Yes, performance matters. Obviously. But the moment performance becomes the marketing engine, you get behavior that optimizes for optics. Not outcomes.
 
-That’s when you see:
+That's when you see:
 
-*   risk hidden in “smart” structures
-*   leverage that looks fine until it isn’t
+*   risk hidden in "smart" structures
+*   leverage that looks fine until it isn't
 *   short term decisions dressed up as strategy
 *   and a lot of selective memory
 
@@ -269,9 +119,9 @@ We would rather be boring and right about risk than exciting and wrong about rea
 
 ### 2. We refuse to sell complexity as sophistication
 
-There’s a specific kind of financial theater where complexity is used to signal intelligence.
+There's a specific kind of financial theater where complexity is used to signal intelligence.
 
-Fancier product. More layers. More acronyms. More “strategies.” It makes people feel like they are doing something advanced.
+Fancier product. More layers. More acronyms. More "strategies." It makes people feel like they are doing something advanced.
 
 But most of the time, complexity is just… cost. Cost in fees, cost in liquidity, cost in transparency, cost in regret later.
 
@@ -285,7 +135,7 @@ And if a plan only works if everything goes right, it is not a plan. It is a hop
 
 This is where a lot of the industry quietly breaks.
 
-The incentive to gather assets. The incentive to churn. The incentive to recommend what pays the most. The incentive to keep someone invested even when “less invested” is the right answer for their life.
+The incentive to gather assets. The incentive to churn. The incentive to recommend what pays the most. The incentive to keep someone invested even when "less invested" is the right answer for their life.
 
 We are not interested in building a machine that extracts value while sounding helpful.
 
@@ -293,12 +143,12 @@ We want to build a firm that earns trust so slowly that it almost feels stubborn
 
 That means we have to be willing to say things like:
 
-*   “You don’t need us for this.”
-*   “This is not the right time.”
-*   “This risk does not match your actual situation.”
-*   “You’re trying to solve an [emotional problem with a financial move](https://ncua.gov/regulation-supervision/manuals-guides/federal-consumer-financial-protection-guide/compliance-management/unfair-deceptive-or-abusive-acts-or-practices-udaap).”
+*   "You don't need us for this."
+*   "This is not the right time."
+*   "This risk does not match your actual situation."
+*   "You're trying to solve an [emotional problem with a financial move](https://ncua.gov/regulation-supervision/manuals-guides/federal-consumer-financial-protection-guide/compliance-management/unfair-deceptive-or-abusive-acts-or-practices-udaap)."
 
-Not always fun to say. But it’s real.
+Not always fun to say. But it's real.
 
 ### 4. We refuse to be a brand built on noise
 
@@ -312,15 +162,15 @@ We are building WolvCapital to be useful when the feed is screaming.
 
 There is a quiet kind of confidence that comes from process. From knowing why you own what you own. From not needing to react to every headline.
 
-That’s the vibe, if we have to call it a vibe.
+That's the vibe, if we have to call it a vibe.
 
 However, we recognize that the digital platforms heavily influence news and journalistic content, as highlighted in this [ACCC commissioned report](https://www.accc.gov.au/system/files/ACCC+commissioned+report+-+The+impact+of+digital+platforms+on+news+and+journalistic+content,+Centre+for+Media+Transition+\(2\).pdf). This understanding further solidifies our commitment to maintaining our integrity and focus amidst the noise of sensationalism and urgency in financial media.
 
-### 5. We refuse to hide behind “that’s just the market”
+### 5. We refuse to hide behind "that's just the market"
 
 Markets do what they do. Fine.
 
-But “the market” is not an excuse for sloppy thinking, unclear risk, or misaligned expectations.
+But "the market" is not an excuse for sloppy thinking, unclear risk, or misaligned expectations.
 
 If we take risk, it should be intentional. Understood. Chosen.
 
@@ -330,27 +180,27 @@ If something goes against us, we should be able to explain whether it was:
 *   a known risk showing up
 *   or a genuine mistake in our assumptions
 
-That honesty is uncomfortable sometimes. But it’s the only way to improve.
+That honesty is uncomfortable sometimes. But it's the only way to improve.
 
 ### 6. We refuse to treat people like account sizes
 
-This one sounds obvious. It’s not.
+This one sounds obvious. It's not.
 
-A lot of people get ignored because they are not “big enough.” Or they get a shallow version of the service. Or they get pushed toward standardized solutions because it’s efficient.
+A lot of people get ignored because they are not "big enough." Or they get a shallow version of the service. Or they get pushed toward standardized solutions because it's efficient.
 
 We get it. Firms have economics. Time is real.
 
 But we are building WolvCapital around the idea that relationships come first, and that good relationships tend to compound into good business anyway.
 
-Also, people talk. And they remember how you treated them when it didn’t benefit you.
+Also, people talk. And they remember how you treated them when it didn't benefit you.
 
 ### 7. We refuse to pretend risk can be engineered away
 
 Some parts of finance sell the fantasy that with the right strategy, the right hedges, the right algorithm, you can basically remove pain.
 
-You can’t.
+You can't.
 
-You can manage risk. You can size it. You can diversify it. You can choose which risks you’re paid to take. You can avoid stupid risks.
+You can manage risk. You can size it. You can diversify it. You can choose which risks you're paid to take. You can avoid stupid risks.
 
 But you cannot remove uncertainty from a world built on uncertainty.
 
@@ -389,50 +239,50 @@ If you can survive the bad seasons, you get to benefit from the good ones.
 
 ### A real relationship, not a funnel
 
-You can tell when you’re being funneled. Scripted calls. Manufactured urgency. A path that always leads to the same product.
+You can tell when you're being funneled. Scripted calls. Manufactured urgency. A path that always leads to the same product.
 
-We’re not building that.
+We're not building that.
 
 We want conversations that feel like real conversations, sometimes messy, sometimes slow, sometimes full of follow up questions.
 
-Because that’s how good decisions get made.
+Because that's how good decisions get made.
 
 ## The kind of clients and partners we work best with
 
-This is not a checklist, but it’s close.
+This is not a checklist, but it's close.
 
 We work best with people who:
 
 *   want a plan they can stick to
 *   can handle nuance and tradeoffs
 *   value transparency even when it is not comforting
-*   care about building wealth the same way they’d build a business, patiently, deliberately
+*   care about building wealth the same way they'd build a business, patiently, deliberately
 *   are not looking for someone to blame
 *   are willing to do the unglamorous work of staying consistent
 
 And honestly, we love working with builders. Operators. People who have been through a few cycles. People who know the difference between movement and progress.
 
-## A quick note on values, because “values” gets abused
+## A quick note on values, because "values" gets abused
 
 Every company has a values page now. Half of them were written in ten minutes.
 
 Here are ours, without trying to make them sound like a poster.
 
 *   **Say the quiet part out loud.** Especially about incentives and risk.
-*   **Do not manufacture certainty.** If it’s unknowable, call it unknowable.
-*   **Keep it explainable.** If we can’t explain it, we can’t justify it.
+*   **Do not manufacture certainty.** If it's unknowable, call it unknowable.
+*   **Keep it explainable.** If we can't explain it, we can't justify it.
 *   **Respect the downside.** The downside ruins lives. Take it seriously.
 *   **Act like trust is fragile.** Because it is.
 
-That’s the list. We try to live it, and we’ll mess it up sometimes. But we will correct fast and stay accountable.
+That's the list. We try to live it, and we'll mess it up sometimes. But we will correct fast and stay accountable.
 
 ## So why did we really build WolvCapital?
 
-Because we wanted a firm we would trust with our own family’s money and our own reputations.
+Because we wanted a firm we would trust with our own family's money and our own reputations.
 
 A firm that does not need to shout.
 
-A firm that can look someone in the eye and explain what we’re doing, why we’re doing it, what could go wrong, and what we’ll do if it does.
+A firm that can look someone in the eye and explain what we're doing, why we're doing it, what could go wrong, and what we'll do if it does.
 
 And a firm that refuses to turn into the thing it originally set out to fix.
 
@@ -440,9 +290,9 @@ That last part is the whole game, by the way. Businesses drift. Incentives creep
 
 So this is us, writing it down early, while it still costs nothing to be principled. While it still feels sharp.
 
-If you’re looking for hype, we’re not it.
+If you're looking for hype, we're not it.
 
-If you’re looking for a steady partner, someone who takes risk seriously and communication seriously and long term outcomes seriously, then yeah. That’s what WolvCapital is here to be.
+If you're looking for a steady partner, someone who takes risk seriously and communication seriously and long term outcomes seriously, then yeah. That's what WolvCapital is here to be.
 
 And what we refuse to be is just as important.
 

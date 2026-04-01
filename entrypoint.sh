@@ -2,7 +2,7 @@
 set -euo pipefail
 
 PORT="${PORT:-8000}"
-WEB_CONCURRENCY="${WEB_CONCURRENCY:-2}"
+WEB_CONCURRENCY="${WEB_CONCURRENCY:-3}"
 GUNICORN_TIMEOUT="${GUNICORN_TIMEOUT:-120}"
 
 echo "🐳 Container starting (PORT=${PORT})"
@@ -46,6 +46,6 @@ fi
 
 echo "🚀 Starting Gunicorn..."
 exec gunicorn wolvcapital.wsgi:application \
-	--bind "0.0.0.0:${PORT}" \
-	--workers "${WEB_CONCURRENCY}" \
-	--timeout "${GUNICORN_TIMEOUT}"
+	--bind 0.0.0.0:${PORT} \
+	--workers ${WEB_CONCURRENCY} \
+	--timeout ${GUNICORN_TIMEOUT}

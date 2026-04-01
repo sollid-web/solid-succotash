@@ -21,4 +21,4 @@ ENV WEB_CONCURRENCY=2
 # Use shell form so environment variables EXPAND correctly
 # final part of Dockerfile
 # Run migrations, collectstatic, then start Gunicorn
-CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn wolvcapital.wsgi:application --bind 0.0.0.0:$PORT --log-level debug --access-logfile -"]
+CMD ["sh", "-c", "gunicorn wolvcapital.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --threads 2 --timeout 120 --log-level debug --access-logfile -"]

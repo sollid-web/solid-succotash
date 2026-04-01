@@ -49,22 +49,61 @@ else:
     # Fail fast in production if SECRET_KEY is missing
     if not SECRET_KEY:
         raise ValueError("SECRET_KEY environment variable required when DEBUG=False")
-ALLOWED_HOSTS = ["*"]
+
+# ------------------------------------------------------------------
+# ALLOWED_HOSTS & CSRF Configuration (Koyeb + Production)
+# ------------------------------------------------------------------
+# Get custom domain from environment (e.g., from Koyeb)
+KOYEB_PUBLIC_DOMAIN = env("KOYEB_PUBLIC_DOMAIN", default=None)
+CUSTOM_DOMAIN = env("CUSTOM_DOMAIN", default=None)
+
+# Dynamic ALLOWED_HOSTS for multi-environment deployment
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "*.railway.app",
+    "web-production-a4860.up.railway.app",
+    "*.koyeb.app",  # Accept any Koyeb subdomain
+    "wolvcapital.com",
+    "www.wolvcapital.com",
+]
+
+# Add custom domains if provided
+if KOYEB_PUBLIC_DOMAIN:
+    ALLOWED_HOSTS.append(KOYEB_PUBLIC_DOMAIN)
+if CUSTOM_DOMAIN:
+    ALLOWED_HOSTS.append(CUSTOM_DOMAIN)
+    ALLOWED_HOSTS.append(f"www.{CUSTOM_DOMAIN}")
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.railway.app",
-    "https://solid-succotash-production.up.railway.app",
+    "https://web-production-a4860.up.railway.app",
+    "https://*.koyeb.app",
     "https://wolvcapital.com",
     "https://www.wolvcapital.com",
 ]
+
+# Add custom domain CSRF origins if provided
+if KOYEB_PUBLIC_DOMAIN:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{KOYEB_PUBLIC_DOMAIN}")
+if CUSTOM_DOMAIN:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{CUSTOM_DOMAIN}")
+    CSRF_TRUSTED_ORIGINS.append(f"https://www.{CUSTOM_DOMAIN}")
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "https://wolvcapital.com",
     "https://www.wolvcapital.com",
-    "https://solid-succotash-production.up.railway.app",
+    "https://web-production-a4860.up.railway.app",
 ]
+
+# Add custom domain CORS origins if provided
+if KOYEB_PUBLIC_DOMAIN:
+    CORS_ALLOWED_ORIGINS.append(f"https://{KOYEB_PUBLIC_DOMAIN}")
+if CUSTOM_DOMAIN:
+    CORS_ALLOWED_ORIGINS.append(f"https://{CUSTOM_DOMAIN}")
+    CORS_ALLOWED_ORIGINS.append(f"https://www.{CUSTOM_DOMAIN}")
 
 CORS_ALLOWED_ORIGIN_REGEXES: list[str] = [
     r"^https://.*\\.vercel\\.app$",
@@ -98,8 +137,26 @@ USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # ------------------------------------------------------------------
-# Installed apps / middleware
+# Security Headers (Koyeb & Production)
 # ------------------------------------------------------------------
+# HTTPS enforcement in production
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = "DENY"
+    SECURE_CONTENT_SECURITY_POLICY = {
+        "default-src": ("'self'",),
+        "script-src": ("'self'", "'unsafe-inline'", "cdn.jsdelivr.net"),
+        "style-src": ("'self'", "'unsafe-inline'", "cdn.jsdelivr.net"),
+        "img-src": ("'self'", "data:", "https:"),
+        "font-src": ("'self'", "data:", "https:"),
+        "connect-src": ("'self'", "https://api.stripe.com"),
+    }
 INSTALLED_APPS = [
     # jazzmin must come before contrib.admin so it can override templates
     "jazzmin",
@@ -127,6 +184,7 @@ INSTALLED_APPS = [
     "transactions",
     "api",
     "referrals",
+    "cards",          # ← Add this new app
 ]
 
 # Alert thresholds for high-priority admin email notifications
@@ -266,21 +324,16 @@ MIDDLEWARE = [
 # ------------------------------------------------------------------
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
-if DATABASE_URL:
-    DATABASES = {
-        "default": dj_database_url.parse(
-            DATABASE_URL,
-            conn_max_age=600,
-            ssl_require=True,
-        ),
-    }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "build.sqlite3",
-        },
-    }
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL environment variable is required")
+
+DATABASES = {
+    "default": dj_database_url.config(
+        default=DATABASE_URL,
+        conn_max_age=600,
+        ssl_require=True,
+    ),
+}
 
 # ------------------------------------------------------------------
 # Templates

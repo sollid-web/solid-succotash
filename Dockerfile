@@ -15,4 +15,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn wolvcapital.wsgi:application --bind 0.0.0.0:${PORT}"]
+# Default concurrency if Railway/Vercel doesn't set it
+ENV WEB_CONCURRENCY=2
+
+# Use shell form so environment variables EXPAND correctly
+CMD sh -c "
+    python manage.py migrate --noinput &&
+    python manage.py collectstatic --noinput &&
+    gunicorn wolvcapital.wsgi:application \
+        --bind 0.0.0.0:${PORT:-8000} \
+        --workers ${WEB_CONCURRENCY}
+"

@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+8FROM python:3.11-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -19,5 +19,6 @@ COPY . .
 ENV WEB_CONCURRENCY=2
 
 # Use shell form so environment variables EXPAND correctly
-CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn wolvcapital.wsgi:application --bind 0.0.0.0:$PORT"]
-gunicorn wolvcapital.wsgi:application --bind 0.0.0.0:$PORT --log-level debug --access-logfile -
+# final part of Dockerfile
+# Run migrations, collectstatic, then start Gunicorn
+CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn wolvcapital.wsgi:application --bind 0.0.0.0:$PORT --log-level debug --access-logfile -"]

@@ -17,7 +17,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Default concurrency if Railway/Vercel doesn't set it
-ENV WEB_CONCURRENCY=2
 
 # Use shell form so environment variables EXPAND correctly
 # final part of Dockerfile

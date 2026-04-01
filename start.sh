@@ -19,7 +19,7 @@ if env | grep -q '^RAILWAY_'; then
     echo "🚀 Starting Gunicorn server on port $PORT..."
     exec python -m gunicorn wolvcapital.wsgi:application \
         --bind 0.0.0.0:${PORT:-8000} \
-        --workers ${WEB_CONCURRENCY:-2} \
+        --workers 3 \
         --timeout 120 \
         --keep-alive 5 \
         --limit-request-line 8190 \

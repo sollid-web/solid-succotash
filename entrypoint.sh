@@ -2,7 +2,7 @@
 set -euo pipefail
 
 PORT="${PORT:-8000}"
-WEB_CONCURRENCY="${WEB_CONCURRENCY:-3}"
+WEB_CONCURRENCY="2"
 GUNICORN_TIMEOUT="${GUNICORN_TIMEOUT:-120}"
 
 echo "🐳 Container starting (PORT=${PORT})"

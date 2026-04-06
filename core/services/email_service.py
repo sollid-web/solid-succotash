@@ -58,6 +58,10 @@ class EmailService:
         ctx: dict[str, Any] = context.copy() if context else {}
         ctx.setdefault("brand_name", cls.BRAND_NAME)
         ctx.setdefault("support_email", getattr(settings, "SUPPORT_EMAIL", None))
+        ctx.setdefault(
+            "site_url",
+            getattr(settings, "PUBLIC_SITE_URL", getattr(settings, "SITE_URL", "https://wolvcapital.com")),
+        )
         ctx.setdefault("current_timestamp", timezone.now())
 
         html_template = f"emails/{template_name}.html"
@@ -193,6 +197,27 @@ class EmailService:
             "user": user,
             "investment": investment,
             "admin_notes": admin_notes,
+            "dashboard_url": "/dashboard/",
+        }
+        return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)
+
+    @classmethod
+    def send_roi_payout_notification(
+        cls,
+        user: Any,
+        amount: Any,
+        investment: Any,
+        payout_date: Any,
+    ) -> bool:
+        """Notify user of daily ROI payout."""
+        template = "roi_payout"
+        subject = f"ROI Payout Received - {cls.BRAND_NAME}"
+
+        context = {
+            "user": user,
+            "amount": amount,
+            "investment": investment,
+            "payout_date": payout_date,
             "dashboard_url": "/dashboard/",
         }
         return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)

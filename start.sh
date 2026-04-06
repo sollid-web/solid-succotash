@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# WolvCapital Render.com Startup Script
-echo "🚀 Starting WolvCapital on Render.com..."
+# WolvCapital startup script for Render and Railway
+echo "🚀 Starting WolvCapital..."
 
 # Railway healthchecks time out quickly (see railway.json healthcheckTimeout).
 # On Railway, prefer starting Gunicorn immediately so /healthz/ can pass,

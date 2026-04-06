@@ -6,17 +6,14 @@ import logging
 from typing import Any
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils import timezone
 
 logger = logging.getLogger(__name__)
-UserModel: Any = get_user_model()
-
 
 class EmailService:
-    """High-level email helper for system, transaction and investment emails."""
+    """High-level email helper for system, transaction, and investment emails."""
 
     BRAND_NAME: str = getattr(settings, "BRAND_NAME", "WolvCapital")
     DEFAULT_FROM_EMAIL: str = getattr(
@@ -36,6 +33,13 @@ class EmailService:
         "TEST": "test",
     }
 
+    # --- Deferred user model ---
+    @classmethod
+    def get_user_model(cls):
+        from django.contrib.auth import get_user_model
+        return get_user_model()
+
+    # --- Internal send method ---
     @classmethod
     def _send(
         cls,
@@ -44,8 +48,7 @@ class EmailService:
         context: dict[str, Any] | None = None,
         subject: str | None = None,
         bcc: list[str] | None = None,
- ) -> bool:
-        """Render templates and send a multi-part email (text + HTML)."""
+    ) -> bool:
         if isinstance(to_emails, str):
             recipients: list[str] = [to_emails]
         else:
@@ -76,7 +79,6 @@ class EmailService:
         try:
             text_content: str = render_to_string(text_template, ctx)
         except Exception:
-            # text version is optional; fall back to HTML-only if missing
             logger.info("Text template emails/%s.txt not found or failed to render", template_name)
             text_content = ""
 
@@ -112,11 +114,9 @@ class EmailService:
             )
             return False
 
-    # --- Public helpers -------------------------------------------------
-
+    # --- Public helpers ---
     @classmethod
     def send_test_email(cls, to_email: str) -> bool:
-        """Lightweight connectivity test."""
         context = {
             "test_timestamp": timezone.now(),
             "brand_name": cls.BRAND_NAME,
@@ -139,13 +139,7 @@ class EmailService:
         subject: str | None = None,
         bcc: list[str] | None = None,
     ) -> bool:
-        return cls._send(
-            template_name,
-            to_emails,
-            context=context,
-            subject=subject,
-            bcc=bcc,
-        )
+        return cls._send(template_name, to_emails, context=context, subject=subject, bcc=bcc)
 
     @classmethod
     def send_transaction_notification(
@@ -155,7 +149,6 @@ class EmailService:
         admin_notes: str | None = None,
         bcc: list[str] | None = None,
     ) -> bool:
-        """Notify user when a transaction is created / approved / rejected."""
         user = getattr(transaction, "user", None)
         status_normalized = (status or "").lower()
 
@@ -178,13 +171,7 @@ class EmailService:
             "admin_notes": admin_notes,
             "dashboard_url": "/dashboard/",
         }
-        return cls._send(
-            template,
-            getattr(user, "email", ""),
-            context=context,
-            subject=subject,
-            bcc=bcc,
-        )
+        return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)
 
     @classmethod
     def send_investment_notification(
@@ -193,7 +180,6 @@ class EmailService:
         status: str,
         admin_notes: str | None = None,
     ) -> bool:
-        """Notify user when an investment is created / approved / rejected / completed."""
         user = getattr(investment, "user", None)
         status_normalized = (status or "").lower()
 
@@ -220,6 +206,7 @@ class EmailService:
             "dashboard_url": "/dashboard/",
         }
         return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)
+
 
     @classmethod
     def send_checkout_completion_email(
@@ -262,6 +249,10 @@ class EmailService:
             "dashboard_url": "/dashboard/",
         }
         return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)
+
+
+
+# Optional utility function
 
 def send_email(subject, to, body=None, bcc=None, template_name=None, context=None):
     return EmailService._send(

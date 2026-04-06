@@ -1,0 +1,591 @@
+Metadata-Version: 2.1
+Name: mutatest
+Version: 3.1.0
+Summary: Python mutation testing: test your tests!
+Home-page: https://github.com/EvanKepner/mutatest
+Author: Evan Kepner
+Author-email: EvanKepner@users.noreply.github.com
+Maintainer: Evan Kepner
+License: MIT
+Project-URL: Documentation, https://mutatest.readthedocs.io/
+Project-URL: Bug Tracker, https://github.com/EvanKepner/mutatest/issues
+Project-URL: Source Code, https://github.com/EvanKepner/mutatest
+Keywords: mutatest,mutation,testing,test,mutant,mutate,pytest
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: English
+Classifier: Environment :: Console
+Classifier: Framework :: Pytest
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Topic :: Utilities
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Software Development :: Quality Assurance
+Classifier: Topic :: Software Development :: Testing
+Classifier: Topic :: Software Development :: Testing :: Unit
+Requires-Python: >=3.7.0
+License-File: LICENSE
+Requires-Dist: coverage (<6.0,>=4.4)
+Requires-Dist: typing-extensions
+Provides-Extra: build
+Requires-Dist: twine ; extra == 'build'
+Requires-Dist: wheel ; extra == 'build'
+Provides-Extra: dev
+Requires-Dist: pytest (>=4.0.0) ; extra == 'dev'
+Requires-Dist: freezegun ; extra == 'dev'
+Requires-Dist: coverage ; extra == 'dev'
+Requires-Dist: pytest-cov ; extra == 'dev'
+Requires-Dist: pytest-xdist ; extra == 'dev'
+Requires-Dist: tox ; extra == 'dev'
+Requires-Dist: virtualenv ; extra == 'dev'
+Requires-Dist: hypothesis ; extra == 'dev'
+Requires-Dist: coverage (<6.0,>=4.4) ; extra == 'dev'
+Requires-Dist: ipython ; extra == 'dev'
+Requires-Dist: sphinx ; extra == 'dev'
+Requires-Dist: sphinx-rtd-theme ; extra == 'dev'
+Requires-Dist: mypy ; extra == 'dev'
+Requires-Dist: black ; extra == 'dev'
+Requires-Dist: pre-commit ; extra == 'dev'
+Requires-Dist: isort ; extra == 'dev'
+Requires-Dist: twine ; extra == 'dev'
+Requires-Dist: wheel ; extra == 'dev'
+Provides-Extra: docs
+Requires-Dist: coverage (<6.0,>=4.4) ; extra == 'docs'
+Requires-Dist: ipython ; extra == 'docs'
+Requires-Dist: sphinx ; extra == 'docs'
+Requires-Dist: sphinx-rtd-theme ; extra == 'docs'
+Provides-Extra: qa
+Requires-Dist: mypy ; extra == 'qa'
+Requires-Dist: black ; extra == 'qa'
+Requires-Dist: pre-commit ; extra == 'qa'
+Requires-Dist: isort ; extra == 'qa'
+Provides-Extra: tests
+Requires-Dist: pytest (>=4.0.0) ; extra == 'tests'
+Requires-Dist: freezegun ; extra == 'tests'
+Requires-Dist: coverage ; extra == 'tests'
+Requires-Dist: pytest-cov ; extra == 'tests'
+Requires-Dist: pytest-xdist ; extra == 'tests'
+Requires-Dist: tox ; extra == 'tests'
+Requires-Dist: virtualenv ; extra == 'tests'
+Requires-Dist: hypothesis ; extra == 'tests'
+
+``mutatest``: Python mutation testing
+==========================================
+
+|  |py-versions| |license| |ci-azure| |docs| |coverage| |black|
+|  |pypi-version| |pypi-status| |pypi-format| |pypi-downloads|
+|  |conda-version| |conda-recipe| |conda-platform| |conda-downloads|
+
+
+Are you confident in your tests? Try out ``mutatest`` and see if your tests will detect small
+modifications (mutations) in the code. Surviving mutations represent subtle changes that are
+undetectable by your tests. These mutants are potential modifications in source code that continuous
+integration checks would miss.
+
+
+Features
+---------
+
+    - Simple command line tool with `multiple configuration options <https://mutatest.readthedocs.io/en/latest/commandline.html>`_.
+    - Built on Python's Abstract Syntax Tree (AST) grammar to ensure `mutants are valid <https://mutatest.readthedocs.io/en/latest/mutants.html>`_.
+    - `No source code modification <https://mutatest.readthedocs.io/en/latest/install.html#mutation-trial-process>`_,
+      only the ``__pycache__`` is changed.
+    - Uses ``coverage`` to create `only meaningful mutants <https://mutatest.readthedocs.io/en/latest/commandline.html#coverage-filtering>`_.
+    - Built for efficiency with `multiple running modes <https://mutatest.readthedocs.io/en/latest/commandline.html#selecting-a-running-mode>`_
+      and `random sampling of mutation targets <https://mutatest.readthedocs.io/en/latest/commandline.html#controlling-randomization-behavior-and-trial-number>`_.
+    - Capable of running `parallel mutation trials <https://mutatest.readthedocs.io/en/latest/commandline.html#parallelization>`_
+      with multiprocessing on Python 3.8.
+    - Flexible enough to run on a `whole package <https://mutatest.readthedocs.io/en/latest/commandline.html#auto-detected-package-structures>`_
+      or a `single file <https://mutatest.readthedocs.io/en/latest/commandline.html#specifying-source-files-and-test-commands>`_.
+    - Includes an `API for custom mutation controls <https://mutatest.readthedocs.io/en/latest/modules.html>`_.
+    - Tested on Linux, Windows, and MacOS with `Azure pipelines <https://dev.azure.com/evankepner/mutatest/_build/latest?definitionId=1&branchName=master>`_.
+    - Full strict static type annotations throughout the source code and the API.
+
+Install
+-------
+
+Install from `PyPI <https://pypi.org/project/mutatest/>`_:
+
+.. code-block:: bash
+
+    $ pip install mutatest
+
+Install from `conda-forge <https://anaconda.org/conda-forge/mutatest>`_:
+
+.. code-block:: bash
+
+    $ conda install -c conda-forge mutatest
+
+
+Example Output
+--------------
+
+This is an output example running mutation trials against the
+`API Tutorial example folder <https://mutatest.readthedocs.io/en/latest/api_tutorial/api_tutorial.html>`_
+example folder.
+
+.. code-block:: bash
+
+    $ mutatest -s example/ -t "pytest" -r 314
+
+    Running clean trial
+    2 mutation targets found in example/a.py AST.
+    1 mutation targets found in example/b.py AST.
+    Setting random.seed to: 314
+    Total sample space size: 2
+    10 exceeds sample space, using full sample: 2.
+
+    Starting individual mutation trials!
+    Current target location: a.py, LocIndex(ast_class='BinOp', lineno=6, col_offset=11, op_type=<class '_ast.Add'>)
+    Detected mutation at example/a.py: (6, 11)
+    Detected mutation at example/a.py: (6, 11)
+    Surviving mutation at example/a.py: (6, 11)
+    Break on survival: stopping further mutations at location.
+
+    Current target location: b.py, LocIndex(ast_class='CompareIs', lineno=6, col_offset=11, op_type=<class '_ast.Is'>)
+    Detected mutation at example/b.py: (6, 11)
+    Running clean trial
+
+    Mutatest diagnostic summary
+    ===========================
+     - Source location: /home/user/Github/mutatest/docs/api_tutorial/example
+     - Test commands: ['pytest']
+     - Mode: s
+     - Excluded files: []
+     - N locations input: 10
+     - Random seed: 314
+
+    Random sample details
+    ---------------------
+     - Total locations mutated: 2
+     - Total locations identified: 2
+     - Location sample coverage: 100.00 %
+
+
+    Running time details
+    --------------------
+     - Clean trial 1 run time: 0:00:00.348999
+     - Clean trial 2 run time: 0:00:00.350213
+     - Mutation trials total run time: 0:00:01.389095
+
+    Trial Summary Report:
+
+    Overall mutation trial summary
+    ==============================
+     - DETECTED: 3
+     - SURVIVED: 1
+     - TOTAL RUNS: 4
+     - RUN DATETIME: 2019-10-17 16:57:08.645355
+
+    Detected mutations:
+
+    DETECTED
+    --------
+     - example/a.py: (l: 6, c: 11) - mutation from <class '_ast.Add'> to <class '_ast.Sub'>
+     - example/a.py: (l: 6, c: 11) - mutation from <class '_ast.Add'> to <class '_ast.Mod'>
+     - example/b.py: (l: 6, c: 11) - mutation from <class '_ast.Is'> to <class '_ast.IsNot'>
+
+    Surviving mutations:
+
+    SURVIVED
+    --------
+     - example/a.py: (l: 6, c: 11) - mutation from <class '_ast.Add'> to <class '_ast.Mult'>
+
+
+Documentation
+-------------
+
+For full documentation, including installation, CLI references, API references, and tutorials,
+please see https://mutatest.readthedocs.io/en/latest/.
+The project is hosted on PyPI at https://pypi.org/project/mutatest/.
+
+
+Bugs/Requests
+-------------
+
+Please use the `GitHub issue tracker <https://github.com/EvanKepner/mutatest/issues>`_ to submit bugs
+or request features.
+See the `Contributing Guidelines <https://mutatest.readthedocs.io/en/latest/contributing.html>`_ if you
+are interested in submitting code in the form of pull requests.
+
+ChangeLog
+---------
+
+Consult the `Changelog <https://mutatest.readthedocs.io/en/latest/changelog.html>`_ page for fixes
+and enhancements of each version.
+
+License
+-------
+
+Copyright Evan Kepner 2018-2020.
+
+Distributed under the terms of the `MIT <https://github.com/pytest-dev/pytest/blob/master/LICENSE>`_
+license, ``mutatest`` is free and open source software.
+
+.. |py-versions| image:: https://img.shields.io/pypi/pyversions/mutatest?color=green
+    :target: https://pypi.org/project/mutatest/
+    :alt: Python versions
+.. |license| image:: https://img.shields.io/pypi/l/mutatest.svg
+    :target: https://pypi.org/project/mutatest/
+    :alt: License
+.. |pypi-version| image:: https://badge.fury.io/py/mutatest.svg
+    :target: https://pypi.org/project/mutatest/
+    :alt: PyPI version
+.. |pypi-status| image:: https://img.shields.io/pypi/status/mutatest.svg
+    :target: https://pypi.org/project/mutatest/
+    :alt: PyPI status
+.. |pypi-format| image:: https://img.shields.io/pypi/format/mutatest.svg
+    :target: https://pypi.org/project/mutatest/
+    :alt: PyPI Format
+.. |pypi-downloads| image:: https://pepy.tech/badge/mutatest
+    :target: https://pepy.tech/project/mutatest
+    :alt: PyPI Downloads
+.. |ci-travis| image:: https://travis-ci.org/EvanKepner/mutatest.svg?branch=master
+    :target: https://travis-ci.org/EvanKepner/mutatest
+    :alt: TravisCI
+.. |ci-azure| image:: https://dev.azure.com/evankepner/mutatest/_apis/build/status/EvanKepner.mutatest?branchName=master
+    :target: https://dev.azure.com/evankepner/mutatest/_build/latest?definitionId=1&branchName=master
+    :alt: Azure Pipelines
+.. |docs| image:: https://readthedocs.org/projects/mutatest/badge/?version=latest
+    :target: https://mutatest.readthedocs.io/en/latest/?badge=latest
+    :alt: RTD status
+.. |coverage| image:: https://codecov.io/gh/EvanKepner/mutatest/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/EvanKepner/mutatest
+    :alt: CodeCov
+.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/psf/black
+    :alt: Black
+.. |conda-recipe| image:: https://img.shields.io/badge/recipe-mutatest-green.svg
+    :target: https://anaconda.org/conda-forge/mutatest
+    :alt: Conda recipe
+.. |conda-version| image:: https://img.shields.io/conda/vn/conda-forge/mutatest.svg
+    :target: https://anaconda.org/conda-forge/mutatest
+    :alt: Conda version
+.. |conda-platform| image:: https://img.shields.io/conda/pn/conda-forge/mutatest.svg
+    :target: https://anaconda.org/conda-forge/mutatest
+    :alt: Conda platforms
+.. |conda-azure| image:: https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/mutatest-feedstock?branchName=master
+    :target: https://anaconda.org/conda-forge/mutatest
+    :alt: Conda azure status
+.. |conda-downloads| image:: https://img.shields.io/conda/dn/conda-forge/mutatest.svg
+    :target: https://anaconda.org/conda-forge/mutatest
+    :alt: Conda downloads
+
+
+Changelog
+=========
+
+Stable Releases
+---------------
+
+3.1.0
+~~~~~
+
+  - Maintenance patches and API changes to skip/only category selection.
+
+3.0.2
+~~~~~
+
+    - `Maintenance patch #27 <https://github.com/EvanKepner/mutatest/pull/27>`_ updating source
+      code conditional logic in the CLI argument parsing.
+    - Minor fixes for the most updated CI checks.
+
+
+3.0.1
+~~~~~
+
+    - `Bug fix #24 <https://github.com/EvanKepner/mutatest/issues/24>`_ where the bit-shift
+      operators where not being applied during mutation trials and raised ``KeyError``.
+    - A new ``test_all_op_types.py`` ensures all mutation substitutions work as intended.
+
+
+3.0.0
+~~~~~
+
+    - ``Mutatest`` has reached a level of maturity to warrant a stable release.
+      With the addition of the multiprocessing capabilities, support for ``coverage`` versions
+      4.x and 5.x, support for Python 3.7 and 3.8, being installable through ``pip`` or
+      ``conda``, and with Azure Pipelines CI for platform tests, the tool and API are
+      unlikely to change in a major way without moving to ``4.0.0``.
+
+    New in this release:
+
+    - Multiprocessing support on Python 3.8!
+        - The new ``--parallel`` command argument will instruct ``mutatest`` to use
+          multiprocessing for mutation trials. See the documentation for complete details.
+
+    - Bug fix in ``mutatest.cache.create_cache_dirs()`` where the cache directory did not
+      include "parents" in case of packages with nested directories without existing pycache.
+    - Removal of the ``sr`` subcategory of slice mutations (``Slice_RC`` for range changes).
+      These were rare, and supporting both Python 3.7 and 3.8 required excessive complexity.
+      The ``su`` category remains valid as the primary slice mutation set.
+
+
+Beta Releases
+-------------
+
+2.2.0
+~~~~~
+
+    - Added support for specifying settings in ``setup.cfg`` using either ``[mutatest]`` or
+      ``[tool:mutatest]`` sections in addition to the ``mutatest.ini`` file.
+
+2.1.3
+~~~~~
+
+    - Addressing test issues on Windows platform in the coverage tests by adding a
+      ``resolve_source`` flag to the ``CoverageFilter.filter`` method.
+
+2.1.2
+~~~~~
+
+    - Moved the ``tests`` directory to be within the package of ``mutatest``.
+      This enabled the installation to be tested with ``pytest --pyargs mutatest`` as well
+      as ``pytest`` from local source files.
+      Test dependencies are still installed with ``pip install .[tests]``.
+
+2.1.1
+~~~~~
+
+    - Includes specific test environments for ``coverage`` versions 4 and 5 with appropriate mocked
+      ``.coverage`` data outputs (JSON or SQL based on version).
+    - A new ``tox`` test environment called ``cov4`` is added, with a new ``pytest`` marker
+      ``pytest.mark.coverage`` for test selection.
+
+2.1.0
+~~~~~
+
+    - ``Coverage`` version 5.0 has moved to a SQLite database instead of a flat file. To support
+      both 4x and 5x versions of ``Coverage`` the ``filters`` source code has been updated.
+      The test suite includes mocked coverage data parsing tests of 4x only for now.
+
+2.0.1
+~~~~~
+
+    - Explicit including of ``typing-extensions`` in ``setup.py`` requirements to fix breaking
+      documentation builds on Python version 3.7 vs. 3.8.
+
+2.0.0
+~~~~~
+
+    - Python 3.8 support! There are breaking changes with the ``LocIndex`` and other components
+      of the ``transformers`` from prior versions of ``mutatest``. Python 3.8 introduces a new
+      AST structure - including additional node attributes ``end_lineno`` and ``end_col_offset``
+      that have to be accounted for. ``transformers.MutateAST`` is now build from a base class
+      and a mixin class depending on the Python version (3.7 vs. 3.8) for the appropriate AST
+      treatment. There are no changes in the CLI usage.
+
+
+1.2.1
+~~~~~
+
+    - Bugfix to ensure ``exclude`` path processing in ``GenomeGroup.add_folder`` always uses full
+      resolved paths for files.
+
+1.2.0
+~~~~~
+
+    - `Feature #18 <https://github.com/EvanKepner/mutatest/pull/18>`_: Allow mutation trials to time out.
+      There are cases where a mutation could cause an infinite loop, such as changing the comparator in
+      a ``while`` statement e.g., ``while x < 5`` becomes ``while x >= 5``. A new ``--timeout_factor``
+      argument is added to set a cap on the maximum trial time as a multiplier of the clean-trial run.
+    - Bugfix on using ``exclude`` where files were logged but still becoming part of the sample.
+
+1.1.1
+~~~~~
+
+    - `Bug Fix #15 <https://github.com/EvanKepner/mutatest/pull/15>`_: Fix ``LocIndex.ast_class`` setting for ``Index`` node mutations.
+
+
+1.1.0
+~~~~~
+
+    - Add support for a ``mutatest.ini`` configuration file for command line arguments.
+
+
+1.0.1
+~~~~~
+
+    - Documentation updates, including the API tutorial.
+    - Fix on latest ``mypy`` errors related to ``strict`` processing of ``run`` and ``cache``.
+
+
+1.0.0
+~~~~~
+
+    - Moving from the alpha to the beta version with an API design. The alpha releases were focused
+      on defining the functionality of the CLI. In the beta version, the CLI remains unchanged; however,
+      a full internal design has been applied to create a coherent API. The ``controller``, ``optimizers``,
+      and ``maker`` modules have been fully replaced by ``run``, ``api``, and ``filters``. See
+      the new full API documentation for details on using these modules outside of the CLI.
+    - Additionally, ``pytest`` was removed from the installation requirements since it is assumed
+      for the default running modes but not required for the API or installation.
+
+
+Alpha Releases
+--------------
+
+0.9.2
+~~~~~
+
+    - Added ``--exception`` and ``-x`` as a survivor tolerance to raise an exception
+      after the trial completes if the count of surviving mutants is greater than or equal to the
+      specified value.
+
+0.9.1
+~~~~~
+
+    - Added ``--only`` and ``--skip`` with category codes for mutation families.
+    - Provides CLI selection of mutation types to be used during the trials.
+
+
+0.9.0
+~~~~~
+
+    - Added new ``If`` mutation:
+        1. Original statements are represented by ``If_Statement`` and mutated to be either
+           ``If_True`` where the statement always passes, or ``If_False`` where the statement
+           is never passed.
+
+
+0.8.0
+~~~~~
+
+    - Breaking changes to the CLI arguments and new defaults:
+        1. Output files are now optional, the default behavior has changed from always writing an RST
+           file using the ``-o`` option on the command line.
+        2. Exclusions are still marked as ``-e``; however, now multiple ``-e`` arguments are
+           supported and arguments must point to a Python file. The argument used to be:
+           ``mutatest -e "__init__.py _devtools.py"`` and now it is
+           ``mutatest -e src/__init__.py -e src/_devtools.py``. There are no longer default
+           exclusions applied.
+
+    - Improved CLI reporting, including selected test counts and line/col locations
+      for trial results while processing.
+
+
+0.7.1
+~~~~~
+
+    - Internal changes to ``Slice`` mutations for clearer categorization and report output.
+    - Includes clearing names to ``Slice_Swap`` and ``Slice_RangeChange`` for categories.
+    - Updates operation names to ``Slice_Unbounded...`` with "lower" or "upper".
+
+0.7.0
+~~~~~
+
+    - Added new slice mutations:
+        1. ``Slice_SwapNoneUL`` and ``Slice_SwapNoneLU`` for swapping the upper and lower
+           bound values when only one is specified e.g. ``x[1:]`` to ``x[:1]``.
+        2. ``Slice_UPosToZero`` and ``Slice_UNegToZero`` for moving the upper bound of a
+           slice by 1 unit e.g. ``x[1:5]`` becomes ``x[1:4]``.
+
+
+0.6.1
+~~~~~
+
+    - Added explicit tests for ``argparse`` cli options.
+    - Added mechanism to sort reporting mutations by source file, then line number, then column
+      number.
+
+0.6.0
+~~~~~
+
+    - Including ``pytest`` in the installation requirements. Technically, any test runner can
+      be used but with all base package assumptions being built around ``pytest`` this feels
+      like the right assumption to call out as an install dependency. It is the default behavior.
+    - Updated ``controller`` for test file exclusion to explicitly match prefix or suffix cases
+      for ``"test_"`` and ``"_test"`` per ``pytest`` conventions.
+    - Changed error and unknown status results to console color as yellow instead of red.
+    - Added multiple invariant property tests, primarily to ``controller`` and ``cache``.
+    - Added ``hypothesis`` to the test components of ``extras_require``.
+    - Moved to ``@property`` decorators for internal class properties that should only
+      be set at initialization, may add custom ``setters`` at a later time.
+    - Fixed a zero-division bug in the ``cli`` when reporting coverage percentage.
+
+0.5.0
+~~~~~
+
+    - Addition of ``optimizers``, including the new class ``CoverageOptimizer``.
+    - This optimizer restricts the full sample space only to source locations that are marked
+      as covered in the ``.coverage`` file. If you have a ``pytest.ini`` that includes
+      the ``--cov=`` command it will automatically generate during the clean-trial run.
+
+
+0.4.2
+~~~~~
+
+    - More behind the scenes maintenance: updated debug level logging to include source file
+      names and line numbers for all visit operations and separated colorized output to a new
+      function.
+
+0.4.1
+~~~~~
+
+    - Updated the reporting functions to return colorized display results to CLI.
+
+0.4.0
+~~~~~
+
+    - Added new mutation support for:
+        1. ``AugAssign`` in AST e.g. ``+= -= *= /=``.
+        2. ``Index`` substitution in lists e.g. take a positive number like ``i[1]`` and
+           mutate to zero and a negative number e.g. ``i[-1] i[0]``.
+
+    - Added a ``desc`` attribute to ``transformers.MutationOpSet`` that is used in the
+      cli help display.
+    - Updated the cli help display to show the description and valid members.
+
+0.3.0
+~~~~~
+
+    - Added new mutation support for ``NameConstant`` in AST.
+    - This includes substitutions for singleton assignments such as: ``True``, ``False``,
+      and ``None``.
+    - This is the first non-type mutation and required adding a ``readonly`` parameter
+      to the ``transformers.MutateAST`` class. Additionally, the type-hints for the
+      ``LocIndex`` and ``MutationOpSet`` were updated to ``Any`` to support
+      the mixed types. This was more flexible than a series of ``overload`` signatures.
+
+0.2.0
+~~~~~
+
+    - Added new compare mutation support for:
+        1. ``Compare Is`` mutations e.g. ``is, is not``.
+        2. ``Compare In`` mutations e.g. ``in, not in``.
+
+0.1.0
+~~~~~
+
+    - Initial release!
+    - Requires Python 3.7 due to the ``importlib`` internal references for manipulating cache.
+    - Run mutation tests using the ``mutatest`` command line interface.
+    - Supported operations:
+
+        1. ``BinOp`` mutations e.g. ``+ - / *`` including bit-operations.
+        2. ``Compare`` mutations e.g. ``== >= < <= !=``.
+        3. ``BoolOp`` mutations e.g. ``and or``.
+
+
+Authors
+=======
+
+``mutatest`` is written and maintained by Evan Kepner.
+
+See the `Contributing Guidelines <https://mutatest.readthedocs.io/en/latest/contributing.html>`_ if you
+are interested in submitting code in the form of pull requests.
+Contributors are listed here, and can be seen on the
+`GitHub contribution graph <https://github.com/EvanKepner/mutatest/graphs/contributors>`_.
+
+Contributors
+------------
+
+* David Li-Bland
+* Alireza Aghamohammadi
+
+

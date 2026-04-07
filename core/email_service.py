@@ -220,6 +220,28 @@ class EmailService:
             "dashboard_url": "/dashboard/",
         }
         return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)
+
+    @classmethod
+    def send_roi_payout_notification(
+        cls,
+        user: Any,
+        amount: Any,
+        investment: Any,
+        payout_date: Any,
+    ) -> bool:
+        """Notify user of daily ROI payout."""
+        template = "roi_payout"
+        subject = f"ROI Payout Received - {cls.BRAND_NAME}"
+
+        context = {
+            "user": user,
+            "amount": amount,
+            "investment": investment,
+            "payout_date": payout_date,
+            "dashboard_url": "/dashboard/",
+        }
+        return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)
+
 def send_email(subject, to, body=None, bcc=None, template_name=None, context=None):
     return EmailService._send(
         template_name=template_name or "system",

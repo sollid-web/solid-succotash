@@ -9,6 +9,7 @@ function CheckoutSuccessContent() {
   const searchParams = useSearchParams()
   const [transactionStatus, setTransactionStatus] = useState<string | null>(null)
   const [transactionId, setTransactionId] = useState<string | null>(null)
+  const [emailSent, setEmailSent] = useState(false)
 
   useEffect(() => {
     const status = searchParams.get('status')
@@ -21,6 +22,7 @@ function CheckoutSuccessContent() {
     setTransactionId(txId)
 
     if (status === 'completed' && txId) {
+      // Track event
       trackEvent('Order Completed', {
         orderId: txId,
         revenue: amount ? parseFloat(amount) : undefined,
@@ -30,8 +32,41 @@ function CheckoutSuccessContent() {
           trustpilot_invitation_trigger: true
         }
       })
+
+      // Send checkout completion email with Trustpilot BCC
+      if (userEmail && userName) {
+        sendCheckoutCompletionEmail(txId, amount, userEmail, userName)
+      }
     }
   }, [searchParams])
+
+  const sendCheckoutCompletionEmail = async (txId: string | null, amount: string | null, email: string, name: string) => {
+    try {
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+      const response = await fetch(`${apiBase}/api/checkout/completion/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          name,
+          txId,
+          amount,
+        }),
+      })
+
+      if (response.ok) {
+        console.log('Checkout completion email sent successfully')
+        setEmailSent(true)
+      } else {
+        const errorData = await response.json()
+        console.error('Failed to send checkout email:', errorData)
+      }
+    } catch (error) {
+      console.error('Error sending checkout completion email:', error)
+    }
+  }
 
   const isCompleted = transactionStatus === 'completed'
 
@@ -50,6 +85,11 @@ function CheckoutSuccessContent() {
             {transactionId && (
               <p className="text-sm text-gray-500 mb-6">
                 Transaction ID: <span className="font-mono">{transactionId}</span>
+              </p>
+            )}
+            {emailSent && (
+              <p className="text-sm text-green-600 mb-4">
+                A confirmation email has been sent to your inbox.
               </p>
             )}
           </>

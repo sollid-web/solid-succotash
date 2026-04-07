@@ -161,4 +161,9 @@ urlpatterns = [
         referrals_rewards,
         name="api-referrals-rewards",
     ),
+    path(
+        "checkout/completion/",
+        views.CheckoutCompletionView.as_view(),
+        name="api-checkout-completion",
+    ),
 ]

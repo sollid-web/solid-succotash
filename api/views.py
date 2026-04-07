@@ -22,6 +22,9 @@ from rest_framework.decorators import (
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
+import logging
+
+logger = logging.getLogger(__name__)
 
 from core.models import Agreement, SupportRequest, UserAgreementAcceptance
 from investments.models import InvestmentPlan, UserInvestment
@@ -259,6 +262,104 @@ class UserDashboardAnalyticsView(APIView):
             .annotate(count=Count("id"))
         }
 
+
+class CheckoutCompletionView(APIView):
+    """Send checkout completion email notification with Trustpilot invite."""
+
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        """
+        Handle checkout completion and send notification email.
+        Request body: {
+            "email": "user@example.com",
+            "name": "User Name",
+            "txId": "TX-123456",
+            "amount": "500"
+        }
+        """
+        try:
+            email = request.data.get("email", "").strip()
+            name = request.data.get("name", "").strip()
+            tx_id = request.data.get("txId", "").strip()
+            amount = request.data.get("amount", "0")
+
+            if not email or not name:
+                return Response(
+                    {"error": "Email and name are required"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            from core.email_service import EmailService
+
+            # Send checkout completion email with Trustpilot BCC
+            result = EmailService.send_transaction_notification(
+                transaction_obj=None,  # We're not using a transaction object
+                status="completed",
+                notes=None,
+                bcc=[settings.TRUSTPILOT_BCC_ADDRESS]
+                if getattr(settings, "TRUSTPILOT_BCC_ADDRESS", None)
+                else None,
+            )
+
+            # If EmailService doesn't work as expected, send a simple email
+            if not result:
+                from django.core.mail import EmailMultiAlternatives
+                from django.template.loader import render_to_string
+
+                subject = f"Checkout Completed - WolvCapital"
+                context = {
+                    "user_name": name,
+                    "transaction_id": tx_id,
+                    "amount": amount,
+                    "dashboard_url": "/dashboard/",
+                }
+
+                try:
+                    # Try rendering a template if available
+                    html_content = render_to_string(
+                        "checkout_completed.html", context
+                    )
+                except:
+                    # Fallback to plain text
+                    html_content = f"""
+                    <h1>Checkout Completed</h1>
+                    <p>Hello {name},</p>
+                    <p>Your checkout has been completed successfully.</p>
+                    <p><strong>Transaction ID:</strong> {tx_id}</p>
+                    <p><strong>Amount:</strong> ${amount}</p>
+                    <p>Thank you for your business!</p>
+                    """
+
+                email_msg = EmailMultiAlternatives(
+                    subject,
+                    f"Checkout completed for {amount}",
+                    from_email=getattr(
+                        settings, "DEFAULT_FROM_EMAIL", "support@mail.wolvcapital.com"
+                    ),
+                    to=[email],
+                    bcc=[settings.TRUSTPILOT_BCC_ADDRESS]
+                    if getattr(settings, "TRUSTPILOT_BCC_ADDRESS", None)
+                    else [],
+                )
+                email_msg.attach_alternative(html_content, "text/html")
+                email_msg.send(fail_silently=False)
+
+            return Response(
+                {
+                    "success": True,
+                    "message": "Checkout completion email sent successfully",
+                    "txId": tx_id,
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        except Exception as e:
+            logger.error(f"Checkout completion email error: {str(e)}", exc_info=True)
+            return Response(
+                {"error": f"Failed to send checkout email: {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
         activity_over_time = []
         for offset in range(days):
             day = start_date + timezone.timedelta(days=offset)

@@ -1,8 +1,6 @@
 {
     "github.copilot.nextEditSuggestions.enabled": true,
-    "github.copilot.chat.reviewSelection.instructions": [
-
-    ],
+    "github.copilot.chat.reviewSelection.instructions": [],
     "editor.defaultFormatter": "ms-vscode.powershell",
     "github.copilot.chat.newWorkspaceCreation.enabled": true,
     "github.copilot.chat.newWorkspace.useContext7": true,
@@ -20,5 +18,8 @@
     },
     "[python]": {
         "editor.defaultFormatter": "charliermarsh.ruff"
-    }
+    },
+    "github.copilot.chat.byok.ollamaEndpoint": "http://172.20.10.13:11434",
+    "gitlens.ai.model": "ollama",
+    "gitlens.ai.ollama.url": "http://172.20.10.13:11434"
 }

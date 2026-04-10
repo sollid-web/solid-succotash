@@ -43,18 +43,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* OG Image Display */}
-      <div className="w-full flex justify-center items-center py-8 bg-gray-50">
-        <Image
-          src="/og-images/about-og.png"
-          alt="About WolvCapital – Global, Secure, Transparent Digital Asset Management"
-          width={1200}
-          height={630}
-          priority
-          className="rounded-2xl shadow-2xl max-w-full h-auto"
-        />
-      </div>
-
       {/* Content */}
       <section className="py-12 sm:py-16 md:py-24 bg-white">
         <div className="container mx-auto px-4 lg:px-8 max-w-5xl">
@@ -119,47 +107,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-[#071d42] text-white py-16">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
-            <div>
-              <h3 className="text-xl font-bold mb-4">Quick Links</h3>
-              <ul className="space-y-2">
-                <li><Link href="/" className="text-gray-300 hover:text-white transition">Home</Link></li>
-                <li><Link href="/plans" className="text-gray-300 hover:text-white transition">Investment Plans</Link></li>
-                <li><Link href="/about" className="text-gray-300 hover:text-white transition">About Us</Link></li>
-                <li><Link href="/contact" className="text-gray-300 hover:text-white transition">Contact</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-xl font-bold mb-4">Legal</h3>
-              <ul className="space-y-2">
-                <li><Link href="/terms-of-service" className="text-gray-300 hover:text-white transition">Terms of Service</Link></li>
-                <li><Link href="/legal-disclaimer" className="text-gray-300 hover:text-white transition">Legal Disclaimer</Link></li>
-                <li><Link href="/risk-disclosure" className="text-gray-300 hover:text-white transition">Risk Disclosure</Link></li>
-                <li><Link href="/privacy" className="text-gray-300 hover:text-white transition">Privacy Policy</Link></li>
-                <li><Link href="/legal/certificate-of-operation" className="text-gray-300 hover:text-white transition">Certificate of Operation</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-xl font-bold mb-4">Contact Info</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li>support@mail.wolvcapital.com</li>
-                <li>24/7 Support</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-xl font-bold mb-4">WolvCapital</h3>
-              <p className="text-gray-300 text-sm leading-relaxed">WolvCapital is a digital asset investment platform providing secure and sustainable daily ROI opportunities through diversified strategies and advanced risk controls. With global investor support, AML/KYC compliance, and industry-grade security, WolvCapital delivers a trusted environment for digital asset growth.</p>
-            </div>
-          </div>
-          <div className="border-t border-gray-700 pt-8 text-center text-gray-400">
-            <p>© 2025 WolvCapital. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </PublicLayout>
   )
 }

@@ -6,7 +6,6 @@ import type { ReactNode } from "react";
 import { apiFetch } from "@/lib/api";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
-import RecentActivityTicker from "@/components/RecentActivityTicker";
 
 type DashboardShellProps = {
   children: ReactNode;
@@ -257,9 +256,6 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
       <main className="max-w-7xl mx-auto px-4 lg:px-8 py-8">
         {children}
       </main>
-
-      {/* Dashboard-specific Activity Ticker */}
-      <RecentActivityTicker minIntervalMs={150000} maxIntervalMs={220000} displayDurationMs={6500} />
 
       {/* Dashboard Footer */}
       <footer className="bg-white border-t border-gray-200 mt-12">

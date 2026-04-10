@@ -1,6 +1,7 @@
 "use client"
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useTranslation } from '@/i18n/TranslationProvider'
 import { Button } from '@/components/ui/Button'
@@ -23,9 +24,21 @@ export default function NavBar() {
     <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
-          {/* Brand Wordmark */}
-          <Link href="/" className="text-2xl font-bold text-brand-primary flex-shrink-0">
-            WolvCapital
+          {/* Brand Logo + Wordmark */}
+          <Link href="/" className="flex items-center gap-2 flex-shrink-0 hover:opacity-80 transition-opacity">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 relative">
+              <Image
+                src="/logo.svg"
+                alt="WolvCapital"
+                width={48}
+                height={48}
+                priority
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <span className="hidden sm:inline text-xl sm:text-2xl font-bold text-brand-primary">
+              WolvCapital
+            </span>
           </Link>
 
           {/* Desktop Navigation Links */}

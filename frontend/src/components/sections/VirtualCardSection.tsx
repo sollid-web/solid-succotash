@@ -88,24 +88,24 @@ export default function VirtualCardSection() {
               </div>
 
               {/* Services Grid */}
-              <div className="grid grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
                 {CARD_SERVICES.map((service, idx) => (
-                  <div key={idx} className="bg-gray-50 border border-gray-200 rounded-lg p-3 text-center hover:border-blue-600 hover:bg-blue-50 transition flex flex-col items-center justify-center gap-2 min-h-20">
+                  <div key={idx} className="bg-white border-2 border-gray-300 rounded-xl p-5 text-center hover:border-blue-600 hover:bg-blue-50 hover:shadow-lg transition-all duration-200 flex flex-col items-center justify-center gap-3 min-h-32 cursor-pointer">
                     {service.icon === null ? (
-                      <div className="w-8 h-8 border-2 border-gray-400 rounded flex items-center justify-center text-gray-600 font-bold">
+                      <div className="w-14 h-14 border-3 border-gray-400 rounded-lg flex items-center justify-center text-gray-600 font-bold text-xl">
                         +
                       </div>
                     ) : (
                       <Image
                         src={service.icon}
                         alt={service.name}
-                        width={32}
-                        height={32}
-                        className="max-w-[32px] max-h-[32px] object-contain"
+                        width={56}
+                        height={56}
+                        className="max-w-[56px] max-h-[56px] object-contain"
                         unoptimized
                       />
                     )}
-                    <div className="text-xs font-medium text-gray-700 line-clamp-2">{service.name}</div>
+                    <div className="text-sm font-semibold text-gray-800 line-clamp-2 leading-tight">{service.name}</div>
                   </div>
                 ))}
               </div>

@@ -1,0 +1,56 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E3A8A"/>
+      <stop offset="100%" style="stop-color:#2A52BE"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.06" stroke="#ffffff" stroke-width="0.5">
+    <line x1="0" y1="105" x2="1200" y2="105"/>
+    <line x1="0" y1="210" x2="1200" y2="210"/>
+    <line x1="0" y1="315" x2="1200" y2="315"/>
+    <line x1="0" y1="420" x2="1200" y2="420"/>
+    <line x1="0" y1="525" x2="1200" y2="525"/>
+    <line x1="150" y1="0" x2="150" y2="630"/>
+    <line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="450" y1="0" x2="450" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="750" y1="0" x2="750" y2="630"/>
+    <line x1="900" y1="0" x2="900" y2="630"/>
+    <line x1="1050" y1="0" x2="1050" y2="630"/>
+  </g>
+
+  <!-- Decorative circle -->
+  <circle cx="1050" cy="150" r="200" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.08"/>
+  <circle cx="1050" cy="150" r="320" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.05"/>
+
+  <!-- Logo dot -->
+  <rect x="96" y="200" width="16" height="16" rx="3" fill="#e2f5ff"/>
+
+  <!-- Logo text -->
+  <text x="120" y="214" font-family="system-ui, sans-serif" font-size="22" font-weight="600" fill="#ffffff">WolvCapital</text>
+
+  <!-- Main headline -->
+  <text x="96" y="310" font-family="system-ui, sans-serif" font-size="56" font-weight="700" fill="#ffffff" letter-spacing="-1">Managed Digital Asset</text>
+  <text x="96" y="380" font-family="system-ui, sans-serif" font-size="56" font-weight="700" fill="#ffffff" letter-spacing="-1">Portfolios.</text>
+
+  <!-- Subtext -->
+  <text x="96" y="430" font-family="system-ui, sans-serif" font-size="22" fill="rgba(255,255,255,0.7)">Transparent fees. Institutional custody. No guaranteed returns.</text>
+
+  <!-- Bottom strip -->
+  <rect x="0" y="560" width="1200" height="70" fill="rgba(0,0,0,0.2)"/>
+
+  <!-- Bottom badges -->
+  <text x="96" y="602" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.6)" letter-spacing="2">FINCEN REGISTERED</text>
+  <text x="96" y="602" font-family="system-ui, sans-serif" font-size="14" fill="rgba(255,255,255,0.3)" dx="200">·</text>
+  <text x="320" y="602" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.6)" letter-spacing="2">KYC VERIFIED</text>
+  <text x="320" y="602" font-family="system-ui, sans-serif" font-size="14" fill="rgba(255,255,255,0.3)" dx="170">·</text>
+  <text x="510" y="602" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.6)" letter-spacing="2">INSTITUTIONAL CUSTODY</text>
+  <text x="510" y="602" font-family="system-ui, sans-serif" font-size="14" fill="rgba(255,255,255,0.3)" dx="260">·</text>
+  <text x="790" y="602" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.6)" letter-spacing="2">256-BIT ENCRYPTED</text>
+</svg>

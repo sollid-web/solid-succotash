@@ -43,13 +43,13 @@ const STANDARDS = [
     label: '256-bit',
     value: 'SSL Encryption',
     color: 'bg-gradient-to-br from-green-600 to-green-700',
-    textColor: 'text-green-700',
+    textColor: 'text-[#4F46E5]',
   },
   {
     label: '24/7',
     value: 'Fraud Monitoring',
     color: 'bg-gradient-to-br from-red-600 to-red-700',
-    textColor: 'text-red-700',
+    textColor: 'text-white',
   },
   {
     label: 'PCI-DSS',
@@ -75,7 +75,7 @@ export default function RegulatedSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
           {CARDS.map((card) => (
             <div key={card.id} className={`bg-white rounded-2xl p-8 ${card.borderColor} shadow-sm hover:shadow-md transition`}>
-              <div className={`w-14 h-14 rounded-xl ${card.iconBg} flex items-center justify-center text-white mb-4`}>
+              <div className={`w-14 h-14 rounded-xl ${card.iconBg} flex items-center justify-center text-[#0F172A] mb-4`}>
                 {card.icon}
               </div>
               <h3 className="text-lg font-bold text-[#0b2f6b] mb-2">{card.title}</h3>
@@ -91,7 +91,7 @@ export default function RegulatedSection() {
             {STANDARDS.map((standard, idx) => (
               <div key={idx} className="text-center">
                 <div className={`w-20 h-20 rounded-xl ${standard.color} flex items-center justify-center mx-auto mb-4`}>
-                  <span className="text-white font-bold text-2xl">{standard.label}</span>
+                  <span className="text-[#0F172A] font-bold text-2xl">{standard.label}</span>
                 </div>
                 <p className={`font-bold ${standard.textColor} mb-1`}>{standard.label}</p>
                 <p className="text-gray-600 text-sm">{standard.value}</p>

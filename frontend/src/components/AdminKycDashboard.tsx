@@ -212,7 +212,7 @@ export default function AdminKycDashboard() {
                         <button
                           onClick={() => handleApprove(app.id)}
                           disabled={actionLoading}
-                          className="mt-3 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition disabled:opacity-50"
+                          className="mt-3 w-full bg-green-600 text-[#0F172A] py-2 rounded-lg hover:bg-green-700 transition disabled:opacity-50"
                         >
                           {actionLoading ? 'Processing...' : 'Approve'}
                         </button>
@@ -230,7 +230,7 @@ export default function AdminKycDashboard() {
                         <button
                           onClick={() => handleReject(app.id)}
                           disabled={actionLoading}
-                          className="mt-3 w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition disabled:opacity-50"
+                          className="mt-3 w-full bg-red-600 text-[#0F172A] py-2 rounded-lg hover:bg-red-700 transition disabled:opacity-50"
                         >
                           {actionLoading ? 'Processing...' : 'Reject'}
                         </button>
@@ -239,7 +239,7 @@ export default function AdminKycDashboard() {
 
                     <button
                       onClick={() => setSelectedApp(null)}
-                      className="w-full bg-gray-400 text-white py-2 rounded-lg hover:bg-gray-500 transition"
+                      className="w-full bg-gray-400 text-[#0F172A] py-2 rounded-lg hover:bg-gray-500 transition"
                     >
                       Close
                     </button>

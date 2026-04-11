@@ -27,10 +27,10 @@ export const metadata: Metadata = {
     siteName: 'WolvCapital',
     images: [
       {
-        url: '/images/home-og.jpg',
+        url: '/images/og/og-image.svg',
         width: 1200,
         height: 630,
-        alt: 'WolvCapital Professional Investment Platform',
+        alt: 'WolvCapital - Managed Digital Asset Portfolios',
       },
     ],
     locale: 'en_US',
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'WolvCapital - Professional Investment Platform',
     description: 'Professional investment platform with secure deposits, real-time tracking, and verified withdrawals.',
-    images: ['/images/home-og.jpg'],
+    images: ['/images/og/og-image.svg'],
   },
   icons: {
     icon: [

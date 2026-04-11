@@ -3,6 +3,8 @@
 import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import NavBar from "@/components/NavBar";
+import DisclosureTicker from "@/components/DisclosureTicker";
+import LegalDisclaimerBanner from "@/components/LegalDisclaimerBanner";
 import MobileBottomBar from "@/components/MobileBottomBar";
 import Footer from "@/components/sections/Footer";
 import TawkToChat from "@/components/TawkToChat";
@@ -18,7 +20,9 @@ export default function AppChrome({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-white">
       <NavBar />
-      <main className="flex-1 pt-20 md:pt-24">{children}</main>
+      <DisclosureTicker />
+      <LegalDisclaimerBanner />
+      <main className="flex-1 pt-0 md:pt-0">{children}</main>
       <MobileBottomBar />
       <Footer />
       <TawkToChat />

@@ -462,7 +462,7 @@ export default function KYCPage() {
           <div className="space-y-6">
             <div className="flex items-center space-x-3 p-4 bg-green-50 rounded-xl border border-green-200">
               <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-[#0F172A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
@@ -661,7 +661,7 @@ export default function KYCPage() {
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
               <div className="flex items-start space-x-3">
                 <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3 h-3 text-[#0F172A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
@@ -723,7 +723,7 @@ export default function KYCPage() {
             <div className="text-center">
               <h4 className="text-lg font-semibold text-gray-900 mb-2">Video Call Verification</h4>
               <p className="text-gray-600 mb-6">Schedule a brief video call with our verification team</p>
-              <button className="bg-purple-600 text-white px-8 py-3 rounded-lg hover:bg-purple-700 transition font-semibold">
+              <button className="bg-purple-600 text-[#0F172A] px-8 py-3 rounded-lg hover:bg-purple-700 transition font-semibold">
                 Schedule Video Call
               </button>
             </div>
@@ -741,7 +741,7 @@ export default function KYCPage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="bg-gradient-to-r from-[#0b2f6b] to-[#2563eb] rounded-3xl p-8 text-white">
+      <div className="bg-gradient-to-r from-[#0b2f6b] to-[#2563eb] rounded-3xl p-8 text-[#0F172A]">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-3xl font-bold mb-2">KYC Verification</h1>
@@ -762,8 +762,8 @@ export default function KYCPage() {
 
         {latestApplication && (
           <div className="mt-4 flex items-center justify-between text-sm">
-            <span className="uppercase tracking-wide text-white/80">Current Status</span>
-            <span className="px-3 py-1 rounded-full bg-white/20 text-white font-semibold">
+            <span className="uppercase tracking-wide text-[#0F172A]/80">Current Status</span>
+            <span className="px-3 py-1 rounded-full bg-white/20 text-[#0F172A] font-semibold">
               {statusLabelMap[latestApplication.status]}
             </span>
           </div>
@@ -916,12 +916,12 @@ export default function KYCPage() {
           border-radius: 9999px;
         }
         .kyc-progress::-webkit-progress-value {
-          background-color: #ffffff;
+          background-color: #0F172A;
           border-radius: 9999px;
           transition: width 0.3s ease;
         }
         .kyc-progress::-moz-progress-bar {
-          background-color: #ffffff;
+          background-color: #0F172A;
           border-radius: 9999px;
           transition: width 0.3s ease;
         }

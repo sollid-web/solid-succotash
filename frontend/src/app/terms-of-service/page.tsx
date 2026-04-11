@@ -23,7 +23,7 @@ export default function TermsOfServicePage() {
   return (
     <div className="min-h-screen bg-hero-terms bg-cover bg-center bg-no-repeat">
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-black/50 text-white">
+      <section className="pt-32 pb-16 bg-black/50 text-[#0F172A]">
         <div className="container mx-auto px-4 lg:px-8 text-center">
           <h1 className="text-5xl lg:text-6xl font-extrabold mb-6">Terms of Service</h1>
           <p className="text-xl text-gray-200">Effective Date: October 2025</p>

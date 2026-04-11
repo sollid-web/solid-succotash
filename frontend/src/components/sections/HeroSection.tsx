@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
-import { Badge } from '@/components/ui/Badge'
 
 interface HeroSectionProps {
   onPlansClick?: () => void
@@ -10,118 +9,104 @@ interface HeroSectionProps {
 
 export default function HeroSection({ onPlansClick }: HeroSectionProps) {
   return (
-    <section className="relative min-h-[calc(100vh-160px)] md:min-h-[calc(100vh-140px)] bg-brand-primary overflow-hidden flex items-center">
-      {/* Background pattern/gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-brand-primary via-brand-accent to-brand-secondary opacity-20" />
+    <section className="relative overflow-hidden flex items-center min-h-[80vh] py-24 bg-white">
+      {/* Background image */}
+      <div 
+        className="absolute inset-0" 
+        style={{ 
+          backgroundImage: "url(/images/hero/hero-bg.webp)", 
+          backgroundSize: "cover", 
+          backgroundPosition: "center",
+          opacity: 0.08,
+          zIndex: 0
+        }} 
+      />
       
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-      </div>
-
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-0">
-        <div className="grid lg:grid-cols-7 gap-10 lg:gap-12 items-center">
-          {/* Left column: Text */}
-          <div className="lg:col-span-4 text-white">
-            <Badge variant="hero" className="mb-6">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-400">
-                <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-                <path d="m9 12 2 2 4-4" />
-              </svg>
-              Secure • Transparent • KYC-Verified
-            </Badge>
+      <div className="relative z-10 max-w-6xl mx-auto px-12 lg:px-20 w-full">
+        <div className="grid lg:grid-cols-5 gap-12 lg:gap-16 items-center">
+          {/* Left column (60%): Text */}
+          <div className="lg:col-span-3">
+            {/* Eyebrow label */}
+            <div className="mb-4">
+              <span className="text-[11px] font-bold tracking-widest text-[#0EA5E9] uppercase">
+                Regulated Digital Asset Management
+              </span>
+            </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              A disciplined, transparent way to grow your digital assets
+            {/* Headline */}
+            <h1 className="text-5xl lg:text-6xl font-bold leading-[1.15] mb-6 text-[#0F172A] tracking-tight" style={{ letterSpacing: '-0.02em' }}>
+              Managed cryptocurrency portfolios. Fixed fees. No guaranteed returns.
             </h1>
 
-            <p className="text-lg md:text-xl text-blue-100 mb-8 leading-relaxed max-w-md">
-              WolvCapital offers professionally managed cryptocurrency portfolios for retail and high-net-worth investors. Transparent fees, real risk controls, no guaranteed return promises.
+            {/* Subheadline */}
+            <p className="text-lg text-[#64748B] leading-[1.65] max-w-xl mb-9" style={{ marginTop: '20px' }}>
+              WolvCapital provides managed exposure to digital assets through a transparent fee structure and institutional custody. Capital is at risk. Past performance does not predict future results.
             </p>
 
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-8">
-              <Button 
-                variant="cta-sky" 
-                size="lg" 
-                onClick={onPlansClick}
-                className="text-base font-bold hover:scale-105"
+            {/* CTA Row */}
+            <div className="flex flex-col sm:flex-row items-start gap-6 mb-10">
+              <Link
+                href="/#plans"
+                onClick={(e) => {
+                  if (onPlansClick) {
+                    e.preventDefault()
+                    onPlansClick()
+                  }
+                }}
+                className="px-7 py-3.5 bg-[#e2f5ff] text-[#0F172A] rounded-md font-semibold text-sm hover:bg-[#1E3A5F] transition-colors"
               >
-                Explore Portfolio Plans →
-              </Button>
-              <Button 
-                variant="cta-sky" 
-                size="lg" 
-                asLink 
-                href="/accounts/signup"
-                className="text-base font-bold hover:scale-105"
+                View Portfolio Plans
+              </Link>
+              <Link
+                href="/compliance"
+                className="text-sm font-medium text-[#0EA5E9] hover:underline"
               >
-                Create Free Account
-              </Button>
+                Read Full Disclosure →
+              </Link>
             </div>
 
-            {/* Trust indicators */}
-            <div className="flex flex-wrap gap-6 mb-8">
-              <div className="flex items-center gap-2 text-sm text-blue-100">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect width="18" height="11" x="3" y="11" rx="2" />
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                </svg>
-                256-bit encryption
-              </div>
-              <div className="flex items-center gap-2 text-sm text-blue-100">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-                </svg>
-                Institutional custody
-              </div>
-              <div className="flex items-center gap-2 text-sm text-blue-100">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 6v6l4 2" />
-                  <circle cx="12" cy="12" r="10" />
-                </svg>
-                Real-time risk monitoring
-              </div>
+            {/* Trust strip */}
+            <div className="flex flex-wrap items-center gap-2 text-[12px] text-[#94A3B8] uppercase font-semibold tracking-widest">
+              <span>256-bit Encryption</span>
+              <span>|</span>
+              <span>Institutional Custody</span>
+              <span>|</span>
+              <span>FinCEN Registered MSB</span>
             </div>
-
-            {/* Fine print */}
-            <p className="text-xs text-blue-200/60 max-w-md leading-relaxed">
-              Management fees: 1–2% annually. Performance fees apply only on gains above benchmark. No guaranteed returns. Digital assets are speculative and can lose value.
-            </p>
           </div>
 
-          {/* Right column: Card (desktop only) */}
-          <div className="hidden lg:col-span-3 lg:flex">
-            <div className="w-full bg-white/5 border border-white/12 backdrop-blur-lg rounded-2xl p-8">
-              <p className="text-xs uppercase tracking-widest font-bold text-white/45 mb-6">Platform at a glance</p>
+          {/* Right column (40%): Card */}
+          <div className="hidden lg:col-span-2 lg:flex">
+            <div className="w-full bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-8 shadow-md">
+              {/* Card header */}
+              <p className="text-[10px] font-bold tracking-widest text-[#94A3B8] uppercase mb-6 pb-4 border-b border-[#E2E8F0]">
+                Platform at a glance
+              </p>
               
-              <div className="space-y-4">
-                <div className="flex justify-between items-center py-2 border-b border-white/6">
-                  <span className="text-xs text-white/45">Fee structure</span>
-                  <span className="text-sm font-bold text-white">1–2% annual AUM</span>
+              {/* Data rows */}
+              <div className="space-y-0">
+                <div className="flex justify-between items-center py-2.5 border-b border-[#F1F5F9]">
+                  <span className="text-xs text-[#64748B]">Management fee</span>
+                  <span className="text-sm font-bold text-[#0F172A]">1–2% annually</span>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-white/6">
-                  <span className="text-xs text-white/45">Performance fee</span>
-                  <span className="text-sm font-bold text-white">20% above benchmark</span>
+                <div className="flex justify-between items-center py-2.5 border-b border-[#F1F5F9]">
+                  <span className="text-xs text-[#64748B]">Performance fee</span>
+                  <span className="text-sm font-bold text-[#0F172A]">20% above benchmark</span>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-white/6">
-                  <span className="text-xs text-white/45">Minimum investment</span>
-                  <span className="text-sm font-bold text-white">$100</span>
+                <div className="flex justify-between items-center py-2.5 border-b border-[#F1F5F9]">
+                  <span className="text-xs text-[#64748B]">Minimum investment</span>
+                  <span className="text-sm font-bold text-[#0F172A]">$100</span>
                 </div>
-                <div className="flex justify-between items-center py-2 border-b border-white/6">
-                  <span className="text-xs text-white/45">Countries supported</span>
-                  <span className="text-sm font-bold text-white">120+</span>
-                </div>
-                <div className="flex justify-between items-center py-2">
-                  <span className="text-xs text-white/45">Asset custody</span>
-                  <span className="text-sm font-bold text-white">Institutional-grade</span>
+                <div className="flex justify-between items-center py-2.5">
+                  <span className="text-xs text-[#64748B]">Asset custody</span>
+                  <span className="text-sm font-bold text-[#0F172A]">Institutional-grade</span>
                 </div>
               </div>
 
-              <p className="mt-6 text-xs text-white/28 leading-relaxed">
-                All figures are operational disclosures. Returns vary with market conditions and are not guaranteed. See our fee schedule for full details.
+              {/* Footer text */}
+              <p className="mt-4 text-xs text-[#94A3B8] leading-relaxed">
+                Returns vary with market conditions and are not guaranteed. See fee schedule for full details.
               </p>
             </div>
           </div>

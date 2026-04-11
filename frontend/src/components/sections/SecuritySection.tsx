@@ -58,44 +58,52 @@ const STANDARDS = [
 
 export default function SecuritySection() {
   return (
-    <section id="security" className="py-12 md:py-20 bg-gray-50">
+    <section id="security" className="py-24 bg-[#f8fafc] border-t border-[#E2E8F0] border-b">
       <div className="container mx-auto px-4 lg:px-8">
+        {/* Eyebrow label */}
+        <div className="text-center mb-4">
+          <span className="text-[11px] font-bold tracking-widest text-[#0EA5E9] uppercase">
+            Security
+          </span>
+        </div>
+
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-[#0b2f6b] mb-4">Security & Compliance Standards</h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          <h2 className="text-4xl font-bold text-[#0F172A] mb-4" style={{ letterSpacing: '-0.02em' }}>Security &amp; Compliance Standards</h2>
+          <p className="text-[#64748B] text-lg max-w-2xl mx-auto">
             WolvCapital implements a multilayered security framework to safeguard investor funds and sensitive information.
           </p>
         </div>
 
         {/* Security Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {SECURITY_FEATURES.map((feature, idx) => (
-            <div key={idx} className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow">
-              <div className="flex gap-4 items-start">
-                <div className="w-14 h-14 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-xl flex items-center justify-center flex-shrink-0 text-white">
+            <div 
+              key={idx} 
+              className="bg-white rounded-xl p-8 border border-[#E2E8F0] shadow-sm hover:shadow-lg hover:border-[#CBD5E1] transition"
+            >
+              <div className="flex gap-4 items-start mb-4">
+                <div className="w-12 h-12 bg-[#f8fafc] rounded-lg flex items-center justify-center flex-shrink-0 text-[#1E3A5F]">
                   {feature.icon}
                 </div>
-                <div>
-                  <h3 className="font-bold text-[#0b2f6b] mb-2">{feature.title}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
-                </div>
               </div>
+              <h3 className="font-bold text-[#0F172A] mb-2 text-[15px]">{feature.title}</h3>
+              <p className="text-[#64748B] text-sm leading-relaxed">{feature.description}</p>
             </div>
           ))}
         </div>
 
         {/* Standards Box */}
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-10">
-          <h3 className="text-center text-2xl font-bold text-[#0b2f6b] mb-10">Security Standards</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-white rounded-xl p-12 border border-[#E2E8F0]">
+          <h3 className="text-center text-2xl font-bold text-white mb-12">Security Standards</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {STANDARDS.map((standard, idx) => (
               <div key={idx} className="text-center">
-                <div className={`w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-3 bg-gradient-to-br ${standard.color}`}>
-                  <span className="text-white font-bold text-lg">{standard.label}</span>
+                <div className="w-16 h-16 rounded-lg flex items-center justify-center mx-auto mb-4 bg-[#f8fafc]">
+                  <span className="text-[#0F172A] font-bold text-lg">{standard.label}</span>
                 </div>
-                <p className="font-bold text-[#0b2f6b] mb-1">{standard.label}</p>
-                <p className="text-gray-600 text-sm">{standard.value}</p>
+                <p className="font-bold text-[#0F172A] mb-1 text-sm">{standard.label}</p>
+                <p className="text-[#64748B] text-xs">{standard.value}</p>
               </div>
             ))}
           </div>
@@ -105,7 +113,7 @@ export default function SecuritySection() {
         <div className="text-center mt-12">
           <a
             href="/security"
-            className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-sky-400 to-cyan-500 text-[#0b2f6b] font-bold rounded-full hover:opacity-90 transition"
+            className="inline-flex items-center px-7 py-3 bg-[#f8fafc] text-[#0F172A] font-semibold rounded-md hover:bg-[#1E3A5F] transition"
           >
             View Our Security Measures →
           </a>
@@ -113,4 +121,4 @@ export default function SecuritySection() {
       </div>
     </section>
   )
-}
+};

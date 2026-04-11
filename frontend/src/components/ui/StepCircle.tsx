@@ -14,7 +14,7 @@ export const StepCircle: React.FC<StepCircleProps> = ({ number, icon, title, des
   return (
     <div className={cn('text-center', className)}>
       <div className="relative w-20 h-20 bg-gradient-to-br from-brand-primary to-brand-secondary rounded-full flex items-center justify-center mx-auto mb-4">
-        <div className="text-white">
+        <div className="text-[#0F172A]">
           {icon}
         </div>
         <div className="absolute -top-2 -right-2 w-7 h-7 bg-white rounded-full flex items-center justify-center text-xs font-bold text-brand-primary shadow-lg">

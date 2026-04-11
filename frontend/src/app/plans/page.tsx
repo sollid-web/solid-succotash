@@ -113,13 +113,13 @@ export default function PlansPage() {
       {/* Hero Section */}
       <section className="relative w-full min-h-[260px] sm:min-h-[320px] md:min-h-[360px] flex items-center justify-center mb-10 mt-24 overflow-hidden rounded-3xl shadow-lg bg-gradient-to-br from-[#0b2f6b] via-[#1d4ed8] to-[#2563eb]">
         <div className="relative z-10 w-full text-center px-4 py-12 sm:py-16">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#0F172A] mb-4">
             Investment Plans
           </h1>
-          <p className="text-lg sm:text-xl md:text-2xl text-white/95 mb-4">
+          <p className="text-lg sm:text-xl md:text-2xl text-[#0F172A]/95 mb-4">
             Understand the structure, terms, and review process before you decide.
           </p>
-          <p className="text-base sm:text-lg md:text-xl text-white/90 mt-2 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-[#0F172A]/90 mt-2 max-w-2xl mx-auto">
             This page provides educational information about plan structures, eligibility, and key terms. Digital assets are volatile and outcomes are not guaranteed.
           </p>
         </div>

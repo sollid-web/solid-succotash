@@ -27,7 +27,7 @@ export default function RiskDisclosurePage() {
 						<div className="flex items-center justify-between h-20">
 							<Link href="/" className="flex items-center space-x-3">
 								<div className="w-12 h-12 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-lg flex items-center justify-center">
-									<span className="text-2xl font-bold text-white">W</span>
+									<span className="text-2xl font-bold text-[#0F172A]">W</span>
 								</div>
 								<span className="text-2xl font-bold text-[#0b2f6b]">WolvCapital</span>
 							</Link>
@@ -35,7 +35,7 @@ export default function RiskDisclosurePage() {
 					</div>
 				</nav>
 
-				<section className="pt-32 pb-16 bg-black/50 text-white">
+				<section className="pt-32 pb-16 bg-black/50 text-[#0F172A]">
 					<div className="container mx-auto px-4 lg:px-8 text-center">
 						<h1 className="text-5xl lg:text-6xl font-extrabold mb-6">Risk Disclosure</h1>
 						<p className="text-xl text-gray-200 max-w-3xl mx-auto mb-8">

@@ -142,10 +142,10 @@ export default function FAQPage(): JSX.Element {
             <Link href="/" className="inline-block mb-8">
               <Image src="/wolv-logo.svg" alt="WolvCapital" width={180} height={60} />
             </Link>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white drop-shadow-2xl mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#0F172A] drop-shadow-2xl mb-6">
               Frequently Asked Questions
             </h1>
-            <p className="text-xl md:text-2xl text-white/95 drop-shadow-lg max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-[#0F172A]/95 drop-shadow-lg max-w-3xl mx-auto leading-relaxed">
               Everything you need to know about WolvCapital, investment plans, security, and platform operations.
             </p>
           </div>
@@ -175,7 +175,7 @@ export default function FAQPage(): JSX.Element {
           <div className="backdrop-blur-xl bg-white/95 rounded-3xl shadow-2xl p-8 md:p-12 border border-white/20 text-center">
             <div className="mb-6">
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <HelpCircle className="w-9 h-9 text-white" strokeWidth={2.5} />
+                <HelpCircle className="w-9 h-9 text-[#0F172A]" strokeWidth={2.5} />
               </div>
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Still Have Questions?</h2>
               <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">

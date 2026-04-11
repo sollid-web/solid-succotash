@@ -159,7 +159,7 @@ export default function TransactionsPage() {
           <div className="flex justify-between items-center">
             <Link href="/dashboard" className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-xl flex items-center justify-center">
-                <span className="text-xl font-bold text-white">W</span>
+                <span className="text-xl font-bold text-[#0F172A]">W</span>
               </div>
               <span className="text-2xl font-bold text-[#0b2f6b]">WolvCapital</span>
             </Link>
@@ -286,13 +286,13 @@ export default function TransactionsPage() {
               <div className="flex justify-center space-x-4">
                 <Link
                   href="/dashboard/deposit"
-                  className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-semibold hover:shadow-lg transition"
+                  className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-[#0F172A] rounded-xl font-semibold hover:shadow-lg transition"
                 >
                   Make a Deposit
                 </Link>
                 <Link
                   href="/dashboard/withdraw"
-                  className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-semibold hover:shadow-lg transition"
+                  className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-[#0F172A] rounded-xl font-semibold hover:shadow-lg transition"
                 >
                   Request Withdrawal
                 </Link>

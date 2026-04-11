@@ -8,6 +8,12 @@ export default function HowItWorksSection() {
   return (
     <section className="py-12 md:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Eyebrow label */}
+        <div className="text-center mb-4">
+          <span className="text-[11px] font-bold tracking-widest text-[#0EA5E9] uppercase">
+            Process
+          </span>
+        </div>
         <SectionHeader 
           title="How WolvCapital Works" 
           description="Our streamlined process ensures security, transparency, and compliance at every step."

@@ -24,7 +24,7 @@ export default function AboutPage() {
   return (
     <PublicLayout backgroundClassName="bg-hero-about overlay-dark-40">
       {/* Hero */}
-      <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 bg-black/50 text-white">
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 bg-black/50 text-[#0F172A]">
         <div className="container mx-auto px-4 lg:px-8 text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 sm:mb-6">About WolvCapital</h1>
           <p className="text-base sm:text-lg md:text-xl text-gray-200 max-w-3xl mx-auto px-4">WolvCapital is a digital asset investment platform dedicated to delivering secure, transparent, and technology-driven financial solutions for individuals worldwide.</p>

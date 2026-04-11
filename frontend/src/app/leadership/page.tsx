@@ -60,7 +60,7 @@ export default function LeadershipPage(): JSX.Element {
           </p>
 
           <div className="mt-6">
-            <a className="inline-block bg-indigo-600 text-white px-4 py-2 rounded" href="/about">
+            <a className="inline-block bg-indigo-600 text-[#0F172A] px-4 py-2 rounded" href="/about">
               Learn more about WolvCapital
             </a>
           </div>

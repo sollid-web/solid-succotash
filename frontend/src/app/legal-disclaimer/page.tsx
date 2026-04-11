@@ -39,7 +39,7 @@ export default function LegalDisclaimerPage() {
               <div className="flex items-center justify-between h-20">
                 <Link href="/" className="flex items-center space-x-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-lg flex items-center justify-center">
-                    <span className="text-2xl font-bold text-white">W</span>
+                    <span className="text-2xl font-bold text-[#0F172A]">W</span>
                   </div>
                   <span className="text-2xl font-bold text-[#0b2f6b]">WolvCapital</span>
                 </Link>
@@ -63,8 +63,8 @@ export default function LegalDisclaimerPage() {
                     className="object-cover object-center w-full h-auto"
                   />
                   {/* Credibility Badge */}
-                  <div className="absolute top-4 left-4 bg-gradient-to-r from-[#0b2f6b] to-[#2563eb] text-white px-4 py-1 rounded-full shadow-lg text-xs font-bold tracking-wide flex items-center gap-2">
-                    <svg className="w-4 h-4 text-white mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  <div className="absolute top-4 left-4 bg-gradient-to-r from-[#0b2f6b] to-[#2563eb] text-[#0F172A] px-4 py-1 rounded-full shadow-lg text-xs font-bold tracking-wide flex items-center gap-2">
+                    <svg className="w-4 h-4 text-[#0F172A] mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                     Verified Legal Document
                   </div>
                 </div>

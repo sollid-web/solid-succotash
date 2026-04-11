@@ -2,28 +2,28 @@ import type { Metadata } from 'next'
 import HomePage from '@/components/HomePage'
 import PublicLayout from '@/components/PublicLayout'
 export const metadata: Metadata = {
-  title: 'WolvCapital | Secure Digital Asset Investment',
-  description: 'Managed digital asset portfolios with 1–2% annual fees, KYC-verified investors, institutional custody, transparent reporting.',
-  keywords: 'digital asset investment, crypto investment platform, crypto portfolio management, daily ROI crypto, WolvCapital, crypto risk management, verified investors, KYC compliant platform, crypto trading strategies, AML compliant investment, wolvcapital',
+  title: 'WolvCapital | Professionally Managed Digital Asset Portfolios',
+  description: 'KYC-verified digital asset management with 1–2% annual fees, institutional custody via Coinbase, and transparent reporting. Audit-verified platform.',
+  keywords: 'digital asset investment, cryptocurrency portfolio, managed investments, institutional custody, KYC compliant, crypto management, WolvCapital, audited platform',
   openGraph: {
-    title: 'Secure Digital Asset Investment | WolvCapital',
+    title: 'Professional Digital Asset Management | WolvCapital',
     description:
-      'Earn 1%–2% Daily ROI with AML/KYC compliance and 256-bit encryption. Trusted by 45,000+ investors.',
+      'Professionally managed cryptocurrency portfolios with KYC verification, institutional custody (Coinbase), and transparent fees.',
     images: [
       {
          url: '/og-images/home-og.png',
         width: 1200,
         height: 630,
-        alt: 'WolvCapital Secure Digital Asset Investment Platform',
+        alt: 'WolvCapital Professional Digital Asset Management Platform',
       },
     ],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'WolvCapital — Secure Digital Asset Investment Platform',
+    title: 'Professional Digital Asset Management | WolvCapital',
     description:
-      'Invest in secure digital assets. Daily ROI up to 5%, AML/KYC compliance, 256-bit encryption. Join 45,000+ verified investors globally.',
+      'Professionally managed cryptocurrency portfolios with KYC verification, institutional custody, and audited compliance.',
      images: ['/og-images/home-og.png'],
   },
 }

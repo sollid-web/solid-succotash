@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function LegalPage() {
   return (
@@ -7,18 +6,15 @@ export default function LegalPage() {
       <main className="min-h-screen bg-white">
         <section className="max-w-2xl mx-auto py-16 px-4">
           <h1 className="text-4xl font-bold mb-6">Legal & Compliance Overview</h1>
-          <div className="mb-8 flex justify-center">
-            <div className="relative w-full max-w-[480px] aspect-[2/3] rounded-2xl overflow-hidden shadow-2xl border-2 border-gray-200">
-              <Image
-                src="/img/legal_disclaimer_wolvcapital.jpg"
-                alt="Legal practitioner signing WolvCapital disclaimer documents"
-                fill
-                priority
-                className="object-cover object-center"
-                sizes="(max-width: 768px) 100vw, 480px"
-              />
-            </div>
+          
+          {/* Blockquote replacing image */}
+          <div className="mb-8 border-l-4 border-[#0EA5E9] pl-6 py-4">
+            <blockquote className="text-lg italic text-gray-700 mb-2">
+              "WolvCapital is committed to full regulatory transparency. All legal documents are available upon request and disclosed before account activation."
+            </blockquote>
+            <p className="text-sm text-gray-600">— WolvCapital Compliance Team</p>
           </div>
+          
           <p className="text-lg text-gray-700 mb-8">WolvCapital is committed to maintaining high standards of operational transparency, data protection, and responsible investment practices. Our legal and compliance framework is designed to protect investors, ensure regulatory adherence, and foster trust in digital asset management.</p>
           <h2 className="text-2xl font-semibold mb-4">Compliance Focus Areas</h2>
           <ul className="list-disc pl-6 mb-6 text-gray-700 space-y-2">

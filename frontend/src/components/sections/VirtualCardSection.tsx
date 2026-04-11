@@ -51,18 +51,30 @@ const FEATURES = [
 
 export default function VirtualCardSection() {
   return (
-    <section id="virtual-card" className="py-12 md:py-20 bg-white">
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <section id="virtual-card" className="relative py-24 bg-[#0F172A] overflow-hidden">
+      {/* Background image */}
+      <div 
+        className="absolute inset-0" 
+        style={{ 
+          backgroundImage: "url(/images/sections/card-bg.webp)", 
+          backgroundSize: "cover", 
+          backgroundPosition: "center",
+          opacity: 0.05,
+          zIndex: 0
+        }} 
+      />
+      
+      <div className="relative z-10 container mx-auto px-4 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left: Card Visualization */}
           <div className="flex justify-center lg:justify-end">
             <div className="w-full max-w-xs">
               {/* Card */}
               <div
-                className="w-full aspect-video rounded-2xl p-6 mb-6"
+                className="w-full aspect-video rounded-2xl p-6 mb-8"
                 style={{
                   background: 'linear-gradient(135deg, #1e5df7 0%, #0a34b0 100%)',
-                  boxShadow: '0 20px 60px rgba(11, 47, 107, 0.35)',
+                  boxShadow: '0 32px 64px rgba(0,0,0,0.4)',
                 }}
               >
                 {/* Chip */}
@@ -90,22 +102,30 @@ export default function VirtualCardSection() {
               {/* Services Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
                 {CARD_SERVICES.map((service, idx) => (
-                  <div key={idx} className="bg-white border-2 border-gray-300 rounded-xl p-5 text-center hover:border-blue-600 hover:bg-blue-50 hover:shadow-lg transition-all duration-200 flex flex-col items-center justify-center gap-3 min-h-32 cursor-pointer">
+                  <div 
+                    key={idx} 
+                    className="rounded-lg p-4 text-center hover:shadow-lg transition-all duration-200 flex flex-col items-center justify-center gap-3 min-h-28 cursor-pointer"
+                    style={{
+                      background: 'rgba(255,255,255,0.06)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      backdropFilter: 'blur(4px)',
+                    }}
+                  >
                     {service.icon === null ? (
-                      <div className="w-14 h-14 border-3 border-gray-400 rounded-lg flex items-center justify-center text-gray-600 font-bold text-xl">
+                      <div className="w-12 h-12 border-2 border-white border-opacity-30 rounded-lg flex items-center justify-center text-white font-bold text-lg">
                         +
                       </div>
                     ) : (
                       <Image
                         src={service.icon}
                         alt={service.name}
-                        width={56}
-                        height={56}
-                        className="max-w-[56px] max-h-[56px] object-contain"
+                        width={48}
+                        height={48}
+                        className="max-w-[48px] max-h-[48px] object-contain"
                         unoptimized
                       />
                     )}
-                    <div className="text-sm font-semibold text-gray-800 line-clamp-2 leading-tight">{service.name}</div>
+                    <div className="text-xs font-semibold text-white text-opacity-80 line-clamp-2 leading-tight">{service.name}</div>
                   </div>
                 ))}
               </div>
@@ -114,9 +134,9 @@ export default function VirtualCardSection() {
 
           {/* Right: Content */}
           <div>
-            <span className="text-xs uppercase font-bold tracking-widest text-blue-600">Virtual Card</span>
-            <h2 className="text-4xl font-bold text-[#0b2f6b] my-4">Pay bills directly from your dashboard</h2>
-            <p className="text-gray-600 text-lg leading-relaxed mb-8">
+            <span className="text-[11px] font-bold tracking-widest text-[#0EA5E9] uppercase block mb-4">Virtual Card</span>
+            <h2 className="text-4xl font-bold text-white my-4" style={{ letterSpacing: '-0.02em' }}>Pay bills directly from your dashboard</h2>
+            <p className="text-[#CBD5E1] text-lg leading-relaxed mb-8">
               Once your account is KYC-verified and activated, you can request a WolvCapital virtual Visa card linked directly to your portfolio balance. Use it to pay subscriptions, shop online, or connect to Apple Pay and Google Pay — all managed from your dashboard.
             </p>
 
@@ -124,21 +144,21 @@ export default function VirtualCardSection() {
             <ul className="space-y-3 mb-8">
               {FEATURES.map((feature, idx) => (
                 <li key={idx} className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700">{feature}</span>
+                  <Check className="w-5 h-5 text-[#0EA5E9] flex-shrink-0 mt-0.5" />
+                  <span className="text-[#E2E8F0] text-sm">{feature}</span>
                 </li>
               ))}
             </ul>
 
             {/* Disclaimer */}
-            <div className="bg-gray-50 border-l-4 border-gray-300 p-4 mb-8 text-sm text-gray-600">
-              Card issuance is subject to KYC verification, eligibility review, and partner programme availability. Card spending draws from your available portfolio balance. This is not a credit card — no credit is extended. Availability varies by country. Features and limits are disclosed at activation.
+            <div className="border-l-4 border-[#0EA5E9] p-4 mb-8 text-sm text-[#CBD5E1]" style={{ background: 'rgba(14, 165, 233, 0.08)' }}>
+              The WolvCapital virtual card is currently available to verified residents of supported countries only. A full list of supported countries is available at activation. Residents of unsupported regions may register their interest via the waitlist.
             </div>
 
             {/* CTA */}
             <Link
               href="/accounts/signup"
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-sky-400 to-cyan-500 text-[#0b2f6b] font-bold rounded-full hover:opacity-90 transition"
+              className="inline-flex items-center px-8 py-3 bg-white text-[#0F172A] font-semibold rounded-md hover:bg-gray-100 transition"
             >
               Activate Your Card →
             </Link>

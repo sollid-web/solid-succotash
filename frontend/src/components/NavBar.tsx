@@ -1,7 +1,6 @@
 "use client"
 
 import Link from 'next/link'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useTranslation } from '@/i18n/TranslationProvider'
 import { Button } from '@/components/ui/Button'
@@ -21,35 +20,28 @@ export default function NavBar() {
   ]
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200">
-      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
-          {/* Brand Logo + Wordmark */}
+    <nav className="sticky top-0 w-full z-50 bg-white border-b border-[#E2E8F0] shadow-sm" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.08)', height: '68px', paddingLeft: '48px', paddingRight: '48px' }}>
+      <div className="max-w-full mx-auto">
+        <div className="flex items-center justify-between h-full">
+          {/* Brand Logo + Wordmark with Navy Dot */}
           <Link href="/" className="flex items-center gap-2 flex-shrink-0 hover:opacity-80 transition-opacity">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 relative">
-              <Image
-                src="/logo.svg"
-                alt="WolvCapital"
-                width={48}
-                height={48}
-                priority
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <span className="hidden sm:inline text-xl sm:text-2xl font-bold text-brand-primary">
+            <div className="w-2 h-2 bg-[#0EA5E9] rounded-sm" style={{ borderRadius: '2px' }}></div>
+            <span className="text-xl font-bold text-[#0F172A]">
               WolvCapital
             </span>
           </Link>
 
           {/* Desktop Navigation Links */}
-          <ul className="hidden lg:flex items-center gap-8">
+          <ul className="hidden lg:flex items-center gap-9">
             {navItems.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
                   className={cn(
-                    'text-sm font-medium transition-colors duration-200',
-                    pathname === item.href ? 'text-brand-primary' : 'text-gray-600 hover:text-brand-primary'
+                    'text-sm font-medium transition-colors duration-200 tracking-tighter',
+                    pathname === item.href 
+                      ? 'text-[#0F172A] border-b-2 border-[#0EA5E9]' 
+                      : 'text-[#475569] hover:text-[#0F172A]'
                   )}
                 >
                   {item.label}
@@ -60,17 +52,28 @@ export default function NavBar() {
 
           {/* Right Side: Auth Links */}
           <div className="hidden lg:flex items-center gap-4">
-            <Link href="/accounts/login" className="text-sm font-semibold text-brand-primary hover:text-brand-secondary transition-colors">
+            <Link 
+              href="/accounts/login" 
+              className="text-sm font-medium text-[#0F172A] px-5 py-2 border border-[#CBD5E1] rounded-md hover:bg-[#F8FAFC] transition-colors"
+            >
               Login
             </Link>
-            <Button variant="cta-sky" size="md" asLink href="/accounts/signup">
+            <Button 
+              asLink 
+              href="/accounts/signup"
+              className="bg-[#0F172A] text-white px-5 py-2 rounded-md font-semibold text-sm hover:bg-[#1E3A5F] transition-colors"
+            >
               Sign Up
             </Button>
           </div>
 
           {/* Mobile: Show sign up button only */}
           <div className="lg:hidden">
-            <Button variant="cta-sky" size="sm" asLink href="/accounts/signup">
+            <Button 
+              asLink 
+              href="/accounts/signup"
+              className="bg-[#0F172A] text-white px-5 py-2 rounded-md font-semibold text-sm hover:bg-[#1E3A5F] transition-colors"
+            >
               Sign Up
             </Button>
           </div>

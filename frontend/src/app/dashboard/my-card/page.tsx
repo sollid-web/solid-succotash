@@ -106,7 +106,7 @@ export default function MyCardPage() {
               <p className="text-yellow-900 mb-4">{error}</p>
               <Link
                 href="/dashboard/purchase-card"
-                className="inline-block px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all"
+                className="inline-block px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-[#0F172A] font-semibold rounded-xl hover:shadow-lg transition-all"
               >
                 Request Virtual Card
               </Link>
@@ -190,7 +190,7 @@ export default function MyCardPage() {
                     <p className="text-sm text-green-700 mb-4">You can now withdraw funds and make purchases with your card.</p>
                     <Link
                       href="/dashboard/withdraw"
-                      className="inline-block px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition"
+                      className="inline-block px-6 py-2 bg-green-600 text-[#0F172A] font-semibold rounded-lg hover:bg-green-700 transition"
                     >
                       Request Withdrawal
                     </Link>
@@ -206,7 +206,7 @@ export default function MyCardPage() {
                     <p className="text-sm text-red-700 mb-4">Your request was not approved. Please contact support for details.</p>
                     <Link
                       href="/dashboard/support"
-                      className="inline-block px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition"
+                      className="inline-block px-6 py-2 bg-red-600 text-[#0F172A] font-semibold rounded-lg hover:bg-red-700 transition"
                     >
                       Contact Support
                     </Link>
@@ -219,7 +219,7 @@ export default function MyCardPage() {
                       href="/dashboard/purchase-card"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-block px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+                      className="inline-block px-6 py-2 bg-blue-600 text-[#0F172A] font-semibold rounded-lg hover:bg-blue-700 transition"
                     >
                       Request Card
                     </Link>

@@ -104,14 +104,14 @@ export default function AdminWithdrawalsPage() {
                 <button
                   disabled={actionId === row.id}
                   onClick={() => submitAction(row.id, 'approved')}
-                  className="px-3 py-2 bg-green-600 text-white rounded text-sm"
+                  className="px-3 py-2 bg-green-600 text-[#0F172A] rounded text-sm"
                 >
                   Approve
                 </button>
                 <button
                   disabled={actionId === row.id}
                   onClick={() => submitAction(row.id, 'rejected')}
-                  className="px-3 py-2 bg-red-600 text-white rounded text-sm"
+                  className="px-3 py-2 bg-red-600 text-[#0F172A] rounded text-sm"
                 >
                   Reject
                 </button>

@@ -97,10 +97,10 @@ export default function SignupPage() {
             <Link href="/" className="inline-block mb-8">
               <Image src="/wolv-logo.svg" alt="WolvCapital" width={180} height={60} />
             </Link>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white drop-shadow-2xl mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#0F172A] drop-shadow-2xl mb-6">
               Create Your WolvCapital Account
             </h1>
-            <p className="text-xl md:text-2xl text-white/95 drop-shadow-lg max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-[#0F172A]/95 drop-shadow-lg max-w-3xl mx-auto leading-relaxed">
               Join 45,000+ global investors growing their digital assets through a secure and transparent platform.
             </p>
           </div>
@@ -131,7 +131,7 @@ export default function SignupPage() {
             </div>
 
             {/* 3-Step Process */}
-            <div className="mb-10 p-6 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 text-white">
+            <div className="mb-10 p-6 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 text-[#0F172A]">
               <h2 className="text-2xl font-bold mb-4 text-center">Sign Up in 3 Easy Steps</h2>
               <ol className="space-y-3">
                 <li className="flex items-center gap-3">
@@ -244,7 +244,7 @@ export default function SignupPage() {
                     <p className="text-sm text-gray-600">Didn't receive the email? Check your spam folder.</p>
                   </div>
                   <button 
-                    className="mt-6 w-full bg-gradient-to-r from-gray-600 to-gray-700 text-white py-4 rounded-xl font-bold text-lg shadow-xl hover:scale-105 transition-all duration-300" 
+                    className="mt-6 w-full bg-gradient-to-r from-gray-600 to-gray-700 text-[#0F172A] py-4 rounded-xl font-bold text-lg shadow-xl hover:scale-105 transition-all duration-300" 
                     onClick={() => router.replace('/accounts/login')}
                   >
                     Go to Sign In
@@ -256,7 +256,7 @@ export default function SignupPage() {
 
           {/* Trust Indicators */}
           <div className="mt-8 text-center">
-            <div className="flex flex-wrap justify-center gap-8 text-white/90">
+            <div className="flex flex-wrap justify-center gap-8 text-[#0F172A]/90">
               <div className="flex items-center gap-2">
                 <span className="text-2xl">🔒</span>
                 <span className="font-semibold">256-bit Encryption</span>

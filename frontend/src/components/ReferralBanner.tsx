@@ -20,8 +20,8 @@ export default function ReferralBanner({ className = '' }: { className?: string 
             <stop offset="1" stopColor="#0ea5a4" stopOpacity="1" />
           </linearGradient>
           <linearGradient id="g2" x1="0" x2="1">
-            <stop offset="0" stopColor="#fff" stopOpacity="0.06" />
-            <stop offset="1" stopColor="#fff" stopOpacity="0.02" />
+            <stop offset="0" stopColor="#0F172A" stopOpacity="0.06" />
+            <stop offset="1" stopColor="#0F172A" stopOpacity="0.02" />
           </linearGradient>
         </defs>
 
@@ -48,7 +48,7 @@ export default function ReferralBanner({ className = '' }: { className?: string 
         </g>
 
         <g transform="translate(60,160)">
-          <text x="0" y="0" fill="#fff" fontSize="36" fontWeight="700" fontFamily="Inter, ui-sans-serif, system-ui, -apple-system">
+          <text x="0" y="0" fill="#0F172A" fontSize="36" fontWeight="700" fontFamily="Inter, ui-sans-serif, system-ui, -apple-system">
             Earn when you invite investors
           </text>
           <text x="0" y="46" fill="#e6f3f2" fontSize="18" fontWeight="500" fontFamily="Inter, ui-sans-serif, system-ui, -apple-system">
@@ -57,25 +57,25 @@ export default function ReferralBanner({ className = '' }: { className?: string 
         </g>
 
         <g transform="translate(60,300)">
-          <rect x="0" y="-12" rx="12" ry="12" width="320" height="72" fill="#fff" opacity="0.06" />
-          <text x="24" y="16" fill="#fff" fontSize="16" fontWeight="600">Share your link — grow your earnings</text>
+          <rect x="0" y="-12" rx="12" ry="12" width="320" height="72" fill="#0F172A" opacity="0.06" />
+          <text x="24" y="16" fill="#0F172A" fontSize="16" fontWeight="600">Share your link — grow your earnings</text>
           <rect x="240" y="-6" rx="8" ry="8" width="80" height="44" fill="#06b6d4" />
           <text x="280" y="24" textAnchor="middle" fill="#06283d" fontSize="14" fontWeight="700">Get started</text>
         </g>
 
         <g transform="translate(80,320)">
-          <rect x="0" y="0" width="68" height="68" rx="12" fill="#fff" opacity="0.08" />
-          <text x="34" y="42" textAnchor="middle" fontSize="12" fontWeight="700" fill="#fff">Wallet</text>
+          <rect x="0" y="0" width="68" height="68" rx="12" fill="#0F172A" opacity="0.08" />
+          <text x="34" y="42" textAnchor="middle" fontSize="12" fontWeight="700" fill="#0F172A">Wallet</text>
         </g>
 
         <g transform="translate(160,320)">
-          <rect x="0" y="0" width="68" height="68" rx="12" fill="#fff" opacity="0.08" />
-          <text x="34" y="42" textAnchor="middle" fontSize="12" fontWeight="700" fill="#fff">Share</text>
+          <rect x="0" y="0" width="68" height="68" rx="12" fill="#0F172A" opacity="0.08" />
+          <text x="34" y="42" textAnchor="middle" fontSize="12" fontWeight="700" fill="#0F172A">Share</text>
         </g>
 
         <g transform="translate(240,320)">
-          <rect x="0" y="0" width="68" height="68" rx="12" fill="#fff" opacity="0.08" />
-          <text x="34" y="42" textAnchor="middle" fontSize="12" fontWeight="700" fill="#fff">Stats</text>
+          <rect x="0" y="0" width="68" height="68" rx="12" fill="#0F172A" opacity="0.08" />
+          <text x="34" y="42" textAnchor="middle" fontSize="12" fontWeight="700" fill="#0F172A">Stats</text>
         </g>
       </svg>
     </div>

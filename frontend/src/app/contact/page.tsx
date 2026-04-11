@@ -9,7 +9,7 @@ const MapWithOverlay = dynamic(() => import('@/components/MapWithOverlay'), { ss
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-hero-contact bg-cover bg-center bg-no-repeat overlay-dark-40">
-  <section className="pt-32 pb-16 bg-black/40 text-white text-center">
+  <section className="pt-32 pb-16 bg-black/40 text-[#0F172A] text-center">
           <div className="container mx-auto px-4 lg:px-8">
             <h1 className="text-5xl lg:text-6xl font-extrabold mb-6">Contact WolvCapital</h1>
             <p className="text-xl text-gray-200 max-w-3xl mx-auto">
@@ -69,7 +69,7 @@ export default function ContactPage() {
                 <div className="space-y-8">
                   <div className="flex items-start space-x-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-xl flex items-center justify-center flex-shrink-0">
-                      <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-7 h-7 text-[#0F172A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
                     </div>
@@ -81,7 +81,7 @@ export default function ContactPage() {
                   </div>
                   <div className="flex items-start space-x-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-7 h-7 text-[#0F172A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
@@ -93,7 +93,7 @@ export default function ContactPage() {
                   </div>
                   <div className="flex items-start space-x-4">
                     <div className="w-14 h-14 bg-gradient-to-br from-green-600 to-green-700 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-7 h-7 text-[#0F172A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
                       </svg>
                     </div>

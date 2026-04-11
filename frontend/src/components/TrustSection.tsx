@@ -24,8 +24,8 @@ export default function TrustSection() {
             <div className="bg-white rounded-xl p-8 shadow-lg border-l-4 border-green-500 hover:shadow-xl transition-all">
               <div className="flex items-center mb-4">
                 <div className="relative w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg">
-                  <div className="absolute inset-0 bg-green-400 rounded-2xl blur-sm opacity-50"></div>
-                  <UserCheck className="relative w-8 h-8 text-white" strokeWidth={2.5} />
+                  <div className="absolute inset-0 bg-[#4F46E5] rounded-2xl "></div>
+                  <UserCheck className="relative w-8 h-8 text-[#0F172A]" strokeWidth={2.5} />
                 </div>
                 <h3 className="text-xl font-bold text-[#0b2f6b]">KYC Verified</h3>
               </div>
@@ -36,8 +36,8 @@ export default function TrustSection() {
             <div className="bg-white rounded-xl p-8 shadow-lg border-l-4 border-blue-500 hover:shadow-xl transition-all">
               <div className="flex items-center mb-4">
                 <div className="relative w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg">
-                  <div className="absolute inset-0 bg-blue-400 rounded-2xl blur-sm opacity-50"></div>
-                  <ShieldCheck className="relative w-8 h-8 text-white" strokeWidth={2.5} />
+                  <div className="absolute inset-0 bg-blue-400 rounded-2xl "></div>
+                  <ShieldCheck className="relative w-8 h-8 text-[#0F172A]" strokeWidth={2.5} />
                 </div>
                 <h3 className="text-xl font-bold text-[#0b2f6b]">AML Compliant</h3>
               </div>
@@ -48,8 +48,8 @@ export default function TrustSection() {
             <div className="bg-white rounded-xl p-8 shadow-lg border-l-4 border-purple-500 hover:shadow-xl transition-all">
               <div className="flex items-center mb-4">
                 <div className="relative w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg">
-                  <div className="absolute inset-0 bg-purple-400 rounded-2xl blur-sm opacity-50"></div>
-                  <Lock className="relative w-8 h-8 text-white" strokeWidth={2.5} />
+                  <div className="absolute inset-0 bg-[#0EA5E9] rounded-2xl "></div>
+                  <Lock className="relative w-8 h-8 text-[#0F172A]" strokeWidth={2.5} />
                 </div>
                 <h3 className="text-xl font-bold text-[#0b2f6b]">Data Encryption</h3>
               </div>
@@ -64,8 +64,8 @@ export default function TrustSection() {
               <div className="text-center">
                 <div className="flex justify-center mb-3">
                   <div className="relative w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-                    <div className="absolute inset-0 bg-indigo-400 rounded-2xl blur opacity-40"></div>
-                    <Shield className="relative w-9 h-9 text-white" strokeWidth={2.5} />
+                    <div className="absolute inset-0 bg-indigo-400 rounded-2xl "></div>
+                    <Shield className="relative w-9 h-9 text-[#0F172A]" strokeWidth={2.5} />
                   </div>
                 </div>
                 <div className="text-2xl font-bold text-indigo-700 mb-2">2FA</div>
@@ -74,28 +74,28 @@ export default function TrustSection() {
               <div className="text-center">
                 <div className="flex justify-center mb-3">
                   <div className="relative w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
-                    <div className="absolute inset-0 bg-green-400 rounded-2xl blur opacity-40"></div>
-                    <Lock className="relative w-9 h-9 text-white" strokeWidth={2.5} />
+                    <div className="absolute inset-0 bg-[#4F46E5] rounded-2xl "></div>
+                    <Lock className="relative w-9 h-9 text-[#0F172A]" strokeWidth={2.5} />
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-green-700 mb-2">256-bit</div>
+                <div className="text-2xl font-bold text-white mb-2">256-bit</div>
                 <p className="text-sm text-gray-700">SSL Encryption</p>
               </div>
               <div className="text-center">
                 <div className="flex justify-center mb-3">
                   <div className="relative w-16 h-16 bg-gradient-to-br from-red-500 to-rose-600 rounded-2xl flex items-center justify-center shadow-lg">
-                    <div className="absolute inset-0 bg-red-400 rounded-2xl blur opacity-40"></div>
-                    <Clock className="relative w-9 h-9 text-white" strokeWidth={2.5} />
+                    <div className="absolute inset-0 bg-[#38BDF8] rounded-2xl "></div>
+                    <Clock className="relative w-9 h-9 text-[#0F172A]" strokeWidth={2.5} />
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-red-700 mb-2">24/7</div>
+                <div className="text-2xl font-bold text-white mb-2">24/7</div>
                 <p className="text-sm text-gray-700">Fraud Monitoring</p>
               </div>
               <div className="text-center">
                 <div className="flex justify-center mb-3">
                   <div className="relative w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg">
-                    <div className="absolute inset-0 bg-blue-400 rounded-2xl blur opacity-40"></div>
-                    <FileCheck className="relative w-9 h-9 text-white" strokeWidth={2.5} />
+                    <div className="absolute inset-0 bg-blue-400 rounded-2xl "></div>
+                    <FileCheck className="relative w-9 h-9 text-[#0F172A]" strokeWidth={2.5} />
                   </div>
                 </div>
                 <div className="text-2xl font-bold text-blue-700 mb-2">PCI-DSS</div>
@@ -112,8 +112,8 @@ export default function TrustSection() {
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
             <div className="flex gap-4">
               <div className="relative w-12 h-12 bg-gradient-to-br from-yellow-500 to-amber-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
-                <div className="absolute inset-0 bg-yellow-400 rounded-xl blur-sm opacity-50"></div>
-                <AlertTriangle className="relative w-7 h-7 text-white" strokeWidth={2.5} />
+                <div className="absolute inset-0 bg-yellow-400 rounded-xl "></div>
+                <AlertTriangle className="relative w-7 h-7 text-[#0F172A]" strokeWidth={2.5} />
               </div>
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-yellow-800 mb-2">Important Disclosure</h3>
@@ -132,7 +132,7 @@ export default function TrustSection() {
             </div>
             <Link
               href="/risk-disclosure"
-              className="inline-flex items-center px-4 py-2 bg-yellow-600 text-white rounded-lg font-semibold hover:bg-yellow-700 transition-colors whitespace-nowrap"
+              className="inline-flex items-center px-4 py-2 bg-yellow-600 text-[#0F172A] rounded-lg font-semibold hover:bg-yellow-700 transition-colors whitespace-nowrap"
             >
               Read Full Disclosure
               <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

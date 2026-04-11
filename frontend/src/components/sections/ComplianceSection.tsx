@@ -7,6 +7,7 @@ interface ComplianceItem {
   title: string
   description: string
   status: 'active' | 'pending' | 'in-progress'
+  button?: boolean
 }
 
 const COMPLIANCE_ITEMS: ComplianceItem[] = [
@@ -31,8 +32,9 @@ const COMPLIANCE_ITEMS: ComplianceItem[] = [
   {
     title: 'State Money Transmitter Licenses',
     description:
-      'Actively applying for MTLs in applicable U.S. states. Current onboarding is limited to states where exemptions apply. Full list on our legal page.',
+      'Actively applying for MTLs in applicable U.S. states. Current onboarding is available only to residents of states where no Money Transmitter License is currently required or where a valid exemption applies. A full list of eligible states and applicable exemptions is available on our Legal page. Residents of unlisted states may not open accounts at this time.',
     status: 'in-progress',
+    button: true,
   },
   {
     title: 'Form ADV Disclosure',
@@ -54,7 +56,7 @@ const BENEFITS = [
 
 function StatusBadge({ status }: { status: 'active' | 'pending' | 'in-progress' }) {
   const badges = {
-    active: 'bg-green-100 text-green-800 border border-green-300',
+    active: 'bg-[#4F46E5] text-white border border-[#BFDBFE]',
     'in-progress': 'bg-yellow-100 text-yellow-800 border border-yellow-300',
     pending: 'bg-gray-100 text-gray-800 border border-gray-300',
   }
@@ -74,42 +76,56 @@ function StatusBadge({ status }: { status: 'active' | 'pending' | 'in-progress' 
 
 export default function ComplianceSection() {
   return (
-    <section id="compliance" className="py-12 md:py-20 bg-white">
+    <section id="compliance" className="py-24 bg-white">
       <div className="container mx-auto px-4 lg:px-8">
         {/* Header */}
-        <div className="mb-12">
-          <span className="text-xs uppercase font-bold tracking-widest text-blue-600 block mb-2">
+        <div className="mb-16">
+          <span className="text-[11px] font-bold tracking-widest text-[#0EA5E9] uppercase block mb-4">
             Regulatory Status
           </span>
-          <h2 className="text-4xl font-bold text-[#0b2f6b] mb-4">Compliance & regulation</h2>
-          <p className="text-gray-600 text-lg max-w-2xl">
+          <h2 className="text-4xl font-bold text-[#0F172A] mb-4" style={{ letterSpacing: '-0.02em' }}>Compliance &amp; regulation</h2>
+          <p className="text-[#334155] text-lg max-w-2xl">
             We believe investors deserve complete transparency about who they're trusting with their capital.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Left Column: Compliance Items */}
           <div className="lg:col-span-1">
             {COMPLIANCE_ITEMS.map((item, idx) => (
-              <div key={idx} className="pb-6 border-b border-gray-200 last:border-b-0">
-                <h3 className="font-bold text-[#0b2f6b] mb-2">{item.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed mb-2">{item.description}</p>
+              <div key={idx} className="pb-8 border-b border-[#E2E8F0] last:border-b-0 last:pb-0">
+                <h3 className="font-bold text-white mb-2 text-[15px]">{item.title}</h3>
+                <p className="text-[#334155] text-sm leading-relaxed mb-4">{item.description}</p>
                 <StatusBadge status={item.status} />
+                {item.button && (
+                  <a
+                    href="/legal"
+                    className="inline-block mt-3 px-4 py-2 border border-[#0EA5E9] text-[#0EA5E9] text-sm font-semibold rounded-md hover:bg-sky-50 transition"
+                  >
+                    View Eligible States →
+                  </a>
+                )}
               </div>
             ))}
           </div>
 
           {/* Right Column: Benefits */}
-          <div className="lg:col-span-2 bg-gradient-to-br from-[#0b2f6b] to-[#1d4ed8] rounded-2xl p-8 text-white">
+          <div className="lg:col-span-2 bg-[#0F172A] rounded-xl p-10 text-white relative overflow-hidden">
+            <img
+              src="/compliance-ecosystem.png"
+              alt="WolvCapital Compliance Ecosystem — Capital secured through compliance"
+              className="w-full h-auto object-cover rounded-lg mb-6"
+            />
+            
             <h3 className="text-2xl font-bold mb-4">What this means for you</h3>
-            <p className="text-blue-100 mb-6">
+            <p className="text-[#CBD5E1] mb-8">
               Our compliance commitments translate into concrete protections for your capital:
             </p>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {BENEFITS.map((benefit, idx) => (
                 <li key={idx} className="flex items-start gap-3">
-                  <span className="w-5 h-5 rounded-full bg-sky-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-blue-50 text-sm">{benefit}</span>
+                  <span className="text-[#0EA5E9] font-bold mt-1">✓</span>
+                  <span className="text-[#E2E8F0] text-sm leading-relaxed">{benefit}</span>
                 </li>
               ))}
             </ul>

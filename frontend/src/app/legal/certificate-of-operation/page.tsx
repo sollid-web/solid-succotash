@@ -51,7 +51,7 @@ export default async function CertificateOfOperationPage() {
               <header className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-xl flex items-center justify-center shadow-md">
-                    <span className="text-2xl sm:text-3xl font-extrabold text-white">W</span>
+                    <span className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">W</span>
                   </div>
                   <div>
                     <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight h-readable">WolvCapital</h1>

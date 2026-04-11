@@ -71,7 +71,7 @@ export default function CardPurchaseFlow() {
             {error && <p className="text-red-400 text-sm">{error}</p>}
             <button
               onClick={handleProceed}
-              className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 rounded text-white font-semibold"
+              className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 rounded text-[#0F172A] font-semibold"
             >
               Proceed to Payment
             </button>
@@ -89,7 +89,7 @@ export default function CardPurchaseFlow() {
             </div>
             <button
               onClick={handleConfirmPayment}
-              className="w-full py-2 bg-green-600 hover:bg-green-700 rounded text-white font-semibold"
+              className="w-full py-2 bg-green-600 hover:bg-green-700 rounded text-[#0F172A] font-semibold"
             >
               I have made the payment
             </button>

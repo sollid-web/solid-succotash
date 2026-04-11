@@ -43,10 +43,10 @@ export default function HowItWorksPage() {
         {/* Hero Section */}
         <section className="pt-32 pb-16 px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white drop-shadow-2xl mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#0F172A] drop-shadow-2xl mb-6">
               How It Works
             </h1>
-            <p className="text-xl md:text-2xl text-white/95 drop-shadow-lg mb-8 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-[#0F172A]/95 drop-shadow-lg mb-8 max-w-3xl mx-auto leading-relaxed">
               Simple 8-step process for secure digital asset investment with 1%–2% daily ROI
             </p>
             <div className="flex flex-wrap justify-center gap-4 mt-8">
@@ -58,7 +58,7 @@ export default function HowItWorksPage() {
               </Link>
               <Link 
                 href="/plans" 
-                className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white border-2 border-white/80 rounded-xl backdrop-blur-sm bg-white/10 hover:bg-white/20 transition-all duration-300"
+                className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-[#0F172A] border-2 border-white/80 rounded-xl backdrop-blur-sm bg-white/10 hover:bg-white/20 transition-all duration-300"
               >
                 View Investment Plans
               </Link>
@@ -123,7 +123,7 @@ export default function HowItWorksPage() {
               ].map((step) => (
                 <div key={step.num} className="flex gap-6 p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-white border border-blue-100 hover:shadow-xl transition-shadow duration-300">
                   <div className="flex-shrink-0">
-                    <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white font-bold text-2xl shadow-lg">
+                    <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-[#0F172A] font-bold text-2xl shadow-lg">
                       {step.num}
                     </div>
                   </div>
@@ -139,7 +139,7 @@ export default function HowItWorksPage() {
             </div>
 
             {/* Call to Action Section */}
-            <div className="mt-12 p-8 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 text-white text-center">
+            <div className="mt-12 p-8 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 text-[#0F172A] text-center">
               <h3 className="text-3xl font-bold mb-4">Ready to Start Growing Your Digital Assets?</h3>
               <p className="text-xl mb-6 text-blue-100">Join 45,000+ global investors earning 1%–2% daily ROI with professional monitoring and AML/KYC compliance.</p>
               <div className="flex flex-wrap justify-center gap-4">
@@ -151,7 +151,7 @@ export default function HowItWorksPage() {
                 </Link>
                 <Link 
                   href="/contact" 
-                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold border-2 border-white text-white rounded-xl hover:bg-white/10 transition-all duration-300"
+                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold border-2 border-white text-[#0F172A] rounded-xl hover:bg-white/10 transition-all duration-300"
                 >
                   Contact Support
                 </Link>

@@ -30,7 +30,7 @@ export default function ReferralPage() {
     <PublicLayout>
       <main className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] text-white">
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-16 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] text-[#0F172A]">
         <div className="container mx-auto px-4 lg:px-8 text-center">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 sm:mb-6">WolvCapital Referral Program</h1>
           <p className="text-base sm:text-lg md:text-xl text-gray-200 max-w-3xl mx-auto px-4">Earn lifetime commissions by sharing investment opportunities with your network.</p>
@@ -69,7 +69,7 @@ export default function ReferralPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
                 <div className="bg-gradient-to-br from-blue-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg">
                   <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-xl flex items-center justify-center mb-4">
-                    <span className="text-white font-extrabold text-xl sm:text-2xl">1</span>
+                    <span className="text-[#0F172A] font-extrabold text-xl sm:text-2xl">1</span>
                   </div>
                   <h3 className="text-xl sm:text-2xl font-bold text-[#0b2f6b] mb-3">Share Your Link</h3>
                   <p className="text-base sm:text-lg text-gray-700">Find your unique referral link in your dashboard and share it with friends, family, or followers.</p>
@@ -77,7 +77,7 @@ export default function ReferralPage() {
 
                 <div className="bg-gradient-to-br from-purple-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg">
                   <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl flex items-center justify-center mb-4">
-                    <span className="text-white font-extrabold text-xl sm:text-2xl">2</span>
+                    <span className="text-[#0F172A] font-extrabold text-xl sm:text-2xl">2</span>
                   </div>
                   <h3 className="text-xl sm:text-2xl font-bold text-purple-700 mb-3">They Join & Invest</h3>
                   <p className="text-base sm:text-lg text-gray-700">When new users sign up through your link and activate an investment plan, you qualify for commission.</p>
@@ -85,7 +85,7 @@ export default function ReferralPage() {
 
                 <div className="bg-gradient-to-br from-green-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg">
                   <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-green-600 to-green-700 rounded-xl flex items-center justify-center mb-4">
-                    <span className="text-white font-extrabold text-xl sm:text-2xl">3</span>
+                    <span className="text-[#0F172A] font-extrabold text-xl sm:text-2xl">3</span>
                   </div>
                   <h3 className="text-xl sm:text-2xl font-bold text-green-700 mb-3">Earn Rewards</h3>
                   <p className="text-base sm:text-lg text-gray-700">Your commission is credited automatically every time your referral makes an investment.</p>
@@ -141,7 +141,7 @@ export default function ReferralPage() {
             </div>
 
             {/* CTA */}
-            <div className="bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] p-6 sm:p-10 rounded-2xl text-center text-white">
+            <div className="bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] p-6 sm:p-10 rounded-2xl text-center text-[#0F172A]">
               <h3 className="text-2xl sm:text-3xl font-bold mb-4">Ready to Start Earning?</h3>
               <p className="text-base sm:text-lg text-gray-200 mb-6 max-w-2xl mx-auto">
                 Log in to your dashboard to access your unique referral link and start building passive income today.

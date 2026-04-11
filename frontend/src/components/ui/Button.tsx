@@ -27,9 +27,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const variantStyles = {
       'cta-sky': 'bg-gradient-to-r from-sky-400 to-sky-500 text-brand-primary hover:from-sky-500 hover:to-sky-600 active:translate-y-0.5',
       'white': 'bg-white text-brand-primary border-2 border-gray-300 hover:border-brand-secondary hover:shadow-lg active:translate-y-0.5',
-      'plan': 'bg-transparent border border-white/18 text-white/75 hover:bg-white/7 active:translate-y-0.5',
+      'plan': 'bg-transparent border border-white/18 text-[#0F172A]/75 hover:bg-white/7 active:translate-y-0.5',
       'plan-sky': 'bg-gradient-to-r from-sky-400 to-sky-500 text-brand-primary font-bold border-transparent hover:opacity-90 active:translate-y-0.5',
-      'outline': 'border-2 border-current text-current hover:bg-current hover:text-white active:translate-y-0.5',
+      'outline': 'border-2 border-current text-current hover:bg-current hover:text-[#0F172A] active:translate-y-0.5',
     }
 
     const sizeStyles = {

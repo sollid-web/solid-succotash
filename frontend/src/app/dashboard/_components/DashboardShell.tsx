@@ -118,7 +118,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
         <div className="max-w-7xl mx-auto px-4 lg:px-8 h-16 flex items-center justify-between">
           {/* Dashboard Brand */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-xl text-white flex items-center justify-center text-xl font-bold shadow-lg">
+            <div className="w-10 h-10 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-xl text-[#0F172A] flex items-center justify-center text-xl font-bold shadow-lg">
               W
             </div>
             <div>
@@ -130,7 +130,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
           {/* User Info & Actions */}
           <div className="flex items-center gap-4">
             <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-lg">
-              <div className="w-8 h-8 bg-[#2563eb] rounded-full flex items-center justify-center text-white text-sm font-semibold">
+              <div className="w-8 h-8 bg-[#2563eb] rounded-full flex items-center justify-center text-[#0F172A] text-sm font-semibold">
                 {user?.first_name?.charAt(0) || user?.last_name?.charAt(0) || user?.email?.charAt(0) || "U"}
               </div>
               <div>
@@ -151,7 +151,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
 
             <button
               onClick={handleLogout}
-              className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-colors duration-200 flex items-center gap-2"
+              className="px-4 py-2 bg-red-500 hover:bg-red-600 text-[#0F172A] text-sm font-medium rounded-lg transition-colors duration-200 flex items-center gap-2"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

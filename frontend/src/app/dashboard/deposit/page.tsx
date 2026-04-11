@@ -183,7 +183,7 @@ export default function DepositPage() {
                           <button 
                             type="button" 
                             onClick={() => copyToClipboard(w.wallet_address, `${w.currency} address`)}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] text-white px-4 py-2 rounded-lg text-xs font-semibold hover:shadow-lg transition-all duration-200 hover:scale-105 flex items-center space-x-1"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] text-[#0F172A] px-4 py-2 rounded-lg text-xs font-semibold hover:shadow-lg transition-all duration-200 hover:scale-105 flex items-center space-x-1"
                           >
                             {copiedAddress === w.wallet_address ? (
                               <>
@@ -271,7 +271,7 @@ export default function DepositPage() {
           </div>
         </div>
 
-        <button type="submit" disabled={loading} className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-xl font-semibold disabled:opacity-50">
+        <button type="submit" disabled={loading} className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-[#0F172A] px-6 py-3 rounded-xl font-semibold disabled:opacity-50">
           {loading ? 'Submitting...' : 'Submit Deposit'}
         </button>
       </form>
@@ -308,7 +308,7 @@ function QRCode({ address }: { address: string }) {
 }
 
 function CryptoIcon({ currency }: { currency: string }) {
-  const base = 'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-md'
+  const base = 'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-[#0F172A] shadow-md'
   if (currency === 'BTC') return <div className={`${base} bg-gradient-to-br from-orange-400 to-orange-600`}>₿</div>
   if (currency === 'ETH') return <div className={`${base} bg-gradient-to-br from-gray-600 to-gray-800`}>Ξ</div>
   if (currency === 'USDT') return <div className={`${base} bg-gradient-to-br from-green-500 to-green-700`}>₮</div>

@@ -10,7 +10,7 @@ export default function RiskBar() {
         <div className="flex flex-col md:flex-row items-start gap-4 md:gap-5">
           {/* Icon */}
           <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center">
-            <AlertTriangle className="w-5 h-5 md:w-6 md:h-6 text-white" />
+            <AlertTriangle className="w-5 h-5 md:w-6 md:h-6 text-[#0F172A]" />
           </div>
 
           {/* Content */}
@@ -32,7 +32,7 @@ export default function RiskBar() {
           {/* CTA Button */}
           <Link
             href="/risk-disclosure"
-            className="w-full md:w-auto md:flex-shrink-0 inline-flex items-center justify-center gap-2 px-4 md:px-6 py-2 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-700 transition whitespace-nowrap text-sm md:text-base"
+            className="w-full md:w-auto md:flex-shrink-0 inline-flex items-center justify-center gap-2 px-4 md:px-6 py-2 bg-amber-600 text-[#0F172A] rounded-lg font-semibold hover:bg-amber-700 transition whitespace-nowrap text-sm md:text-base"
           >
             Read Full Disclosure
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

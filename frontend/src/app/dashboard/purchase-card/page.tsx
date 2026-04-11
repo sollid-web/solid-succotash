@@ -197,7 +197,7 @@ export default function PurchaseCardPage() {
                       <button
                         type="button"
                         onClick={() => copyToClipboard(selectedWallet.wallet_address, `${selectedWallet.currency} address`)}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] text-white px-3 py-2 rounded-lg text-xs font-semibold hover:shadow-lg transition-all flex items-center space-x-1"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] text-[#0F172A] px-3 py-2 rounded-lg text-xs font-semibold hover:shadow-lg transition-all flex items-center space-x-1"
                       >
                         {copiedAddress === selectedWallet.wallet_address ? (
                           <>
@@ -259,7 +259,7 @@ export default function PurchaseCardPage() {
             <button
               type="submit"
               disabled={loading || !selectedWallet || loadingWallets}
-              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-6 rounded-xl hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-[#0F172A] font-semibold py-3 px-6 rounded-xl hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               {loading ? 'Submitting Request...' : 'Submit Card Request'}
             </button>

@@ -225,7 +225,7 @@ const RecentActivitySingle: React.FC<Props> = ({
           align-items: center;
           gap: 0.85rem;
           background: linear-gradient(135deg, rgba(11,47,107,0.97), rgba(20,37,75,0.95));
-          color: #fff;
+          color: #0F172A;
           padding: 1rem 1.3rem;
           border-radius: 24px;
           font-size: 0.96rem;
@@ -283,7 +283,7 @@ const RecentActivitySingle: React.FC<Props> = ({
           margin-left: 0.35rem;
           border: 0;
           background: rgba(255,255,255,0.12);
-          color: #fff;
+          color: #0F172A;
           width: 22px;
           height: 22px;
           border-radius: 999px;
@@ -297,15 +297,15 @@ const RecentActivitySingle: React.FC<Props> = ({
 
         .card.plan { 
           background: linear-gradient(135deg, rgba(37,99,235,0.96), rgba(29,78,216,0.94));
-          box-shadow: 0 12px 32px rgba(37,99,235,0.4), 0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
+          box-shadow: 0 12px 32px rgba(37,99,235,0.4), 0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(0,0,0,0.08);
         }
         .card.deposit { 
           background: linear-gradient(135deg, rgba(5,150,105,0.96), rgba(4,120,87,0.94));
-          box-shadow: 0 12px 32px rgba(5,150,105,0.4), 0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
+          box-shadow: 0 12px 32px rgba(5,150,105,0.4), 0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(0,0,0,0.08);
         }
         .card.withdrawal { 
           background: linear-gradient(135deg, rgba(245,158,11,0.96), rgba(217,119,6,0.94));
-          box-shadow: 0 12px 32px rgba(245,158,11,0.35), 0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
+          box-shadow: 0 12px 32px rgba(245,158,11,0.35), 0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(0,0,0,0.08);
         }
 
         @media (max-width: 640px) {

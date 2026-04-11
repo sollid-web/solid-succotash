@@ -25,7 +25,7 @@ export default function PrivacyPolicyPage() {
             <div className="flex items-center justify-between h-20">
               <Link href="/" className="flex items-center space-x-3">
                 <div className="w-12 h-12 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-lg flex items-center justify-center">
-                  <span className="text-2xl font-bold text-white">W</span>
+                  <span className="text-2xl font-bold text-[#0F172A]">W</span>
                 </div>
                 <span className="text-2xl font-bold text-[#0b2f6b]">WolvCapital</span>
               </Link>

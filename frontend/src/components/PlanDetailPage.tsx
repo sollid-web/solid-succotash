@@ -66,7 +66,7 @@ export default function PlanDetailPage({ plan }: { plan: PlanDetail }) {
   const totalPotential = clampedAmount + dailyEarnings * plan.durationDays;
 
   const ctaClass =
-    "inline-flex items-center justify-center rounded-full bg-[#4AB3F4] px-7 py-3.5 text-sm sm:text-base font-bold text-white shadow-sm hover:bg-[#3aa6e6] transition";
+    "inline-flex items-center justify-center rounded-full bg-[#4AB3F4] px-7 py-3.5 text-sm sm:text-base font-bold text-[#0F172A] shadow-sm hover:bg-[#3aa6e6] transition";
 
   return (
     <div className="min-h-screen bg-white">
@@ -209,7 +209,7 @@ export default function PlanDetailPage({ plan }: { plan: PlanDetail }) {
           <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
             {plan.activationSteps.map((step, idx) => (
               <div key={step} className="rounded-2xl border border-gray-200 bg-white p-4 text-sm text-gray-700">
-                <div className="h-7 w-7 rounded-full bg-[#0b2f6b] text-white flex items-center justify-center font-semibold text-sm mb-3">
+                <div className="h-7 w-7 rounded-full bg-[#0b2f6b] text-[#0F172A] flex items-center justify-center font-semibold text-sm mb-3">
                   {idx + 1}
                 </div>
                 {step}

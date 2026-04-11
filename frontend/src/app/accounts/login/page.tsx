@@ -354,7 +354,7 @@ export default function LoginPage() {
           </div>
 
           <div className="text-center mt-6">
-            <Link href="/" className="text-white hover:text-gray-200 font-semibold transition">
+            <Link href="/" className="text-[#0F172A] hover:text-gray-200 font-semibold transition">
               ← Back to Home
             </Link>
           </div>

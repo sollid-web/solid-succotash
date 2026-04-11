@@ -258,7 +258,7 @@ export default function WithdrawPage() {
             <button
               type="submit"
               disabled={loading || !hasActiveCard}
-              className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-gradient-to-r from-orange-500 to-orange-600 text-[#0F172A] px-6 py-3 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Submitting..." : hasActiveCard ? "Request Withdrawal" : "Activate Card First"}
             </button>

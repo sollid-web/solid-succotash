@@ -293,10 +293,11 @@ class CheckoutCompletionView(APIView):
             from core.email_service import EmailService
 
             # Send checkout completion email with Trustpilot BCC
-            result = EmailService.send_transaction_notification(
-                transaction_obj=None,  # We're not using a transaction object
-                status="completed",
-                notes=None,
+            result = EmailService.send_checkout_completion_email(
+                email=email,
+                user_name=name,
+                transaction_id=tx_id,
+                amount=amount,
                 bcc=[settings.TRUSTPILOT_BCC_ADDRESS]
                 if getattr(settings, "TRUSTPILOT_BCC_ADDRESS", None)
                 else None,

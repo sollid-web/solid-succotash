@@ -1,0 +1,23 @@
+CHECKOUT COMPLETED - {{ brand_name }}
+
+Dear {{ user_name }},
+
+Thank you for your purchase! Your checkout has been completed successfully and your investment is now active.
+
+PAYMENT CONFIRMED
+Your transaction has been processed and your account has been credited.
+
+Transaction Details:
+- Transaction ID: {{ transaction_id }}
+- Amount: ${{ amount }}
+- Status: Completed
+- Processed: {{ current_timestamp|date:"F d, Y \a\t g:i A" }}
+
+You can now access your dashboard to view your portfolio and track your investments.
+
+View Dashboard: {{ dashboard_url }}
+
+If you have any questions, please don't hesitate to contact our support team.
+
+Best regards,
+The {{ brand_name }} Team

@@ -10,7 +10,7 @@ export default function HowItWorksSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Eyebrow label */}
         <div className="text-center mb-4">
-          <span className="text-[11px] font-bold tracking-widest text-[#0EA5E9] uppercase">
+          <span className="text-[11px] font-bold tracking-widest text-brand-primary uppercase">
             Process
           </span>
         </div>

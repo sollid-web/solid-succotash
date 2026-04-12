@@ -48,7 +48,7 @@ export default function TrustSection() {
             <div className="bg-white rounded-xl p-8 shadow-lg border-l-4 border-purple-500 hover:shadow-xl transition-all">
               <div className="flex items-center mb-4">
                 <div className="relative w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg">
-                  <div className="absolute inset-0 bg-[#0EA5E9] rounded-2xl "></div>
+                  <div className="absolute inset-0 bg-brand-primary rounded-2xl "></div>
                   <Lock className="relative w-8 h-8 text-[#0F172A]" strokeWidth={2.5} />
                 </div>
                 <h3 className="text-xl font-bold text-[#0b2f6b]">Data Encryption</h3>

@@ -50,7 +50,7 @@ export default async function CertificateOfOperationPage() {
             <div className="p-6 sm:p-10 relative">
               <header className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-xl flex items-center justify-center shadow-md">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-brand-primary to-brand-primary rounded-xl flex items-center justify-center shadow-md">
                     <span className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">W</span>
                   </div>
                   <div>
@@ -61,7 +61,7 @@ export default async function CertificateOfOperationPage() {
                 <div className="hidden sm:flex items-center gap-3 text-right">
                   <div className="hidden md:block">
                     <p className="text-xs text-gray-500">Verify at</p>
-                    <p className="text-xs font-semibold text-[#0b2f6b]">wolvcapital.com/legal/certificate-of-operation</p>
+                    <p className="text-xs font-semibold text-brand-primary">wolvcapital.com/legal/certificate-of-operation</p>
                   </div>
                   {data?.authority_seal_url ? (
                     <SignatureImage
@@ -76,7 +76,7 @@ export default async function CertificateOfOperationPage() {
               <div className="panel-readable rounded-xl p-6 sm:p-10">
                 <div className="text-center mb-6">
                   <p className="tracking-[0.35em] text-[10px] sm:text-xs text-gray-500 mb-2">OFFICIAL DOCUMENT</p>
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0b2f6b]">Certificate of Operation</h2>
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-primary">Certificate of Operation</h2>
                 </div>
 
                 <p className="p-readable text-sm sm:text-base leading-relaxed text-justify">

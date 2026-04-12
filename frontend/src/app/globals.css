@@ -4,20 +4,20 @@
 
 /* WolvCapital Brand CSS Variables */
 :root {
-  /* Live Site Brand Colors - Exact Match */
-  --brand-primary: #0b2f6b;
-  --brand-secondary: #2563eb;
-  --brand-accent: #1d4ed8;
+  /* Corporate palette aligned with Tailwind brand tokens */
+  --brand-primary: #2A52BE;
+  --brand-secondary: #1E3A8A;
+  --brand-accent: #0EA5E9;
   --brand-gold: #fde047;
-  --brand-dark: #071d42;
-  --brand-darker: #111827;
-  --brand-light: #f8fafc;
+  --brand-dark: #1E3A8A;
+  --brand-darker: #0F172A;
+  --brand-light: #e2f5ff;
   --brand-gray: #64748b;
 
-  /* Live Site Gradients */
-  --brand-gradient: linear-gradient(135deg, #0b2f6b 0%, #2563eb 100%);
-  --brand-gradient-hover: linear-gradient(135deg, #071d42 0%, #0b2f6b 100%);
-  --hero-gradient: linear-gradient(180deg, rgba(7, 29, 66, 0.85) 0%, rgba(11, 47, 107, 0.95) 100%);
+  /* Brand gradients */
+  --brand-gradient: linear-gradient(135deg, #2A52BE 0%, #1E3A8A 100%);
+  --brand-gradient-hover: linear-gradient(135deg, #1E3A8A 0%, #2A52BE 100%);
+  --hero-gradient: linear-gradient(180deg, rgba(30, 58, 138, 0.85) 0%, rgba(42, 82, 190, 0.95) 100%);
   --gold-gradient: linear-gradient(135deg, #FFD700, #FFA500);
 
   /* CTA Sky Blue (silky) */

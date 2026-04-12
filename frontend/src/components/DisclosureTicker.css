@@ -1,5 +1,5 @@
 .disclosure-ticker {
-  background-color: #103ba0;
+  background-color: #F59E0B;
   border-bottom: 1px solid #1e3a5f;
   height: 40px;
   overflow: hidden;
@@ -21,7 +21,7 @@
   display: inline-block;
   font-size: 12px;
   font-weight: 500;
-  color: #dab678;
+  color: white;
   letter-spacing: 0.03em;
   text-transform: uppercase;
   line-height: 40px;

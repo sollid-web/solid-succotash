@@ -222,6 +222,27 @@ class EmailService:
         return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)
 
     @classmethod
+    def send_checkout_completion_email(
+        cls,
+        email: str,
+        user_name: str,
+        transaction_id: str,
+        amount: str,
+        bcc: list[str] | None = None,
+    ) -> bool:
+        """Send checkout completion email with Trustpilot invite."""
+        template = "checkout_completed"
+        subject = f"Checkout Completed - {cls.BRAND_NAME}"
+
+        context = {
+            "user_name": user_name,
+            "transaction_id": transaction_id,
+            "amount": amount,
+            "dashboard_url": "/dashboard/",
+        }
+        return cls._send(template, email, context=context, subject=subject, bcc=bcc)
+
+    @classmethod
     def send_roi_payout_notification(
         cls,
         user: Any,

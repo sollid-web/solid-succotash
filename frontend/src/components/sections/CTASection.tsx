@@ -13,13 +13,13 @@ export default function CTASection() {
         <div className="flex gap-4 justify-center flex-wrap">
           <Link
             href="/plans"
-            className="px-10 py-4 bg-white text-[#0b2f6b] font-bold rounded-full hover:shadow-2xl hover:scale-105 transition-all border border-gray-200"
+            className="px-10 py-4 bg-white text-brand-primary font-bold rounded-full hover:shadow-2xl hover:scale-105 transition-all border border-gray-200"
           >
             View Plans
           </Link>
           <Link
             href="/accounts/signup"
-            className="px-10 py-4 bg-gradient-to-r from-sky-400 to-cyan-500 text-[#0b2f6b] font-bold rounded-full hover:opacity-90 transition"
+            className="px-10 py-4 bg-brand-primary text-white font-bold rounded-full hover:opacity-90 transition"
           >
             Open Account
           </Link>

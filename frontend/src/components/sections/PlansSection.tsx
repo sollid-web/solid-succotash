@@ -97,7 +97,7 @@ export default function PlansSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Eyebrow label */}
         <div className="text-center mb-4">
-          <span className="text-[11px] font-bold tracking-widest text-[#0EA5E9] uppercase">
+          <span className="text-[11px] font-bold tracking-widest text-brand-primary uppercase">
             Investment Tiers
           </span>
         </div>
@@ -116,7 +116,7 @@ export default function PlansSection() {
               key={plan.id}
               className={`rounded-2xl p-8 transition-all duration-200 flex flex-col ${
                 plan.featured
-                  ? 'bg-white border-2 border-[#e2f5ff] shadow-xl' 
+                  ? 'bg-white border-2 border-brand-primary shadow-xl' 
                   : 'bg-white border border-[#E2E8F0] shadow-md hover:shadow-lg hover:border-[#CBD5E1]'
               }`}
               style={plan.featured ? { boxShadow: '0 8px 32px rgba(15,23,42,0.12)' } : { boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}
@@ -125,7 +125,7 @@ export default function PlansSection() {
               <p className="text-xs text-[#64748B] mb-4">{plan.sub}</p>
               
               {/* Contract term text box */}
-              <div className="bg-[#F8FAFC] border-l-4 border-[#0EA5E9] px-4 py-3 rounded-r-md mb-6 text-xs text-[#475569] leading-relaxed">
+              <div className="bg-[#F8FAFC] border-l-4 border-brand-primary px-4 py-3 rounded-r-md mb-6 text-xs text-[#475569] leading-relaxed">
                 {plan.duration}
               </div>
 
@@ -147,7 +147,7 @@ export default function PlansSection() {
               <ul className="space-y-3 mb-8 flex-1">
                 {plan.features.map((feature, idx) => (
                   <li key={idx} className="text-xs text-[#475569] flex items-start gap-3">
-                    <span className="flex-shrink-0 text-[#0EA5E9] font-bold mt-1">✓</span>
+                    <span className="flex-shrink-0 text-brand-primary font-bold mt-1">✓</span>
                     <span>{feature}</span>
                   </li>
                 ))}

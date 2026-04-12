@@ -29,7 +29,7 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
           <div className="lg:col-span-3">
             {/* Eyebrow label */}
             <div className="mb-4">
-              <span className="text-[11px] font-bold tracking-widest text-[#0EA5E9] uppercase">
+              <span className="text-[11px] font-bold tracking-widest text-brand-primary uppercase">
                 Regulated Digital Asset Management
               </span>
             </div>
@@ -54,13 +54,13 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
                     onPlansClick()
                   }
                 }}
-                className="px-7 py-3.5 bg-[#e2f5ff] text-[#0F172A] rounded-md font-semibold text-sm hover:bg-[#1E3A5F] transition-colors"
+                className="px-7 py-3.5 bg-brand-primary text-white rounded-md font-semibold text-sm hover:bg-[#1E3A5F] transition-colors"
               >
                 View Portfolio Plans
               </Link>
               <Link
                 href="/compliance"
-                className="text-sm font-medium text-[#0EA5E9] hover:underline"
+                className="text-sm font-medium text-brand-primary hover:underline"
               >
                 Read Full Disclosure →
               </Link>

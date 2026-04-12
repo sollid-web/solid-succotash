@@ -134,7 +134,7 @@ export default function VirtualCardSection() {
 
           {/* Right: Content */}
           <div>
-            <span className="text-[11px] font-bold tracking-widest text-[#0EA5E9] uppercase block mb-4">Virtual Card</span>
+            <span className="text-[11px] font-bold tracking-widest text-brand-primary uppercase block mb-4">Virtual Card</span>
             <h2 className="text-4xl font-bold text-white my-4" style={{ letterSpacing: '-0.02em' }}>Pay bills directly from your dashboard</h2>
             <p className="text-[#CBD5E1] text-lg leading-relaxed mb-8">
               Once your account is KYC-verified and activated, you can request a WolvCapital virtual Visa card linked directly to your portfolio balance. Use it to pay subscriptions, shop online, or connect to Apple Pay and Google Pay — all managed from your dashboard.
@@ -144,14 +144,14 @@ export default function VirtualCardSection() {
             <ul className="space-y-3 mb-8">
               {FEATURES.map((feature, idx) => (
                 <li key={idx} className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-[#0EA5E9] flex-shrink-0 mt-0.5" />
+                  <Check className="w-5 h-5 text-brand-primary flex-shrink-0 mt-0.5" />
                   <span className="text-[#E2E8F0] text-sm">{feature}</span>
                 </li>
               ))}
             </ul>
 
             {/* Disclaimer */}
-            <div className="border-l-4 border-[#0EA5E9] p-4 mb-8 text-sm text-[#CBD5E1]" style={{ background: 'rgba(14, 165, 233, 0.08)' }}>
+            <div className="border-l-4 border-brand-primary p-4 mb-8 text-sm text-[#CBD5E1]" style={{ background: 'rgba(42, 82, 190, 0.08)' }}>
               The WolvCapital virtual card is currently available to verified residents of supported countries only. A full list of supported countries is available at activation. Residents of unsupported regions may register their interest via the waitlist.
             </div>
 

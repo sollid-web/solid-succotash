@@ -25,7 +25,7 @@ export default function NavBar() {
         <div className="flex items-center justify-between h-full">
           {/* Brand Logo + Wordmark with Navy Dot */}
           <Link href="/" className="flex items-center gap-2 flex-shrink-0 hover:opacity-80 transition-opacity">
-            <div className="w-2 h-2 bg-[#0EA5E9] rounded-sm" style={{ borderRadius: '2px' }}></div>
+            <div className="w-2 h-2 bg-brand-primary rounded-sm" style={{ borderRadius: '2px' }}></div>
             <span className="text-xl font-bold text-[#0F172A]">
               WolvCapital
             </span>
@@ -40,7 +40,7 @@ export default function NavBar() {
                   className={cn(
                     'text-sm font-medium transition-colors duration-200 tracking-tighter',
                     pathname === item.href 
-                      ? 'text-[#0F172A] border-b-2 border-[#0EA5E9]' 
+                      ? 'text-[#0F172A] border-b-2 border-brand-primary' 
                       : 'text-[#475569] hover:text-[#0F172A]'
                   )}
                 >
@@ -61,7 +61,7 @@ export default function NavBar() {
             <Button 
               asLink 
               href="/accounts/signup"
-              className="bg-[#0F172A] text-white px-5 py-2 rounded-md font-semibold text-sm hover:bg-[#1E3A5F] transition-colors"
+              className="bg-brand-primary text-white px-5 py-2 rounded-md font-semibold text-sm hover:bg-[#1E3A5F] transition-colors"
             >
               Sign Up
             </Button>
@@ -72,7 +72,7 @@ export default function NavBar() {
             <Button 
               asLink 
               href="/accounts/signup"
-              className="bg-[#0F172A] text-white px-5 py-2 rounded-md font-semibold text-sm hover:bg-[#1E3A5F] transition-colors"
+              className="bg-brand-primary text-white px-5 py-2 rounded-md font-semibold text-sm hover:bg-[#1E3A5F] transition-colors"
             >
               Sign Up
             </Button>

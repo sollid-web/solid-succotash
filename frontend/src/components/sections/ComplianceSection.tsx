@@ -80,7 +80,7 @@ export default function ComplianceSection() {
       <div className="container mx-auto px-4 lg:px-8">
         {/* Header */}
         <div className="mb-16">
-          <span className="text-[11px] font-bold tracking-widest text-[#0EA5E9] uppercase block mb-4">
+          <span className="text-[11px] font-bold tracking-widest text-brand-primary uppercase block mb-4">
             Regulatory Status
           </span>
           <h2 className="text-4xl font-bold text-[#0F172A] mb-4" style={{ letterSpacing: '-0.02em' }}>Compliance &amp; regulation</h2>
@@ -100,7 +100,7 @@ export default function ComplianceSection() {
                 {item.button && (
                   <a
                     href="/legal"
-                    className="inline-block mt-3 px-4 py-2 border border-[#0EA5E9] text-[#0EA5E9] text-sm font-semibold rounded-md hover:bg-sky-50 transition"
+                    className="inline-block mt-3 px-4 py-2 border border-brand-primary text-brand-primary text-sm font-semibold rounded-md hover:bg-sky-50 transition"
                   >
                     View Eligible States →
                   </a>
@@ -110,7 +110,7 @@ export default function ComplianceSection() {
           </div>
 
           {/* Right Column: Benefits */}
-          <div className="lg:col-span-2 bg-[#0F172A] rounded-xl p-10 text-white relative overflow-hidden">
+          <div className="lg:col-span-2 bg-brand-primary rounded-xl p-10 text-white relative overflow-hidden">
             <img
               src="/compliance-ecosystem.png"
               alt="WolvCapital Compliance Ecosystem — Capital secured through compliance"
@@ -124,7 +124,7 @@ export default function ComplianceSection() {
             <ul className="space-y-4">
               {BENEFITS.map((benefit, idx) => (
                 <li key={idx} className="flex items-start gap-3">
-                  <span className="text-[#0EA5E9] font-bold mt-1">✓</span>
+                  <span className="text-brand-primary font-bold mt-1">✓</span>
                   <span className="text-[#E2E8F0] text-sm leading-relaxed">{benefit}</span>
                 </li>
               ))}

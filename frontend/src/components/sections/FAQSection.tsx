@@ -64,7 +64,7 @@ export default function FAQSection() {
       <div className="container mx-auto px-4 lg:px-8">
         {/* Eyebrow label */}
         <div className="text-center mb-4">
-          <span className="text-[11px] font-bold tracking-widest text-[#0EA5E9] uppercase">
+          <span className="text-[11px] font-bold tracking-widest text-brand-primary uppercase">
             Support
           </span>
         </div>
@@ -84,7 +84,7 @@ export default function FAQSection() {
               key={idx}
               className={`rounded-xl border transition-all ${
                 openIdx === idx
-                  ? 'border-[#0EA5E9] bg-white shadow-lg'
+                  ? 'border-brand-primary bg-white shadow-lg'
                   : 'border-[#E2E8F0] bg-white hover:border-[#CBD5E1] hover:shadow-md'
               }`}
             >
@@ -100,7 +100,7 @@ export default function FAQSection() {
                   <h3 className="font-bold text-[#0F172A] text-[15px]">{faq.question}</h3>
                 </div>
                 <div
-                  className={`flex-shrink-0 text-[#0EA5E9] text-2xl transition-transform ${
+                  className={`flex-shrink-0 text-brand-primary text-2xl transition-transform ${
                     openIdx === idx ? 'rotate-45' : ''
                   }`}
                 >

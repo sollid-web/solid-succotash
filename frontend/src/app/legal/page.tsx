@@ -8,7 +8,7 @@ export default function LegalPage() {
           <h1 className="text-4xl font-bold mb-6">Legal & Compliance Overview</h1>
           
           {/* Blockquote replacing image */}
-          <div className="mb-8 border-l-4 border-[#0EA5E9] pl-6 py-4">
+          <div className="mb-8 border-l-4 border-brand-primary pl-6 py-4">
             <blockquote className="text-lg italic text-gray-700 mb-2">
               "WolvCapital is committed to full regulatory transparency. All legal documents are available upon request and disclosed before account activation."
             </blockquote>

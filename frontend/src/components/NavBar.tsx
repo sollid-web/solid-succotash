@@ -61,7 +61,7 @@ export default function NavBar() {
             <Button 
               asLink 
               href="/accounts/signup"
-              className="bg-brand-primary text-white px-5 py-2 rounded-md font-semibold text-sm hover:bg-[#1E3A5F] transition-colors"
+              className="bg-brand-primary text-white px-5 py-2 rounded-md font-bold text-sm hover:brightness-110 transition-colors"
             >
               Sign Up
             </Button>
@@ -72,7 +72,7 @@ export default function NavBar() {
             <Button 
               asLink 
               href="/accounts/signup"
-              className="bg-brand-primary text-white px-5 py-2 rounded-md font-semibold text-sm hover:bg-[#1E3A5F] transition-colors"
+              className="bg-brand-primary text-white px-5 py-2 rounded-md font-bold text-sm hover:brightness-110 transition-colors"
             >
               Sign Up
             </Button>

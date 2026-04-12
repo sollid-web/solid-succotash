@@ -59,7 +59,7 @@ export default function FAQPage(): JSX.Element {
       icon: <HelpCircle className="w-6 h-6" />,
       color: "orange",
       question: "Is WolvCapital regulated?",
-      answer: "WolvCapital follows global compliance standards including KYC, AML, and PCI-DSS, but is not a government-regulated financial institution. Please review our Risk Disclosure and legal pages for complete information."
+      answer: "WolvCapital follows global compliance standards including KYC, AML, and PCI-DSS. Please review our Risk Disclosure and legal pages for complete information."
     },
     {
       icon: <TrendingUp className="w-6 h-6" />,

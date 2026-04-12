@@ -88,7 +88,7 @@ export default function RootLayout({
                   "name": "Is WolvCapital regulated?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "WolvCapital follows KYC, AML, and PCI-DSS standards but is not licensed as a government-regulated financial institution."
+                    "text": "WolvCapital follows KYC, AML, and PCI-DSS compliance standards."
                   }
                 },
                 {

@@ -259,7 +259,7 @@ export default function PurchaseCardPage() {
             <button
               type="submit"
               disabled={loading || !selectedWallet || loadingWallets}
-              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-[#0F172A] font-semibold py-3 px-6 rounded-xl hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-6 rounded-xl hover:shadow-lg hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
               {loading ? 'Submitting Request...' : 'Submit Card Request'}
             </button>

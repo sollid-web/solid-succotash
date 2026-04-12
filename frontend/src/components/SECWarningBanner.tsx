@@ -9,7 +9,7 @@ export default function SECWarningBanner() {
         <div className="flex items-center justify-center py-2.5 px-4">
           <p className="text-center text-[13px] text-gray-800 leading-relaxed max-w-4xl">
             <span className="mr-2">⚠️</span>
-            <span className="font-medium">Regulatory Notice:</span> WolvCapital&rsquo;s SEC Investment Adviser registration is currently in progress. We are not registered investment advisers at this time. No client funds are managed until registration is complete or a valid exemption is confirmed.
+            <span className="font-medium">Compliance Notice:</span> WolvCapital operates under KYC, AML, and PCI-DSS compliance standards. FinCEN MSB Registered.
             {' '}
             <Link href="/compliance" className="font-semibold text-gray-800 hover:text-gray-600 underline inline-flex items-center gap-1">
               Learn more →

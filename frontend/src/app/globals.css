@@ -37,6 +37,24 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-feature-settings: 'cv11', 'ss01';
   font-variation-settings: 'opsz' 32;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Tawk Chat Widget - Fixed Position */
+#tawk-container-iframe,
+.tawk-iframe,
+iframe[src*="tawk"],
+div[id*="tawk"] {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 9999 !important;
 }
 
 /* Custom Component Classes */
@@ -67,18 +85,24 @@ body {
 
   /* Silky Sky CTA (primary) */
   .btn-cta-sky {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     background: linear-gradient(180deg, var(--cta-sky-1) 0%, var(--cta-sky-2) 100%);
     border: 1px solid rgba(11, 47, 107, 0.16);
     box-shadow: 0 8px 18px rgba(37, 99, 235, 0.12);
-    color: var(--brand-primary);
+    color: #fff;
+    font-weight: 700;
     transform: translateZ(0);
-    transition: box-shadow 200ms ease, background 200ms ease, border-color 200ms ease, transform 120ms ease;
+    transition: box-shadow 200ms ease, background 200ms ease, border-color 200ms ease, transform 120ms ease, filter 200ms ease;
   }
 
   .btn-cta-sky:hover {
     background: linear-gradient(180deg, var(--cta-sky-2) 0%, var(--cta-sky-3) 100%);
     border-color: rgba(11, 47, 107, 0.22);
     box-shadow: 0 10px 20px rgba(37, 99, 235, 0.14);
+    filter: brightness(1.1);
   }
 
   .btn-cta-sky:active {

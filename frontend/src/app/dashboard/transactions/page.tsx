@@ -286,13 +286,13 @@ export default function TransactionsPage() {
               <div className="flex justify-center space-x-4">
                 <Link
                   href="/dashboard/deposit"
-                  className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-[#0F172A] rounded-xl font-semibold hover:shadow-lg transition"
+                  className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-semibold hover:shadow-lg hover:brightness-110 transition"
                 >
                   Make a Deposit
                 </Link>
                 <Link
                   href="/dashboard/withdraw"
-                  className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-[#0F172A] rounded-xl font-semibold hover:shadow-lg transition"
+                  className="px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-semibold hover:shadow-lg hover:brightness-110 transition"
                 >
                   Request Withdrawal
                 </Link>

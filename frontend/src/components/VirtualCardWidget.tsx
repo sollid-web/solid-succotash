@@ -85,7 +85,7 @@ export default function VirtualCardWidget() {
       {loading ? null : cards.some(c => c.status === 'active') ? (
         <Link
           href="/dashboard/cards"
-          className="block w-full bg-green-600 text-[#0F172A] font-semibold py-3 px-4 rounded-xl text-center hover:shadow-lg transition-all duration-200"
+          className="block w-full bg-green-600 text-white font-semibold py-3 px-4 rounded-xl text-center hover:shadow-lg hover:brightness-110 transition-all duration-200"
         >
           View Active Card
         </Link>
@@ -95,7 +95,7 @@ export default function VirtualCardWidget() {
             href="/dashboard/purchase-card"
             target="_blank"
             rel="noopener noreferrer"
-            className="block w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-[#0F172A] font-semibold py-3 px-4 rounded-xl text-center hover:shadow-lg transition-all duration-200"
+            className="block w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 px-4 rounded-xl text-center hover:shadow-lg hover:brightness-110 transition-all duration-200"
           >
             Request Card Activation
           </Link>

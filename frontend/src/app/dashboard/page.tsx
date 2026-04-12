@@ -222,7 +222,7 @@ export default function DashboardPage() {
               </div>
               <Link
                 href="/dashboard/my-card"
-                className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-[#0F172A] font-semibold rounded-lg hover:shadow-lg transition-all"
+                className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:shadow-lg hover:brightness-110 transition-all"
               >
                 View Card →
               </Link>

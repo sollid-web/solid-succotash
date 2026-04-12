@@ -19,7 +19,7 @@ export default function CTASection() {
           </Link>
           <Link
             href="/accounts/signup"
-            className="px-10 py-4 bg-brand-primary text-white font-bold rounded-full hover:opacity-90 transition"
+            className="px-10 py-4 bg-brand-primary text-white font-bold rounded-full hover:brightness-110 transition"
           >
             Open Account
           </Link>

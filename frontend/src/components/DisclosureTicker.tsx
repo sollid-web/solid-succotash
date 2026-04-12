@@ -2,7 +2,7 @@
 
 import './DisclosureTicker.css'
 
-const tickerText = "⚠️ SEC Registration In Progress — Not yet a registered investment adviser · Custodian & audit details disclosed at activation · No guaranteed returns · Digital assets are speculative and may lose all value · FinCEN MSB Registered · KYC required before account activation · All fees disclosed in writing before investing · WolvCapital is not a bank · Not FDIC or SIPC insured ·"
+const tickerText = "WolvCapital is an SEC-registered investment adviser. View our disclosures for details on fees and services. Digital assets are speculative and involve high risk, including loss of principal. KYC required."
 
 export default function DisclosureTicker() {
   return (

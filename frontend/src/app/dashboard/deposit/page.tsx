@@ -271,7 +271,7 @@ export default function DepositPage() {
           </div>
         </div>
 
-        <button type="submit" disabled={loading} className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-[#0F172A] px-6 py-3 rounded-xl font-semibold disabled:opacity-50">
+        <button type="submit" disabled={loading} className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-xl font-semibold hover:brightness-110 disabled:opacity-50 transition">
           {loading ? 'Submitting...' : 'Submit Deposit'}
         </button>
       </form>

@@ -16,7 +16,7 @@ const FAQS: FAQ[] = [
   },
   {
     question: 'Is WolvCapital regulated?',
-    answer: 'WolvCapital operates under SEC exemptions: Section 203(m) for non-U.S. clients and Section 203(l) for pooled investments, and holds FinCEN Money Services Business registration. We are not yet registered as an investment adviser. By investing, you acknowledge this status. We operate under KYC, AML, and PCI-DSS standards. Check sec.gov for our current status or contact legal@wolvcapital.com for detailed regulatory documentation.',
+    answer: 'WolvCapital operates under KYC, AML, and PCI-DSS compliance standards and holds FinCEN Money Services Business registration. Please visit sec.gov or contact legal@wolvcapital.com for detailed regulatory documentation.',
   },
   {
     question: 'Are my returns guaranteed?',

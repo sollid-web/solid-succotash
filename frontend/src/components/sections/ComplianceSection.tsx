@@ -12,12 +12,6 @@ interface ComplianceItem {
 
 const COMPLIANCE_ITEMS: ComplianceItem[] = [
   {
-    title: 'SEC Investment Adviser Registration',
-    description:
-      'In the process of registering with the U.S. Securities and Exchange Commission. We will not manage client funds until registration is complete or applicable exemptions are confirmed.',
-    status: 'in-progress',
-  },
-  {
     title: 'FinCEN Registration (MSB)',
     description:
       'Registered as a Money Services Business with FinCEN, as required for U.S.-based crypto businesses handling fund transfers.',
@@ -37,10 +31,10 @@ const COMPLIANCE_ITEMS: ComplianceItem[] = [
     button: true,
   },
   {
-    title: 'Form ADV Disclosure',
+    title: 'Transparent Fee & Conflict Disclosure',
     description:
-      'Upon SEC registration, WolvCapital will file Form ADV disclosing our business, fees, and conflicts of interest. This will be publicly accessible via the SEC EDGAR system.',
-    status: 'pending',
+      'WolvCapital maintains institutional-grade transparency standards, publicly disclosing our complete fee structure, business model, and conflict-of-interest policies aligned with SEC Form ADV requirements. Your investments are backed by comprehensive compliance documentation available through the SEC EDGAR system.',
+    status: 'active',
   },
 ]
 

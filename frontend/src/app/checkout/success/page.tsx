@@ -9,6 +9,7 @@ function CheckoutSuccessContent() {
   const searchParams = useSearchParams()
   const [transactionStatus, setTransactionStatus] = useState<string | null>(null)
   const [transactionId, setTransactionId] = useState<string | null>(null)
+  const [userEmail, setUserEmail] = useState<string | null>(null)
   const [emailSent, setEmailSent] = useState(false)
 
   useEffect(() => {
@@ -20,6 +21,7 @@ function CheckoutSuccessContent() {
 
     setTransactionStatus(status)
     setTransactionId(txId)
+    setUserEmail(userEmail)
 
     if (status === 'completed' && txId) {
       // Track event
@@ -42,7 +44,9 @@ function CheckoutSuccessContent() {
 
   const sendCheckoutCompletionEmail = async (txId: string | null, amount: string | null, email: string, name: string) => {
     try {
-      const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+      const apiBase =
+        process.env.NEXT_PUBLIC_API_URL ||
+        (typeof window !== 'undefined' ? window.location.origin : '')
       const response = await fetch(`${apiBase}/api/checkout/completion/`, {
         method: 'POST',
         headers: {
@@ -123,7 +127,7 @@ function CheckoutSuccessContent() {
         </div>
       </div>
 
-      {isCompleted && <TrustpilotInvite />}
+      {isCompleted && userEmail && <TrustpilotInvite email={userEmail} />}
     </div>
   )
 }

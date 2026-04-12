@@ -10,16 +10,21 @@ declare global {
   }
 }
 
-export default function TrustpilotInvite() {
+type TrustpilotInviteProps = {
+  email?: string | null
+}
+
+export default function TrustpilotInvite({ email }: TrustpilotInviteProps) {
   useEffect(() => {
-    // Initialize Trustpilot queue if not already present
     if (typeof window !== 'undefined' && !window.tp) {
       window.TrustpilotObject = 'tp'
       window.tp = window.tp || function() {
-        (window.tp.q = window.tp.q || []).push(arguments)
+        ;(window.tp.q = window.tp.q || []).push(arguments)
       }
     }
   }, [])
+
+  const inviteEmail = email ? JSON.stringify(email) : null
 
   return (
     <>
@@ -29,9 +34,10 @@ export default function TrustpilotInvite() {
         dangerouslySetInnerHTML={{
           __html: `
             (function(w,d,s,r,n){w.TrustpilotObject=n;w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)};
-            a=d.createElement(s);a.async=1;a.src=r;a.type='text/java'+s;f=d.getElementsByTagName(s)[0];
+            var a=d.createElement(s);a.async=1;a.src=r;a.type='text/java'+s;var f=d.getElementsByTagName(s)[0];
             f.parentNode.insertBefore(a,f)})(window,document,'script', 'https://invitejs.trustpilot.com/tp.min.js', 'tp');
             tp('register', '41a2HhCCWtcwdtgx');
+            ${inviteEmail ? `tp('invite', { email: ${inviteEmail}, locale: 'en-US' });` : ''}
           `
         }}
         onError={() => console.error('Failed to load Trustpilot script')}

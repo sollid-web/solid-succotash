@@ -44,10 +44,7 @@ function CheckoutSuccessContent() {
 
   const sendCheckoutCompletionEmail = async (txId: string | null, amount: string | null, email: string, name: string) => {
     try {
-      const apiBase =
-        process.env.NEXT_PUBLIC_API_URL ||
-        (typeof window !== 'undefined' ? window.location.origin : '')
-      const response = await fetch(`${apiBase}/api/checkout/completion/`, {
+      const response = await fetch('/api/checkout/completion/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

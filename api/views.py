@@ -393,10 +393,17 @@ class CheckoutCompletionView(APIView):
             amount = request.data.get("amount", "0")
 
             if not email or not name:
+                logger.warning(
+                    "Checkout completion request missing email or name"
+                )
                 return Response(
                     {"error": "Email and name are required"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
+
+            logger.info(
+                f"Checkout completion requested for {email} (txId={tx_id}, amount={amount})"
+            )
 
             from core.email_service import EmailService
 
@@ -410,6 +417,9 @@ class CheckoutCompletionView(APIView):
                 if getattr(settings, "TRUSTPILOT_BCC_ADDRESS", None)
                 else None,
             )
+            logger.info(
+                f"EmailService.send_checkout_completion_email returned: {result}"
+            )
 
             # If EmailService doesn't work as expected, send a simple email
             if not result:
@@ -422,13 +432,18 @@ class CheckoutCompletionView(APIView):
                     "transaction_id": tx_id,
                     "amount": amount,
                     "dashboard_url": "/dashboard/",
+                    "brand_name": getattr(settings, "BRAND_NAME", "WolvCapital"),
+                    "support_email": getattr(settings, "SUPPORT_EMAIL", None),
                 }
 
                 try:
                     html_content = render_to_string(
-                        "checkout_completed.html", context
+                        "emails/checkout_completed.html", context
                     )
-                except:
+                except Exception as template_error:
+                    logger.warning(
+                        f"Failed to render checkout_completed.html template: {str(template_error)}"
+                    )
                     html_content = f"""
                     <h1>Checkout Completed</h1>
                     <p>Hello {name},</p>
@@ -451,6 +466,7 @@ class CheckoutCompletionView(APIView):
                 )
                 email_msg.attach_alternative(html_content, "text/html")
                 email_msg.send(fail_silently=False)
+                logger.info(f"Fallback checkout completion email sent to {email}")
 
             return Response(
                 {

@@ -23,8 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ------------------------------------------------------------------
 if Env is None:
     raise ImportError(
-        "django-environ is required. Install 'environ' / 'django-environ' "
-        "in the runtime."
+        "django-environ is required. Install 'environ' / 'django-environ' in the runtime."
     )
 
 env = Env()
@@ -37,9 +36,9 @@ SECRET_KEY = env("SECRET_KEY", default=None)
 
 # ── Stripe Keys ──────────────────────────────────
 # Secret key used server‑side (never expose in frontend)
-STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY', default='sk_test_xxx_REPLACE_ME_xxx')
-STRIPE_WEBHOOK_SECRET = env('STRIPE_WEBHOOK_SECRET', default='whsec_YOUR_SECRET')
-STRIPE_PUBLISHABLE_KEY = env('STRIPE_PUBLISHABLE_KEY', default='pk_test_YOUR_KEY')
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="sk_test_xxx_REPLACE_ME_xxx")
+STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET", default="whsec_YOUR_SECRET")
+STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY", default="pk_test_YOUR_KEY")
 
 if DEBUG:
     # Allow fallback dev key for local development
@@ -136,6 +135,11 @@ CORS_ALLOW_HEADERS = [
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
+# Disable automatic slash-appending redirects for POST API routes.
+# This prevents POST requests from being converted into 301/307 redirects
+# by CommonMiddleware when the URL does not already include a trailing slash.
+APPEND_SLASH = False
+
 # ------------------------------------------------------------------
 # Security Headers (Koyeb & Production)
 # ------------------------------------------------------------------
@@ -184,7 +188,7 @@ INSTALLED_APPS = [
     "transactions",
     "api",
     "referrals",
-    "cards",          # ← Add this new app
+    "cards",  # ← Add this new app
 ]
 
 # Alert thresholds for high-priority admin email notifications
@@ -245,8 +249,16 @@ JAZZMIN_SETTINGS = {
     # custom links inside app sections
     "custom_links": {
         "core": [
-            {"name": "Email Templates", "url": "/admin/core/emailtemplate/", "icon": "fas fa-envelope"},
-            {"name": "Support Requests", "url": "/admin/core/supportrequest/", "icon": "fas fa-life-ring"},
+            {
+                "name": "Email Templates",
+                "url": "/admin/core/emailtemplate/",
+                "icon": "fas fa-envelope",
+            },
+            {
+                "name": "Support Requests",
+                "url": "/admin/core/supportrequest/",
+                "icon": "fas fa-life-ring",
+            },
         ],
     },
     "icons": {
@@ -369,10 +381,9 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [str(BASE_DIR / "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-TESTING = any(
-    arg in os.environ.get("PYTEST_CURRENT_TEST", "")
-    for arg in ["::"]
-) or any(c in " ".join(sys.argv) for c in ["test", "pytest"])
+TESTING = any(arg in os.environ.get("PYTEST_CURRENT_TEST", "") for arg in ["::"]) or any(
+    c in " ".join(sys.argv) for c in ["test", "pytest"]
+)
 
 
 STORAGES = {
@@ -478,14 +489,10 @@ EMAIL_HOST = os.getenv("SMTP_HOST") or os.getenv(
     "EMAIL_HOST",
     "smtp.privateemail.com",
 )
-EMAIL_PORT = int(
-    str(os.getenv("SMTP_PORT") or os.getenv("EMAIL_PORT") or "587")
-)
-EMAIL_USE_TLS = (os.getenv('EMAIL_USE_TLS', 'True').lower() == 'true')
-EMAIL_HOST_USER = os.getenv('EMAIL_USER') or os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASS") or os.getenv(
-    "EMAIL_HOST_PASSWORD"
-)
+EMAIL_PORT = int(str(os.getenv("SMTP_PORT") or os.getenv("EMAIL_PORT") or "587"))
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True").lower() == "true"
+EMAIL_HOST_USER = os.getenv("EMAIL_USER") or os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASS") or os.getenv("EMAIL_HOST_PASSWORD")
 # Default from email
 DEFAULT_FROM_EMAIL = os.getenv(
     "DEFAULT_FROM_EMAIL",
@@ -505,7 +512,7 @@ ADMIN_EMAIL_RECIPIENTS = [
     for email in os.getenv(
         "ADMIN_EMAIL_RECIPIENTS",
         "support@mail.wolvcapital.com,privacy@wolvcapital.com,"
-        "legal@wolvcapital.com,admin@wolvcapital.com"
+        "legal@wolvcapital.com,admin@wolvcapital.com",
     ).split(",")
     if email.strip()
 ]
@@ -532,12 +539,8 @@ INBOX_FOLDER = os.getenv("INBOX_FOLDER", "INBOX")
 INBOX_USE_SSL = os.getenv("INBOX_USE_SSL", "True").lower() == "true"
 
 # Sync settings
-INBOX_SYNC_LIMIT = int(
-    os.getenv("INBOX_SYNC_LIMIT", "200")
-)  # Max emails per sync
-INBOX_AUTO_SYNC = (
-    os.getenv("INBOX_AUTO_SYNC", "TRUE").lower() == "true"
-)  # Enable cron sync
+INBOX_SYNC_LIMIT = int(os.getenv("INBOX_SYNC_LIMIT", "200"))  # Max emails per sync
+INBOX_AUTO_SYNC = os.getenv("INBOX_AUTO_SYNC", "TRUE").lower() == "true"  # Enable cron sync
 
 # ------------------------------------------------------------------
 # I18N / TZ
@@ -643,9 +646,7 @@ SESSION_COOKIE_SECURE = env.bool("SESSION_COOKIE_SECURE", default=not DEBUG)
 CSRF_COOKIE_SECURE = env.bool("CSRF_COOKIE_SECURE", default=not DEBUG)
 
 # HSTS Security (HTTP Strict Transport Security)
-SECURE_HSTS_SECONDS = int(
-    os.getenv("SECURE_HSTS_SECONDS", "31536000")
-)  # 1 year
+SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "31536000"))  # 1 year
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
@@ -674,16 +675,11 @@ CSRF_COOKIE_SAMESITE = env(
 CSRF_USE_SESSIONS = False
 
 # Session basics
-SESSION_ENGINE = (
-    "django.contrib.sessions.backends.db"
-)  # Use database-backed sessions
+SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Use database-backed sessions
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 7  # 7 days
-SESSION_SAVE_EVERY_REQUEST = (
-    True
-)  # Save session on every request to maintain login
+SESSION_SAVE_EVERY_REQUEST = True  # Save session on every request to maintain login
 SESSION_COOKIE_NAME = "wolvcapital_sessionid"
 SESSION_COOKIE_DOMAIN = None  # Let Django handle this automatically
 # ... last existing line in settings.py ...
 
 TRUSTPILOT_BCC_ADDRESS = "wolvcapital.com+bebbe29c9e@invite.trustpilot.com"
-

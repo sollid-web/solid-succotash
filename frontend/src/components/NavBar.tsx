@@ -1,14 +1,12 @@
-"use client"
+'use client'
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useTranslation } from '@/i18n/TranslationProvider'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/cn'
 
 export default function NavBar() {
   const pathname = usePathname()
-  const { t } = useTranslation()
 
   const navItems = [
     { href: '/', label: 'Home' },
@@ -20,18 +18,16 @@ export default function NavBar() {
   ]
 
   return (
-    <nav className="sticky top-0 w-full z-50 bg-white border-b border-[#E2E8F0] shadow-sm" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.08)', height: '68px', paddingLeft: '48px', paddingRight: '48px' }}>
-      <div className="max-w-full mx-auto">
-        <div className="flex items-center justify-between h-full">
-          {/* Brand Logo + Wordmark with Navy Dot */}
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0 hover:opacity-80 transition-opacity">
-            <div className="w-2 h-2 bg-brand-primary rounded-sm" style={{ borderRadius: '2px' }}></div>
+    <nav className="sticky top-0 w-full z-50 bg-white border-b border-[rgba(15,23,42,0.1)] shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-[68px]">
+          <Link href="/" className="flex items-center gap-2 flex-shrink-0 hover:opacity-90 transition-opacity">
+            <div className="w-2 h-2 bg-[#2A52BE] rounded-sm"></div>
             <span className="text-xl font-bold text-[#0F172A]">
               WolvCapital
             </span>
           </Link>
 
-          {/* Desktop Navigation Links */}
           <ul className="hidden lg:flex items-center gap-9">
             {navItems.map((item) => (
               <li key={item.href}>
@@ -39,8 +35,8 @@ export default function NavBar() {
                   href={item.href}
                   className={cn(
                     'text-sm font-medium transition-colors duration-200 tracking-tighter',
-                    pathname === item.href 
-                      ? 'text-[#0F172A] border-b-2 border-brand-primary' 
+                    pathname === item.href
+                      ? 'text-[#0F172A] border-b-2 border-[#2A52BE] pb-1'
                       : 'text-[#475569] hover:text-[#0F172A]'
                   )}
                 >
@@ -50,29 +46,27 @@ export default function NavBar() {
             ))}
           </ul>
 
-          {/* Right Side: Auth Links */}
           <div className="hidden lg:flex items-center gap-4">
-            <Link 
-              href="/accounts/login" 
-              className="text-sm font-medium text-[#0F172A] px-5 py-2 border border-[#CBD5E1] rounded-md hover:bg-[#F8FAFC] transition-colors"
+            <Link
+              href="/auth/login"
+              className="text-sm font-medium text-[#1E3A8A] px-5 py-2 border border-[#2A52BE] rounded-[7px] hover:bg-[#eff6ff] transition-colors"
             >
               Login
             </Link>
-            <Button 
-              asLink 
-              href="/accounts/signup"
-              className="bg-brand-primary text-white px-5 py-2 rounded-md font-bold text-sm hover:brightness-110 transition-colors"
+            <Button
+              asLink
+              href="/auth/signup"
+              className="bg-[#2A52BE] text-white px-5 py-2 rounded-[7px] font-bold text-sm hover:bg-[#244bb0] transition-colors"
             >
               Sign Up
             </Button>
           </div>
 
-          {/* Mobile: Show sign up button only */}
           <div className="lg:hidden">
-            <Button 
-              asLink 
-              href="/accounts/signup"
-              className="bg-brand-primary text-white px-5 py-2 rounded-md font-bold text-sm hover:brightness-110 transition-colors"
+            <Button
+              asLink
+              href="/auth/signup"
+              className="bg-[#2A52BE] text-white px-5 py-2 rounded-[7px] font-bold text-sm hover:bg-[#244bb0] transition-colors"
             >
               Sign Up
             </Button>

@@ -11,7 +11,7 @@ export default function SECWarningBanner() {
             <span className="mr-2">⚠️</span>
             <span className="font-medium">Compliance Notice:</span> WolvCapital operates under KYC, AML, and PCI-DSS compliance standards. FinCEN MSB Registered.
             {' '}
-            <Link href="/compliance" className="font-semibold text-gray-800 hover:text-gray-600 underline inline-flex items-center gap-1">
+            <Link href="/risk-disclosure" className="font-semibold text-gray-800 hover:text-gray-600 underline inline-flex items-center gap-1">
               Learn more →
             </Link>
           </p>

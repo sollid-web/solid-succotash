@@ -22,7 +22,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const baseStyles = 'inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 rounded-lg focus:outline-none'
+    const baseStyles = 'inline-flex items-center justify-center gap-2 font-semibold transition-all duration-200 rounded-[7px] focus:outline-none'
 
     const variantStyles = {
       'cta-sky': 'bg-gradient-to-r from-sky-400 to-sky-500 text-white font-bold hover:from-sky-500 hover:to-sky-600 hover:brightness-110 active:translate-y-0.5',

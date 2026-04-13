@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { Button } from '@/components/ui/Button'
 
 interface HeroSectionProps {
   onPlansClick?: () => void
@@ -9,123 +8,65 @@ interface HeroSectionProps {
 
 export default function HeroSection({ onPlansClick }: HeroSectionProps) {
   return (
-    <section className="relative overflow-hidden flex items-center min-h-[80vh] py-24 bg-slate-950">
-      {/* Mesh Gradient Background */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundColor: '#f8fbff',
-          backgroundImage: 'radial-gradient(at 0% 0%, rgba(52, 183, 217, 0.3) 0px, transparent 50%), radial-gradient(at 100% 0%, rgba(15, 23, 42, 0.1) 0px, transparent 50%), radial-gradient(at 50% 100%, rgba(52, 183, 217, 0.2) 0px, transparent 50%)',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          opacity: 1,
-          zIndex: 0,
-        }}
-      />
+    <section
+      className="relative overflow-hidden bg-cover bg-center bg-[url('/images/hero/hero-bg.webp')]"
+      style={{ minHeight: '80vh' }}
+    >
+      <div className="absolute inset-0 bg-slate-950/10" />
+      <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/80 to-white/40" />
 
-      {/* Subtle Node/Network Overlay */}
-      <svg className="absolute inset-0 w-full h-full opacity-10 z-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
-        <defs>
-          <pattern id="network" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
-            <circle cx="50" cy="50" r="2" fill="#00204a" />
-            <circle cx="100" cy="100" r="2" fill="#00204a" />
-            <circle cx="150" cy="75" r="2" fill="#00204a" />
-            <circle cx="75" cy="150" r="2" fill="#00204a" />
-            <line x1="50" y1="50" x2="100" y2="100" stroke="#00204a" strokeWidth="0.5" />
-            <line x1="100" y1="100" x2="150" y2="75" stroke="#00204a" strokeWidth="0.5" />
-          </pattern>
-        </defs>
-        <rect width="1200" height="800" fill="url(#network)" />
-      </svg>
-      
-      {/* Content Container with Glassmorphism */}
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-8 lg:px-20 w-full">
-        <div className="relative backdrop-blur-xl bg-white/40 border border-white/20 rounded-3xl p-8 sm:p-12 lg:p-16 shadow-2xl shadow-slate-900/10">
-          <div className="grid lg:grid-cols-5 gap-8 lg:gap-16 items-center">
-            {/* Left column (60%): Text */}
-            <div className="lg:col-span-3">
-              {/* Eyebrow label */}
-              <div className="mb-4">
-                <span className="text-[11px] font-bold tracking-widest text-slate-900 uppercase opacity-80">
-                  Institutional-Grade Digital Asset Management
-                </span>
-              </div>
-
-              {/* Headline */}
-              <h1 className="text-5xl lg:text-6xl font-bold leading-[1.15] mb-6 text-slate-900 tracking-tight" style={{ letterSpacing: '-0.02em' }}>
-                Managed cryptocurrency portfolios. Fixed fees. No guaranteed returns.
-              </h1>
-
-              {/* Subheadline */}
-              <p className="text-lg text-slate-900 leading-[1.65] max-w-xl mb-10" style={{ marginTop: '20px' }}>
-                WolvCapital provides managed exposure to digital assets through a transparent fee structure and institutional custody. Capital is at risk. Past performance does not predict future results.
-              </p>
-
-              {/* CTA Row */}
-              <div className="flex flex-col sm:flex-row items-start gap-4 mb-10 w-full sm:w-auto">
-                <Link
-                  href="/#plans"
-                  onClick={(e) => {
-                    if (onPlansClick) {
-                      e.preventDefault()
-                      onPlansClick()
-                    }
-                  }}
-                  className="w-full sm:w-auto my-2 px-8 py-3.5 bg-[#34B7D9] text-white rounded-lg font-bold text-sm hover:bg-[#2ca0b5] hover:brightness-110 transition-all shadow-lg hover:shadow-xl"
-                >
-                  View Portfolio Plans
-                </Link>
-                <Link
-                  href="/compliance"
-                  className="w-full sm:w-auto my-2 px-8 py-3.5 border-2 border-[#34B7D9] bg-transparent text-slate-900 rounded-lg font-semibold text-sm hover:bg-slate-100 transition-all"
-                >
-                  Read Full Disclosure →
-                </Link>
-              </div>
-
-              {/* Trust strip */}
-              <div className="flex flex-wrap items-center gap-2 text-[12px] text-slate-700 uppercase font-semibold tracking-widest opacity-75">
-                <span>256-bit Encryption</span>
-                <span>|</span>
-                <span>Institutional Custody</span>
-                <span>|</span>
-                <span>FinCEN Registered MSB</span>
-              </div>
+      <div className="relative z-10 max-w-6xl mx-auto px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[60%_40%] lg:items-center">
+          <div className="space-y-8">
+            <div className="max-w-xl">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1E3A8A]">
+                Institutional-Grade Digital Asset Management
+              </span>
             </div>
 
-            {/* Right column (40%): Card */}
-            <div className="hidden lg:col-span-2 lg:flex">
-              <div className="w-full backdrop-blur-sm bg-white/80 border border-white/40 rounded-2xl p-8 shadow-lg">
-                {/* Card header */}
-                <p className="text-[10px] font-bold tracking-widest text-slate-700 uppercase mb-6 pb-4 border-b border-slate-200">
-                  Platform at a glance
-                </p>
-                
-                {/* Data rows */}
-                <div className="space-y-0">
-                  <div className="flex justify-between items-center py-3 border-b border-slate-100">
-                    <span className="text-xs text-slate-600">Management fee</span>
-                    <span className="text-sm font-bold text-slate-900">1–2% annually</span>
-                  </div>
-                  <div className="flex justify-between items-center py-3 border-b border-slate-100">
-                    <span className="text-xs text-slate-600">Performance fee</span>
-                    <span className="text-sm font-bold text-slate-900">20% above benchmark</span>
-                  </div>
-                  <div className="flex justify-between items-center py-3 border-b border-slate-100">
-                    <span className="text-xs text-slate-600">Minimum investment</span>
-                    <span className="text-sm font-bold text-slate-900">$100</span>
-                  </div>
-                  <div className="flex justify-between items-center py-3">
-                    <span className="text-xs text-slate-600">Asset custody</span>
-                    <span className="text-sm font-bold text-slate-900">Institutional-grade</span>
-                  </div>
-                </div>
+            <h1 className="text-3xl font-bold leading-tight tracking-tight text-[#0F172A] sm:text-4xl md:text-5xl lg:text-[48px] lg:leading-[1.05]">
+              Managed cryptocurrency portfolios with transparent fees and professional custody.
+            </h1>
 
-                {/* Footer text */}
-                <p className="mt-4 text-xs text-slate-600 leading-relaxed">
-                  Returns vary with market conditions and are not guaranteed. See fee schedule for full details.
-                </p>
-              </div>
+            <p className="max-w-2xl text-base leading-7 text-slate-700 sm:text-lg">
+              WolvCapital combines KYC-verified onboarding, institutional custody, and audited digital asset strategies. Capital is at risk and returns are not guaranteed.
+            </p>
+
+            <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap items-start sm:items-center">
+              <Link
+                href="/plans"
+                onClick={() => onPlansClick?.()}
+                className="inline-flex min-h-[44px] items-center justify-center rounded-[7px] bg-[#2A52BE] px-8 py-3.5 text-sm font-bold text-white transition hover:bg-[#244bb0]"
+              >
+                View Plans
+              </Link>
+              <Link
+                href="/auth/signup"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-[7px] border-2 border-[#2A52BE] bg-white px-8 py-3.5 text-sm font-semibold text-[#1E3A8A] transition hover:bg-[#eff6ff]"
+              >
+                Open Account
+              </Link>
+            </div>
+
+            <div className="flex flex-wrap gap-3 text-[11px] uppercase tracking-[0.16em] text-slate-700">
+              <span>256-bit Encryption</span>
+              <span>|</span>
+              <span>Institutional Custody</span>
+              <span>|</span>
+              <span>FinCEN Registered MSB</span>
+            </div>
+          </div>
+
+          <div className="hidden lg:block">
+            <div className="relative mx-auto h-[520px] max-w-[420px] overflow-hidden rounded-[16px] shadow-2xl shadow-slate-900/10">
+              <img
+                src="/images/hero/home-hero.webp"
+                alt="WolvCapital professional investment management"
+                className="h-full w-full object-cover object-top"
+                loading="eager"
+                decoding="async"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#2A52BE]/15" />
             </div>
           </div>
         </div>

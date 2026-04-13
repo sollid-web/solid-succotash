@@ -1,9 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { Button } from '@/components/ui/Button'
-import { Badge } from '@/components/ui/Badge'
-import { SectionHeader } from '@/components/ui/SectionHeader'
 
 const plans = [
   {
@@ -95,41 +92,36 @@ export default function PlansSection() {
   return (
     <section id="plans" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Eyebrow label */}
         <div className="text-center mb-4">
-          <span className="text-[11px] font-bold tracking-widest text-brand-primary uppercase">
+          <span className="text-[11px] font-semibold tracking-[0.14em] uppercase text-[#2A52BE]">
             Investment Tiers
           </span>
         </div>
 
         <div className="mb-16 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-[#0F172A] mb-4" style={{ letterSpacing: '-0.02em' }}>Choose your portfolio plan</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-[#0F172A] mb-4" style={{ letterSpacing: '-0.02em' }}>
+            Choose your portfolio plan
+          </h2>
           <p className="text-lg text-[#64748B] max-w-2xl mx-auto">
             Each tier reflects a distinct risk strategy and fee structure — not a return promise. All fees are disclosed in full before account activation.
           </p>
         </div>
 
-        {/* Plans Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {plans.map((plan) => (
             <div
               key={plan.id}
-              className={`rounded-2xl p-8 transition-all duration-200 flex flex-col ${
-                plan.featured
-                  ? 'bg-white border-2 border-brand-primary shadow-xl' 
-                  : 'bg-white border border-[#E2E8F0] shadow-md hover:shadow-lg hover:border-[#CBD5E1]'
+              className={`rounded-[14px] p-8 flex flex-col transition-all duration-200 bg-white border border-[rgba(15,23,42,0.1)] ${
+                plan.featured ? 'shadow-xl ring-1 ring-[#2A52BE]/15' : 'shadow-sm hover:shadow-lg hover:border-[#CBD5E1]'
               }`}
-              style={plan.featured ? { boxShadow: '0 8px 32px rgba(15,23,42,0.12)' } : { boxShadow: '0 2px 12px rgba(0,0,0,0.05)' }}
             >
               <h3 className="text-xl font-bold text-[#0F172A] mb-1">{plan.name}</h3>
               <p className="text-xs text-[#64748B] mb-4">{plan.sub}</p>
-              
-              {/* Contract term text box */}
-              <div className="bg-[#F8FAFC] border-l-4 border-brand-primary px-4 py-3 rounded-r-md mb-6 text-xs text-[#475569] leading-relaxed">
+
+              <div className="bg-[#F8FAFC] border-l-4 border-[#2A52BE] px-4 py-3 rounded-r-[7px] mb-6 text-xs text-[#475569] leading-relaxed">
                 {plan.duration}
               </div>
 
-              {/* Fee */}
               <div className="mb-6">
                 <div className="text-5xl font-bold text-[#0F172A] leading-tight mb-1" style={{ letterSpacing: '-0.03em' }}>
                   {plan.fee}
@@ -137,55 +129,52 @@ export default function PlansSection() {
                 <p className="text-xs text-[#64748B]">{plan.feeNote}</p>
               </div>
 
-              {/* Minimum */}
-              <p className="text-xs text-[#475569] mb-4">Minimum: <span className="font-bold text-[#0F172A]">{plan.min}</span></p>
+              <p className="text-xs text-[#475569] mb-4">
+                Minimum: <span className="font-bold text-[#0F172A]">{plan.min}</span>
+              </p>
 
-              {/* Withdrawal info */}
-              <p className="text-xs text-[#64748B] mb-6 pb-6 border-b border-[#E2E8F0]">{plan.withdrawal}</p>
+              <p className="text-xs text-[#64748B] mb-6 pb-6 border-b border-[#E2E8F0]">
+                {plan.withdrawal}
+              </p>
 
-              {/* Features */}
               <ul className="space-y-3 mb-8 flex-1">
                 {plan.features.map((feature, idx) => (
                   <li key={idx} className="text-xs text-[#475569] flex items-start gap-3">
-                    <span className="flex-shrink-0 text-brand-primary font-bold mt-1">✓</span>
+                    <span className="flex-shrink-0 text-[#2A52BE] font-bold mt-1">✓</span>
                     <span>{feature}</span>
                   </li>
                 ))}
               </ul>
 
-              {/* Card info if applicable */}
               {plan.card && (
-                <div className="text-xs text-[#64748B] mb-6 p-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded">
+                <div className="text-xs text-[#64748B] mb-6 p-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-[7px]">
                   {plan.cardCost}
                 </div>
               )}
 
-              {/* Buttons */}
               <div className="flex gap-3 mb-4">
                 <Link
                   href={`/plans/${plan.id}`}
-                  className="flex-1 px-4 py-3 text-center text-sm font-medium text-[#475569] border border-[#CBD5E1] rounded-md hover:bg-[#F8FAFC] transition"
+                  className="flex-1 px-4 py-3 text-center text-sm font-medium text-[#0F172A] border border-[#CBD5E1] rounded-[7px] hover:bg-[#F8FAFC] transition"
                 >
                   Review
                 </Link>
                 <Link
                   href={`/accounts/signup?plan=${plan.id}`}
-                  className="flex-1 px-4 py-3 text-center text-sm font-bold text-[#0F172A] bg-[#e2f5ff] rounded-md hover:bg-[#1E3A5F] transition"
+                  className="flex-1 px-4 py-3 text-center text-sm font-bold text-white bg-[#2A52BE] rounded-[7px] hover:bg-[#244bb0] transition"
                 >
                   Get Started
                 </Link>
               </div>
 
-              {/* Risk Warning */}
-              <div className="text-xs text-[#94A3B8] text-center">
+              <div className="text-[10px] text-[#94A3B8] text-center">
                 Digital assets are speculative. You may lose some or all of your invested capital.
               </div>
             </div>
           ))}
         </div>
 
-        {/* Disclosure Note */}
-        <div className="bg-white border border-[#E2E8F0] rounded-xl p-8 text-center">
+        <div className="bg-white border border-[#E2E8F0] rounded-[14px] p-8 text-center">
           <p className="text-xs text-[#64748B] leading-relaxed max-w-3xl mx-auto">
             <strong className="text-[#0F172A]">Fee disclosure:</strong> Management fees are charged as a percentage of AUM, deducted monthly. Performance fees apply only on gains exceeding the agreed benchmark. No guaranteed returns are offered. All fees are disclosed in writing before account activation. Digital assets are speculative — you may lose some or all of your capital.
           </p>

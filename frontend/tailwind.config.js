@@ -43,6 +43,15 @@ module.exports = {
           900: '#0c3d66',
         },
       },
+      fontFamily: {
+        sans: ['DM Sans', 'Inter', 'system-ui', 'sans-serif'],
+        mono: ['DM Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
+      },
+      borderRadius: {
+        btn: '7px',
+        card: '14px',
+        pill: '20px',
+      },
       spacing: {
         '18': '4.5rem',
         '88': '22rem',

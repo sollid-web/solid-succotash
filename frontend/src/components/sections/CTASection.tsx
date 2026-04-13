@@ -4,26 +4,80 @@ import Link from 'next/link'
 
 export default function CTASection() {
   return (
-    <section className="py-16 md:py-24 bg-gray-50 text-center">
+    <section className="py-16 md:py-24 bg-gray-50">
       <div className="container mx-auto px-4 lg:px-8">
-        <h2 className="text-4xl lg:text-5xl font-bold text-[#0F172A] mb-6">Start Your Application</h2>
-        <p className="text-xl text-gray-700 max-w-2xl mx-auto mb-8 leading-relaxed">
-          Account opening is subject to KYC verification, eligibility review, and applicable regulatory requirements.
-        </p>
-        <div className="flex gap-4 justify-center flex-wrap">
-          <Link
-            href="/plans"
-            className="px-10 py-4 bg-white text-brand-primary font-bold rounded-full hover:shadow-2xl hover:scale-105 transition-all border border-gray-200"
-          >
-            View Plans
-          </Link>
-          <Link
-            href="/accounts/signup"
-            className="px-10 py-4 bg-brand-primary text-white font-bold rounded-full hover:brightness-110 transition"
-          >
-            Open Account
-          </Link>
+        <div className="max-w-4xl mx-auto text-center mb-12">
+          <h2 className="text-4xl lg:text-5xl font-bold text-[#0F172A] mb-6">Start Your Application</h2>
+          <p className="text-xl text-[#475569] max-w-2xl mx-auto leading-relaxed">
+            Account opening is subject to KYC verification, eligibility review, and applicable regulatory requirements.
+          </p>
         </div>
+
+        <form className="mx-auto max-w-4xl bg-white border border-[#E5E7EB] rounded-[8px] p-6 shadow-sm">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <label className="block">
+              <span className="text-[13px] font-medium text-[#475569]">Full Legal Name</span>
+              <input
+                type="text"
+                name="fullName"
+                placeholder="Jane Doe"
+                className="mt-2 w-full rounded-[8px] border border-gray-300 bg-white px-4 py-3 text-[13px] text-[#0F172A] outline-none transition focus:border-[#2A52BE] focus:ring-2 focus:ring-[#2A52BE]/15"
+              />
+              <span className="mt-2 block text-[12px] text-[#94A3B8]">Used for identity verification and account records.</span>
+            </label>
+
+            <label className="block">
+              <span className="text-[13px] font-medium text-[#475569]">Email Address</span>
+              <input
+                type="email"
+                name="email"
+                placeholder="jane.doe@example.com"
+                className="mt-2 w-full rounded-[8px] border border-gray-300 bg-white px-4 py-3 text-[13px] text-[#0F172A] outline-none transition focus:border-[#2A52BE] focus:ring-2 focus:ring-[#2A52BE]/15"
+              />
+              <span className="mt-2 block text-[12px] text-[#94A3B8]">We will send your account confirmation to this address.</span>
+            </label>
+
+            <label className="block">
+              <span className="text-[13px] font-medium text-[#475569]">Country of Residence</span>
+              <select
+                name="country"
+                className="mt-2 w-full appearance-none rounded-[8px] border border-gray-300 bg-white px-4 py-3 text-[13px] text-[#0F172A] outline-none transition focus:border-[#2A52BE] focus:ring-2 focus:ring-[#2A52BE]/15"
+              >
+                <option value="">Select your country</option>
+                <option value="US">United States</option>
+                <option value="CA">Canada</option>
+                <option value="GB">United Kingdom</option>
+                <option value="AU">Australia</option>
+                <option value="DE">Germany</option>
+              </select>
+              <span className="mt-2 block text-[12px] text-[#94A3B8]">Used for regulatory eligibility screening.</span>
+            </label>
+
+            <label className="block">
+              <span className="text-[13px] font-medium text-[#475569]">Investment Amount (USD)</span>
+              <input
+                type="number"
+                name="investmentAmount"
+                placeholder="$5,000"
+                className="mt-2 w-full rounded-[8px] border border-gray-300 bg-white px-4 py-3 text-[13px] text-[#0F172A] outline-none transition focus:border-[#2A52BE] focus:ring-2 focus:ring-[#2A52BE]/15"
+              />
+              <span className="mt-2 block text-[12px] text-[#94A3B8]">This is a preliminary amount for your application.</span>
+            </label>
+          </div>
+
+          <div className="mt-8 flex flex-col gap-4 items-center justify-between sm:flex-row">
+            <Link
+              href="/accounts/signup"
+              className="inline-flex items-center justify-center rounded-[7px] bg-[#2A52BE] px-8 py-3 text-sm font-bold text-white transition hover:bg-[#244bb0]"
+            >
+              Open Account
+            </Link>
+          </div>
+
+          <p className="mt-6 text-[10px] text-[#94A3B8] text-center">
+            Digital assets are speculative. You may lose some or all of your invested capital.
+          </p>
+        </form>
       </div>
     </section>
   )

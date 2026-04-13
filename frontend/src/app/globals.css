@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,6 +15,11 @@
   --brand-darker: #0F172A;
   --brand-light: #e2f5ff;
   --brand-gray: #64748b;
+
+  /* Radii */
+  --radius-button: 7px;
+  --radius-card: 14px;
+  --radius-pill: 20px;
 
   /* Brand gradients */
   --brand-gradient: linear-gradient(135deg, #2A52BE 0%, #1E3A8A 100%);
@@ -34,7 +41,7 @@ html {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-feature-settings: 'cv11', 'ss01';
   font-variation-settings: 'opsz' 32;
   margin: 0;
@@ -324,7 +331,7 @@ div[id*="tawk"] {
     color: #374151;
   }
   .blog-content code {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-family: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 0.95em;
     padding: 0.15rem 0.35rem;
     border-radius: 0.5rem;
@@ -376,7 +383,7 @@ div[id*="tawk"] {
   .bg-hero-faq { background-image: url('/images/og/faq-hero.jpg'); }
   .bg-hero-terms { background-image: url('/images/legal/legal-terms-hero.jpg'); }
   .bg-hero-legal { background-image: url('/images/legal/wolvcapital-legal-disclaimer.jpg'); }
-  .bg-hero-home { background-image: url('/images/welcome-mobile.jpg'); }
+  .bg-hero-home { background-image: url('/images/hero/hero-bg.webp'); }
   .bg-hero-about { background-image: url('/images/about-hero.jpg'); }
   .bg-hero-privacy { background-image: url('/images/legal/wolvcapital-privacy-policy-hero.jpg'); }
   .bg-hero-contact { background-image: url('/images/contact-hero.jpg'); }

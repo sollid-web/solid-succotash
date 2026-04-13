@@ -83,7 +83,7 @@ export default function SecuritySection() {
               className="bg-white rounded-xl p-8 border border-[#E2E8F0] shadow-sm hover:shadow-lg hover:border-[#CBD5E1] transition"
             >
               <div className="flex gap-4 items-start mb-4">
-                <div className="w-12 h-12 bg-[#f8fafc] rounded-lg flex items-center justify-center flex-shrink-0 text-[#1E3A5F]">
+                <div className="w-12 h-12 bg-[#2A52BE] rounded-lg flex items-center justify-center flex-shrink-0 text-white">
                   {feature.icon}
                 </div>
               </div>
@@ -99,8 +99,8 @@ export default function SecuritySection() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {STANDARDS.map((standard, idx) => (
               <div key={idx} className="text-center">
-                <div className="w-16 h-16 rounded-lg flex items-center justify-center mx-auto mb-4 bg-[#f8fafc]">
-                  <span className="text-[#0F172A] font-bold text-lg">{standard.label}</span>
+                <div className={`w-16 h-16 rounded-lg flex items-center justify-center mx-auto mb-4 bg-gradient-to-br ${standard.color}`}>
+                  <span className="text-white font-bold text-lg">{standard.label}</span>
                 </div>
                 <p className="font-bold text-[#0F172A] mb-1 text-sm">{standard.label}</p>
                 <p className="text-[#64748B] text-xs">{standard.value}</p>

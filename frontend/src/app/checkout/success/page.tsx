@@ -44,15 +44,7 @@ function CheckoutSuccessContent() {
 
   const sendCheckoutCompletionEmail = async (txId: string | null, amount: string | null, email: string, name: string) => {
     try {
-<<<<<<< HEAD
-      const endpoint = process.env.NEXT_PUBLIC_API_URL
-        ? `${process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, '')}/api/checkout/completion/`
-        : 'https://www.wolvcapital.com/api/checkout/completion/'
-
-      const response = await fetch(endpoint, {
-=======
       const response = await fetch('/api/checkout/completion/', {
->>>>>>> 7551299c71a8744eb2351d84b36943a87c7a82f2
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

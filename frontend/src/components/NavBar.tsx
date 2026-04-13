@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/cn'
+import { useState } from 'react'
 
 export default function NavBar() {
   const pathname = usePathname()

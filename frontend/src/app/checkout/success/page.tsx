@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import TrustpilotInvite from '@/components/TrustpilotInvite'
 import { trackEvent } from '@/lib/segment'
+import { apiFetch } from '@/lib/api'
 
 function CheckoutSuccessContent() {
   const searchParams = useSearchParams()
@@ -44,7 +45,7 @@ function CheckoutSuccessContent() {
 
   const sendCheckoutCompletionEmail = async (txId: string | null, amount: string | null, email: string, name: string) => {
     try {
-      const response = await fetch('/api/checkout/completion/', {
+      const response = await apiFetch('/api/checkout/completion/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

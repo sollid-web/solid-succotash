@@ -1,6 +1,7 @@
 "use client"
 
 import { type KeyboardEvent, useEffect, useMemo, useRef, useState } from "react"
+import { Bot, Headset, MessageSquare, Send, X } from "lucide-react"
 
 type ChatMessage = {
   role: "user" | "assistant"
@@ -145,7 +146,10 @@ function makeVisitor(id: number): Visitor {
 }
 
 export default function SupportChat() {
-  const backendUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") || ""
+  const backendUrl =
+    process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ||
+    process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ||
+    ""
   const [dashOpen, setDashOpen] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
   const [visitors, setVisitors] = useState<Visitor[]>([])
@@ -172,10 +176,13 @@ export default function SupportChat() {
     priority: "High",
     description: "",
   })
+  const [agentMode, setAgentMode] = useState<"ai" | "human">("ai")
+  const [sessionId, setSessionId] = useState("")
   const [ticketSuccess, setTicketSuccess] = useState(false)
   const [tab, setTab] = useState<"chat" | "faq" | "ticket">("chat")
   const [toasts, setToasts] = useState<ToastItem[]>([])
   const [clock, setClock] = useState(timeNow())
+  const [isAdmin, setIsAdmin] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
 
   const filteredFaqs = useMemo(
@@ -189,6 +196,56 @@ export default function SupportChat() {
   )
 
   useEffect(() => {
+    const savedSession = window.localStorage.getItem("supportChatSessionId")
+    if (savedSession) {
+      setSessionId(savedSession)
+      return
+    }
+
+    const generatedSession =
+      typeof window.crypto?.randomUUID === "function"
+        ? window.crypto.randomUUID()
+        : `session-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
+    window.localStorage.setItem("supportChatSessionId", generatedSession)
+    setSessionId(generatedSession)
+  }, [])
+
+  useEffect(() => {
+    const token = window.localStorage.getItem("authToken")
+    if (!token || !backendUrl) {
+      return
+    }
+
+    let cancelled = false
+    fetch(`${backendUrl}/api/auth/me/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Accept": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Unauthenticated")
+        }
+        return response.json()
+      })
+      .then((data) => {
+        if (cancelled) return
+        setIsAdmin(Boolean(data.is_staff || data.is_superuser))
+      })
+      .catch(() => {
+        if (cancelled) return
+        setIsAdmin(false)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [backendUrl])
+
+  useEffect(() => {
+    if (!isAdmin) return
+
     const initialVisitors: Visitor[] = []
     let index = 0
     const baseVisitor = makeVisitor(index++)
@@ -198,9 +255,10 @@ export default function SupportChat() {
     baseVisitor.status = "active"
     initialVisitors.push(baseVisitor)
 
+    const statusList: Visitor["status"][] = ["active", "idle", "active"]
     for (let i = 0; i < 3; i += 1) {
       const visitor = makeVisitor(index++)
-      visitor.status = ["active", "idle", "active"][i]
+      visitor.status = statusList[i]
       const extraPage = randomItem(pages)
       visitor.trail.push({
         url: extraPage,
@@ -215,6 +273,8 @@ export default function SupportChat() {
   }, [])
 
   useEffect(() => {
+    if (!isAdmin) return
+
     const visitorTimer = window.setInterval(() => {
       setVisitors((current) => {
         const nextVisitor = makeVisitor(current.length ? current[current.length - 1].id + 1 : 1)
@@ -266,7 +326,7 @@ export default function SupportChat() {
       window.clearInterval(navTimer)
       window.clearInterval(clockTimer)
     }
-  }, [])
+  }, [isAdmin])
 
   useEffect(() => {
     if (chatOpen) {
@@ -314,7 +374,7 @@ export default function SupportChat() {
         return {
           ...visitor,
           page: url,
-          status: "active",
+          status: "active" as Visitor["status"],
           trail: nextTrail,
         }
       })
@@ -325,10 +385,11 @@ export default function SupportChat() {
 
   const activeCount = visitors.filter((visitor) => visitor.status !== "idle").length
 
-  async function sendMessage(overrideText?: string) {
+  async function sendMessage(overrideText?: string, handover = false) {
     const trimmed = (overrideText ?? input).trim()
     if (!trimmed) return
 
+    const currentMode = handover ? "human" : agentMode
     const userMessage: ChatMessage = { role: "user", content: trimmed, time: timeNow() }
     setMessages((current) => [...current, userMessage])
     setHistory((current) => [...current, { role: "user", content: trimmed }].slice(-20))
@@ -349,12 +410,18 @@ export default function SupportChat() {
     }
 
     try {
+      const payload = {
+        session_id: sessionId,
+        messages: [...history, { role: "user", content: trimmed }],
+        is_human_handover: currentMode === "human",
+        mode: currentMode,
+      }
       const response = await fetch(`${backendUrl}/api/chat/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ messages: [...history, { role: "user", content: trimmed }] }),
+        body: JSON.stringify(payload),
       })
       const data = await response.json()
       if (data.error) {
@@ -387,6 +454,12 @@ export default function SupportChat() {
     }
   }
 
+  function handleTalkToHuman() {
+    setAgentMode("human")
+    setChatOpen(true)
+    showToast("chat", "🤝 Human Support Requested", "You can now send your message and our support team will receive the handover request.")
+  }
+
   function handleTicketSubmit() {
     if (!ticket.name || !ticket.email || !ticket.category || !ticket.description) {
       window.alert("Please fill in all ticket fields before submitting.")
@@ -399,10 +472,12 @@ export default function SupportChat() {
     setTimeout(() => setTicketSuccess(false), 5000)
   }
 
+  const visibleToasts = isAdmin ? toasts : toasts.filter((toast) => toast.type === "chat")
+
   return (
     <div className="support-chat-widget">
       <div className="notif-toasts">
-        {toasts.map((toast) => (
+        {visibleToasts.map((toast) => (
           <div key={toast.id} className={`notif-toast ${toast.type}`}>
             <div className="toast-icon">{toast.type === "visitor" ? "👤" : toast.type === "link-click" ? "🔗" : "💬"}</div>
             <div className="toast-body">
@@ -416,114 +491,119 @@ export default function SupportChat() {
         ))}
       </div>
 
-      <button className="dash-toggle" onClick={() => setDashOpen((open) => !open)} title="Open Agent Dashboard">
-        <div className="live-dot" />
-        AGENT PANEL
-      </button>
-
-      <div className={`agent-dashboard ${dashOpen ? "open" : ""}`}>
-        <div className="dash-header">
-          <div className="dash-title">
+      {isAdmin ? (
+        <>
+          <button className="dash-toggle" onClick={() => setDashOpen((open) => !open)} title="Open Agent Dashboard">
             <div className="live-dot" />
-            WolvCapital · Live Visitors
-          </div>
-          <div className="dash-sub">{clock}</div>
-        </div>
-        <div className="dash-stats">
-          <div className="stat-box">
-            <div className="stat-num">{activeCount}</div>
-            <div className="stat-lbl">Active</div>
-          </div>
-          <div className="stat-box">
-            <div className="stat-num">{newToday}</div>
-            <div className="stat-lbl">New Today</div>
-          </div>
-          <div className="stat-box">
-            <div className="stat-num">{chatCount}</div>
-            <div className="stat-lbl">Chats</div>
-          </div>
-        </div>
-        <div className="visitors-section">
-          <div className="section-label">Live Visitors</div>
-          {visitors.length === 0 ? (
-            <div className="visitor-card">No visitors yet.</div>
-          ) : (
-            visitors.slice().reverse().map((visitor) => {
-              const badgeClass = visitor.status === "new" ? "badge-new" : visitor.status === "active" ? "badge-active" : "badge-idle"
-              const label = visitor.status === "new" ? "NEW" : visitor.status === "active" ? "ACTIVE" : "IDLE"
-              return (
-                <div key={visitor.id} className={`visitor-card ${visitor.status === "active" ? "active" : ""} ${visitor.status === "new" ? "new-visitor" : ""}`} onClick={() => openDetail(visitor)}>
-                  <div className="visitor-top">
-                    <div className="visitor-icon">{visitor.emoji}</div>
-                    <div className="visitor-id">{visitor.label}</div>
-                    <span className={`visitor-badge ${badgeClass}`}>{label}</span>
-                  </div>
-                  <div className="visitor-page">
-                    Now: <span className="page-pill">{pageNames[visitor.page] || visitor.page}</span>
-                  </div>
-                  <div className="link-trail">
-                    {visitor.trail.slice(-2).map((trail, index) => (
-                      <div className="trail-item" key={`${visitor.id}-${index}`}>
-                        <span className="trail-arrow">→</span>
-                        <span className="trail-link">{trail.label}</span>
-                        <span className="trail-time">{trail.time}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="visitor-time">📍 {visitor.city} · {visitor.device} · Arrived {visitor.arrived}</div>
-                </div>
-              )
-            })
-          )}
-        </div>
-      </div>
+            AGENT PANEL
+          </button>
 
-      <div className={`visitor-detail ${selectedVisitor ? "open" : ""}`} onClick={(event) => {
-        if (event.target === event.currentTarget) closeDetail()
-      }}>
-        <div className="vd-panel">
-          <div className="vd-header">
-            <div className="vd-title">{selectedVisitor ? `${selectedVisitor.emoji} ${selectedVisitor.label}` : "Visitor Details"}</div>
-            <button className="vd-close" onClick={closeDetail}>
-              ✕
-            </button>
-          </div>
-          {selectedVisitor ? (
-            <>
-              <div className="vd-info-grid">
-                <div className="vd-info-box">
-                  <div className="vd-info-lbl">Location</div>
-                  <div className="vd-info-val">📍 {selectedVisitor.city}</div>
-                </div>
-                <div className="vd-info-box">
-                  <div className="vd-info-lbl">Device</div>
-                  <div className="vd-info-val">💻 {selectedVisitor.device}</div>
-                </div>
-                <div className="vd-info-box">
-                  <div className="vd-info-lbl">Status</div>
-                  <div className="vd-info-val">{selectedVisitor.status.toUpperCase()}</div>
-                </div>
-                <div className="vd-info-box">
-                  <div className="vd-info-lbl">Arrived</div>
-                  <div className="vd-info-val">🕐 {selectedVisitor.arrived}</div>
-                </div>
+          <div className={`agent-dashboard ${dashOpen ? "open" : ""}`}>
+            <div className="dash-header">
+              <div className="dash-title">
+                <div className="live-dot" />
+                WolvCapital · Live Visitors
               </div>
-              <div className="vd-section-title">🔗 Navigation Trail ({selectedVisitor.trail.length} pages)</div>
-              {selectedVisitor.trail.map((trail, index) => (
-                <div className="vd-trail-item" key={`${selectedVisitor.id}-${index}`}>
-                  <div className="vd-trail-num">{index + 1}</div>
-                  <div className="vd-trail-url">{trail.label}</div>
-                  <div className="vd-trail-time">{trail.time}</div>
-                </div>
-              ))}
-            </>
-          ) : null}
-        </div>
-      </div>
+              <div className="dash-sub">{clock}</div>
+            </div>
+            <div className="dash-stats">
+              <div className="stat-box">
+                <div className="stat-num">{activeCount}</div>
+                <div className="stat-lbl">Active</div>
+              </div>
+              <div className="stat-box">
+                <div className="stat-num">{newToday}</div>
+                <div className="stat-lbl">New Today</div>
+              </div>
+              <div className="stat-box">
+                <div className="stat-num">{chatCount}</div>
+                <div className="stat-lbl">Chats</div>
+              </div>
+            </div>
+            <div className="visitors-section">
+              <div className="section-label">Live Visitors</div>
+              {visitors.length === 0 ? (
+                <div className="visitor-card">No visitors yet.</div>
+              ) : (
+                visitors.slice().reverse().map((visitor) => {
+                  const badgeClass = visitor.status === "new" ? "badge-new" : visitor.status === "active" ? "badge-active" : "badge-idle"
+                  const label = visitor.status === "new" ? "NEW" : visitor.status === "active" ? "ACTIVE" : "IDLE"
+                  return (
+                    <div key={visitor.id} className={`visitor-card ${visitor.status === "active" ? "active" : ""} ${visitor.status === "new" ? "new-visitor" : ""}`} onClick={() => openDetail(visitor)}>
+                      <div className="visitor-top">
+                        <div className="visitor-icon">{visitor.emoji}</div>
+                        <div className="visitor-id">{visitor.label}</div>
+                        <span className={`visitor-badge ${badgeClass}`}>{label}</span>
+                      </div>
+                      <div className="visitor-page">
+                        Now: <span className="page-pill">{pageNames[visitor.page] || visitor.page}</span>
+                      </div>
+                      <div className="link-trail">
+                        {visitor.trail.slice(-2).map((trail, index) => (
+                          <div className="trail-item" key={`${visitor.id}-${index}`}>
+                            <span className="trail-arrow">→</span>
+                            <span className="trail-link">{trail.label}</span>
+                            <span className="trail-time">{trail.time}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="visitor-time">📍 {visitor.city} · {visitor.device} · Arrived {visitor.arrived}</div>
+                    </div>
+                  )
+                })
+              )}
+            </div>
+          </div>
+        </>
+      ) : null}
 
-      <button className="chat-launcher" onClick={() => setChatOpen((open) => !open)} aria-label="Chat with WolvCapital Support">
+      {isAdmin ? (
+        <div className={`visitor-detail ${selectedVisitor ? "open" : ""}`} onClick={(event) => {
+          if (event.target === event.currentTarget) closeDetail()
+        }}>
+          <div className="vd-panel">
+            <div className="vd-header">
+              <div className="vd-title">{selectedVisitor ? `${selectedVisitor.emoji} ${selectedVisitor.label}` : "Visitor Details"}</div>
+              <button className="vd-close" onClick={closeDetail}>
+                ✕
+              </button>
+            </div>
+            {selectedVisitor ? (
+              <>
+                <div className="vd-info-grid">
+                  <div className="vd-info-box">
+                    <div className="vd-info-lbl">Location</div>
+                    <div className="vd-info-val">📍 {selectedVisitor.city}</div>
+                  </div>
+                  <div className="vd-info-box">
+                    <div className="vd-info-lbl">Device</div>
+                    <div className="vd-info-val">💻 {selectedVisitor.device}</div>
+                  </div>
+                  <div className="vd-info-box">
+                    <div className="vd-info-lbl">Status</div>
+                    <div className="vd-info-val">{selectedVisitor.status.toUpperCase()}</div>
+                  </div>
+                  <div className="vd-info-box">
+                    <div className="vd-info-lbl">Arrived</div>
+                    <div className="vd-info-val">🕐 {selectedVisitor.arrived}</div>
+                  </div>
+                </div>
+                <div className="vd-section-title">🔗 Navigation Trail ({selectedVisitor.trail.length} pages)</div>
+                {selectedVisitor.trail.map((trail, index) => (
+                  <div className="vd-trail-item" key={`${selectedVisitor.id}-${index}`}>
+                    <div className="vd-trail-num">{index + 1}</div>
+                    <div className="vd-trail-url">{trail.label}</div>
+                    <div className="vd-trail-time">{trail.time}</div>
+                  </div>
+                ))}
+              </>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
+      <button className={`chat-launcher ${chatOpen ? "open" : ""}`} onClick={() => setChatOpen((open) => !open)} aria-label="Chat with WolvCapital Support">
         <div className="notif-dot">{unread > 0 ? unread : ""}</div>
-        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+        <MessageSquare size={24} />
       </button>
 
       <div className={`chat-window ${chatOpen ? "open" : ""}`}>
@@ -532,10 +612,35 @@ export default function SupportChat() {
           <div className="agent-info">
             <div className="agent-name">Wolv<span>Capital</span> Support</div>
             <div className="agent-status"><div className="dot" />Online · usually instant</div>
+            <div className="session-meta">Session: {sessionId ? sessionId.slice(0, 8) : "..."}</div>
+            <div className="chat-subtitle">Ask our AI anything or tap “Talk to a Human” for live support.</div>
           </div>
           <div className="hdr-btns">
-            <button className="hdr-btn" type="button" title="Close chat" onClick={() => setChatOpen(false)}>－</button>
+            <button className="hdr-btn" type="button" title="Close chat" onClick={() => setChatOpen(false)}><X size={16} /></button>
           </div>
+        </div>
+
+        <div className="mode-toggle-row">
+          <button
+            type="button"
+            className={`mode-pill ${agentMode === "ai" ? "active" : ""}`}
+            onClick={() => setAgentMode("ai")}
+          >
+            <Bot size={16} /> AI Response
+          </button>
+          <button
+            type="button"
+            className={`mode-pill ${agentMode === "human" ? "active" : ""}`}
+            onClick={() => setAgentMode("human")}
+          >
+            <Headset size={16} /> Human Handover
+          </button>
+        </div>
+
+        <div className="human-handover-row">
+          <button type="button" className="human-handover-btn" onClick={handleTalkToHuman}>
+            <Headset size={16} /> Talk to a Human
+          </button>
         </div>
 
         <div className="chat-tabs">
@@ -566,8 +671,14 @@ export default function SupportChat() {
                 { label: "💰 Pricing", value: "Pricing plans" },
                 { label: "🔌 API Help", value: "API integration help" },
                 { label: "🙋 Advisor", value: "Speak to an advisor" },
+                { label: "🤝 Talk to a Human", value: "Please connect me to a human agent.", handover: true },
               ].map((reply) => (
-                <button key={reply.value} className="qr" onClick={() => sendMessage(reply.value)} type="button">
+                <button
+                  key={reply.value}
+                  className="qr"
+                  onClick={() => sendMessage(reply.value, Boolean((reply as { handover?: boolean }).handover))}
+                  type="button"
+                >
                   {reply.label}
                 </button>
               ))}
@@ -584,8 +695,8 @@ export default function SupportChat() {
                   onKeyDown={handleSendKey}
                   className="chat-textarea"
                 />
-                <button className="send-btn" type="button" onClick={sendMessage} disabled={loading}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                <button className="send-btn" type="button" onClick={() => sendMessage()} disabled={loading}>
+                  <Send size={16} />
                 </button>
               </div>
               <div className="input-footer">
@@ -852,6 +963,15 @@ export default function SupportChat() {
         .support-chat-widget .tab-btn { flex: 1; padding: 9px 4px; font-size: 11.5px; font-weight: 600; color: #5a84b8; border: none; background: transparent; cursor: pointer; border-bottom: 2px solid transparent; letter-spacing: 0.01em; }
         .support-chat-widget .tab-btn.active { color: #2d8bff; border-bottom-color: #1565ff; background: rgba(21, 101, 255, 0.07); }
         .support-chat-widget .tab-btn:hover:not(.active) { color: #eaf3ff; background: rgba(255, 255, 255, 0.03); }
+        .support-chat-widget .mode-toggle-row { display: flex; gap: 8px; padding: 12px 14px 10px; background: #020b1a; border-bottom: 1px solid rgba(26, 58, 110, 1); }
+        .support-chat-widget .mode-pill { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 11px; border-radius: 12px; border: 1px solid rgba(26, 58, 110, 1); background: #071c3f; color: #a8bfd6; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .support-chat-widget .mode-pill.active { background: linear-gradient(135deg, #1565ff, #2d8bff); border-color: transparent; color: white; box-shadow: 0 10px 28px rgba(21, 101, 255, 0.18); }
+        .support-chat-widget .mode-pill:hover { background: rgba(21, 101, 255, 0.12); color: #eaf3ff; }
+        .support-chat-widget .human-handover-row { padding: 12px 14px 0; background: #020b1a; border-bottom: 1px solid rgba(26, 58, 110, 1); }
+        .support-chat-widget .human-handover-btn { width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 14px; border-radius: 14px; border: 1px solid rgba(45, 139, 255, 0.3); background: rgba(45, 139, 255, 0.12); color: #eaf3ff; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .support-chat-widget .human-handover-btn:hover { background: rgba(45, 139, 255, 0.18); transform: translateY(-1px); }
+        .support-chat-widget .session-meta { margin-top: 5px; font-size: 10px; color: #7d9cd4; letter-spacing: 0.02em; }
+        .support-chat-widget .chat-subtitle { margin-top: 6px; font-size: 11px; color: #a8bfd6; line-height: 1.4; }
         .support-chat-widget .chat-messages { flex: 1; overflow-y: auto; padding: 16px 14px; display: flex; flex-direction: column; gap: 10px; }
         .support-chat-widget .chat-messages::-webkit-scrollbar { width: 3px; }
         .support-chat-widget .chat-messages::-webkit-scrollbar-thumb { background: rgba(26, 58, 110, 1); border-radius: 3px; }
@@ -882,6 +1002,157 @@ export default function SupportChat() {
         .support-chat-widget .powered-by { font-size: 10px; color: #5a84b8; }
         .support-chat-widget .powered-by strong { color: #2d8bff; }
         .support-chat-widget .char-count { font-size: 10px; color: #5a84b8; }
+
+        .support-chat-widget .ticket-panel {
+          padding: 16px 18px 18px;
+          background: #071c3f;
+          border: 1px solid rgba(45, 139, 255, 0.25);
+          border-radius: 18px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+        .support-chat-widget .ticket-panel label {
+          display: block;
+          margin-bottom: 6px;
+          font-size: 12px;
+          font-weight: 700;
+          color: #eaf3ff;
+        }
+        .support-chat-widget .ticket-panel input,
+        .support-chat-widget .ticket-panel select,
+        .support-chat-widget .ticket-panel textarea {
+          width: 100%;
+          min-height: 44px;
+          padding: 12px 14px;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(45, 139, 255, 0.35);
+          border-radius: 14px;
+          color: #edf2ff;
+          font-size: 13px;
+          line-height: 1.5;
+          outline: none;
+          transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .support-chat-widget .ticket-panel textarea {
+          min-height: 96px;
+          resize: vertical;
+        }
+        .support-chat-widget .ticket-panel input::placeholder,
+        .support-chat-widget .ticket-panel textarea::placeholder {
+          color: rgba(234, 243, 255, 0.55);
+        }
+        .support-chat-widget .ticket-panel input:focus,
+        .support-chat-widget .ticket-panel select:focus,
+        .support-chat-widget .ticket-panel textarea:focus {
+          border-color: #76b7ff;
+          box-shadow: 0 0 0 3px rgba(45, 139, 255, 0.12);
+        }
+        .support-chat-widget .ticket-panel .submit-btn {
+          width: 100%;
+          padding: 12px 16px;
+          border-radius: 14px;
+          border: none;
+          background: linear-gradient(135deg, #2d8bff, #6d9cff);
+          color: white;
+          font-size: 14px;
+          font-weight: 700;
+          box-shadow: 0 14px 30px rgba(45, 139, 255, 0.18);
+          transition: transform 0.15s ease, filter 0.15s ease;
+        }
+        .support-chat-widget .ticket-panel .submit-btn:hover {
+          transform: translateY(-1px);
+          filter: brightness(1.04);
+        }
+        .support-chat-widget .ticket-panel .success-msg {
+          color: #a8ffd5;
+          font-size: 13px;
+          margin-top: 6px;
+          background: rgba(0, 229, 160, 0.08);
+          padding: 10px 12px;
+          border-radius: 12px;
+          border: 1px solid rgba(0, 229, 160, 0.16);
+        }
+
+        @media (max-width: 780px) {
+          .support-chat-widget .chat-window {
+            width: calc(100% - 24px);
+            height: calc(100vh - 84px);
+            bottom: 12px;
+            right: 12px;
+            border-radius: 18px;
+            max-width: 660px;
+          }
+          .support-chat-widget .chat-header,
+          .support-chat-widget .mode-toggle-row,
+          .support-chat-widget .human-handover-row,
+          .support-chat-widget .chat-tabs,
+          .support-chat-widget .chat-input-area {
+            padding-left: 14px;
+            padding-right: 14px;
+          }
+          .support-chat-widget .chat-messages {
+            padding-left: 12px;
+            padding-right: 12px;
+          }
+          .support-chat-widget .chat-launcher {
+            bottom: 18px;
+            right: 18px;
+          }
+          .support-chat-widget .chat-window {
+            max-height: calc(100vh - 72px);
+          }
+          .support-chat-widget .faq-panel,
+          .support-chat-widget .ticket-panel {
+            padding: 14px;
+          }
+        }
+
+        @media (max-width: 520px) {
+          .support-chat-widget .chat-window {
+            right: 8px;
+            left: 8px;
+            width: auto;
+            height: calc(100vh - 58px);
+          }
+          .support-chat-widget .chat-header {
+            flex-wrap: wrap;
+            gap: 10px;
+          }
+          .support-chat-widget .agent-info {
+            min-width: 0;
+          }
+          .support-chat-widget .agent-name,
+          .support-chat-widget .agent-status,
+          .support-chat-widget .chat-subtitle {
+            font-size: 12px;
+          }
+          .support-chat-widget .mode-toggle-row,
+          .support-chat-widget .human-handover-row,
+          .support-chat-widget .chat-tabs {
+            flex-direction: column;
+            gap: 8px;
+          }
+          .support-chat-widget .tab-btn,
+          .support-chat-widget .mode-pill {
+            font-size: 12px;
+            padding: 10px 12px;
+          }
+          .support-chat-widget .quick-reps {
+            padding-left: 12px;
+            padding-right: 12px;
+          }
+          .support-chat-widget .qr {
+            flex: 1 1 100%;
+            min-width: 0;
+          }
+          .support-chat-widget .ticket-panel input,
+          .support-chat-widget .ticket-panel select,
+          .support-chat-widget .ticket-panel textarea {
+            padding: 12px 14px;
+            font-size: 14px;
+          }
+        }
       `}</style>
     </div>
   )

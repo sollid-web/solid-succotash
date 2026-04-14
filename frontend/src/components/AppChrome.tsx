@@ -6,7 +6,7 @@ import NavBar from "@/components/NavBar";
 import DisclosureTicker from "@/components/DisclosureTicker";
 import MobileBottomBar from "@/components/MobileBottomBar";
 import Footer from "@/components/sections/Footer";
-import TawkToChat from "@/components/TawkToChat";
+import SupportChat from "@/components/SupportChat";
 
 export default function AppChrome({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -23,7 +23,7 @@ export default function AppChrome({ children }: { children: ReactNode }) {
       <main className="flex-1 w-full">{children}</main>
       <MobileBottomBar />
       <Footer />
-      <TawkToChat />
+      <SupportChat />
     </div>
   );
 }

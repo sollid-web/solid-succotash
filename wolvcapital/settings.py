@@ -39,6 +39,7 @@ SECRET_KEY = env("SECRET_KEY", default=None)
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="sk_test_xxx_REPLACE_ME_xxx")
 STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET", default="whsec_YOUR_SECRET")
 STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY", default="pk_test_YOUR_KEY")
+GROQ_API_KEY = env("GROQ_API_KEY", default="")
 
 if DEBUG:
     # Allow fallback dev key for local development
@@ -188,7 +189,8 @@ INSTALLED_APPS = [
     "transactions",
     "api",
     "referrals",
-    "cards",  # ← Add this new app
+    "cards",
+    "chat",
 ]
 
 # Alert thresholds for high-priority admin email notifications

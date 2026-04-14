@@ -10,6 +10,7 @@ from django.db.models import Count, Sum
 from django.db.models.functions import TruncDate
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import mixins, permissions, serializers, status, viewsets
 from rest_framework.authtoken.models import Token
@@ -376,10 +377,11 @@ class UserDashboardAnalyticsView(APIView):
         )
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class CheckoutCompletionView(APIView):
     """Send checkout completion email notification with Trustpilot invite."""
 
-    authentication_classes = []  # <--- THE FIX: Bypass strict DRF session/CSRF auth
+    authentication_classes = []  # Allow anonymous access for the webhook-style endpoint
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):

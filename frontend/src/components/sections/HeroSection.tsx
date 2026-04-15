@@ -41,7 +41,7 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
                 View Plans
               </Link>
               <Link
-                href="/auth/signup"
+                href="/accounts/signup"
                 className="inline-flex min-h-[44px] items-center justify-center rounded-[7px] border-2 border-[#2A52BE] bg-white px-8 py-3.5 text-sm font-semibold text-[#1E3A8A] transition hover:bg-[#eff6ff]"
               >
                 Open Account

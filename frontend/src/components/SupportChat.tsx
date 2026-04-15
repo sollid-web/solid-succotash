@@ -176,7 +176,6 @@ export default function SupportChat() {
     priority: "High",
     description: "",
   })
-  const [agentMode, setAgentMode] = useState<"ai" | "human">("ai")
   const [sessionId, setSessionId] = useState("")
   const [ticketSuccess, setTicketSuccess] = useState(false)
   const [tab, setTab] = useState<"chat" | "faq" | "ticket">("chat")
@@ -389,7 +388,7 @@ export default function SupportChat() {
     const trimmed = (overrideText ?? input).trim()
     if (!trimmed) return
 
-    const currentMode = handover ? "human" : agentMode
+    const currentMode = handover ? "human" : "ai"
     const userMessage: ChatMessage = { role: "user", content: trimmed, time: timeNow() }
     setMessages((current) => [...current, userMessage])
     setHistory((current) => [...current, { role: "user", content: trimmed }].slice(-20))
@@ -455,7 +454,6 @@ export default function SupportChat() {
   }
 
   function handleTalkToHuman() {
-    setAgentMode("human")
     setChatOpen(true)
     showToast("chat", "🤝 Human Support Requested", "You can now send your message and our support team will receive the handover request.")
   }
@@ -618,23 +616,6 @@ export default function SupportChat() {
           <div className="hdr-btns">
             <button className="hdr-btn" type="button" title="Close chat" onClick={() => setChatOpen(false)}><X size={16} /></button>
           </div>
-        </div>
-
-        <div className="mode-toggle-row">
-          <button
-            type="button"
-            className={`mode-pill ${agentMode === "ai" ? "active" : ""}`}
-            onClick={() => setAgentMode("ai")}
-          >
-            <Bot size={16} /> AI Response
-          </button>
-          <button
-            type="button"
-            className={`mode-pill ${agentMode === "human" ? "active" : ""}`}
-            onClick={() => setAgentMode("human")}
-          >
-            <Headset size={16} /> Human Handover
-          </button>
         </div>
 
         <div className="human-handover-row">

@@ -97,12 +97,6 @@ export default function TawkToChat() {
     // On mobile, hide the default launcher and use our in-site button to maximize chat.
     const api = (window as any).Tawk_API
     api.onLoad = () => {
-      try {
-        // Always hide the default launcher so users can't accidentally trigger a popout.
-        api?.hideWidget?.()
-      } catch {
-        // ignore
-      }
       if (DEBUG) console.info('[TawkToChat] Widget loaded')
     }
 

@@ -4,19 +4,21 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
+import { useTranslation } from '@/i18n/TranslationProvider'
 import { cn } from '@/lib/cn'
 import { useState } from 'react'
 
 export default function NavBar() {
   const pathname = usePathname()
+  const { t } = useTranslation()
 
   const navItems = [
-    { href: '/', label: 'Home' },
-    { href: '#plans', label: 'Plans' },
-    { href: '#virtual-card', label: 'Virtual Card' },
-    { href: '#compliance', label: 'Compliance' },
-    { href: '/blog', label: 'Blog' },
-    { href: '/contact', label: 'Contact' },
+    { href: '/', labelKey: 'nav.home' },
+    { href: '#plans', labelKey: 'nav.plans' },
+    { href: '#virtual-card', labelKey: 'nav.virtualCard' },
+    { href: '#compliance', labelKey: 'nav.compliance' },
+    { href: '/blog', labelKey: 'nav.blog' },
+    { href: '/contact', labelKey: 'nav.contact' },
   ]
 
   return (
@@ -42,7 +44,7 @@ export default function NavBar() {
                       : 'text-[#475569] hover:text-[#0F172A]'
                   )}
                 >
-                  {item.label}
+                  {t(item.labelKey)}
                 </Link>
               </li>
             ))}
@@ -54,14 +56,14 @@ export default function NavBar() {
               href="/accounts/login"
               className="text-sm font-medium text-[#1E3A8A] px-5 py-2 border border-[#2A52BE] rounded-[7px] hover:bg-[#eff6ff] transition-colors"
             >
-              Login
+              {t('nav.login')}
             </Link>
             <Button
               asLink
               href="/accounts/signup"
               className="bg-[#2A52BE] text-white px-5 py-2 rounded-[7px] font-bold text-sm hover:bg-[#244bb0] transition-colors"
             >
-              Sign Up
+              {t('nav.signup')}
             </Button>
           </div>
 
@@ -72,7 +74,7 @@ export default function NavBar() {
               href="/accounts/signup"
               className="bg-[#2A52BE] text-white px-5 py-2 rounded-[7px] font-bold text-sm hover:bg-[#244bb0] transition-colors"
             >
-              Sign Up
+              {t('nav.signup')}
             </Button>
           </div>
         </div>

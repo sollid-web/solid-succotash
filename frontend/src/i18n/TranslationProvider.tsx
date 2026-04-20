@@ -4,6 +4,7 @@ import en from './en.json';
 import es from './es.json';
 import fr from './fr.json';
 import no from './no.json';
+import de from './de.json';
 
 // Basic dictionary map
 const dictionaries: Record<string, Record<string,string>> = {
@@ -11,7 +12,7 @@ const dictionaries: Record<string, Record<string,string>> = {
   es,
   fr,
   no,
-  de: en,
+  de,
   it: en,
   pt: en,
   nl: en,

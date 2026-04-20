@@ -47,26 +47,30 @@ interface TranslationContextValue {
 const TranslationContext = createContext<TranslationContextValue | undefined>(undefined);
 
 function detectInitialLocale(): string {
-  // 1. Check explicit user preference in localStorage
-  if (typeof window !== 'undefined') {
-    const storedRaw = window.localStorage.getItem('wolvcapital.locale');
-    const stored = normalizeLocale(storedRaw);
-    if (stored && dictionaries[stored]) return stored;
+  if (typeof window === 'undefined') return 'en';
+
+  // 1. URL parameter is highest-priority for user-selected language.
+  const urlSearch = new URLSearchParams(window.location.search);
+  const paramLocale = normalizeLocale(urlSearch.get('lang'));
+  if (paramLocale && dictionaries[paramLocale]) return paramLocale;
+
+  // 2. Check explicit user preference in localStorage
+  const storedRaw = window.localStorage.getItem('wolvcapital.locale');
+  const stored = normalizeLocale(storedRaw);
+  if (stored && dictionaries[stored]) return stored;
+
+  // 3. Check cookie set by middleware (geo/ip)
+  const cookieLocale = document.cookie.split(';').map(c => c.trim()).find(c => c.startsWith('wolvcapital_locale='));
+  if (cookieLocale) {
+    const value = normalizeLocale(cookieLocale.split('=')[1]);
+    if (value && dictionaries[value]) return value;
   }
-  // 2. Check cookie set by middleware (geo/ip) - e.g. x-wolv-locale
-  if (typeof document !== 'undefined') {
-    const cookieLocale = document.cookie.split(';').map(c => c.trim()).find(c => c.startsWith('wolvcapital_locale='));
-    if (cookieLocale) {
-      const value = normalizeLocale(cookieLocale.split('=')[1]);
-      if (value && dictionaries[value]) return value;
-    }
-  }
-  // 3. Browser language fallback
-  if (typeof navigator !== 'undefined') {
-    const nav = normalizeLocale(navigator.language);
-    if (nav && dictionaries[nav]) return nav;
-  }
-  // 4. Default
+
+  // 4. Browser language fallback
+  const nav = normalizeLocale(navigator.language);
+  if (nav && dictionaries[nav]) return nav;
+
+  // 5. Default
   return 'en';
 }
 

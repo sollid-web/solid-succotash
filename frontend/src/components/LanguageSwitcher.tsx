@@ -28,6 +28,17 @@ const languages = [
 export default function LanguageSwitcher() {
   const { locale, setLocale } = useTranslation();
   const currentLanguage = languages.find(l => l.code === locale) || languages[0];
+
+  const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const nextLocale = event.target.value;
+    setLocale(nextLocale);
+
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.set('lang', nextLocale);
+      window.history.replaceState({}, '', url.toString());
+    }
+  };
   
   return (
     <div className="relative">
@@ -35,7 +46,7 @@ export default function LanguageSwitcher() {
         aria-label="Change language"
         className="appearance-none bg-white border border-gray-300 rounded-lg px-3 py-2 pr-8 text-sm font-medium text-gray-700 hover:border-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:border-[#2563eb] transition-colors cursor-pointer min-w-0"
         value={locale}
-        onChange={(e) => setLocale(e.target.value)}
+        onChange={handleLanguageChange}
       >
         {languages.map(l => (
           <option key={l.code} value={l.code}>

@@ -4,9 +4,25 @@ import { useTranslation } from '@/i18n/TranslationProvider';
 
 const languages = [
   { code: 'en', label: 'English', flag: '🇺🇸' },
+  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
   { code: 'es', label: 'Español', flag: '🇪🇸' },
   { code: 'fr', label: 'Français', flag: '🇫🇷' },
   { code: 'no', label: 'Norsk', flag: '🇳🇴' },
+  { code: 'it', label: 'Italiano', flag: '🇮🇹' },
+  { code: 'pt', label: 'Português', flag: '🇵🇹' },
+  { code: 'nl', label: 'Nederlands', flag: '🇳🇱' },
+  { code: 'sv', label: 'Svenska', flag: '🇸🇪' },
+  { code: 'fi', label: 'Suomi', flag: '🇫🇮' },
+  { code: 'da', label: 'Dansk', flag: '🇩🇰' },
+  { code: 'pl', label: 'Polski', flag: '🇵🇱' },
+  { code: 'ro', label: 'Română', flag: '🇷🇴' },
+  { code: 'cs', label: 'Čeština', flag: '🇨🇿' },
+  { code: 'hu', label: 'Magyar', flag: '🇭🇺' },
+  { code: 'bg', label: 'Български', flag: '🇧🇬' },
+  { code: 'el', label: 'Ελληνικά', flag: '🇬🇷' },
+  { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
+  { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+  { code: 'ja', label: '日本語', flag: '🇯🇵' },
 ];
 
 export default function LanguageSwitcher() {

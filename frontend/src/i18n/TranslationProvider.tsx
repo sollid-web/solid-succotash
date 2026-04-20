@@ -6,7 +6,28 @@ import fr from './fr.json';
 import no from './no.json';
 
 // Basic dictionary map
-const dictionaries: Record<string, Record<string,string>> = { en, es, fr, no };
+const dictionaries: Record<string, Record<string,string>> = {
+  en,
+  es,
+  fr,
+  no,
+  de: en,
+  it: en,
+  pt: en,
+  nl: en,
+  sv: en,
+  fi: en,
+  da: en,
+  pl: en,
+  ro: en,
+  cs: en,
+  hu: en,
+  bg: en,
+  el: en,
+  tr: en,
+  ru: en,
+  ja: en,
+};
 
 function normalizeLocale(input: string | undefined | null): string {
   if (!input) return '';

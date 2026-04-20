@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
+import LanguageSwitcher from '@/components/LanguageSwitcher'
 import { cn } from '@/lib/cn'
 import { useState } from 'react'
 
@@ -48,6 +49,7 @@ export default function NavBar() {
           </ul>
 
           <div className="hidden lg:flex items-center gap-4">
+            <LanguageSwitcher />
             <Link
               href="/accounts/login"
               className="text-sm font-medium text-[#1E3A8A] px-5 py-2 border border-[#2A52BE] rounded-[7px] hover:bg-[#eff6ff] transition-colors"
@@ -63,7 +65,8 @@ export default function NavBar() {
             </Button>
           </div>
 
-          <div className="lg:hidden">
+          <div className="flex items-center gap-3 lg:hidden">
+            <LanguageSwitcher />
             <Button
               asLink
               href="/accounts/signup"

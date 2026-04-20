@@ -1,40 +1,19 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import en from './en.json';
-import es from './es.json';
-import fr from './fr.json';
-import no from './no.json';
 import de from './de.json';
 
-// Basic dictionary map
+const supportedLocales = ['en', 'de']
+const localeCookieName = 'next-locale'
+
 const dictionaries: Record<string, Record<string,string>> = {
   en,
-  es,
-  fr,
-  no,
   de,
-  it: en,
-  pt: en,
-  nl: en,
-  sv: en,
-  fi: en,
-  da: en,
-  pl: en,
-  ro: en,
-  cs: en,
-  hu: en,
-  bg: en,
-  el: en,
-  tr: en,
-  ru: en,
-  ja: en,
 };
 
 function normalizeLocale(input: string | undefined | null): string {
   if (!input) return '';
   const base = String(input).toLowerCase().split('-')[0];
-  // Map common Norwegian codes to our canonical 'no'
-  if (base === 'nb' || base === 'nn') return 'no';
   return base;
 }
 
@@ -52,47 +31,51 @@ function detectInitialLocale(): string {
   // 1. URL parameter is highest-priority for user-selected language.
   const urlSearch = new URLSearchParams(window.location.search);
   const paramLocale = normalizeLocale(urlSearch.get('lang'));
-  if (paramLocale && dictionaries[paramLocale]) return paramLocale;
+  if (supportedLocales.includes(paramLocale)) return paramLocale;
 
   // 2. Check explicit user preference in localStorage
   const storedRaw = window.localStorage.getItem('wolvcapital.locale');
   const stored = normalizeLocale(storedRaw);
-  if (stored && dictionaries[stored]) return stored;
+  if (supportedLocales.includes(stored)) return stored;
 
-  // 3. Check cookie set by middleware (geo/ip)
-  const cookieLocale = document.cookie.split(';').map(c => c.trim()).find(c => c.startsWith('wolvcapital_locale='));
+  // 3. Check cookie set by middleware or legacy client code
+  const cookieLocale = document.cookie
+    .split(';')
+    .map((c) => c.trim())
+    .find((c) => c.startsWith(`${localeCookieName}=`) || c.startsWith('wolvcapital_locale='));
   if (cookieLocale) {
     const value = normalizeLocale(cookieLocale.split('=')[1]);
-    if (value && dictionaries[value]) return value;
+    if (supportedLocales.includes(value)) return value;
   }
 
   // 4. Browser language fallback
   const nav = normalizeLocale(navigator.language);
-  if (nav && dictionaries[nav]) return nav;
+  if (supportedLocales.includes(nav)) return nav;
 
   // 5. Default
   return 'en';
 }
 
-export const TranslationProvider = ({ children }: { children: ReactNode }) => {
-  const [locale, setLocaleState] = useState<string>('en');
+export const TranslationProvider = ({ children, initialLocale = 'en' }: { children: ReactNode; initialLocale?: string }) => {
+  const [locale, setLocaleState] = useState<string>(supportedLocales.includes(initialLocale) ? initialLocale : 'en');
 
   useEffect(() => {
-    setLocaleState(detectInitialLocale());
-  }, []);
+    setLocaleState(supportedLocales.includes(initialLocale) ? initialLocale : detectInitialLocale());
+  }, [initialLocale]);
 
   const setLocale = (loc: string) => {
     const normalized = normalizeLocale(loc);
-    if (!dictionaries[normalized]) return;
+    if (!supportedLocales.includes(normalized)) return;
     setLocaleState(normalized);
     if (typeof window !== 'undefined') {
       window.localStorage.setItem('wolvcapital.locale', normalized);
+      document.cookie = `${localeCookieName}=${normalized};path=/;max-age=${60*60*24*365}`;
       document.cookie = `wolvcapital_locale=${normalized};path=/;max-age=${60*60*24*365}`;
     }
   };
 
   const t = (key: string) => {
-    const dict = dictionaries[locale] || dictionaries.en;
+    const dict = supportedLocales.includes(locale) ? dictionaries[locale] : dictionaries.en;
     return dict[key] || key;
   };
 

@@ -9,12 +9,35 @@ function normalizeLocale(locale?: string | null) {
   return locale.trim().toLowerCase().split(';')[0].split('-')[0]
 }
 
+function parseAcceptLanguage(header: string) {
+  return header
+    .split(',')
+    .map((item) => {
+      const [tag, q] = item.trim().split(';q=')
+      return {
+        locale: normalizeLocale(tag),
+        weight: q ? Number(q) : 1,
+      }
+    })
+    .filter((item) => item.locale)
+    .sort((a, b) => b.weight - a.weight)
+    .map((item) => item.locale)
+}
+
 export function middleware(request: NextRequest) {
   const url = request.nextUrl
   const { pathname, searchParams } = url
   const res = NextResponse.next()
 
-  const isStatic = pathname.startsWith('/_next') || pathname.startsWith('/static') || pathname.startsWith('/images') || pathname.endsWith('.ico') || pathname.endsWith('.txt') || pathname.endsWith('.xml')
+  const isStatic =
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/static') ||
+    pathname.startsWith('/images') ||
+    pathname.startsWith('/api') ||
+    pathname.endsWith('.ico') ||
+    pathname.endsWith('.txt') ||
+    pathname.endsWith('.xml')
+
   if (isStatic) return res
 
   const explicitLang = normalizeLocale(searchParams.get('lang'))
@@ -23,16 +46,14 @@ export function middleware(request: NextRequest) {
     return res
   }
 
-  const localeCookie = request.cookies.get(localeCookieName)?.value
-  if (!localeCookie) {
-    const acceptLanguage = request.headers.get('accept-language') || ''
-    const preferredLanguages = acceptLanguage
-      .split(',')
-      .map((item) => normalizeLocale(item))
-      .filter((lang) => lang)
+  const localeCookie = normalizeLocale(request.cookies.get(localeCookieName)?.value)
+  const preferredLanguages = parseAcceptLanguage(request.headers.get('accept-language') || '')
+  const resolvedLocale =
+    (localeCookie && supportedLocales.includes(localeCookie) ? localeCookie : preferredLanguages.find((lang) => supportedLocales.includes(lang))) ||
+    'en'
 
-    const locale = preferredLanguages.find((lang) => supportedLocales.includes(lang)) || 'en'
-    res.cookies.set(localeCookieName, locale, { path: '/', maxAge: 60 * 60 * 24 * 365 })
+  if (!localeCookie || !supportedLocales.includes(localeCookie)) {
+    res.cookies.set(localeCookieName, resolvedLocale, { path: '/', maxAge: 60 * 60 * 24 * 365 })
   }
 
   return res

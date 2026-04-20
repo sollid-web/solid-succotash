@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Script from 'next/script'
 import { Suspense } from 'react'
 import { Analytics } from '@vercel/analytics/next'
+import { cookies, headers } from 'next/headers'
 import './globals.css'
 import { TranslationProvider } from '@/i18n/TranslationProvider'
 import AppChrome from '@/components/AppChrome'
@@ -11,6 +12,43 @@ import RemoveSyncBannerClient from '@/components/RemoveSyncBannerClient'
 
 // Removed Google font import for offline/build stability; fallback to Tailwind font-sans.
 
+
+const supportedLocales = ['en', 'de']
+
+function normalizeLocale(value: string | string[] | undefined | null) {
+  if (!value) return ''
+  const locale = Array.isArray(value) ? value[0] : value
+  return locale.trim().toLowerCase().split(';')[0].split('-')[0]
+}
+
+function parseAcceptLanguage(header: string) {
+  return header
+    .split(',')
+    .map((item) => {
+      const [tag, q] = item.trim().split(';q=')
+      return {
+        locale: normalizeLocale(tag),
+        weight: q ? Number(q) : 1,
+      }
+    })
+    .filter((item) => item.locale)
+    .sort((a, b) => b.weight - a.weight)
+    .map((item) => item.locale)
+}
+
+async function detectLocale(searchParams: Record<string, string | string[] | undefined>) {
+  const paramLocale = normalizeLocale(searchParams.lang)
+  if (supportedLocales.includes(paramLocale)) return paramLocale
+
+  const cookieStore = await cookies()
+  const cookieLocale = normalizeLocale(cookieStore.get('next-locale')?.value)
+  if (supportedLocales.includes(cookieLocale)) return cookieLocale
+
+  const headerStore = await headers()
+  const acceptLanguage = headerStore.get('accept-language') || ''
+  const preferredLanguages = parseAcceptLanguage(acceptLanguage)
+  return preferredLanguages.find((lang) => supportedLocales.includes(lang)) || 'en'
+}
 
 export const metadata: Metadata = {
   title: 'WolvCapital - Professional Investment Platform',
@@ -53,11 +91,14 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  searchParams,
 }: {
   children: React.ReactNode
+  searchParams: Record<string, string | string[] | undefined>
 }) {
+  const locale = await detectLocale(searchParams)
   const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
   const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID
   const linkedInPartnerId = process.env.NEXT_PUBLIC_LINKEDIN_PARTNER_ID
@@ -65,7 +106,7 @@ export default function RootLayout({
   const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID
 
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         {/* FAQ Schema */}
         <script
@@ -242,7 +283,7 @@ export default function RootLayout({
               </Suspense>
             </>
           ) : null}
-          <TranslationProvider>
+          <TranslationProvider initialLocale={locale}>
             <AppChrome>{children}</AppChrome>
           </TranslationProvider>
         <Analytics />

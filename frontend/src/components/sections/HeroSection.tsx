@@ -1,12 +1,15 @@
 'use client'
 
 import Link from 'next/link'
+import { useTranslation } from '@/i18n/TranslationProvider'
 
 interface HeroSectionProps {
   onPlansClick?: () => void
 }
 
 export default function HeroSection({ onPlansClick }: HeroSectionProps) {
+  const { t } = useTranslation()
+
   return (
     <section
       className="relative overflow-hidden bg-cover bg-center bg-[url('/images/hero/hero-bg.webp')]"
@@ -20,16 +23,16 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
           <div className="space-y-8">
             <div className="max-w-xl">
               <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1E3A8A]">
-                Institutional-Grade Digital Asset Management
+                {t('hero.eyebrow')}
               </span>
             </div>
 
             <h1 className="text-3xl font-bold leading-tight tracking-tight text-[#0F172A] sm:text-4xl md:text-5xl lg:text-[48px] lg:leading-[1.05]">
-              Managed cryptocurrency portfolios with transparent fees and professional custody.
+              {t('hero.title')}
             </h1>
 
             <p className="max-w-2xl text-base leading-7 text-slate-700 sm:text-lg">
-              WolvCapital combines KYC-verified onboarding, institutional custody, and audited digital asset strategies. Capital is at risk and returns are not guaranteed.
+              {t('hero.subtitle')}
             </p>
 
             <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap items-start sm:items-center">
@@ -38,22 +41,22 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
                 onClick={() => onPlansClick?.()}
                 className="inline-flex min-h-[44px] items-center justify-center rounded-[7px] bg-[#2A52BE] px-8 py-3.5 text-sm font-bold text-white transition hover:bg-[#244bb0]"
               >
-                View Plans
+                {t('hero.button.viewPlans')}
               </Link>
               <Link
                 href="/accounts/signup"
                 className="inline-flex min-h-[44px] items-center justify-center rounded-[7px] border-2 border-[#2A52BE] bg-white px-8 py-3.5 text-sm font-semibold text-[#1E3A8A] transition hover:bg-[#eff6ff]"
               >
-                Open Account
+                {t('hero.button.openAccount')}
               </Link>
             </div>
 
             <div className="flex flex-wrap gap-3 text-[11px] uppercase tracking-[0.16em] text-slate-700">
-              <span>256-bit Encryption</span>
+              <span>{t('hero.badge.encryption')}</span>
               <span>|</span>
-              <span>Institutional Custody</span>
+              <span>{t('hero.badge.custody')}</span>
               <span>|</span>
-              <span>FinCEN Registered MSB</span>
+              <span>{t('hero.badge.fincen')}</span>
             </div>
           </div>
 

@@ -1,15 +1,20 @@
 "use client";
 import React from 'react';
-import { useTranslation } from '@/i18n/TranslationProvider';
+import { useTranslation } from '@/components/TranslationProvider';
 
 const languages = [
-  { code: 'en', label: 'English', flag: '🇺🇸' },
-  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+  { code: 'en', label: 'English',    flag: '🇺🇸' },
+  { code: 'de', label: 'Deutsch',    flag: '🇩🇪' },
+  { code: 'es', label: 'Español',    flag: '🇪🇸' },
+  { code: 'fr', label: 'Français',   flag: '🇫🇷' },
+  { code: 'it', label: 'Italiano',   flag: '🇮🇹' },
+  { code: 'pt', label: 'Português',  flag: '🇵🇹' },
+  { code: 'ru', label: 'Русский',    flag: '🇷🇺' },
+  { code: 'no', label: 'Norsk',      flag: '🇳🇴' },
 ];
 
 export default function LanguageSwitcher() {
   const { locale, setLocale } = useTranslation();
-  const currentLanguage = languages.find(l => l.code === locale) || languages[0];
 
   const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const nextLocale = event.target.value;
@@ -21,7 +26,7 @@ export default function LanguageSwitcher() {
       window.history.replaceState({}, '', url.toString());
     }
   };
-  
+
   return (
     <div className="relative">
       <select

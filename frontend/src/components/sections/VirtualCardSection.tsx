@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Check } from 'lucide-react'
-import { useTranslation } from '@/i18n/TranslationProvider'
+import { useTranslation } from '@/components/TranslationProvider'
 const CARD_SERVICES = [
   { name: 'Netflix', icon: '/icons/Netflix-Logo.wine.svg' },
   { name: 'Spotify', icon: '/icons/Spotify-Logo.wine.svg' },

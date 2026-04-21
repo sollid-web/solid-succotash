@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo } from 'react'
-import { useTranslation } from '@/i18n/TranslationProvider'
+import { useTranslation } from '@/components/TranslationProvider'
 
 interface MapWithOverlayProps {
   query: string // address query for Google Maps

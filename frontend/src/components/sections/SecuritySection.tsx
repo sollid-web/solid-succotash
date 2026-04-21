@@ -4,7 +4,7 @@ import { Shield, Lock, AlertTriangle, CheckSquare, Eye, FileCheck } from 'lucide
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { IconBox } from '@/components/ui/IconBox'
 import { Button } from '@/components/ui/Button'
-import { useTranslation } from '@/i18n/TranslationProvider'
+import { useTranslation } from '@/components/TranslationProvider'
 
 interface SecurityFeature {
   icon: React.ReactNode

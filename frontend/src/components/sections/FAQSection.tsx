@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { HelpCircle } from 'lucide-react'
 import Link from 'next/link'
-import { useTranslation } from '@/i18n/TranslationProvider'
+import { useTranslation } from '@/components/TranslationProvider'
 export default function FAQSection() {
   const { t } = useTranslation()
   const [openIdx, setOpenIdx] = useState<number | null>(null)

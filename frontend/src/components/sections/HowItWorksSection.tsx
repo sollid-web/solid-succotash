@@ -1,5 +1,5 @@
 'use client'
-import { useTranslation } from '@/i18n/TranslationProvider'
+import { useTranslation } from '@/components/TranslationProvider'
 import { Button } from '@/components/ui/Button'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { StepCircle } from '@/components/ui/StepCircle'

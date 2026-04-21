@@ -1,6 +1,6 @@
 'use client'
 import { CheckCircle2, Shield, Lock } from 'lucide-react'
-import { useTranslation } from '@/i18n/TranslationProvider'
+import { useTranslation } from '@/components/TranslationProvider'
 export default function RegulatedSection() {
   const { t } = useTranslation()
   const CARDS = [

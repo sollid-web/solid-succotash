@@ -1,14 +1,25 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import en from './en.json';
-import de from './de.json';
-
-const supportedLocales = ['en', 'de']
+import en from '../i18n/en.json';
+import de from '../i18n/de.json';
+import es from '../i18n/es.json';
+import fr from '../i18n/fr.json';
+import it from '../i18n/it.json';
+import pt from '../i18n/pt.json';
+import ru from '../i18n/ru.json';
+import no from '../i18n/no.json';
+const supportedLocales = ['en', 'de', 'es', 'fr', 'it', 'pt', 'ru', 'no'];
 const localeCookieName = 'next-locale'
 
 const dictionaries: Record<string, Record<string,string>> = {
   en,
   de,
+  no,
+  fr,
+  es,
+  ru,
+  pt,
+  it,
 };
 
 function normalizeLocale(input: string | undefined | null): string {
@@ -59,9 +70,11 @@ function detectInitialLocale(): string {
 export const TranslationProvider = ({ children, initialLocale = 'en' }: { children: ReactNode; initialLocale?: string }) => {
   const [locale, setLocaleState] = useState<string>(supportedLocales.includes(initialLocale) ? initialLocale : 'en');
 
-  useEffect(() => {
-    setLocaleState(supportedLocales.includes(initialLocale) ? initialLocale : detectInitialLocale());
-  }, [initialLocale]);
+useEffect(() => {
+  // If the server didn't pass a specific locale, detect it from the browser/URL
+  const detected = detectInitialLocale();
+  setLocaleState(detected);
+}, [initialLocale]);
 
   const setLocale = (loc: string) => {
     const normalized = normalizeLocale(loc);

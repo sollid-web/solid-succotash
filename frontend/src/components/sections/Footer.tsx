@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { useTranslation } from '@/i18n/TranslationProvider'
+import { useTranslation } from '@/components/TranslationProvider'
 export default function Footer() {
   const { t } = useTranslation()
   return (

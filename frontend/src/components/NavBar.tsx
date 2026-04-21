@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/Button'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
-import { useTranslation } from '@/i18n/TranslationProvider'
+import { useTranslation } from '@/components/TranslationProvider'
 import { cn } from '@/lib/cn'
 import { useState } from 'react'
 

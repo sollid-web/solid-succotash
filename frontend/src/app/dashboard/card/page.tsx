@@ -187,8 +187,8 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
   async function handleFreeze() {
     setFreezing(true);
     try {
-      const res = await apiFetch("/api/cards/freeze/", {
-        method: "POST",
+// CORRECT (Must match your main urls.py prefix)
+const res = await apiFetch("/api/virtualcards/freeze/", {        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ card_id: card.id }),
       });

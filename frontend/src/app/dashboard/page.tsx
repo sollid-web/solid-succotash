@@ -221,7 +221,7 @@ export default function DashboardPage() {
                 <p className="text-sm text-gray-600 mt-1">Activate your digital card or view details</p>
               </div>
               <Link
-                href="/dashboard/my-card"
+                href="/dashboard/card"
                 className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:shadow-lg hover:brightness-110 transition-all"
               >
                 View Card →

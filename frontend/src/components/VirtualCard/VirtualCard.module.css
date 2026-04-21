@@ -1,0 +1,56 @@
+.cardContainer {
+  perspective: 1200px;
+  cursor: pointer;
+}
+
+.cardInner {
+  position: relative;
+  width: 100%;
+  min-height: 250px;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(.4,0,.2,1);
+}
+
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.cardFace {
+  position: absolute;
+  inset: 0;
+  border-radius: 1.5rem;
+  box-shadow: 0 32px 80px rgba(15, 23, 42, 0.18);
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+
+.cardFront {
+  background: linear-gradient(135deg, #1e2a78, #4f6ef7, #7c3aed);
+  color: white;
+}
+
+.cardBack {
+  transform: rotateY(180deg);
+  background: linear-gradient(135deg, #1e2a78, #4f6ef7, #7c3aed);
+  color: white;
+}
+
+.frozenOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(190, 223, 255, 0.72);
+  backdrop-filter: blur(8px);
+  border-radius: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.frozenText {
+  color: #0f172a;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}

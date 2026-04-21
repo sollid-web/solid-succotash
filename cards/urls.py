@@ -1,3 +1,6 @@
+from django.urls import path  # <--- This is what is missing
+from .views import CardDetailView, CardFreezeView, CardTransactionsView
+
 urlpatterns = [
     # Change "detail/" to "" so the base URL works
     path("", CardDetailView.as_view(), name="card-detail"), 

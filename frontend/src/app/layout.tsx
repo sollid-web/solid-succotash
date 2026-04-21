@@ -2,55 +2,14 @@ import type { Metadata } from 'next'
 import Script from 'next/script'
 import { Suspense } from 'react'
 import { Analytics } from '@vercel/analytics/next'
-import { cookies, headers } from 'next/headers'
-import './globals.css'
 import { TranslationProvider } from '@/i18n/TranslationProvider'
 import AppChrome from '@/components/AppChrome'
 import GaPageView from '@/components/GaPageView'
 import SegmentProvider from '@/components/SegmentProvider'
 import RemoveSyncBannerClient from '@/components/RemoveSyncBannerClient'
-
-// Removed Google font import for offline/build stability; fallback to Tailwind font-sans.
-
-
-const supportedLocales = ['en', 'de']
-
-function normalizeLocale(value: string | string[] | undefined | null) {
-  if (!value) return ''
-  const locale = Array.isArray(value) ? value[0] : value
-  return locale.trim().toLowerCase().split(';')[0].split('-')[0]
-}
-
-function parseAcceptLanguage(header: string) {
-  return header
-    .split(',')
-    .map((item) => {
-      const [tag, q] = item.trim().split(';q=')
-      return {
-        locale: normalizeLocale(tag),
-        weight: q ? Number(q) : 1,
-      }
-    })
-    .filter((item) => item.locale)
-    .sort((a, b) => b.weight - a.weight)
-    .map((item) => item.locale)
-}
-
-async function detectLocale(searchParams: Record<string, string | string[] | undefined>) {
-  const paramLocale = normalizeLocale(searchParams.lang)
-  if (supportedLocales.includes(paramLocale)) return paramLocale
-
-  const cookieStore = await cookies()
-  const cookieLocale = normalizeLocale(cookieStore.get('next-locale')?.value)
-  if (supportedLocales.includes(cookieLocale)) return cookieLocale
-
-  const headerStore = await headers()
-  const acceptLanguage = headerStore.get('accept-language') || ''
-  const preferredLanguages = parseAcceptLanguage(acceptLanguage)
-  return preferredLanguages.find((lang) => supportedLocales.includes(lang)) || 'en'
-}
-
+import '@/app/globals.css'
 export const metadata: Metadata = {
+  
   title: 'WolvCapital - Professional Investment Platform',
   description: 'WolvCapital offers professional investment opportunities with manual off-chain approvals for maximum security.',
   keywords: 'investment, platform, wolvcapital, professional, secure, blockchain',
@@ -83,7 +42,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },
-      { url: '/favicon.ico', sizes: '32x32' }
+      { url: '/favicon.ico', sizes: '32x32' },
     ],
     apple: '/apple-touch-icon.png',
     shortcut: '/favicon.ico',
@@ -93,12 +52,9 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-  searchParams,
 }: {
   children: React.ReactNode
-  searchParams: Record<string, string | string[] | undefined>
 }) {
-  const locale = await detectLocale(searchParams)
   const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
   const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID
   const linkedInPartnerId = process.env.NEXT_PUBLIC_LINKEDIN_PARTNER_ID
@@ -106,77 +62,76 @@ export default async function RootLayout({
   const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID
 
   return (
-    <html lang={locale}>
+    <html lang="en">
       <head>
-        {/* FAQ Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              "mainEntity": [
+              '@context': 'https://schema.org',
+              '@type': 'FAQPage',
+              mainEntity: [
                 {
-                  "@type": "Question",
-                  "name": "How does WolvCapital generate investor returns?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "WolvCapital uses diversified digital asset strategies with automated monitoring tools to generate structured daily returns."
-                  }
+                  '@type': 'Question',
+                  name: 'How does WolvCapital generate investor returns?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'WolvCapital uses diversified digital asset strategies with automated monitoring tools to generate structured daily returns.',
+                  },
                 },
                 {
-                  "@type": "Question",
-                  "name": "Is WolvCapital regulated?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "WolvCapital follows KYC, AML, and PCI-DSS compliance standards."
-                  }
+                  '@type': 'Question',
+                  name: 'Is WolvCapital regulated?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'WolvCapital follows KYC, AML, and PCI-DSS compliance standards.',
+                  },
                 },
                 {
-                  "@type": "Question",
-                  "name": "How long do withdrawals take?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Profit withdrawals are available at end of your active investment plan and capital withdrawals are processed after plan completion."
-                  }
+                  '@type': 'Question',
+                  name: 'How long do withdrawals take?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Profit withdrawals are available at end of your active investment plan and capital withdrawals are processed after plan completion.',
+                  },
                 },
                 {
-                  "@type": "Question",
-                  "name": "What are the minimum and maximum investment amounts?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Minimum investment begins at $100. Higher-tier plans support custom or flexible amounts."
-                  }
+                  '@type': 'Question',
+                  name: 'What are the minimum and maximum investment amounts?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Minimum investment begins at $100. Higher-tier plans support custom or flexible amounts.',
+                  },
                 },
                 {
-                  "@type": "Question",
-                  "name": "How is my account secured?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "WolvCapital provides 2FA, 256-bit SSL encryption, and continuous fraud monitoring to protect user accounts."
-                  }
-                }
-              ]
-            })
+                  '@type': 'Question',
+                  name: 'How is my account secured?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'WolvCapital provides 2FA, 256-bit SSL encryption, and continuous fraud monitoring to protect user accounts.',
+                  },
+                },
+              ],
+            }),
           }}
         />
-        {/* Organization Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "name": "WolvCapital",
-              "url": "https://www.wolvcapital.com",
-              "logo": "https://www.wolvcapital.com/wolv-logo.svg",
-              "sameAs": [
-                "https://facebook.com/wolvcapital",
-                "https://instagram.com/wolvcapital",
-                "https://twitter.com/wolvcapital"
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'WolvCapital',
+              url: 'https://www.wolvcapital.com',
+              logo: 'https://www.wolvcapital.com/wolv-logo.svg',
+              sameAs: [
+                'https://facebook.com/wolvcapital',
+                'https://instagram.com/wolvcapital',
+                'https://twitter.com/wolvcapital',
               ],
-              "description": "WolvCapital is a secure digital asset investment platform offering structured daily ROI, AML/KYC compliance, 256-bit encryption, and global investor support."
-            })
+              description:
+                'WolvCapital is a secure digital asset investment platform offering structured daily ROI, AML/KYC compliance, 256-bit encryption, and global investor support.',
+            }),
           }}
         />
       </head>
@@ -184,23 +139,21 @@ export default async function RootLayout({
         <RemoveSyncBannerClient />
         <SegmentProvider writeKey={process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY || ''}>
           {metaPixelId ? (
-            <>
-              <Script
-                id="meta-pixel"
-                strategy="afterInteractive"
-                dangerouslySetInnerHTML={{
-                  __html: `
-                    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-                    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-                    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-                    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script',
-                    'https://connect.facebook.net/en_US/fbevents.js');
-                    fbq('init', '${metaPixelId}');
-                    fbq('track', 'PageView');
-                  `,
-                }}
-              />
-            </>
+            <Script
+              id="meta-pixel"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+                  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+                  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script',
+                  'https://connect.facebook.net/en_US/fbevents.js');
+                  fbq('init', '${metaPixelId}');
+                  fbq('track', 'PageView');
+                `,
+              }}
+            />
           ) : null}
 
           {linkedInPartnerId ? (
@@ -271,11 +224,11 @@ export default async function RootLayout({
                 strategy="afterInteractive"
                 dangerouslySetInnerHTML={{
                   __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${measurementId}');
-                `,
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', '${measurementId}');
+                  `,
                 }}
               />
               <Suspense fallback={null}>
@@ -283,10 +236,11 @@ export default async function RootLayout({
               </Suspense>
             </>
           ) : null}
-          <TranslationProvider initialLocale={locale}>
+
+          <TranslationProvider initialLocale="en">
             <AppChrome>{children}</AppChrome>
           </TranslationProvider>
-        <Analytics />
+          <Analytics />
         </SegmentProvider>
       </body>
     </html>

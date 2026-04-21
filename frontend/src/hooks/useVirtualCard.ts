@@ -9,22 +9,15 @@ export interface VirtualCard {
   expiry_month: string;
   expiry_year: string;
   cvv: string;
-  balance: number;
-  purchase_amount: number;
+  balance: string;
+  purchase_amount: string;
   status: "pending" | "approved" | "active" | "suspended" | "expired" | "rejected";
   is_active: boolean;
   created_at: string;
   updated_at: string;
 }
 
-interface UseVirtualCardReturn {
-  card: VirtualCard | null;
-  loading: boolean;
-  error: string | null;
-  refetch: () => void;
-}
-
-export function useVirtualCard(): UseVirtualCardReturn {
+export function useVirtualCard() {
   const [card, setCard] = useState<VirtualCard | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -33,6 +26,7 @@ export function useVirtualCard(): UseVirtualCardReturn {
     setLoading(true);
     setError(null);
     try {
+      // Uses existing VirtualCardViewSet list endpoint
       const res = await apiFetch("/api/virtualcards/");
       if (res.status === 401 || res.status === 403) {
         throw new Error("Session expired. Please log in again.");
@@ -40,7 +34,11 @@ export function useVirtualCard(): UseVirtualCardReturn {
       if (!res.ok) throw new Error(`Failed to load card (${res.status})`);
       const data = await res.json();
       const list: VirtualCard[] = Array.isArray(data) ? data : [];
-      const active = list.find((c) => c.is_active) || list[0] || null;
+      // Priority: active first, then most recent
+      const active = list.find((c) => c.is_active)
+        || list.find((c) => c.status === "approved")
+        || list[0]
+        || null;
       setCard(active);
     } catch (e: any) {
       setError(e?.message || "Failed to load virtual card");

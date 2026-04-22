@@ -1458,3 +1458,20 @@ class VirtualCardViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+# Patch: prevent duplicate pending/active card requests
+_original_vc_create = VirtualCardViewSet.create
+def _patched_vc_create(self, request, *args, **kwargs):
+    from transactions.models import VirtualCard as VC
+    existing = VC.objects.filter(
+        user=request.user,
+        status__in=["pending", "active", "approved"]
+    ).first()
+    if existing:
+        return Response(
+            {"error": f"You already have a {existing.status} card. Please wait for processing."},
+            status=400
+        )
+    return _original_vc_create(self, request, *args, **kwargs)
+VirtualCardViewSet.create = _patched_vc_create

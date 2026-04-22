@@ -39,6 +39,14 @@ class Profile(models.Model):
     email_marketing: models.BooleanField = models.BooleanField(default=False, help_text="Marketing and promotional emails")
     email_verified: models.BooleanField = models.BooleanField(default=False, help_text="Email address verified via code")
 
+    # Stripe Virtual Card fields
+    stripe_cardholder_id: models.CharField = models.CharField(max_length=100, blank=True, null=True, help_text="Stripe Cardholder ID")
+    stripe_card_id: models.CharField = models.CharField(max_length=100, blank=True, null=True, help_text="Stripe Virtual Card ID")
+    card_last4: models.CharField = models.CharField(max_length=4, blank=True, null=True, help_text="Last 4 digits of card")
+    card_exp_month: models.CharField = models.CharField(max_length=2, blank=True, null=True, help_text="Card expiration month")
+    card_exp_year: models.CharField = models.CharField(max_length=4, blank=True, null=True, help_text="Card expiration year")
+    is_card_frozen: models.BooleanField = models.BooleanField(default=False, help_text="Whether virtual card is frozen")
+
     def __str__(self):
         return f"{self.user.email} - {self.role}"
 

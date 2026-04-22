@@ -194,7 +194,7 @@ export default function WithdrawPage() {
               <div className="mb-4 p-3 bg-yellow-50 text-yellow-900 rounded-xl text-sm border border-yellow-200">
                 <p className="font-semibold">Withdrawals require an active virtual card.</p>
                 <p className="mt-1">
-                  <Link href="/dashboard/purchase-card" className="underline">Purchase Card</Link> to request activation.
+                  <Link href="/dashboard/card" className="underline">Purchase Card</Link> to request activation.
                 </p>
               </div>
             )}

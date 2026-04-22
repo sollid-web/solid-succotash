@@ -84,7 +84,7 @@ export default function VirtualCardWidget() {
       {/* CTA / View Actions */}
       {loading ? null : cards.some(c => c.status === 'active') ? (
         <Link
-          href="/dashboard/cards"
+          href="/dashboard/card"
           className="block w-full bg-green-600 text-white font-semibold py-3 px-4 rounded-xl text-center hover:shadow-lg hover:brightness-110 transition-all duration-200"
         >
           View Active Card
@@ -92,7 +92,7 @@ export default function VirtualCardWidget() {
       ) : (
         <>
           <Link
-            href="/dashboard/purchase-card"
+            href="/dashboard/card"
             target="_blank"
             rel="noopener noreferrer"
             className="block w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 px-4 rounded-xl text-center hover:shadow-lg hover:brightness-110 transition-all duration-200"
@@ -101,7 +101,7 @@ export default function VirtualCardWidget() {
           </Link>
 
           <Link
-            href="/dashboard/cards"
+            href="/dashboard/card"
             className="block w-full mt-3 text-center text-sm font-semibold text-blue-600 hover:text-blue-700 underline underline-offset-2"
           >
             View My Cards

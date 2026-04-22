@@ -39,6 +39,8 @@ SECRET_KEY = env("SECRET_KEY", default=None)
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="sk_test_xxx_REPLACE_ME_xxx")
 STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET", default="whsec_YOUR_SECRET")
 STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY", default="pk_test_YOUR_KEY")
+STRIPE_ISSUING_ENABLED = True
+STRIPE_CARDHOLDER_TYPE = 'individual'
 GROQ_API_KEY = env("GROQ_API_KEY", default="")
 
 if DEBUG:
@@ -107,7 +109,7 @@ if CUSTOM_DOMAIN:
 
 CORS_ALLOWED_ORIGIN_REGEXES: list[str] = [
     r"^https://.*\\.vercel\\.app$",
-    # Add more frontend deploy domains here if needed
+    r"^https://.*\\.up\\.railway\\.app$",
 ]
 
 CORS_ALLOW_CREDENTIALS = True

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Card Error - WolvCapital{% endblock %}
+
+{% block content %}
+<div class="wc-card-container">
+    <div class="wc-card-error">
+        <h1>⚠️ Card Error</h1>
+        <p class="wc-error-message">{{ error }}</p>
+        <div class="wc-error-actions">
+            <a href="/dashboard/" class="wc-btn wc-btn-primary">Return to Dashboard</a>
+            <a href="/support/" class="wc-btn wc-btn-secondary">Contact Support</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .wc-card-error {
+        max-width: 500px;
+        margin: 60px auto;
+        padding: 40px;
+        background: #f8f9fa;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .wc-error-message {
+        color: #dc3545;
+        margin: 20px 0;
+        font-size: 16px;
+    }
+    .wc-error-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+        justify-content: center;
+    }
+</style>
+{% endblock %}

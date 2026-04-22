@@ -53,12 +53,12 @@ function RequestCardView({ onRequested, wasRejected }: { onRequested: () => void
           {wasRejected ? "Request Not Approved" : "Get Your Virtual Card"}
         </h1>
         <p className="text-sm text-gray-500 leading-relaxed">
-          {wasRejected ? "Your previous request was not approved. Submit a new request or contact support." : "Activate a WolvCapital Visa virtual card for digital transactions worldwide."}
+          {wasRejected ? "Your previous request was not approved. Submit a new request or contact support." : "Activate a WolvCapital Visa Infinite virtual card for digital transactions worldwide."}
         </p>
       </div>
       <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden mb-5">
         {[
-          { label: "Card Type", value: "Visa Virtual Card" },
+          { label: "Card Type", value: "Visa Infinite Virtual" },
           { label: "Activation Fee", value: "$0.00", cls: "text-green-600" },
           { label: "Purchase Amount", value: "$1,000.00", cls: "text-blue-700 font-bold" },
           { label: "Processing Time", value: "1–24 hours" },
@@ -71,7 +71,7 @@ function RequestCardView({ onRequested, wasRejected }: { onRequested: () => void
       </div>
       {error && <div className="rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm p-3 mb-4">{error}</div>}
       <button onClick={handleRequest} disabled={loading}
-        className="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-sm shadow hover:shadow-md transition-all disabled:opacity-60">
+        className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#0f1c30] to-[#00a896] text-white font-semibold text-sm shadow hover:shadow-md transition-all disabled:opacity-60">
         {loading ? "Submitting…" : "Request Card — $1,000"}
       </button>
       <p className="text-center text-xs text-gray-400 mt-3">Reviewed by our team within 24 hours.</p>
@@ -96,6 +96,143 @@ function PendingCardView({ onRefresh }: { onRefresh: () => void }) {
         🔄 Check Status
       </button>
       <Link href="/dashboard" className="block text-center text-sm text-blue-600 hover:underline">← Back to Dashboard</Link>
+    </div>
+  );
+}
+
+// ── The realistic card face ───────────────────────────────
+function CardFace({ card, showFull, showCvv, isFrozen, isBack }: {
+  card: any; showFull: boolean; showCvv: boolean; isFrozen: boolean; isBack: boolean;
+}) {
+  const displayNum = showFull && card.card_number
+    ? card.card_number.replace(/(.{4})/g, "$1 ").trim()
+    : maskNumber(card.card_number);
+
+  if (isBack) {
+    return (
+      <div style={{
+        position: "absolute", inset: 0,
+        backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" as any,
+        transform: "rotateY(180deg)",
+        borderRadius: 16,
+        background: "linear-gradient(135deg, #0f1c30 0%, #1a3a5f 40%, #2a6a8f 70%, #00a896 100%)",
+        color: "white",
+        boxShadow: "0 20px 60px rgba(0,168,150,0.35), 0 4px 16px rgba(0,0,0,0.3)",
+        overflow: "hidden",
+      }}>
+        {/* Geometric shapes background */}
+        <div style={{ position: "absolute", inset: 0, overflow: "hidden", borderRadius: 16 }}>
+          <div style={{ position: "absolute", top: -40, right: -40, width: 200, height: 200, background: "rgba(0,168,150,0.2)", borderRadius: "50%", transform: "rotate(30deg)" }} />
+          <div style={{ position: "absolute", bottom: -30, left: -30, width: 160, height: 160, background: "rgba(42,106,143,0.25)", borderRadius: "40%" }} />
+        </div>
+        {/* Magnetic stripe */}
+        <div style={{ height: 44, background: "rgba(0,0,0,0.7)", marginBottom: 18, marginTop: 30 }} />
+        <div style={{ padding: "0 22px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+            <div>
+              <div style={{ fontSize: 8, opacity: 0.6, textTransform: "uppercase", letterSpacing: 1, marginBottom: 3 }}>Security Code</div>
+              <div style={{ fontSize: 8, opacity: 0.45 }}>CVV / CVC</div>
+            </div>
+            <div style={{ background: "#f5f0e8", color: "#111", fontFamily: "monospace", padding: "5px 14px", borderRadius: 4, fontSize: 14, letterSpacing: 5, minWidth: 64, textAlign: "center", boxShadow: "inset 0 1px 3px rgba(0,0,0,0.15)" }}>
+              {showCvv ? (card.cvv || "•••") : "•••"}
+            </div>
+          </div>
+          <div style={{ height: 1, background: "rgba(255,255,255,0.1)", marginBottom: 10 }} />
+          <p style={{ fontSize: 9, opacity: 0.4, lineHeight: 1.6 }}>
+            This card is issued by WolvCapital for authorised digital transactions only.<br />
+            Keep your security code confidential. Report lost cards immediately.
+          </p>
+          <p style={{ fontSize: 9, opacity: 0.3, marginTop: 14, textAlign: "center" }}>↩ Tap to flip back</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{
+      position: "absolute", inset: 0,
+      backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" as any,
+      borderRadius: 16,
+      background: "linear-gradient(135deg, #0f1c30 0%, #1a3a5f 35%, #2a6a8f 65%, #00a896 100%)",
+      padding: "20px 22px",
+      display: "flex", flexDirection: "column", justifyContent: "space-between",
+      color: "white",
+      boxShadow: "0 20px 60px rgba(0,168,150,0.35), 0 4px 16px rgba(0,0,0,0.3)",
+      overflow: "hidden",
+    }}>
+      {/* Geometric background shapes — matches image 2 */}
+      <div style={{ position: "absolute", inset: 0, overflow: "hidden", borderRadius: 16, pointerEvents: "none" }}>
+        {/* Large diagonal teal shape */}
+        <div style={{ position: "absolute", top: -20, right: -20, width: 260, height: 260, background: "rgba(0,168,150,0.18)", borderRadius: "35%", transform: "rotate(-15deg)" }} />
+        {/* Medium blue-green shape */}
+        <div style={{ position: "absolute", bottom: -30, left: 60, width: 180, height: 180, background: "rgba(42,106,143,0.22)", borderRadius: "40%", transform: "rotate(20deg)" }} />
+        {/* Small accent */}
+        <div style={{ position: "absolute", top: 30, right: 80, width: 100, height: 100, background: "rgba(100,200,180,0.1)", borderRadius: "50%", transform: "rotate(45deg)" }} />
+        {/* Metallic shine */}
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(45deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.07) 50%, rgba(255,255,255,0) 100%)" }} />
+      </div>
+
+      {/* Top row: brand + VISA Infinite */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", position: "relative" }}>
+        <div>
+          <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: 0.5, lineHeight: 1 }}>WolvCapital</div>
+        </div>
+        <div style={{ textAlign: "right" }}>
+          <div style={{ fontSize: 20, fontWeight: 900, fontStyle: "italic", letterSpacing: -0.5, lineHeight: 1 }}>VISA</div>
+          <div style={{ fontSize: 8, opacity: 0.7, letterSpacing: 1, textTransform: "uppercase", marginTop: 1 }}>Infinite</div>
+        </div>
+      </div>
+
+      {/* Chip + contactless row */}
+      <div style={{ display: "flex", alignItems: "center", gap: 12, position: "relative" }}>
+        {/* EMV chip */}
+        <div style={{ width: 44, height: 34, background: "linear-gradient(135deg, #c8a951, #f0d878, #b8922a)", borderRadius: 6, position: "relative", boxShadow: "0 2px 6px rgba(0,0,0,0.3)", flexShrink: 0 }}>
+          {/* Chip lines */}
+          <div style={{ position: "absolute", inset: 0, borderRadius: 6, overflow: "hidden" }}>
+            <div style={{ position: "absolute", top: "33%", left: 0, right: 0, height: 1, background: "rgba(150,110,20,0.5)" }} />
+            <div style={{ position: "absolute", top: "66%", left: 0, right: 0, height: 1, background: "rgba(150,110,20,0.5)" }} />
+            <div style={{ position: "absolute", left: "33%", top: 0, bottom: 0, width: 1, background: "rgba(150,110,20,0.5)" }} />
+            <div style={{ position: "absolute", left: "66%", top: 0, bottom: 0, width: 1, background: "rgba(150,110,20,0.5)" }} />
+            <div style={{ position: "absolute", inset: "25%", borderRadius: 2, border: "1px solid rgba(150,110,20,0.4)" }} />
+          </div>
+        </div>
+        {/* Contactless symbol */}
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" opacity={0.75}>
+          <path d="M12 17.5C9.5 15.5 9.5 8.5 12 6.5" stroke="white" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
+          <path d="M15 19.5C10.5 16 10.5 8 15 4.5" stroke="white" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
+          <path d="M18 21C11.5 16.5 11.5 7.5 18 3" stroke="white" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
+          <circle cx="9" cy="12" r="1.2" fill="white"/>
+        </svg>
+      </div>
+
+      {/* Card number */}
+      <div style={{ fontFamily: "monospace", fontSize: 17, letterSpacing: 3, opacity: 0.95, textShadow: "0 1px 3px rgba(0,0,0,0.4)", position: "relative" }}>
+        {displayNum}
+      </div>
+
+      {/* Footer */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", position: "relative" }}>
+        <div>
+          <div style={{ fontSize: 7, opacity: 0.6, textTransform: "uppercase", letterSpacing: 1.5, marginBottom: 3 }}>Card Holder</div>
+          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 0.8, textTransform: "uppercase" }}>{card.cardholder_name || "CARD HOLDER"}</div>
+        </div>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 7, opacity: 0.6, textTransform: "uppercase", letterSpacing: 1.5, marginBottom: 3 }}>Valid Thru</div>
+          <div style={{ fontSize: 12, fontWeight: 700, fontFamily: "monospace" }}>{formatExpiry(card.expiry_month, card.expiry_year)}</div>
+        </div>
+        {/* Hologram placeholder */}
+        <div style={{ width: 36, height: 36, borderRadius: 4, background: "linear-gradient(135deg, rgba(255,255,255,0.15), rgba(0,200,180,0.3), rgba(150,100,255,0.2))", border: "1px solid rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>
+          🕊️
+        </div>
+      </div>
+
+      {/* Frozen overlay */}
+      {isFrozen && (
+        <div style={{ position: "absolute", inset: 0, borderRadius: 16, background: "rgba(8,10,18,0.72)", backdropFilter: "blur(3px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6 }}>
+          <span style={{ fontSize: 28 }}>❄️</span>
+          <span style={{ color: "#93c5fd", fontWeight: 700, fontSize: 12, letterSpacing: 2 }}>CARD FROZEN</span>
+        </div>
+      )}
     </div>
   );
 }
@@ -137,12 +274,9 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
     finally { setFreezing(false); setShowFreezeModal(false); }
   }
 
-  const displayNum = showFull && card.card_number ? card.card_number.replace(/(.{4})/g,"$1 ").trim() : maskNumber(card.card_number);
-
   return (
     <div className="max-w-sm mx-auto px-4 py-6 pb-20">
 
-      {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div>
           <h1 className="text-lg font-bold text-gray-900">Virtual Card</h1>
@@ -154,90 +288,25 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
         </span>
       </div>
 
-      {/* Card — constrained to real card aspect ratio */}
-      <div className="flex justify-center mb-3">
-        <div style={{ width: "100%", maxWidth: 340, perspective: "1000px" }}
+      {/* Card with real proportions — max 360px, 63% padding = 54/85.6 ratio */}
+      <div className="flex justify-center mb-2">
+        <div style={{ width: "100%", maxWidth: 360, perspective: "1200px" }}
           onClick={() => { if (!isFrozen) setIsFlipped(f => !f); }}>
           <div style={{
-            position: "relative",
-            width: "100%",
-            paddingTop: "63%", /* real card ratio 85.6×54mm */
+            position: "relative", width: "100%", paddingTop: "63%",
             transformStyle: "preserve-3d",
             transition: "transform 0.65s cubic-bezier(.4,0,.2,1)",
             transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
             cursor: isFrozen ? "not-allowed" : "pointer",
           }}>
-            {/* FRONT */}
-            <div style={{
-              position: "absolute", inset: 0, backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" as any,
-              borderRadius: 14,
-              background: "linear-gradient(135deg, #1a237e 0%, #1565c0 45%, #4527a0 100%)",
-              padding: "18px 20px",
-              display: "flex", flexDirection: "column", justifyContent: "space-between",
-              color: "white",
-              boxShadow: "0 8px 32px rgba(79,110,247,0.45), 0 2px 8px rgba(0,0,0,0.2)",
-            }}>
-              {/* Subtle shine overlay */}
-              <div style={{ position: "absolute", inset: 0, borderRadius: 14, background: "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%)", pointerEvents: "none" }} />
-
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: 15, fontWeight: 800, letterSpacing: 2, opacity: 0.95 }}>WOLV</span>
-                {/* EMV chip */}
-                <div style={{ width: 32, height: 24, background: "linear-gradient(135deg,#d4af37,#f0d060)", borderRadius: 4, opacity: 0.9, boxShadow: "inset 0 1px 2px rgba(0,0,0,0.2)" }} />
-              </div>
-
-              {/* Contactless symbol */}
-              <div style={{ fontFamily: "monospace", fontSize: 13, letterSpacing: 2.5, opacity: 0.9, textAlign: "center", textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}>
-                {displayNum}
-              </div>
-
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-                <div>
-                  <div style={{ fontSize: 7, opacity: 0.55, textTransform: "uppercase", letterSpacing: 1, marginBottom: 2 }}>Card Holder</div>
-                  <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase" }}>{card.cardholder_name || "CARD HOLDER"}</div>
-                </div>
-                <div style={{ textAlign: "center" }}>
-                  <div style={{ fontSize: 7, opacity: 0.55, textTransform: "uppercase", letterSpacing: 1, marginBottom: 2 }}>Expires</div>
-                  <div style={{ fontSize: 11, fontWeight: 700, fontFamily: "monospace" }}>{formatExpiry(card.expiry_month, card.expiry_year)}</div>
-                </div>
-                <div style={{ fontSize: 16, fontWeight: 900, fontStyle: "italic", opacity: 0.95, letterSpacing: -0.5 }}>VISA</div>
-              </div>
-
-              {isFrozen && (
-                <div style={{ position: "absolute", inset: 0, borderRadius: 14, background: "rgba(8,10,18,0.72)", backdropFilter: "blur(3px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6 }}>
-                  <span style={{ fontSize: 28 }}>❄️</span>
-                  <span style={{ color: "#93c5fd", fontWeight: 700, fontSize: 13, letterSpacing: 2 }}>CARD FROZEN</span>
-                </div>
-              )}
-            </div>
-
-            {/* BACK */}
-            <div style={{
-              position: "absolute", inset: 0, backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" as any,
-              transform: "rotateY(180deg)", borderRadius: 14,
-              background: "linear-gradient(135deg, #1a237e, #1565c0)",
-              color: "white", boxShadow: "0 8px 32px rgba(79,110,247,0.45), 0 2px 8px rgba(0,0,0,0.2)", overflow: "hidden",
-            }}>
-              <div style={{ height: 36, background: "rgba(0,0,0,0.65)", marginBottom: 14 }} />
-              <div style={{ padding: "0 18px" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                  <span style={{ fontSize: 9, opacity: 0.6, textTransform: "uppercase", letterSpacing: 1 }}>CVV</span>
-                  <div style={{ background: "#f5f5f0", color: "#111", fontFamily: "monospace", padding: "4px 12px", borderRadius: 4, fontSize: 13, letterSpacing: 4, minWidth: 60, textAlign: "center" }}>
-                    {showCvv ? (card.cvv || "•••") : "•••"}
-                  </div>
-                </div>
-                <div style={{ height: "1px", background: "rgba(255,255,255,0.1)", marginBottom: 10 }} />
-                <p style={{ fontSize: 9, opacity: 0.45, lineHeight: 1.6 }}>Issued by WolvCapital. For digital transactions only. Keep your CVV secure and never share it.</p>
-                <p style={{ fontSize: 9, opacity: 0.35, marginTop: 10, textAlign: "center" }}>↩ Tap to flip back</p>
-              </div>
-            </div>
+            <CardFace card={card} showFull={showFull} showCvv={showCvv} isFrozen={isFrozen} isBack={false} />
+            <CardFace card={card} showFull={showFull} showCvv={showCvv} isFrozen={isFrozen} isBack={true} />
           </div>
         </div>
       </div>
-
       <p className="text-center text-[10px] text-gray-400 mb-5">Tap card to flip</p>
 
-      {/* Balance row */}
+      {/* Balance */}
       <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-4 flex justify-between items-center shadow-sm">
         <div>
           <div className="text-xs text-gray-400 mb-1">Card Balance</div>
@@ -249,7 +318,7 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
         </div>
       </div>
 
-      {/* 2×2 action grid */}
+      {/* Actions */}
       <div className="grid grid-cols-2 gap-2.5 mb-4">
         {[
           { icon: "📋", label: "Copy Number", fn: () => copy(card.card_number, "Card number") },
@@ -258,17 +327,17 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
           { icon: showFull ? "🔒" : "🔢", label: showFull ? "Hide Number" : "Full Number", fn: () => setShowFull(v => !v) },
         ].map(btn => (
           <button key={btn.label} onClick={btn.fn} disabled={freezing}
-            className="flex flex-col items-center gap-1.5 py-3.5 px-2 bg-white border border-gray-200 rounded-xl text-center hover:border-blue-400 hover:shadow-sm transition-all disabled:opacity-50">
+            className="flex flex-col items-center gap-1.5 py-3.5 px-2 bg-white border border-gray-200 rounded-xl text-center hover:border-teal-400 hover:shadow-sm transition-all disabled:opacity-50">
             <span className="text-xl">{btn.icon}</span>
             <span className="text-[11px] font-semibold text-gray-600">{btn.label}</span>
           </button>
         ))}
       </div>
 
-      {/* Copy detail rows */}
+      {/* Copy rows */}
       <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden mb-4 shadow-sm">
         {[
-          { label: "Card Number", display: displayNum, copy: card.card_number },
+          { label: "Card Number", display: showFull && card.card_number ? card.card_number.replace(/(.{4})/g,"$1 ").trim() : maskNumber(card.card_number), copy: card.card_number },
           { label: "Expiry Date", display: formatExpiry(card.expiry_month, card.expiry_year), copy: formatExpiry(card.expiry_month, card.expiry_year) },
           { label: "CVV", display: showCvv ? (card.cvv || "•••") : "•••", copy: card.cvv },
           { label: "Cardholder", display: card.cardholder_name || "—", copy: card.cardholder_name },
@@ -285,10 +354,8 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
       </div>
 
       <Link href="/dashboard" className="block text-center text-xs text-blue-600 hover:underline">← Back to Dashboard</Link>
-
       <Toast message={toast} show={toastVisible} />
 
-      {/* Freeze modal */}
       {showFreezeModal && (
         <div className="fixed inset-0 bg-black/50 z-40 flex items-end" onClick={() => setShowFreezeModal(false)}>
           <div className="w-full bg-white rounded-t-2xl p-5 pb-8 shadow-xl" onClick={e => e.stopPropagation()}>
@@ -296,7 +363,7 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
             <h3 className="text-base font-bold text-gray-900 mb-1">Freeze Card?</h3>
             <p className="text-sm text-gray-500 mb-5">All transactions will be blocked. You can unfreeze anytime.</p>
             <button onClick={handleFreeze} disabled={freezing}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-sm mb-2.5 disabled:opacity-60">
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#0f1c30] to-[#00a896] text-white font-semibold text-sm mb-2.5 disabled:opacity-60">
               {freezing ? "Processing…" : "Yes, Freeze Card"}
             </button>
             <button onClick={() => setShowFreezeModal(false)}
@@ -316,7 +383,7 @@ export default function VirtualCardPage() {
   if (loading) return (
     <div className="flex items-center justify-center min-h-64">
       <div className="text-center">
-        <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-3" />
+        <div className="w-8 h-8 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin mx-auto mb-3" />
         <p className="text-sm text-gray-400">Loading your card…</p>
       </div>
     </div>
@@ -327,7 +394,7 @@ export default function VirtualCardPage() {
       <div className="text-center">
         <div className="text-3xl mb-3">⚠️</div>
         <p className="text-red-500 text-sm mb-3">{error}</p>
-        <button onClick={refetch} className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold">Try Again</button>
+        <button onClick={refetch} className="px-4 py-2 bg-teal-600 text-white rounded-lg text-sm font-semibold">Try Again</button>
       </div>
     </div>
   );

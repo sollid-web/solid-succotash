@@ -17,13 +17,13 @@ module.exports = {
     extend: {
       colors: {
         brand: {
-          primary: '#2A52BE',
-          secondary: '#1E3A8A',
-          accent: '#0EA5E9',
+          primary: '#0f7b6c',
+          secondary: '#0f1c30',
+          accent: '#00a896',
           gold: '#FDE047',
           light: '#e2f5ff',
-          dark: '#1E3A8A',
-          darker: '#0F172A',
+          dark: '#0f1c30',
+          darker: '#070d14',
           textPrimary: '#0F172A',
           textSecondary: '#475569',
           textMuted: '#94A3B8',
@@ -60,7 +60,7 @@ module.exports = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'brand-gradient': 'linear-gradient(135deg, #2A52BE 0%, #2A52BE 50%, #2A52BE 100%)',
+        'brand-gradient': 'linear-gradient(135deg, #0f1c30 0%, #1a3a5f 50%, #00a896 100%)',
       },
       keyframes: {
         fadeIn: {

@@ -191,7 +191,7 @@ export default function DashboardPage() {
   }, [transactions]);
 
   return (
-    <div className="min-h-screen bg-[#F2F9FF]">
+    <div className="min-h-screen bg-[#f0faf8]">
       <main className="max-w-6xl mx-auto px-4 pt-6 pb-24 sm:pb-6">
         {error ? (
           <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
@@ -202,7 +202,7 @@ export default function DashboardPage() {
         <div className="flex flex-col gap-4 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
-              <h1 className="text-xl font-semibold text-[#0b2f6b]">Portfolio Overview</h1>
+              <h1 className="text-xl font-semibold text-[#0f1c30]">Portfolio Overview</h1>
               <p className="text-sm text-gray-600">Monitor balances, ROI, and active plan performance.</p>
             </div>
             <Link
@@ -214,7 +214,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Quick link to virtual card page */}
-          <div className="mb-6 rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-6 shadow-sm">
+          <div className="mb-6 rounded-2xl border border-teal-200 bg-gradient-to-br from-teal-50 to-cyan-50 p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">💳 Virtual Card</h3>
@@ -222,7 +222,7 @@ export default function DashboardPage() {
               </div>
               <Link
                 href="/dashboard/card"
-                className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:shadow-lg hover:brightness-110 transition-all"
+                className="px-4 py-2 bg-gradient-to-r from-[#0f1c30] to-[#00a896] text-white font-semibold rounded-lg hover:shadow-lg hover:brightness-110 transition-all"
               >
                 View Card →
               </Link>
@@ -280,7 +280,7 @@ export default function DashboardPage() {
                 const statusLabel = String(inv.status || "").toUpperCase();
                 const statusTone =
                   ["ACTIVE", "APPROVED"].includes(statusLabel)
-                    ? "bg-blue-100 text-blue-700"
+                    ? "bg-teal-100 text-teal-700"
                     : ["COMPLETED"].includes(statusLabel)
                     ? "bg-gray-100 text-gray-700"
                     : "bg-slate-100 text-slate-700";
@@ -334,7 +334,7 @@ export default function DashboardPage() {
                         </div>
                         <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
                           <div
-                            className="h-full bg-[#4AB3F4]"
+                            className="h-full bg-gradient-to-r from-[#00a896] to-[#1a3a5f]"
                             style={{ width: `${progressPct}%` }}
                           />
                         </div>
@@ -349,9 +349,9 @@ export default function DashboardPage() {
                             {Number.isFinite(totalEarned) ? money(totalEarned) : "-"}
                           </div>
                         </div>
-                        <div className="rounded-lg bg-indigo-50 p-4">
-                          <div className="text-xs text-indigo-700">Expected Total</div>
-                          <div className="text-xl font-semibold text-indigo-800">
+                        <div className="rounded-lg bg-teal-50 p-4">
+                          <div className="text-xs text-teal-700">Expected Total</div>
+                          <div className="text-xl font-semibold text-teal-800">
                             {Number.isFinite(expectedTotal) ? money(expectedTotal) : "-"}
                           </div>
                         </div>
@@ -361,7 +361,7 @@ export default function DashboardPage() {
                     <div className="mt-4 flex items-center justify-between">
                       <Link
                         href={planSlug ? `/plans/${planSlug}` : "/plans"}
-                        className="text-sm font-semibold text-[#0b2f6b] underline underline-offset-4 hover:no-underline"
+                        className="text-sm font-semibold text-[#0f1c30] underline underline-offset-4 hover:no-underline"
                       >
                         View Details
                       </Link>
@@ -376,7 +376,7 @@ export default function DashboardPage() {
         <section className="mb-10">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xl font-semibold">Recent Activity</h2>
-            <Link href="/dashboard/transactions" className="text-sm text-blue-600 hover:underline">
+            <Link href="/dashboard/transactions" className="text-sm text-teal-600 hover:underline">
               View all
             </Link>
           </div>
@@ -441,8 +441,8 @@ export default function DashboardPage() {
 function StatCard(props: { title: string; value: string; subtitle: string; emphasis?: boolean }) {
   const baseClasses = "rounded-xl border p-5 shadow-sm";
   const emphasisClasses = props.emphasis
-    ? "bg-gradient-to-br from-white via-[#f6fbff] to-[#eef6ff] border-[#cfe3ff] shadow-md"
-    : "bg-[#f8fbff] border-[#e0ecff]";
+    ? "bg-gradient-to-br from-white via-[#f0faf8] to-[#e0f7f4] border-[#99e0d8] shadow-md"
+    : "bg-[#f5fffe] border-[#c8ede9]";
 
   return (
     <div className={`${baseClasses} ${emphasisClasses}`}>

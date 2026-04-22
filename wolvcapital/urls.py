@@ -10,7 +10,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
 urlpatterns = [
-    path("api/virtualcards/", include("cards.urls")),    path("", include("core.urls")),  # Root, /healthz/, /agreements/x/pdf/, /contact/, /inbox/
+    path("api/cards/", include("cards.urls")),    path("", include("core.urls")),  # Root, /healthz/, /agreements/x/pdf/, /contact/, /inbox/
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
     path("api/", include("api.urls")),

@@ -27,7 +27,7 @@ export function useVirtualCard() {
     setError(null);
     try {
       // Uses existing VirtualCardViewSet list endpoint
-      const res = await apiFetch("/api/virtualcards/");
+      const res = await apiFetch("/api/virtual-cards/");
       if (res.status === 401 || res.status === 403) {
         throw new Error("Session expired. Please log in again.");
       }

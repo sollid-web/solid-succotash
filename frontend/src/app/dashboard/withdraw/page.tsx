@@ -81,7 +81,7 @@ export default function WithdrawPage() {
         const [w, inv, cardsRes] = await Promise.all([
           apiGet<WalletResponse>("/api/wallet/"),
           apiGet<any>("/api/investments/my/"),
-          apiFetch("/api/cards/"),
+          apiFetch("/api/virtual-cards/"),
         ]);
 
         if (!cardsRes.ok) {
@@ -194,7 +194,7 @@ export default function WithdrawPage() {
               <div className="mb-4 p-3 bg-yellow-50 text-yellow-900 rounded-xl text-sm border border-yellow-200">
                 <p className="font-semibold">Withdrawals require an active virtual card.</p>
                 <p className="mt-1">
-                  <Link href="/dashboard/card" className="underline">Purchase Card</Link> to request activation.
+                  <Link href="/dashboard/card" className="underline">Get a Virtual Card</Link> to unlock withdrawals.
                 </p>
               </div>
             )}

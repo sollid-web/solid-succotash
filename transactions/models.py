@@ -152,6 +152,10 @@ class Transaction(models.Model):
 
 
 class VirtualCard(models.Model):
+    class Meta:
+        app_label = "cards"
+        verbose_name = "Virtual Card"
+        verbose_name_plural = "Virtual Cards"
     CARD_TYPE_CHOICES = [
         ("visa", "Visa Virtual Card"),
     ]

@@ -1,15 +1,16 @@
 import logging
-
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from transactions.models import VirtualCard
 
 logger = logging.getLogger(__name__)
 
-
 def _get_user_card(user, card_id=None):
+    """
+    Helper to fetch the user's card. 
+    Prioritizes a specific ID if provided, otherwise gets the latest.
+    """
     if card_id:
         return VirtualCard.objects.filter(id=card_id, user=user).first()
     return VirtualCard.objects.filter(user=user).order_by("-created_at").first()
@@ -19,12 +20,18 @@ class CardDetailView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
+        """Fetches card details for the dashboard."""
         card = _get_user_card(request.user)
+        
+        # If no card exists, we return a 404. 
+        # Your frontend hook should catch this and set 'card' to null 
+        # so the RequestCardView displays.
         if not card:
             return Response({"error": "No card found."}, status=status.HTTP_404_NOT_FOUND)
+            
         return Response({
             "id": str(card.id),
-            "card_type": card.card_type,
+            "card_type": getattr(card, 'card_type', 'Visa'),
             "card_number": card.card_number,
             "cardholder_name": card.cardholder_name,
             "expiry_month": card.expiry_month,
@@ -38,6 +45,45 @@ class CardDetailView(APIView):
             "updated_at": card.updated_at,
         })
 
+    def post(self, request):
+        """Handles the 'Request Card' submission from the frontend."""
+        # 1. Prevent multiple active/pending cards if that's your business logic
+        if VirtualCard.objects.filter(user=request.user, status__in=['active', 'pending']).exists():
+            return Response(
+                {"error": "You already have an active or pending card request."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # 2. Extract data sent by Next.js (defaulting to 1000 as seen in your code)
+        purchase_amount = request.data.get("purchase_amount", 1000)
+        
+        try:
+            # 3. Create the pending card record
+            # Note: card_number, cvv, etc., should be blank until approved by admin
+            card = VirtualCard.objects.create(
+                user=request.user,
+                purchase_amount=purchase_amount,
+                status="pending",
+                is_active=False,
+                cardholder_name=f"{request.user.get_full_name() or request.user.username}",
+                balance=0.00
+            )
+            
+            logger.info(f"New card request created for user {request.user.id}")
+            
+            return Response({
+                "id": str(card.id),
+                "status": card.status,
+                "message": "Card request submitted successfully."
+            }, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            logger.error(f"Failed to create card request: {str(e)}")
+            return Response(
+                {"error": "Could not process card request. Please contact support."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
 
 class CardFreezeView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -45,6 +91,7 @@ class CardFreezeView(APIView):
     def post(self, request):
         card_id = request.data.get("card_id")
         card = _get_user_card(request.user, card_id)
+        
         if not card:
             return Response({"error": "No card found."}, status=status.HTTP_404_NOT_FOUND)
 
@@ -74,4 +121,6 @@ class CardTransactionsView(APIView):
         card = _get_user_card(request.user)
         if not card:
             return Response({"error": "No card found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        # You can implement transaction fetching logic here later
         return Response([])

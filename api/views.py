@@ -1001,7 +1001,7 @@ class CryptoWalletViewSet(viewsets.ReadOnlyModelViewSet):
 # views.py
 
 
-class VirtualCardViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class VirtualCardViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     serializer_class = VirtualCardSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -1447,3 +1447,14 @@ def verify_email_link(request):
             },
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
+
+class VirtualCardViewSet(viewsets.ModelViewSet):
+    """User virtual cards endpoint"""
+    serializer_class = VirtualCardSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return VirtualCard.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

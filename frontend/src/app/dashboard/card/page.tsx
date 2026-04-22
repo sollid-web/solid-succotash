@@ -12,13 +12,14 @@ function maskNumber(num: string) {
   if (!num || num.length < 4) return "•••• •••• •••• ••••";
   return `•••• •••• •••• ${num.slice(-4)}`;
 }
-function formatExpiry(month: string, year: string) {
-  if (!month || !year) return "••/••";
-  return `${month.padStart(2, "0")}/${year}`;
+function formatExpiry(m: string, y: string) {
+  if (!m || !y) return "••/••";
+  return `${m.padStart(2,"0")}/${y}`;
 }
+
 function Toast({ message, show }: { message: string; show: boolean }) {
   return (
-    <div className={`fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-full bg-green-500 text-white text-sm font-semibold shadow-lg whitespace-nowrap transition-all duration-300 ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}`}>
+    <div className={`fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-green-500 text-white text-xs font-semibold shadow-lg whitespace-nowrap transition-all duration-300 ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3 pointer-events-none"}`}>
       {message}
     </div>
   );
@@ -29,8 +30,7 @@ function RequestCardView({ onRequested, wasRejected }: { onRequested: () => void
   const [error, setError] = useState<string | null>(null);
 
   async function handleRequest() {
-    setLoading(true);
-    setError(null);
+    setLoading(true); setError(null);
     try {
       const res = await apiFetch("/api/virtual-cards/", {
         method: "POST",
@@ -42,78 +42,60 @@ function RequestCardView({ onRequested, wasRejected }: { onRequested: () => void
       onRequested();
     } catch (e: any) {
       setError(e?.message || "Failed to submit request");
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   }
 
   return (
-    <div className="min-h-screen bg-[#F2F9FF] flex items-center justify-center px-4">
-      <div className="max-w-sm w-full">
-        <div className="text-center mb-8">
-          <div className="text-7xl mb-5">{wasRejected ? "❌" : "💳"}</div>
-          <h2 className="text-2xl font-bold text-[#0b2f6b] mb-2">
-            {wasRejected ? "Request Not Approved" : "Get Your Virtual Card"}
-          </h2>
-          <p className="text-gray-500 text-sm leading-relaxed">
-            {wasRejected
-              ? "Your previous request was not approved. Submit a new request or contact support."
-              : "Activate a WolvCapital Visa virtual card for digital transactions worldwide."}
-          </p>
-        </div>
-        <div className="rounded-2xl border border-blue-100 bg-white p-6 mb-5 shadow-sm">
-          {[
-            { label: "Card Type", value: "Visa Virtual Card" },
-            { label: "Activation Fee", value: "$0.00", green: true },
-            { label: "Purchase Amount", value: "$1,000.00", bold: true },
-            { label: "Processing Time", value: "1–24 hours" },
-          ].map((row: any, i: number) => (
-            <div key={row.label} className={`flex justify-between items-center py-3 ${i > 0 ? "border-t border-gray-100" : ""}`}>
-              <span className="text-sm text-gray-500">{row.label}</span>
-              <span className={`text-sm font-semibold ${row.green ? "text-green-600" : row.bold ? "text-[#0b2f6b] font-bold" : ""}`}>{row.value}</span>
-            </div>
-          ))}
-        </div>
-        {error && <div className="rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm p-4 mb-4">{error}</div>}
-        <button onClick={handleRequest} disabled={loading}
-          className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-base shadow-lg hover:shadow-xl transition-all disabled:opacity-60">
-          {loading ? "Submitting…" : "Request Card — $1,000"}
-        </button>
-        <p className="text-center text-xs text-gray-400 mt-4">Reviewed and approved by our team within 24 hours.</p>
-        <Link href="/dashboard" className="block text-center text-sm text-blue-600 hover:underline mt-4">← Back to Dashboard</Link>
+    <div className="max-w-sm mx-auto px-4 py-10">
+      <div className="text-center mb-8">
+        <div className="text-6xl mb-4">{wasRejected ? "❌" : "💳"}</div>
+        <h1 className="text-xl font-bold text-gray-900 mb-2">
+          {wasRejected ? "Request Not Approved" : "Get Your Virtual Card"}
+        </h1>
+        <p className="text-sm text-gray-500 leading-relaxed">
+          {wasRejected ? "Your previous request was not approved. Submit a new request or contact support." : "Activate a WolvCapital Visa virtual card for digital transactions worldwide."}
+        </p>
       </div>
+      <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden mb-5">
+        {[
+          { label: "Card Type", value: "Visa Virtual Card" },
+          { label: "Activation Fee", value: "$0.00", cls: "text-green-600" },
+          { label: "Purchase Amount", value: "$1,000.00", cls: "text-blue-700 font-bold" },
+          { label: "Processing Time", value: "1–24 hours" },
+        ].map((r, i) => (
+          <div key={r.label} className={`flex justify-between px-5 py-3 ${i > 0 ? "border-t border-gray-100" : ""}`}>
+            <span className="text-sm text-gray-500">{r.label}</span>
+            <span className={`text-sm font-semibold ${(r as any).cls || "text-gray-800"}`}>{r.value}</span>
+          </div>
+        ))}
+      </div>
+      {error && <div className="rounded-xl bg-red-50 border border-red-200 text-red-600 text-sm p-3 mb-4">{error}</div>}
+      <button onClick={handleRequest} disabled={loading}
+        className="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-sm shadow hover:shadow-md transition-all disabled:opacity-60">
+        {loading ? "Submitting…" : "Request Card — $1,000"}
+      </button>
+      <p className="text-center text-xs text-gray-400 mt-3">Reviewed by our team within 24 hours.</p>
+      <Link href="/dashboard" className="block text-center text-sm text-blue-600 hover:underline mt-4">← Back to Dashboard</Link>
     </div>
   );
 }
 
 function PendingCardView({ onRefresh }: { onRefresh: () => void }) {
   return (
-    <div className="min-h-screen bg-[#F2F9FF] flex items-center justify-center px-4">
-      <div className="max-w-sm w-full text-center">
-        <div className="text-7xl mb-5">⏳</div>
-        <h2 className="text-xl font-bold text-[#0b2f6b] mb-2">Card Under Review</h2>
-        <p className="text-gray-500 text-sm leading-relaxed mb-8">
-          Your virtual card request is being reviewed. This usually takes 1–24 hours.
-        </p>
-        <div className="rounded-2xl border border-yellow-200 bg-yellow-50 p-5 mb-6 text-left">
-          <div className="flex gap-3">
-            <span className="text-xl">📋</span>
-            <div>
-              <div className="font-semibold text-yellow-800 text-sm mb-1">What happens next?</div>
-              <ul className="text-yellow-700 text-xs space-y-1 leading-relaxed">
-                <li>• Our team verifies your account</li>
-                <li>• Card details are generated and assigned</li>
-                <li>• Card becomes available here instantly</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <button onClick={onRefresh}
-          className="w-full py-3 rounded-2xl border border-blue-200 text-blue-600 font-semibold text-sm hover:bg-blue-50 transition-colors mb-3">
-          🔄 Check Status
-        </button>
-        <Link href="/dashboard" className="block text-center text-sm text-blue-600 hover:underline">← Back to Dashboard</Link>
+    <div className="max-w-sm mx-auto px-4 py-10 text-center">
+      <div className="text-6xl mb-4">⏳</div>
+      <h1 className="text-xl font-bold text-gray-900 mb-2">Card Under Review</h1>
+      <p className="text-sm text-gray-500 leading-relaxed mb-6">Your request is being reviewed. This usually takes 1–24 hours.</p>
+      <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6 text-left">
+        <div className="font-semibold text-amber-800 text-sm mb-2">What happens next?</div>
+        {["Our team verifies your account","Card details are generated","Card appears here automatically"].map(t => (
+          <div key={t} className="text-xs text-amber-700 mb-1">• {t}</div>
+        ))}
       </div>
+      <button onClick={onRefresh} className="w-full py-3 rounded-xl border border-blue-200 text-blue-600 text-sm font-semibold hover:bg-blue-50 transition-colors mb-3">
+        🔄 Check Status
+      </button>
+      <Link href="/dashboard" className="block text-center text-sm text-blue-600 hover:underline">← Back to Dashboard</Link>
     </div>
   );
 }
@@ -127,172 +109,203 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
   const [toast, setToast] = useState("");
   const [toastVisible, setToastVisible] = useState(false);
   const [showFreezeModal, setShowFreezeModal] = useState(false);
-  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   function showToast(msg: string) {
     setToast(msg); setToastVisible(true);
-    if (toastTimer.current) clearTimeout(toastTimer.current);
-    toastTimer.current = setTimeout(() => setToastVisible(false), 2500);
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => setToastVisible(false), 2500);
   }
 
-  async function copyToClipboard(value: string, label: string) {
+  async function copy(value: string, label: string) {
     try { await navigator.clipboard.writeText(value); }
-    catch {
-      const el = document.createElement("textarea"); el.value = value;
-      document.body.appendChild(el); el.select();
-      document.execCommand("copy"); document.body.removeChild(el);
-    }
+    catch { const el = document.createElement("textarea"); el.value = value; document.body.appendChild(el); el.select(); document.execCommand("copy"); document.body.removeChild(el); }
     showToast(`${label} copied!`);
   }
 
   async function handleFreeze() {
     setFreezing(true);
     try {
-      const res = await apiFetch("/api/cards/freeze/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ card_id: card.id }),
-      });
+      const res = await apiFetch("/api/cards/freeze/", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ card_id: card.id }) });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed");
       setIsFrozen(data.frozen);
+      if (data.frozen && isFlipped) setIsFlipped(false);
       showToast(data.frozen ? "Card frozen ❄️" : "Card unfrozen ✓");
       refetch();
-    } catch {
-      setIsFrozen((p) => !p);
-      showToast(isFrozen ? "Card unfrozen ✓" : "Card frozen ❄️");
-    } finally { setFreezing(false); setShowFreezeModal(false); }
+    } catch { setIsFrozen(p => !p); showToast(isFrozen ? "Card unfrozen ✓" : "Card frozen ❄️"); }
+    finally { setFreezing(false); setShowFreezeModal(false); }
   }
 
-  const displayNumber = showFull && card.card_number
-    ? card.card_number.replace(/(.{4})/g, "$1 ").trim()
-    : maskNumber(card.card_number);
+  const displayNum = showFull && card.card_number ? card.card_number.replace(/(.{4})/g,"$1 ").trim() : maskNumber(card.card_number);
 
   return (
-    <div className="min-h-screen bg-[#F2F9FF]">
-      <main className="max-w-lg mx-auto px-4 pt-6 pb-28">
-        <div className="flex items-center gap-2 text-sm text-gray-500 mb-5">
-          <Link href="/dashboard" className="hover:text-blue-600">Dashboard</Link>
-          <span>/</span>
-          <span className="text-gray-900 font-medium">Virtual Card</span>
-        </div>
-        <div className="flex items-center justify-between mb-5">
-          <div>
-            <h1 className="text-xl font-semibold text-[#0b2f6b]">Virtual Card</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Tap card to flip and reveal CVV</p>
-          </div>
-          <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${isFrozen ? "bg-blue-100 text-blue-700 border-blue-200" : card.is_active ? "bg-green-100 text-green-700 border-green-200" : "bg-gray-100 text-gray-600 border-gray-200"}`}>
-            {isFrozen ? "❄️ Frozen" : card.is_active ? "● Active" : card.status}
-          </span>
-        </div>
+    <div className="max-w-sm mx-auto px-4 py-6 pb-20">
 
-        <div className="w-full cursor-pointer mb-2 select-none" style={{ perspective: "1000px" }}
-          onClick={() => { if (!isFrozen) setIsFlipped((f) => !f); }}>
-          <div style={{ position: "relative", width: "100%", paddingTop: "56%", transformStyle: "preserve-3d", transition: "transform 0.7s cubic-bezier(.4,0,.2,1)", transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)" }}>
-            <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" as any, borderRadius: 20, background: "linear-gradient(135deg,#1e2a78 0%,#4f6ef7 55%,#7c3aed 100%)", padding: 24, display: "flex", flexDirection: "column", justifyContent: "space-between", color: "white", boxShadow: "0 25px 50px rgba(79,110,247,0.35)" }}>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: 3 }}>WOLV</span>
-                <div style={{ width: 40, height: 30, background: "linear-gradient(135deg,#d4af37,#f0d060)", borderRadius: 6 }} />
+      {/* Header */}
+      <div className="flex items-center justify-between mb-5">
+        <div>
+          <h1 className="text-lg font-bold text-gray-900">Virtual Card</h1>
+          <p className="text-xs text-gray-400 mt-0.5">Tap card to flip · reveal CVV</p>
+        </div>
+        <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full border ${isFrozen ? "bg-blue-50 text-blue-600 border-blue-200" : "bg-green-50 text-green-600 border-green-200"}`}>
+          <span className="w-1.5 h-1.5 rounded-full bg-current" />
+          {isFrozen ? "Frozen" : "Active"}
+        </span>
+      </div>
+
+      {/* Card — constrained to real card aspect ratio */}
+      <div className="flex justify-center mb-3">
+        <div style={{ width: "100%", maxWidth: 340, perspective: "1000px" }}
+          onClick={() => { if (!isFrozen) setIsFlipped(f => !f); }}>
+          <div style={{
+            position: "relative",
+            width: "100%",
+            paddingTop: "63%", /* real card ratio 85.6×54mm */
+            transformStyle: "preserve-3d",
+            transition: "transform 0.65s cubic-bezier(.4,0,.2,1)",
+            transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
+            cursor: isFrozen ? "not-allowed" : "pointer",
+          }}>
+            {/* FRONT */}
+            <div style={{
+              position: "absolute", inset: 0, backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" as any,
+              borderRadius: 14,
+              background: "linear-gradient(135deg, #1a237e 0%, #1565c0 45%, #4527a0 100%)",
+              padding: "18px 20px",
+              display: "flex", flexDirection: "column", justifyContent: "space-between",
+              color: "white",
+              boxShadow: "0 8px 32px rgba(79,110,247,0.45), 0 2px 8px rgba(0,0,0,0.2)",
+            }}>
+              {/* Subtle shine overlay */}
+              <div style={{ position: "absolute", inset: 0, borderRadius: 14, background: "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%)", pointerEvents: "none" }} />
+
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span style={{ fontSize: 15, fontWeight: 800, letterSpacing: 2, opacity: 0.95 }}>WOLV</span>
+                {/* EMV chip */}
+                <div style={{ width: 32, height: 24, background: "linear-gradient(135deg,#d4af37,#f0d060)", borderRadius: 4, opacity: 0.9, boxShadow: "inset 0 1px 2px rgba(0,0,0,0.2)" }} />
               </div>
-              <div style={{ fontFamily: "monospace", fontSize: 15, letterSpacing: 3, color: "rgba(255,255,255,0.9)", textAlign: "center" }}>{displayNumber}</div>
+
+              {/* Contactless symbol */}
+              <div style={{ fontFamily: "monospace", fontSize: 13, letterSpacing: 2.5, opacity: 0.9, textAlign: "center", textShadow: "0 1px 2px rgba(0,0,0,0.3)" }}>
+                {displayNum}
+              </div>
+
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
                 <div>
-                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.5)", textTransform: "uppercase", letterSpacing: 1 }}>Card Holder</div>
-                  <div style={{ fontSize: 14, fontWeight: 600 }}>{card.cardholder_name || "CARD HOLDER"}</div>
+                  <div style={{ fontSize: 7, opacity: 0.55, textTransform: "uppercase", letterSpacing: 1, marginBottom: 2 }}>Card Holder</div>
+                  <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 0.5, textTransform: "uppercase" }}>{card.cardholder_name || "CARD HOLDER"}</div>
                 </div>
                 <div style={{ textAlign: "center" }}>
-                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.5)", textTransform: "uppercase", letterSpacing: 1 }}>Expires</div>
-                  <div style={{ fontSize: 14, fontWeight: 600, fontFamily: "monospace" }}>{formatExpiry(card.expiry_month, card.expiry_year)}</div>
+                  <div style={{ fontSize: 7, opacity: 0.55, textTransform: "uppercase", letterSpacing: 1, marginBottom: 2 }}>Expires</div>
+                  <div style={{ fontSize: 11, fontWeight: 700, fontFamily: "monospace" }}>{formatExpiry(card.expiry_month, card.expiry_year)}</div>
                 </div>
-                <div style={{ fontSize: 22, fontWeight: 900, fontStyle: "italic", opacity: 0.9 }}>VISA</div>
+                <div style={{ fontSize: 16, fontWeight: 900, fontStyle: "italic", opacity: 0.95, letterSpacing: -0.5 }}>VISA</div>
               </div>
+
               {isFrozen && (
-                <div style={{ position: "absolute", inset: 0, borderRadius: 20, background: "rgba(10,11,15,0.75)", backdropFilter: "blur(4px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8 }}>
-                  <span style={{ fontSize: 40 }}>❄️</span>
-                  <span style={{ color: "#93c5fd", fontWeight: 700, fontSize: 18, letterSpacing: 2 }}>CARD FROZEN</span>
+                <div style={{ position: "absolute", inset: 0, borderRadius: 14, background: "rgba(8,10,18,0.72)", backdropFilter: "blur(3px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6 }}>
+                  <span style={{ fontSize: 28 }}>❄️</span>
+                  <span style={{ color: "#93c5fd", fontWeight: 700, fontSize: 13, letterSpacing: 2 }}>CARD FROZEN</span>
                 </div>
               )}
             </div>
-            <div style={{ position: "absolute", inset: 0, backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" as any, transform: "rotateY(180deg)", borderRadius: 20, background: "linear-gradient(135deg,#1e2a78,#4f6ef7)", color: "white", boxShadow: "0 25px 50px rgba(79,110,247,0.35)", overflow: "hidden" }}>
-              <div style={{ height: 44, background: "rgba(0,0,0,0.6)", marginBottom: 20 }} />
-              <div style={{ padding: "0 24px" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                  <span style={{ fontSize: 11, color: "rgba(255,255,255,0.6)" }}>Security Code (CVV)</span>
-                  <div style={{ background: "white", color: "#111", fontFamily: "monospace", padding: "6px 16px", borderRadius: 6, fontSize: 15, letterSpacing: 4 }}>
+
+            {/* BACK */}
+            <div style={{
+              position: "absolute", inset: 0, backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" as any,
+              transform: "rotateY(180deg)", borderRadius: 14,
+              background: "linear-gradient(135deg, #1a237e, #1565c0)",
+              color: "white", boxShadow: "0 8px 32px rgba(79,110,247,0.45), 0 2px 8px rgba(0,0,0,0.2)", overflow: "hidden",
+            }}>
+              <div style={{ height: 36, background: "rgba(0,0,0,0.65)", marginBottom: 14 }} />
+              <div style={{ padding: "0 18px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                  <span style={{ fontSize: 9, opacity: 0.6, textTransform: "uppercase", letterSpacing: 1 }}>CVV</span>
+                  <div style={{ background: "#f5f5f0", color: "#111", fontFamily: "monospace", padding: "4px 12px", borderRadius: 4, fontSize: 13, letterSpacing: 4, minWidth: 60, textAlign: "center" }}>
                     {showCvv ? (card.cvv || "•••") : "•••"}
                   </div>
                 </div>
-                <p style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>Issued by WolvCapital for digital transactions only.</p>
-                <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 16, textAlign: "center" }}>↩ Tap to flip back</p>
+                <div style={{ height: "1px", background: "rgba(255,255,255,0.1)", marginBottom: 10 }} />
+                <p style={{ fontSize: 9, opacity: 0.45, lineHeight: 1.6 }}>Issued by WolvCapital. For digital transactions only. Keep your CVV secure and never share it.</p>
+                <p style={{ fontSize: 9, opacity: 0.35, marginTop: 10, textAlign: "center" }}>↩ Tap to flip back</p>
               </div>
             </div>
           </div>
         </div>
-        <p className="text-center text-xs text-gray-400 mb-6">Tap card to flip</p>
+      </div>
 
-        <div className="rounded-2xl border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-4 mb-5 flex justify-between items-center">
-          <div>
-            <div className="text-xs text-gray-500 mb-1">Card Balance</div>
-            <div className="text-2xl font-semibold">{money(Number(card.balance) || 0)}</div>
-          </div>
-          <div className="text-right">
-            <div className="text-xs text-gray-500 mb-1">Purchase Amount</div>
-            <div className="text-lg font-semibold text-gray-700">{money(Number(card.purchase_amount) || 0)}</div>
-          </div>
+      <p className="text-center text-[10px] text-gray-400 mb-5">Tap card to flip</p>
+
+      {/* Balance row */}
+      <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-4 flex justify-between items-center shadow-sm">
+        <div>
+          <div className="text-xs text-gray-400 mb-1">Card Balance</div>
+          <div className="text-xl font-bold text-gray-900">{money(Number(card.balance) || 0)}</div>
         </div>
-
-        <div className="grid grid-cols-2 gap-3 mb-5">
-          {[
-            { icon: "📋", label: "Copy Number", action: () => copyToClipboard(card.card_number, "Card number") },
-            { icon: isFrozen ? "🔥" : "❄️", label: freezing ? "Please wait…" : isFrozen ? "Unfreeze" : "Freeze Card", action: () => isFrozen ? handleFreeze() : setShowFreezeModal(true) },
-            { icon: showCvv ? "🙈" : "👁️", label: showCvv ? "Hide CVV" : "Show CVV", action: () => { setShowCvv((v) => !v); if (!isFlipped) setIsFlipped(true); } },
-            { icon: showFull ? "🔒" : "🔢", label: showFull ? "Hide Number" : "Show Number", action: () => setShowFull((v) => !v) },
-          ].map((btn: any) => (
-            <button key={btn.label} onClick={btn.action} disabled={freezing && btn.label.includes("reeze")}
-              className="flex flex-col items-center gap-2 p-4 rounded-2xl border border-gray-200 bg-white hover:border-blue-400 hover:shadow-sm transition-all disabled:opacity-60">
-              <span className="text-2xl">{btn.icon}</span>
-              <span className="text-xs font-semibold text-gray-700">{btn.label}</span>
-            </button>
-          ))}
+        <div className="text-right">
+          <div className="text-xs text-gray-400 mb-1">Purchase Amount</div>
+          <div className="text-base font-semibold text-gray-600">{money(Number(card.purchase_amount) || 0)}</div>
         </div>
+      </div>
 
-        <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden mb-5">
-          {[
-            { label: "Card Number", display: displayNumber, copy: card.card_number },
-            { label: "Expiry Date", display: formatExpiry(card.expiry_month, card.expiry_year), copy: formatExpiry(card.expiry_month, card.expiry_year) },
-            { label: "CVV", display: showCvv ? (card.cvv || "•••") : "•••", copy: card.cvv },
-            { label: "Cardholder Name", display: card.cardholder_name || "-", copy: card.cardholder_name },
-          ].map((row: any, i: number) => (
-            <button key={row.label} onClick={() => row.copy && copyToClipboard(row.copy, row.label)}
-              className={`w-full flex justify-between items-center px-5 py-4 hover:bg-gray-50 transition-colors text-left ${i > 0 ? "border-t border-gray-100" : ""}`}>
-              <div>
-                <div className="text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">{row.label}</div>
-                <div className="font-mono text-sm font-medium text-gray-900">{row.display}</div>
-              </div>
-              <span className="text-gray-400">📋</span>
-            </button>
-          ))}
-        </div>
+      {/* 2×2 action grid */}
+      <div className="grid grid-cols-2 gap-2.5 mb-4">
+        {[
+          { icon: "📋", label: "Copy Number", fn: () => copy(card.card_number, "Card number") },
+          { icon: isFrozen ? "🔥" : "❄️", label: isFrozen ? "Unfreeze" : "Freeze Card", fn: () => isFrozen ? handleFreeze() : setShowFreezeModal(true) },
+          { icon: showCvv ? "🙈" : "👁️", label: showCvv ? "Hide CVV" : "Show CVV", fn: () => { setShowCvv(v => !v); if (!isFlipped) setIsFlipped(true); } },
+          { icon: showFull ? "🔒" : "🔢", label: showFull ? "Hide Number" : "Full Number", fn: () => setShowFull(v => !v) },
+        ].map(btn => (
+          <button key={btn.label} onClick={btn.fn} disabled={freezing}
+            className="flex flex-col items-center gap-1.5 py-3.5 px-2 bg-white border border-gray-200 rounded-xl text-center hover:border-blue-400 hover:shadow-sm transition-all disabled:opacity-50">
+            <span className="text-xl">{btn.icon}</span>
+            <span className="text-[11px] font-semibold text-gray-600">{btn.label}</span>
+          </button>
+        ))}
+      </div>
 
-        <Link href="/dashboard" className="block text-center text-sm text-blue-600 hover:underline mt-4">← Back to Dashboard</Link>
-      </main>
+      {/* Copy detail rows */}
+      <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden mb-4 shadow-sm">
+        {[
+          { label: "Card Number", display: displayNum, copy: card.card_number },
+          { label: "Expiry Date", display: formatExpiry(card.expiry_month, card.expiry_year), copy: formatExpiry(card.expiry_month, card.expiry_year) },
+          { label: "CVV", display: showCvv ? (card.cvv || "•••") : "•••", copy: card.cvv },
+          { label: "Cardholder", display: card.cardholder_name || "—", copy: card.cardholder_name },
+        ].map((row, i) => (
+          <button key={row.label} onClick={() => row.copy && copy(row.copy, row.label)}
+            className={`w-full flex justify-between items-center px-4 py-3 hover:bg-gray-50 transition-colors text-left ${i > 0 ? "border-t border-gray-100" : ""}`}>
+            <div>
+              <div className="text-[9px] text-gray-400 uppercase tracking-wider mb-0.5">{row.label}</div>
+              <div className="font-mono text-sm font-medium text-gray-800">{row.display}</div>
+            </div>
+            <span className="text-base text-gray-300">📋</span>
+          </button>
+        ))}
+      </div>
+
+      <Link href="/dashboard" className="block text-center text-xs text-blue-600 hover:underline">← Back to Dashboard</Link>
 
       <Toast message={toast} show={toastVisible} />
 
+      {/* Freeze modal */}
       {showFreezeModal && (
-        <div className="fixed inset-0 bg-black/60 z-40 flex items-end backdrop-blur-sm" onClick={() => setShowFreezeModal(false)}>
-          <div className="w-full bg-white rounded-t-3xl p-6 pb-10" onClick={(e) => e.stopPropagation()} style={{ animation: "slideUp 0.3s ease" }}>
-            <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-6" />
-            <h3 className="text-lg font-bold mb-2">Freeze Card?</h3>
-            <p className="text-sm text-gray-500 mb-6">Freezing blocks all transactions. You can unfreeze anytime.</p>
-            <button onClick={handleFreeze} disabled={freezing} className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold mb-3 disabled:opacity-60">
+        <div className="fixed inset-0 bg-black/50 z-40 flex items-end" onClick={() => setShowFreezeModal(false)}>
+          <div className="w-full bg-white rounded-t-2xl p-5 pb-8 shadow-xl" onClick={e => e.stopPropagation()}>
+            <div className="w-8 h-1 bg-gray-200 rounded-full mx-auto mb-5" />
+            <h3 className="text-base font-bold text-gray-900 mb-1">Freeze Card?</h3>
+            <p className="text-sm text-gray-500 mb-5">All transactions will be blocked. You can unfreeze anytime.</p>
+            <button onClick={handleFreeze} disabled={freezing}
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-sm mb-2.5 disabled:opacity-60">
               {freezing ? "Processing…" : "Yes, Freeze Card"}
             </button>
-            <button onClick={() => setShowFreezeModal(false)} className="w-full py-4 rounded-2xl border border-gray-200 text-gray-600 font-semibold">Cancel</button>
+            <button onClick={() => setShowFreezeModal(false)}
+              className="w-full py-3.5 rounded-xl border border-gray-200 text-gray-500 font-semibold text-sm">
+              Cancel
+            </button>
           </div>
         </div>
       )}
-      <style jsx global>{`@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }`}</style>
     </div>
   );
 }
@@ -300,28 +313,24 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
 export default function VirtualCardPage() {
   const { card, loading, error, refetch } = useVirtualCard();
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#F2F9FF] flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-500 text-sm">Loading your card…</p>
-        </div>
+  if (loading) return (
+    <div className="flex items-center justify-center min-h-64">
+      <div className="text-center">
+        <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-3" />
+        <p className="text-sm text-gray-400">Loading your card…</p>
       </div>
-    );
-  }
+    </div>
+  );
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-[#F2F9FF] flex items-center justify-center px-4">
-        <div className="text-center">
-          <div className="text-4xl mb-4">⚠️</div>
-          <p className="text-red-600 font-medium mb-4">{error}</p>
-          <button onClick={refetch} className="px-5 py-2.5 bg-blue-600 text-white rounded-full text-sm font-semibold">Try Again</button>
-        </div>
+  if (error) return (
+    <div className="flex items-center justify-center min-h-64 px-4">
+      <div className="text-center">
+        <div className="text-3xl mb-3">⚠️</div>
+        <p className="text-red-500 text-sm mb-3">{error}</p>
+        <button onClick={refetch} className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold">Try Again</button>
       </div>
-    );
-  }
+    </div>
+  );
 
   if (!card) return <RequestCardView onRequested={refetch} />;
   if (card.status === "rejected") return <RequestCardView onRequested={refetch} wasRejected />;

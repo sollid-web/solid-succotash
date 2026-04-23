@@ -124,3 +124,27 @@ class CardTransactionsView(APIView):
         
         # You can implement transaction fetching logic here later
         return Response([])
+
+class VerifyPasswordView(APIView):
+    """Verify user password before revealing sensitive card details."""
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        from django.contrib.auth import authenticate
+        password = request.data.get("password", "")
+        if not password:
+            return Response(
+                {"error": "Password is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        user = authenticate(
+            request,
+            username=request.user.email,
+            password=password
+        )
+        if user is not None:
+            return Response({"verified": True})
+        return Response(
+            {"verified": False, "error": "Incorrect password."},
+            status=status.HTTP_401_UNAUTHORIZED
+        )

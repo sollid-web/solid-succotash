@@ -126,25 +126,81 @@ class CardTransactionsView(APIView):
         return Response([])
 
 class VerifyPasswordView(APIView):
-    """Verify user password before revealing sensitive card details."""
+    """Verify a separate card PIN before revealing sensitive card details.
+    This is intentionally NOT the account login password."""
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        from django.contrib.auth import authenticate
-        password = request.data.get("password", "")
-        if not password:
+        from django.contrib.auth.hashers import check_password
+        from transactions.models import VirtualCard
+
+        pin = request.data.get("password", "").strip()
+        if not pin:
             return Response(
-                {"error": "Password is required."},
+                {"error": "Card PIN is required."},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        user = authenticate(
-            request,
-            username=request.user.email,
-            password=password
-        )
-        if user is not None:
+
+        card = VirtualCard.objects.filter(user=request.user).first()
+        if not card:
+            return Response(
+                {"error": "No card found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # If no card PIN set yet, reject — admin must set one on approval
+        if not card.card_pin:
+            return Response(
+                {"verified": False, "error": "Card PIN not set. Contact support."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        if check_password(pin, card.card_pin):
             return Response({"verified": True})
+
         return Response(
-            {"verified": False, "error": "Incorrect password."},
+            {"verified": False, "error": "Incorrect card PIN."},
             status=status.HTTP_401_UNAUTHORIZED
         )
+
+
+class SetPinView(APIView):
+    """Allows a user to create their card PIN for the first time."""
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        from django.contrib.auth.hashers import make_password
+        from transactions.models import VirtualCard
+
+        pin = request.data.get("pin", "").strip()
+        confirm = request.data.get("confirm_pin", "").strip()
+
+        if not pin or not confirm:
+            return Response(
+                {"error": "Both PIN fields are required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if len(pin) < 4 or not pin.isdigit():
+            return Response(
+                {"error": "PIN must be at least 4 digits."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if pin != confirm:
+            return Response(
+                {"error": "PINs do not match."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        card = VirtualCard.objects.filter(user=request.user).first()
+        if not card:
+            return Response({"error": "No card found."}, status=status.HTTP_404_NOT_FOUND)
+
+        if card.card_pin:
+            return Response(
+                {"error": "PIN already set. Contact support to reset."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        card.card_pin = make_password(pin)
+        card.save(update_fields=["card_pin"])
+        return Response({"success": True, "message": "Card PIN created successfully."})

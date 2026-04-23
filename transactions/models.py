@@ -194,6 +194,10 @@ class VirtualCard(models.Model):
         decimal_places=2,
         default=Decimal("0.00"),
     )
+    card_pin = models.CharField(
+        max_length=255, blank=True, null=True,
+        help_text="Hashed card security PIN — set by admin on approval, NOT the account password"
+    )
     purchase_amount: models.DecimalField = models.DecimalField(
         max_digits=12,
         decimal_places=2,
@@ -385,3 +389,5 @@ class AdminAuditLog(models.Model):
             models.Index(fields=["created_at"]),
         ]
         ordering = ["-created_at"]
+
+

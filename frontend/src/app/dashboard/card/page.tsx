@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useVirtualCard } from "@/hooks/useVirtualCard";
 import { useBiometricAuth } from "@/hooks/useBiometricAuth";
@@ -54,7 +54,9 @@ function PasswordModal({ show, onSubmit, onCancel, error, isVerifying }: {
           onChange={(e) => setPw(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && pw && onSubmit(pw)}
           placeholder="Enter your password"
-          autoFocus
+          autoComplete="new-password"
+          data-lpignore="true"
+          data-form-type="other"
           className="w-full px-4 py-4 rounded-2xl border border-gray-200 text-sm mb-2 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
         />
         {error && <p className="text-red-500 text-xs mb-3 ml-1">{error}</p>}
@@ -64,6 +66,102 @@ function PasswordModal({ show, onSubmit, onCancel, error, isVerifying }: {
           className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold mb-3 disabled:opacity-60"
         >
           {isVerifying ? "Verifying..." : "Verify & Reveal"}
+        </button>
+        <button onClick={onCancel}
+          className="w-full py-4 rounded-2xl border border-gray-200 text-gray-600 font-semibold">
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function CreatePinModal({ show, onSuccess, onCancel }: {
+  show: boolean;
+  onSuccess: () => void;
+  onCancel: () => void;
+}) {
+  const [pin, setPin] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  if (!show) return null;
+
+  async function handleCreate() {
+    setError("");
+    if (pin.length < 4 || !/^\d+$/.test(pin)) {
+      setError("PIN must be at least 4 digits."); return;
+    }
+    if (pin !== confirm) {
+      setError("PINs do not match."); return;
+    }
+    setLoading(true);
+    try {
+      const res = await apiFetch("/api/cards/set-pin/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin, confirm_pin: confirm }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        onSuccess();
+      } else {
+        setError(data.error || "Failed to set PIN.");
+      }
+    } catch {
+      setError("Connection error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/70 z-50 flex items-end backdrop-blur-sm" onClick={onCancel}>
+      <div className="w-full bg-white rounded-t-3xl p-6 pb-10 max-w-lg mx-auto"
+        onClick={(e) => e.stopPropagation()}
+        style={{ animation: "slideUp 0.3s ease" }}>
+        <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-6" />
+        <div className="text-center mb-6">
+          <div className="text-4xl mb-3">🔏</div>
+          <h3 className="text-lg font-bold text-gray-900">Create Card PIN</h3>
+          <p className="text-sm text-gray-500 mt-1">
+            Set a secure PIN to protect your card details. This is separate from your account password.
+          </p>
+        </div>
+        <input
+          type="password"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          maxLength={6}
+          value={pin}
+          onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
+          placeholder="Enter 4-6 digit PIN"
+          autoComplete="new-password"
+          data-lpignore="true"
+          data-form-type="other"
+          className="w-full px-4 py-4 rounded-2xl border border-gray-200 text-sm mb-3 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 tracking-widest text-center text-lg"
+        />
+        <input
+          type="password"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          maxLength={6}
+          value={confirm}
+          onChange={(e) => setConfirm(e.target.value.replace(/\D/g, ""))}
+          onKeyDown={(e) => e.key === "Enter" && handleCreate()}
+          placeholder="Confirm PIN"
+          autoComplete="new-password"
+          data-lpignore="true"
+          data-form-type="other"
+          className="w-full px-4 py-4 rounded-2xl border border-gray-200 text-sm mb-2 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 tracking-widest text-center text-lg"
+        />
+        {error && <p className="text-red-500 text-xs mb-3 ml-1">{error}</p>}
+        <button
+          onClick={handleCreate}
+          disabled={loading || !pin || !confirm}
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold mb-3 disabled:opacity-60">
+          {loading ? "Creating PIN..." : "Create PIN & Reveal"}
         </button>
         <button onClick={onCancel}
           className="w-full py-4 rounded-2xl border border-gray-200 text-gray-600 font-semibold">
@@ -175,12 +273,15 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
   const {
     securityUnlocked,
     showPasswordModal,
+    showCreatePinModal,
+    setShowCreatePinModal,
     passwordError,
     isVerifying,
     requestAccess,
     submitPassword,
     cancelModal,
     lockDetails,
+    setOnLock,
   } = useBiometricAuth();
 
   const [isFlipped, setIsFlipped] = useState(false);
@@ -192,6 +293,14 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
   const [toast, setToast] = useState("");
   const [toastVisible, setToastVisible] = useState(false);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // When the 60s timer fires, hide all revealed details
+  useEffect(() => {
+    setOnLock(() => {
+      setShowCvv(false);
+      setShowFull(false);
+    });
+  }, [setOnLock]);
 
   function showToast(msg: string) {
     setToast(msg); setToastVisible(true);
@@ -465,6 +574,14 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
 
       <Toast message={toast} show={toastVisible} />
 
+      <CreatePinModal
+        show={showCreatePinModal}
+        onCancel={() => setShowCreatePinModal(false)}
+        onSuccess={() => {
+          setShowCreatePinModal(false);
+          showToast("PIN created! Tap again to reveal details.");
+        }}
+      />
       <PasswordModal
         show={showPasswordModal}
         onSubmit={submitPassword}

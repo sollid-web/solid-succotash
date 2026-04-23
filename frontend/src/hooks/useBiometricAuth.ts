@@ -6,12 +6,15 @@ type PendingAction = "number" | "cvv" | null;
 interface BiometricAuthReturn {
   securityUnlocked: boolean;
   showPasswordModal: boolean;
+  showCreatePinModal: boolean;
+  setShowCreatePinModal: (v: boolean) => void;
   passwordError: string;
   isVerifying: boolean;
   requestAccess: (action: PendingAction, onSuccess: (action: PendingAction) => void) => Promise<void>;
   submitPassword: (password: string) => Promise<void>;
   cancelModal: () => void;
   lockDetails: () => void;
+  setOnLock: (fn: () => void) => void;
 }
 
 async function isBiometricAvailable(): Promise<boolean> {
@@ -19,9 +22,7 @@ async function isBiometricAvailable(): Promise<boolean> {
     if (typeof window === "undefined") return false;
     if (!window.PublicKeyCredential) return false;
     return await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
-  } catch {
-    return false;
-  }
+  } catch { return false; }
 }
 
 async function triggerBiometric(): Promise<boolean> {
@@ -37,13 +38,7 @@ async function triggerBiometric(): Promise<boolean> {
       },
     });
     return credential !== null;
-  } catch (err: any) {
-    if (err?.name === "NotAllowedError" || err?.name === "AbortError") {
-      return false;
-    }
-    // Any other error (e.g. no credentials registered) — fall through to password
-    return false;
-  }
+  } catch { return false; }
 }
 
 export function useBiometricAuth(): BiometricAuthReturn {
@@ -51,23 +46,30 @@ export function useBiometricAuth(): BiometricAuthReturn {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [passwordError, setPasswordError] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
+  const [showCreatePinModal, setShowCreatePinModal] = useState(false);
 
   const lockTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingActionRef = useRef<PendingAction>(null);
   const onSuccessRef = useRef<((action: PendingAction) => void) | null>(null);
+  const onLockRef = useRef<(() => void) | null>(null);
 
   function startLockTimer() {
     if (lockTimer.current) clearTimeout(lockTimer.current);
     lockTimer.current = setTimeout(() => {
       setSecurityUnlocked(false);
-    }, 15000);
+      // Fire the onLock callback so the card page hides details
+      if (onLockRef.current) onLockRef.current();
+    }, 60000);
   }
+
+  const setOnLock = useCallback((fn: () => void) => {
+    onLockRef.current = fn;
+  }, []);
 
   const requestAccess = useCallback(async (
     action: PendingAction,
     onSuccess: (action: PendingAction) => void
   ) => {
-    // Already unlocked — call success immediately
     if (securityUnlocked) {
       onSuccess(action);
       startLockTimer();
@@ -78,7 +80,6 @@ export function useBiometricAuth(): BiometricAuthReturn {
     onSuccessRef.current = onSuccess;
 
     const biometricAvailable = await isBiometricAvailable();
-
     if (biometricAvailable) {
       const passed = await triggerBiometric();
       if (passed) {
@@ -87,11 +88,9 @@ export function useBiometricAuth(): BiometricAuthReturn {
         onSuccess(action);
         return;
       }
-      // User cancelled biometric — do nothing, don't fall to password
       return;
     }
 
-    // No biometric available — show password modal
     setPasswordError("");
     setShowPasswordModal(true);
   }, [securityUnlocked]);
@@ -111,11 +110,12 @@ export function useBiometricAuth(): BiometricAuthReturn {
         setShowPasswordModal(false);
         setSecurityUnlocked(true);
         startLockTimer();
-        if (onSuccessRef.current) {
-          onSuccessRef.current(pendingActionRef.current);
-        }
+        if (onSuccessRef.current) onSuccessRef.current(pendingActionRef.current);
+      } else if (data.pin_not_set) {
+        setShowPasswordModal(false);
+        setShowCreatePinModal(true);
       } else {
-        setPasswordError("Incorrect password. Please try again.");
+        setPasswordError(data.error || "Incorrect card PIN. Please try again.");
       }
     } catch {
       setPasswordError("Could not verify. Check your connection.");
@@ -134,16 +134,20 @@ export function useBiometricAuth(): BiometricAuthReturn {
   const lockDetails = useCallback(() => {
     if (lockTimer.current) clearTimeout(lockTimer.current);
     setSecurityUnlocked(false);
+    if (onLockRef.current) onLockRef.current();
   }, []);
 
   return {
     securityUnlocked,
     showPasswordModal,
+    showCreatePinModal,
+    setShowCreatePinModal,
     passwordError,
     isVerifying,
     requestAccess,
     submitPassword,
     cancelModal,
     lockDetails,
+    setOnLock,
   };
 }

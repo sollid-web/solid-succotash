@@ -60,7 +60,7 @@ export function useBiometricAuth(): BiometricAuthReturn {
     if (lockTimer.current) clearTimeout(lockTimer.current);
     lockTimer.current = setTimeout(() => {
       setSecurityUnlocked(false);
-    }, 60000);
+    }, 15000);
   }
 
   const requestAccess = useCallback(async (

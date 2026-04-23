@@ -20,12 +20,12 @@
 
 .wc-card-header h1 {
     font-size: 2.5rem;
-    color: #0f172a;
+    color: #1340aa;
     margin: 0 0 8px;
 }
 
 .wc-card-header p {
-    color: #64748b;
+    color: #2360b4;
     font-size: 1.1rem;
     margin: 0;
 }
@@ -153,7 +153,7 @@
 
 .wc-card-cvc-box {
     background: white;
-    color: #000;
+    color: #1b53cd;
     padding: 8px 12px;
     border-radius: 4px;
     width: 90px;

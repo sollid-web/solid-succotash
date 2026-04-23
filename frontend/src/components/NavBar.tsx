@@ -69,13 +69,24 @@ export default function NavBar() {
 
           <div className="flex items-center gap-3 lg:hidden">
             <LanguageSwitcher />
+            <Link
+              href="/accounts/login"
+              className="text-sm font-medium text-[#1E3A8A] px-4 py-2 border border-[#2A52BE] rounded-[7px] hover:bg-[#eff6ff] transition-colors"
+            >
+              {t('nav.login')}
+            </Link>
             <Button
               asLink
               href="/accounts/signup"
-              className="bg-[#2A52BE] text-white px-5 py-2 rounded-[7px] font-bold text-sm hover:bg-[#244bb0] transition-colors"
+              className="bg-[#2A52BE] text-white px-4 py-2 rounded-[7px] font-bold text-sm hover:bg-[#244bb0] transition-colors"
             >
               {t('nav.signup')}
             </Button>
+            <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+              <svg className="w-6 h-6 text-[#0F172A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>

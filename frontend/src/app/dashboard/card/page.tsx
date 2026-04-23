@@ -410,120 +410,55 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
             transition: "transform 0.7s cubic-bezier(.4,0,.2,1)",
             transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
           }}>
-            {/* FRONT — matches WolvCapital physical card */}
+            {/* FRONT — WolvCapital physical card as background image */}
             <div style={{
               position: "absolute", inset: 0,
               backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden",
               borderRadius: 20, overflow: "hidden",
-              background: "linear-gradient(135deg, #0d47a1 0%, #1565c0 25%, #1976d2 50%, #42a5f5 80%, #90caf9 100%)",
-              padding: 24, display: "flex", flexDirection: "column",
-              justifyContent: "space-between", color: "white",
+              backgroundImage: "url('/wolv-premium-card.webp')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
               boxShadow: "0 25px 60px rgba(13,71,161,0.5)",
             }}>
-              {/* Geometric background shapes */}
-              <div style={{ position: "absolute", inset: 0, overflow: "hidden", borderRadius: 20 }}>
-                <div style={{
-                  position: "absolute", width: 220, height: 220,
-                  borderRadius: "50%", top: -60, right: -40,
-                  background: "rgba(255,255,255,0.07)",
-                }} />
-                <div style={{
-                  position: "absolute", width: 180, height: 180,
-                  borderRadius: "50%", bottom: -60, left: 60,
-                  background: "rgba(255,255,255,0.05)",
-                }} />
-                <div style={{
-                  position: "absolute", width: 120, height: 120,
-                  borderRadius: "50%", top: 20, left: 120,
-                  background: "rgba(255,255,255,0.06)",
-                }} />
-              </div>
-
-              {/* Top row: WolvCapital + VISA Infinite */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", position: "relative" }}>
-                <div>
-                  <span style={{ fontSize: 17, fontWeight: 800, letterSpacing: 0.5 }}>
-                    <span style={{ fontWeight: 400 }}>Wolv</span>Capital
-                  </span>
-                </div>
-                <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: 20, fontWeight: 900, fontStyle: "italic", letterSpacing: 1 }}>VISA</div>
-                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.8)", letterSpacing: 2, marginTop: -2 }}>Infinite</div>
-                </div>
-              </div>
-
-              {/* Chip + contactless */}
-              <div style={{ display: "flex", alignItems: "center", gap: 12, position: "relative" }}>
-                {/* EMV Chip */}
-                <div style={{
-                  width: 44, height: 34, borderRadius: 6,
-                  background: "linear-gradient(135deg, #d4af37 0%, #f0d060 40%, #c8a415 100%)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
-                  flexShrink: 0,
-                }}>
-                  <div style={{
-                    width: 28, height: 22, border: "1.5px solid rgba(0,0,0,0.25)",
-                    borderRadius: 3, display: "grid",
-                    gridTemplateColumns: "1fr 1fr 1fr",
-                    gridTemplateRows: "1fr 1fr 1fr",
-                    gap: 1, padding: 2,
-                  }}>
-                    {[...Array(9)].map((_, i) => (
-                      <div key={i} style={{ background: i === 4 ? "transparent" : "rgba(0,0,0,0.15)", borderRadius: 1 }} />
-                    ))}
-                  </div>
-                </div>
-                {/* Contactless icon */}
-                <div style={{ display: "flex", flexDirection: "column", gap: 2, opacity: 0.85 }}>
-                  {[14, 10, 6].map((size, i) => (
-                    <div key={i} style={{
-                      width: size, height: size,
-                      border: "1.5px solid white",
-                      borderRadius: "50%",
-                      borderLeft: "1.5px solid transparent",
-                      transform: "rotate(-45deg)",
-                      alignSelf: "flex-start",
-                    }} />
-                  ))}
-                </div>
-              </div>
-
-              {/* Card Number */}
+              {/* Dynamic text overlay — positioned to match physical card layout */}
               <div style={{
-                fontFamily: "monospace", fontSize: 16, letterSpacing: 3,
-                color: "rgba(255,255,255,0.95)", textAlign: "center",
-                position: "relative", fontWeight: 500,
+                position: "absolute", inset: 0, padding: "6% 7%",
+                display: "flex", flexDirection: "column",
+                justifyContent: "space-between", color: "white",
               }}>
-                {displayNumber}
-              </div>
+                {/* Top row spacer — branding already on image */}
+                <div />
 
-              {/* Bottom row: expiry + name + holographic dove */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", position: "relative" }}>
-                <div>
-                  <div style={{ fontSize: 8, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: 2 }}>
-                    Valid Thru
-                  </div>
-                  <div style={{ fontSize: 13, fontWeight: 600, fontFamily: "monospace", letterSpacing: 1 }}>
-                    {formatExpiry(card.expiry_month, card.expiry_year)}
-                  </div>
-                  <div style={{ fontSize: 8, color: "rgba(255,255,255,0.55)", textTransform: "uppercase", letterSpacing: 1.5, marginTop: 6, marginBottom: 2 }}>
-                    Card Holder
-                  </div>
-                  <div style={{ fontSize: 13, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase" }}>
-                    {card.cardholder_name || "CARD HOLDER"}
-                  </div>
-                </div>
-                {/* Holographic dove placeholder */}
+                {/* Card Number — center of card */}
                 <div style={{
-                  width: 52, height: 42, borderRadius: 6,
-                  background: "linear-gradient(135deg, rgba(255,255,255,0.3), rgba(200,220,255,0.4), rgba(255,200,255,0.3))",
-                  backdropFilter: "blur(2px)",
-                  border: "1px solid rgba(255,255,255,0.4)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 22,
+                  fontFamily: "'Courier New', monospace",
+                  fontSize: "clamp(13px, 3.5vw, 18px)",
+                  letterSpacing: "0.2em",
+                  color: "rgba(255,255,255,0.95)",
+                  textAlign: "center",
+                  fontWeight: 500,
+                  textShadow: "0 1px 4px rgba(0,0,0,0.4)",
                 }}>
-                  🕊️
+                  {displayNumber}
+                </div>
+
+                {/* Bottom row: expiry + name */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+                  <div>
+                    <div style={{ fontSize: "clamp(7px, 1.5vw, 9px)", color: "rgba(255,255,255,0.6)", textTransform: "uppercase", letterSpacing: 2, marginBottom: 2 }}>
+                      Valid Thru
+                    </div>
+                    <div style={{ fontSize: "clamp(11px, 2.5vw, 14px)", fontWeight: 600, fontFamily: "monospace", letterSpacing: 2, textShadow: "0 1px 3px rgba(0,0,0,0.4)" }}>
+                      {formatExpiry(card.expiry_month, card.expiry_year)}
+                    </div>
+                    <div style={{ fontSize: "clamp(7px, 1.5vw, 9px)", color: "rgba(255,255,255,0.6)", textTransform: "uppercase", letterSpacing: 2, marginTop: 6, marginBottom: 2 }}>
+                      Card Holder
+                    </div>
+                    <div style={{ fontSize: "clamp(11px, 2.5vw, 14px)", fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", textShadow: "0 1px 3px rgba(0,0,0,0.4)" }}>
+                      {card.cardholder_name || "CARD HOLDER"}
+                    </div>
+                  </div>
                 </div>
               </div>
 

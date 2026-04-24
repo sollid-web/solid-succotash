@@ -118,8 +118,7 @@ export default function MyCardPage() {
               {/* Card Display */}
               <div className="mb-8 flex justify-center">
                 <div className="w-full max-w-md">
-                  <FlipCard maxWidth={380} initialFlipped={false} />
-                </div>
+             <FlipCard maxWidth={380} />                </div>
               </div>
 
               {/* Card Details */}

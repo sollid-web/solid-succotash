@@ -9,29 +9,6 @@ interface BiometricAuthResult {
   error?: string;
 }
 
-function isWebAuthnSupported(): boolean {
-  return (
-    typeof window !== "undefined" &&
-    !!window.PublicKeyCredential &&
-    !!navigator.credentials
-  );
-}
-
-async function isPlatformAuthenticatorAvailable(): Promise<boolean> {
-  try {
-    if (!isWebAuthnSupported()) return false;
-    return await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
-  } catch {
-    return false;
-  }
-}
-
-function generateChallenge(): ArrayBuffer {
-  const challenge = new Uint8Array(32);
-  crypto.getRandomValues(challenge);
-  return challenge.buffer as ArrayBuffer;
-}
-
 export function useBiometricAuth() {
   const [securityUnlocked, setSecurityUnlocked] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
@@ -57,59 +34,26 @@ export function useBiometricAuth() {
       }
       pendingActionRef.current = action;
       onSuccessRef.current = onSuccess;
-      triggerAuth();
+      checkPinExists();
     },
     [securityUnlocked]
   );
 
-  async function triggerAuth() {
-    setIsAuthenticating(true);
-    try {
-      const platformAvailable = await isPlatformAuthenticatorAvailable();
-      if (platformAvailable) {
-        try {
-          const credential = await navigator.credentials.get({
-            publicKey: {
-              challenge: generateChallenge(),
-              timeout: 60000,
-              userVerification: "required",
-              rpId: window.location.hostname,
-            },
-          });
-          if (credential) {
-            setIsAuthenticating(false);
-            setSecurityUnlocked(true);
-            onSuccessRef.current?.(pendingActionRef.current);
-            return;
-          }
-        } catch (err: any) {
-          if (err?.name === "NotAllowedError" || err?.name === "AbortError") {
-            setIsAuthenticating(false);
-            return;
-          }
-        }
-      }
-      checkPinExists();
-    } catch {
-      setIsAuthenticating(false);
-      setShowPasswordModal(true);
-    }
-  }
-
   async function checkPinExists() {
+    setIsAuthenticating(true);
     try {
       const { apiFetch } = await import("@/lib/api");
       const res = await apiFetch("/api/cards/check-pin/");
       const data = await res.json();
-      setIsAuthenticating(false);
       if (data.has_pin) {
         setShowPasswordModal(true);
       } else {
         setShowCreatePinModal(true);
       }
     } catch {
-      setIsAuthenticating(false);
       setShowPasswordModal(true);
+    } finally {
+      setIsAuthenticating(false);
     }
   }
 

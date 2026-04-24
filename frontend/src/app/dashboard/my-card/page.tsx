@@ -36,7 +36,6 @@ export default function MyCardPage() {
         if (!res.ok) throw new Error('Failed to load cards')
         const data = await res.json()
         const cards = Array.isArray(data) ? data : []
-        // Get the first/most recent card, prefer active
         const activeCard = cards.find((c: Card) => c.status === 'active')
         const mostRecent = cards[0]
         if (!active) return
@@ -54,20 +53,13 @@ export default function MyCardPage() {
 
   const statusColor = (status: string) => {
     switch (status) {
-      case 'pending':
-        return { bg: 'bg-yellow-100', text: 'text-yellow-700', border: 'border-yellow-200' }
-      case 'approved':
-        return { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-blue-200' }
-      case 'active':
-        return { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-200' }
-      case 'rejected':
-        return { bg: 'bg-red-100', text: 'text-red-700', border: 'border-red-200' }
-      case 'suspended':
-        return { bg: 'bg-orange-100', text: 'text-orange-700', border: 'border-orange-200' }
-      case 'expired':
-        return { bg: 'bg-gray-100', text: 'text-gray-700', border: 'border-gray-200' }
-      default:
-        return { bg: 'bg-gray-100', text: 'text-gray-700', border: 'border-gray-200' }
+      case 'pending': return { bg: 'bg-yellow-100', text: 'text-yellow-700', border: 'border-yellow-200' }
+      case 'approved': return { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-blue-200' }
+      case 'active': return { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-200' }
+      case 'rejected': return { bg: 'bg-red-100', text: 'text-red-700', border: 'border-red-200' }
+      case 'suspended': return { bg: 'bg-orange-100', text: 'text-orange-700', border: 'border-orange-200' }
+      case 'expired': return { bg: 'bg-gray-100', text: 'text-gray-700', border: 'border-gray-200' }
+      default: return { bg: 'bg-gray-100', text: 'text-gray-700', border: 'border-gray-200' }
     }
   }
 
@@ -104,10 +96,7 @@ export default function MyCardPage() {
           {error && !card && (
             <div className="mb-6 p-6 bg-yellow-50 border border-yellow-200 rounded-2xl text-center">
               <p className="text-yellow-900 mb-4">{error}</p>
-              <Link
-                href="/dashboard/purchase-card"
-                className="inline-block px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl hover:shadow-lg hover:brightness-110 transition-all"
-              >
+              <Link href="/dashboard/purchase-card" className="inline-block px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl hover:shadow-lg hover:brightness-110 transition-all">
                 Request Virtual Card
               </Link>
             </div>
@@ -115,82 +104,67 @@ export default function MyCardPage() {
 
           {card && (
             <>
-              {/* Card Display */}
               <div className="mb-8 flex justify-center">
                 <div className="w-full max-w-md">
-             <FlipCard maxWidth={380} />                </div>
+                  <FlipCard
+                    maxWidth={380}
+                    cardNumber={card.card_number}
+                    cardholderName="CARD HOLDER"
+                    expiryMonth={card.expiry_month}
+                    expiryYear={card.expiry_year}
+                    isFrozen={card.status === 'suspended'}
+                  />
+                </div>
               </div>
 
-              {/* Card Details */}
               <div className="mb-8 rounded-2xl border border-gray-200 bg-gray-50 p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Card Details</h2>
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <div className="text-sm font-semibold text-gray-700 mb-2">Status</div>
                     <div className="flex items-center">
-                      <span
-                        className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold border ${statusColor(card.status).bg} ${statusColor(card.status).text} ${statusColor(card.status).border}`}
-                      >
+                      <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold border ${statusColor(card.status).bg} ${statusColor(card.status).text} ${statusColor(card.status).border}`}>
                         {card.status.charAt(0).toUpperCase() + card.status.slice(1)}
                       </span>
                     </div>
                   </div>
-
                   <div>
                     <div className="text-sm font-semibold text-gray-700 mb-2">Card Type</div>
                     <p className="text-lg text-gray-900">{card.card_type || 'Visa Virtual Card'}</p>
                   </div>
-
                   <div>
                     <div className="text-sm font-semibold text-gray-700 mb-2">Purchase Amount</div>
                     <p className="text-lg font-bold text-gray-900">${parseFloat(card.purchase_amount).toFixed(2)}</p>
                   </div>
-
                   <div>
                     <div className="text-sm font-semibold text-gray-700 mb-2">Current Balance</div>
                     <p className="text-lg font-bold text-green-700">${parseFloat(card.current_balance || card.balance || '0').toFixed(2)}</p>
                   </div>
-
                   {card.card_number && (
                     <>
                       <div>
                         <div className="text-sm font-semibold text-gray-700 mb-2">Card Number</div>
                         <p className="text-lg font-mono text-gray-900">****-****-****-{card.card_number.slice(-4)}</p>
                       </div>
-
                       <div>
                         <div className="text-sm font-semibold text-gray-700 mb-2">Expiry</div>
-                        <p className="text-lg font-mono text-gray-900">
-                          {card.expiry_month}/{card.expiry_year}
-                        </p>
+                        <p className="text-lg font-mono text-gray-900">{card.expiry_month}/{card.expiry_year}</p>
                       </div>
                     </>
                   )}
-
                   <div>
                     <div className="text-sm font-semibold text-gray-700 mb-2">Created</div>
-                    <p className="text-gray-900">
-                      {new Date(card.created_at).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                      })}
-                    </p>
+                    <p className="text-gray-900">{new Date(card.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
                   </div>
                 </div>
               </div>
 
-              {/* Status-based CTAs */}
               <div className="flex gap-4 flex-wrap">
                 {card.status === 'active' ? (
                   <div className="flex-1 p-6 bg-green-50 border border-green-200 rounded-2xl text-center">
                     <p className="text-green-900 font-semibold mb-3">✓ Card is active</p>
                     <p className="text-sm text-green-700 mb-4">You can now withdraw funds and make purchases with your card.</p>
-                    <Link
-                      href="/dashboard/withdraw"
-                      className="inline-block px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 hover:brightness-110 transition"
-                    >
+                    <Link href="/dashboard/withdraw" className="inline-block px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">
                       Request Withdrawal
                     </Link>
                   </div>
@@ -203,10 +177,7 @@ export default function MyCardPage() {
                   <div className="flex-1 p-6 bg-red-50 border border-red-200 rounded-2xl text-center">
                     <p className="text-red-900 font-semibold mb-3">✗ Request Rejected</p>
                     <p className="text-sm text-red-700 mb-4">Your request was not approved. Please contact support for details.</p>
-                    <Link
-                      href="/dashboard/support"
-                      className="inline-block px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 hover:brightness-110 transition"
-                    >
+                    <Link href="/dashboard/support" className="inline-block px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">
                       Contact Support
                     </Link>
                   </div>
@@ -214,19 +185,13 @@ export default function MyCardPage() {
                   <div className="flex-1 p-6 bg-blue-50 border border-blue-200 rounded-2xl text-center">
                     <p className="text-blue-900 font-semibold mb-3">Request a New Card</p>
                     <p className="text-sm text-blue-700 mb-4">You don't have an active card yet. Request activation to get started.</p>
-                    <Link
-                      href="/dashboard/purchase-card"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 hover:brightness-110 transition"
-                    >
+                    <Link href="/dashboard/purchase-card" className="inline-block px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
                       Request Card
                     </Link>
                   </div>
                 )}
               </div>
 
-              {/* Info */}
               <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-2xl">
                 <h3 className="font-semibold text-gray-900 mb-3">ℹ️ Card Security</h3>
                 <ul className="space-y-2 text-sm text-gray-700">

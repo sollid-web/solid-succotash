@@ -26,10 +26,10 @@ async function isPlatformAuthenticatorAvailable(): Promise<boolean> {
   }
 }
 
-function generateChallenge(): Uint8Array {
+function generateChallenge(): ArrayBuffer {
   const challenge = new Uint8Array(32);
   crypto.getRandomValues(challenge);
-  return challenge;
+  return challenge.buffer as ArrayBuffer;
 }
 
 export function useBiometricAuth() {

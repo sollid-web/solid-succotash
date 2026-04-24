@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from "react";
 
 type AuthMethod = "biometric" | "password" | "none";
+type RevealAction = "number" | "cvv" | string;
 
 interface BiometricAuthResult {
   success: boolean;
@@ -32,22 +33,41 @@ function generateChallenge(): Uint8Array {
 }
 
 export function useBiometricAuth() {
+  const [securityUnlocked, setSecurityUnlocked] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
-  const [showPasswordFallback, setShowPasswordFallback] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [showCreatePinModal, setShowCreatePinModal] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [securityUnlocked, setSecurityUnlocked] = useState(false);
-  const resolveRef = useRef<((result: BiometricAuthResult) => void) | null>(null);
 
-  const authenticate = useCallback(async (): Promise<BiometricAuthResult> => {
-    return new Promise(async (resolve) => {
-      resolveRef.current = resolve;
-      setIsAuthenticating(true);
+  const onSuccessRef = useRef<((action: RevealAction) => void) | null>(null);
+  const pendingActionRef = useRef<RevealAction>("number");
+  const onLockRef = useRef<(() => void) | null>(null);
 
-      try {
-        const platformAvailable = await isPlatformAuthenticatorAvailable();
+  function setOnLock(cb: () => void) {
+    onLockRef.current = cb;
+  }
 
-        if (platformAvailable) {
+  const requestAccess = useCallback(
+    (action: RevealAction, onSuccess: (action: RevealAction) => void) => {
+      if (securityUnlocked) {
+        onSuccess(action);
+        return;
+      }
+      pendingActionRef.current = action;
+      onSuccessRef.current = onSuccess;
+      triggerAuth();
+    },
+    [securityUnlocked]
+  );
+
+  async function triggerAuth() {
+    setIsAuthenticating(true);
+    try {
+      const platformAvailable = await isPlatformAuthenticatorAvailable();
+      if (platformAvailable) {
+        try {
           const credential = await navigator.credentials.get({
             publicKey: {
               challenge: generateChallenge(),
@@ -56,69 +76,104 @@ export function useBiometricAuth() {
               rpId: window.location.hostname,
             },
           });
-
           if (credential) {
             setIsAuthenticating(false);
             setSecurityUnlocked(true);
-            resolve({ success: true, method: "biometric" });
+            onSuccessRef.current?.(pendingActionRef.current);
+            return;
+          }
+        } catch (err: any) {
+          if (err?.name === "NotAllowedError" || err?.name === "AbortError") {
+            setIsAuthenticating(false);
             return;
           }
         }
-
-        setShowPasswordFallback(true);
-      } catch (err: any) {
-        if (err?.name === "NotAllowedError" || err?.name === "AbortError") {
-          setIsAuthenticating(false);
-          resolve({ success: false, method: "biometric", error: "Authentication cancelled" });
-          return;
-        }
-        setShowPasswordFallback(true);
       }
-    });
-  }, []);
+      checkPinExists();
+    } catch {
+      setIsAuthenticating(false);
+      setShowPasswordModal(true);
+    }
+  }
 
-  async function submitPassword(correctPassword?: string) {
+  async function checkPinExists() {
+    try {
+      const { apiFetch } = await import("@/lib/api");
+      const res = await apiFetch("/api/cards/check-pin/");
+      const data = await res.json();
+      setIsAuthenticating(false);
+      if (data.has_pin) {
+        setShowPasswordModal(true);
+      } else {
+        setShowCreatePinModal(true);
+      }
+    } catch {
+      setIsAuthenticating(false);
+      setShowPasswordModal(true);
+    }
+  }
+
+  async function submitPassword(pin: string) {
+    setIsVerifying(true);
     setPasswordError("");
     try {
       const { apiFetch } = await import("@/lib/api");
       const res = await apiFetch("/api/auth/verify-password/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ password: pin }),
       });
-
       if (res.ok) {
-        setShowPasswordFallback(false);
+        setShowPasswordModal(false);
         setPassword("");
-        setIsAuthenticating(false);
         setSecurityUnlocked(true);
-        resolveRef.current?.({ success: true, method: "password" });
+        onSuccessRef.current?.(pendingActionRef.current);
       } else {
-        setPasswordError("Incorrect password. Please try again.");
+        setPasswordError("Incorrect PIN. Please try again.");
       }
     } catch {
-      setPasswordError("Could not verify password. Try again.");
+      setPasswordError("Could not verify PIN. Try again.");
+    } finally {
+      setIsVerifying(false);
     }
   }
 
-  function cancelAuth() {
-    setShowPasswordFallback(false);
+  function cancelModal() {
+    setShowPasswordModal(false);
+    setShowCreatePinModal(false);
     setPassword("");
     setPasswordError("");
     setIsAuthenticating(false);
-    setSecurityUnlocked(false);
-    resolveRef.current?.({ success: false, method: "none", error: "Cancelled" });
   }
 
+  function lockDetails() {
+    setSecurityUnlocked(false);
+    onLockRef.current?.();
+  }
+
+  const authenticate = useCallback(async (): Promise<BiometricAuthResult> => {
+    return new Promise((resolve) => {
+      requestAccess("number", () => {
+        resolve({ success: true, method: "password" });
+      });
+    });
+  }, [requestAccess]);
+
   return {
-    authenticate,
-    isAuthenticating,
-    showPasswordFallback,
-    password,
-    setPassword,
-    passwordError,
-    submitPassword,
-    cancelAuth,
     securityUnlocked,
+    isAuthenticating,
+    isVerifying,
+    showPasswordModal,
+    showCreatePinModal,
+    password,
+    passwordError,
+    authenticate,
+    requestAccess,
+    submitPassword,
+    cancelModal,
+    lockDetails,
+    setOnLock,
+    setShowCreatePinModal,
+    setPassword,
   };
 }

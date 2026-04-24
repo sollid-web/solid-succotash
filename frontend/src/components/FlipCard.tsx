@@ -1,197 +1,252 @@
-'use client';
+'use client'
 
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { apiFetch } from '@/lib/api'
+import FlipCard from '@/components/FlipCard'
 
-type FlipCardProps = {
-  cardNumber?: string;
-  cardholderName?: string;
-  expiryMonth?: string | number;
-  expiryYear?: string | number;
-  cvv?: string;
-  showCvv?: boolean;
-  showFull?: boolean;
-  isFrozen?: boolean;
-  maxWidth?: number;
-  className?: string;
-};
-
-function maskNumber(num?: string) {
-  if (!num || num.length < 4) return '•••• •••• •••• ••••';
-  return '•••• •••• •••• ' + num.slice(-4);
+interface Card {
+  id: string
+  last4?: string
+  exp_month?: number
+  exp_year?: number
+  brand?: string
+  card_type: string
+  status: 'pending' | 'approved' | 'rejected' | 'active' | 'suspended' | 'expired'
+  purchase_amount: string
+  balance?: string
+  card_number?: string
+  expiry_month?: string
+  expiry_year?: string
+  current_balance?: string
+  created_at: string
+  activated_at?: string
 }
 
-function formatExpiry(m?: string | number, y?: string | number) {
-  if (!m || !y) return '••/••';
-  return m.toString().padStart(2, '0') + '/' + y.toString();
-}
+export default function MyCardPage() {
+  const [card, setCard] = useState<Card | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
-export default function FlipCard({
-  cardNumber,
-  cardholderName,
-  expiryMonth,
-  expiryYear,
-  cvv,
-  showCvv = false,
-  showFull = false,
-  isFrozen = false,
-  maxWidth = 420,
-  className = '',
-}: FlipCardProps) {
-  const [flipped, setFlipped] = useState(false);
+  useEffect(() => {
+    let active = true
+    ;(async () => {
+      try {
+        const res = await apiFetch('/api/cards/')
+        if (!res.ok) throw new Error('Failed to load cards')
+        const data = await res.json()
+        const cards = Array.isArray(data) ? data : []
+        const activeCard = cards.find((c: Card) => c.status === 'active')
+        const mostRecent = cards[0]
+        if (!active) return
+        setCard(activeCard || mostRecent || null)
+        if (!activeCard && !mostRecent) setError('No virtual cards found. Request one to get started.')
+      } catch (e: any) {
+        if (!active) return
+        setError(e.message || 'Failed to load card')
+      } finally {
+        if (active) setLoading(false)
+      }
+    })()
+    return () => { active = false }
+  }, [])
 
-  const displayNumber =
-    showFull && cardNumber
-      ? cardNumber.replace(/(.{4})/g, '$1 ').trim()
-      : maskNumber(cardNumber);
+  const statusColor = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return { bg: 'bg-yellow-100', text: 'text-yellow-700', border: 'border-yellow-200' }
+      case 'approved':
+        return { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-blue-200' }
+      case 'active':
+        return { bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-200' }
+      case 'rejected':
+        return { bg: 'bg-red-100', text: 'text-red-700', border: 'border-red-200' }
+      case 'suspended':
+        return { bg: 'bg-orange-100', text: 'text-orange-700', border: 'border-orange-200' }
+      case 'expired':
+        return { bg: 'bg-gray-100', text: 'text-gray-700', border: 'border-gray-200' }
+      default:
+        return { bg: 'bg-gray-100', text: 'text-gray-700', border: 'border-gray-200' }
+    }
+  }
 
   return (
-    <div
-      className={'w-full ' + className}
-      style={{ maxWidth, margin: '0 auto' }}
-    >
-      {/* 3-D stage */}
-      <div
-        className="w-full cursor-pointer select-none"
-        style={{ perspective: '1500px', aspectRatio: '1.586 / 1' }}
-        onClick={() => { if (!isFrozen) setFlipped((f) => !f); }}
-      >
-        <motion.div
-          className="relative w-full h-full"
-          style={{ transformStyle: 'preserve-3d' }}
-          initial={false}
-          animate={{ rotateY: flipped ? 180 : 0 }}
-          transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-        >
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100 py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Link href="/dashboard" className="inline-flex items-center text-[#2563eb] hover:text-[#1d4ed8] mb-6">
+          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back to Dashboard
+        </Link>
 
-          {/* ══════════════════ FRONT FACE ══════════════════ */}
-          <div
-            className="absolute inset-0 rounded-[18px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
-            style={{ backfaceVisibility: 'hidden' }}
-          >
-            {/* Photo background — chip, hologram, gradient, branding */}
-            <Image
-              src="/assets/cards/wolv-premium-front.webp"
-              alt="WolvCapital Visa Infinite"
-              fill
-              priority
-              className="object-cover object-top"
-            />
-
-            {/* Dynamic data overlay — sits in the cleared lower zone */}
-            <div className="absolute inset-0 flex flex-col justify-end pb-[7%] px-[6%]">
-
-              {/* Card number */}
-              <div className="mb-[4%]">
-                <p
-                  className="font-mono text-white drop-shadow-md"
-                  style={{
-                    fontSize: 'clamp(14px, 3.8vw, 22px)',
-                    letterSpacing: '0.22em',
-                    fontWeight: 500,
-                    textShadow: '0 1px 6px rgba(0,0,0,0.5)',
-                  }}
-                >
-                  {displayNumber}
-                </p>
-              </div>
-
-              {/* Name + Expiry row */}
-              <div className="flex items-end justify-between">
-                <div>
-                  <span
-                    className="block uppercase text-white/60"
-                    style={{ fontSize: 'clamp(6px, 1.4vw, 9px)', letterSpacing: '0.18em' }}
-                  >
-                    Card Holder
-                  </span>
-                  <span
-                    className="block uppercase text-white font-semibold tracking-wider"
-                    style={{
-                      fontSize: 'clamp(11px, 2.5vw, 15px)',
-                      textShadow: '0 1px 4px rgba(0,0,0,0.4)',
-                    }}
-                  >
-                    {cardholderName || 'CARD HOLDER'}
-                  </span>
-                </div>
-
-                <div className="text-center">
-                  <span
-                    className="block uppercase text-white/60"
-                    style={{ fontSize: 'clamp(6px, 1.4vw, 9px)', letterSpacing: '0.18em' }}
-                  >
-                    Valid Thru
-                  </span>
-                  <span
-                    className="block text-white font-semibold font-mono"
-                    style={{
-                      fontSize: 'clamp(12px, 2.8vw, 16px)',
-                      letterSpacing: '0.12em',
-                      textShadow: '0 1px 4px rgba(0,0,0,0.4)',
-                    }}
-                  >
-                    {formatExpiry(expiryMonth, expiryYear)}
-                  </span>
-                </div>
-
-                {/* Spacer to keep hologram photo visible on right */}
-                <div style={{ width: 'clamp(48px, 10%, 72px)' }} />
-              </div>
+        <div className="bg-white rounded-3xl shadow-xl p-8">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Your Virtual Card</h1>
+              <p className="text-gray-600 mt-2">View your card details and manage activation</p>
             </div>
-
-            {/* Frozen overlay */}
-            {isFrozen && (
-              <div
-                className="absolute inset-0 rounded-[18px] flex flex-col items-center justify-center gap-2"
-                style={{ background: 'rgba(5,10,20,0.78)', backdropFilter: 'blur(5px)' }}
-              >
-                <span style={{ fontSize: 44 }}>❄️</span>
-                <span style={{ color: '#93c5fd', fontWeight: 700, fontSize: 20, letterSpacing: 3 }}>
-                  CARD FROZEN
-                </span>
-              </div>
-            )}
+            <div className="text-5xl">💳</div>
           </div>
 
-          {/* ══════════════════ BACK FACE ══════════════════ */}
-          <div
-            className="absolute inset-0 rounded-[18px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.35)]"
-            style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
-          >
-            {/* Photo background — barcode, QR, signature strip, legal text, Visa hologram */}
-            <Image
-              src="/assets/cards/wolv-premium-back.webp"
-              alt="WolvCapital Visa Infinite — back"
-              fill
-              className="object-cover object-top"
-            />
-
-            {/* Dynamic CVV overlay — positioned inside the white CVV box */}
-            {/* Fine-tune top/right % to align with the white box in your back image */}
-            <div
-              className="absolute flex items-center justify-center z-10"
-              style={{
-                top: '40%',
-                right: '21%',
-                width: '9%',
-                height: '9%',
-              }}
-            >
-              <span
-                className="font-mono font-bold text-gray-900"
-                style={{ fontSize: 'clamp(13px, 2.8vw, 18px)', letterSpacing: '0.12em' }}
-              >
-                {showCvv ? (cvv || '•••') : '•••'}
-              </span>
+          {loading && (
+            <div className="flex items-center justify-center py-12">
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 mb-4 animate-spin">
+                  <div className="w-8 h-8 rounded-full border-4 border-blue-200 border-t-blue-600"></div>
+                </div>
+                <p className="text-gray-600">Loading your card…</p>
+              </div>
             </div>
-          </div>
+          )}
 
-        </motion.div>
+          {error && !card && (
+            <div className="mb-6 p-6 bg-yellow-50 border border-yellow-200 rounded-2xl text-center">
+              <p className="text-yellow-900 mb-4">{error}</p>
+              <Link
+                href="/dashboard/purchase-card"
+                className="inline-block px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl hover:shadow-lg hover:brightness-110 transition-all"
+              >
+                Request Virtual Card
+              </Link>
+            </div>
+          )}
+
+          {card && (
+            <>
+              {/* Card Display */}
+              <div className="mb-8 flex justify-center">
+                <div className="w-full max-w-md">
+                  <FlipCard
+                    maxWidth={380}
+                    cardNumber={card.card_number}
+                    cardholderName="CARD HOLDER"
+                    expiryMonth={card.expiry_month}
+                    expiryYear={card.expiry_year}
+                    isFrozen={card.status === 'suspended'}
+                  />
+                </div>
+              </div>
+
+              {/* Card Details */}
+              <div className="mb-8 rounded-2xl border border-gray-200 bg-gray-50 p-8">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">Card Details</h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <div className="text-sm font-semibold text-gray-700 mb-2">Status</div>
+                    <div className="flex items-center">
+                      <span
+                        className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold border ${statusColor(card.status).bg} ${statusColor(card.status).text} ${statusColor(card.status).border}`}
+                      >
+                        {card.status.charAt(0).toUpperCase() + card.status.slice(1)}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-sm font-semibold text-gray-700 mb-2">Card Type</div>
+                    <p className="text-lg text-gray-900">{card.card_type || 'Visa Virtual Card'}</p>
+                  </div>
+
+                  <div>
+                    <div className="text-sm font-semibold text-gray-700 mb-2">Purchase Amount</div>
+                    <p className="text-lg font-bold text-gray-900">${parseFloat(card.purchase_amount).toFixed(2)}</p>
+                  </div>
+
+                  <div>
+                    <div className="text-sm font-semibold text-gray-700 mb-2">Current Balance</div>
+                    <p className="text-lg font-bold text-green-700">${parseFloat(card.current_balance || card.balance || '0').toFixed(2)}</p>
+                  </div>
+
+                  {card.card_number && (
+                    <>
+                      <div>
+                        <div className="text-sm font-semibold text-gray-700 mb-2">Card Number</div>
+                        <p className="text-lg font-mono text-gray-900">****-****-****-{card.card_number.slice(-4)}</p>
+                      </div>
+
+                      <div>
+                        <div className="text-sm font-semibold text-gray-700 mb-2">Expiry</div>
+                        <p className="text-lg font-mono text-gray-900">
+                          {card.expiry_month}/{card.expiry_year}
+                        </p>
+                      </div>
+                    </>
+                  )}
+
+                  <div>
+                    <div className="text-sm font-semibold text-gray-700 mb-2">Created</div>
+                    <p className="text-gray-900">
+                      {new Date(card.created_at).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Status-based CTAs */}
+              <div className="flex gap-4 flex-wrap">
+                {card.status === 'active' ? (
+                  <div className="flex-1 p-6 bg-green-50 border border-green-200 rounded-2xl text-center">
+                    <p className="text-green-900 font-semibold mb-3">✓ Card is active</p>
+                    <p className="text-sm text-green-700 mb-4">You can now withdraw funds and make purchases with your card.</p>
+                    <Link
+                      href="/dashboard/withdraw"
+                      className="inline-block px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 hover:brightness-110 transition"
+                    >
+                      Request Withdrawal
+                    </Link>
+                  </div>
+                ) : card.status === 'pending' ? (
+                  <div className="flex-1 p-6 bg-yellow-50 border border-yellow-200 rounded-2xl text-center">
+                    <p className="text-yellow-900 font-semibold mb-3">⏳ Approval Pending</p>
+                    <p className="text-sm text-yellow-700">Your card request is under review. This typically takes 24-72 hours.</p>
+                  </div>
+                ) : card.status === 'rejected' ? (
+                  <div className="flex-1 p-6 bg-red-50 border border-red-200 rounded-2xl text-center">
+                    <p className="text-red-900 font-semibold mb-3">✗ Request Rejected</p>
+                    <p className="text-sm text-red-700 mb-4">Your request was not approved. Please contact support for details.</p>
+                    <Link
+                      href="/dashboard/support"
+                      className="inline-block px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 hover:brightness-110 transition"
+                    >
+                      Contact Support
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="flex-1 p-6 bg-blue-50 border border-blue-200 rounded-2xl text-center">
+                    <p className="text-blue-900 font-semibold mb-3">Request a New Card</p>
+                    <p className="text-sm text-blue-700 mb-4">You don't have an active card yet. Request activation to get started.</p>
+                    <Link
+                      href="/dashboard/purchase-card"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 hover:brightness-110 transition"
+                    >
+                      Request Card
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              {/* Info */}
+              <div className="mt-8 p-6 bg-gray-50 border border-gray-200 rounded-2xl">
+                <h3 className="font-semibold text-gray-900 mb-3">ℹ️ Card Security</h3>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li>• Your full card details are only displayed once and encrypted in our system.</li>
+                  <li>• Never share your card number or CVV with anyone.</li>
+                  <li>• Contact support immediately if your card is compromised.</li>
+                  <li>• All card transactions require manual admin approval.</li>
+                </ul>
+              </div>
+            </>
+          )}
+        </div>
       </div>
-
-      <p className="text-center text-xs text-gray-400 mt-2">Tap card to flip</p>
     </div>
-  );
+  )
 }

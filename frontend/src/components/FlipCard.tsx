@@ -1,147 +1,157 @@
 "use client";
+
 import { useMemo, useState } from "react";
+import { motion } from "framer-motion";
 
 type FlipCardProps = {
-  maxWidth?: number; // px
-  aspectWidth?: number; // numerator (default 480)
-  aspectHeight?: number; // denominator (default 300)
-  animationMs?: number;
-  perspective?: number; // px
-  borderRadius?: number; // px
-  shadow?: string; // CSS box-shadow
-  initialFlipped?: boolean;
+  cardNumber?: string;
+  cardholderName?: string;
+  expiryMonth?: string | number;
+  expiryYear?: string | number;
+  cvv?: string;
+  showCvv?: boolean;
+  showFull?: boolean;
+  isFrozen?: boolean;
+  maxWidth?: number;
   className?: string;
 };
 
+function maskNumber(num?: string) {
+  if (!num || num.length < 4) return "•••• •••• •••• ••••";
+  return "•••• •••• •••• " + num.slice(-4);
+}
+
+function formatExpiry(m?: string | number, y?: string | number) {
+  if (!m || !y) return "••/••";
+  return m.toString().padStart(2, "0") + "/" + y.toString();
+}
+
 export default function FlipCard({
-  // Note: browsers can't guarantee true physical size across devices, but we use the ISO/IEC 7810 ID-1 aspect ratio.
-  // Print mode uses 85.6mm width for a closer-to-real-size result.
-  maxWidth = 360,
-  aspectWidth = 856,
-  aspectHeight = 540,
-  animationMs = 800,
-  perspective = 1000,
-  borderRadius = 20,
-  shadow = "0 10px 25px rgba(0, 0, 0, 0.3)",
-  initialFlipped = false,
+  cardNumber,
+  cardholderName,
+  expiryMonth,
+  expiryYear,
+  cvv,
+  showCvv = false,
+  showFull = false,
+  isFrozen = false,
+  maxWidth = 420,
   className = "",
 }: FlipCardProps) {
-  const [flipped, setFlipped] = useState<boolean>(initialFlipped);
-  const aspectCSS = useMemo(() => `${aspectWidth} / ${aspectHeight}`, [aspectWidth, aspectHeight]);
+  const [flipped, setFlipped] = useState(false);
 
-  const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      setFlipped((f) => !f);
-    }
-  };
-
-  const ariaProps = flipped
-    ? { 'aria-pressed': 'true' as const }
-    : { 'aria-pressed': 'false' as const };
-  const ariaLabel = flipped
-    ? 'Click to flip card to front'
-    : 'Click to flip card to back';
+  const displayNumber = showFull && cardNumber
+    ? cardNumber.replace(/(.{4})/g, "$1 ").trim()
+    : maskNumber(cardNumber);
 
   return (
-    <div className={`w-full flex items-center justify-center ${className}`}> 
-      <style jsx>{`
-        .flip-card { perspective: ${perspective}px; max-width: ${maxWidth}px; width: 100%; }
-        .flip-outer { position: relative; width: 100%; aspect-ratio: ${aspectCSS}; }
-        .flip-inner { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform ${animationMs}ms ease; cursor: pointer; }
-        .is-flipped { transform: rotateY(180deg); }
-        .flip-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: ${borderRadius}px; overflow: hidden; box-shadow: ${shadow}; }
-        .flip-back { transform: rotateY(180deg); }
-
-        @media print {
-          .flip-card { max-width: 85.6mm; }
-        }
-      `}</style>
-      <div className="flip-card cursor-pointer">
-        <div className="flip-outer">
+    <div
+      className={"w-full " + className}
+      style={{ maxWidth, margin: "0 auto" }}
+    >
+      <div
+        className="w-full cursor-pointer select-none"
+        style={{ perspective: "1500px", aspectRatio: "1.586 / 1" }}
+        onClick={() => { if (!isFrozen) setFlipped((f) => !f); }}
+      >
+        <motion.div
+          className="relative w-full h-full"
+          style={{ transformStyle: "preserve-3d" }}
+          initial={false}
+          animate={{ rotateY: flipped ? 180 : 0 }}
+          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+        >
+          {/* FRONT */}
           <div
-            className={`flip-inner ${flipped ? 'is-flipped' : ''}`}
-            role="button"
-            aria-label={ariaLabel}
-            tabIndex={0}
-            onClick={() => setFlipped((f) => !f)}
-            onKeyDown={onKeyDown}
-            {...ariaProps}
+            className="absolute inset-0 rounded-[18px] overflow-hidden shadow-2xl flex flex-col p-6 text-white"
+            style={{
+              backfaceVisibility: "hidden",
+              background: "linear-gradient(135deg, #0a2472 0%, #0e7490 50%, #1e3a8a 100%)",
+            }}
           >
-            <div className="flip-face" role="img" aria-label="Front of virtual Visa card">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300">
-                <defs>
-                  <linearGradient id="bgGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#1E5DF7" /><stop offset="100%" stopColor="#0A34B0" /></linearGradient>
-                  <linearGradient id="chipGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#D4AF37" /><stop offset="100%" stopColor="#B8860B" /></linearGradient>
-                  <linearGradient id="metallicText" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#E0E0E0" /><stop offset="50%" stopColor="#B0B0B0" /><stop offset="100%" stopColor="#F5F5F5" /></linearGradient>
-                  <linearGradient id="visaGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#1A1F71" /><stop offset="100%" stopColor="#F7B600" /></linearGradient>
-                </defs>
-                <rect width="480" height="300" rx="20" fill="url(#bgGradient)" />
-                <text x="20" y="40" fill="url(#metallicText)" fontSize="22" fontFamily="Arial" fontWeight="bold" stroke="black" strokeOpacity="0.3" strokeWidth="0.4">WOLVCAPITAL LTD</text>
-                <g transform="translate(40,90)">
-                  <rect width="60" height="50" rx="6" fill="url(#chipGradient)" stroke="black" strokeWidth="1.2" />
-                  <line x1="10" y1="0" x2="10" y2="50" stroke="black" strokeWidth="0.8" />
-                  <line x1="30" y1="0" x2="30" y2="50" stroke="black" strokeWidth="0.8" />
-                  <line x1="50" y1="0" x2="50" y2="50" stroke="black" strokeWidth="0.8" />
-                  <line x1="0" y1="15" x2="60" y2="15" stroke="black" strokeWidth="0.8" />
-                  <line x1="0" y1="35" x2="60" y2="35" stroke="black" strokeWidth="0.8" />
-                </g>
-                <path d="M120 95 q10 10 0 20 M130 90 q20 20 0 40 M140 85 q30 30 0 60" stroke="white" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-                <text x="40" y="190" fill="url(#metallicText)" fontSize="22" fontFamily="Courier New" fontWeight="bold" stroke="black" strokeOpacity="0.4" strokeWidth="0.5">4532 **** **** 7891</text>
-                <text x="40" y="225" fill="url(#metallicText)" fontSize="14" fontFamily="Arial" fontWeight="bold" stroke="black" strokeOpacity="0.3" strokeWidth="0.4">CARD HOLDER</text>
-                <text x="300" y="225" fill="url(#metallicText)" fontSize="14" fontFamily="Arial" fontWeight="bold" stroke="black" strokeOpacity="0.3" strokeWidth="0.4">12/28</text>
-                <text x="350" y="270" fill="url(#visaGradient)" fontSize="38" fontFamily="Arial Black" fontWeight="bold">VISA</text>
+            {/* Metallic sheen */}
+            <div className="absolute inset-0 opacity-20 pointer-events-none"
+              style={{ background: "linear-gradient(45deg,transparent 45%,rgba(255,255,255,0.6) 50%,transparent 55%)" }} />
+
+            {/* Header */}
+            <div className="flex justify-between items-start z-10">
+              <h1 className="text-xl font-bold tracking-tight drop-shadow-sm">
+                <span className="font-normal">Wolv</span>Capital
+              </h1>
+              <div className="text-right leading-tight">
+                <span className="text-xl font-extrabold italic block">VISA</span>
+                <span className="text-[9px] uppercase tracking-[0.2em] opacity-80">Infinite</span>
+              </div>
+            </div>
+
+            {/* Chip + Contactless */}
+            <div className="mt-4 flex items-center gap-3 z-10">
+              <div className="w-11 h-8 rounded-md shadow-inner relative overflow-hidden border border-yellow-600/30"
+                style={{ background: "linear-gradient(135deg, #f0d060 0%, #d4af37 50%, #f0d060 100%)" }}>
+                <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 opacity-20">
+                  {[...Array(9)].map((_, i) => <div key={i} className="border border-black/20" />)}
+                </div>
+              </div>
+              <svg className="w-5 h-5 opacity-60" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M9.5 6.5c.28 0 .5.22.5.5v4c0 .28-.22.5-.5.5S9 11.28 9 11V7c0-.28.22-.5.5-.5zm5 0c.28 0 .5.22.5.5v4c0 .28-.22.5-.5.5S14 11.28 14 11V7c0-.28.22-.5.5-.5zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
               </svg>
             </div>
-            <div className="flip-face flip-back" role="img" aria-label="Back of virtual Visa card">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300">
-                <defs>
-                  <linearGradient id="bgGradientBack" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#1E5DF7" />
-                    <stop offset="100%" stopColor="#0A34B0" />
-                  </linearGradient>
-                  <linearGradient id="signaturePanel" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#F5F5F5" />
-                    <stop offset="100%" stopColor="#E8E8E8" />
-                  </linearGradient>
-                </defs>
-                
-                {/* Card Background */}
-                <rect width="480" height="300" rx="20" fill="url(#bgGradientBack)" />
-                
-                {/* Magnetic Stripe */}
-                <rect x="0" y="40" width="480" height="50" fill="#000000" />
-                
-                {/* Signature Panel */}
-                <rect x="30" y="130" width="350" height="40" rx="4" fill="url(#signaturePanel)" stroke="#CCCCCC" strokeWidth="1" />
-                
-                {/* Security Code */}
-                <text x="400" y="155" fill="#000000" fontSize="24" fontFamily="Courier New" fontWeight="bold">012</text>
-                
-                {/* Card Information Text */}
-                <text x="30" y="200" fill="white" fontSize="12" fontFamily="Arial" fontWeight="normal">
-                  This card is the property of WolvCapital Ltd.
-                </text>
-                <text x="30" y="220" fill="white" fontSize="12" fontFamily="Arial" fontWeight="normal">
-                  If found, please call 1-800-WOLV-CAP
-                </text>
-                
-                {/* Bottom Section */}
-                <text x="30" y="260" fill="white" fontSize="11" fontFamily="Arial" fontWeight="bold">
-                  AUTHORIZED SIGNATURE
-                </text>
-                <text x="280" y="260" fill="white" fontSize="11" fontFamily="Arial" fontWeight="normal">
-                  www.wolvcapital.com
-                </text>
-                
-                {/* Small decorative elements */}
-                <circle cx="420" cy="270" r="8" fill="white" opacity="0.3" />
-                <circle cx="440" cy="270" r="8" fill="white" opacity="0.2" />
-              </svg>
+
+            {/* Card Number */}
+            <div className="mt-auto mb-3 z-10">
+              <p className="text-lg tracking-[0.22em] font-mono drop-shadow-md">{displayNumber}</p>
+            </div>
+
+            {/* Footer */}
+            <div className="flex justify-between items-end z-10">
+              <div>
+                <span className="text-[7px] uppercase tracking-widest opacity-60 block">Card Holder</span>
+                <span className="text-xs font-semibold tracking-wide uppercase">{cardholderName || "CARD HOLDER"}</span>
+              </div>
+              <div className="text-center">
+                <span className="text-[7px] uppercase tracking-widest opacity-60 block">Valid Thru</span>
+                <span className="text-xs font-semibold tracking-widest">{formatExpiry(expiryMonth, expiryYear)}</span>
+              </div>
+              <div className="w-12 h-9 rounded-lg opacity-70"
+                style={{ background: "linear-gradient(135deg, #93c5fd, #c4b5fd, #6ee7b7)" }} />
+            </div>
+
+            {isFrozen && (
+              <div className="absolute inset-0 rounded-[18px] flex flex-col items-center justify-center gap-2"
+                style={{ background: "rgba(10,11,15,0.75)", backdropFilter: "blur(4px)" }}>
+                <span style={{ fontSize: 40 }}>❄️</span>
+                <span style={{ color: "#93c5fd", fontWeight: 700, fontSize: 18, letterSpacing: 2 }}>CARD FROZEN</span>
+              </div>
+            )}
+          </div>
+
+          {/* BACK */}
+          <div
+            className="absolute inset-0 rounded-[18px] overflow-hidden shadow-2xl bg-gray-200 flex flex-col text-gray-800"
+            style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+          >
+            <div className="w-full h-10 bg-gray-900 mt-6" />
+            <div className="px-6 mt-5">
+              <div className="flex items-center">
+                <div className="flex-1 h-9 bg-white border-y border-gray-300 flex items-center px-3 italic text-gray-400 text-xs font-serif">
+                  Authorized Signature
+                </div>
+                <div className="w-16 h-9 bg-white border border-gray-300 flex items-center justify-center font-mono font-bold text-base">
+                  {showCvv ? (cvv || "•••") : "•••"}
+                </div>
+              </div>
+              <p className="text-[8px] mt-1 text-right font-semibold opacity-60">CVV</p>
+            </div>
+            <div className="mt-auto px-6 pb-4">
+              <p className="text-[7px] leading-tight opacity-60">
+                This card is issued by WolvCapital pursuant to a license from Visa U.S.A. Inc.
+                Use of this card is subject to the terms and conditions of the Cardholder Agreement.
+              </p>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
+      <p className="text-center text-xs text-gray-400 mt-2">Tap card to flip</p>
     </div>
   );
 }

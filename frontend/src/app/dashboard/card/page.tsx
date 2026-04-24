@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { useVirtualCard } from "@/hooks/useVirtualCard";
 import { useBiometricAuth } from "@/hooks/useBiometricAuth";
@@ -15,7 +16,7 @@ function maskNumber(num: string) {
 }
 function formatExpiry(m: string, y: string) {
   if (!m || !y) return "••/••";
-  return m.padStart(2, "0") + "/" + y;
+  return m.toString().padStart(2, "0") + "/" + y.toString();
 }
 
 function Toast({ message, show }: { message: string; show: boolean }) {
@@ -43,32 +44,27 @@ function PasswordModal({ show, onSubmit, onCancel, error, isVerifying }: {
         <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-6" />
         <div className="text-center mb-6">
           <div className="text-4xl mb-3">🔐</div>
-          <h3 className="text-lg font-bold text-gray-900">Security Verification</h3>
-          <p className="text-sm text-gray-500 mt-1">
-            Enter your account password to reveal card details
-          </p>
+          <h3 className="text-lg font-bold text-gray-900">Enter Card PIN</h3>
+          <p className="text-sm text-gray-500 mt-1">Enter your card PIN to reveal details</p>
         </div>
         <input
           type="password"
+          inputMode="numeric"
           value={pw}
           onChange={(e) => setPw(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && pw && onSubmit(pw)}
-          placeholder="Enter your password"
+          placeholder="Enter card PIN"
           autoComplete="new-password"
           data-lpignore="true"
           data-form-type="other"
-          className="w-full px-4 py-4 rounded-2xl border border-gray-200 text-sm mb-2 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100"
+          className="w-full px-4 py-4 rounded-2xl border border-gray-200 text-sm mb-2 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 tracking-widest text-center text-lg"
         />
         {error && <p className="text-red-500 text-xs mb-3 ml-1">{error}</p>}
-        <button
-          onClick={() => pw && onSubmit(pw)}
-          disabled={isVerifying || !pw}
-          className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold mb-3 disabled:opacity-60"
-        >
+        <button onClick={() => pw && onSubmit(pw)} disabled={isVerifying || !pw}
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold mb-3 disabled:opacity-60">
           {isVerifying ? "Verifying..." : "Verify & Reveal"}
         </button>
-        <button onClick={onCancel}
-          className="w-full py-4 rounded-2xl border border-gray-200 text-gray-600 font-semibold">
+        <button onClick={onCancel} className="w-full py-4 rounded-2xl border border-gray-200 text-gray-600 font-semibold">
           Cancel
         </button>
       </div>
@@ -85,17 +81,12 @@ function CreatePinModal({ show, onSuccess, onCancel }: {
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
   if (!show) return null;
 
   async function handleCreate() {
     setError("");
-    if (pin.length < 4 || !/^\d+$/.test(pin)) {
-      setError("PIN must be at least 4 digits."); return;
-    }
-    if (pin !== confirm) {
-      setError("PINs do not match."); return;
-    }
+    if (pin.length < 4 || !/^\d+$/.test(pin)) { setError("PIN must be at least 4 digits."); return; }
+    if (pin !== confirm) { setError("PINs do not match."); return; }
     setLoading(true);
     try {
       const res = await apiFetch("/api/cards/set-pin/", {
@@ -104,16 +95,10 @@ function CreatePinModal({ show, onSuccess, onCancel }: {
         body: JSON.stringify({ pin, confirm_pin: confirm }),
       });
       const data = await res.json();
-      if (res.ok && data.success) {
-        onSuccess();
-      } else {
-        setError(data.error || "Failed to set PIN.");
-      }
-    } catch {
-      setError("Connection error. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+      if (res.ok && data.success) { onSuccess(); }
+      else { setError(data.error || "Failed to set PIN."); }
+    } catch { setError("Connection error. Please try again."); }
+    finally { setLoading(false); }
   }
 
   return (
@@ -125,46 +110,27 @@ function CreatePinModal({ show, onSuccess, onCancel }: {
         <div className="text-center mb-6">
           <div className="text-4xl mb-3">🔏</div>
           <h3 className="text-lg font-bold text-gray-900">Create Card PIN</h3>
-          <p className="text-sm text-gray-500 mt-1">
-            Set a secure PIN to protect your card details. This is separate from your account password.
-          </p>
+          <p className="text-sm text-gray-500 mt-1">Set a secure PIN separate from your account password</p>
         </div>
-        <input
-          type="password"
-          inputMode="numeric"
-          pattern="[0-9]*"
-          maxLength={6}
-          value={pin}
-          onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
+        <input type="password" inputMode="numeric" pattern="[0-9]*" maxLength={6}
+          value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
           placeholder="Enter 4-6 digit PIN"
-          autoComplete="new-password"
-          data-lpignore="true"
-          data-form-type="other"
+          autoComplete="new-password" data-lpignore="true" data-form-type="other"
           className="w-full px-4 py-4 rounded-2xl border border-gray-200 text-sm mb-3 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 tracking-widest text-center text-lg"
         />
-        <input
-          type="password"
-          inputMode="numeric"
-          pattern="[0-9]*"
-          maxLength={6}
-          value={confirm}
-          onChange={(e) => setConfirm(e.target.value.replace(/\D/g, ""))}
+        <input type="password" inputMode="numeric" pattern="[0-9]*" maxLength={6}
+          value={confirm} onChange={(e) => setConfirm(e.target.value.replace(/\D/g, ""))}
           onKeyDown={(e) => e.key === "Enter" && handleCreate()}
           placeholder="Confirm PIN"
-          autoComplete="new-password"
-          data-lpignore="true"
-          data-form-type="other"
+          autoComplete="new-password" data-lpignore="true" data-form-type="other"
           className="w-full px-4 py-4 rounded-2xl border border-gray-200 text-sm mb-2 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 tracking-widest text-center text-lg"
         />
         {error && <p className="text-red-500 text-xs mb-3 ml-1">{error}</p>}
-        <button
-          onClick={handleCreate}
-          disabled={loading || !pin || !confirm}
+        <button onClick={handleCreate} disabled={loading || !pin || !confirm}
           className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold mb-3 disabled:opacity-60">
           {loading ? "Creating PIN..." : "Create PIN & Reveal"}
         </button>
-        <button onClick={onCancel}
-          className="w-full py-4 rounded-2xl border border-gray-200 text-gray-600 font-semibold">
+        <button onClick={onCancel} className="w-full py-4 rounded-2xl border border-gray-200 text-gray-600 font-semibold">
           Cancel
         </button>
       </div>
@@ -189,9 +155,7 @@ function RequestCardView({ onRequested }: { onRequested: () => void }) {
       onRequested();
     } catch (e: any) {
       setError(e?.message || "Failed to submit request");
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   }
 
   return (
@@ -200,9 +164,7 @@ function RequestCardView({ onRequested }: { onRequested: () => void }) {
         <div className="text-center mb-8">
           <div className="text-7xl mb-5">💳</div>
           <h2 className="text-2xl font-bold text-[#0b2f6b] mb-2">Get Your Virtual Card</h2>
-          <p className="text-gray-500 text-sm leading-relaxed">
-            Activate a WolvCapital Visa virtual card for digital transactions worldwide.
-          </p>
+          <p className="text-gray-500 text-sm leading-relaxed">Activate a WolvCapital Visa virtual card for digital transactions worldwide.</p>
         </div>
         <div className="rounded-2xl border border-blue-100 bg-white p-6 mb-5 shadow-sm">
           {([
@@ -213,9 +175,7 @@ function RequestCardView({ onRequested }: { onRequested: () => void }) {
           ] as any[]).map((row, i) => (
             <div key={row.label} className={"flex justify-between items-center py-3 " + (i > 0 ? "border-t border-gray-100" : "")}>
               <span className="text-sm text-gray-500">{row.label}</span>
-              <span className={"text-sm " + (row.green ? "text-green-600 font-semibold" : row.bold ? "font-bold text-[#0b2f6b]" : "font-semibold")}>
-                {row.value}
-              </span>
+              <span className={"text-sm " + (row.green ? "text-green-600 font-semibold" : row.bold ? "font-bold text-[#0b2f6b]" : "font-semibold")}>{row.value}</span>
             </div>
           ))}
         </div>
@@ -224,12 +184,8 @@ function RequestCardView({ onRequested }: { onRequested: () => void }) {
           className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-base shadow-lg disabled:opacity-60">
           {loading ? "Submitting..." : "Request Card — $1,000"}
         </button>
-        <p className="text-center text-xs text-gray-400 mt-4">
-          Your request will be reviewed and approved by our team.
-        </p>
-        <Link href="/dashboard" className="block text-center text-sm text-blue-600 hover:underline mt-4">
-          Back to Dashboard
-        </Link>
+        <p className="text-center text-xs text-gray-400 mt-4">Your request will be reviewed and approved by our team.</p>
+        <Link href="/dashboard" className="block text-center text-sm text-blue-600 hover:underline mt-4">Back to Dashboard</Link>
       </div>
     </div>
   );
@@ -241,9 +197,7 @@ function PendingCardView({ onRefresh }: { onRefresh: () => void }) {
       <div className="max-w-sm w-full text-center">
         <div className="text-7xl mb-5">⏳</div>
         <h2 className="text-xl font-bold text-[#0b2f6b] mb-2">Card Under Review</h2>
-        <p className="text-gray-500 text-sm leading-relaxed mb-8">
-          Your virtual card request is being reviewed. This usually takes 1-24 hours.
-        </p>
+        <p className="text-gray-500 text-sm leading-relaxed mb-8">Your virtual card request is being reviewed. This usually takes 1-24 hours.</p>
         <div className="rounded-2xl border border-yellow-200 bg-yellow-50 p-5 mb-6 text-left">
           <div className="flex gap-3">
             <span className="text-xl">📋</span>
@@ -261,9 +215,7 @@ function PendingCardView({ onRefresh }: { onRefresh: () => void }) {
           className="w-full py-3 rounded-2xl border border-blue-200 text-blue-600 font-semibold text-sm hover:bg-blue-50 transition-colors mb-3">
           🔄 Check Status
         </button>
-        <Link href="/dashboard" className="block text-center text-sm text-blue-600 hover:underline">
-          Back to Dashboard
-        </Link>
+        <Link href="/dashboard" className="block text-center text-sm text-blue-600 hover:underline">Back to Dashboard</Link>
       </div>
     </div>
   );
@@ -294,7 +246,6 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
   const [toastVisible, setToastVisible] = useState(false);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // When the 60s timer fires, hide all revealed details
   useEffect(() => {
     setOnLock(() => {
       setShowCvv(false);
@@ -322,13 +273,8 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
   function handleReveal(action: "number" | "cvv") {
     requestAccess(action, (resolvedAction) => {
       showToast("Identity verified");
-      if (resolvedAction === "number") {
-        setShowFull(true);
-      }
-      if (resolvedAction === "cvv") {
-        setShowCvv(true);
-        if (!isFlipped) setIsFlipped(true);
-      }
+      if (resolvedAction === "number") setShowFull(true);
+      if (resolvedAction === "cvv") { setShowCvv(true); if (!isFlipped) setIsFlipped(true); }
     });
   }
 
@@ -345,12 +291,8 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
       setIsFrozen(data.frozen);
       showToast(data.frozen ? "Card frozen" : "Card unfrozen");
       refetch();
-    } catch {
-      setIsFrozen((prev) => !prev);
-    } finally {
-      setFreezing(false);
-      setShowFreezeModal(false);
-    }
+    } catch { setIsFrozen((prev) => !prev); }
+    finally { setFreezing(false); setShowFreezeModal(false); }
   }
 
   const displayNumber = showFull && card.card_number
@@ -360,7 +302,6 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
   return (
     <div className="min-h-screen bg-[#F2F9FF]">
       <main className="max-w-lg mx-auto px-4 pt-6 pb-28">
-
         <div className="flex items-center gap-2 text-sm text-gray-500 mb-5">
           <Link href="/dashboard" className="hover:text-blue-600">Dashboard</Link>
           <span>/</span>
@@ -392,83 +333,79 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
           <div className="rounded-xl border border-blue-100 bg-blue-50 p-3 mb-4 flex items-center gap-3">
             <span className="text-xl">🔐</span>
             <div>
-              <div className="text-xs font-semibold text-blue-800">Biometric protection enabled</div>
-              <div className="text-xs text-blue-600">
-                Fingerprint, Face ID or password required to reveal card details
-              </div>
+              <div className="text-xs font-semibold text-blue-800">PIN protection enabled</div>
+              <div className="text-xs text-blue-600">Card PIN required to reveal sensitive details</div>
             </div>
           </div>
         )}
 
-        {/* 3D Flip Card */}
-        <div className="w-full cursor-pointer mb-2 select-none"
-          style={{ perspective: "1000px" }}
+        {/* Premium 3D Flip Card */}
+        <div className="w-full max-w-[420px] mx-auto aspect-[1.586/1] mb-2"
+          style={{ perspective: "1500px" }}
           onClick={() => { if (!isFrozen) setIsFlipped((f) => !f); }}>
-          <div style={{
-            position: "relative", width: "100%", paddingTop: "56%",
-            transformStyle: "preserve-3d",
-            transition: "transform 0.7s cubic-bezier(.4,0,.2,1)",
-            transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
-          }}>
-            {/* FRONT — WolvCapital physical card as background image */}
-            <div style={{
-              position: "absolute", inset: 0,
-              backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden",
-              borderRadius: 20, overflow: "hidden",
-              backgroundImage: "url('/wolv-premium-card.webp')",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-              boxShadow: "0 25px 60px rgba(13,71,161,0.5)",
-            }}>
-              {/* Dynamic text overlay — positioned to match physical card layout */}
-              <div style={{
-                position: "absolute", inset: 0, padding: "6% 7%",
-                display: "flex", flexDirection: "column",
-                justifyContent: "space-between", color: "white",
+          <motion.div
+            className="relative w-full h-full cursor-pointer select-none"
+            style={{ transformStyle: "preserve-3d" }}
+            initial={false}
+            animate={{ rotateY: isFlipped ? 180 : 0 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          >
+            {/* FRONT */}
+            <div className="absolute inset-0 rounded-[18px] overflow-hidden shadow-2xl flex flex-col p-6 text-white select-none"
+              style={{
+                backfaceVisibility: "hidden",
+                background: "linear-gradient(135deg, #0a2472 0%, #0e7490 50%, #1e3a8a 100%)",
               }}>
-                {/* Top row spacer — branding already on image */}
-                <div />
+              {/* Metallic sheen */}
+              <div className="absolute inset-0 opacity-20 pointer-events-none"
+                style={{ background: "linear-gradient(45deg,transparent 45%,rgba(255,255,255,0.6) 50%,transparent 55%)" }} />
 
-                {/* Card Number — center of card */}
-                <div style={{
-                  fontFamily: "'Courier New', monospace",
-                  fontSize: "clamp(13px, 3.5vw, 18px)",
-                  letterSpacing: "0.2em",
-                  color: "rgba(255,255,255,0.95)",
-                  textAlign: "center",
-                  fontWeight: 500,
-                  textShadow: "0 1px 4px rgba(0,0,0,0.4)",
-                }}>
-                  {displayNumber}
-                </div>
-
-                {/* Bottom row: expiry + name */}
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-                  <div>
-                    <div style={{ fontSize: "clamp(7px, 1.5vw, 9px)", color: "rgba(255,255,255,0.6)", textTransform: "uppercase", letterSpacing: 2, marginBottom: 2 }}>
-                      Valid Thru
-                    </div>
-                    <div style={{ fontSize: "clamp(11px, 2.5vw, 14px)", fontWeight: 600, fontFamily: "monospace", letterSpacing: 2, textShadow: "0 1px 3px rgba(0,0,0,0.4)" }}>
-                      {formatExpiry(card.expiry_month, card.expiry_year)}
-                    </div>
-                    <div style={{ fontSize: "clamp(7px, 1.5vw, 9px)", color: "rgba(255,255,255,0.6)", textTransform: "uppercase", letterSpacing: 2, marginTop: 6, marginBottom: 2 }}>
-                      Card Holder
-                    </div>
-                    <div style={{ fontSize: "clamp(11px, 2.5vw, 14px)", fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", textShadow: "0 1px 3px rgba(0,0,0,0.4)" }}>
-                      {card.cardholder_name || "CARD HOLDER"}
-                    </div>
-                  </div>
+              {/* Header */}
+              <div className="flex justify-between items-start z-10">
+                <h1 className="text-xl font-bold tracking-tight drop-shadow-sm">
+                  <span className="font-normal">Wolv</span>Capital
+                </h1>
+                <div className="text-right leading-tight">
+                  <span className="text-xl font-extrabold italic block">VISA</span>
+                  <span className="text-[9px] uppercase tracking-[0.2em] opacity-80">Infinite</span>
                 </div>
               </div>
 
+              {/* Chip + Contactless */}
+              <div className="mt-4 flex items-center gap-3 z-10">
+                <div className="w-11 h-8 rounded-md shadow-inner relative overflow-hidden border border-yellow-600/30"
+                  style={{ background: "linear-gradient(135deg, #f0d060 0%, #d4af37 50%, #f0d060 100%)" }}>
+                  <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 opacity-20">
+                    {[...Array(9)].map((_, i) => <div key={i} className="border border-black/20" />)}
+                  </div>
+                </div>
+                <svg className="w-5 h-5 opacity-60" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M9.5 6.5c.28 0 .5.22.5.5v4c0 .28-.22.5-.5.5S9 11.28 9 11V7c0-.28.22-.5.5-.5zm5 0c.28 0 .5.22.5.5v4c0 .28-.22.5-.5.5S14 11.28 14 11V7c0-.28.22-.5.5-.5zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                </svg>
+              </div>
+
+              {/* Card Number */}
+              <div className="mt-auto mb-3 z-10">
+                <p className="text-lg tracking-[0.22em] font-mono drop-shadow-md">{displayNumber}</p>
+              </div>
+
+              {/* Footer */}
+              <div className="flex justify-between items-end z-10">
+                <div>
+                  <span className="text-[7px] uppercase tracking-widest opacity-60 block">Card Holder</span>
+                  <span className="text-xs font-semibold tracking-wide uppercase">{card.cardholder_name || "CARD HOLDER"}</span>
+                </div>
+                <div className="text-center">
+                  <span className="text-[7px] uppercase tracking-widest opacity-60 block">Valid Thru</span>
+                  <span className="text-xs font-semibold tracking-widest">{formatExpiry(card.expiry_month, card.expiry_year)}</span>
+                </div>
+                <div className="w-12 h-9 rounded-lg opacity-70"
+                  style={{ background: "linear-gradient(135deg, #93c5fd, #c4b5fd, #6ee7b7)" }} />
+              </div>
+
               {isFrozen && (
-                <div style={{
-                  position: "absolute", inset: 0, borderRadius: 20,
-                  background: "rgba(10,11,15,0.75)", backdropFilter: "blur(4px)",
-                  display: "flex", flexDirection: "column",
-                  alignItems: "center", justifyContent: "center", gap: 8,
-                }}>
+                <div className="absolute inset-0 rounded-[18px] flex flex-col items-center justify-center gap-2"
+                  style={{ background: "rgba(10,11,15,0.75)", backdropFilter: "blur(4px)" }}>
                   <span style={{ fontSize: 40 }}>❄️</span>
                   <span style={{ color: "#93c5fd", fontWeight: 700, fontSize: 18, letterSpacing: 2 }}>CARD FROZEN</span>
                 </div>
@@ -476,30 +413,28 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
             </div>
 
             {/* BACK */}
-            <div style={{
-              position: "absolute", inset: 0,
-              backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden",
-              transform: "rotateY(180deg)", borderRadius: 20,
-              background: "linear-gradient(135deg,#1e2a78,#4f6ef7)",
-              color: "white", boxShadow: "0 25px 50px rgba(79,110,247,0.35)", overflow: "hidden",
-            }}>
-              <div style={{ height: 44, background: "rgba(0,0,0,0.6)", marginBottom: 20 }} />
-              <div style={{ padding: "0 24px" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                  <span style={{ fontSize: 11, color: "rgba(255,255,255,0.6)" }}>Security Code (CVV)</span>
-                  <div style={{ background: "white", color: "#111", fontFamily: "monospace", padding: "6px 16px", borderRadius: 6, fontSize: 15, letterSpacing: 4 }}>
+            <div className="absolute inset-0 rounded-[18px] overflow-hidden shadow-2xl bg-gray-200 flex flex-col text-gray-800"
+              style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}>
+              <div className="w-full h-10 bg-gray-900 mt-6" />
+              <div className="px-6 mt-5">
+                <div className="flex items-center">
+                  <div className="flex-1 h-9 bg-white border-y border-gray-300 flex items-center px-3 italic text-gray-400 text-xs font-serif">
+                    Authorized Signature
+                  </div>
+                  <div className="w-16 h-9 bg-white border border-gray-300 flex items-center justify-center font-mono font-bold text-base">
                     {showCvv ? (card.cvv || "•••") : "•••"}
                   </div>
                 </div>
-                <p style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>
-                  Issued by WolvCapital. Keep your CVV secure and never share it.
-                </p>
-                <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 16, textAlign: "center" }}>
-                  Tap to flip back
+                <p className="text-[8px] mt-1 text-right font-semibold opacity-60">CVV</p>
+              </div>
+              <div className="mt-auto px-6 pb-4">
+                <p className="text-[7px] leading-tight opacity-60">
+                  This card is issued by WolvCapital pursuant to a license from Visa U.S.A. Inc.
+                  Use of this card is subject to the terms and conditions of the Cardholder Agreement.
                 </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         <p className="text-center text-xs text-gray-400 mb-5">Tap card to flip</p>
@@ -520,11 +455,8 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
         <div className="grid grid-cols-2 gap-3 mb-5">
           {([
             {
-              icon: "📋",
-              label: "Copy Number",
-              action: () => securityUnlocked
-                ? copyToClipboard(card.card_number, "Card number")
-                : handleReveal("number"),
+              icon: "📋", label: "Copy Number",
+              action: () => securityUnlocked ? copyToClipboard(card.card_number, "Card number") : handleReveal("number"),
             },
             {
               icon: isFrozen ? "🔥" : "❄️",
@@ -534,16 +466,12 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
             {
               icon: showCvv ? "🙈" : "👁️",
               label: showCvv ? "Hide CVV" : "🔐 Show CVV",
-              action: () => showCvv
-                ? (setShowCvv(false))
-                : handleReveal("cvv"),
+              action: () => showCvv ? setShowCvv(false) : handleReveal("cvv"),
             },
             {
               icon: showFull ? "🔒" : "🔢",
               label: showFull ? "Hide Number" : "🔐 Full Number",
-              action: () => showFull
-                ? (setShowFull(false))
-                : handleReveal("number"),
+              action: () => showFull ? setShowFull(false) : handleReveal("number"),
             },
           ] as any[]).map((btn) => (
             <button key={btn.label} onClick={btn.action}
@@ -565,11 +493,8 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
           ] as any[]).map((row, i) => (
             <button key={row.label}
               onClick={() => {
-                if (row.secure && !securityUnlocked) {
-                  handleReveal(row.action);
-                } else if (row.copy) {
-                  copyToClipboard(row.copy, row.label);
-                }
+                if (row.secure && !securityUnlocked) { handleReveal(row.action); }
+                else if (row.copy) { copyToClipboard(row.copy, row.label); }
               }}
               className={"w-full flex justify-between items-center px-5 py-4 hover:bg-gray-50 transition-colors text-left " + (i > 0 ? "border-t border-gray-100" : "")}>
               <div>
@@ -584,8 +509,7 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
         </div>
 
         {securityUnlocked && (
-          <button
-            onClick={() => { lockDetails(); setShowCvv(false); setShowFull(false); }}
+          <button onClick={() => { lockDetails(); setShowCvv(false); setShowFull(false); }}
             className="w-full py-3 rounded-2xl border border-red-200 text-red-500 text-sm font-semibold hover:bg-red-50 transition-colors mb-4">
             🔒 Lock Card Details
           </button>
@@ -606,6 +530,7 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
           showToast("PIN created! Tap again to reveal details.");
         }}
       />
+
       <PasswordModal
         show={showPasswordModal}
         onSubmit={submitPassword}
@@ -622,9 +547,7 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
             style={{ animation: "slideUp 0.3s ease" }}>
             <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-6" />
             <h3 className="text-lg font-bold mb-2">Freeze Card?</h3>
-            <p className="text-sm text-gray-500 mb-6">
-              Freezing blocks all transactions. You can unfreeze anytime.
-            </p>
+            <p className="text-sm text-gray-500 mb-6">Freezing blocks all transactions. You can unfreeze anytime.</p>
             <button onClick={handleFreeze} disabled={freezing}
               className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold mb-3 disabled:opacity-60">
               {freezing ? "Processing..." : "Yes, Freeze Card"}
@@ -664,10 +587,7 @@ export default function VirtualCardPage() {
       <div className="text-center">
         <div className="text-4xl mb-4">⚠️</div>
         <p className="text-red-600 font-medium mb-4">{error}</p>
-        <button onClick={refetch}
-          className="px-5 py-2.5 bg-blue-600 text-white rounded-full text-sm font-semibold">
-          Try Again
-        </button>
+        <button onClick={refetch} className="px-5 py-2.5 bg-blue-600 text-white rounded-full text-sm font-semibold">Try Again</button>
       </div>
     </div>
   );

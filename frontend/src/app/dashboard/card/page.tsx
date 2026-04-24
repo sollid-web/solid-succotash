@@ -300,273 +300,283 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
     : maskNumber(card.card_number);
 
   return (
-    <div className="min-h-screen bg-[#F2F9FF]">
-      <main className="max-w-lg mx-auto px-4 pt-6 pb-28">
-        <div className="flex items-center gap-2 text-sm text-gray-500 mb-5">
-          <Link href="/dashboard" className="hover:text-blue-600">Dashboard</Link>
-          <span>/</span>
-          <span className="text-gray-900 font-medium">Virtual Card</span>
-        </div>
-
-        <div className="flex items-center justify-between mb-3">
-          <div>
-            <h1 className="text-xl font-semibold text-[#0b2f6b]">Virtual Card</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Tap card to flip</p>
+    <>
+      <div className="min-h-screen bg-[#F2F9FF]">
+        <main className="max-w-lg mx-auto px-4 pt-6 pb-28">
+          <div className="flex items-center gap-2 text-sm text-gray-500 mb-5">
+            <Link href="/dashboard" className="hover:text-blue-600">Dashboard</Link>
+            <span>/</span>
+            <span className="text-gray-900 font-medium">Virtual Card</span>
           </div>
-          <div className="flex items-center gap-2">
-            {securityUnlocked && (
-              <span className="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 border border-green-200">
-                🔓 Unlocked
-              </span>
-            )}
-            <span className={"px-3 py-1 rounded-full text-xs font-semibold border " + (
-              isFrozen ? "bg-blue-100 text-blue-700 border-blue-200"
-              : card.is_active ? "bg-green-100 text-green-700 border-green-200"
-              : "bg-gray-100 text-gray-600 border-gray-200"
-            )}>
-              {isFrozen ? "❄️ Frozen" : card.is_active ? "● Active" : card.status}
-            </span>
-          </div>
-        </div>
 
-        {!securityUnlocked && (
-          <div className="rounded-xl border border-blue-100 bg-blue-50 p-3 mb-4 flex items-center gap-3">
-            <span className="text-xl">🔐</span>
+          <div className="flex items-center justify-between mb-3">
             <div>
-              <div className="text-xs font-semibold text-blue-800">PIN protection enabled</div>
-              <div className="text-xs text-blue-600">Card PIN required to reveal sensitive details</div>
+              <h1 className="text-xl font-semibold text-[#0b2f6b]">Virtual Card</h1>
+              <p className="text-sm text-gray-500 mt-0.5">Tap card to flip</p>
             </div>
-          </div>
-        )}
-
-        {/* Premium 3D Flip Card */}
-        <div className="w-full max-w-[420px] mx-auto aspect-[1.586/1] mb-2"
-          style={{ perspective: "1500px" }}
-          onClick={() => { if (!isFrozen) setIsFlipped((f) => !f); }}>
-          <motion.div
-            className="relative w-full h-full cursor-pointer select-none"
-            style={{ transformStyle: "preserve-3d" }}
-            initial={false}
-            animate={{ rotateY: isFlipped ? 180 : 0 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
-          >
-            {/* FRONT */}
-            <div className="absolute inset-0 rounded-[18px] overflow-hidden shadow-2xl flex flex-col p-6 text-white select-none"
-              style={{
-                backfaceVisibility: "hidden",
-                background: "linear-gradient(135deg, #0a2472 0%, #0e7490 50%, #1e3a8a 100%)",
-              }}>
-              {/* Metallic sheen */}
-              <div className="absolute inset-0 opacity-20 pointer-events-none"
-                style={{ background: "linear-gradient(45deg,transparent 45%,rgba(255,255,255,0.6) 50%,transparent 55%)" }} />
-
-              {/* Header */}
-              <div className="flex justify-between items-start z-10">
-                <h1 className="text-xl font-bold tracking-tight drop-shadow-sm">
-                  <span className="font-normal">Wolv</span>Capital
-                </h1>
-                <div className="text-right leading-tight">
-                  <span className="text-xl font-extrabold italic block">VISA</span>
-                  <span className="text-[9px] uppercase tracking-[0.2em] opacity-80">Infinite</span>
-                </div>
-              </div>
-
-              {/* Chip + Contactless */}
-              <div className="mt-4 flex items-center gap-3 z-10">
-                <div className="w-11 h-8 rounded-md shadow-inner relative overflow-hidden border border-yellow-600/30"
-                  style={{ background: "linear-gradient(135deg, #f0d060 0%, #d4af37 50%, #f0d060 100%)" }}>
-                  <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 opacity-20">
-                    {[...Array(9)].map((_, i) => <div key={i} className="border border-black/20" />)}
-                  </div>
-                </div>
-                <svg className="w-5 h-5 opacity-60" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M9.5 6.5c.28 0 .5.22.5.5v4c0 .28-.22.5-.5.5S9 11.28 9 11V7c0-.28.22-.5.5-.5zm5 0c.28 0 .5.22.5.5v4c0 .28-.22.5-.5.5S14 11.28 14 11V7c0-.28.22-.5.5-.5zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
-                </svg>
-              </div>
-
-              {/* Card Number */}
-              <div className="mt-auto mb-3 z-10">
-                <p className="text-lg tracking-[0.22em] font-mono drop-shadow-md">{displayNumber}</p>
-              </div>
-
-              {/* Footer */}
-              <div className="flex justify-between items-end z-10">
-                <div>
-                  <span className="text-[7px] uppercase tracking-widest opacity-60 block">Card Holder</span>
-                  <span className="text-xs font-semibold tracking-wide uppercase">{card.cardholder_name || "CARD HOLDER"}</span>
-                </div>
-                <div className="text-center">
-                  <span className="text-[7px] uppercase tracking-widest opacity-60 block">Valid Thru</span>
-                  <span className="text-xs font-semibold tracking-widest">{formatExpiry(card.expiry_month, card.expiry_year)}</span>
-                </div>
-                <div className="w-12 h-9 rounded-lg opacity-70"
-                  style={{ background: "linear-gradient(135deg, #93c5fd, #c4b5fd, #6ee7b7)" }} />
-              </div>
-
-              {isFrozen && (
-                <div className="absolute inset-0 rounded-[18px] flex flex-col items-center justify-center gap-2"
-                  style={{ background: "rgba(10,11,15,0.75)", backdropFilter: "blur(4px)" }}>
-                  <span style={{ fontSize: 40 }}>❄️</span>
-                  <span style={{ color: "#93c5fd", fontWeight: 700, fontSize: 18, letterSpacing: 2 }}>CARD FROZEN</span>
-                </div>
+            <div className="flex items-center gap-2">
+              {securityUnlocked && (
+                <span className="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 border border-green-200">
+                  🔓 Unlocked
+                </span>
               )}
+              <span className={"px-3 py-1 rounded-full text-xs font-semibold border " + (
+                isFrozen ? "bg-blue-100 text-blue-700 border-blue-200"
+                : card.is_active ? "bg-green-100 text-green-700 border-green-200"
+                : "bg-gray-100 text-gray-600 border-gray-200"
+              )}>
+                {isFrozen ? "❄️ Frozen" : card.is_active ? "● Active" : card.status}
+              </span>
             </div>
-
-            {/* BACK */}
-            <div className="absolute inset-0 rounded-[18px] overflow-hidden shadow-2xl bg-gray-200 flex flex-col text-gray-800"
-              style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}>
-              <div className="w-full h-10 bg-gray-900 mt-6" />
-              <div className="px-6 mt-5">
-                <div className="flex items-center">
-                  <div className="flex-1 h-9 bg-white border-y border-gray-300 flex items-center px-3 italic text-gray-400 text-xs font-serif">
-                    Authorized Signature
-                  </div>
-                  <div className="w-16 h-9 bg-white border border-gray-300 flex items-center justify-center font-mono font-bold text-base">
-                    {showCvv ? (card.cvv || "•••") : "•••"}
-                  </div>
-                </div>
-                <p className="text-[8px] mt-1 text-right font-semibold opacity-60">CVV</p>
-              </div>
-              <div className="mt-auto px-6 pb-4">
-                <p className="text-[7px] leading-tight opacity-60">
-                  This card is issued by WolvCapital pursuant to a license from Visa U.S.A. Inc.
-                  Use of this card is subject to the terms and conditions of the Cardholder Agreement.
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-
-        <p className="text-center text-xs text-gray-400 mb-5">Tap card to flip</p>
-
-        {/* Balance */}
-        <div className="rounded-2xl border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-4 mb-5 flex justify-between items-center">
-          <div>
-            <div className="text-xs text-gray-500 mb-1">Card Balance</div>
-            <div className="text-2xl font-semibold">{money(Number(card.balance) || 0)}</div>
           </div>
-          <div className="text-right">
-            <div className="text-xs text-gray-500 mb-1">Purchase Amount</div>
-            <div className="text-lg font-semibold text-gray-700">{money(Number(card.purchase_amount) || 0)}</div>
-          </div>
-        </div>
 
-        {/* Action buttons */}
-        <div className="grid grid-cols-2 gap-3 mb-5">
-          {([
-            {
-              icon: "📋", label: "Copy Number",
-              action: () => securityUnlocked ? copyToClipboard(card.card_number, "Card number") : handleReveal("number"),
-            },
-            {
-              icon: isFrozen ? "🔥" : "❄️",
-              label: freezing ? "Please wait..." : isFrozen ? "Unfreeze" : "Freeze Card",
-              action: () => isFrozen ? handleFreeze() : setShowFreezeModal(true),
-            },
-            {
-              icon: showCvv ? "🙈" : "👁️",
-              label: showCvv ? "Hide CVV" : "🔐 Show CVV",
-              action: () => showCvv ? setShowCvv(false) : handleReveal("cvv"),
-            },
-            {
-              icon: showFull ? "🔒" : "🔢",
-              label: showFull ? "Hide Number" : "🔐 Full Number",
-              action: () => showFull ? setShowFull(false) : handleReveal("number"),
-            },
-          ] as any[]).map((btn) => (
-            <button key={btn.label} onClick={btn.action}
-              disabled={freezing && btn.label === "Freeze Card"}
-              className="flex flex-col items-center gap-2 p-4 rounded-2xl border border-gray-200 bg-white hover:border-blue-400 hover:shadow-sm transition-all disabled:opacity-60">
-              <span className="text-2xl">{btn.icon}</span>
-              <span className="text-xs font-semibold text-gray-700 text-center">{btn.label}</span>
-            </button>
-          ))}
-        </div>
-
-        {/* Copy rows */}
-        <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden mb-5">
-          {([
-            { label: "Card Number", display: showFull ? (card.card_number || "").replace(/(.{4})/g, "$1 ").trim() : maskNumber(card.card_number), copy: card.card_number, secure: true, action: "number" },
-            { label: "Expiry Date", display: formatExpiry(card.expiry_month, card.expiry_year), copy: formatExpiry(card.expiry_month, card.expiry_year), secure: false },
-            { label: "CVV", display: showCvv ? card.cvv : "•••", copy: card.cvv, secure: true, action: "cvv" },
-            { label: "Cardholder Name", display: card.cardholder_name || "-", copy: card.cardholder_name, secure: false },
-          ] as any[]).map((row, i) => (
-            <button key={row.label}
-              onClick={() => {
-                if (row.secure && !securityUnlocked) { handleReveal(row.action); }
-                else if (row.copy) { copyToClipboard(row.copy, row.label); }
-              }}
-              className={"w-full flex justify-between items-center px-5 py-4 hover:bg-gray-50 transition-colors text-left " + (i > 0 ? "border-t border-gray-100" : "")}>
+          {!securityUnlocked && (
+            <div className="rounded-xl border border-blue-100 bg-blue-50 p-3 mb-4 flex items-center gap-3">
+              <span className="text-xl">🔐</span>
               <div>
-                <div className="text-xs text-gray-400 uppercase tracking-wider mb-0.5">
-                  {row.label} {row.secure && !securityUnlocked ? "🔐" : ""}
-                </div>
-                <div className="font-mono text-sm font-medium text-gray-900">{row.display}</div>
+                <div className="text-xs font-semibold text-blue-800">PIN protection enabled</div>
+                <div className="text-xs text-blue-600">Card PIN required to reveal sensitive details</div>
               </div>
-              <span className="text-gray-400">{row.secure && !securityUnlocked ? "🔐" : "📋"}</span>
-            </button>
-          ))}
-        </div>
+            </div>
+          )}
 
-        {securityUnlocked && (
-          <button onClick={() => { lockDetails(); setShowCvv(false); setShowFull(false); }}
-            className="w-full py-3 rounded-2xl border border-red-200 text-red-500 text-sm font-semibold hover:bg-red-50 transition-colors mb-4">
-            🔒 Lock Card Details
-          </button>
+          {/* Premium 3D Flip Card */}
+          <div
+            className="w-full max-w-[420px] mx-auto mb-2 cursor-pointer select-none"
+            style={{ perspective: "1500px", aspectRatio: "1.586 / 1" }}
+            onClick={() => setIsFlipped((f) => !f)}
+          >
+            <motion.div
+              className="relative w-full h-full"
+              style={{ transformStyle: "preserve-3d" }}
+              initial={false}
+              animate={{ rotateY: isFlipped ? 180 : 0 }}
+              transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            >
+              {/* FRONT FACE */}
+              <div
+                className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden shadow-2xl"
+                style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
+              >
+                {/* Card gradient background */}
+                <div className="w-full h-full relative"
+                  style={{ background: "linear-gradient(135deg, #0f1c30 0%, #0a3d62 40%, #00a896 100%)" }}>
+                  {/* Decorative circles */}
+                  <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full opacity-10"
+                    style={{ background: "radial-gradient(circle, #ffffff, transparent)" }} />
+                  <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full opacity-10"
+                    style={{ background: "radial-gradient(circle, #00a896, transparent)" }} />
+                  {/* Header */}
+                  <div className="absolute top-0 left-0 right-0 px-5 pt-4 flex justify-between items-start">
+                    <span className="text-white font-bold text-sm tracking-widest opacity-90">WOLVCAPITAL</span>
+                    <svg viewBox="0 0 48 16" width="52" height="18" fill="none">
+                      <text x="0" y="13" fontFamily="serif" fontStyle="italic" fontSize="14" fontWeight="bold" fill="white" opacity="0.95">VISA</text>
+                    </svg>
+                  </div>
+                  {/* Chip */}
+                  <div className="absolute left-5" style={{ top: "38%" }}>
+                    <div className="w-9 h-7 rounded-md"
+                      style={{ background: "linear-gradient(135deg, #d4a843 0%, #f5d980 40%, #c8921e 100%)", boxShadow: "0 1px 4px rgba(0,0,0,0.3)" }}>
+                      <div className="w-full h-full rounded-md opacity-50"
+                        style={{ background: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 4px)" }} />
+                    </div>
+                  </div>
+                  {/* Card number */}
+                  <div className="absolute bottom-10 left-5 right-5">
+                    <div className="font-mono text-white text-base tracking-[0.2em] opacity-90 mb-2">
+                      {displayNumber}
+                    </div>
+                    <div className="flex justify-between items-end">
+                      <div>
+                        <div className="text-white opacity-50 text-xs uppercase tracking-wider mb-0.5">Card Holder</div>
+                        <div className="text-white text-sm font-semibold tracking-wide">{card.cardholder_name || "CARD HOLDER"}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-white opacity-50 text-xs uppercase tracking-wider mb-0.5">Expires</div>
+                        <div className="text-white text-sm font-semibold">{formatExpiry(card.expiry_month, card.expiry_year)}</div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Frozen overlay */}
+                  {isFrozen && (
+                    <div className="absolute inset-0 rounded-2xl flex items-center justify-center"
+                      style={{ background: "rgba(10,30,60,0.7)", backdropFilter: "blur(2px)" }}>
+                      <div className="text-center">
+                        <div className="text-5xl mb-2">❄️</div>
+                        <div className="text-white font-bold text-sm tracking-widest">CARD FROZEN</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* BACK FACE */}
+              <div
+                className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden shadow-2xl"
+                style={{
+                  backfaceVisibility: "hidden",
+                  WebkitBackfaceVisibility: "hidden",
+                  transform: "rotateY(180deg)",
+                }}
+              >
+                <div className="w-full h-full relative"
+                  style={{ background: "linear-gradient(135deg, #0a3d62 0%, #0f1c30 60%, #00a896 100%)" }}>
+                  {/* Magnetic stripe */}
+                  <div className="absolute top-7 left-0 right-0 h-10 bg-gray-900 opacity-90" />
+                  {/* Signature + CVV */}
+                  <div className="absolute left-5 right-5" style={{ top: "52%" }}>
+                    <div className="text-white opacity-50 text-xs uppercase tracking-wider mb-1">CVV</div>
+                    <div className="bg-white rounded px-3 py-2 flex justify-between items-center">
+                      <div className="text-gray-400 text-xs italic tracking-widest flex-1">{"— — — — — — — — — — —"}</div>
+                      <div className="font-mono font-bold text-gray-900 text-sm ml-3">
+                        {showCvv ? card.cvv : "•••"}
+                      </div>
+                    </div>
+                  </div>
+                  {/* VISA bottom right */}
+                  <div className="absolute bottom-4 right-5">
+                    <svg viewBox="0 0 48 16" width="44" height="16" fill="none">
+                      <text x="0" y="13" fontFamily="serif" fontStyle="italic" fontSize="14" fontWeight="bold" fill="white" opacity="0.7">VISA</text>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          <p className="text-center text-xs text-gray-400 mb-5">Tap card to flip</p>
+
+          {/* Balance */}
+          <div className="rounded-2xl border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-4 mb-5 flex justify-between items-center">
+            <div>
+              <div className="text-xs text-gray-500 mb-1">Card Balance</div>
+              <div className="text-2xl font-semibold">{money(Number(card.balance) || 0)}</div>
+            </div>
+            <div className="text-right">
+              <div className="text-xs text-gray-500 mb-1">Purchase Amount</div>
+              <div className="text-lg font-semibold text-gray-700">{money(Number(card.purchase_amount) || 0)}</div>
+            </div>
+          </div>
+
+          {/* Action buttons */}
+          <div className="grid grid-cols-2 gap-3 mb-5">
+            {([
+              {
+                icon: "📋", label: "Copy Number",
+                action: () => securityUnlocked ? copyToClipboard(card.card_number, "Card number") : handleReveal("number"),
+              },
+              {
+                icon: isFrozen ? "🔥" : "❄️",
+                label: freezing ? "Please wait..." : isFrozen ? "Unfreeze" : "Freeze Card",
+                action: () => isFrozen ? handleFreeze() : setShowFreezeModal(true),
+              },
+              {
+                icon: showCvv ? "🙈" : "👁️",
+                label: showCvv ? "Hide CVV" : "🔐 Show CVV",
+                action: () => showCvv ? setShowCvv(false) : handleReveal("cvv"),
+              },
+              {
+                icon: showFull ? "🔒" : "🔢",
+                label: showFull ? "Hide Number" : "🔐 Full Number",
+                action: () => showFull ? setShowFull(false) : handleReveal("number"),
+              },
+            ] as any[]).map((btn) => (
+              <button key={btn.label} onClick={btn.action}
+                disabled={freezing && btn.label === "Freeze Card"}
+                className="flex flex-col items-center gap-2 p-4 rounded-2xl border border-gray-200 bg-white hover:border-blue-400 hover:shadow-sm transition-all disabled:opacity-60">
+                <span className="text-2xl">{btn.icon}</span>
+                <span className="text-xs font-semibold text-gray-700 text-center">{btn.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Copy rows */}
+          <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden mb-5">
+            {([
+              { label: "Card Number", display: showFull ? (card.card_number || "").replace(/(.{4})/g, "$1 ").trim() : maskNumber(card.card_number), copy: card.card_number, secure: true, action: "number" },
+              { label: "Expiry Date", display: formatExpiry(card.expiry_month, card.expiry_year), copy: formatExpiry(card.expiry_month, card.expiry_year), secure: false },
+              { label: "CVV", display: showCvv ? card.cvv : "•••", copy: card.cvv, secure: true, action: "cvv" },
+              { label: "Cardholder Name", display: card.cardholder_name || "-", copy: card.cardholder_name, secure: false },
+            ] as any[]).map((row, i) => (
+              <button key={row.label}
+                onClick={() => {
+                  if (row.secure && !securityUnlocked) { handleReveal(row.action); }
+                  else if (row.copy) { copyToClipboard(row.copy, row.label); }
+                }}
+                className={"w-full flex justify-between items-center px-5 py-4 hover:bg-gray-50 transition-colors text-left " + (i > 0 ? "border-t border-gray-100" : "")}>
+                <div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wider mb-0.5">
+                    {row.label} {row.secure && !securityUnlocked ? "🔐" : ""}
+                  </div>
+                  <div className="font-mono text-sm font-medium text-gray-900">{row.display}</div>
+                </div>
+                <span className="text-gray-400">{row.secure && !securityUnlocked ? "🔐" : "📋"}</span>
+              </button>
+            ))}
+          </div>
+
+          {securityUnlocked && (
+            <button onClick={() => { lockDetails(); setShowCvv(false); setShowFull(false); }}
+              className="w-full py-3 rounded-2xl border border-red-200 text-red-500 text-sm font-semibold hover:bg-red-50 transition-colors mb-4">
+              🔒 Lock Card Details
+            </button>
+          )}
+
+          <Link href="/dashboard" className="block text-center text-sm text-blue-600 hover:underline mt-2">
+            Back to Dashboard
+          </Link>
+        </main>
+
+        <Toast message={toast} show={toastVisible} />
+
+        <CreatePinModal
+          show={showCreatePinModal}
+          onCancel={() => setShowCreatePinModal(false)}
+          onSuccess={() => {
+            setShowCreatePinModal(false);
+            showToast("PIN created! Tap again to reveal details.");
+          }}
+        />
+
+        <PasswordModal
+          show={showPasswordModal}
+          onSubmit={submitPassword}
+          onCancel={cancelModal}
+          error={passwordError}
+          isVerifying={isVerifying}
+        />
+
+        {showFreezeModal && (
+          <div
+            className="fixed inset-0 bg-black/60 z-40 flex items-end backdrop-blur-sm"
+            onClick={() => setShowFreezeModal(false)}
+          >
+            <div className="w-full bg-white rounded-t-3xl p-6 pb-10"
+              onClick={(e) => e.stopPropagation()}
+              style={{ animation: "slideUp 0.3s ease" }}>
+              <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-6" />
+              <h3 className="text-lg font-bold mb-2">Freeze Card?</h3>
+              <p className="text-sm text-gray-500 mb-6">Freezing blocks all transactions. You can unfreeze anytime.</p>
+              <button onClick={handleFreeze} disabled={freezing}
+                className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold mb-3 disabled:opacity-60">
+                {freezing ? "Processing..." : "Yes, Freeze Card"}
+              </button>
+              <button onClick={() => setShowFreezeModal(false)}
+                className="w-full py-4 rounded-2xl border border-gray-200 text-gray-600 font-semibold">
+                Cancel
+              </button>
+            </div>
+          </div>
         )}
 
-        <Link href="/dashboard" className="block text-center text-sm text-blue-600 hover:underline mt-2">
-          Back to Dashboard
-        </Link>
-      </main>
-
-      <Toast message={toast} show={toastVisible} />
-
-      <CreatePinModal
-        show={showCreatePinModal}
-        onCancel={() => setShowCreatePinModal(false)}
-        onSuccess={() => {
-          setShowCreatePinModal(false);
-          showToast("PIN created! Tap again to reveal details.");
-        }}
-      />
-
-      <PasswordModal
-        show={showPasswordModal}
-        onSubmit={submitPassword}
-        onCancel={cancelModal}
-        error={passwordError}
-        isVerifying={isVerifying}
-      />
-
-      {showFreezeModal && (
-        <div className="fixed inset-0 bg-black/60 z-40 flex items-end backdrop-blur-sm"
-          onClick={() => setShowFreezeModal(false)}>
-          <div className="w-full bg-white rounded-t-3xl p-6 pb-10"
-            onClick={(e) => e.stopPropagation()}
-            style={{ animation: "slideUp 0.3s ease" }}>
-            <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-6" />
-            <h3 className="text-lg font-bold mb-2">Freeze Card?</h3>
-            <p className="text-sm text-gray-500 mb-6">Freezing blocks all transactions. You can unfreeze anytime.</p>
-            <button onClick={handleFreeze} disabled={freezing}
-              className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold mb-3 disabled:opacity-60">
-              {freezing ? "Processing..." : "Yes, Freeze Card"}
-            </button>
-            <button onClick={() => setShowFreezeModal(false)}
-              className="w-full py-4 rounded-2xl border border-gray-200 text-gray-600 font-semibold">
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-
-      <style jsx global>{`
-        @keyframes slideUp {
-          from { transform: translateY(100%); }
-          to { transform: translateY(0); }
-        }
-      `}</style>
-    </div>
+        <style jsx global>{`
+          @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+          }
+        `}</style>
+      </div>
+    </>
   );
 }
 

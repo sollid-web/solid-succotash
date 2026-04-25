@@ -137,8 +137,58 @@ export default function TermsOfServicePage() {
               </ol>
             </div>
 
+
+            {/* Investment Terms & Risk Disclosures Section */}
             <div>
-              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">6. Account Security</h2>
+              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">6. Investment Terms &amp; Risk Disclosures</h2>
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-2xl font-semibold text-[#1e293b] mb-2">Nature of Returns</h3>
+                  <p className="text-lg text-gray-700 leading-relaxed">
+                    WolvCapital provides access to investment opportunities with <span className="font-semibold">projected returns</span> based on historical data, current market analysis, and our investment strategies. All returns are presented as <span className="font-semibold">target return ranges</span> and are subject to change. Actual returns may differ and are not guaranteed. Past performance does not indicate future results.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-semibold text-[#1e293b] mb-2">Market Risk Disclosure</h3>
+                  <p className="text-lg text-gray-700 leading-relaxed">
+                    Investing involves risk, including the potential loss of principal. Returns are subject to market conditions, economic factors, and other variables beyond our control. Market fluctuations can impact the value of your investments and overall account equity.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-semibold text-[#1e293b] mb-2">Position Management</h3>
+                  <p className="text-lg text-gray-700 leading-relaxed">
+                    To protect client accounts and maintain platform integrity, WolvCapital may adjust or liquidate positions automatically in response to market movements or risk thresholds. These actions are taken to manage risk and may occur without prior notice.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-semibold text-[#1e293b] mb-2">Margin and Account Risk</h3>
+                  <p className="text-lg text-gray-700 leading-relaxed">
+                    Investments may be subject to margin requirements. Market volatility can affect your account balance and equity. If your account falls below required thresholds, positions may be reduced or closed automatically. <span className="font-semibold">You are not obligated to deposit additional funds</span> in the event of a margin call or account shortfall.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-semibold text-[#1e293b] mb-2">Client Control &amp; Options</h3>
+                  <p className="text-lg text-gray-700 leading-relaxed">
+                    You retain control over your investment decisions within the options provided by the platform. You may review, modify, or close your positions as permitted by the platform’s features and policies.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-semibold text-[#1e293b] mb-2">Risk Acknowledgment</h3>
+                  <p className="text-lg text-gray-700 leading-relaxed">
+                    By investing with WolvCapital, you acknowledge and accept that all investments carry risk. You understand that returns are not guaranteed and that you may lose some or all of your invested capital. You agree to review all disclosures and seek independent advice if needed.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-semibold text-[#1e293b] mb-2">Limitation of Liability</h3>
+                  <p className="text-lg text-gray-700 leading-relaxed">
+                    WolvCapital, its affiliates, and partners are not liable for any losses, damages, or expenses arising from investment activities, market movements, or platform operations. Our liability is limited to the maximum extent permitted by law.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">7. Account Security</h2>
               <p className="text-lg text-gray-700 leading-relaxed">
                 You are responsible for protecting your login credentials and account access. Notify support immediately if unauthorized activity is suspected.
               </p>

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+// import CertificateActions from './certificate-of-operation/CertificateActions';
 
 export default function LegalPage() {
   return (
@@ -32,7 +33,7 @@ export default function LegalPage() {
             <li><Link href="/legal-disclaimer" className="text-blue-700 underline">Legal Disclaimer</Link></li>
             <li><Link href="/risk-disclosure" className="text-blue-700 underline">Risk Disclosure</Link></li>
             <li><Link href="/privacy" className="text-blue-700 underline">Privacy Policy</Link></li>
-            <li><Link href="/legal/certificate-of-operation" className="text-blue-700 underline">Certificate of Operation</Link></li>
+          {/* <li><Link href="/legal/certificate-of-operation" className="text-blue-700 underline">Certificate of Operation</Link></li> */}
           </ul>
           <p className="text-lg text-blue-700 font-semibold mt-8">Our goal is to provide a safe, responsible, and compliant investment environment for all users.</p>
         </section>

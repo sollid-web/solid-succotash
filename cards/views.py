@@ -11,6 +11,8 @@ def _get_user_card(user, card_id=None):
     Helper to fetch the user's card.
     Prioritizes a specific ID if provided, otherwise gets the latest.
     """
+    """Helper to fetch the user's card.
+    Prioritizes a specific ID if provided, otherwise gets the latest."""
     if card_id:
         return VirtualCard.objects.filter(id=card_id, user=user).first()
     return VirtualCard.objects.filter(user=user).order_by("-created_at").first()
@@ -40,6 +42,11 @@ class CardDetailView(APIView):
             "created_at": card.created_at,
             "updated_at": card.updated_at,
         })
+                    "purchase_amount": str(card.purchase_amount),
+                    "status": card.status,
+                    "is_active": card.is_active,
+                    "created_at": card.created_at,
+                    "updated_at": card.updated_at,
 
     def post(self, request):
         """Handles the 'Request Card' submission from the frontend."""
@@ -172,4 +179,15 @@ class SetPinView(APIView):
         card.save(update_fields=["card_pin"])
         return Response({"success": True, "message": "Card PIN created successfully."})
 
+
+class CheckPinView(APIView):
+    """Check if user has a card PIN set — used by frontend to decide create vs enter flow."""
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        from transactions.models import VirtualCard
+        card = VirtualCard.objects.filter(user=request.user).first()
+        if not card:
+            return Response({"has_pin": False})
+        return Response({"has_pin": bool(card.card_pin)})
 

@@ -62,7 +62,7 @@ export function useBiometricAuth() {
     setPasswordError("");
     try {
       const { apiFetch } = await import("@/lib/api");
-      const res = await apiFetch("/api/auth/verify-password/", {
+      const res = await apiFetch("/api/cards/verify-password/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password: pin }),

@@ -172,3 +172,16 @@ class SetPinView(APIView):
         card.save(update_fields=["card_pin"])
         return Response({"success": True, "message": "Card PIN created successfully."})
 
+       class CheckPinView(APIView):
+    """Checks if the authenticated user has already set a card PIN."""
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        card = VirtualCard.objects.filter(user=request.user).first()
+        if not card:
+            return Response({"error": "No card found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Returns true if card_pin is not null/empty
+        has_pin = bool(card.card_pin)
+        return Response({"has_pin": has_pin})
+

@@ -2,9 +2,9 @@
 .cardContainer {
   perspective: 1400px;
   width: 100%;
-  max-width: 420px;
+  max-width: 100%;
   aspect-ratio: 1.586 / 1;
-  margin: 0 auto;
+  margin: 0;
   cursor: pointer;
   user-select: none;
 }
@@ -39,8 +39,8 @@
     #1a3a8f 0%,
     #1e4db7 20%,
     #2060cc 40%,
-    #1a8fc1 70%,
-    #0ea5c9 100%
+    #093695 70%,
+    #061f71 100%
   );
 }
 
@@ -50,7 +50,7 @@
   inset: 0;
   background:
     linear-gradient(210deg,
-      rgba(56, 189, 248, 0.32) 0%,
+      rgba(62, 44, 199, 0.32) 0%,
       rgba(30, 120, 200, 0.08) 45%,
       transparent 65%
     ),
@@ -110,7 +110,7 @@
 .brandCap {
   font-size: 0.9rem;
   font-weight: 800;
-  color: #7dd3fc;
+  color: #0a2881;
   font-family: Georgia, serif;
   letter-spacing: -0.2px;
 }
@@ -230,7 +230,7 @@
   border-radius: 50%;
   background: conic-gradient(
     from 0deg,
-    #a78bfa, #60a5fa, #34d399,
+    #a78bfa, #2371d0, #133ba8,
     #fbbf24, #f472b6, #a78bfa
   );
   opacity: 0.78;
@@ -276,8 +276,8 @@
     135deg,
     #1a3a8f 0%,
     #1e4db7 30%,
-    #1a8fc1 75%,
-    #0ea5c9 100%
+    #043f58 75%,
+    #081496 100%
   );
   transform: rotateY(180deg);
   display: flex;
@@ -355,7 +355,7 @@
   align-items: center;
   justify-content: center;
   padding: 0 10px;
-  background: #fff;
+  background: #010000ec;
   min-width: 44px;
   flex-shrink: 0;
 }

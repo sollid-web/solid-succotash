@@ -51,12 +51,12 @@ function CreatePinModal({ show, onCancel, onSuccess }: { show: boolean; onCancel
 
   return (
     <div className="fixed inset-0 bg-black/70 z-[60] flex items-end sm:items-center justify-center backdrop-blur-sm" onClick={onCancel}>
-      <div className="w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl p-6" onClick={e => e.stopPropagation()}>
-        <div className="w-12 h-1 bg-gray-200 rounded-full mx-auto mb-6 sm:hidden" />
+      <div className="w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6" onClick={e => e.stopPropagation()} style={{ background: "linear-gradient(135deg, rgba(26,58,143,0.6) 0%, rgba(14,165,201,0.4) 100%)" }}>
+        <div className="w-12 h-1 rounded-full mx-auto mb-6 sm:hidden" style={{ background: "rgba(255,255,255,0.2)" }} />
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">🔑</div>
-          <h3 className="text-xl font-bold text-gray-900">Create Card PIN</h3>
-          <p className="text-sm text-gray-500">Set a PIN to protect your card details</p>
+          <h3 className="text-xl font-bold" style={{ color: "#fff" }}>Create Card PIN</h3>
+          <p className="text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>Set a PIN to protect your card details</p>
         </div>
         <input
           type="password"
@@ -65,7 +65,8 @@ function CreatePinModal({ show, onCancel, onSuccess }: { show: boolean; onCancel
           value={pin}
           onChange={e => setPin(e.target.value)}
           placeholder="Enter PIN"
-          className="w-full px-4 py-4 rounded-2xl border border-gray-200 text-center text-2xl tracking-[1em] mb-3 focus:ring-2 focus:ring-blue-500 outline-none"
+          className="w-full px-4 py-4 rounded-2xl border text-center text-2xl tracking-[1em] mb-3 outline-none"
+          style={{ borderColor: "rgba(255,255,255,0.2)", background: "rgba(255,255,255,0.1)", color: "#fff" }}
         />
         <input
           type="password"
@@ -73,14 +74,16 @@ function CreatePinModal({ show, onCancel, onSuccess }: { show: boolean; onCancel
           value={confirm}
           onChange={e => setConfirm(e.target.value)}
           placeholder="Confirm PIN"
-          className="w-full px-4 py-4 rounded-2xl border border-gray-200 text-center text-2xl tracking-[1em] mb-2 focus:ring-2 focus:ring-blue-500 outline-none"
+          className="w-full px-4 py-4 rounded-2xl border text-center text-2xl tracking-[1em] mb-2 outline-none"
+          style={{ borderColor: "rgba(255,255,255,0.2)", background: "rgba(255,255,255,0.1)", color: "#fff" }}
         />
-        {error && <p className="text-red-500 text-xs text-center mb-4">{error}</p>}
+        {error && <p className="text-xs text-center mb-4" style={{ color: "#ff6b6b" }}>{error}</p>}
         <button onClick={handleSubmit} disabled={saving || !pin || !confirm}
-          className="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold mb-3 disabled:opacity-50">
+          className="w-full py-4 text-white rounded-2xl font-bold mb-3 disabled:opacity-50"
+          style={{ background: "linear-gradient(135deg, #00a896, #0f7a70)" }}>
           {saving ? "Saving..." : "Create PIN"}
         </button>
-        <button onClick={onCancel} className="w-full py-3 text-gray-500 text-sm">Cancel</button>
+        <button onClick={onCancel} className="w-full py-3 text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>Cancel</button>
       </div>
     </div>
   );
@@ -91,12 +94,12 @@ function PasswordModal({ show, onSubmit, onCancel, error, isVerifying }: any) {
   if (!show) return null;
   return (
     <div className="fixed inset-0 bg-black/70 z-[60] flex items-end sm:items-center justify-center backdrop-blur-sm" onClick={onCancel}>
-      <div className="w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl p-6" onClick={e => e.stopPropagation()}>
-        <div className="w-12 h-1 bg-gray-200 rounded-full mx-auto mb-6 sm:hidden" />
+      <div className="w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6" onClick={e => e.stopPropagation()} style={{ background: "linear-gradient(135deg, rgba(26,58,143,0.6) 0%, rgba(14,165,201,0.4) 100%)" }}>
+        <div className="w-12 h-1 rounded-full mx-auto mb-6 sm:hidden" style={{ background: "rgba(255,255,255,0.2)" }} />
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">🔐</div>
-          <h3 className="text-xl font-bold text-gray-900">Security Check</h3>
-          <p className="text-sm text-gray-500">Enter your card PIN to reveal details</p>
+          <h3 className="text-xl font-bold" style={{ color: "#fff" }}>Security Check</h3>
+          <p className="text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>Enter your card PIN to reveal details</p>
         </div>
         <input
           type="password"
@@ -105,10 +108,11 @@ function PasswordModal({ show, onSubmit, onCancel, error, isVerifying }: any) {
           value={pw}
           onChange={e => setPw(e.target.value)}
           placeholder="••••"
-          className="w-full px-4 py-4 rounded-2xl border border-gray-200 text-center text-2xl tracking-[1em] mb-2 focus:ring-2 focus:ring-blue-500 outline-none"
+          className="w-full px-4 py-4 rounded-2xl border text-center text-2xl tracking-[1em] mb-2 outline-none"
+          style={{ borderColor: "rgba(255,255,255,0.2)", background: "rgba(255,255,255,0.1)", color: "#fff" }}
         />
-        {error && <p className="text-red-500 text-xs text-center mb-4">{error}</p>}
-        <button onClick={() => onSubmit(pw)} disabled={isVerifying || !pw} className="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold mb-3 disabled:opacity-50">
+        {error && <p className="text-xs text-center mb-4" style={{ color: "#ff6b6b" }}>{error}</p>}
+        <button onClick={() => onSubmit(pw)} disabled={isVerifying || !pw} className="w-full py-4 text-white rounded-2xl font-bold mb-3 disabled:opacity-50" style={{ background: "linear-gradient(135deg, #00a896, #0f7a70)" }}>
           {isVerifying ? "Verifying..." : "Unlock Details"}
         </button>
       </div>
@@ -196,18 +200,18 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
 
   return (
     <>
-      <div className="min-h-screen bg-[#F2F9FF]">
+      <div className="min-h-screen" style={{ background: "#0a0f1e", fontFamily: "'DM Sans', system-ui, sans-serif" }}>
         <main className="max-w-lg mx-auto px-4 pt-6 pb-28">
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-5">
-            <Link href="/dashboard" className="hover:text-blue-600">Dashboard</Link>
+          <div className="flex items-center gap-2 text-sm mb-5" style={{ color: "rgba(255,255,255,0.5)" }}>
+            <Link href="/dashboard" style={{ color: "rgba(0,168,150,0.8)", textDecoration: "none" }} className="hover:underline">Dashboard</Link>
             <span>/</span>
-            <span className="text-gray-900 font-medium">Virtual Card</span>
+            <span className="font-medium" style={{ color: "#fff" }}>Virtual Card</span>
           </div>
 
           <div className="flex items-center justify-between mb-3">
             <div>
-              <h1 className="text-xl font-semibold text-[#0b2f6b]">Virtual Card</h1>
-              <p className="text-sm text-gray-500 mt-0.5">Tap card to flip</p>
+              <h1 className="text-xl font-semibold" style={{ color: "#fff" }}>Virtual Card</h1>
+              <p className="text-sm mt-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>Tap card to flip</p>
             </div>
             <div className="flex items-center gap-2">
               {securityUnlocked && (
@@ -215,22 +219,22 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
                   🔓 Unlocked
                 </span>
               )}
-              <span className={"px-3 py-1 rounded-full text-xs font-semibold border " + (
-                isFrozen ? "bg-blue-100 text-blue-700 border-blue-200"
-                : card.is_active ? "bg-green-100 text-green-700 border-green-200"
-                : "bg-gray-100 text-gray-600 border-gray-200"
-              )}>
+              <span className="px-3 py-1 rounded-full text-xs font-semibold border" style={{
+                ...(isFrozen ? { background: "rgba(59,130,246,0.2)", color: "#3b82f6", borderColor: "rgba(59,130,246,0.3)" }
+                : card.is_active ? { background: "rgba(16,185,129,0.2)", color: "#10b981", borderColor: "rgba(16,185,129,0.3)" }
+                : { background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)", borderColor: "rgba(255,255,255,0.1)" })
+              }}>
                 {isFrozen ? "❄️ Frozen" : card.is_active ? "● Active" : card.status}
               </span>
             </div>
           </div>
 
           {!securityUnlocked && (
-            <div className="rounded-xl border border-blue-100 bg-blue-50 p-3 mb-4 flex items-center gap-3">
+            <div className="rounded-xl border p-3 mb-4 flex items-center gap-3" style={{ background: "rgba(0,168,150,0.15)", borderColor: "rgba(0,168,150,0.3)" }}>
               <span className="text-xl">🔐</span>
               <div>
-                <div className="text-xs font-semibold text-blue-800">PIN protection enabled</div>
-                <div className="text-xs text-blue-600">Card PIN required to reveal sensitive details</div>
+                <div className="text-xs font-semibold" style={{ color: "rgba(0,168,150,0.9)" }}>PIN protection enabled</div>
+                <div className="text-xs" style={{ color: "rgba(0,168,150,0.7)" }}>Card PIN required to reveal sensitive details</div>
               </div>
             </div>
           )}
@@ -401,17 +405,20 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
             </motion.div>
           </div>
 
-          <p className="text-center text-xs text-gray-400 mb-5">Tap card to flip</p>
+          <p className="text-center text-xs mb-5" style={{ color: "rgba(255,255,255,0.5)" }}>Tap card to flip</p>
 
           {/* Balance */}
-          <div className="rounded-2xl border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-4 mb-5 flex justify-between items-center">
+          <div className="rounded-2xl border p-4 mb-5 flex justify-between items-center" style={{
+            background: "linear-gradient(135deg, rgba(26,58,143,0.4) 0%, rgba(14,165,201,0.3) 100%)",
+            borderColor: "rgba(0,168,150,0.3)",
+          }}>
             <div>
-              <div className="text-xs text-gray-500 mb-1">Card Balance</div>
-              <div className="text-2xl font-semibold">{money(Number(card.balance) || 0)}</div>
+              <div className="text-xs mb-1" style={{ color: "rgba(255,255,255,0.6)" }}>Card Balance</div>
+              <div className="text-2xl font-semibold" style={{ color: "#fff" }}>{money(Number(card.balance) || 0)}</div>
             </div>
             <div className="text-right">
-              <div className="text-xs text-gray-500 mb-1">Purchase Amount</div>
-              <div className="text-lg font-semibold text-gray-700">{money(Number(card.purchase_amount) || 0)}</div>
+              <div className="text-xs mb-1" style={{ color: "rgba(255,255,255,0.6)" }}>Purchase Amount</div>
+              <div className="text-lg font-semibold" style={{ color: "rgba(255,255,255,0.9)" }}>{money(Number(card.purchase_amount) || 0)}</div>
             </div>
           </div>
 
@@ -440,15 +447,22 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
             ] as any[]).map((btn) => (
               <button key={btn.label} onClick={btn.action}
                 disabled={freezing && btn.label === "Freeze Card"}
-                className="flex flex-col items-center gap-2 p-4 rounded-2xl border border-gray-200 bg-white hover:border-blue-400 hover:shadow-sm transition-all disabled:opacity-60">
+                className="flex flex-col items-center gap-2 p-4 rounded-2xl border transition-all disabled:opacity-60"
+                style={{
+                  background: "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)",
+                  borderColor: "rgba(255,255,255,0.08)",
+                }}>
                 <span className="text-2xl">{btn.icon}</span>
-                <span className="text-xs font-semibold text-gray-700 text-center">{btn.label}</span>
+                <span className="text-xs font-semibold text-center" style={{ color: "rgba(255,255,255,0.8)" }}>{btn.label}</span>
               </button>
             ))}
           </div>
 
           {/* Copy rows */}
-          <div className="rounded-2xl border border-gray-200 bg-white overflow-hidden mb-5">
+          <div className="rounded-2xl border overflow-hidden mb-5" style={{
+            background: "linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%)",
+            borderColor: "rgba(255,255,255,0.08)",
+          }}>
             {([
               { label: "Card Number", display: showFull ? (card.card_number || "").replace(/(.{4})/g, "$1 ").trim() : maskNumber(card.card_number), copy: card.card_number, secure: true, action: "number" },
               { label: "Expiry Date", display: formatExpiry(card.expiry_month, card.expiry_year), copy: formatExpiry(card.expiry_month, card.expiry_year), secure: false },
@@ -460,26 +474,34 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
                   if (row.secure && !securityUnlocked) { handleReveal(row.action); }
                   else if (row.copy) { copyToClipboard(row.copy, row.label); }
                 }}
-                className={"w-full flex justify-between items-center px-5 py-4 hover:bg-gray-50 transition-colors text-left " + (i > 0 ? "border-t border-gray-100" : "")}>
+                className="w-full flex justify-between items-center px-5 py-4 transition-colors text-left"
+                style={{
+                  borderTop: i > 0 ? "1px solid rgba(255,255,255,0.08)" : "none",
+                }}>
                 <div>
-                  <div className="text-xs text-gray-400 uppercase tracking-wider mb-0.5">
+                  <div className="text-xs uppercase tracking-wider mb-0.5" style={{ color: "rgba(255,255,255,0.5)" }}>
                     {row.label} {row.secure && !securityUnlocked ? "🔐" : ""}
                   </div>
-                  <div className="font-mono text-sm font-medium text-gray-900">{row.display}</div>
+                  <div className="font-mono text-sm font-medium" style={{ color: "#fff" }}>{row.display}</div>
                 </div>
-                <span className="text-gray-400">{row.secure && !securityUnlocked ? "🔐" : "📋"}</span>
+                <span style={{ color: "rgba(255,255,255,0.5)" }}>{row.secure && !securityUnlocked ? "🔐" : "📋"}</span>
               </button>
             ))}
           </div>
 
           {securityUnlocked && (
             <button onClick={() => { lockDetails(); setShowCvv(false); setShowFull(false); }}
-              className="w-full py-3 rounded-2xl border border-red-200 text-red-500 text-sm font-semibold hover:bg-red-50 transition-colors mb-4">
+              className="w-full py-3 rounded-2xl border text-sm font-semibold transition-colors mb-4"
+              style={{
+                borderColor: "rgba(239,68,68,0.3)",
+                color: "#ff6b6b",
+                background: "rgba(239,68,68,0.1)",
+              }}>
               🔒 Lock Card Details
             </button>
           )}
 
-          <Link href="/dashboard" className="block text-center text-sm text-blue-600 hover:underline mt-2">
+          <Link href="/dashboard" className="block text-center text-sm hover:underline mt-2" style={{ color: "rgba(0,168,150,0.8)" }}>
             Back to Dashboard
           </Link>
         </main>
@@ -508,18 +530,20 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
             className="fixed inset-0 bg-black/60 z-40 flex items-end backdrop-blur-sm"
             onClick={() => setShowFreezeModal(false)}
           >
-            <div className="w-full bg-white rounded-t-3xl p-6 pb-10"
+            <div className="w-full rounded-t-3xl p-6 pb-10"
               onClick={(e) => e.stopPropagation()}
-              style={{ animation: "slideUp 0.3s ease" }}>
-              <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-6" />
-              <h3 className="text-lg font-bold mb-2">Freeze Card?</h3>
-              <p className="text-sm text-gray-500 mb-6">Freezing blocks all transactions. You can unfreeze anytime.</p>
+              style={{ animation: "slideUp 0.3s ease", background: "linear-gradient(135deg, rgba(26,58,143,0.6) 0%, rgba(14,165,201,0.4) 100%)", borderTop: "1px solid rgba(0,168,150,0.3)" }}>
+              <div className="w-10 h-1 rounded-full mx-auto mb-6" style={{ background: "rgba(255,255,255,0.2)" }} />
+              <h3 className="text-lg font-bold mb-2" style={{ color: "#fff" }}>Freeze Card?</h3>
+              <p className="text-sm mb-6" style={{ color: "rgba(255,255,255,0.6)" }}>Freezing blocks all transactions. You can unfreeze anytime.</p>
               <button onClick={handleFreeze} disabled={freezing}
-                className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold mb-3 disabled:opacity-60">
+                className="w-full py-4 rounded-2xl text-white font-semibold mb-3 disabled:opacity-60"
+                style={{ background: "linear-gradient(135deg, #00a896, #0f7a70)", boxShadow: "0 8px 20px rgba(0,168,150,0.3)" }}>
                 {freezing ? "Processing..." : "Yes, Freeze Card"}
               </button>
               <button onClick={() => setShowFreezeModal(false)}
-                className="w-full py-4 rounded-2xl border border-gray-200 text-gray-600 font-semibold">
+                className="w-full py-4 rounded-2xl border font-semibold"
+                style={{ borderColor: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.7)" }}>
                 Cancel
               </button>
             </div>

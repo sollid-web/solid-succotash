@@ -75,12 +75,30 @@ function formatDate(d: Date | null) {
   });
 }
 
+const txTypeConfig: Record<string, { label: string; icon: string; color: string; bg: string }> = {
+  deposit:    { label: "Deposit",    icon: "↓", color: "#10b981", bg: "rgba(16,185,129,0.1)" },
+  withdrawal: { label: "Withdrawal", icon: "↑", color: "#ef4444", bg: "rgba(239,68,68,0.1)"  },
+  profit:     { label: "Profit",     icon: "◈", color: "#f59e0b", bg: "rgba(245,158,11,0.1)" },
+  investment: { label: "Investment", icon: "⬡", color: "#3b82f6", bg: "rgba(59,130,246,0.1)" },
+  bonus:      { label: "Bonus",      icon: "★", color: "#8b5cf6", bg: "rgba(139,92,246,0.1)" },
+  fee:        { label: "Fee",        icon: "−", color: "#6b7280", bg: "rgba(107,114,128,0.1)"},
+};
+
+const statusConfig: Record<string, { color: string; bg: string; dot: string }> = {
+  approved:  { color: "#10b981", bg: "rgba(16,185,129,0.1)",  dot: "#10b981" },
+  completed: { color: "#10b981", bg: "rgba(16,185,129,0.1)",  dot: "#10b981" },
+  pending:   { color: "#f59e0b", bg: "rgba(245,158,11,0.1)",  dot: "#f59e0b" },
+  rejected:  { color: "#ef4444", bg: "rgba(239,68,68,0.1)",   dot: "#ef4444" },
+  failed:    { color: "#ef4444", bg: "rgba(239,68,68,0.1)",   dot: "#ef4444" },
+};
+
 export default function DashboardPage() {
   const [wallet, setWallet] = useState<WalletData | null>(null);
   const [investments, setInvestments] = useState<Investment[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [now] = useState(() => new Date());
 
   useEffect(() => {
     let cancelled = false;
@@ -101,7 +119,7 @@ export default function DashboardPage() {
           walletRes?.status === 401 || invRes?.status === 401 || txRes?.status === 401 ||
           walletRes?.status === 403 || invRes?.status === 403 || txRes?.status === 403;
 
-        if (anyUnauthorized) throw new Error("Session expired or missing. Please log in again.");
+        if (anyUnauthorized) throw new Error("Session expired. Please log in again.");
         if (!walletRes || !walletRes.ok) throw new Error(`Wallet fetch failed (${walletRes?.status || "network"})`);
         if (!invRes || !invRes.ok) throw new Error(`Investments fetch failed (${invRes?.status || "network"})`);
 
@@ -140,64 +158,250 @@ export default function DashboardPage() {
       return db - da;
     }), [transactions]);
 
+  const roiRate = totalInvested > 0 ? ((lockedRoi / totalInvested) * 100).toFixed(1) : "0.0";
+
   return (
-    <div className="min-h-screen bg-[#f0faf8]">
-      <main className="max-w-6xl mx-auto px-4 pt-6 pb-24 sm:pb-6">
+    <div className="min-h-screen" style={{ background: "#0a0f1e", fontFamily: "'DM Sans', system-ui, sans-serif" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+        
+        .stat-card { 
+          background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+          border: 1px solid rgba(255,255,255,0.08);
+          backdrop-filter: blur(20px);
+          transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+          border-color: rgba(0,168,150,0.4);
+          transform: translateY(-2px);
+          box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .plan-card {
+          background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+          border: 1px solid rgba(255,255,255,0.07);
+          transition: all 0.3s ease;
+        }
+        .plan-card:hover {
+          border-color: rgba(0,168,150,0.35);
+          box-shadow: 0 0 40px rgba(0,168,150,0.08);
+        }
+        .glow-teal { box-shadow: 0 0 30px rgba(0,168,150,0.2); }
+        .progress-bar {
+          background: linear-gradient(90deg, #00a896, #1a3a8f);
+          border-radius: 99px;
+          transition: width 1s ease;
+        }
+        .tx-row { transition: background 0.15s; }
+        .tx-row:hover { background: rgba(255,255,255,0.03); }
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(16px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.5s ease forwards; }
+        .fade-up-1 { animation-delay: 0.05s; opacity: 0; }
+        .fade-up-2 { animation-delay: 0.1s;  opacity: 0; }
+        .fade-up-3 { animation-delay: 0.15s; opacity: 0; }
+        .fade-up-4 { animation-delay: 0.2s;  opacity: 0; }
+        .fade-up-5 { animation-delay: 0.25s; opacity: 0; }
+        .fade-up-6 { animation-delay: 0.3s;  opacity: 0; }
+        .shimmer {
+          background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+          background-size: 200% 100%;
+          animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .card-mini {
+          background: linear-gradient(135deg, #1a3a8f 0%, #1e4db7 35%, #1a8fc1 75%, #0ea5c9 100%);
+        }
+      `}</style>
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-28 sm:pb-10">
+
         {error && (
-          <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">{error}</div>
+          <div className="mb-6 rounded-2xl p-4 fade-up" style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", color: "#fca5a5" }}>
+            ⚠ {error}
+          </div>
         )}
 
-        <div className="flex flex-col gap-4 mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        {/* ── Header ── */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 fade-up fade-up-1">
+          <div>
+            <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "4px" }}>
+              WolvCapital
+            </div>
+            <h1 style={{ color: "#fff", fontSize: "26px", fontWeight: 700, letterSpacing: "-0.5px", lineHeight: 1.2 }}>
+              Portfolio Overview
+            </h1>
+            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", marginTop: "4px" }}>
+              Monitor balances, ROI, and active plan performance
+            </p>
+          </div>
+          <Link href="/dashboard/new-investment"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "8px",
+              padding: "12px 24px", borderRadius: "12px",
+              background: "linear-gradient(135deg, #00a896, #0f7a70)",
+              color: "#fff", fontWeight: 600, fontSize: "14px",
+              boxShadow: "0 8px 32px rgba(0,168,150,0.35)",
+              textDecoration: "none", whiteSpace: "nowrap",
+              transition: "all 0.2s",
+            }}>
+            <span style={{ fontSize: "16px" }}>+</span> New Investment
+          </Link>
+        </div>
+
+        {/* ── Virtual Card Banner ── */}
+        <div className="fade-up fade-up-2 mb-6" style={{
+          borderRadius: "20px",
+          background: "linear-gradient(135deg, rgba(26,58,143,0.6) 0%, rgba(14,165,201,0.4) 100%)",
+          border: "1px solid rgba(0,168,150,0.3)",
+          padding: "0",
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "stretch",
+        }}>
+          {/* Mini card visual */}
+          <div className="card-mini" style={{
+            width: "120px", flexShrink: 0, padding: "16px 14px",
+            display: "flex", flexDirection: "column", justifyContent: "space-between",
+            position: "relative", overflow: "hidden",
+          }}>
+            <div style={{ position: "absolute", top: 0, right: 0, width: "80px", height: "80px",
+              background: "rgba(255,255,255,0.07)", borderRadius: "50%", transform: "translate(30px,-30px)" }} />
+            <div style={{ color: "#fff", fontSize: "9px", fontWeight: 700, letterSpacing: "1px" }}>WOLVCAPITAL</div>
             <div>
-              <h1 className="text-xl font-semibold text-[#0f1c30]">Portfolio Overview</h1>
-              <p className="text-sm text-gray-600">Monitor balances, ROI, and active plan performance.</p>
-            </div>
-            <Link href="/dashboard/new-investment"
-              className="btn-cta-sky inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold">
-              + Start New Investment
-            </Link>
-          </div>
-
-          {/* Virtual Card banner */}
-          <div className="rounded-2xl border border-teal-200 bg-gradient-to-br from-teal-50 to-cyan-50 p-4 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-base font-semibold text-gray-900">💳 Virtual Card</h3>
-                <p className="text-sm text-gray-600 mt-0.5">Activate your digital card or view details</p>
+              <div style={{ width: "28px", height: "20px", borderRadius: "3px",
+                background: "linear-gradient(135deg, #b8860b, #f5d06e, #b8860b)", marginBottom: "8px" }} />
+              <div style={{ color: "rgba(255,255,255,0.7)", fontSize: "8px", fontFamily: "monospace", letterSpacing: "1px" }}>
+                •••• 7717
               </div>
-              <Link href="/dashboard/card"
-                className="px-4 py-2 bg-gradient-to-r from-[#0f1c30] to-[#00a896] text-white font-semibold rounded-lg hover:shadow-lg hover:brightness-110 transition-all text-sm whitespace-nowrap">
-                View Card →
-              </Link>
             </div>
           </div>
-
-          {/* Stats — 2 cols on mobile, 3 on desktop */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            <StatCard title="Total Invested" value={money(totalInvested)} subtitle="Active investments" emphasis />
-            <StatCard title="Locked ROI" value={money(lockedRoi)} subtitle="Profit earned" emphasis />
-            <StatCard title="Balance" value={money(wallet?.balance ?? 0)} subtitle="Available funds" emphasis />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <StatCard title="Total Deposits" value={money(wallet?.total_deposits ?? 0)} subtitle="Approved deposits" />
-            <StatCard title="Withdrawals" value={money(wallet?.total_withdrawals ?? 0)} subtitle="Approved" />
+          {/* Text content */}
+          <div style={{ flex: 1, padding: "18px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
+            <div>
+              <div style={{ color: "#fff", fontWeight: 600, fontSize: "15px", marginBottom: "3px" }}>
+                Virtual Card
+              </div>
+              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "12px" }}>
+                Visa Infinite · Digital payments worldwide
+              </div>
+            </div>
+            <Link href="/dashboard/card" style={{
+              padding: "9px 18px", borderRadius: "10px",
+              background: "rgba(255,255,255,0.12)",
+              border: "1px solid rgba(255,255,255,0.2)",
+              color: "#fff", fontSize: "13px", fontWeight: 600,
+              textDecoration: "none", whiteSpace: "nowrap",
+              backdropFilter: "blur(10px)",
+            }}>
+              View Card →
+            </Link>
           </div>
         </div>
 
-        {/* Active Plans */}
-        <section className="mb-10">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xl font-semibold">Active Plans</h2>
+        {/* ── Stats Grid ── */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-3 fade-up fade-up-3">
+          <MetricCard
+            label="Total Invested"
+            value={money(totalInvested)}
+            sub="Active capital"
+            icon="⬡"
+            accent="#3b82f6"
+            loading={loading}
+          />
+          <MetricCard
+            label="Locked ROI"
+            value={money(lockedRoi)}
+            sub="Profit earned"
+            icon="◈"
+            accent="#f59e0b"
+            loading={loading}
+          />
+          <MetricCard
+            label="Available Balance"
+            value={money(wallet?.balance ?? 0)}
+            sub="Ready to deploy"
+            icon="◎"
+            accent="#10b981"
+            loading={loading}
+          />
+          <MetricCard
+            label="Total Deposits"
+            value={money(wallet?.total_deposits ?? 0)}
+            sub="All time"
+            icon="↓"
+            accent="#00a896"
+            loading={loading}
+          />
+          <MetricCard
+            label="Withdrawals"
+            value={money(wallet?.total_withdrawals ?? 0)}
+            sub="Approved"
+            icon="↑"
+            accent="#8b5cf6"
+            loading={loading}
+            className="col-span-2 sm:col-span-1"
+          />
+        </div>
+
+        {/* ── ROI Rate Banner ── */}
+        {!loading && totalInvested > 0 && (
+          <div className="fade-up fade-up-3 mb-6 rounded-2xl px-5 py-4 flex items-center justify-between" style={{
+            background: "linear-gradient(135deg, rgba(245,158,11,0.08), rgba(245,158,11,0.03))",
+            border: "1px solid rgba(245,158,11,0.15)",
+          }}>
+            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px" }}>Overall ROI Rate</div>
+            <div style={{ color: "#f59e0b", fontWeight: 700, fontSize: "20px", fontFamily: "'DM Mono', monospace" }}>
+              +{roiRate}%
+            </div>
           </div>
+        )}
+
+        {/* ── Active Plans ── */}
+        <section className="mb-8 fade-up fade-up-4">
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+            <div>
+              <h2 style={{ color: "#fff", fontSize: "18px", fontWeight: 600 }}>Active Plans</h2>
+              <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", marginTop: "2px" }}>
+                {activeInvestments.length} plan{activeInvestments.length !== 1 ? "s" : ""} running
+              </p>
+            </div>
+            <Link href="/dashboard/new-investment" style={{
+              color: "#00a896", fontSize: "13px", fontWeight: 500, textDecoration: "none",
+              padding: "6px 14px", borderRadius: "8px",
+              border: "1px solid rgba(0,168,150,0.3)",
+              background: "rgba(0,168,150,0.08)",
+            }}>
+              + Add Plan
+            </Link>
+          </div>
+
           {loading ? (
-            <div className="rounded-lg border bg-white p-6">Loading…</div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[1,2].map(i => (
+                <div key={i} className="shimmer rounded-2xl" style={{ height: "220px" }} />
+              ))}
+            </div>
           ) : activeInvestments.length === 0 ? (
-            <div className="rounded-lg border bg-white p-6 text-gray-600">No active plans yet.</div>
+            <div style={{
+              borderRadius: "20px", padding: "48px 24px", textAlign: "center",
+              background: "rgba(255,255,255,0.03)", border: "1px dashed rgba(255,255,255,0.1)",
+            }}>
+              <div style={{ fontSize: "40px", marginBottom: "12px" }}>📊</div>
+              <div style={{ color: "rgba(255,255,255,0.6)", fontWeight: 500, marginBottom: "6px" }}>No active plans yet</div>
+              <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "13px", marginBottom: "20px" }}>Start investing to grow your portfolio</div>
+              <Link href="/dashboard/new-investment" style={{
+                padding: "10px 24px", borderRadius: "10px",
+                background: "linear-gradient(135deg, #00a896, #0f7a70)",
+                color: "#fff", fontWeight: 600, fontSize: "14px", textDecoration: "none",
+              }}>
+                Start Investing
+              </Link>
+            </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {activeInvestments.map((inv) => {
+              {activeInvestments.map((inv, idx) => {
                 const planName = inv.plan_name || inv.plan?.name || `Plan #${String(inv.id)}`;
                 const dailyRoi = Number(inv.plan_daily_roi ?? inv.plan?.daily_roi ?? inv.plan?.roi_rate) || 0;
                 const durationDays = Number(inv.plan_duration_days ?? inv.plan?.duration_days) || 0;
@@ -207,78 +411,136 @@ export default function DashboardPage() {
                   end = new Date(started);
                   end.setDate(end.getDate() + durationDays);
                 }
-                const today = new Date();
-                const elapsed = started ? Math.max(0, daysBetween(started, today)) : 0;
-                const left = end ? Math.max(0, daysBetween(today, end)) : 0;
+                const elapsed = started ? Math.max(0, daysBetween(started, now)) : 0;
+                const left = end ? Math.max(0, daysBetween(now, end)) : 0;
                 const totalEarned = Number(inv.total_earned);
                 const expectedTotal = Number(inv.expected_total);
                 const progressPct = durationDays > 0 ? Math.min(100, Math.round((elapsed / durationDays) * 100)) : 0;
-                const statusLabel = String(inv.status || "").toUpperCase();
-                const statusTone = ["ACTIVE", "APPROVED"].includes(statusLabel)
-                  ? "bg-teal-100 text-teal-700"
-                  : ["COMPLETED"].includes(statusLabel)
-                  ? "bg-gray-100 text-gray-700"
-                  : "bg-slate-100 text-slate-700";
                 const planSlug = planName.toLowerCase().includes("pioneer") ? "pioneer"
                   : planName.toLowerCase().includes("vanguard") ? "vanguard"
                   : planName.toLowerCase().includes("horizon") ? "horizon"
-                  : planName.toLowerCase().includes("summit") ? "summit"
-                  : null;
+                  : planName.toLowerCase().includes("summit") ? "summit" : null;
+
+                const planColors = [
+                  { from: "#3b82f6", to: "#1d4ed8" },
+                  { from: "#00a896", to: "#0f7a70" },
+                  { from: "#8b5cf6", to: "#6d28d9" },
+                  { from: "#f59e0b", to: "#b45309" },
+                ];
+                const col = planColors[idx % planColors.length];
 
                 return (
-                  <div key={String(inv.id)} className="rounded-xl border bg-white p-5 shadow-sm">
-                    <div className="flex items-start justify-between gap-3">
+                  <div key={String(inv.id)} className="plan-card rounded-2xl p-5">
+                    {/* Plan header */}
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
                       <div>
-                        <div className="text-lg font-semibold">{planName}</div>
-                        <div className="mt-1 flex items-center gap-2 text-sm text-gray-600">
-                          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${statusTone}`}>
-                            {statusLabel || "STATUS"}
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
+                          <div style={{
+                            width: "32px", height: "32px", borderRadius: "8px",
+                            background: `linear-gradient(135deg, ${col.from}, ${col.to})`,
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            fontSize: "14px",
+                          }}>⬡</div>
+                          <span style={{ color: "#fff", fontWeight: 700, fontSize: "16px" }}>{planName}</span>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          <span style={{
+                            padding: "2px 10px", borderRadius: "99px", fontSize: "11px", fontWeight: 600,
+                            background: "rgba(16,185,129,0.15)", color: "#10b981",
+                            border: "1px solid rgba(16,185,129,0.25)",
+                          }}>
+                            ● ACTIVE
                           </span>
-                          <span>{dailyRoi > 0 ? `${dailyRoi}% daily ROI` : "Daily ROI"}</span>
+                          {dailyRoi > 0 && (
+                            <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px" }}>
+                              {dailyRoi}% daily ROI
+                            </span>
+                          )}
                         </div>
                       </div>
-                      <div className="text-right">
-                        <div className="text-xs text-gray-500">Investment Amount</div>
-                        <div className="text-2xl font-semibold">{money(Number(inv.amount) || 0)}</div>
+                      <div style={{ textAlign: "right" }}>
+                        <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "2px" }}>
+                          Amount
+                        </div>
+                        <div style={{ color: "#fff", fontWeight: 700, fontSize: "22px", fontFamily: "'DM Mono', monospace" }}>
+                          {money(Number(inv.amount) || 0)}
+                        </div>
                       </div>
                     </div>
-                    <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                      <InfoRow label="Started" value={formatDate(started)} />
-                      <InfoRow label="End Date" value={formatDate(end)} />
-                      <InfoRow label="Duration" value={durationDays > 0 ? `${durationDays} days` : "-"} />
-                      <InfoRow label="Progress" value={durationDays > 0 ? `${Math.min(elapsed, durationDays)}/${durationDays} days` : "-"} />
-                      <InfoRow label="Days left" value={durationDays > 0 ? String(left) : "-"} />
-                      <InfoRow label="Daily ROI" value={dailyRoi > 0 ? `${dailyRoi}%` : "-"} />
-                    </div>
+
+                    {/* Progress */}
                     {durationDays > 0 && (
-                      <div className="mt-4">
-                        <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
-                          <span>Plan progress</span>
-                          <span>{progressPct}%</span>
+                      <div style={{ marginBottom: "16px" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
+                          <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px" }}>Plan Progress</span>
+                          <span style={{ color: "#fff", fontSize: "12px", fontWeight: 600 }}>{progressPct}%</span>
                         </div>
-                        <div className="h-2 rounded-full bg-gray-100 overflow-hidden">
-                          <div className="h-full bg-gradient-to-r from-[#00a896] to-[#1a3a5f]" style={{ width: `${progressPct}%` }} />
-                        </div>
-                      </div>
-                    )}
-                    {(Number.isFinite(totalEarned) || Number.isFinite(expectedTotal)) && (
-                      <div className="mt-4 grid grid-cols-2 gap-3">
-                        <div className="rounded-lg bg-green-50 p-4">
-                          <div className="text-xs text-green-700">Total Earned</div>
-                          <div className="text-xl font-semibold text-green-800">{Number.isFinite(totalEarned) ? money(totalEarned) : "-"}</div>
-                        </div>
-                        <div className="rounded-lg bg-teal-50 p-4">
-                          <div className="text-xs text-teal-700">Expected Total</div>
-                          <div className="text-xl font-semibold text-teal-800">{Number.isFinite(expectedTotal) ? money(expectedTotal) : "-"}</div>
+                        <div style={{ height: "6px", borderRadius: "99px", background: "rgba(255,255,255,0.07)", overflow: "hidden" }}>
+                          <div className="progress-bar" style={{ width: `${progressPct}%`, height: "100%" }} />
                         </div>
                       </div>
                     )}
-                    <div className="mt-4">
-                      <Link href={planSlug ? `/plans/${planSlug}` : "/plans"}
-                        className="text-sm font-semibold text-[#0f1c30] underline underline-offset-4 hover:no-underline">
-                        View Details
-                      </Link>
+
+                    {/* Stats grid */}
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "14px" }}>
+                      {[
+                        { label: "Started",  value: formatDate(started) },
+                        { label: "End Date", value: formatDate(end) },
+                        { label: "Duration", value: durationDays > 0 ? `${durationDays} days` : "-" },
+                        { label: "Days Left", value: durationDays > 0 ? `${left}` : "-" },
+                      ].map(item => (
+                        <div key={item.label} style={{
+                          padding: "10px 12px", borderRadius: "10px",
+                          background: "rgba(255,255,255,0.04)",
+                          border: "1px solid rgba(255,255,255,0.06)",
+                        }}>
+                          <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "3px" }}>
+                            {item.label}
+                          </div>
+                          <div style={{ color: "#fff", fontSize: "13px", fontWeight: 500 }}>{item.value}</div>
+                        </div>
+                      ))}
                     </div>
+
+                    {/* Earned / Expected */}
+                    {(Number.isFinite(totalEarned) || Number.isFinite(expectedTotal)) && (
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "14px" }}>
+                        <div style={{
+                          padding: "12px", borderRadius: "10px",
+                          background: "rgba(16,185,129,0.08)",
+                          border: "1px solid rgba(16,185,129,0.15)",
+                        }}>
+                          <div style={{ color: "#10b981", fontSize: "10px", letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "3px" }}>
+                            Total Earned
+                          </div>
+                          <div style={{ color: "#10b981", fontSize: "15px", fontWeight: 700, fontFamily: "'DM Mono', monospace" }}>
+                            {Number.isFinite(totalEarned) ? money(totalEarned) : "-"}
+                          </div>
+                        </div>
+                        <div style={{
+                          padding: "12px", borderRadius: "10px",
+                          background: "rgba(0,168,150,0.08)",
+                          border: "1px solid rgba(0,168,150,0.15)",
+                        }}>
+                          <div style={{ color: "#00a896", fontSize: "10px", letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "3px" }}>
+                            Expected Total
+                          </div>
+                          <div style={{ color: "#00a896", fontSize: "15px", fontWeight: 700, fontFamily: "'DM Mono', monospace" }}>
+                            {Number.isFinite(expectedTotal) ? money(expectedTotal) : "-"}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <Link href={planSlug ? `/plans/${planSlug}` : "/plans"} style={{
+                      display: "block", textAlign: "center", padding: "10px",
+                      borderRadius: "10px", background: "rgba(255,255,255,0.05)",
+                      border: "1px solid rgba(255,255,255,0.1)",
+                      color: "rgba(255,255,255,0.7)", fontSize: "13px", fontWeight: 500,
+                      textDecoration: "none", transition: "all 0.2s",
+                    }}>
+                      View Details →
+                    </Link>
                   </div>
                 );
               })}
@@ -286,47 +548,122 @@ export default function DashboardPage() {
           )}
         </section>
 
-        {/* Recent Activity */}
-        <section className="mb-10">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xl font-semibold">Recent Activity</h2>
-            <Link href="/dashboard/transactions" className="text-sm text-teal-600 hover:underline">View all</Link>
+        {/* ── Recent Activity ── */}
+        <section className="fade-up fade-up-5 mb-8">
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+            <div>
+              <h2 style={{ color: "#fff", fontSize: "18px", fontWeight: 600 }}>Recent Activity</h2>
+              <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", marginTop: "2px" }}>
+                Latest transactions
+              </p>
+            </div>
+            <Link href="/dashboard/transactions" style={{
+              color: "#00a896", fontSize: "13px", fontWeight: 500, textDecoration: "none",
+              padding: "6px 14px", borderRadius: "8px",
+              border: "1px solid rgba(0,168,150,0.3)",
+              background: "rgba(0,168,150,0.08)",
+            }}>
+              View All
+            </Link>
           </div>
-          <div className="rounded-xl border bg-white shadow-sm overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-gray-700">
-                <tr>
-                  <th className="text-left px-4 py-3">Date</th>
-                  <th className="text-left px-4 py-3">Type</th>
-                  <th className="text-left px-4 py-3">Status</th>
-                  <th className="text-right px-4 py-3">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading && <tr><td className="px-4 py-4" colSpan={4}>Loading…</td></tr>}
-                {!loading && recentTransactions.length === 0 && (
-                  <tr><td className="px-4 py-4 text-gray-600" colSpan={4}>No transactions yet.</td></tr>
-                )}
-                {!loading && recentTransactions.slice(0, 10).map((tx) => {
+
+          <div style={{
+            borderRadius: "20px",
+            background: "rgba(255,255,255,0.03)",
+            border: "1px solid rgba(255,255,255,0.07)",
+            overflow: "hidden",
+          }}>
+            {loading ? (
+              <div style={{ padding: "24px" }}>
+                {[1,2,3].map(i => (
+                  <div key={i} className="shimmer rounded-xl" style={{ height: "52px", marginBottom: "8px" }} />
+                ))}
+              </div>
+            ) : recentTransactions.length === 0 ? (
+              <div style={{ padding: "48px 24px", textAlign: "center", color: "rgba(255,255,255,0.3)", fontSize: "14px" }}>
+                No transactions yet
+              </div>
+            ) : (
+              <div>
+                {/* Header */}
+                <div style={{
+                  display: "grid", gridTemplateColumns: "auto 1fr auto auto",
+                  gap: "12px", padding: "12px 20px",
+                  borderBottom: "1px solid rgba(255,255,255,0.06)",
+                }}>
+                  {["Type", "Date", "Status", "Amount"].map(h => (
+                    <div key={h} style={{ color: "rgba(255,255,255,0.3)", fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600 }}>
+                      {h}
+                    </div>
+                  ))}
+                </div>
+                {recentTransactions.slice(0, 10).map((tx, i) => {
                   const d = safeDate(tx.created_at);
+                  const type = txTypeConfig[String(tx.tx_type)] || { label: String(tx.tx_type), icon: "·", color: "#9ca3af", bg: "rgba(156,163,175,0.1)" };
+                  const stat = statusConfig[String(tx.status)] || { color: "#9ca3af", bg: "rgba(156,163,175,0.1)", dot: "#9ca3af" };
+                  const isCredit = ["deposit", "profit", "bonus"].includes(String(tx.tx_type));
+
                   return (
-                    <tr key={tx.id} className="border-t">
-                      <td className="px-4 py-3 whitespace-nowrap">{d ? d.toLocaleString() : "-"}</td>
-                      <td className="px-4 py-3 whitespace-nowrap">{String(tx.tx_type)}</td>
-                      <td className="px-4 py-3 whitespace-nowrap">{String(tx.status)}</td>
-                      <td className="px-4 py-3 text-right whitespace-nowrap">{money(Number(tx.amount) || 0)}</td>
-                    </tr>
+                    <div key={tx.id} className="tx-row" style={{
+                      display: "grid", gridTemplateColumns: "auto 1fr auto auto",
+                      gap: "12px", padding: "14px 20px", alignItems: "center",
+                      borderBottom: i < recentTransactions.slice(0,10).length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
+                    }}>
+                      {/* Type icon */}
+                      <div style={{
+                        width: "36px", height: "36px", borderRadius: "10px",
+                        background: type.bg, display: "flex", alignItems: "center",
+                        justifyContent: "center", fontSize: "16px", color: type.color,
+                        fontWeight: 700, flexShrink: 0,
+                      }}>
+                        {type.icon}
+                      </div>
+                      {/* Label + date */}
+                      <div>
+                        <div style={{ color: "#fff", fontSize: "13px", fontWeight: 500, marginBottom: "2px" }}>
+                          {type.label}
+                        </div>
+                        <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "11px", fontFamily: "'DM Mono', monospace" }}>
+                          {d ? d.toLocaleDateString("en-GB") : "-"} · {d ? d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : ""}
+                        </div>
+                      </div>
+                      {/* Status */}
+                      <div style={{
+                        padding: "3px 10px", borderRadius: "99px",
+                        background: stat.bg, fontSize: "11px", fontWeight: 600,
+                        color: stat.color, whiteSpace: "nowrap",
+                      }}>
+                        <span style={{ marginRight: "4px" }}>●</span>
+                        {String(tx.status).charAt(0).toUpperCase() + String(tx.status).slice(1)}
+                      </div>
+                      {/* Amount */}
+                      <div style={{
+                        color: isCredit ? "#10b981" : "#f87171",
+                        fontFamily: "'DM Mono', monospace",
+                        fontWeight: 600, fontSize: "14px",
+                        whiteSpace: "nowrap",
+                      }}>
+                        {isCredit ? "+" : "-"}{money(Number(tx.amount) || 0)}
+                      </div>
+                    </div>
                   );
                 })}
-              </tbody>
-            </table>
+              </div>
+            )}
           </div>
         </section>
+
       </main>
 
+      {/* Mobile CTA */}
       <div className="sm:hidden fixed bottom-4 inset-x-0 px-4 z-40">
-        <Link href="/dashboard/new-investment"
-          className="btn-cta-sky inline-flex w-full items-center justify-center rounded-full px-5 py-3 text-sm font-semibold">
+        <Link href="/dashboard/new-investment" style={{
+          display: "flex", alignItems: "center", justifyContent: "center",
+          width: "100%", padding: "16px", borderRadius: "16px",
+          background: "linear-gradient(135deg, #00a896, #0f7a70)",
+          color: "#fff", fontWeight: 700, fontSize: "15px",
+          textDecoration: "none", boxShadow: "0 8px 32px rgba(0,168,150,0.4)",
+        }}>
           + Start New Investment
         </Link>
       </div>
@@ -334,23 +671,39 @@ export default function DashboardPage() {
   );
 }
 
-function StatCard({ title, value, subtitle, emphasis }: { title: string; value: string; subtitle: string; emphasis?: boolean }) {
+function MetricCard({ label, value, sub, icon, accent, loading, className }: {
+  label: string; value: string; sub: string; icon: string;
+  accent: string; loading?: boolean; className?: string;
+}) {
   return (
-    <div className={`rounded-xl border p-4 shadow-sm ${emphasis
-      ? "bg-gradient-to-br from-white via-[#f0faf8] to-[#e0f7f4] border-[#99e0d8] shadow-md"
-      : "bg-[#f5fffe] border-[#c8ede9]"}`}>
-      <div className="text-xs text-gray-500">{title}</div>
-      <div className="text-xl font-semibold mt-1 truncate">{value}</div>
-      <div className="text-xs text-gray-400 mt-0.5">{subtitle}</div>
-    </div>
-  );
-}
-
-function InfoRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <div className="text-xs text-gray-500">{label}</div>
-      <div className="font-medium">{value}</div>
+    <div className={`stat-card rounded-2xl p-4 ${className || ""}`}>
+      {loading ? (
+        <div>
+          <div className="shimmer rounded-lg" style={{ height: "12px", width: "60%", marginBottom: "12px" }} />
+          <div className="shimmer rounded-lg" style={{ height: "24px", width: "80%", marginBottom: "8px" }} />
+          <div className="shimmer rounded-lg" style={{ height: "10px", width: "40%" }} />
+        </div>
+      ) : (
+        <>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+            <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", letterSpacing: "0.5px", textTransform: "uppercase" }}>
+              {label}
+            </div>
+            <div style={{
+              width: "28px", height: "28px", borderRadius: "8px",
+              background: `rgba(${accent === "#3b82f6" ? "59,130,246" : accent === "#f59e0b" ? "245,158,11" : accent === "#10b981" ? "16,185,129" : accent === "#00a896" ? "0,168,150" : "139,92,246"},0.15)`,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              color: accent, fontSize: "14px",
+            }}>
+              {icon}
+            </div>
+          </div>
+          <div style={{ color: "#fff", fontSize: "20px", fontWeight: 700, fontFamily: "'DM Mono', monospace", marginBottom: "4px", letterSpacing: "-0.5px" }}>
+            {value}
+          </div>
+          <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "11px" }}>{sub}</div>
+        </>
+      )}
     </div>
   );
 }

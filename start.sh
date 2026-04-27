@@ -96,13 +96,7 @@ EOF
     fi
 done
 
-# Seed / update platform operational certificate (non-financial transparency)
-echo "📜 Seeding platform certificate (idempotent)..."
-if python manage.py seed_platform_certificate --certificate-id "WC-OP-2025-0001" --issuing-authority "Issuing Authority (Placeholder)" --jurisdiction "United States" --verification-url "https://wolvcapital.com/legal/certificate-of-operation"; then
-    echo "✅ Platform certificate seeded/updated"
-else
-    echo "⚠️ Platform certificate seeding failed (continuing)"
-fi
+
 
 # Setup crypto wallets only if enabled (security consideration)
 if [[ -n "$SETUP_CRYPTO_WALLETS" && "$SETUP_CRYPTO_WALLETS" == "1" ]]; then

@@ -1,59 +1,54 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { apiFetch } from '@/lib/api'
-import SpendLimitsModal from './SpendLimitsModal'
 
-export default function CardActions({ cardData, onFreeze, onReplace }) {
+export default function CardActions({ cardData, onFreeze, isFrozen }) {
   const [toast, setToast] = useState('')
   const [isBusy, setIsBusy] = useState(false)
-  const [showLimits, setShowLimits] = useState(false)
+  const [showCvv, setShowCvv] = useState(false)
+  const [showFull, setShowFull] = useState(false)
+  // Fix: use useRef instead of window.__wolvCardToast for timer
+  const toastTimer = useRef(null)
 
   const showToast = (message) => {
     setToast(message)
-    window.clearTimeout(window.__virtualCardToast)
-    window.__virtualCardToast = window.setTimeout(() => setToast(''), 2800)
+    if (toastTimer.current) clearTimeout(toastTimer.current)
+    toastTimer.current = setTimeout(() => setToast(''), 2800)
   }
 
-  const copyToClipboard = async (text) => {
-    if (!text) {
-      showToast('Nothing to copy')
-      return
-    }
-
+  const copyToClipboard = async (text, label = 'Copied') => {
+    if (!text) { showToast('Nothing to copy'); return }
     try {
       await navigator.clipboard.writeText(text)
-      showToast('Copied to clipboard')
-    } catch (error) {
-      const fallback = document.createElement('textarea')
-      fallback.value = text
-      fallback.style.position = 'fixed'
-      fallback.style.left = '-9999px'
-      document.body.appendChild(fallback)
-      fallback.focus()
-      fallback.select()
+    } catch {
+      const el = document.createElement('textarea')
+      el.value = text
+      el.style.cssText = 'position:fixed;left:-9999px'
+      document.body.appendChild(el)
+      el.focus(); el.select()
       document.execCommand('copy')
-      document.body.removeChild(fallback)
-      showToast('Copied to clipboard')
+      document.body.removeChild(el)
     }
+    showToast(`${label} copied!`)
   }
 
   const handleFreeze = async () => {
     if (isBusy) return
     setIsBusy(true)
-
     try {
       const res = await apiFetch('/api/cards/freeze/', {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ card_id: cardData?.id }),
       })
       if (!res.ok) {
-        const payload = await res.json().catch(() => null)
-        throw new Error(payload?.error || 'Could not update card status')
+        const p = await res.json().catch(() => null)
+        throw new Error(p?.error || 'Could not update card status')
       }
-
-      const payload = await res.json()
-      onFreeze?.(payload.frozen)
-      showToast(payload.frozen ? 'Card frozen' : 'Card reactivated')
+      const p = await res.json()
+      onFreeze?.(p.frozen)
+      showToast(p.frozen ? '❄️ Card frozen' : '🔥 Card unfrozen')
     } catch (err) {
       showToast(err?.message || 'Action failed')
     } finally {
@@ -61,70 +56,118 @@ export default function CardActions({ cardData, onFreeze, onReplace }) {
     }
   }
 
-  const handleReplace = () => {
-    if (!window.confirm('Replace card details with the latest issued card?')) {
-      return
-    }
-    onReplace?.()
-    showToast('Refreshing card data')
-  }
+  const cardNumber = cardData?.card_number || cardData?.number || ''
+  const cvv = cardData?.cvv || ''
+
+  const actions = [
+    {
+      icon: '📋',
+      label: 'Copy Number',
+      onClick: () => copyToClipboard(cardNumber, 'Card number'),
+      disabled: !cardNumber,
+    },
+    {
+      icon: isFrozen ? '🔥' : '❄️',
+      label: isBusy ? 'Please wait…' : isFrozen ? 'Unfreeze Card' : 'Freeze Card',
+      onClick: handleFreeze,
+      disabled: isBusy || !cardData,
+      highlight: true,
+    },
+    {
+      icon: showCvv ? '🙈' : '👁️',
+      label: showCvv ? 'Hide CVV' : 'Show CVV',
+      onClick: () => {
+        if (!showCvv && !cvv) { showToast('CVV not available'); return }
+        setShowCvv(v => !v)
+      },
+      disabled: !cardData,
+    },
+    {
+      // Fix: showFull now actually renders the full number below
+      icon: showFull ? '🔒' : '🔢',
+      label: showFull ? 'Hide Number' : 'Full Number',
+      onClick: () => {
+        if (!showFull && !cardNumber) { showToast('Number not available'); return }
+        if (!showFull) copyToClipboard(cardNumber, 'Full card number')
+        setShowFull(v => !v)
+      },
+      disabled: !cardData,
+    },
+  ]
 
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <button
-          type="button"
-          className="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-500"
-          onClick={handleFreeze}
-          disabled={isBusy || !cardData}
-        >
-          {cardData?.is_frozen ? 'Unfreeze Card' : 'Freeze Card'}
-        </button>
-
-        <button
-          type="button"
-          className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
-          onClick={() => copyToClipboard(cardData?.number)}
-          disabled={!cardData?.number}
-        >
-          Copy Number
-        </button>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      {/* Action buttons */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+        {actions.map((btn) => (
+          <button
+            key={btn.label}
+            type="button"
+            onClick={btn.onClick}
+            disabled={btn.disabled}
+            style={{
+              display: 'flex', flexDirection: 'column', alignItems: 'center',
+              gap: '8px', padding: '16px 12px', borderRadius: '16px',
+              border: btn.highlight ? 'none' : '1px solid rgba(255,255,255,0.08)',
+              background: btn.highlight
+                ? 'linear-gradient(135deg, #1a3a8f, #00a896)'
+                : 'rgba(255,255,255,0.04)',
+              color: '#fff', cursor: btn.disabled ? 'not-allowed' : 'pointer',
+              opacity: btn.disabled ? 0.5 : 1,
+              transition: 'all 0.2s',
+              boxShadow: btn.highlight ? '0 6px 20px rgba(0,168,150,0.25)' : 'none',
+            }}
+          >
+            <span style={{ fontSize: '22px' }}>{btn.icon}</span>
+            <span style={{ fontSize: '11px', fontWeight: 600, textAlign: 'center', lineHeight: 1.3 }}>
+              {btn.label}
+            </span>
+          </button>
+        ))}
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <button
-          type="button"
-          className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
-          onClick={() => copyToClipboard(cardData?.cvc)}
-          disabled={!cardData?.cvc}
-        >
-          Copy CVC
-        </button>
+      {/* Fix: Full number reveal row (was missing in original) */}
+      {showFull && cardNumber && (
+        <div style={{
+          padding: '12px 16px', borderRadius: '12px',
+          background: 'rgba(59,130,246,0.08)',
+          border: '1px solid rgba(59,130,246,0.2)',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        }}>
+          <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px' }}>Full Number</span>
+          <span style={{ fontFamily: 'monospace', fontWeight: 700, color: '#fff', fontSize: '13px', letterSpacing: '2px' }}>
+            {cardNumber.replace(/(.{4})/g, '$1 ').trim()}
+          </span>
+        </div>
+      )}
 
-        <button
-          type="button"
-          className="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-sky-600 to-indigo-600 px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110"
-          onClick={() => setShowLimits(true)}
-        >
-          Spending Limits
-        </button>
-      </div>
+      {/* CVV reveal row */}
+      {showCvv && cvv && (
+        <div style={{
+          padding: '12px 16px', borderRadius: '12px',
+          background: 'rgba(0,168,150,0.08)',
+          border: '1px solid rgba(0,168,150,0.2)',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        }}>
+          <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px' }}>CVV / CVC</span>
+          <span style={{ fontFamily: 'monospace', fontWeight: 700, color: '#00a896', fontSize: '16px', letterSpacing: '4px' }}>
+            {cvv}
+          </span>
+        </div>
+      )}
 
-      <button
-        type="button"
-        className="inline-flex items-center justify-center w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
-        onClick={handleReplace}
-      >
-        Replace Card
-      </button>
-
-      {toast ? (
-        <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+      {/* Toast */}
+      {toast && (
+        <div style={{
+          padding: '10px 16px', borderRadius: '12px',
+          background: 'rgba(255,255,255,0.06)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          color: 'rgba(255,255,255,0.8)', fontSize: '13px',
+          textAlign: 'center', fontWeight: 500,
+        }}>
           {toast}
         </div>
-      ) : null}
-
-      <SpendLimitsModal open={showLimits} onClose={() => setShowLimits(false)} />
+      )}
     </div>
   )
 }

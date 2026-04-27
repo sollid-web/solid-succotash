@@ -32,48 +32,23 @@ export default function DepositPage() {
       const data = JSON.parse(text)
       if (data?.detail) return String(data.detail)
       if (data?.error) return String(data.error)
-      if (Array.isArray(data?.non_field_errors) && data.non_field_errors[0]) {
-        return String(data.non_field_errors[0])
-      }
-      const fieldErrors = Object.entries(data)
-        .filter(([, v]) => Array.isArray(v) && v.length)
-        .map(([k, v]) => `${k}: ${(v as string[]).join(', ')}`)
+      if (Array.isArray(data?.non_field_errors) && data.non_field_errors[0]) return String(data.non_field_errors[0])
+      const fieldErrors = Object.entries(data).filter(([, v]) => Array.isArray(v) && (v as any[]).length).map(([k, v]) => `${k}: ${(v as string[]).join(', ')}`)
       if (fieldErrors.length) return fieldErrors.join(' | ')
       return text
-    } catch {
-      return text
-    }
+    } catch { return text }
   }
 
   useEffect(() => {
     const loadWallets = async () => {
       try {
-        console.log('Loading wallets from:', buildApiUrl('/api/crypto-wallets/'))
-        const res = await apiFetch('/api/crypto-wallets/', {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-        })
-        console.log('Wallet fetch response status:', res.status)
+        const res = await apiFetch('/api/crypto-wallets/', { method: 'GET', headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } })
         if (res.ok) {
           const data = await res.json()
-          console.log('Loaded wallets:', data)
           setCompanyWallets(Array.isArray(data) ? data : [])
-          // Show wallets section when crypto method is selected
-          if (['BTC','USDT','USDC','ETH'].includes(method)) {
-            setShowWallets(true)
-          }
-        } else {
-          const errorText = await res.text()
-          console.error('Failed to load wallets, status:', res.status, 'Response:', errorText)
-          setError(`Failed to load wallet addresses. Status: ${res.status}`)
+          if (['BTC','USDT','USDC','ETH'].includes(method)) setShowWallets(true)
         }
-      } catch (e) {
-        console.error('Error loading company wallets:', e)
-        setError(`Network error loading wallet addresses: ${e instanceof Error ? e.message : 'Unknown error'}`)
-      }
+      } catch (e) { setError(`Network error loading wallet addresses`) }
     }
     loadWallets()
   }, [method])
@@ -82,236 +57,138 @@ export default function DepositPage() {
     try {
       await navigator.clipboard.writeText(text)
       setCopiedAddress(text)
-      setMessage(`${label} copied to clipboard!`)
-      setTimeout(() => {
-        setCopiedAddress('')
-        setMessage('')
-      }, 3000)
-    } catch (err) {
-      setError('Failed to copy to clipboard')
-    }
+      setMessage(`${label} copied!`)
+      setTimeout(() => { setCopiedAddress(''); setMessage('') }, 3000)
+    } catch { setError('Failed to copy') }
   }
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setMessage('')
-    setError('')
-
+    setMessage(''); setError('')
     if (!amount) return setError('Please enter an amount')
-    if (!reference) return setError('Please provide a reference or note')
-
+    if (!reference) return setError('Please provide a reference')
     setLoading(true)
     try {
       const res = await apiFetch('/api/transactions/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          tx_type: 'deposit',
-          amount: Number(amount),
-          reference,
-          payment_method: method,
-          tx_hash: txHash,
-          wallet_address_used: walletAddress,
-        }),
+        body: JSON.stringify({ tx_type: 'deposit', amount: Number(amount), reference, payment_method: method, tx_hash: txHash, wallet_address_used: walletAddress }),
       })
-      if (res.ok) {
-        setMessage('Deposit request submitted. Awaiting approval.')
-        setTimeout(() => (window.location.href = '/dashboard'), 1000)
-      } else {
-        const msg = await readErrorMessage(res)
-        setError(msg || 'Failed to submit deposit')
-      }
-    } catch {
-      setError('Network error. Please try again.')
-    } finally {
-      setLoading(false)
-    }
+      if (res.ok) { setMessage('Deposit request submitted. Awaiting approval.'); setTimeout(() => (window.location.href = '/dashboard'), 1500) }
+      else { const msg = await readErrorMessage(res); setError(msg || 'Failed to submit deposit') }
+    } catch { setError('Network error. Please try again.') }
+    finally { setLoading(false) }
   }
 
+  const isCrypto = ['BTC','USDT','USDC','ETH'].includes(method)
+  const activeWallet = companyWallets.find(w => w.currency === method && w.is_active)
+
   return (
-    <div className="bg-white rounded-3xl shadow-xl p-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Deposit Funds</h1>
-        <Link href="/dashboard" className="text-sm text-[#2563eb] hover:underline">Back to dashboard</Link>
+    <div>
+      <div style={{ marginBottom: "24px" }}>
+        <h1 style={{ color: "#fff", fontSize: "24px", fontWeight: 700, marginBottom: "4px" }}>Deposit Funds</h1>
+        <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px" }}>Add funds to your investment account</p>
       </div>
 
-      <form onSubmit={submit} className="space-y-6 max-w-xl">
-        {error && <div className="p-3 bg-red-50 text-red-700 rounded-xl text-sm">{error}</div>}
-        {message && <div className="p-3 bg-emerald-50 text-emerald-700 rounded-xl text-sm">{message}</div>}
-        
-        {/* Debug block removed for production build (was conditional on NODE_ENV) */}
+      <div style={{ maxWidth: "640px" }}>
+        {error && <div style={{ padding: "12px 16px", borderRadius: "12px", background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)", color: "#f87171", fontSize: "13px", marginBottom: "16px" }}>{error}</div>}
+        {message && <div style={{ padding: "12px 16px", borderRadius: "12px", background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.2)", color: "#34d399", fontSize: "13px", marginBottom: "16px" }}>{message}</div>}
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="depositAmount" className="block text-sm font-semibold text-gray-700 mb-2">Amount (USD)</label>
-            <input id="depositAmount" aria-label="Deposit amount" type="number" min="0" step="0.01" value={amount} onChange={(e) => setAmount(e.target.value)} className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:border-[#2563eb]" placeholder="0.00"/>
+        <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+            <div>
+              <label>Amount (USD)</label>
+              <input type="number" min="0" step="0.01" value={amount} onChange={e => setAmount(e.target.value)} placeholder="0.00" />
+            </div>
+            <div>
+              <label>Payment Method</label>
+              <select value={method} onChange={e => { setMethod(e.target.value); setShowWallets(['BTC','USDT','USDC','ETH'].includes(e.target.value)) }}>
+                <option value="bank_transfer">Bank Transfer</option>
+                <option value="BTC">Bitcoin (BTC)</option>
+                <option value="USDT">Tether (USDT)</option>
+                <option value="USDC">USD Coin (USDC)</option>
+                <option value="ETH">Ethereum (ETH)</option>
+              </select>
+            </div>
           </div>
-          <div>
-            <label htmlFor="paymentMethod" className="block text-sm font-semibold text-gray-700 mb-2">Payment Method</label>
-            <select id="paymentMethod" aria-label="Payment method" value={method} onChange={(e) => {
-              setMethod(e.target.value)
-              setShowWallets(['BTC','USDT','USDC','ETH'].includes(e.target.value))
-              setError('') // Clear any previous errors
-            }} className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:border-[#2563eb]">
-              <option value="bank_transfer">Bank Transfer</option>
-              <option value="BTC">Bitcoin (BTC)</option>
-              <option value="USDT">Tether (USDT)</option>
-              <option value="USDC">USD Coin (USDC)</option>
-              <option value="ETH">Ethereum (ETH)</option>
-            </select>
-            {['BTC','USDT','USDC','ETH'].includes(method) && showWallets && (
-              <div className="mt-3 space-y-3">
-                {/* Company wallet address for selected crypto method */}
-                <div className="rounded-xl border-2 border-blue-200 p-4 bg-gradient-to-br from-blue-50 to-indigo-50">
-                  {companyWallets.filter(w => w.currency === method && w.is_active).map(w => (
-                    <div key={w.currency} className="space-y-4">
-                      <div className="flex items-center justify-between pb-2 border-b border-blue-200">
-                        <div className="flex items-center space-x-2">
-                          <CryptoIcon currency={w.currency} />
-                          <span className="text-sm font-bold text-gray-800">{w.currency} Deposit Address</span>
-                        </div>
-                        {w.network && <span className="text-xs font-semibold text-gray-600 bg-white px-2 py-1 rounded-lg">Network: {w.network}</span>}
-                      </div>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Wallet Address</span>
-                        </div>
-                        <div className="relative group">
-                          <div className="font-mono text-xs break-all bg-white border-2 border-gray-200 rounded-lg p-3 pr-20 hover:border-blue-300 transition">
-                            {w.wallet_address}
-                          </div>
-                          <button 
-                            type="button" 
-                            onClick={() => copyToClipboard(w.wallet_address, `${w.currency} address`)}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] text-[#0F172A] px-4 py-2 rounded-lg text-xs font-semibold hover:shadow-lg transition-all duration-200 hover:scale-105 flex items-center space-x-1"
-                          >
-                            {copiedAddress === w.wallet_address ? (
-                              <>
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                </svg>
-                                <span>Copied!</span>
-                              </>
-                            ) : (
-                              <>
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                </svg>
-                                <span>Copy</span>
-                              </>
-                            )}
-                          </button>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-center pt-3 pb-1">
-                        <div className="text-center">
-                          <QRCode address={w.wallet_address} />
-                          <p className="text-[10px] text-gray-500 mt-2">Scan QR to copy address</p>
-                        </div>
-                      </div>
-                      <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 space-y-1">
-                        <div className="flex items-start space-x-2">
-                          <svg className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                          </svg>
-                          <div className="text-xs text-amber-800">
-                            <p className="font-semibold">Important:</p>
-                            <ul className="list-disc list-inside mt-1 space-y-1">
-                              <li>Only send {w.currency} to this address</li>
-                              <li>Verify the network is {w.network || 'correct'} before sending</li>
-                              <li>Double-check the address before confirming transaction</li>
-                              <li>Deposits require manual approval (24-72 hours)</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
+
+          {isCrypto && showWallets && (
+            <div style={{ borderRadius: "16px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", padding: "20px" }}>
+              {activeWallet ? (
+                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                      <CryptoIcon currency={activeWallet.currency} />
+                      <span style={{ color: "#fff", fontWeight: 600, fontSize: "14px" }}>{activeWallet.currency} Deposit Address</span>
                     </div>
-                  ))}
-                  {companyWallets.length === 0 && (
-                    <div className="text-center py-4">
-                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-yellow-100 mb-2">
-                        <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                      <p className="text-sm text-gray-600 font-medium">Loading wallet addresses...</p>
-                      <p className="text-xs text-gray-500 mt-1">Please wait while we fetch deposit information</p>
+                    {activeWallet.network && <span style={{ padding: "3px 10px", borderRadius: "99px", background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.5)", fontSize: "11px" }}>Network: {activeWallet.network}</span>}
+                  </div>
+                  <div style={{ position: "relative" }}>
+                    <div style={{ fontFamily: "monospace", fontSize: "12px", padding: "14px 100px 14px 14px", borderRadius: "10px", background: "rgba(0,0,0,0.3)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.7)", wordBreak: "break-all" }}>
+                      {activeWallet.wallet_address}
                     </div>
-                  )}
-                  {companyWallets.length > 0 && companyWallets.filter(w => w.currency === method && w.is_active).length === 0 && (
-                    <div className="text-center py-4">
-                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-2">
-                        <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                      <p className="text-sm text-gray-600 font-medium">No active {method} wallet configured</p>
-                      <p className="text-xs text-gray-500 mt-1">Please contact support for deposit information</p>
-                    </div>
-                  )}
+                    <button type="button" onClick={() => copyToClipboard(activeWallet.wallet_address, `${activeWallet.currency} address`)} style={{
+                      position: "absolute", right: "8px", top: "50%", transform: "translateY(-50%)",
+                      padding: "6px 14px", borderRadius: "8px", background: "linear-gradient(135deg, #00a896, #0f7a70)",
+                      color: "#fff", fontSize: "12px", fontWeight: 600, cursor: "pointer", border: "none",
+                    }}>
+                      {copiedAddress === activeWallet.wallet_address ? "✓ Copied" : "Copy"}
+                    </button>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <QRCode address={activeWallet.wallet_address} />
+                  </div>
+                  <div style={{ padding: "12px 16px", borderRadius: "10px", background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.15)" }}>
+                    <p style={{ color: "#fbbf24", fontSize: "12px", fontWeight: 600, marginBottom: "6px" }}>⚠ Important</p>
+                    <ul style={{ color: "rgba(255,255,255,0.5)", fontSize: "12px", listStyle: "disc", paddingLeft: "16px", lineHeight: 1.8 }}>
+                      <li>Only send {activeWallet.currency} to this address</li>
+                      <li>Verify the network is {activeWallet.network || 'correct'} before sending</li>
+                      <li>Deposits require manual approval (24-72 hours)</li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        </div>
+              ) : (
+                <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", textAlign: "center", padding: "24px 0" }}>
+                  {companyWallets.length === 0 ? "Loading wallet addresses..." : `No active ${method} wallet configured. Contact support.`}
+                </p>
+              )}
+            </div>
+          )}
 
-        <div>
-          <label htmlFor="depositReference" className="block text-sm font-semibold text-gray-700 mb-2">Reference / Notes</label>
-          <input id="depositReference" aria-label="Deposit reference or notes" value={reference} onChange={(e) => setReference(e.target.value)} className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:border-[#2563eb]" placeholder="e.g., Bank transfer ref or wallet used"/>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="cryptoTxHash" className="block text-sm font-semibold text-gray-700 mb-2">Crypto Tx Hash (optional)</label>
-            <input id="cryptoTxHash" aria-label="Cryptocurrency transaction hash" value={txHash} onChange={(e) => setTxHash(e.target.value)} className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:border-[#2563eb]"/>
+            <label>Reference / Notes</label>
+            <input value={reference} onChange={e => setReference(e.target.value)} placeholder="e.g., Bank transfer ref or wallet used" />
           </div>
-          <div>
-            <label htmlFor="walletAddressUsed" className="block text-sm font-semibold text-gray-700 mb-2">Wallet Address Used (optional)</label>
-            <input id="walletAddressUsed" aria-label="Wallet address used" value={walletAddress} onChange={(e) => setWalletAddress(e.target.value)} className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:border-[#2563eb]"/>
-          </div>
-        </div>
 
-        <button type="submit" disabled={loading} className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-xl font-semibold hover:brightness-110 disabled:opacity-50 transition">
-          {loading ? 'Submitting...' : 'Submit Deposit'}
-        </button>
-      </form>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+            <div>
+              <label>Crypto Tx Hash (optional)</label>
+              <input value={txHash} onChange={e => setTxHash(e.target.value)} />
+            </div>
+            <div>
+              <label>Wallet Address Used (optional)</label>
+              <input value={walletAddress} onChange={e => setWalletAddress(e.target.value)} />
+            </div>
+          </div>
+
+          <button type="submit" disabled={loading} className="btn-cta-sky" style={{ width: "fit-content" }}>
+            {loading ? 'Submitting...' : 'Submit Deposit'}
+          </button>
+        </form>
+      </div>
     </div>
   )
 }
 
 function QRCode({ address }: { address: string }) {
   const [imageError, setImageError] = useState(false)
-  const src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(address)}&bgcolor=ffffff&color=000000&format=png&margin=1`
-  
-  if (imageError) {
-    return (
-      <div className="w-28 h-28 rounded-lg border-2 border-gray-300 bg-gray-50 p-1 shadow-sm flex items-center justify-center">
-        <div className="text-center">
-          <svg className="w-8 h-8 text-gray-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span className="text-xs text-gray-500">QR Code</span>
-        </div>
-      </div>
-    )
-  }
-  
-  return (
-    <img
-      src={src}
-      alt="Wallet address QR code"
-      className="w-28 h-28 rounded-lg border-2 border-gray-300 bg-white p-1 shadow-sm"
-      loading="lazy"
-      onError={() => setImageError(true)}
-    />
-  )
+  const src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(address)}&bgcolor=1a2035&color=ffffff&format=png&margin=1`
+  if (imageError) return <div style={{ width: "100px", height: "100px", borderRadius: "10px", background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(255,255,255,0.3)", fontSize: "12px" }}>QR Code</div>
+  return <img src={src} alt="QR" style={{ width: "100px", height: "100px", borderRadius: "10px" }} loading="lazy" onError={() => setImageError(true)} />
 }
 
 function CryptoIcon({ currency }: { currency: string }) {
-  const base = 'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-[#0F172A] shadow-md'
-  if (currency === 'BTC') return <div className={`${base} bg-gradient-to-br from-orange-400 to-orange-600`}>₿</div>
-  if (currency === 'ETH') return <div className={`${base} bg-gradient-to-br from-gray-600 to-gray-800`}>Ξ</div>
-  if (currency === 'USDT') return <div className={`${base} bg-gradient-to-br from-green-500 to-green-700`}>₮</div>
-  if (currency === 'USDC') return <div className={`${base} bg-gradient-to-br from-blue-500 to-blue-700`}>$</div>
-  return <div className={`${base} bg-gradient-to-br from-gray-400 to-gray-600`}>{currency[0]}</div>
+  const colors: Record<string, string> = { BTC: "#f97316", ETH: "#6366f1", USDT: "#10b981", USDC: "#3b82f6" }
+  const symbols: Record<string, string> = { BTC: "₿", ETH: "Ξ", USDT: "₮", USDC: "$" }
+  return <div style={{ width: "32px", height: "32px", borderRadius: "8px", background: colors[currency] || "#6b7280", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: "14px" }}>{symbols[currency] || currency[0]}</div>
 }

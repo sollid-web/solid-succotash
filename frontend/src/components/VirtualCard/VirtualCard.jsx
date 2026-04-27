@@ -1,126 +1,66 @@
-import React, { useState } from 'react';
-import styles from './VirtualCard.module.css';
+import React, { useState } from "react";
+import styles from "./VirtualCard.module.css";
 
-const VirtualCard = ({ userData, cardData, isFrozen }) => {
+export default function VirtualCard({ userData, cardData, isFrozen }) {
   const [flipped, setFlipped] = useState(false);
 
+  // Fallbacks for missing data
+  const cardNumber = cardData?.card_number || "4000 7812 3456 7717";
+  const lastFour = cardNumber.slice(-4);
+  const expiry = cardData?.expiry || cardData?.expiry_date || "01/29";
+  const holder = cardData?.cardholder_name || userData?.fullName || "JAMES";
+
   return (
-    <div className={styles.cardContainer} onClick={() => setFlipped(!flipped)}>
-      <div className={`${styles.cardInner} ${flipped ? styles.flipped : ''}`}>
-        {/* FRONT OF CARD */}
+    <div className={styles.cardContainer} onClick={() => setFlipped((f) => !f)}>
+      <div className={`${styles.cardInner} ${flipped ? styles.flipped : ""}`}>
+        {/* FRONT */}
         <div className={`${styles.cardFace} ${styles.cardFront}`}>
           <div className={styles.cardContent}>
             <div className={styles.cardTop}>
               <span className={styles.brandLogo}>WolvCapital</span>
               <div className={styles.visaInfo}>
                 <span className={styles.visaText}>VISA</span>
-                <span className={styles.infiniteText}>Infinite</span>
+                <span className={styles.infiniteText}>INFINITE</span>
               </div>
             </div>
             <div className={styles.chipSection}>
-              <div className={styles.chip}></div>
-            </div>
-            <div className={styles.cardNumber}>
-              4000 7812 3456 {cardData?.lastFour || '0401'}
-            </div>
-            <div className={styles.cardBottom}>
-              <div className={styles.holderInfo}>
-                <span className={styles.label}>Card Holder</span>
-                <span className={styles.value}>{userData?.fullName || 'CIDALARID'}</span>
-              </div>
-              <div className={styles.expiryInfo}>
-                <span className={styles.label}>Valid Thru</span>
-                <span className={styles.value}>{cardData?.expiry || '04/29'}</span>
-              </div>
-              <div className={styles.hologram}></div>
-            </div>
-          </div>
-        </div>
-        {/* BACK OF CARD */}
-        <div className={`${styles.cardFace} ${styles.cardBack}`}>
-          <div className={styles.magneticStrip}></div>
-          <div className={styles.signatureArea}>
-            <div className={styles.cvvBox}>{cardData?.cvv || '***'}</div>
-          </div>
-          <div className={styles.backText}>
-            Issued by WolvCapital Global Services Ltd. 
-            Visa Infinite benefits apply.
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default VirtualCard;
-import React, { useState } from 'react';
-import styles from './VirtualCard.module.css'; // Corrected Import
-
-const VirtualCard = ({ userData, cardData, isFrozen }) => {
-  const [flipped, setFlipped] = useState(false);
-
-  return (
-    <div className={styles.cardContainer} onClick={() => setFlipped(!flipped)}>
-      <div className={`${styles.cardInner} ${flipped ? styles.flipped : ''}`}>
-        
-        {/* FRONT OF CARD */}
-        <div className={`${styles.cardFace} ${styles.cardFront}`}>
-          {isFrozen && (
-            <div className={styles.frozenOverlay}>
-              <span className={styles.frozenText}>CARD FROZEN</span>
-            </div>
-          )}
-          
-          <div className={styles.cardContent}>
-            <div className={styles.cardTop}>
-              <span className={styles.brandLogo}>WolvCapital</span>
-              <div className={styles.visaInfo}>
-                <span className={styles.visaText}>VISA</span>
-                <span className={styles.infiniteText}>Infinite</span>
-              </div>
-            </div>
-
-            <div className={styles.chipSection}>
-              <div className={styles.chip}></div>
-              {/* Contactless Icon SVG */}
-              <svg className={styles.contactless} viewBox="0 0 24 24">
-                <path fill="currentColor" d="M7.03 5.07c.41-.35.46-.96.11-1.37s-.96-.46-1.37-.11C2.56 6.45.5 10.15.5 14.18s2.06 7.73 5.27 10.59c.41.35 1.02.3 1.37-.11s.3-.1.35-.41c-.35-.41-.96-.46-1.37-.11-2.85-2.54-4.68-5.83-4.68-9.41s1.83-6.87 4.68-9.41z"/>
+              <div className={styles.chip} />
+              <svg className={styles.contactless} viewBox="0 0 24 24" fill="none">
+                <path d="M8.5 12c0-1.93 1.57-3.5 3.5-3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                <path d="M5.5 12c0-3.59 2.91-6.5 6.5-6.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                <circle cx="12" cy="12" r="0.5" fill="currentColor" />
               </svg>
             </div>
-
-            <div className={styles.cardNumber}>
-              4000 7812 3456 {cardData?.lastFour || '0401'}
-            </div>
-
+            <div className={styles.cardNumber}>{cardNumber}</div>
             <div className={styles.cardBottom}>
               <div className={styles.holderInfo}>
-                <span className={styles.label}>Card Holder</span>
-                <span className={styles.value}>{userData?.fullName || 'CIDALARID'}</span>
+                <span className={styles.label}>CARD HOLDER</span>
+                <span className={styles.value}>{holder}</span>
               </div>
               <div className={styles.expiryInfo}>
-                <span className={styles.label}>Valid Thru</span>
-                <span className={styles.value}>{cardData?.expiry || '04/29'}</span>
+                <span className={styles.label}>VALID THRU</span>
+                <span className={styles.value}>{expiry}</span>
               </div>
-              <div className={styles.hologram}></div>
+              <div className={styles.hologram} />
             </div>
           </div>
+          {isFrozen && (
+            <div className={styles.frozenOverlay}>
+              <span className={styles.frozenText}>FROZEN</span>
+            </div>
+          )}
         </div>
-
-        {/* BACK OF CARD */}
+        {/* BACK */}
         <div className={`${styles.cardFace} ${styles.cardBack}`}>
-          <div className={styles.magneticStrip}></div>
+          <div className={styles.magneticStrip} />
           <div className={styles.signatureArea}>
-            <div className={styles.cvvBox}>{cardData?.cvv || '***'}</div>
+            <div className={styles.cvvBox}>{cardData?.cvv || "•••"}</div>
           </div>
           <div className={styles.backText}>
-            Issued by WolvCapital Global Services Ltd. 
-            Visa Infinite benefits apply.
+            Issued by WolvCapital Global Services Ltd. Visa Infinite benefits apply.
           </div>
         </div>
-
       </div>
     </div>
   );
-};
-
-export default VirtualCard;
+}

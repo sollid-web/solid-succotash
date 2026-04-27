@@ -7,215 +7,110 @@ import { useVirtualCard } from "@/hooks/useVirtualCard";
 import { useBiometricAuth } from "@/hooks/useBiometricAuth";
 import { apiFetch } from "@/lib/api";
 
-function money(n: number) {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 }).format(n);
-}
-function maskNumber(num: string) {
-  if (!num || num.length < 4) return "•••• •••• •••• ••••";
-  return "•••• •••• •••• " + num.slice(-4);
-}
-function formatExpiry(m: string, y: string) {
-  if (!m || !y) return "••/••";
-  return m.toString().padStart(2, "0") + "/" + y.toString();
-}
+/** --- Helper Functions --- **/
+const money = (n: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n);
+const maskNumber = (num: string) => num ? `•••• •••• •••• ${num.slice(-4)}` : "•••• •••• •••• ••••";
+const formatExpiry = (m: string, y: string) => (m && y) ? `${m.toString().padStart(2, "0")}/${y.toString().slice(-2)}` : "••/••";
+
+/** --- Components --- **/
 
 function Toast({ message, show }: { message: string; show: boolean }) {
   return (
-    <div className={"fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-full bg-green-500 text-white text-sm font-semibold shadow-lg whitespace-nowrap transition-all duration-300 " + (show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none")}>
+    <div className={`fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-full bg-gray-900/90 text-white text-sm font-semibold shadow-2xl backdrop-blur-md transition-all duration-300 ${show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}`}>
       {message}
     </div>
   );
 }
 
-function PasswordModal({ show, onSubmit, onCancel, error, isVerifying }: {
-  show: boolean;
-  onSubmit: (p: string) => void;
-  onCancel: () => void;
-  error: string;
-  isVerifying: boolean;
-}) {
-  const [pw, setPw] = useState("");
-  if (!show) return null;
-  return (
-    <div className="fixed inset-0 bg-black/70 z-50 flex items-end backdrop-blur-sm" onClick={onCancel}>
-      <div className="w-full bg-white rounded-t-3xl p-6 pb-10 max-w-lg mx-auto"
-        onClick={(e) => e.stopPropagation()}
-        style={{ animation: "slideUp 0.3s ease" }}>
-        <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-6" />
-        <div className="text-center mb-6">
-          <div className="text-4xl mb-3">🔐</div>
-          <h3 className="text-lg font-bold text-gray-900">Enter Card PIN</h3>
-          <p className="text-sm text-gray-500 mt-1">Enter your card PIN to reveal details</p>
-        </div>
-        <input
-          type="password"
-          inputMode="numeric"
-          value={pw}
-          onChange={(e) => setPw(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && pw && onSubmit(pw)}
-          placeholder="Enter card PIN"
-          autoComplete="new-password"
-          data-lpignore="true"
-          data-form-type="other"
-          className="w-full px-4 py-4 rounded-2xl border border-gray-200 text-sm mb-2 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 tracking-widest text-center text-lg"
-        />
-        {error && <p className="text-red-500 text-xs mb-3 ml-1">{error}</p>}
-        <button onClick={() => pw && onSubmit(pw)} disabled={isVerifying || !pw}
-          className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold mb-3 disabled:opacity-60">
-          {isVerifying ? "Verifying..." : "Verify & Reveal"}
-        </button>
-        <button onClick={onCancel} className="w-full py-4 rounded-2xl border border-gray-200 text-gray-600 font-semibold">
-          Cancel
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function CreatePinModal({ show, onSuccess, onCancel }: {
-  show: boolean;
-  onSuccess: () => void;
-  onCancel: () => void;
-}) {
+function CreatePinModal({ show, onCancel, onSuccess }: { show: boolean; onCancel: () => void; onSuccess: () => void }) {
   const [pin, setPin] = useState("");
   const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+
   if (!show) return null;
 
-  async function handleCreate() {
-    setError("");
-    if (pin.length < 4 || !/^\d+$/.test(pin)) { setError("PIN must be at least 4 digits."); return; }
-    if (pin !== confirm) { setError("PINs do not match."); return; }
-    setLoading(true);
+  async function handleSubmit() {
+    if (pin.length < 4) return setError("PIN must be at least 4 digits");
+    if (pin !== confirm) return setError("PINs do not match");
+    setSaving(true);
     try {
       const res = await apiFetch("/api/cards/set-pin/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pin, confirm_pin: confirm }),
+        body: JSON.stringify({ pin }),
       });
-      const data = await res.json();
-      if (res.ok && data.success) { onSuccess(); }
-      else { setError(data.error || "Failed to set PIN."); }
-    } catch { setError("Connection error. Please try again."); }
-    finally { setLoading(false); }
+      if (!res.ok) throw new Error("Failed to set PIN");
+      onSuccess();
+    } catch {
+      setError("Failed to save PIN. Try again.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
-    <div className="fixed inset-0 bg-black/70 z-50 flex items-end backdrop-blur-sm" onClick={onCancel}>
-      <div className="w-full bg-white rounded-t-3xl p-6 pb-10 max-w-lg mx-auto"
-        onClick={(e) => e.stopPropagation()}
-        style={{ animation: "slideUp 0.3s ease" }}>
-        <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-6" />
+    <div className="fixed inset-0 bg-black/70 z-[60] flex items-end sm:items-center justify-center backdrop-blur-sm" onClick={onCancel}>
+      <div className="w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl p-6" onClick={e => e.stopPropagation()}>
+        <div className="w-12 h-1 bg-gray-200 rounded-full mx-auto mb-6 sm:hidden" />
         <div className="text-center mb-6">
-          <div className="text-4xl mb-3">🔏</div>
-          <h3 className="text-lg font-bold text-gray-900">Create Card PIN</h3>
-          <p className="text-sm text-gray-500 mt-1">Set a secure PIN separate from your account password</p>
+          <div className="text-4xl mb-2">🔑</div>
+          <h3 className="text-xl font-bold text-gray-900">Create Card PIN</h3>
+          <p className="text-sm text-gray-500">Set a PIN to protect your card details</p>
         </div>
-        <input type="password" inputMode="numeric" pattern="[0-9]*" maxLength={6}
-          value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
-          placeholder="Enter 4-6 digit PIN"
-          autoComplete="new-password" data-lpignore="true" data-form-type="other"
-          className="w-full px-4 py-4 rounded-2xl border border-gray-200 text-sm mb-3 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 tracking-widest text-center text-lg"
+        <input
+          type="password"
+          inputMode="numeric"
+          autoFocus
+          value={pin}
+          onChange={e => setPin(e.target.value)}
+          placeholder="Enter PIN"
+          className="w-full px-4 py-4 rounded-2xl border border-gray-200 text-center text-2xl tracking-[1em] mb-3 focus:ring-2 focus:ring-blue-500 outline-none"
         />
-        <input type="password" inputMode="numeric" pattern="[0-9]*" maxLength={6}
-          value={confirm} onChange={(e) => setConfirm(e.target.value.replace(/\D/g, ""))}
-          onKeyDown={(e) => e.key === "Enter" && handleCreate()}
+        <input
+          type="password"
+          inputMode="numeric"
+          value={confirm}
+          onChange={e => setConfirm(e.target.value)}
           placeholder="Confirm PIN"
-          autoComplete="new-password" data-lpignore="true" data-form-type="other"
-          className="w-full px-4 py-4 rounded-2xl border border-gray-200 text-sm mb-2 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 tracking-widest text-center text-lg"
+          className="w-full px-4 py-4 rounded-2xl border border-gray-200 text-center text-2xl tracking-[1em] mb-2 focus:ring-2 focus:ring-blue-500 outline-none"
         />
-        {error && <p className="text-red-500 text-xs mb-3 ml-1">{error}</p>}
-        <button onClick={handleCreate} disabled={loading || !pin || !confirm}
-          className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold mb-3 disabled:opacity-60">
-          {loading ? "Creating PIN..." : "Create PIN & Reveal"}
+        {error && <p className="text-red-500 text-xs text-center mb-4">{error}</p>}
+        <button onClick={handleSubmit} disabled={saving || !pin || !confirm}
+          className="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold mb-3 disabled:opacity-50">
+          {saving ? "Saving..." : "Create PIN"}
         </button>
-        <button onClick={onCancel} className="w-full py-4 rounded-2xl border border-gray-200 text-gray-600 font-semibold">
-          Cancel
-        </button>
+        <button onClick={onCancel} className="w-full py-3 text-gray-500 text-sm">Cancel</button>
       </div>
     </div>
   );
 }
 
-function RequestCardView({ onRequested }: { onRequested: () => void }) {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  async function handleRequest() {
-    setLoading(true); setError(null);
-    try {
-      const res = await apiFetch("/api/virtualcards/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ purchase_amount: 1000 }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Request failed");
-      onRequested();
-    } catch (e: any) {
-      setError(e?.message || "Failed to submit request");
-    } finally { setLoading(false); }
-  }
-
+function PasswordModal({ show, onSubmit, onCancel, error, isVerifying }: any) {
+  const [pw, setPw] = useState("");
+  if (!show) return null;
   return (
-    <div className="min-h-screen bg-[#F2F9FF] flex items-center justify-center px-4">
-      <div className="max-w-sm w-full">
-        <div className="text-center mb-8">
-          <div className="text-7xl mb-5">💳</div>
-          <h2 className="text-2xl font-bold text-[#0b2f6b] mb-2">Get Your Virtual Card</h2>
-          <p className="text-gray-500 text-sm leading-relaxed">Activate a WolvCapital Visa virtual card for digital transactions worldwide.</p>
+    <div className="fixed inset-0 bg-black/70 z-[60] flex items-end sm:items-center justify-center backdrop-blur-sm" onClick={onCancel}>
+      <div className="w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl p-6" onClick={e => e.stopPropagation()}>
+        <div className="w-12 h-1 bg-gray-200 rounded-full mx-auto mb-6 sm:hidden" />
+        <div className="text-center mb-6">
+          <div className="text-4xl mb-2">🔐</div>
+          <h3 className="text-xl font-bold text-gray-900">Security Check</h3>
+          <p className="text-sm text-gray-500">Enter your card PIN to reveal details</p>
         </div>
-        <div className="rounded-2xl border border-blue-100 bg-white p-6 mb-5 shadow-sm">
-          {([
-            { label: "Card Type", value: "Visa Virtual Card" },
-            { label: "Activation Fee", value: "$0.00", green: true },
-            { label: "Purchase Amount", value: "$1,000.00", bold: true },
-            { label: "Processing Time", value: "1-24 hours" },
-          ] as any[]).map((row, i) => (
-            <div key={row.label} className={"flex justify-between items-center py-3 " + (i > 0 ? "border-t border-gray-100" : "")}>
-              <span className="text-sm text-gray-500">{row.label}</span>
-              <span className={"text-sm " + (row.green ? "text-green-600 font-semibold" : row.bold ? "font-bold text-[#0b2f6b]" : "font-semibold")}>{row.value}</span>
-            </div>
-          ))}
-        </div>
-        {error && <div className="rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm p-4 mb-4">{error}</div>}
-        <button onClick={handleRequest} disabled={loading}
-          className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-base shadow-lg disabled:opacity-60">
-          {loading ? "Submitting..." : "Request Card — $1,000"}
+        <input
+          type="password"
+          inputMode="numeric"
+          autoFocus
+          value={pw}
+          onChange={e => setPw(e.target.value)}
+          placeholder="••••"
+          className="w-full px-4 py-4 rounded-2xl border border-gray-200 text-center text-2xl tracking-[1em] mb-2 focus:ring-2 focus:ring-blue-500 outline-none"
+        />
+        {error && <p className="text-red-500 text-xs text-center mb-4">{error}</p>}
+        <button onClick={() => onSubmit(pw)} disabled={isVerifying || !pw} className="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold mb-3 disabled:opacity-50">
+          {isVerifying ? "Verifying..." : "Unlock Details"}
         </button>
-        <p className="text-center text-xs text-gray-400 mt-4">Your request will be reviewed and approved by our team.</p>
-        <Link href="/dashboard" className="block text-center text-sm text-blue-600 hover:underline mt-4">Back to Dashboard</Link>
-      </div>
-    </div>
-  );
-}
-
-function PendingCardView({ onRefresh }: { onRefresh: () => void }) {
-  return (
-    <div className="min-h-screen bg-[#F2F9FF] flex items-center justify-center px-4">
-      <div className="max-w-sm w-full text-center">
-        <div className="text-7xl mb-5">⏳</div>
-        <h2 className="text-xl font-bold text-[#0b2f6b] mb-2">Card Under Review</h2>
-        <p className="text-gray-500 text-sm leading-relaxed mb-8">Your virtual card request is being reviewed. This usually takes 1-24 hours.</p>
-        <div className="rounded-2xl border border-yellow-200 bg-yellow-50 p-5 mb-6 text-left">
-          <div className="flex gap-3">
-            <span className="text-xl">📋</span>
-            <div>
-              <div className="font-semibold text-yellow-800 text-sm mb-1">What happens next?</div>
-              <ul className="text-yellow-700 text-xs space-y-1">
-                <li>• Our team verifies your account</li>
-                <li>• Card details are generated and assigned</li>
-                <li>• You receive a notification when ready</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <button onClick={onRefresh}
-          className="w-full py-3 rounded-2xl border border-blue-200 text-blue-600 font-semibold text-sm hover:bg-blue-50 transition-colors mb-3">
-          🔄 Check Status
-        </button>
-        <Link href="/dashboard" className="block text-center text-sm text-blue-600 hover:underline">Back to Dashboard</Link>
       </div>
     </div>
   );
@@ -358,52 +253,86 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
                 className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden shadow-2xl"
                 style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
               >
-                {/* Card gradient background */}
-                <div className="w-full h-full relative"
-                  style={{ background: "linear-gradient(135deg, #0f1c30 0%, #0a3d62 40%, #00a896 100%)" }}>
-                  {/* Decorative circles */}
-                  <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full opacity-10"
-                    style={{ background: "radial-gradient(circle, #ffffff, transparent)" }} />
-                  <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full opacity-10"
-                    style={{ background: "radial-gradient(circle, #00a896, transparent)" }} />
+                <div className="w-full h-full relative" style={{
+                  background: "linear-gradient(135deg, #1a3a8f 0%, #1e4db7 20%, #2060cc 40%, #1a8fc1 70%, #0ea5c9 100%)",
+                }}>
+                  {/* Geometric polygons */}
+                  <div className="absolute" style={{
+                    top: 0, right: 0, width: "60%", height: "70%",
+                    background: "linear-gradient(210deg, rgba(56,189,248,0.32) 0%, rgba(30,120,200,0.08) 55%, transparent 100%)",
+                    clipPath: "polygon(100% 0%, 100% 75%, 25% 100%, 0% 35%, 45% 0%)",
+                  }} />
+                  <div className="absolute" style={{
+                    bottom: 0, left: 0, width: "45%", height: "50%",
+                    background: "linear-gradient(45deg, rgba(15,40,110,0.4) 0%, transparent 80%)",
+                    clipPath: "polygon(0% 100%, 0% 15%, 75% 0%, 100% 55%, 35% 100%)",
+                  }} />
+                  <div className="absolute inset-0" style={{
+                    background: "linear-gradient(155deg, transparent 25%, rgba(255,255,255,0.05) 50%, transparent 75%)",
+                  }} />
                   {/* Header */}
-                  <div className="absolute top-0 left-0 right-0 px-5 pt-4 flex justify-between items-start">
-                    <span className="text-white font-bold text-sm tracking-widest opacity-90">WOLVCAPITAL</span>
-                    <svg viewBox="0 0 48 16" width="52" height="18" fill="none">
-                      <text x="0" y="13" fontFamily="serif" fontStyle="italic" fontSize="14" fontWeight="bold" fill="white" opacity="0.95">VISA</text>
+                  <div className="absolute top-0 left-0 right-0 px-4 pt-3 flex justify-between items-start">
+                    <div style={{ display: "flex", alignItems: "baseline" }}>
+                      <span style={{ color: "#fff", fontWeight: 800, fontSize: "14px", fontFamily: "Georgia, serif" }}>Wolv</span>
+                      <span style={{ color: "#7dd3fc", fontWeight: 800, fontSize: "14px", fontFamily: "Georgia, serif" }}>Capital</span>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", lineHeight: 1 }}>
+                      <span style={{ color: "#fff", fontFamily: "serif", fontStyle: "italic", fontWeight: 900, fontSize: "19px", letterSpacing: "1px" }}>VISA</span>
+                      <span style={{ color: "rgba(255,255,255,0.72)", fontSize: "7.5px", letterSpacing: "2px", marginTop: "1px" }}>Infinite</span>
+                    </div>
+                  </div>
+                  {/* Chip + Contactless */}
+                  <div style={{ position: "absolute", top: "37%", left: "16px", display: "flex", alignItems: "center", gap: "8px" }}>
+                    <div style={{
+                      width: "36px", height: "27px", borderRadius: "4px",
+                      background: "linear-gradient(135deg, #b8860b 0%, #f5d06e 35%, #daa520 55%, #b8860b 100%)",
+                      boxShadow: "0 1px 5px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.25)",
+                      position: "relative", overflow: "hidden",
+                    }}>
+                      <div style={{
+                        position: "absolute", inset: 0,
+                        background: "repeating-linear-gradient(0deg,transparent,transparent 4px,rgba(0,0,0,0.08) 4px,rgba(0,0,0,0.08) 5px), repeating-linear-gradient(90deg,transparent,transparent 4px,rgba(0,0,0,0.08) 4px,rgba(0,0,0,0.08) 5px)",
+                      }} />
+                      <div style={{
+                        position: "absolute", top: "5px", left: "5px", right: "5px", bottom: "5px",
+                        background: "linear-gradient(135deg, #c8960c, #f0c83a)",
+                        borderRadius: "2px", border: "0.5px solid rgba(0,0,0,0.2)",
+                      }} />
+                    </div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 3C8 7 8 17 12 21" stroke="rgba(255,255,255,0.9)" strokeWidth="2" strokeLinecap="round"/>
+                      <path d="M15.5 6C13 8.5 13 15.5 15.5 18" stroke="rgba(255,255,255,0.65)" strokeWidth="2" strokeLinecap="round"/>
+                      <path d="M19 9C17.5 10.5 17.5 13.5 19 15" stroke="rgba(255,255,255,0.4)" strokeWidth="2" strokeLinecap="round"/>
                     </svg>
                   </div>
-                  {/* Chip */}
-                  <div className="absolute left-5" style={{ top: "38%" }}>
-                    <div className="w-9 h-7 rounded-md"
-                      style={{ background: "linear-gradient(135deg, #d4a843 0%, #f5d980 40%, #c8921e 100%)", boxShadow: "0 1px 4px rgba(0,0,0,0.3)" }}>
-                      <div className="w-full h-full rounded-md opacity-50"
-                        style={{ background: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 4px)" }} />
-                    </div>
-                  </div>
-                  {/* Card number */}
-                  <div className="absolute bottom-10 left-5 right-5">
-                    <div className="font-mono text-white text-base tracking-[0.2em] opacity-90 mb-2">
+                  {/* Card number + details */}
+                  <div style={{ position: "absolute", bottom: "14px", left: "16px", right: "16px" }}>
+                    <div style={{ fontFamily: "'Courier New', monospace", color: "#fff", fontSize: "14px", letterSpacing: "0.2em", opacity: 0.92, marginBottom: "8px" }}>
                       {displayNumber}
                     </div>
-                    <div className="flex justify-between items-end">
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
                       <div>
-                        <div className="text-white opacity-50 text-xs uppercase tracking-wider mb-0.5">Card Holder</div>
-                        <div className="text-white text-sm font-semibold tracking-wide">{card.cardholder_name || "CARD HOLDER"}</div>
+                        <div style={{ color: "rgba(255,255,255,0.52)", fontSize: "7px", letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: "2px" }}>Card Holder</div>
+                        <div style={{ color: "#fff", fontSize: "11px", fontWeight: 600 }}>{card.cardholder_name || "CARD HOLDER"}</div>
                       </div>
-                      <div className="text-right">
-                        <div className="text-white opacity-50 text-xs uppercase tracking-wider mb-0.5">Expires</div>
-                        <div className="text-white text-sm font-semibold">{formatExpiry(card.expiry_month, card.expiry_year)}</div>
+                      <div style={{ textAlign: "center" }}>
+                        <div style={{ color: "rgba(255,255,255,0.52)", fontSize: "7px", letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: "2px" }}>Valid Thru</div>
+                        <div style={{ color: "#fff", fontSize: "11px", fontWeight: 600 }}>{formatExpiry(card.expiry_month, card.expiry_year)}</div>
                       </div>
+                      <div style={{
+                        width: "36px", height: "36px", borderRadius: "50%",
+                        background: "conic-gradient(from 0deg, #a78bfa, #60a5fa, #34d399, #fbbf24, #f472b6, #a78bfa)",
+                        opacity: 0.78, flexShrink: 0,
+                      }} />
                     </div>
                   </div>
                   {/* Frozen overlay */}
                   {isFrozen && (
                     <div className="absolute inset-0 rounded-2xl flex items-center justify-center"
-                      style={{ background: "rgba(10,30,60,0.7)", backdropFilter: "blur(2px)" }}>
+                      style={{ background: "rgba(10,30,60,0.72)", backdropFilter: "blur(3px)" }}>
                       <div className="text-center">
                         <div className="text-5xl mb-2">❄️</div>
-                        <div className="text-white font-bold text-sm tracking-widest">CARD FROZEN</div>
+                        <div style={{ color: "#fff", fontWeight: 700, fontSize: "12px", letterSpacing: "3px" }}>CARD FROZEN</div>
                       </div>
                     </div>
                   )}
@@ -413,34 +342,62 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
               {/* BACK FACE */}
               <div
                 className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden shadow-2xl"
-                style={{
-                  backfaceVisibility: "hidden",
-                  WebkitBackfaceVisibility: "hidden",
-                  transform: "rotateY(180deg)",
-                }}
+                style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
               >
-                <div className="w-full h-full relative"
-                  style={{ background: "linear-gradient(135deg, #0a3d62 0%, #0f1c30 60%, #00a896 100%)" }}>
+                <div className="w-full h-full relative" style={{
+                  background: "linear-gradient(135deg, #1a3a8f 0%, #1e4db7 30%, #1a8fc1 75%, #0ea5c9 100%)",
+                }}>
+                  {/* Geometric overlays */}
+                  <div className="absolute" style={{
+                    top: 0, right: 0, width: "55%", height: "60%",
+                    background: "linear-gradient(210deg, rgba(56,189,248,0.22) 0%, transparent 65%)",
+                    clipPath: "polygon(100% 0%, 100% 70%, 20% 100%, 0% 30%, 50% 0%)",
+                  }} />
+                  <div className="absolute inset-0" style={{
+                    background: "linear-gradient(155deg, transparent 30%, rgba(255,255,255,0.04) 50%, transparent 70%)",
+                  }} />
                   {/* Magnetic stripe */}
-                  <div className="absolute top-7 left-0 right-0 h-10 bg-gray-900 opacity-90" />
+                  <div style={{ position: "absolute", top: "17%", left: 0, right: 0, height: "38px", background: "linear-gradient(180deg, #111 0%, #1a1a1a 50%, #0a0a0a 100%)" }} />
+                  {/* Contact info */}
+                  <div style={{ position: "absolute", top: "7%", left: "14px" }}>
+                    <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "6.5px", lineHeight: 1.6 }}>Tel. +1 800 XXX XXXX (Toll-Free USA)</div>
+                    <div style={{ color: "rgba(255,255,255,0.38)", fontSize: "6px" }}>WolvCapital Global Contact Center</div>
+                  </div>
                   {/* Signature + CVV */}
-                  <div className="absolute left-5 right-5" style={{ top: "52%" }}>
-                    <div className="text-white opacity-50 text-xs uppercase tracking-wider mb-1">CVV</div>
-                    <div className="bg-white rounded px-3 py-2 flex justify-between items-center">
-                      <div className="text-gray-400 text-xs italic tracking-widest flex-1">{"— — — — — — — — — — —"}</div>
-                      <div className="font-mono font-bold text-gray-900 text-sm ml-3">
-                        {showCvv ? card.cvv : "•••"}
+                  <div style={{ position: "absolute", left: "14px", right: "14px", top: "46%" }}>
+                    <div style={{ color: "rgba(255,255,255,0.48)", fontSize: "6.5px", textTransform: "uppercase", marginBottom: "3px" }}>
+                      Authorised Signature - Not valid unless signed
+                    </div>
+                    <div style={{ display: "flex", alignItems: "stretch", borderRadius: "4px", overflow: "hidden", height: "30px" }}>
+                      <div style={{ flex: 1, display: "flex", alignItems: "center", paddingLeft: "8px", background: "repeating-linear-gradient(90deg, #ddd 0px, #ddd 1px, #fff 1px, #fff 7px)" }}>
+                        <span style={{ fontFamily: "cursive", color: "#aaa", fontSize: "10px", opacity: 0.55 }}>WolvCapital Online Banking</span>
+                      </div>
+                      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 10px", background: "#fff", minWidth: "44px" }}>
+                        <div style={{ fontFamily: "monospace", fontWeight: 700, color: "#111", fontSize: "13px", letterSpacing: "2px" }}>
+                          {showCvv ? card.cvv : "•••"}
+                        </div>
+                        <div style={{ color: "#999", fontSize: "5.5px" }}>CVV/CVC</div>
                       </div>
                     </div>
                   </div>
-                  {/* VISA bottom right */}
-                  <div className="absolute bottom-4 right-5">
-                    <svg viewBox="0 0 48 16" width="44" height="16" fill="none">
-                      <text x="0" y="13" fontFamily="serif" fontStyle="italic" fontSize="14" fontWeight="bold" fill="white" opacity="0.7">VISA</text>
-                    </svg>
+                  {/* Fine print */}
+                  <div style={{ position: "absolute", left: "14px", right: "14px", top: "67%" }}>
+                    <div style={{ color: "rgba(255,255,255,0.42)", fontSize: "6px", lineHeight: 1.65 }}>
+                      Issued by WolvCapital Global Services Ltd. Visa Infinite benefits apply.
+                    </div>
+                    <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "5.5px", marginTop: "2px" }}>
+                      www.wolvcapital.com
+                    </div>
+                  </div>
+                  {/* VISA Infinite */}
+                  <div style={{ position: "absolute", bottom: "10px", right: "14px", display: "flex", flexDirection: "column", alignItems: "flex-end", lineHeight: 1 }}>
+                    <span style={{ color: "#fff", fontFamily: "serif", fontStyle: "italic", fontWeight: 900, fontSize: "17px" }}>VISA</span>
+                    <span style={{ color: "rgba(255,255,255,0.58)", fontSize: "6.5px", letterSpacing: "2px" }}>Infinite</span>
+                    <span style={{ color: "rgba(255,255,255,0.38)", fontSize: "5.5px", marginTop: "1px" }}>WOLVCAPITAL</span>
                   </div>
                 </div>
               </div>
+
             </motion.div>
           </div>
 
@@ -580,29 +537,79 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
   );
 }
 
+function RequestCardView({ onRequested }: { onRequested: () => void }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleRequest() {
+    setLoading(true);
+    try {
+      const res = await apiFetch("/api/virtualcards/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!res.ok) throw new Error("Failed to request card");
+      onRequested();
+    } catch {
+      setError("Failed to request card. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-[#F2F9FF] flex items-center justify-center p-6">
+      <div className="max-w-sm w-full text-center">
+        <div className="text-6xl mb-4">💳</div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Get Your Virtual Card</h2>
+        <p className="text-gray-500 text-sm leading-relaxed mb-6">Activate a WolvCapital Visa virtual card for digital transactions worldwide.</p>
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        <button onClick={handleRequest} disabled={loading}
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#0f1c30] to-[#00a896] text-white font-bold text-base disabled:opacity-60">
+          {loading ? "Requesting..." : "Request Virtual Card"}
+        </button>
+        <Link href="/dashboard" className="block text-center text-sm text-blue-600 hover:underline mt-4">
+          Back to Dashboard
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function PendingCardView({ onRefresh }: { onRefresh: () => void }) {
+  return (
+    <div className="min-h-screen bg-[#F2F9FF] flex items-center justify-center p-6">
+      <div className="max-w-sm w-full text-center">
+        <div className="text-6xl mb-4">⏳</div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Card Pending Approval</h2>
+        <p className="text-gray-500 text-sm leading-relaxed mb-6">Your virtual card request is being reviewed. This usually takes 1-2 business days.</p>
+        <button onClick={onRefresh}
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#0f1c30] to-[#00a896] text-white font-bold text-base">
+          Refresh Status
+        </button>
+        <Link href="/dashboard" className="block text-center text-sm text-blue-600 hover:underline mt-4">
+          Back to Dashboard
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 export default function VirtualCardPage() {
   const { card, loading, error, refetch } = useVirtualCard();
 
   if (loading) return (
-    <div className="min-h-screen bg-[#F2F9FF] flex items-center justify-center">
-      <div className="text-center">
-        <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-        <p className="text-gray-500 text-sm">Loading your card...</p>
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"/>
     </div>
   );
-
   if (error) return (
-    <div className="min-h-screen bg-[#F2F9FF] flex items-center justify-center px-4">
-      <div className="text-center">
-        <div className="text-4xl mb-4">⚠️</div>
-        <p className="text-red-600 font-medium mb-4">{error}</p>
-        <button onClick={refetch} className="px-5 py-2.5 bg-blue-600 text-white rounded-full text-sm font-semibold">Try Again</button>
-      </div>
+    <div className="min-h-screen flex items-center justify-center p-8 text-center">
+      <p className="text-red-500">{error}</p>
     </div>
   );
-
   if (!card) return <RequestCardView onRequested={refetch} />;
   if (card.status === "pending") return <PendingCardView onRefresh={refetch} />;
+
   return <ActiveCardView card={card} refetch={refetch} />;
 }

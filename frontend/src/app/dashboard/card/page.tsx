@@ -568,9 +568,10 @@ function RequestCardView({ onRequested }: { onRequested: () => void }) {
   async function handleRequest() {
     setLoading(true);
     try {
-      const res = await apiFetch("/api/virtualcards/", {
+      const res = await apiFetch("/api/virtual-cards/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ purchase_amount: 1000 }),
       });
       if (!res.ok) throw new Error("Failed to request card");
       onRequested();

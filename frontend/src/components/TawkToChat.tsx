@@ -98,6 +98,15 @@ export default function TawkToChat() {
     const api = (window as any).Tawk_API
     api.onLoad = () => {
       if (DEBUG) console.info('[TawkToChat] Widget loaded')
+      // Configure mobile offsets to prevent overflow
+      if (isMobile) {
+        api.setAttributes?.({
+          yOffset: 100,
+          xOffset: 10,
+        }, function (error: any) {
+          if (error && DEBUG) console.warn('[TawkToChat] setAttributes error:', error)
+        })
+      }
     }
 
     if (DEBUG) {

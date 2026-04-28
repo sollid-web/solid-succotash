@@ -38,7 +38,7 @@ function CreatePinModal({ show, onCancel, onSuccess }: { show: boolean; onCancel
       const res = await apiFetch("/api/cards/set-pin/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pin }),
+        body: JSON.stringify({ pin, confirm_pin: confirm }),
       });
       if (!res.ok) throw new Error("Failed to set PIN");
       onSuccess();

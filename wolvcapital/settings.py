@@ -28,7 +28,11 @@ if Env is None:
 
 env = Env()
 
-Env.read_env()  # Load .env early
+ENV_FILE = BASE_DIR / ".env"
+if ENV_FILE.exists():
+    Env.read_env(str(ENV_FILE))  # Load .env early
+else:
+    Env.read_env()  # Fallback to default lookup
 
 # Unified DEBUG + SECRET_KEY handling
 DEBUG = env.bool("DEBUG", default=True)
@@ -165,8 +169,11 @@ if not DEBUG:
         "connect-src": ("'self'", "https://api.stripe.com"),
     }
 INSTALLED_APPS = [
-    # jazzmin must come before contrib.admin so it can override templates
-    "jazzmin",
+    # unfold must come before contrib.admin so it can override templates
+    "unfold",
+    "unfold.contrib.filters",
+    "unfold.contrib.forms",
+    "unfold.contrib.inlines",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -174,6 +181,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    # Constance for financial controls
+    "constance",
+    "constance.backends.database",
     # Third-party
     "whitenoise.runserver_nostatic",
     "corsheaders",
@@ -226,64 +236,194 @@ ALERT_THRESHOLDS = {
 }
 
 # ------------------------------------------------------------------
-# Jazzmin (modern admin theme) configuration
+# Constance Configuration (Financial Controls)
 # ------------------------------------------------------------------
-# see https://django-jazzmin.readthedocs.io/ for options
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 
-JAZZMIN_SETTINGS = {
-    "site_title": "WolvCapital Admin",
-    "site_header": "WolvCapital Admin",
-    "site_brand": "WolvCapital Admin",
-    # path under STATIC_URL
-    "site_logo": "images/logos/wolvcapital-logo.svg",
-    "login_logo": "images/logos/wolvcapital-logo.svg",
-    "welcome_sign": "Welcome to WolvCapital administration",
-    "search_model": "auth.User",
-    "show_sidebar": True,
-    "navigation_expanded": False,
-    # ordering of sections in sidebar
-    "order_with_respect_to": [
-        "auth",
-        "users",
-        "users.kycdocument",
-        "investments",
-        "referrals",
-        "core",
+CONSTANCE_CONFIG = {
+    'DAILY_INTEREST_RATE': {
+        'default': 0.5,
+        'help_text': 'Daily interest rate as percentage (e.g., 0.5 for 0.5%)',
+    },
+    'WITHDRAWAL_FEE_PERCENT': {
+        'default': 2.0,
+        'help_text': 'Withdrawal fee as percentage (e.g., 2.0 for 2%)',
+    },
+    'MIN_INVESTMENT_AMOUNT': {
+        'default': 100.00,
+        'help_text': 'Minimum investment amount in USD',
+    },
+    'MAINTENANCE_MODE': {
+        'default': False,
+        'help_text': 'Enable maintenance mode to disable new investments',
+    },
+}
+
+CONSTANCE_CONFIG_FIELDSETS = {
+    'Financial Settings': (
+        'DAILY_INTEREST_RATE',
+        'WITHDRAWAL_FEE_PERCENT',
+        'MIN_INVESTMENT_AMOUNT',
+    ),
+    'System Settings': (
+        'MAINTENANCE_MODE',
+    ),
+}
+
+# ------------------------------------------------------------------
+# Django Unfold Configuration (Modern Dashboard UI)
+# ------------------------------------------------------------------
+UNFOLD = {
+    "SITE_TITLE": "WolvCapital Command Center",
+    "SITE_HEADER": "WolvCapital Administration",
+    "SITE_URL": "/",
+    "SITE_ICON": {
+        "light": "/static/admin/img/logo-light.svg",
+        "dark": "/static/admin/img/logo-dark.svg"
+    },
+    "SITE_LOGO": {
+        "light": "/static/admin/img/logo-light.svg",
+        "dark": "/static/admin/img/logo-dark.svg"
+    },
+    "SITE_FAVICONS": [
+        {
+            "rel": "icon",
+            "sizes": "32x32",
+            "src": "/static/admin/img/favicon-32x32.png",
+            "type": "image/png",
+        },
     ],
-    # custom links inside app sections
-    "custom_links": {
-        "core": [
+    "SHOW_HISTORY": True,
+    "SHOW_VIEW_ON_SITE": True,
+    "THEME": "dark",
+    "STYLES": [
+        lambda request: "/static/admin/css/custom.css" if request.user.is_superuser else "",
+    ],
+    "SCRIPTS": [
+        lambda request: "/static/admin/js/custom.js" if request.user.is_superuser else "",
+    ],
+    "COLORS": {
+        "primary": {
+            "50": "245 243 255",
+            "100": "241 237 252",
+            "200": "233 230 255",
+            "300": "216 207 255",
+            "400": "196 181 253",
+            "500": "168 147 255",
+            "600": "147 128 255",
+            "700": "126 105 255",
+            "800": "110 89 255",
+            "900": "88 28 135",
+            "950": "59 7 100",
+        },
+    },
+    "EXTENSIONS": {
+        "modeltranslation": {
+            "flags": {
+                "en": "🇺🇸",
+                "fr": "🇫🇷",
+                "es": "🇪🇸",
+            },
+        },
+    },
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+        "navigation": [
             {
-                "name": "Email Templates",
-                "url": "/admin/core/emailtemplate/",
-                "icon": "fas fa-envelope",
+                "title": "Dashboard",
+                "separator": True,
+                "collapsible": False,
+                "items": [
+                    {
+                        "title": "Dashboard",
+                        "icon": "dashboard",
+                        "link": "/admin/",
+                    },
+                    {
+                        "title": "System Status",
+                        "icon": "settings",
+                        "link": "/admin/system-status/",
+                        "permission": lambda request: request.user.is_superuser,
+                    },
+                ],
             },
             {
-                "name": "Support Requests",
-                "url": "/admin/core/supportrequest/",
-                "icon": "fas fa-life-ring",
+                "title": "Financial Operations",
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": "Transactions",
+                        "icon": "payment",
+                        "link": "/admin/transactions/transaction/",
+                        "permission": lambda request: request.user.is_superuser,
+                    },
+                    {
+                        "title": "Virtual Cards",
+                        "icon": "credit_card",
+                        "link": "/admin/transactions/virtualcard/",
+                    },
+                    {
+                        "title": "Crypto Wallets",
+                        "icon": "account_balance_wallet",
+                        "link": "/admin/transactions/cryptocurrencywallet/",
+                    },
+                    {
+                        "title": "Financial Settings",
+                        "icon": "settings",
+                        "link": "/admin/constance/config/",
+                        "permission": lambda request: request.user.is_superuser,
+                    },
+                ],
+            },
+            {
+                "title": "User Management",
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": "Users",
+                        "icon": "people",
+                        "link": "/admin/users/user/",
+                    },
+                    {
+                        "title": "User Profiles",
+                        "icon": "person",
+                        "link": "/admin/users/profile/",
+                    },
+                    {
+                        "title": "User Wallets",
+                        "icon": "account_balance",
+                        "link": "/admin/users/userwallet/",
+                    },
+                ],
             },
         ],
     },
-    "icons": {
-        "users": "fas fa-users",
-        "users.kycdocument": "fas fa-file-alt",
-        "investments": "fas fa-chart-line",
-        "referrals": "fas fa-user-friends",
-        "core": "fas fa-cogs",
-    },
-    # show pending badge for KYC documents
-    "badge": {
-        "users.kycdocument": {"filter": {"status": "pending"}},
-    },
-    "quick_links": [
-        {"name": "View site", "url": "/", "new_window": True, "icon": "fas fa-home"},
-        {"name": "Support inbox", "url": "/admin/core/supportrequest/", "icon": "fas fa-life-ring"},
+    "TABS": [
+        {
+            "models": [
+                "users.user",
+                "users.profile",
+                "users.userwallet",
+            ],
+            "items": [
+                {
+                    "title": "Users",
+                    "link": "/admin/users/user/",
+                },
+                {
+                    "title": "Profiles",
+                    "link": "/admin/users/profile/",
+                },
+                {
+                    "title": "Wallets",
+                    "link": "/admin/users/userwallet/",
+                },
+            ],
+        },
     ],
-    # show recent actions panel on dashboard
-    "dashboard": {
-        "show_recent_actions": True,
-    },
 }
 
 # ------------------------------------------------------------------

@@ -8,10 +8,14 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from transactions.admin import SystemStatusView
+
 
 urlpatterns = [
-    path("api/cards/", include("cards.urls")),    path("", include("core.urls")),  # Root, /healthz/, /agreements/x/pdf/, /contact/, /inbox/
+    path("api/cards/", include("cards.urls")),
+    path("", include("core.urls")),  # Root, /healthz/, /agreements/x/pdf/, /contact/, /inbox/
     path("admin/", admin.site.urls),
+    path("admin/system-status/", SystemStatusView.as_view(), name="system_status"),
     path("accounts/", include("allauth.urls")),
     path("api/", include("api.urls")),
     path("api/chat/", include("chat.urls")),

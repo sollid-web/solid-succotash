@@ -5,22 +5,24 @@ from django.contrib.postgres.signals import (
 )
 from django.db import NotSupportedError, router
 from django.db.migrations import AddConstraint, AddIndex, RemoveIndex
-from django.db.migrations.operations.base import Operation
+from django.db.migrations.operations.base import Operation, OperationCategory
 from django.db.models.constraints import CheckConstraint
 
 
 class CreateExtension(Operation):
     reversible = True
+    category = OperationCategory.ADDITION
 
-    def __init__(self, name):
+    def __init__(self, name, hints=None):
         self.name = name
+        self.hints = hints or {}
 
     def state_forwards(self, app_label, state):
         pass
 
     def database_forwards(self, app_label, schema_editor, from_state, to_state):
         if schema_editor.connection.vendor != "postgresql" or not router.allow_migrate(
-            schema_editor.connection.alias, app_label
+            schema_editor.connection.alias, app_label, **self.hints
         ):
             return
         if not self.extension_exists(schema_editor, self.name):
@@ -41,7 +43,9 @@ class CreateExtension(Operation):
             )
 
     def database_backwards(self, app_label, schema_editor, from_state, to_state):
-        if not router.allow_migrate(schema_editor.connection.alias, app_label):
+        if not router.allow_migrate(
+            schema_editor.connection.alias, app_label, **self.hints
+        ):
             return
         if self.extension_exists(schema_editor, self.name):
             schema_editor.execute(
@@ -68,43 +72,43 @@ class CreateExtension(Operation):
 
 
 class BloomExtension(CreateExtension):
-    def __init__(self):
-        self.name = "bloom"
+    def __init__(self, hints=None):
+        super().__init__("bloom", hints=hints)
 
 
 class BtreeGinExtension(CreateExtension):
-    def __init__(self):
-        self.name = "btree_gin"
+    def __init__(self, hints=None):
+        super().__init__("btree_gin", hints=hints)
 
 
 class BtreeGistExtension(CreateExtension):
-    def __init__(self):
-        self.name = "btree_gist"
+    def __init__(self, hints=None):
+        super().__init__("btree_gist", hints=hints)
 
 
 class CITextExtension(CreateExtension):
-    def __init__(self):
-        self.name = "citext"
+    def __init__(self, hints=None):
+        super().__init__("citext", hints=hints)
 
 
 class CryptoExtension(CreateExtension):
-    def __init__(self):
-        self.name = "pgcrypto"
+    def __init__(self, hints=None):
+        super().__init__("pgcrypto", hints=hints)
 
 
 class HStoreExtension(CreateExtension):
-    def __init__(self):
-        self.name = "hstore"
+    def __init__(self, hints=None):
+        super().__init__("hstore", hints=hints)
 
 
 class TrigramExtension(CreateExtension):
-    def __init__(self):
-        self.name = "pg_trgm"
+    def __init__(self, hints=None):
+        super().__init__("pg_trgm", hints=hints)
 
 
 class UnaccentExtension(CreateExtension):
-    def __init__(self):
-        self.name = "unaccent"
+    def __init__(self, hints=None):
+        super().__init__("unaccent", hints=hints)
 
 
 class NotInTransactionMixin:
@@ -120,6 +124,7 @@ class AddIndexConcurrently(NotInTransactionMixin, AddIndex):
     """Create an index using PostgreSQL's CREATE INDEX CONCURRENTLY syntax."""
 
     atomic = False
+    category = OperationCategory.ADDITION
 
     def describe(self):
         return "Concurrently create index %s on field(s) %s of model %s" % (
@@ -145,6 +150,7 @@ class RemoveIndexConcurrently(NotInTransactionMixin, RemoveIndex):
     """Remove an index using PostgreSQL's DROP INDEX CONCURRENTLY syntax."""
 
     atomic = False
+    category = OperationCategory.REMOVAL
 
     def describe(self):
         return "Concurrently remove index %s from %s" % (self.name, self.model_name)
@@ -213,6 +219,8 @@ class CollationOperation(Operation):
 class CreateCollation(CollationOperation):
     """Create a collation."""
 
+    category = OperationCategory.ADDITION
+
     def database_forwards(self, app_label, schema_editor, from_state, to_state):
         if schema_editor.connection.vendor != "postgresql" or not router.allow_migrate(
             schema_editor.connection.alias, app_label
@@ -232,9 +240,16 @@ class CreateCollation(CollationOperation):
     def migration_name_fragment(self):
         return "create_collation_%s" % self.name.lower()
 
+    def reduce(self, operation, app_label):
+        if isinstance(operation, RemoveCollation) and self.name == operation.name:
+            return []
+        return super().reduce(operation, app_label)
+
 
 class RemoveCollation(CollationOperation):
     """Remove a collation."""
+
+    category = OperationCategory.REMOVAL
 
     def database_forwards(self, app_label, schema_editor, from_state, to_state):
         if schema_editor.connection.vendor != "postgresql" or not router.allow_migrate(
@@ -261,6 +276,8 @@ class AddConstraintNotValid(AddConstraint):
     Add a table constraint without enforcing validation, using PostgreSQL's
     NOT VALID syntax.
     """
+
+    category = OperationCategory.ADDITION
 
     def __init__(self, model_name, constraint):
         if not isinstance(constraint, CheckConstraint):
@@ -292,6 +309,8 @@ class AddConstraintNotValid(AddConstraint):
 
 class ValidateConstraint(Operation):
     """Validate a table NOT VALID constraint."""
+
+    category = OperationCategory.ALTERATION
 
     def __init__(self, model_name, name):
         self.model_name = model_name

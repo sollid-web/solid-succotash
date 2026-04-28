@@ -64,7 +64,7 @@ class SessionStore(SessionBase):
         Return the modification time of the file storing the session's content.
         """
         modification = os.stat(self._key_to_file()).st_mtime
-        tz = datetime.timezone.utc if settings.USE_TZ else None
+        tz = datetime.UTC if settings.USE_TZ else None
         return datetime.datetime.fromtimestamp(modification, tz=tz)
 
     def _expiry_date(self, session_data):
@@ -104,6 +104,9 @@ class SessionStore(SessionBase):
             self._session_key = None
         return session_data
 
+    async def aload(self):
+        return self.load()
+
     def create(self):
         while True:
             self._session_key = self._get_new_session_key()
@@ -113,6 +116,9 @@ class SessionStore(SessionBase):
                 continue
             self.modified = True
             return
+
+    async def acreate(self):
+        return self.create()
 
     def save(self, must_create=False):
         if self.session_key is None:
@@ -124,7 +130,7 @@ class SessionStore(SessionBase):
         session_file_name = self._key_to_file()
 
         try:
-            # Make sure the file exists.  If it does not already exist, an
+            # Make sure the file exists. If it does not already exist, an
             # empty placeholder file is created.
             flags = os.O_WRONLY | getattr(os, "O_BINARY", 0)
             if must_create:
@@ -139,7 +145,7 @@ class SessionStore(SessionBase):
                 raise CreateError
 
         # Write the session file without interfering with other threads
-        # or processes.  By writing to an atomically generated temporary
+        # or processes. By writing to an atomically generated temporary
         # file and then using the atomic os.rename() to make the complete
         # file visible, we avoid having to lock the session file, while
         # still maintaining its integrity.
@@ -147,7 +153,7 @@ class SessionStore(SessionBase):
         # Note: Locking the session file was explored, but rejected in part
         # because in order to be atomic and cross-platform, it required a
         # long-lived lock file for each session, doubling the number of
-        # files in the session storage directory at any given time.  This
+        # files in the session storage directory at any given time. This
         # rename solution is cleaner and avoids any additional overhead
         # when reading the session data, which is the more common case
         # unless SESSION_SAVE_EVERY_REQUEST = True.
@@ -177,8 +183,14 @@ class SessionStore(SessionBase):
         except (EOFError, OSError):
             pass
 
+    async def asave(self, must_create=False):
+        return self.save(must_create=must_create)
+
     def exists(self, session_key):
         return os.path.exists(self._key_to_file(session_key))
+
+    async def aexists(self, session_key):
+        return self.exists(session_key)
 
     def delete(self, session_key=None):
         if session_key is None:
@@ -190,8 +202,8 @@ class SessionStore(SessionBase):
         except OSError:
             pass
 
-    def clean(self):
-        pass
+    async def adelete(self, session_key=None):
+        return self.delete(session_key=session_key)
 
     @classmethod
     def clear_expired(cls):
@@ -208,3 +220,7 @@ class SessionStore(SessionBase):
             # the create() method.
             session.create = lambda: None
             session.load()
+
+    @classmethod
+    async def aclear_expired(cls):
+        cls.clear_expired()

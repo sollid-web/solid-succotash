@@ -1,4 +1,5 @@
 import collections
+import gc
 import logging
 import os
 import re
@@ -23,10 +24,11 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.signals import request_started, setting_changed
 from django.db import DEFAULT_DB_ALIAS, connections, reset_queries
 from django.db.models.options import Options
-from django.template import Template
+from django.template import PartialTemplate, Template
 from django.test.signals import template_rendered
 from django.urls import get_script_prefix, set_script_prefix
 from django.utils.translation import deactivate
+from django.utils.version import PYPY
 
 try:
     import jinja2
@@ -38,6 +40,7 @@ __all__ = (
     "Approximate",
     "ContextList",
     "isolate_lru_cache",
+    "garbage_collect",
     "get_runner",
     "CaptureQueriesContext",
     "ignore_warnings",
@@ -144,7 +147,9 @@ def setup_test_environment(debug=None):
     settings.EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
     saved_data.template_render = Template._render
+    saved_data.partial_template_render = PartialTemplate._render
     Template._render = instrumented_test_render
+    PartialTemplate._render = instrumented_test_render
 
     mail.outbox = []
 
@@ -162,6 +167,7 @@ def teardown_test_environment():
     settings.DEBUG = saved_data.debug
     settings.EMAIL_BACKEND = saved_data.email_backend
     Template._render = saved_data.template_render
+    PartialTemplate._render = saved_data.partial_template_render
 
     del _TestState.saved_data
     del mail.outbox
@@ -186,6 +192,7 @@ def setup_databases(
     test_databases, mirrored_aliases = get_unique_databases_and_mirrors(aliases)
 
     old_names = []
+    serialize_connections = []
 
     for db_name, aliases in test_databases.values():
         first_alias = None
@@ -197,15 +204,13 @@ def setup_databases(
             if first_alias is None:
                 first_alias = alias
                 with time_keeper.timed("  Creating '%s'" % alias):
-                    serialize_alias = (
-                        serialized_aliases is None or alias in serialized_aliases
-                    )
                     connection.creation.create_test_db(
                         verbosity=verbosity,
                         autoclobber=not interactive,
                         keepdb=keepdb,
-                        serialize=serialize_alias,
                     )
+                    if serialized_aliases is None or alias in serialized_aliases:
+                        serialize_connections.append(connection)
                 if parallel > 1:
                     for index in range(parallel):
                         with time_keeper.timed("  Cloning '%s'" % alias):
@@ -224,6 +229,16 @@ def setup_databases(
     for alias, mirror_alias in mirrored_aliases.items():
         connections[alias].creation.set_as_test_mirror(
             connections[mirror_alias].settings_dict
+        )
+
+    # Serialize content of test databases only once all of them are setup to
+    # account for database mirroring and routing during serialization. This
+    # slightly horrific process is so people who are testing on databases
+    # without transactions or using TransactionTestCase still get a clean
+    # database on every test run.
+    for serialize_connection in serialize_connections:
+        serialize_connection._test_serialized_contents = (
+            serialize_connection.creation.serialize_db_to_string()
         )
 
     if debug_sql:
@@ -625,7 +640,8 @@ def compare_xml(want, got):
     important. Ignore comment nodes, processing instructions, document type
     node, and leading and trailing whitespaces.
 
-    Based on https://github.com/lxml/lxml/blob/master/src/lxml/doctestcompare.py
+    Based on
+    https://github.com/lxml/lxml/blob/master/src/lxml/doctestcompare.py
     """
     _norm_whitespace_re = re.compile(r"[ \t\n][ \t\n]+")
 
@@ -716,12 +732,13 @@ class CaptureQueriesContext:
         self.connection.ensure_connection()
         self.initial_queries = len(self.connection.queries_log)
         self.final_queries = None
-        request_started.disconnect(reset_queries)
+        self.reset_queries_disconnected = request_started.disconnect(reset_queries)
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.connection.force_debug_cursor = self.force_debug_cursor
-        request_started.connect(reset_queries)
+        if self.reset_queries_disconnected:
+            request_started.connect(reset_queries)
         if exc_type is not None:
             return
         self.final_queries = len(self.connection.queries_log)
@@ -982,3 +999,10 @@ def register_lookup(field, *lookups, lookup_name=None):
     finally:
         for lookup in lookups:
             field._unregister_lookup(lookup, lookup_name)
+
+
+def garbage_collect():
+    gc.collect()
+    if PYPY:
+        # Collecting weakreferences can take two collections on PyPy.
+        gc.collect()

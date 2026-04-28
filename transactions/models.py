@@ -133,7 +133,7 @@ class Transaction(models.Model):
         db_table = "transactions_transaction"
         constraints = [
             models.CheckConstraint(
-                check=models.Q(amount__gt=Decimal("0.00")),
+                condition=models.Q(amount__gt=Decimal("0.00")),
                 name="positive_transaction_amount",
             ),
             models.UniqueConstraint(
@@ -259,11 +259,11 @@ class VirtualCard(models.Model):
         ordering = ["-created_at"]
         constraints = [
             models.CheckConstraint(
-                check=models.Q(balance__gte=Decimal("0.00")),
+                condition=models.Q(balance__gte=Decimal("0.00")),
                 name="positive_card_balance",
             ),
             models.CheckConstraint(
-                check=models.Q(purchase_amount__gt=Decimal("0.00")),
+                condition=models.Q(purchase_amount__gt=Decimal("0.00")),
                 name="positive_purchase_amount",
             ),
         ]

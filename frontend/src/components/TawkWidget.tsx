@@ -3,6 +3,12 @@
 import Script from 'next/script'
 import { useEffect } from 'react'
 
+declare global {
+  interface Window {
+    Tawk_API?: any
+  }
+}
+
 interface TawkWidgetProps {
   propertyId: string
 }
@@ -27,7 +33,7 @@ export default function TawkWidget({ propertyId }: TawkWidgetProps) {
           )
 
           // Apply custom styles via CSS injection
-          applyTawkCustomStyles()
+         
         }
       }
     }

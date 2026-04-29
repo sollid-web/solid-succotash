@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="userinvestment",
             constraint=models.CheckConstraint(
-                check=models.Q(("amount__gt", 0)), name="positive_investment_amount"
+                condition=models.Q(("amount__gt", 0)), name="positive_investment_amount"
             ),
         ),
         migrations.AddIndex(

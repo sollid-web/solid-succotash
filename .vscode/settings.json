@@ -23,5 +23,6 @@
     "gitlens.ai.model": "ollama",
     "gitlens.ai.ollama.url": "http://172.20.10.13:11434",
     "editor.inlineCompletionsAccessibilityVerbose": true,
-    "diffEditor.experimental.useTrueInlineView": true
+    "diffEditor.experimental.useTrueInlineView": true,
+    "github.copilot.chat.rateLimitAutoSwitchToAuto": true
 }

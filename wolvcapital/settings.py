@@ -763,6 +763,54 @@ LOGGING = {
             "level": LOG_LEVEL,
             "propagate": False,
         },
+        # Suppress verbose Django loggers to avoid Railway rate limits
+        "django.server": {
+            "handlers": ["console"],
+            "level": "WARNING",  # Only log warnings/errors, not every HTTP request
+            "propagate": False,
+        },
+        "django.db": {
+            "handlers": ["console"],
+            "level": "WARNING",  # Suppress database query logs
+            "propagate": False,
+        },
+        "django.db.backends": {
+            "handlers": ["console"],
+            "level": "WARNING",  # Suppress detailed DB backend logs
+            "propagate": False,
+        },
+        "django.request": {
+            "handlers": ["console"],
+            "level": "WARNING",  # Only log warnings/errors for requests
+            "propagate": False,
+        },
+        "django.security": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        # Suppress verbose third-party loggers
+        "rest_framework": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "urllib3": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "asyncio": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "google": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        # Application loggers
         "wolvcapital": {
             "handlers": ["console"],
             "level": LOG_LEVEL,

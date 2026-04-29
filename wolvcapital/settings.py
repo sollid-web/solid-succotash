@@ -289,7 +289,7 @@ UNFOLD = {
         {
             "rel": "icon",
             "sizes": "32x32",
-            "src": "/static/admin/img/favicon-32x32.png",
+            "href": "/static/admin/img/favicon-32x32.png",
             "type": "image/png",
         },
     ],

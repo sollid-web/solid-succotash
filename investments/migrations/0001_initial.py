@@ -126,7 +126,7 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="investmentplan",
             constraint=models.CheckConstraint(
-                condition=models.Q(
+                check=models.Q(
                     ("daily_roi__gte", Decimal("0.00")),
                     ("daily_roi__lte", Decimal("2.00")),
                 ),
@@ -136,13 +136,13 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="investmentplan",
             constraint=models.CheckConstraint(
-                condition=models.Q(("duration_days__gt", 0)), name="positive_duration"
+                check=models.Q(("duration_days__gt", 0)), name="positive_duration"
             ),
         ),
         migrations.AddConstraint(
             model_name="investmentplan",
             constraint=models.CheckConstraint(
-                condition=models.Q(("min_amount__lte", models.F("max_amount"))),
+                check=models.Q(("min_amount__lte", models.F("max_amount"))),
                 name="min_amount_lte_max_amount",
             ),
         ),

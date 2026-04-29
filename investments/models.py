@@ -32,16 +32,16 @@ class InvestmentPlan(models.Model):
         db_table = "investments_plan"
         constraints = [
             models.CheckConstraint(
-                condition=models.Q(daily_roi__gte=Decimal("0.00"))
+                check=models.Q(daily_roi__gte=Decimal("0.00"))
                 & models.Q(daily_roi__lte=Decimal("2.00")),
                 name="valid_daily_roi",
             ),
             models.CheckConstraint(
-                condition=models.Q(duration_days__gt=0),
+                check=models.Q(duration_days__gt=0),
                 name="positive_duration",
             ),
             models.CheckConstraint(
-                condition=models.Q(min_amount__lte=models.F("max_amount")),
+                check=models.Q(min_amount__lte=models.F("max_amount")),
                 name="min_amount_lte_max_amount",
             ),
         ]
@@ -118,7 +118,7 @@ class UserInvestment(models.Model):
         db_table = "investments_user_investment"
         constraints = [
             models.CheckConstraint(
-                condition=models.Q(amount__gt=0),
+                check=models.Q(amount__gt=0),
                 name="positive_investment_amount",
             ),
         ]

@@ -168,21 +168,21 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="transaction",
             constraint=models.CheckConstraint(
-                condition=models.Q(("amount__gt", Decimal("0.00"))),
+                check=models.Q(("amount__gt", Decimal("0.00"))),
                 name="positive_transaction_amount",
             ),
         ),
         migrations.AddConstraint(
             model_name="virtualcard",
             constraint=models.CheckConstraint(
-                condition=models.Q(("balance__gte", Decimal("0.00"))),
+                check=models.Q(("balance__gte", Decimal("0.00"))),
                 name="positive_card_balance",
             ),
         ),
         migrations.AddConstraint(
             model_name="virtualcard",
             constraint=models.CheckConstraint(
-                condition=models.Q(("purchase_amount__gt", Decimal("0.00"))),
+                check=models.Q(("purchase_amount__gt", Decimal("0.00"))),
                 name="positive_purchase_amount",
             ),
         ),

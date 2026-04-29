@@ -47,6 +47,12 @@ STRIPE_ISSUING_ENABLED = True
 STRIPE_CARDHOLDER_TYPE = "individual"
 GROQ_API_KEY = env("GROQ_API_KEY", default="")
 
+# Startup debugging for Railway/production deployment
+print("🔧 Django startup: Loading environment...", file=sys.stderr)
+print(f"   DEBUG={DEBUG}", file=sys.stderr)
+print(f"   DATABASE_URL present: {bool(env('DATABASE_URL', default=None))}", file=sys.stderr)
+print(f"   SECRET_KEY present: {bool(SECRET_KEY)}", file=sys.stderr)
+
 if DEBUG:
     # Allow fallback dev key for local development
     if not SECRET_KEY:

@@ -4,17 +4,22 @@
 echo "🚀 Starting WolvCapital..."
 
 # Railway healthchecks time out quickly (see railway.json healthcheckTimeout).
-# On Railway, prefer starting Gunicorn immediately so /healthz/ can pass,
-# and run migrations asynchronously in the background.
+# Run setup SYNCHRONOUSLY to ensure tables exist before Gunicorn starts.
 if env | grep -q '^RAILWAY_'; then
-    echo "🚄 Railway detected — fast startup mode"
-    echo "📦 Running migrations (and setup) in background..."
-    (
-        python manage.py migrate --noinput \
-            && python manage.py collectstatic --noinput \
-            && python manage.py seed_plans \
-            || echo "⚠️ Background setup failed (migrate/collectstatic/seed_plans)"
-    ) &
+    echo "🚄 Railway detected — running setup FIRST..."
+    echo "📦 Running migrations..."
+    if python manage.py migrate --noinput; then
+        echo "✅ Migrations completed"
+    else
+        echo "❌ Migrations FAILED - exiting to prevent crashes"
+        exit 1
+    fi
+    
+    echo "📂 Collecting static files..."
+    python manage.py collectstatic --noinput || echo "⚠️ collectstatic failed (continuing)"
+    
+    echo "💰 Seeding investment plans..."
+    python manage.py seed_plans || echo "⚠️ seed_plans failed (continuing)"
 
     echo "🚀 Starting Gunicorn server on port $PORT..."
     exec python -m gunicorn wolvcapital.wsgi:application \

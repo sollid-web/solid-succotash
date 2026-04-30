@@ -481,17 +481,23 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
-    "core.middleware.RequestIDMiddleware",
+ "core.middleware.RequestIDMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "wolvcapital.middleware.RequestIDMiddleware",
-    "wolvcapital.middleware.LanguageMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    
+    # 1. Authentication must happen first
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    
+    # 2. Custom middlewares that need the 'user' attribute
+    "wolvcapital.middleware.RequestIDMiddleware",
+    "wolvcapital.middleware.LanguageMiddleware",
     "wolvcapital.middleware.PostgresRlsSessionMiddleware",
+    
+    # 3. Remaining standard Django and Third-party apps
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",

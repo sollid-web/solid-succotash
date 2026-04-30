@@ -19,4 +19,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Use the environment variable directly; the shell will now expand it to '2' (or your override)
-CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn wolvcapital.wsgi:application --bind 0.0.0.0:8000 --workers 2
+CMD ["sh", "-c", "python manage.py collectstatic --noinput && echo \"STATIC DONE\" && python manage.py migrate --verbosity 3 2>&1 && echo \"MIGRATE DONE\" && gunicorn wolvcapital.wsgi:application --bind \"0.0.0.0:${PORT:-8000}\" --timeout 120"]

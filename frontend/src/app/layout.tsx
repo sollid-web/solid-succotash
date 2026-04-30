@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import { cookies } from 'next/headers'
 import { Analytics } from '@vercel/analytics/next'
 import { LocaleProvider } from '@/components/LocaleProvider'
+import { TranslationProvider } from '@/components/TranslationProvider'
 import AppChrome from '@/components/AppChrome'
 import GaPageView from '@/components/GaPageView'
 import SegmentProvider from '@/components/SegmentProvider'
@@ -124,12 +125,14 @@ export default async function RootLayout({
 
           {/* 2. LocaleProvider must wrap AppChrome and children */}
           <LocaleProvider locale={locale}>
+            <TranslationProvider initialLocale={locale}>
             <AppChrome>
               {/* 3. Suspense boundary is CRITICAL for Next.js builds */}
               <Suspense fallback={<div className="flex h-screen items-center justify-center">Loading...</div>}>
                 {children}
               </Suspense>
             </AppChrome>
+          </TranslationProvider>
           </LocaleProvider>
 
           {/* Analytics and Widgets */}

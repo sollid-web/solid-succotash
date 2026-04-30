@@ -559,6 +559,8 @@ TESTING = any(arg in os.environ.get("PYTEST_CURRENT_TEST", "") for arg in ["::"]
 BRAND = {
     "name": "WolvCapital",
     "domain": "wolvcapital.com",
+    "primary": "#000000",
+    "logo_svg": "logo.svg",
 }
 
 

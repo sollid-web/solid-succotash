@@ -16,10 +16,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# MOVE COLLECTSTATIC TO BUILD STAGE
-# This ensures static files are ready before the container ever starts
-RUN python manage.py collectstatic --noinput
+# Provide a dummy DATABASE_URL so collectstatic doesn't crash
+# We also set a dummy SECRET_KEY just in case it's required for initialization
+RUN DATABASE_URL=postgres://none:none@none:5432/none \
+    SECRET_KEY=build-time-only-key \
+    python manage.py collectstatic --noinput
 
-# OPTIMIZED START COMMAND
+    # OPTIMIZED START COMMAND
 # We remove collectstatic and keep migrate (or move migrate to a Railway 'Pre-deploy' setting)
 CMD ["sh", "-c", "python manage.py migrate --noinput && gunicorn wolvcapital.wsgi:application --bind 0.0.0.0:${PORT} --timeout 120 --workers 2"]

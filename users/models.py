@@ -6,6 +6,20 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+    on_delete=models.CASCADE, related_name="user_profile")
+    # Store language code (e.g., 'en', 'no')
+    language_preference = models.CharField(
+        max_length=10, 
+        choices=settings.LANGUAGES, 
+        default='en',
+        help_text="User's preferred language for the dashboard"
+    )
+
+    def __str__(self):
+        return f"{self.user.email} - {self.language_preference}"
+
 
 class User(AbstractUser):
     # Custom User model extending AbstractUser

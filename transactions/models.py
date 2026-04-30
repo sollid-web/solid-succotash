@@ -124,7 +124,10 @@ class Transaction(models.Model):
     updated_at: models.DateTimeField = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.user.email} - {self.tx_type} - ${self.amount} - {self.status}"
+        try:
+            return f"{self.user.email} - {self.tx_type} - ${self.amount} - {self.status}"
+        except AttributeError:
+            return f"Transaction {self.id} - {self.tx_type} - ${self.amount} - {self.status}"
 
     def is_crypto(self):
         return self.payment_method in ["BTC", "USDT", "USDC", "ETH"]
@@ -222,7 +225,10 @@ class VirtualCard(models.Model):
     expires_at: models.DateTimeField = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.user.email} - {self.card_type} - {self.card_number[-4:] if self.card_number else 'Pending'}"
+        try:
+            return f"{self.user.email} - {self.card_type} - {self.card_number[-4:] if self.card_number else 'Pending'}"
+        except AttributeError:
+            return f"Card {self.id} - {self.card_type} - {self.card_number[-4:] if self.card_number else 'Pending'}"
 
     def generate_card_details(self):
         """Generate card number, CVV, and expiry date"""

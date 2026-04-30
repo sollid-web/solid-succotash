@@ -101,6 +101,11 @@ urlpatterns = [
         views.EmailPreferencesView.as_view(),
         name="api-email-preferences",
     ),
+    path(
+        "update-language/",
+        views.UpdateLanguageView.as_view(),
+        name="api-update-language",
+    ),
     # Authentication endpoints
     path("auth/login/", views.login_view, name="api-login"),
     path("auth/logout/", views.logout_view, name="api-logout"),

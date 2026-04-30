@@ -101,6 +101,64 @@ class RequestIDMiddleware(MiddlewareMixin):
         return response
 
 
+class LanguageMiddleware(MiddlewareMixin):
+    """Set user language preference with cascading fallback.
+    
+    Priority order:
+    1. URL query parameter: ?lang=no
+    2. Authenticated user's profile.language_preference
+    3. Accept-Language header (browser preference)
+    4. Default: English ('en')
+    
+    Calls translation.activate() to set Django's active language for
+    email templates, admin interface, and template translations.
+    """
+
+    def process_request(self, request):
+        from django.conf import settings
+        from django.utils import translation
+        
+        # Get supported languages
+        supported_langs = [code for code, _ in settings.LANGUAGES]
+        
+        lang = None
+        
+        # 1. Check URL query parameter (highest priority for user intent)
+        if 'lang' in request.GET:
+            param_lang = request.GET.get('lang', '').lower()
+            if param_lang in supported_langs:
+                lang = param_lang
+        
+        # 2. Check authenticated user's profile preference
+        if not lang and request.user.is_authenticated:
+            try:
+                if hasattr(request.user, 'profile'):
+                    user_pref = getattr(request.user.profile, 'language_preference', None)
+                    if user_pref and user_pref in supported_langs:
+                        lang = user_pref
+            except Exception:
+                pass  # Gracefully skip if profile lookup fails
+        
+        # 3. Check Accept-Language header (browser preference)
+        if not lang:
+            accept_language = request.META.get('HTTP_ACCEPT_LANGUAGE', '')
+            if accept_language:
+                # Parse Accept-Language header (e.g., "no-NO,no;q=0.9,en;q=0.8")
+                for lang_tag in accept_language.split(','):
+                    base_lang = lang_tag.split('-')[0].split(';')[0].strip().lower()
+                    if base_lang in supported_langs:
+                        lang = base_lang
+                        break
+        
+        # 4. Default to English
+        if not lang:
+            lang = 'en'
+        
+        # Activate the language for this request
+        translation.activate(lang)
+        request.LANGUAGE_CODE = lang
+
+
 class PostgresRlsSessionMiddleware(MiddlewareMixin):
     """Set per-request Postgres session variables used by RLS.
     Policies read:

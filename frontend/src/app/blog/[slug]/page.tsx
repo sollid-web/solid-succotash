@@ -6,17 +6,17 @@ import BlogCta from '@/components/BlogCta'
 import RiskDisclaimer from '@/components/RiskDisclaimer'
 import { getAllPostSlugs, getPostBySlug } from '@/lib/blog'
 
-type PageProps = {
-  params: Promise<{
-    slug: string
-  }>
+// 1. Define the Props interface for Next.js 15 async params
+interface PageProps {
+  params: Promise<{ slug: string }>
 }
 
-export const dynamic = 'force-static'
-export const dynamicParams = false
-
+// 2. Add generateStaticParams so the build worker knows which slugs to export
 export async function generateStaticParams() {
-  return getAllPostSlugs().map((slug) => ({ slug }))
+  const slugs = getAllPostSlugs()
+  return slugs.map((slug) => ({
+    slug,
+  }))
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -26,24 +26,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, '') ?? 'https://wolvcapital.com'
   const url = `${baseUrl}/blog/${post.slug}`
-
   const pageTitle = `${post.title} | WolvCapital Blog`
 
   const openGraphImages = post.coverImage
-    ? [
-        {
-          url: post.coverImage,
-          alt: post.coverImageAlt || post.title,
-        },
-      ]
+    ? [{ url: post.coverImage, alt: post.coverImageAlt || post.title }]
     : undefined
 
   return {
     title: pageTitle,
     description: post.description,
-    alternates: {
-      canonical: url,
-    },
+    alternates: { canonical: url },
     openGraph: {
       title: pageTitle,
       description: post.description,
@@ -67,38 +59,13 @@ export default async function BlogPostPage({ params }: PageProps) {
   if (!post) notFound()
 
   const publishedTime = new Date(post.publishedAt).toISOString()
-  const modifiedTime = new Date(post.updatedAt).toISOString()
+  const modifiedTime = new Date(post.updatedAt || post.publishedAt).toISOString()
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, '') ?? 'https://wolvcapital.com'
   const canonicalUrl = `${baseUrl}/blog/${post.slug}`
 
   return (
     <div className="min-h-screen bg-white">
-      <Script
-        id="blog-article-jsonld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Article',
-            headline: post.title,
-            description: post.description,
-            datePublished: publishedTime,
-            dateModified: modifiedTime,
-            image: post.coverImage ?? undefined,
-            author: [{ '@type': 'Organization', name: 'WolvCapital' }],
-            publisher: {
-              '@type': 'Organization',
-              name: 'WolvCapital',
-              url: baseUrl,
-            },
-            mainEntityOfPage: {
-              '@type': 'WebPage',
-              '@id': canonicalUrl,
-            },
-          }),
-        }}
-      />
-
+      {/* JSON-LD Script (Cleaned up duplicate) */}
       <Script
         id="blog-article-jsonld"
         type="application/ld+json"
@@ -128,9 +95,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       <section className="pt-28 pb-10 bg-gray-50">
         <div className="container mx-auto px-4 lg:px-8 max-w-3xl">
           <div className="text-sm text-gray-500">
-            <Link href="/blog" className="hover:text-[#0b2f6b] transition">
-              Blog
-            </Link>
+            <Link href="/blog" className="hover:text-[#0b2f6b] transition">Blog</Link>
             <span aria-hidden className="mx-2">/</span>
             <span className="text-gray-600">Article</span>
           </div>
@@ -141,8 +106,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           <p className="mt-4 text-base sm:text-lg text-gray-700">{post.description}</p>
           <div className="mt-6 bg-white border border-gray-200 rounded-2xl p-4">
             <p className="text-sm text-gray-600">
-              Informational content only. This is not financial advice. Digital assets are volatile and you may lose
-              capital.
+              Informational content only. This is not financial advice. Digital assets are volatile and you may lose capital.
             </p>
           </div>
         </div>
@@ -150,7 +114,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
       <section className="py-10 sm:py-14">
         <div className="container mx-auto px-4 lg:px-8 max-w-3xl">
-          {post.coverImage ? (
+          {post.coverImage && (
             <div className="mt-2 mb-10 aspect-[16/9] overflow-hidden rounded-2xl border border-gray-200 bg-gray-100">
               <img
                 src={post.coverImage}
@@ -158,20 +122,18 @@ export default async function BlogPostPage({ params }: PageProps) {
                 className="h-full w-full object-cover"
                 loading="eager"
                 decoding="async"
-                fetchPriority="high"
               />
             </div>
-          ) : null}
+          )}
 
           <article
-            className="blog-content"
+            className="blog-content prose prose-blue max-w-none"
             dangerouslySetInnerHTML={{ __html: post.contentHtml }}
           />
 
           <div className="mt-12 border-t border-gray-200 pt-8">
             <BlogCta />
             <RiskDisclaimer className="mt-4" />
-
             <div className="mt-10">
               <Link href="/blog" className="font-semibold text-[#0b2f6b] hover:text-[#2563eb] transition">
                 ← Back to all articles
@@ -180,7 +142,12 @@ export default async function BlogPostPage({ params }: PageProps) {
           </div>
         </div>
       </section>
-
     </div>
   )
 }
+
+
+function getAllPostsMeta() {
+  throw new Error('Function not implemented.')
+}
+

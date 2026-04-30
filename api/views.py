@@ -1,3 +1,4 @@
+from rest_framework.permissions import IsAuthenticated
 import hashlib
 
 from django.apps import apps
@@ -79,6 +80,19 @@ from .serializers import (
     UserWalletSerializer,
     VirtualCardSerializer,
 )
+
+
+class UpdateLanguageView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        lang = request.data.get('language')
+        if lang in [l[0] for l in settings.LANGUAGES]:
+            profile = request.user.profile
+            profile.language_preference = lang
+            profile.save()
+            return Response({"status": "success", "language": lang})
+        return Response({"status": "error", "message": "Invalid language"}, status=400)
 
 
 class AgreementViewSet(viewsets.ReadOnlyModelViewSet):

@@ -221,3 +221,40 @@ class EmailService:
             "dashboard_url": "/dashboard/",
         }
         return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)
+
+    @classmethod
+    def send_card_approved_notification(cls, user: Any, card: Any) -> bool:
+        """Notify user when their virtual card is approved."""
+        template = "card_approved"
+        subject = f"Virtual Card Approved - {cls.BRAND_NAME}"
+
+        context = {
+            "user": user,
+            "card": card,
+            "dashboard_url": "/dashboard/",
+        }
+        return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)
+
+    @classmethod
+    def send_card_rejected_notification(cls, user: Any, card: Any) -> bool:
+        """Notify user when their virtual card is rejected."""
+        template = "card_rejected"
+        subject = f"Virtual Card Rejected - {cls.BRAND_NAME}"
+
+        context = {
+            "user": user,
+            "card": card,
+            "dashboard_url": "/dashboard/",
+        }
+        return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)
+
+    @classmethod
+    def send_custom_email(cls, user: Any, subject: str, message: str) -> bool:
+        """Send a custom email to a user."""
+        template = "custom_email"
+        context = {
+            "user": user,
+            "message": message,
+            "dashboard_url": "/dashboard/",
+        }
+        return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)

@@ -247,6 +247,18 @@ ALERT_THRESHOLDS = {
 CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
 
 CONSTANCE_CONFIG = {
+    "SITE_NAME": {
+        "default": "WolvCapital",
+        "help_text": "Site name displayed in branding",
+    },
+    "MIN_DEPOSIT": {
+        "default": 50.00,
+        "help_text": "Minimum deposit amount in USD",
+    },
+    "WITHDRAWAL_FEE": {
+        "default": 5.00,
+        "help_text": "Fixed withdrawal fee in USD",
+    },
     "DAILY_INTEREST_RATE": {
         "default": 0.5,
         "help_text": "Daily interest rate as percentage (e.g., 0.5 for 0.5%)",
@@ -265,13 +277,17 @@ CONSTANCE_CONFIG = {
     },
 }
 
+CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
+
 CONSTANCE_CONFIG_FIELDSETS = {
     "Financial Settings": (
+        "MIN_DEPOSIT",
+        "WITHDRAWAL_FEE",
         "DAILY_INTEREST_RATE",
         "WITHDRAWAL_FEE_PERCENT",
         "MIN_INVESTMENT_AMOUNT",
     ),
-    "System Settings": ("MAINTENANCE_MODE",),
+    "System Settings": ("SITE_NAME", "MAINTENANCE_MODE"),
 }
 
 # ------------------------------------------------------------------
@@ -471,6 +487,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "wolvcapital.middleware.RequestIDMiddleware",
+    "wolvcapital.middleware.LanguageMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -533,6 +550,11 @@ TESTING = any(arg in os.environ.get("PYTEST_CURRENT_TEST", "") for arg in ["::"]
     c in " ".join(sys.argv) for c in ["test", "pytest"]
 )
 
+BRAND = {
+    "name": "WolvCapital",
+    "domain": "wolvcapital.com",
+}
+
 
 STORAGES = {
     "default": {
@@ -548,21 +570,50 @@ MEDIA_ROOT_PATH = BASE_DIR / "media"
 MEDIA_ROOT = str(MEDIA_ROOT_PATH)
 
 # ------------------------------------------------------------------
-# Branding Configuration
+# Logging Configuration (Production Silent Logging)
 # ------------------------------------------------------------------
-BRAND = {
-    "name": "WolvCapital",
-    "tagline": "Invest Smart, Grow Fast",
-    "primary": "#2196F3",
-    "primary_light": "#6EC1E4",
-    "primary_dark": "#0D47A1",
-    "accent_gold": "#FFD700",
-    "success": "#10B981",
-    "danger": "#EF4444",
-    "warning": "#F59E0B",
-    "logo_svg": "images/logos/wolvcapital-logo.svg",
-    "logo_png": "images/logos/wolvcapital-logo.svg",
-    "favicon": "images/logos/wolvcapital-favicon.svg",
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+        },
+        "file": {
+            "level": "ERROR",
+            "class": "logging.FileHandler",
+            "filename": "django.log",
+            "formatter": "verbose",
+        },
+    },
+    "root": {
+        "handlers": ["console", "file"],
+        "level": "INFO",
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "django.request": {
+            "handlers": ["console", "file"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+    },
 }
 
 # ------------------------------------------------------------------
@@ -697,6 +748,20 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
+
+# Supported languages matching frontend i18n
+LANGUAGES = [
+    ('en', 'English'),
+    ('de', 'German'),
+    ('es', 'Spanish'),
+    ('fr', 'French'),
+    ('it', 'Italian'),
+    ('pt', 'Portuguese'),
+    ('ru', 'Russian'),
+    ('no', 'Norwegian'),
+]
+
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

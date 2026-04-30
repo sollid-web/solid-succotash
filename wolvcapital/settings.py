@@ -718,10 +718,9 @@ class JsonFormatter:
         import datetime
         import json
 
-        from wolvcapital.middleware import (
-            get_request_id,
-        )  # local import to avoid circular
-
+        from core.middleware import get_request_id
+          
+        # local import to avoid circular
         rid = get_request_id()
         data = {
             "level": record.levelname,

@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: cards
+Version: 2.0.0
+Summary: Top-level package for cards.
+Author: Brian Okken
+Requires-Python: >=3.8
+Classifier: License :: OSI Approved :: MIT License
+Requires-Dist: tinydb==4.8.0
+Requires-Dist: typer==0.9.0
+Requires-Dist: rich==13.5.2
+Requires-Dist: pytest ; extra == "test"
+Requires-Dist: tox ; extra == "test"
+Requires-Dist: coverage ; extra == "test"
+Requires-Dist: pytest-cov ; extra == "test"
+Project-URL: Home, https://github.com/okken/cards
+Provides-Extra: test

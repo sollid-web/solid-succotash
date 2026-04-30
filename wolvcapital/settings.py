@@ -44,8 +44,14 @@ STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="sk_test_xxx_REPLACE_ME_xxx
 STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET", default="whsec_YOUR_SECRET")
 STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY", default="pk_test_YOUR_KEY")
 STRIPE_ISSUING_ENABLED = True
-STRIPE_CARDHOLDER_TYPE = 'individual'
+STRIPE_CARDHOLDER_TYPE = "individual"
 GROQ_API_KEY = env("GROQ_API_KEY", default="")
+
+# Startup debugging for Railway/production deployment
+print("🔧 Django startup: Loading environment...", file=sys.stderr)
+print(f"   DEBUG={DEBUG}", file=sys.stderr)
+print(f"   DATABASE_URL present: {bool(env('DATABASE_URL', default=None))}", file=sys.stderr)
+print(f"   SECRET_KEY present: {bool(SECRET_KEY)}", file=sys.stderr)
 
 if DEBUG:
     # Allow fallback dev key for local development
@@ -68,7 +74,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "*.railway.app",
-    "web-production-a4860.up.railway.app",
+    "django-production-2764.up.railway.app",
     "*.koyeb.app",  # Accept any Koyeb subdomain
     "wolvcapital.com",
     "www.wolvcapital.com",
@@ -83,7 +89,7 @@ if CUSTOM_DOMAIN:
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.railway.app",
-    "https://web-production-a4860.up.railway.app",
+    "https://django-production-2764.up.railway.app",
     "https://*.koyeb.app",
     "https://wolvcapital.com",
     "https://www.wolvcapital.com",
@@ -101,7 +107,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "https://wolvcapital.com",
     "https://www.wolvcapital.com",
-    "https://web-production-a4860.up.railway.app",
+    "https://django-production-2764.up.railway.app",
 ]
 
 # Add custom domain CORS origins if provided
@@ -238,36 +244,34 @@ ALERT_THRESHOLDS = {
 # ------------------------------------------------------------------
 # Constance Configuration (Financial Controls)
 # ------------------------------------------------------------------
-CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
 
 CONSTANCE_CONFIG = {
-    'DAILY_INTEREST_RATE': {
-        'default': 0.5,
-        'help_text': 'Daily interest rate as percentage (e.g., 0.5 for 0.5%)',
+    "DAILY_INTEREST_RATE": {
+        "default": 0.5,
+        "help_text": "Daily interest rate as percentage (e.g., 0.5 for 0.5%)",
     },
-    'WITHDRAWAL_FEE_PERCENT': {
-        'default': 2.0,
-        'help_text': 'Withdrawal fee as percentage (e.g., 2.0 for 2%)',
+    "WITHDRAWAL_FEE_PERCENT": {
+        "default": 2.0,
+        "help_text": "Withdrawal fee as percentage (e.g., 2.0 for 2%)",
     },
-    'MIN_INVESTMENT_AMOUNT': {
-        'default': 100.00,
-        'help_text': 'Minimum investment amount in USD',
+    "MIN_INVESTMENT_AMOUNT": {
+        "default": 100.00,
+        "help_text": "Minimum investment amount in USD",
     },
-    'MAINTENANCE_MODE': {
-        'default': False,
-        'help_text': 'Enable maintenance mode to disable new investments',
+    "MAINTENANCE_MODE": {
+        "default": False,
+        "help_text": "Enable maintenance mode to disable new investments",
     },
 }
 
 CONSTANCE_CONFIG_FIELDSETS = {
-    'Financial Settings': (
-        'DAILY_INTEREST_RATE',
-        'WITHDRAWAL_FEE_PERCENT',
-        'MIN_INVESTMENT_AMOUNT',
+    "Financial Settings": (
+        "DAILY_INTEREST_RATE",
+        "WITHDRAWAL_FEE_PERCENT",
+        "MIN_INVESTMENT_AMOUNT",
     ),
-    'System Settings': (
-        'MAINTENANCE_MODE',
-    ),
+    "System Settings": ("MAINTENANCE_MODE",),
 }
 
 # ------------------------------------------------------------------
@@ -279,17 +283,17 @@ UNFOLD = {
     "SITE_URL": "/",
     "SITE_ICON": {
         "light": "/static/admin/img/logo-light.svg",
-        "dark": "/static/admin/img/logo-dark.svg"
+        "dark": "/static/admin/img/logo-dark.svg",
     },
     "SITE_LOGO": {
         "light": "/static/admin/img/logo-light.svg",
-        "dark": "/static/admin/img/logo-dark.svg"
+        "dark": "/static/admin/img/logo-dark.svg",
     },
     "SITE_FAVICONS": [
         {
             "rel": "icon",
             "sizes": "32x32",
-            "src": "/static/admin/img/favicon-32x32.png",
+            "href": "/static/admin/img/favicon-32x32.png",
             "type": "image/png",
         },
     ],
@@ -714,10 +718,9 @@ class JsonFormatter:
         import datetime
         import json
 
-        from wolvcapital.middleware import (
-            get_request_id,
-        )  # local import to avoid circular
-
+        from core.middleware import get_request_id
+          
+        # local import to avoid circular
         rid = get_request_id()
         data = {
             "level": record.levelname,

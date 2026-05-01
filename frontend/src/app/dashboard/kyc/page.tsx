@@ -420,7 +420,7 @@ export default function KYCPage() {
       case 'completed': return 'text-green-600 bg-green-100'
       case 'pending': return 'text-yellow-600 bg-yellow-100'
       case 'failed': return 'text-red-600 bg-red-100'
-      default: return 'text-gray-600 bg-gray-100'
+      default: return 'text-slate-300 bg-slate-700'
     }
   }
 
@@ -460,7 +460,7 @@ export default function KYCPage() {
       case 1: // Email Verification
         return (
           <div className="space-y-6">
-            <div className="flex items-center space-x-3 p-4 bg-green-50 rounded-xl border border-green-200">
+            <div className="flex items-center space-x-3 p-4 bg-slate-900/80 rounded-xl border border-slate-700">
               <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
                 <svg className="w-6 h-6 text-[#0F172A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -478,15 +478,15 @@ export default function KYCPage() {
         return (
           <div className="space-y-6">
             {submitMessage && (
-              <div className={`p-4 border rounded-xl ${messageTone === 'error' ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'}`}>
-                <p className={`text-sm ${messageTone === 'error' ? 'text-red-800' : 'text-green-800'}`}>
+              <div className={`p-4 border rounded-xl ${messageTone === 'error' ? 'bg-slate-900/80 border-red-600' : 'bg-slate-900/80 border-green-600'}`}>
+                <p className={`text-sm ${messageTone === 'error' ? 'text-red-300' : 'text-green-300'}`}>
                   {submitMessage}
                 </p>
               </div>
             )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="firstName" className="block text-sm font-medium text-slate-300 mb-2">
                   First Name
                 </label>
                 <input
@@ -494,13 +494,13 @@ export default function KYCPage() {
                   id="firstName"
                   value={personalInfo.firstName}
                   onChange={(e) => setPersonalInfo(prev => ({ ...prev, firstName: e.target.value }))}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-slate-700 bg-slate-950/95 text-slate-100 placeholder-slate-500 rounded-lg focus:ring-2 focus:ring-[#00a896]/40 focus:border-[#00a896]"
                   placeholder="Enter your first name"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="lastName" className="block text-sm font-medium text-slate-300 mb-2">
                   Last Name
                 </label>
                 <input
@@ -508,13 +508,13 @@ export default function KYCPage() {
                   id="lastName"
                   value={personalInfo.lastName}
                   onChange={(e) => setPersonalInfo(prev => ({ ...prev, lastName: e.target.value }))}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-slate-700 bg-slate-950/95 text-slate-100 placeholder-slate-500 rounded-lg focus:ring-2 focus:ring-[#00a896]/40 focus:border-[#00a896]"
                   placeholder="Enter your last name"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="dateOfBirth" className="block text-sm font-medium text-slate-300 mb-2">
                   Date of Birth
                 </label>
                 <input
@@ -522,19 +522,19 @@ export default function KYCPage() {
                   id="dateOfBirth"
                   value={personalInfo.dateOfBirth}
                   onChange={(e) => setPersonalInfo(prev => ({ ...prev, dateOfBirth: e.target.value }))}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-slate-700 bg-slate-950/95 text-slate-100 placeholder-slate-500 rounded-lg focus:ring-2 focus:ring-[#00a896]/40 focus:border-[#00a896]"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="nationality" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="nationality" className="block text-sm font-medium text-slate-300 mb-2">
                   Nationality
                 </label>
                 <select
                   id="nationality"
                   value={personalInfo.nationality}
                   onChange={(e) => setPersonalInfo(prev => ({ ...prev, nationality: e.target.value }))}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-slate-700 bg-slate-950/95 text-slate-100 placeholder-slate-500 rounded-lg focus:ring-2 focus:ring-[#00a896]/40 focus:border-[#00a896]"
                   required
                 >
                   <option value="">Select your nationality</option>
@@ -547,7 +547,7 @@ export default function KYCPage() {
               </div>
             </div>
             <div>
-              <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="address" className="block text-sm font-medium text-slate-300 mb-2">
                 Address
               </label>
               <textarea
@@ -555,7 +555,7 @@ export default function KYCPage() {
                 rows={3}
                 value={personalInfo.address}
                 onChange={(e) => setPersonalInfo(prev => ({ ...prev, address: e.target.value }))}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-2 border border-slate-700 bg-slate-950/95 text-slate-100 placeholder-slate-500 rounded-lg focus:ring-2 focus:ring-[#00a896]/40 focus:border-[#00a896]"
                 placeholder="Enter your full address"
                 required
               />
@@ -574,8 +574,8 @@ export default function KYCPage() {
         return (
           <div className="space-y-6">
             {submitMessage && (
-              <div className={`p-4 border rounded-xl ${messageTone === 'error' ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'}`}>
-                <p className={`text-sm ${messageTone === 'error' ? 'text-red-800' : 'text-green-800'}`}>
+              <div className={`p-4 border rounded-xl ${messageTone === 'error' ? 'bg-slate-900/80 border-red-600' : 'bg-slate-900/80 border-green-600'}`}>
+                <p className={`text-sm ${messageTone === 'error' ? 'text-red-300' : 'text-green-300'}`}>
                   {submitMessage}
                 </p>
               </div>
@@ -583,7 +583,7 @@ export default function KYCPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Government ID Upload */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900">Government-issued ID</h3>
+                <h3 className="text-lg font-semibold text-slate-100">Government-issued ID</h3>
                 <div className="relative">
                   <input
                     type="file"
@@ -594,7 +594,7 @@ export default function KYCPage() {
                     aria-label="Upload government-issued identification"
                   />
                   <div className={`border-2 border-dashed rounded-lg p-6 text-center transition cursor-pointer ${
-                    uploadedFiles.governmentId ? 'border-green-300 bg-green-50' : 'border-gray-300 hover:border-[#2563eb]'
+                    uploadedFiles.governmentId ? 'border-emerald-300 bg-emerald-950/75' : 'border-slate-700 bg-slate-950/80 hover:border-[#00a896]'
                   }`}>
                     {uploadedFiles.governmentId ? (
                       <>
@@ -611,8 +611,8 @@ export default function KYCPage() {
                         <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                         </svg>
-                        <p className="text-sm text-gray-600 mb-2">Upload a photo of your ID</p>
-                        <p className="text-xs text-gray-500">Passport, Driver's License, or National ID</p>
+                        <p className="text-sm text-slate-300 mb-2">Upload a photo of your ID</p>
+                        <p className="text-xs text-slate-400">Passport, Driver's License, or National ID</p>
                       </>
                     )}
                   </div>
@@ -621,7 +621,7 @@ export default function KYCPage() {
 
               {/* Proof of Address Upload */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-900">Proof of Address</h3>
+                <h3 className="text-lg font-semibold text-slate-100">Proof of Address</h3>
                 <div className="relative">
                   <input
                     type="file"
@@ -632,7 +632,7 @@ export default function KYCPage() {
                     aria-label="Upload proof of address document"
                   />
                   <div className={`border-2 border-dashed rounded-lg p-6 text-center transition cursor-pointer ${
-                    uploadedFiles.proofOfAddress ? 'border-green-300 bg-green-50' : 'border-gray-300 hover:border-[#2563eb]'
+                    uploadedFiles.proofOfAddress ? 'border-emerald-300 bg-emerald-950/75' : 'border-slate-700 bg-slate-950/80 hover:border-[#00a896]'
                   }`}>
                     {uploadedFiles.proofOfAddress ? (
                       <>
@@ -649,8 +649,8 @@ export default function KYCPage() {
                         <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                         </svg>
-                        <p className="text-sm text-gray-600 mb-2">Upload proof of address</p>
-                        <p className="text-xs text-gray-500">Utility bill, bank statement, or lease agreement</p>
+                        <p className="text-sm text-slate-300 mb-2">Upload proof of address</p>
+                        <p className="text-xs text-slate-400">Utility bill, bank statement, or lease agreement</p>
                       </>
                     )}
                   </div>
@@ -658,10 +658,10 @@ export default function KYCPage() {
               </div>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+            <div className="bg-slate-900/80 border border-slate-700 rounded-xl p-4">
               <div className="flex items-start space-x-3">
-                <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <svg className="w-3 h-3 text-[#0F172A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-6 h-6 bg-[#2563eb] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
@@ -690,8 +690,8 @@ export default function KYCPage() {
       case 4: // Enhanced Verification
         return (
           <div className="space-y-6">
-            <div className="bg-gradient-to-br from-purple-50 to-indigo-100 rounded-xl p-6 border border-purple-200">
-              <h3 className="text-lg font-semibold text-purple-900 mb-4">Enhanced Verification Benefits</h3>
+            <div className="bg-slate-900/80 rounded-xl p-6 border border-slate-700">
+              <h3 className="text-lg font-semibold text-slate-100 mb-4">Enhanced Verification Benefits</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div className="flex items-start space-x-2">
                   <svg className="w-5 h-5 text-purple-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -721,8 +721,8 @@ export default function KYCPage() {
             </div>
 
             <div className="text-center">
-              <h4 className="text-lg font-semibold text-gray-900 mb-2">Video Call Verification</h4>
-              <p className="text-gray-600 mb-6">Schedule a brief video call with our verification team</p>
+              <h4 className="text-lg font-semibold text-slate-100 mb-2">Video Call Verification</h4>
+              <p className="text-slate-300 mb-6">Schedule a brief video call with our verification team</p>
               <button className="bg-purple-600 text-[#0F172A] px-8 py-3 rounded-lg hover:bg-purple-700 transition font-semibold">
                 Schedule Video Call
               </button>
@@ -771,14 +771,14 @@ export default function KYCPage() {
       </div>
 
       {loadingStatus && (
-        <div className="bg-white rounded-2xl shadow-lg p-4 flex items-center space-x-3">
+        <div className="bg-slate-950/95 border border-slate-800 rounded-2xl shadow-lg p-4 flex items-center space-x-3">
           <div className="w-4 h-4 border-2 border-[#2563eb] border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-sm text-gray-600">Refreshing your latest KYC status…</p>
+          <p className="text-sm text-slate-300">Refreshing your latest KYC status…</p>
         </div>
       )}
 
       {fetchError && (
-        <div className="bg-red-50 border border-red-200 text-red-700 rounded-2xl p-4">
+        <div className="bg-slate-900/80 border border-red-600 text-red-300 rounded-2xl p-4">
           {fetchError}
         </div>
       )}
@@ -786,16 +786,16 @@ export default function KYCPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Steps Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-2xl shadow-lg p-6 space-y-4">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Verification Steps</h2>
+          <div className="bg-slate-950/95 border border-slate-800 rounded-2xl shadow-lg p-6 space-y-4">
+            <h2 className="text-xl font-bold text-slate-100 mb-4">Verification Steps</h2>
             {kycSteps.map((step, index) => (
               <div
                 key={step.id}
                 onClick={() => setSelectedStep(step.id)}
                 className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
                   selectedStep === step.id
-                    ? 'border-[#2563eb] bg-blue-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-[#2563eb] bg-slate-900'
+                    : 'border-slate-700 hover:border-slate-500'
                 }`}
               >
                 <div className="flex items-center space-x-3">
@@ -804,14 +804,14 @@ export default function KYCPage() {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center space-x-2">
-                      <h3 className={`font-semibold ${selectedStep === step.id ? 'text-[#2563eb]' : 'text-gray-900'}`}>
+                      <h3 className={`font-semibold ${selectedStep === step.id ? 'text-[#2563eb]' : 'text-slate-100'}`}>
                         {step.title}
                       </h3>
                       {step.required && (
                         <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">Required</span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-600">{step.description}</p>
+                    <p className="text-sm text-slate-300">{step.description}</p>
                   </div>
                 </div>
               </div>
@@ -821,22 +821,22 @@ export default function KYCPage() {
 
         {/* Step Content */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-2xl shadow-lg p-8">
+          <div className="bg-slate-950/95 border border-slate-800 rounded-2xl shadow-lg p-8">
             <div className="mb-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="text-2xl font-bold text-slate-100 mb-2">
                 {kycSteps.find(s => s.id === selectedStep)?.title}
               </h2>
-              <p className="text-gray-600">
+              <p className="text-slate-300">
                 {kycSteps.find(s => s.id === selectedStep)?.description}
               </p>
             </div>
 
             {latestApplication && (
-              <div className="mb-6 rounded-xl border border-gray-200 bg-gray-50 p-4">
+              <div className="mb-6 rounded-xl border border-slate-700 bg-slate-900/80 p-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <p className="text-sm text-gray-600">Application status</p>
-                    <p className="text-lg font-semibold text-gray-900">
+                    <p className="text-sm text-slate-400">Application status</p>
+                    <p className="text-lg font-semibold text-slate-100">
                       {statusLabelMap[latestApplication.status]}
                     </p>
                   </div>
@@ -845,7 +845,7 @@ export default function KYCPage() {
                   </span>
                 </div>
                 {latestApplication.last_submitted_at && (
-                  <p className="mt-3 text-sm text-gray-600">
+                  <p className="mt-3 text-sm text-slate-400">
                     Last submitted: {new Date(latestApplication.last_submitted_at).toLocaleString()}
                   </p>
                 )}
@@ -868,18 +868,18 @@ export default function KYCPage() {
       </div>
 
       {/* Help Section */}
-      <div className="bg-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Need Help?</h2>
+      <div className="bg-slate-950/95 border border-slate-800 rounded-2xl shadow-lg p-8">
+        <h2 className="text-xl font-bold text-slate-100 mb-4">Need Help?</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex items-start space-x-4">
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center">
               <svg className="w-5 h-5 text-[#2563eb]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
               </svg>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-1">Live Chat Support</h3>
-              <p className="text-sm text-gray-600">Get instant help with verification</p>
+              <h3 className="font-semibold text-slate-100 mb-1">Live Chat Support</h3>
+              <p className="text-sm text-slate-300">Get instant help with verification</p>
               <Link href="/dashboard/support" className="text-[#2563eb] text-sm hover:underline">
                 Start Chat →
               </Link>
@@ -893,8 +893,8 @@ export default function KYCPage() {
               </svg>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-1">Email Support</h3>
-              <p className="text-sm text-gray-600">Send us your verification questions</p>
+              <h3 className="font-semibold text-slate-100 mb-1">Email Support</h3>
+              <p className="text-sm text-slate-300">Send us your verification questions</p>
               <a href="mailto:support@mail.wolvcapital.com" className="text-[#2563eb] text-sm hover:underline">
                 support@mail.wolvcapital.com →
               </a>
@@ -907,7 +907,7 @@ export default function KYCPage() {
           width: 100%;
           height: 0.75rem;
           border-radius: 9999px;
-          background-color: rgba(255, 255, 255, 0.2);
+          background-color: rgba(12, 13, 22, 0.94);
           overflow: hidden;
           appearance: none;
         }

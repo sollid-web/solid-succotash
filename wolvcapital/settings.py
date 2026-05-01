@@ -247,34 +247,13 @@ ALERT_THRESHOLDS = {
 CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
 
 CONSTANCE_CONFIG = {
-    "SITE_NAME": {
-        "default": "WolvCapital",
-        "help_text": "Site name displayed in branding",
-    },
-    "MIN_DEPOSIT": {
-        "default": 50.00,
-        "help_text": "Minimum deposit amount in USD",
-    },
-    "WITHDRAWAL_FEE": {
-        "default": 5.00,
-        "help_text": "Fixed withdrawal fee in USD",
-    },
-    "DAILY_INTEREST_RATE": {
-        "default": 0.5,
-        "help_text": "Daily interest rate as percentage (e.g., 0.5 for 0.5%)",
-    },
-    "WITHDRAWAL_FEE_PERCENT": {
-        "default": 2.0,
-        "help_text": "Withdrawal fee as percentage (e.g., 2.0 for 2%)",
-    },
-    "MIN_INVESTMENT_AMOUNT": {
-        "default": 100.00,
-        "help_text": "Minimum investment amount in USD",
-    },
-    "MAINTENANCE_MODE": {
-        "default": False,
-        "help_text": "Enable maintenance mode to disable new investments",
-    },
+    "SITE_NAME": ("WolvCapital", "Site name displayed in branding"),
+    "MIN_DEPOSIT": (50.00, "Minimum deposit amount in USD"),
+    "WITHDRAWAL_FEE": (5.00, "Fixed withdrawal fee in USD"),
+    "DAILY_INTEREST_RATE": (0.5, "Daily interest rate as percentage (e.g., 0.5 for 0.5%)"),
+    "WITHDRAWAL_FEE_PERCENT": (2.0, "Withdrawal fee as percentage (e.g., 2.0 for 2%)"),
+    "MIN_INVESTMENT_AMOUNT": (100.00, "Minimum investment amount in USD"),
+    "MAINTENANCE_MODE": (False, "Enable maintenance mode to disable new investments"),
 }
 
 CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
@@ -410,7 +389,7 @@ UNFOLD = {
                     {
                         "title": "User Profiles",
                         "icon": "person",
-                        "link": "/admin/users/profile/",
+                        "link": "/admin/users/userprofile/",
                     },
                     {
                         "title": "User Wallets",
@@ -435,7 +414,7 @@ UNFOLD = {
                 },
                 {
                     "title": "Profiles",
-                    "link": "/admin/users/profile/",
+                    "link": "/admin/users/userprofile/",
                 },
                 {
                     "title": "Wallets",

@@ -20,3 +20,14 @@ class UserProfileAdmin(ModelAdmin):
             ),
         }),
     )
+
+
+from unfold.admin import ModelAdmin as UnfoldModelAdmin
+from .models import UserWallet
+
+@admin.register(UserWallet)
+class UserWalletAdmin(UnfoldModelAdmin):
+    list_display = ("user", "balance", "updated_at")
+    readonly_fields = ("user", "balance", "updated_at")
+    search_fields = ("user__email",)
+    ordering = ("-updated_at",)

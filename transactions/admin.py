@@ -17,6 +17,11 @@ from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 
 from unfold.admin import ModelAdmin
+from unfold.decorators import action as unfold_action
+from unfold.admin import TabularInline, StackedInline
+from investments.models import UserInvestment, InvestmentPlan
+from users.models import UserWallet, KycDocument, KycApplication, Profile
+from transactions.models import Transaction, VirtualCard
 from unfold.decorators import action
 
 from .models import AdminAuditLog, CryptocurrencyWallet, Transaction, VirtualCard
@@ -241,9 +246,76 @@ except NotRegistered:
     pass
 
 
+
+# ── User detail inlines ─────────────────────────────────────────────────────
+
+class WalletInline(TabularInline):
+    model = UserWallet
+    fields = ("balance", "updated_at")
+    readonly_fields = ("balance", "updated_at")
+    extra = 0
+    can_delete = False
+    verbose_name = "Wallet"
+    verbose_name_plural = "Wallet"
+    tab = True
+
+
+class UserInvestmentInline(StackedInline):
+    model = UserInvestment
+    fields = ("plan", "amount", "status", "started_at", "ends_at", "created_at")
+    readonly_fields = ("created_at",)
+    extra = 1
+    can_delete = True
+    verbose_name = "Investment"
+    verbose_name_plural = "Investments"
+    tab = True
+    autocomplete_fields = []
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related("plan")
+
+
+class TransactionInline(TabularInline):
+    model = Transaction
+    fk_name = "user"
+    fields = ("tx_type", "amount", "status", "payment_method", "created_at")
+    readonly_fields = ("tx_type", "amount", "status", "payment_method", "created_at")
+    extra = 0
+    can_delete = False
+    verbose_name = "Transaction"
+    verbose_name_plural = "Transaction History"
+    tab = True
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).order_by("-created_at")
+
+
+class KycInline(StackedInline):
+    model = KycApplication
+    fields = ("status", "personal_info", "last_submitted_at", "reviewed_by", "reviewer_notes", "rejection_reason")
+    readonly_fields = ("personal_info", "last_submitted_at", "reviewed_by")
+    extra = 0
+    can_delete = False
+    verbose_name = "KYC Application"
+    verbose_name_plural = "KYC Applications"
+    tab = True
+    fk_name = "user"
+
+
+class VirtualCardInline(TabularInline):
+    model = VirtualCard
+    fk_name = "user"
+    fields = ("status", "expires_at", "created_at")
+    readonly_fields = ("status", "expires_at", "created_at")
+    extra = 0
+    can_delete = False
+    verbose_name = "Virtual Card"
+    verbose_name_plural = "Virtual Cards"
+    tab = True
+
 @admin.register(User)
 class UserAdmin(ModelAdmin):
-    list_display = ("email", "get_full_name", "get_wallet_balance", "get_total_investment", "date_joined", "is_active")
+    list_display = ("email", "get_full_name", "get_wallet_balance", "get_total_invested", "get_kyc_status", "date_joined", "is_active")
     list_filter = ("is_active", "is_staff", "date_joined")
     list_fullwidth = True
     list_filter_sheet = True
@@ -251,35 +323,43 @@ class UserAdmin(ModelAdmin):
     readonly_fields = ("date_joined", "last_login")
     actions = ["send_custom_email"]
     actions_detail = ["send_direct_message"]
+    inlines = [WalletInline, UserInvestmentInline, TransactionInline, KycInline, VirtualCardInline]
 
     def get_wallet_balance(self, obj):
         try:
             return f"${obj.wallet.balance:.2f}"
         except (AttributeError, ValueError, TypeError):
             return "$0.00"
-
     get_wallet_balance.short_description = "Wallet Balance"
     get_wallet_balance.admin_order_field = "wallet__balance"
 
-    def get_total_investment(self, obj):
+    def get_total_invested(self, obj):
         try:
-            total = obj.transactions.filter(tx_type="deposit", status="approved").aggregate(
+            total = obj.investments.filter(status__in=["approved", "active", "completed"]).aggregate(
                 total=Sum("amount")
             )["total"] or Decimal("0.00")
             return f"${total:.2f}"
         except (AttributeError, ValueError, TypeError):
             return "$0.00"
+    get_total_invested.short_description = "Total Invested"
 
-    get_total_investment.short_description = "Total Invested"
-    get_total_investment.admin_order_field = "transactions__amount"
+    def get_kyc_status(self, obj):
+        try:
+            app = obj.kyc_applications.order_by("-created_at").first()
+            if not app:
+                return format_html("<span style='color:#999'>None</span>")
+            colors = {"draft": "#999", "pending": "#F59E0B", "approved": "#10B981", "rejected": "#EF4444"}
+            color = colors.get(app.status, "#999")
+            return format_html("<span style='color:{};font-weight:600'>{}</span>", color, app.get_status_display())
+        except Exception:
+            return "-"
+    get_kyc_status.short_description = "KYC"
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related("wallet").prefetch_related("transactions")
+        return super().get_queryset(request).select_related("wallet").prefetch_related("investments", "kyc_applications", "transactions")
 
     @admin.action(description="Send Custom Email")
     def send_custom_email(self, request, queryset):
-        # For now, implement without modal
-        # Assume subject and message are passed somehow, or use defaults
         subject = "Custom Message from WolvCapital"
         message = "This is a custom message."
         success_count = 0
@@ -287,25 +367,19 @@ class UserAdmin(ModelAdmin):
         for user in queryset:
             try:
                 EmailService.send_custom_email(user, subject, message)
-                AdminAuditLog.objects.create(
-                    admin=request.user,
-                    entity="user",
-                    entity_id=str(user.id),
-                    action="send_custom_email",
-                    notes=f"Subject: {subject}",
-                )
                 success_count += 1
-            except Exception as e:
+            except Exception:
                 error_count += 1
-                messages.error(request, f"Failed to send email to {user.email}: {str(e)}")
         if success_count:
-            messages.success(request, f"Successfully sent emails to {success_count} user(s).")
+            messages.success(request, f"✅ Emails sent to {success_count} user(s).")
         if error_count:
-            messages.error(request, f"Failed to send emails to {error_count} user(s).")
+            messages.error(request, f"❌ Failed to send emails to {error_count} user(s).")
 
-    @admin.action(description="Send Direct Message")
-    def send_direct_message(self, request, obj):
-        # Similar
+    @unfold_action(description="Send Direct Message", url_path="send-direct-message")
+    def send_direct_message(self, request, object_id):
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        obj = User.objects.get(pk=object_id)
         subject = "Direct Message from WolvCapital"
         message = "This is a direct message."
         try:
@@ -320,6 +394,8 @@ class UserAdmin(ModelAdmin):
             messages.success(request, f"Successfully sent email to {obj.email}.")
         except Exception as e:
             messages.error(request, f"Failed to send email to {obj.email}: {str(e)}")
+        from django.http import HttpResponseRedirect
+        return HttpResponseRedirect(f"/admin/users/user/{object_id}/change/")
 
 
 # System Health View

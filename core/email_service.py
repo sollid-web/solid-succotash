@@ -12,6 +12,7 @@ from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
+
 class EmailService:
     """High-level email helper for system, transaction, and investment emails."""
 
@@ -37,6 +38,7 @@ class EmailService:
     @classmethod
     def get_user_model(cls):
         from django.contrib.auth import get_user_model
+
         return get_user_model()
 
     # --- Internal send method ---
@@ -207,7 +209,6 @@ class EmailService:
         }
         return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)
 
-
     @classmethod
     def send_checkout_completion_email(
         cls,
@@ -250,9 +251,33 @@ class EmailService:
         }
         return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)
 
+    @classmethod
+    def send_card_approved_notification(cls, user, card) -> bool:
+        """Notify user when their virtual card is approved."""
+        template = "card_approved"
+        subject = f"Virtual Card Approved - {cls.BRAND_NAME}"
+        context = {
+            "user": user,
+            "card": card,
+            "dashboard_url": "/dashboard/",
+        }
+        return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)
+
+    @classmethod
+    def send_card_rejected_notification(cls, user, card) -> bool:
+        """Notify user when their virtual card is rejected."""
+        template = "card_rejected"
+        subject = f"Virtual Card Rejected - {cls.BRAND_NAME}"
+        context = {
+            "user": user,
+            "card": card,
+            "dashboard_url": "/dashboard/",
+        }
+        return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)
 
 
 # Optional utility function
+
 
 def send_email(subject, to, body=None, bcc=None, template_name=None, context=None):
     return EmailService._send(
@@ -262,3 +287,15 @@ def send_email(subject, to, body=None, bcc=None, template_name=None, context=Non
         subject=subject,
         bcc=bcc,
     )
+
+    @classmethod
+    def send_card_rejected_notification(cls, user, card) -> bool:
+        """Notify user when their virtual card is rejected."""
+        template = "card_rejected"
+        subject = f"Virtual Card Rejected - {cls.BRAND_NAME}"
+        context = {
+            "user": user,
+            "card": card,
+            "dashboard_url": "/dashboard/",
+        }
+        return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)

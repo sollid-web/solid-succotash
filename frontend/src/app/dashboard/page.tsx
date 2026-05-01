@@ -76,20 +76,20 @@ function formatDate(d: Date | null) {
 }
 
 const txTypeConfig: Record<string, { label: string; icon: string; color: string; bg: string }> = {
-  deposit:    { label: "Deposit",    icon: "↓", color: "#10b981", bg: "rgba(16,185,129,0.1)" },
-  withdrawal: { label: "Withdrawal", icon: "↑", color: "#ef4444", bg: "rgba(239,68,68,0.1)"  },
-  profit:     { label: "Profit",     icon: "◈", color: "#f59e0b", bg: "rgba(245,158,11,0.1)" },
-  investment: { label: "Investment", icon: "⬡", color: "#3b82f6", bg: "rgba(59,130,246,0.1)" },
-  bonus:      { label: "Bonus",      icon: "★", color: "#8b5cf6", bg: "rgba(139,92,246,0.1)" },
-  fee:        { label: "Fee",        icon: "−", color: "#6b7280", bg: "rgba(107,114,128,0.1)"},
+  deposit:    { label: "Deposit",    icon: "↓", color: "#7dd3fc", bg: "rgba(59,130,246,0.12)" },
+  withdrawal: { label: "Withdrawal", icon: "↑", color: "#fca5a5", bg: "rgba(248,113,113,0.12)" },
+  profit:     { label: "Profit",     icon: "◈", color: "#fbbf24", bg: "rgba(251,191,36,0.12)" },
+  investment: { label: "Investment", icon: "⬡", color: "#93c5fd", bg: "rgba(59,130,246,0.12)" },
+  bonus:      { label: "Bonus",      icon: "★", color: "#c7d2fe", bg: "rgba(148,163,184,0.12)" },
+  fee:        { label: "Fee",        icon: "−", color: "#9ca3af", bg: "rgba(156,163,175,0.12)" },
 };
 
 const statusConfig: Record<string, { color: string; bg: string; dot: string }> = {
-  approved:  { color: "#10b981", bg: "rgba(16,185,129,0.1)",  dot: "#10b981" },
-  completed: { color: "#10b981", bg: "rgba(16,185,129,0.1)",  dot: "#10b981" },
-  pending:   { color: "#f59e0b", bg: "rgba(245,158,11,0.1)",  dot: "#f59e0b" },
-  rejected:  { color: "#ef4444", bg: "rgba(239,68,68,0.1)",   dot: "#ef4444" },
-  failed:    { color: "#ef4444", bg: "rgba(239,68,68,0.1)",   dot: "#ef4444" },
+  approved:  { color: "#7dd3fc", bg: "rgba(59,130,246,0.12)",  dot: "#7dd3fc" },
+  completed: { color: "#7dd3fc", bg: "rgba(59,130,246,0.12)",  dot: "#7dd3fc" },
+  pending:   { color: "#facc15", bg: "rgba(250,204,21,0.12)",  dot: "#facc15" },
+  rejected:  { color: "#fca5a5", bg: "rgba(248,113,113,0.12)",   dot: "#fca5a5" },
+  failed:    { color: "#fca5a5", bg: "rgba(248,113,113,0.12)",   dot: "#fca5a5" },
 };
 
 export default function DashboardPage() {
@@ -159,6 +159,20 @@ export default function DashboardPage() {
     }), [transactions]);
 
   const roiRate = totalInvested > 0 ? ((lockedRoi / totalInvested) * 100).toFixed(1) : "0.0";
+
+  const planColors = [
+    { from: "#1d4ed8", to: "#1d4ed8" },
+    { from: "#0f5c7a", to: "#0f5c7a" },
+    { from: "#212c50", to: "#212c50" },
+    { from: "#053257", to: "#053257" },
+  ];
+
+  const planColorMap = {
+    pioneer: planColors[0],
+    vanguard: planColors[1],
+    horizon: planColors[2],
+    summit: planColors[3],
+  };
 
   return (
     <div className="min-h-screen" style={{ background: "#0a0f1e", fontFamily: "'DM Sans', system-ui, sans-serif" }}>
@@ -240,9 +254,9 @@ export default function DashboardPage() {
             style={{
               display: "inline-flex", alignItems: "center", gap: "8px",
               padding: "12px 24px", borderRadius: "12px",
-              background: "linear-gradient(135deg, #00a896, #0f7a70)",
+              background: "linear-gradient(135deg, #1d4ed8, #2563eb)",
               color: "#fff", fontWeight: 600, fontSize: "14px",
-              boxShadow: "0 8px 32px rgba(0,168,150,0.35)",
+              boxShadow: "0 8px 32px rgba(37,99,235,0.22)",
               textDecoration: "none", whiteSpace: "nowrap",
               transition: "all 0.2s",
             }}>
@@ -368,10 +382,10 @@ export default function DashboardPage() {
               </p>
             </div>
             <Link href="/dashboard/new-investment" style={{
-              color: "#00a896", fontSize: "13px", fontWeight: 500, textDecoration: "none",
+              color: "#bfdbfe", fontSize: "13px", fontWeight: 500, textDecoration: "none",
               padding: "6px 14px", borderRadius: "8px",
-              border: "1px solid rgba(0,168,150,0.3)",
-              background: "rgba(0,168,150,0.08)",
+              border: "1px solid rgba(59,130,246,0.25)",
+              background: "rgba(59,130,246,0.08)",
             }}>
               + Add Plan
             </Link>
@@ -393,7 +407,7 @@ export default function DashboardPage() {
               <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "13px", marginBottom: "20px" }}>Start investing to grow your portfolio</div>
               <Link href="/dashboard/new-investment" style={{
                 padding: "10px 24px", borderRadius: "10px",
-                background: "linear-gradient(135deg, #00a896, #0f7a70)",
+                background: "linear-gradient(135deg, #1d4ed8, #2563eb)",
                 color: "#fff", fontWeight: 600, fontSize: "14px", textDecoration: "none",
               }}>
                 Start Investing
@@ -422,10 +436,10 @@ export default function DashboardPage() {
                   : planName.toLowerCase().includes("summit") ? "summit" : null;
 
                 const planColors = [
-                  { from: "#3b82f6", to: "#1d4ed8" },
-                  { from: "#00a896", to: "#0f7a70" },
-                  { from: "#8b5cf6", to: "#6d28d9" },
-                  { from: "#f59e0b", to: "#b45309" },
+                  { from: "#1d4ed8", to: "#1d4ed8" },
+                  { from: "#0f5c7a", to: "#0f5c7a" },
+                  { from: "#212c50", to: "#212c50" },
+                  { from: "#053257", to: "#053257" },
                 ];
                 const col = planColors[idx % planColors.length];
 
@@ -558,10 +572,10 @@ export default function DashboardPage() {
               </p>
             </div>
             <Link href="/dashboard/transactions" style={{
-              color: "#00a896", fontSize: "13px", fontWeight: 500, textDecoration: "none",
+              color: "#7dd3fc", fontSize: "13px", fontWeight: 500, textDecoration: "none",
               padding: "6px 14px", borderRadius: "8px",
-              border: "1px solid rgba(0,168,150,0.3)",
-              background: "rgba(0,168,150,0.08)",
+              border: "1px solid rgba(59,130,246,0.3)",
+              background: "rgba(59,130,246,0.08)",
             }}>
               View All
             </Link>
@@ -623,7 +637,7 @@ export default function DashboardPage() {
                         <div style={{ color: "#fff", fontSize: "13px", fontWeight: 500, marginBottom: "2px" }}>
                           {type.label}
                         </div>
-                        <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "11px", fontFamily: "'DM Mono', monospace" }}>
+                        <div style={{ color: "rgba(203,213,225,0.65)", fontSize: "11px", fontFamily: "Inter, system-ui, sans-serif" }}>
                           {d ? d.toLocaleDateString("en-GB") : "-"} · {d ? d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : ""}
                         </div>
                       </div>
@@ -638,8 +652,8 @@ export default function DashboardPage() {
                       </div>
                       {/* Amount */}
                       <div style={{
-                        color: isCredit ? "#10b981" : "#f87171",
-                        fontFamily: "'DM Mono', monospace",
+                        color: isCredit ? "#bfdbfe" : "#fca5a5",
+                        fontFamily: "Inter, system-ui, sans-serif",
                         fontWeight: 600, fontSize: "14px",
                         whiteSpace: "nowrap",
                       }}>
@@ -660,9 +674,9 @@ export default function DashboardPage() {
         <Link href="/dashboard/new-investment" style={{
           display: "flex", alignItems: "center", justifyContent: "center",
           width: "100%", padding: "16px", borderRadius: "16px",
-          background: "linear-gradient(135deg, #00a896, #0f7a70)",
+          background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
           color: "#fff", fontWeight: 700, fontSize: "15px",
-          textDecoration: "none", boxShadow: "0 8px 32px rgba(0,168,150,0.4)",
+          textDecoration: "none", boxShadow: "0 8px 32px rgba(37,99,235,0.35)",
         }}>
           + Start New Investment
         </Link>

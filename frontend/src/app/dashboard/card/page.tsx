@@ -7,6 +7,12 @@ import { useVirtualCard } from "@/hooks/useVirtualCard";
 import { useBiometricAuth } from "@/hooks/useBiometricAuth";
 import { apiFetch } from "@/lib/api";
 
+/** --- Brand Colors --- **/
+const logoBlue = "#1a3a8f";
+const logoBlueSoft = "rgba(26,58,143,0.18)";
+const logoBlueBorder = "rgba(26,58,143,0.32)";
+const logoBlueText = "#bfdbfe";
+
 /** --- Helper Functions --- **/
 const money = (n: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n);
 const maskNumber = (num: string) => num ? `•••• •••• •••• ${num.slice(-4)}` : "•••• •••• •••• ••••";
@@ -51,7 +57,7 @@ function CreatePinModal({ show, onCancel, onSuccess }: { show: boolean; onCancel
 
   return (
     <div className="fixed inset-0 bg-black/70 z-[60] flex items-end sm:items-center justify-center backdrop-blur-sm" onClick={onCancel}>
-      <div className="w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6" onClick={e => e.stopPropagation()} style={{ background: "linear-gradient(135deg, rgba(26,58,143,0.6) 0%, rgba(14,165,201,0.4) 100%)" }}>
+      <div className="w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6" onClick={e => e.stopPropagation()} style={{ background: `linear-gradient(135deg, ${logoBlue} 0%, #234c8f 100%)` }}>
         <div className="w-12 h-1 rounded-full mx-auto mb-6 sm:hidden" style={{ background: "rgba(255,255,255,0.2)" }} />
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">🔑</div>
@@ -80,7 +86,7 @@ function CreatePinModal({ show, onCancel, onSuccess }: { show: boolean; onCancel
         {error && <p className="text-xs text-center mb-4" style={{ color: "#ff6b6b" }}>{error}</p>}
         <button onClick={handleSubmit} disabled={saving || !pin || !confirm}
           className="w-full py-4 text-white rounded-2xl font-bold mb-3 disabled:opacity-50"
-          style={{ background: "linear-gradient(135deg, #00a896, #0f7a70)" }}>
+          style={{ background: `linear-gradient(135deg, ${logoBlue}, #234c8f)` }}>
           {saving ? "Saving..." : "Create PIN"}
         </button>
         <button onClick={onCancel} className="w-full py-3 text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>Cancel</button>
@@ -94,7 +100,7 @@ function PasswordModal({ show, onSubmit, onCancel, error, isVerifying }: any) {
   if (!show) return null;
   return (
     <div className="fixed inset-0 bg-black/70 z-[60] flex items-end sm:items-center justify-center backdrop-blur-sm" onClick={onCancel}>
-      <div className="w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6" onClick={e => e.stopPropagation()} style={{ background: "linear-gradient(135deg, rgba(26,58,143,0.6) 0%, rgba(14,165,201,0.4) 100%)" }}>
+      <div className="w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6" onClick={e => e.stopPropagation()} style={{ background: `linear-gradient(135deg, ${logoBlue} 0%, #234c8f 100%)` }}>
         <div className="w-12 h-1 rounded-full mx-auto mb-6 sm:hidden" style={{ background: "rgba(255,255,255,0.2)" }} />
         <div className="text-center mb-6">
           <div className="text-4xl mb-2">🔐</div>
@@ -112,7 +118,7 @@ function PasswordModal({ show, onSubmit, onCancel, error, isVerifying }: any) {
           style={{ borderColor: "rgba(255,255,255,0.2)", background: "rgba(255,255,255,0.1)", color: "#fff" }}
         />
         {error && <p className="text-xs text-center mb-4" style={{ color: "#ff6b6b" }}>{error}</p>}
-        <button onClick={() => onSubmit(pw)} disabled={isVerifying || !pw} className="w-full py-4 text-white rounded-2xl font-bold mb-3 disabled:opacity-50" style={{ background: "linear-gradient(135deg, #00a896, #0f7a70)" }}>
+        <button onClick={() => onSubmit(pw)} disabled={isVerifying || !pw} className="w-full py-4 text-white rounded-2xl font-bold mb-3 disabled:opacity-50" style={{ background: `linear-gradient(135deg, ${logoBlue}, #234c8f)` }}>
           {isVerifying ? "Verifying..." : "Unlock Details"}
         </button>
       </div>
@@ -215,13 +221,17 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
             </div>
             <div className="flex items-center gap-2">
               {securityUnlocked && (
-                <span className="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 border border-green-200">
+                <span className="px-2 py-1 rounded-full text-xs font-semibold" style={{
+                  background: logoBlueSoft,
+                  color: logoBlueText,
+                  border: `1px solid ${logoBlueBorder}`,
+                }}>
                   🔓 Unlocked
                 </span>
               )}
               <span className="px-3 py-1 rounded-full text-xs font-semibold border" style={{
                 ...(isFrozen ? { background: "rgba(59,130,246,0.2)", color: "#3b82f6", borderColor: "rgba(59,130,246,0.3)" }
-                : card.is_active ? { background: "rgba(16,185,129,0.2)", color: "#10b981", borderColor: "rgba(16,185,129,0.3)" }
+                : card.is_active ? { background: logoBlueSoft, color: logoBlueText, borderColor: logoBlueBorder }
                 : { background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)", borderColor: "rgba(255,255,255,0.1)" })
               }}>
                 {isFrozen ? "❄️ Frozen" : card.is_active ? "● Active" : card.status}
@@ -230,11 +240,11 @@ function ActiveCardView({ card, refetch }: { card: any; refetch: () => void }) {
           </div>
 
           {!securityUnlocked && (
-            <div className="rounded-xl border p-3 mb-4 flex items-center gap-3" style={{ background: "rgba(0,168,150,0.15)", borderColor: "rgba(0,168,150,0.3)" }}>
+            <div className="rounded-xl border p-3 mb-4 flex items-center gap-3" style={{ background: logoBlueSoft, borderColor: logoBlueBorder }}>
               <span className="text-xl">🔐</span>
               <div>
-                <div className="text-xs font-semibold" style={{ color: "rgba(0,168,150,0.9)" }}>PIN protection enabled</div>
-                <div className="text-xs" style={{ color: "rgba(0,168,150,0.7)" }}>Card PIN required to reveal sensitive details</div>
+                <div className="text-xs font-semibold" style={{ color: "rgba(191,219,254,0.95)" }}>PIN protection enabled</div>
+                <div className="text-xs" style={{ color: "rgba(191,219,254,0.78)" }}>Card PIN required to reveal sensitive details</div>
               </div>
             </div>
           )}

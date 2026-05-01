@@ -104,7 +104,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
         .nav-link.active { color: #fff !important; }
         .nav-link.active::after {
           content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-          height: 2px; background: linear-gradient(90deg, #00a896, #1a8fc1);
+          height: 2px; background: linear-gradient(90deg, #2563eb, #1d4ed8);
           border-radius: 2px 2px 0 0;
         }
         .shell-card {
@@ -132,7 +132,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
         select option { background: #1a2035; color: #fff; }
         label { color: rgba(255,255,255,0.5) !important; font-size: 12px !important; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; display: block; }
         .btn-cta-sky {
-          background: linear-gradient(135deg, #00a896, #0f7a70) !important;
+          background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
           color: #fff !important;
           border: none !important;
           padding: 12px 24px !important;
@@ -141,13 +141,13 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
           font-size: 14px !important;
           cursor: pointer;
           transition: all 0.2s !important;
-          box-shadow: 0 8px 24px rgba(0,168,150,0.25) !important;
+          box-shadow: 0 8px 24px rgba(37,99,235,0.25) !important;
           text-decoration: none;
           display: inline-flex;
           align-items: center;
           justify-content: center;
         }
-        .btn-cta-sky:hover { box-shadow: 0 12px 32px rgba(0,168,150,0.4) !important; transform: translateY(-1px); }
+        .btn-cta-sky:hover { box-shadow: 0 12px 32px rgba(37,99,235,0.35) !important; transform: translateY(-1px); }
         .btn-cta-sky:disabled { opacity: 0.5; transform: none; cursor: not-allowed; }
         h1, h2, h3, h4 { color: #fff; }
         p { color: rgba(255,255,255,0.5); }
@@ -173,10 +173,10 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <div style={{
               width: "38px", height: "38px", borderRadius: "10px",
-              background: "linear-gradient(135deg, #1a3a8f, #00a896)",
+              background: "linear-gradient(135deg, #1a3a8f, #234c8f)",
               display: "flex", alignItems: "center", justifyContent: "center",
               fontWeight: 800, fontSize: "16px", color: "#fff",
-              boxShadow: "0 4px 16px rgba(0,168,150,0.3)",
+              boxShadow: "0 4px 16px rgba(35,76,143,0.2)",
             }}>W</div>
             <div>
               <div style={{ color: "#fff", fontWeight: 700, fontSize: "16px", lineHeight: 1.2 }}>WolvCapital</div>

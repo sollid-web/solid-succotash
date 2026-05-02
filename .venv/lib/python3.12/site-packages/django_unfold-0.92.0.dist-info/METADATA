@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: django-unfold
-Version: 0.91.0
+Version: 0.92.0
 Summary: Modern Django Admin
 Project-URL: Homepage, https://unfoldadmin.com
 Project-URL: Documentation, https://unfoldadmin.com/docs/
@@ -17,11 +17,10 @@ Classifier: Framework :: Django :: 6.0
 Classifier: Intended Audience :: Developers
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
-Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
 Classifier: Programming Language :: Python :: 3.14
-Requires-Python: <4.0,>=3.11
+Requires-Python: <4.0,>=3.12
 Requires-Dist: django>=5.1
 Description-Content-Type: text/markdown
 

@@ -1,0 +1,13 @@
+name: my-config
+version: 1.0.0
+models:
+  - name: Llama 3.2 3B (Agent)
+    provider: ollama
+    model: llama3.2:3b
+    apiBase: http://10.123.34.243:11434
+  - name: Qwen 1.5B (Chat)
+    provider: ollama
+    model: qwen2.5-coder:1.5b
+    apiBase: http://10.123.34.243:11434
+
+

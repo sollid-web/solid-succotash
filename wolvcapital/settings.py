@@ -293,6 +293,7 @@ UNFOLD = {
         },
     ],
     "SHOW_HISTORY": True,
+    "SHOW_ACTIONS_CONFIRM": True,
     "SHOW_VIEW_ON_SITE": True,
     "THEME": "dark",
     "STYLES": [

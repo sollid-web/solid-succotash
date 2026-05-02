@@ -288,14 +288,3 @@ def send_email(subject, to, body=None, bcc=None, template_name=None, context=Non
         bcc=bcc,
     )
 
-    @classmethod
-    def send_card_rejected_notification(cls, user, card) -> bool:
-        """Notify user when their virtual card is rejected."""
-        template = "card_rejected"
-        subject = f"Virtual Card Rejected - {cls.BRAND_NAME}"
-        context = {
-            "user": user,
-            "card": card,
-            "dashboard_url": "/dashboard/",
-        }
-        return cls._send(template, getattr(user, "email", ""), context=context, subject=subject)

@@ -366,7 +366,12 @@ export default function DashboardPage() {
             background: "linear-gradient(135deg, rgba(245,158,11,0.08), rgba(245,158,11,0.03))",
             border: "1px solid rgba(245,158,11,0.15)",
           }}>
-            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px" }}>Overall ROI Rate</div>
+            <div>
+              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px" }}>Overall ROI Rate</div>
+              <Link href="/wolv-token" style={{ color: "rgba(255,255,255,0.3)", fontSize: "11px", marginTop: "4px", display: "inline-block", textDecoration: "underline" }}>
+                These profits become WOLV tokens →
+              </Link>
+            </div>
             <div style={{ color: "#f59e0b", fontWeight: 700, fontSize: "20px", fontFamily: "'DM Mono', monospace" }}>
               +{roiRate}%
             </div>
@@ -375,12 +380,12 @@ export default function DashboardPage() {
 
 {/* ── WOLV Wallet ── */}
 <section className="fade-up fade-up-4 mb-6">
-  <div style={{ marginBottom: "16px" }}>
+  <Link href="/wolv-token" style={{ textDecoration: "none", display: "block", marginBottom: "16px", cursor: "pointer", transition: "all 0.2s", borderRadius: "12px", padding: "8px", marginLeft: "-8px", marginRight: "-8px" }} onMouseEnter={(e) => e.currentTarget.style.background = "rgba(0,168,150,0.08)"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
     <h2 style={{ color: "#fff", fontSize: "18px", fontWeight: 600 }}>WOLV Token</h2>
     <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", marginTop: "2px" }}>
       Connect your wallet to receive profit tokens
     </p>
-  </div>
+  </Link>
   <div style={{
     background: "rgba(255,255,255,0.03)",
     border: "1px solid rgba(0,168,150,0.2)",

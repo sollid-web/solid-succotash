@@ -16,6 +16,7 @@ export default function NavBar() {
     { href: '/', labelKey: 'nav.home' },
     { href: '#plans', labelKey: 'nav.plans' },
     { href: '#virtual-card', labelKey: 'nav.virtualCard' },
+    { href: '/wolv-token', labelKey: 'nav.wolvToken' },
     { href: '#compliance', labelKey: 'nav.compliance' },
     { href: '/blog', labelKey: 'nav.blog' },
     { href: '/contact', labelKey: 'nav.contact' },

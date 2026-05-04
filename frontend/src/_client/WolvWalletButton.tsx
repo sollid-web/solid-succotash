@@ -39,10 +39,10 @@ export function WolvWalletButton() {
     : '0';
 
   const addWolvToWallet = async () => {
-    if (!window.ethereum) return;
+    if (!(window as any).ethereum) return;
     setAdding(true);
     try {
-      await window.ethereum.request({
+      await (window as any).ethereum.request({
         method: 'wallet_watchAsset',
         params: {
           type: 'ERC20',

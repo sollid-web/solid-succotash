@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { apiFetch } from "@/lib/api";
+import { WolvWalletButton } from '@/_client/WolvWalletButton';
 
 interface WalletData {
   balance: number;
@@ -161,7 +162,7 @@ export default function DashboardPage() {
   const roiRate = totalInvested > 0 ? ((lockedRoi / totalInvested) * 100).toFixed(1) : "0.0";
 
   const planColors = [
-    { from: "#1d4ed8", to: "#1d4ed8" },
+    { from: "#193a93", to: "#0f2f89" },
     { from: "#0f5c7a", to: "#0f5c7a" },
     { from: "#212c50", to: "#212c50" },
     { from: "#053257", to: "#053257" },
@@ -371,6 +372,24 @@ export default function DashboardPage() {
             </div>
           </div>
         )}
+
+{/* ── WOLV Wallet ── */}
+<section className="fade-up fade-up-4 mb-6">
+  <div style={{ marginBottom: "16px" }}>
+    <h2 style={{ color: "#fff", fontSize: "18px", fontWeight: 600 }}>WOLV Token</h2>
+    <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", marginTop: "2px" }}>
+      Connect your wallet to receive profit tokens
+    </p>
+  </div>
+  <div style={{
+    background: "rgba(255,255,255,0.03)",
+    border: "1px solid rgba(0,168,150,0.2)",
+    borderRadius: "20px",
+    padding: "24px",
+  }}>
+    <WolvWalletButton />
+  </div>
+</section>
 
         {/* ── Active Plans ── */}
         <section className="mb-8 fade-up fade-up-4">
@@ -720,4 +739,4 @@ function MetricCard({ label, value, sub, icon, accent, loading, className }: {
       )}
     </div>
   );
-}
+}// WOLV section added below via edit

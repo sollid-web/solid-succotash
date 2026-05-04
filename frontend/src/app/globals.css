@@ -477,3 +477,23 @@ div[id*="tawk"],
   .certificate-border { box-shadow: none !important; border: 1px solid #d1d5db !important; }
   .panel-readable { background: #ffffff !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; box-shadow: none !important; }
 }
+
+/* WOLV Wallet Styles */
+.wolv-wallet-box { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 2rem; background: #f8fffe; border: 1px solid #d0f0e8; border-radius: 16px; text-align: center; }
+.wolv-wallet-icon { width: 56px; height: 56px; border-radius: 50%; background: #e1f5ee; display: flex; align-items: center; justify-content: center; color: #1d9e75; }
+.wolv-wallet-text h3 { font-size: 16px; font-weight: 600; color: #111; margin: 0 0 6px; }
+.wolv-wallet-text p { font-size: 13px; color: #666; margin: 0; max-width: 300px; }
+.wolv-btn-connect { background: #1d9e75; color: #fff; border: none; border-radius: 10px; padding: 12px 28px; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%; max-width: 260px; }
+.wolv-btn-connect:hover { background: #0f6e56; }
+.wolv-wallet-connected { display: flex; flex-direction: column; gap: 16px; padding: 1.5rem; background: #f8fffe; border: 1px solid #d0f0e8; border-radius: 16px; }
+.wolv-address-row { display: flex; align-items: center; gap: 8px; }
+.wolv-dot { width: 8px; height: 8px; border-radius: 50%; background: #1d9e75; flex-shrink: 0; }
+.wolv-address { font-size: 13px; color: #444; font-family: monospace; flex: 1; }
+.wolv-btn-disconnect { background: none; border: 1px solid #ddd; border-radius: 6px; padding: 4px 10px; font-size: 12px; color: #888; cursor: pointer; }
+.wolv-balance-card { background: #fff; border: 1px solid #e8f5f0; border-radius: 12px; padding: 1.25rem; text-align: center; }
+.wolv-balance-label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.wolv-balance-value { font-size: 28px; font-weight: 700; color: #1d9e75; margin-bottom: 4px; }
+.wolv-balance-sub { font-size: 12px; color: #aaa; }
+.wolv-btn-add { background: #fff; border: 1.5px solid #1d9e75; color: #1d9e75; border-radius: 10px; padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer; width: 100%; }
+.wolv-btn-add:hover { background: #1d9e75; color: #fff; }
+.wolv-success { text-align: center; font-size: 13px; color: #1d9e75; font-weight: 500; padding: 8px; }

@@ -10,7 +10,7 @@ const config = createConfig({
   connectors: [
     injected(),
     walletConnect({
-      projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID',
+      projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '2553dfec179d9b27495a66f67de871ee',
     }),
   ],
   transports: {

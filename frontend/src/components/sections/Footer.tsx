@@ -21,8 +21,9 @@ export default function Footer() {
                   { key: 'footer.platform.plans', href: '/plans' },
                   { key: 'footer.platform.virtualCard', href: '#virtual-card' },
                   { key: 'footer.platform.faq', href: '/faq' },
+                  { key: 'WOLV Token', href: '/wolv-token' },
                 ].map((item) => (
-                  <li key={item.key}><Link href={item.href} className="text-[#94A3B8] text-sm hover:text-white transition">{t(item.key)}</Link></li>
+                  <li key={item.key}><Link href={item.href} className="text-[#94A3B8] text-sm hover:text-white transition">{item.key.startsWith('footer') ? t(item.key) : item.key}</Link></li>
                 ))}
               </ul>
             </div>
@@ -36,7 +37,7 @@ export default function Footer() {
                   { key: 'footer.legal.disclaimer', href: '/legal-disclaimer' },
                   { key: 'footer.legal.compliance', href: '#compliance' },
                 ].map((item) => (
-                  <li key={item.key}><Link href={item.href} className="text-[#94A3B8] text-sm hover:text-white transition">{t(item.key)}</Link></li>
+                  <li key={item.key}><Link href={item.href} className="text-[#94A3B8] text-sm hover:text-white transition">{item.key.startsWith('footer') ? t(item.key) : item.key}</Link></li>
                 ))}
               </ul>
             </div>
@@ -50,7 +51,7 @@ export default function Footer() {
                   { key: 'footer.support.security', href: '/security' },
                   { key: 'footer.support.status', href: '#' },
                 ].map((item) => (
-                  <li key={item.key}><Link href={item.href} className="text-[#94A3B8] text-sm hover:text-white transition">{t(item.key)}</Link></li>
+                  <li key={item.key}><Link href={item.href} className="text-[#94A3B8] text-sm hover:text-white transition">{item.key.startsWith('footer') ? t(item.key) : item.key}</Link></li>
                 ))}
               </ul>
             </div>

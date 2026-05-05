@@ -1,12 +1,11 @@
 'use client';
 
 import { useAccount, useConnect, useDisconnect, useReadContract } from 'wagmi';
-import { injected } from 'wagmi/connectors';
+import { injected, walletConnect } from 'wagmi/connectors';
 import { formatUnits } from 'viem';
 import { useState } from 'react';
 
 const WOLV_CONTRACT = '0xbcb3d35bcbbd141f1955aaf8f51b48b801b117bf';
-const WOLV_SYMBOL = 'WOLV';
 const WOLV_DECIMALS = 18;
 
 const WOLV_ABI = [
@@ -25,6 +24,7 @@ export function WolvWalletButton() {
   const { disconnect } = useDisconnect();
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
 
   const { data: balance } = useReadContract({
     address: WOLV_CONTRACT,
@@ -46,7 +46,7 @@ export function WolvWalletButton() {
         method: 'wallet_watchAsset',
         params: {
           type: 'ERC20',
-          options: { address: WOLV_CONTRACT, symbol: WOLV_SYMBOL, decimals: WOLV_DECIMALS },
+          options: { address: WOLV_CONTRACT, symbol: 'WOLV', decimals: WOLV_DECIMALS },
         },
       });
       setAdded(true);
@@ -57,10 +57,22 @@ export function WolvWalletButton() {
     }
   };
 
-  const handleConnect = async () => {
+  const connectMetaMask = () => {
     connect({ connector: injected() });
-    setTimeout(() => { addWolvToWallet(); }, 1500);
+    setShowOptions(false);
+    setTimeout(() => addWolvToWallet(), 1500);
   };
+
+  const connectWalletConnect = () => {
+    connect({
+      connector: walletConnect({
+        projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID',
+      }),
+    });
+    setShowOptions(false);
+  };
+
+  const isMobile = typeof window !== 'undefined' && /iPhone|iPad|Android/i.test(navigator.userAgent);
 
   if (!isConnected) {
     return (
@@ -74,11 +86,45 @@ export function WolvWalletButton() {
         </div>
         <div>
           <h3 style={{ color: '#fff', fontSize: '16px', fontWeight: 600, margin: '0 0 6px' }}>Connect your wallet</h3>
-          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', margin: 0, maxWidth: '300px' }}>Connect to view your WOLV profit balance and receive future earnings directly to your wallet.</p>
+          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', margin: 0, maxWidth: '300px' }}>
+            Connect to view your WOLV profit balance and receive future earnings directly to your wallet.
+          </p>
         </div>
-        <button onClick={handleConnect} style={{ background: 'linear-gradient(135deg, #00a896, #1a3a8f)', color: '#fff', border: 'none', borderRadius: '10px', padding: '12px 28px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', width: '100%', maxWidth: '260px' }}>
-          Connect Wallet
-        </button>
+
+        {!showOptions ? (
+          <button
+            onClick={() => isMobile ? connectWalletConnect() : setShowOptions(true)}
+            style={{ background: 'linear-gradient(135deg, #00a896, #1a3a8f)', color: '#fff', border: 'none', borderRadius: '10px', padding: '12px 28px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', width: '100%', maxWidth: '260px' }}
+          >
+            Connect Wallet
+          </button>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', maxWidth: '260px' }}>
+            {/* MetaMask */}
+            <button onClick={connectMetaMask} style={{
+              display: 'flex', alignItems: 'center', gap: '12px',
+              background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '12px', padding: '12px 16px', cursor: 'pointer', color: '#fff',
+              fontSize: '14px', fontWeight: 600, width: '100%',
+            }}>
+              <span style={{ fontSize: '22px' }}>🦊</span> MetaMask
+            </button>
+            {/* WalletConnect */}
+            <button onClick={connectWalletConnect} style={{
+              display: 'flex', alignItems: 'center', gap: '12px',
+              background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '12px', padding: '12px 16px', cursor: 'pointer', color: '#fff',
+              fontSize: '14px', fontWeight: 600, width: '100%',
+            }}>
+              <span style={{ fontSize: '22px' }}>🔗</span> WalletConnect
+              <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginLeft: 'auto' }}>Trust Wallet, etc.</span>
+            </button>
+            <button onClick={() => setShowOptions(false)} style={{
+              background: 'none', border: 'none', color: 'rgba(255,255,255,0.3)',
+              fontSize: '12px', cursor: 'pointer', padding: '4px',
+            }}>Cancel</button>
+          </div>
+        )}
       </div>
     );
   }
@@ -93,7 +139,7 @@ export function WolvWalletButton() {
 
       <div style={{ background: 'rgba(0,168,150,0.08)', border: '1px solid rgba(0,168,150,0.2)', borderRadius: '12px', padding: '1.25rem', textAlign: 'center' }}>
         <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Your WOLV Balance</div>
-        <div style={{ fontSize: '32px', fontWeight: 700, color: '#00a896', marginBottom: '4px', fontFamily: "'DM Mono', monospace" }}>{formattedBalance} WOLV</div>
+        <div style={{ fontSize: '32px', fontWeight: 700, color: '#00a896', marginBottom: '4px', fontFamily: 'monospace' }}>{formattedBalance} WOLV</div>
         <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)' }}>Earned as investment profits</div>
       </div>
 

@@ -7,11 +7,11 @@ import HowItWorksSection from '@/components/sections/HowItWorksSection'
 import PlansSection from '@/components/sections/PlansSection'
 import ComplianceSection from '@/components/sections/ComplianceSection'
 import SecuritySection from '@/components/sections/SecuritySection'
-import VirtualCardSection from '@/components/sections/VirtualCardSection'
 import FAQSection from '@/components/sections/FAQSection'
 import CTASection from '@/components/sections/CTASection'
 import RegulatedSection from '@/components/sections/RegulatedSection'
 import StatsSection from '@/components/sections/StatsSection'
+import WolvTokenSection from '@/components/sections/WolvTokenSection'
 
 export default function HomePage() {
   const plansRef = useRef<HTMLDivElement>(null)
@@ -30,7 +30,7 @@ export default function HomePage() {
       </div>
       <ComplianceSection />
       <SecuritySection />
-      <VirtualCardSection />
+      <WolvTokenSection />
       <FAQSection />
       <CTASection />
       <RegulatedSection />

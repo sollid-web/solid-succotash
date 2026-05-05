@@ -1,7 +1,7 @@
 'use client';
 
-import { useAccount, useConnect, useDisconnect, useReadContract } from 'wagmi';
-import { injected, walletConnect } from 'wagmi/connectors';
+import { useAccount, useDisconnect, useReadContract } from 'wagmi';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { formatUnits } from 'viem';
 import { useState } from 'react';
 
@@ -20,11 +20,10 @@ const WOLV_ABI = [
 
 export function WolvWalletButton() {
   const { address, isConnected } = useAccount();
-  const { connect } = useConnect();
   const { disconnect } = useDisconnect();
+  const { openConnectModal } = useConnectModal();
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
-  const [showOptions, setShowOptions] = useState(false);
 
   const { data: balance } = useReadContract({
     address: WOLV_CONTRACT,
@@ -57,22 +56,9 @@ export function WolvWalletButton() {
     }
   };
 
-  const connectMetaMask = () => {
-    connect({ connector: injected() });
-    setShowOptions(false);
-    setTimeout(() => addWolvToWallet(), 1500);
+  const handleConnect = () => {
+    openConnectModal?.();
   };
-
-  const connectWalletConnect = () => {
-    connect({
-      connector: walletConnect({
-        projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'YOUR_PROJECT_ID',
-      }),
-    });
-    setShowOptions(false);
-  };
-
-  const isMobile = typeof window !== 'undefined' && /iPhone|iPad|Android/i.test(navigator.userAgent);
 
   if (!isConnected) {
     return (
@@ -87,44 +73,21 @@ export function WolvWalletButton() {
         <div>
           <h3 style={{ color: '#fff', fontSize: '16px', fontWeight: 600, margin: '0 0 6px' }}>Connect your wallet</h3>
           <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', margin: 0, maxWidth: '300px' }}>
-            Connect to view your WOLV profit balance and receive future earnings directly to your wallet.
+            Connect MetaMask, Trust Wallet, or any Web3 wallet to receive WOLV profit tokens.
           </p>
         </div>
-
-        {!showOptions ? (
-          <button
-            onClick={() => isMobile ? connectWalletConnect() : setShowOptions(true)}
-            style={{ background: 'linear-gradient(135deg, #00a896, #1a3a8f)', color: '#fff', border: 'none', borderRadius: '10px', padding: '12px 28px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', width: '100%', maxWidth: '260px' }}
-          >
-            Connect Wallet
-          </button>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', maxWidth: '260px' }}>
-            {/* MetaMask */}
-            <button onClick={connectMetaMask} style={{
-              display: 'flex', alignItems: 'center', gap: '12px',
-              background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '12px', padding: '12px 16px', cursor: 'pointer', color: '#fff',
-              fontSize: '14px', fontWeight: 600, width: '100%',
-            }}>
-              <span style={{ fontSize: '22px' }}>🦊</span> MetaMask
-            </button>
-            {/* WalletConnect */}
-            <button onClick={connectWalletConnect} style={{
-              display: 'flex', alignItems: 'center', gap: '12px',
-              background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '12px', padding: '12px 16px', cursor: 'pointer', color: '#fff',
-              fontSize: '14px', fontWeight: 600, width: '100%',
-            }}>
-              <span style={{ fontSize: '22px' }}>🔗</span> WalletConnect
-              <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginLeft: 'auto' }}>Trust Wallet, etc.</span>
-            </button>
-            <button onClick={() => setShowOptions(false)} style={{
-              background: 'none', border: 'none', color: 'rgba(255,255,255,0.3)',
-              fontSize: '12px', cursor: 'pointer', padding: '4px',
-            }}>Cancel</button>
-          </div>
-        )}
+        <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <span>🦊 MetaMask</span>
+          <span>🛡️ Trust Wallet</span>
+          <span>🔵 Coinbase</span>
+          <span>+ more</span>
+        </div>
+        <button
+          onClick={handleConnect}
+          style={{ background: 'linear-gradient(135deg, #00a896, #1a3a8f)', color: '#fff', border: 'none', borderRadius: '10px', padding: '12px 28px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', width: '100%', maxWidth: '260px' }}
+        >
+          Connect Wallet
+        </button>
       </div>
     );
   }

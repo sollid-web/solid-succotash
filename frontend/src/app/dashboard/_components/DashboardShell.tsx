@@ -20,6 +20,7 @@ const NAV_LINKS = [
   { href: "/dashboard/transactions", label: "Transactions" },
   { href: "/dashboard/support", label: "Support" },
   { href: "/dashboard/kyc", label: "KYC" },
+  { href: "/dashboard/wolv-admin", label: "WOLV Admin" },
 ];
 
 export default function DashboardShell({ children, banner }: DashboardShellProps) {

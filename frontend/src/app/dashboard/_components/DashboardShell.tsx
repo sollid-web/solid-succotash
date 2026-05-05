@@ -20,8 +20,6 @@ const NAV_LINKS = [
   { href: "/dashboard/transactions", label: "Transactions" },
   { href: "/dashboard/support", label: "Support" },
   { href: "/dashboard/kyc", label: "KYC" },
-  { href: "/dashboard/wolv-admin", label: "WOLV Admin" },
-];
 
 export default function DashboardShell({ children, banner }: DashboardShellProps) {
   const router = useRouter();
@@ -239,7 +237,20 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
           )}
         </div>
       </nav>
-
+<Link
+      href="/dashboard/wolv-admin"
+      className={`nav-link ${pathname?.startsWith('/dashboard/wolv-admin') ? 'active' : ''}`}
+      style={{
+        display: "flex", alignItems: "center", gap: "8px",
+        padding: "10px 14px", borderRadius: "10px",
+        color: "#00a896", fontSize: "13px", fontWeight: 600,
+        textDecoration: "none",
+      }}
+    >
+      ⚙️ WOLV Admin
+    </Link>
+  </>
+)}
       {/* Content */}
       <main style={{ maxWidth: "1280px", margin: "0 auto", padding: "32px 16px 80px" }}>
         {children}

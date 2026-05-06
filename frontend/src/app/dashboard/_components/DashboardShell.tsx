@@ -243,4 +243,9 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
             }}>Admin</Link>
           )}
 
-          <Link
+          
+        </div>
+      </nav>
+    </div>
+  );
+}

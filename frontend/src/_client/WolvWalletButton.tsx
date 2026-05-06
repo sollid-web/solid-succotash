@@ -21,9 +21,10 @@ const WOLV_ABI = [
 export function WolvWalletButton() {
   const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
-  const { openConnectModal } = useConnectModal();
+  const { openConnectModal } = useConnectModal() || {};
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const { data: balance } = useReadContract({
     address: WOLV_CONTRACT,
@@ -79,11 +80,24 @@ export function WolvWalletButton() {
           <span>+ more</span>
         </div>
         <button
-          onClick={() => openConnectModal?.()}
+          onClick={() => {
+            setError(null);
+            if (!openConnectModal) {
+              setError('Wallet connection not available. Please check your environment configuration.');
+              console.error('openConnectModal is not available');
+              return;
+            }
+            openConnectModal();
+          }}
           style={{ background: 'linear-gradient(135deg, #00a896, #1a3a8f)', color: '#fff', border: 'none', borderRadius: '10px', padding: '12px 28px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', width: '100%', maxWidth: '260px' }}
         >
           Connect Wallet
         </button>
+        {error && (
+          <div style={{ fontSize: '12px', color: '#ff6b6b', marginTop: '12px', padding: '10px', background: 'rgba(255,107,107,0.1)', borderRadius: '6px', border: '1px solid rgba(255,107,107,0.2)' }}>
+            {error}
+          </div>
+        )}
       </div>
     );
   }

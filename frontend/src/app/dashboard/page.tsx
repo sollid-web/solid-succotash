@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { apiFetchWithRefresh as apiFetch } from "@/lib/api";
-import { WolvWalletButton } from '@/_client/WolvWalletButton';
+import dynamic from 'next/dynamic';
+
+import { WalletProvider } from '@/_client/WalletProvider';
+const WolvWalletSection = dynamic(() => import('@/_client/WolvWalletSection').then(mod => ({ default: mod.WolvWalletSection })), { ssr: false });
+import { apiFetch } from "@/lib/api";
 
 interface WalletData {
   balance: number;
@@ -378,23 +381,21 @@ export default function DashboardPage() {
           </div>
         )}
 
-{/* ── WOLV Wallet ── */}
-<section className="fade-up fade-up-4 mb-6">
-  <Link href="/wolv-token" style={{ textDecoration: "none", display: "block", marginBottom: "16px", cursor: "pointer", transition: "all 0.2s", borderRadius: "12px", padding: "8px", marginLeft: "-8px", marginRight: "-8px" }} onMouseEnter={(e) => e.currentTarget.style.background = "rgba(0,168,150,0.08)"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
-    <h2 style={{ color: "#fff", fontSize: "18px", fontWeight: 600 }}>WOLV Token</h2>
-    <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", marginTop: "2px" }}>
-      Connect your wallet to receive profit tokens
-    </p>
-  </Link>
-  <div style={{
-    background: "rgba(255,255,255,0.03)",
-    border: "1px solid rgba(0,168,150,0.2)",
-    borderRadius: "20px",
-    padding: "24px",
-  }}>
-    <WolvWalletButton />
-  </div>
-</section>
+
+        {/* ── WOLV Wallet ── */}
+        <section className="fade-up fade-up-4 mb-6">
+          <Link href="/wolv-token" style={{ textDecoration: "none", display: "block", marginBottom: "16px" }}>
+            <h2 style={{ color: "#fff", fontSize: "18px", fontWeight: 600 }}>WOLV Token</h2>
+            <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", marginTop: "2px" }}>
+              Connect your wallet to receive profit tokens
+            </p>
+          </Link>
+          <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(0,168,150,0.2)", borderRadius: "20px", padding: "24px" }}>
+            <WalletProvider>
+              <WolvWalletSection />
+            </WalletProvider>
+          </div>
+        </section>
 
         {/* ── Active Plans ── */}
         <section className="mb-8 fade-up fade-up-4">

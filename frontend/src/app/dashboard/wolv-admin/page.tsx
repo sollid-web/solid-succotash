@@ -188,7 +188,7 @@ export default function WolvAdminPage() {
           {tab === 'reclaim' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '10px', padding: '12px 16px', fontSize: '13px', color: '#fca5a5' }}>
-                ⚠️ Burns WOLV from investor wgit add -A && git commit -m "remove wolv admin link from nav" && git pushallet. Use only on withdrawal.
+                ⚠️ Burns WOLV from investor wallet. Use only on withdrawal.
               </div>
               <div>
                 <label style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '1px', display: 'block', marginBottom: '8px' }}>Investor Wallet Address</label>

@@ -11,7 +11,6 @@ import SegmentProvider from '@/components/SegmentProvider'
 import RemoveSyncBannerClient from '@/components/RemoveSyncBannerClient'
 import TawkWidget from '@/components/TawkWidget'
 import '@/app/globals.css'
-import { WalletProvider } from '@/_client/WalletProvider'
 
 export const metadata: Metadata = {
   title: 'WolvCapital - Professional Investment Platform',
@@ -127,14 +126,12 @@ export default async function RootLayout({
           {/* 2. LocaleProvider must wrap AppChrome and children */}
           <LocaleProvider locale={locale}>
             <TranslationProvider initialLocale={locale}>
-            <WalletProvider>
               <AppChrome>
               {/* 3. Suspense boundary is CRITICAL for Next.js builds */}
               <Suspense fallback={<div className="flex h-screen items-center justify-center">Loading...</div>}>
                 {children}
               </Suspense>
             </AppChrome>
-              </WalletProvider>
           </TranslationProvider>
           </LocaleProvider>
 

@@ -3,6 +3,7 @@ import { useAccount, useDisconnect, useReadContract } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { formatUnits } from 'viem';
 import { useState } from 'react';
+import { WalletConnectQR } from '../components/WalletConnectQR';
 
 const WOLV_CONTRACT = '0xbcb3d35bcbbd141f1955aaf8f51b48b801b117bf';
 const WOLV_DECIMALS = 18;
@@ -25,6 +26,7 @@ export function WolvWalletButton() {
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showQR, setShowQR] = useState(false);
 
   const { data: balance } = useReadContract({
     address: WOLV_CONTRACT,
@@ -79,20 +81,28 @@ export function WolvWalletButton() {
           <span>🔵 Coinbase</span>
           <span>+ more</span>
         </div>
-        <button
-          onClick={() => {
-            setError(null);
-            if (!openConnectModal) {
-              setError('Wallet connection not available. Please check your environment configuration.');
-              console.error('openConnectModal is not available');
-              return;
-            }
-            openConnectModal();
-          }}
-          style={{ background: 'linear-gradient(135deg, #00a896, #1a3a8f)', color: '#fff', border: 'none', borderRadius: '10px', padding: '12px 28px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', width: '100%', maxWidth: '260px' }}
-        >
-          Connect Wallet
-        </button>
+        <div style={{ display: 'flex', gap: '12px', width: '100%', maxWidth: '260px' }}>
+          <button
+            onClick={() => {
+              setError(null);
+              if (!openConnectModal) {
+                setError('Wallet connection not available. Please check your environment configuration.');
+                console.error('openConnectModal is not available');
+                return;
+              }
+              openConnectModal();
+            }}
+            style={{ flex: 1, background: 'linear-gradient(135deg, #00a896, #1a3a8f)', color: '#fff', border: 'none', borderRadius: '10px', padding: '12px 16px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}
+          >
+            Browser
+          </button>
+          <button
+            onClick={() => setShowQR(true)}
+            style={{ flex: 1, background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', borderRadius: '10px', padding: '12px 16px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}
+          >
+            📱 QR Code
+          </button>
+        </div>
         {error && (
           <div style={{ fontSize: '12px', color: '#ff6b6b', marginTop: '12px', padding: '10px', background: 'rgba(255,107,107,0.1)', borderRadius: '6px', border: '1px solid rgba(255,107,107,0.2)' }}>
             {error}
@@ -123,6 +133,84 @@ export function WolvWalletButton() {
         </button>
       ) : (
         <div style={{ textAlign: 'center', fontSize: '13px', color: '#00a896', fontWeight: 500, padding: '8px' }}>✅ WOLV added to your wallet</div>
+      )}
+    </div>
+  );
+
+  // QR Modal
+  if (showQR) {
+    return (
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'rgba(0,0,0,0.8)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000,
+        padding: '20px'
+      }}>
+        <div style={{
+          position: 'relative',
+          maxWidth: '400px',
+          width: '100%'
+        }}>
+          <WalletConnectQR onClose={() => setShowQR(false)} />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', padding: '2rem', textAlign: 'center' }}>
+      <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'rgba(0,168,150,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#00a896' }}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M19 7H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+          <path d="M16 12h.01"/>
+          <path d="M3 7V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2"/>
+        </svg>
+      </div>
+      <div>
+        <h3 style={{ color: '#fff', fontSize: '16px', fontWeight: 600, margin: '0 0 6px' }}>Connect your wallet</h3>
+        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', margin: 0, maxWidth: '300px' }}>
+          Connect MetaMask, Trust Wallet, or any Web3 wallet to receive WOLV profit tokens.
+        </p>
+      </div>
+      <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)', display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
+        <span>🦊 MetaMask</span>
+        <span>🛡️ Trust Wallet</span>
+        <span>🔵 Coinbase</span>
+        <span>+ more</span>
+      </div>
+      <div style={{ display: 'flex', gap: '12px', width: '100%', maxWidth: '260px' }}>
+        <button
+          onClick={() => {
+            setError(null);
+            if (!openConnectModal) {
+              setError('Wallet connection not available. Please check your environment configuration.');
+              console.error('openConnectModal is not available');
+              return;
+            }
+            openConnectModal();
+          }}
+          style={{ flex: 1, background: 'linear-gradient(135deg, #00a896, #1a3a8f)', color: '#fff', border: 'none', borderRadius: '10px', padding: '12px 16px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}
+        >
+          Browser
+        </button>
+        <button
+          onClick={() => setShowQR(true)}
+          style={{ flex: 1, background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', borderRadius: '10px', padding: '12px 16px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}
+        >
+          📱 QR Code
+        </button>
+      </div>
+      {error && (
+        <div style={{ fontSize: '12px', color: '#ff6b6b', marginTop: '12px', padding: '10px', background: 'rgba(255,107,107,0.1)', borderRadius: '6px', border: '1px solid rgba(255,107,107,0.2)' }}>
+          {error}
+        </div>
       )}
     </div>
   );

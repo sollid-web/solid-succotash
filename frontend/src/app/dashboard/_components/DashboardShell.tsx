@@ -244,31 +244,3 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
           )}
 
           <Link
-            href="/dashboard/wolv-admin"
-            className={`nav-link ${pathname?.startsWith('/dashboard/wolv-admin') ? 'active' : ''}`}
-            style={{                                                     
-              display: "flex", alignItems: "center", gap: "8px",         
-              padding: "10px 14px", borderRadius: "10px",
-              color: "#00a896", fontSize: "13px", fontWeight: 600,                                                                  
-              textDecoration: "none", marginLeft: "auto"
-            }}                                                       
-          >
-            ⚙️ WOLV Admin
-          </Link>                                                  
-        </div>
-      </nav>
-
-      {/* Content */}
-      <main style={{ maxWidth: "1280px", margin: "0 auto", padding: "32px 16px 80px" }}>
-        {banner && <div style={{ marginBottom: "24px" }}>{banner}</div>}
-        {children}
-      </main>
-
-      {/* Footer */}
-      <footer style={{ borderTop: "1px solid rgba(255,255,255,0.05)", padding: "24px 16px", textAlign: "center" }}>
-        <p style={{ color: "rgba(255,255,255,0.2)", fontSize: "12px" }}>© 2024 WolvCapital · Secure Investment Platform</p>
-      </footer>
-    </div>
-  );
-}
-

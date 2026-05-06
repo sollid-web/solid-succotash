@@ -1,5 +1,4 @@
 'use client';
-
 import { useAccount, useDisconnect, useReadContract } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { formatUnits } from 'viem';
@@ -7,6 +6,7 @@ import { useState } from 'react';
 
 const WOLV_CONTRACT = '0xbcb3d35bcbbd141f1955aaf8f51b48b801b117bf';
 const WOLV_DECIMALS = 18;
+const PRICE_PER_WOLV = 1; // 1 WOLV = $1
 
 const WOLV_ABI = [
   {
@@ -33,9 +33,9 @@ export function WolvWalletButton() {
     query: { enabled: !!address },
   });
 
-  const formattedBalance = balance
-    ? parseFloat(formatUnits(balance, WOLV_DECIMALS)).toLocaleString(undefined, { maximumFractionDigits: 2 })
-    : '0';
+  const rawBalance = balance ? parseFloat(formatUnits(balance, WOLV_DECIMALS)) : 0;
+  const formattedBalance = rawBalance.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  const usdValue = (rawBalance * PRICE_PER_WOLV).toLocaleString(undefined, { maximumFractionDigits: 2 });
 
   const addWolvToWallet = async () => {
     if (!(window as any).ethereum) return;
@@ -54,10 +54,6 @@ export function WolvWalletButton() {
     } finally {
       setAdding(false);
     }
-  };
-
-  const handleConnect = () => {
-    openConnectModal?.();
   };
 
   if (!isConnected) {
@@ -83,7 +79,7 @@ export function WolvWalletButton() {
           <span>+ more</span>
         </div>
         <button
-          onClick={handleConnect}
+          onClick={() => openConnectModal?.()}
           style={{ background: 'linear-gradient(135deg, #00a896, #1a3a8f)', color: '#fff', border: 'none', borderRadius: '10px', padding: '12px 28px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', width: '100%', maxWidth: '260px' }}
         >
           Connect Wallet
@@ -103,6 +99,7 @@ export function WolvWalletButton() {
       <div style={{ background: 'rgba(0,168,150,0.08)', border: '1px solid rgba(0,168,150,0.2)', borderRadius: '12px', padding: '1.25rem', textAlign: 'center' }}>
         <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Your WOLV Balance</div>
         <div style={{ fontSize: '32px', fontWeight: 700, color: '#00a896', marginBottom: '4px', fontFamily: 'monospace' }}>{formattedBalance} WOLV</div>
+        <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}>(~${usdValue})</div>
         <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.3)' }}>Earned as investment profits</div>
       </div>
 

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { apiFetch } from "@/lib/api";
+import { apiFetchWithRefresh as apiFetch } from "@/lib/api";
 import { WolvWalletButton } from '@/_client/WolvWalletButton';
 
 interface WalletData {

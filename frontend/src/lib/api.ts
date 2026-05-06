@@ -45,3 +45,26 @@ export function apiFetch(path: string, init: RequestInit = {}) {
     headers,
   });
 }
+
+export async function apiFetchWithRefresh(path: string, init: RequestInit = {}): Promise<Response> {
+  let res = await apiFetch(path, init);
+  if (res.status === 401) {
+    const refresh = typeof window !== "undefined" ? localStorage.getItem("refresh_token") : null;
+    if (refresh) {
+      const refreshRes = await fetch(`${getApiBaseUrl()}/api/auth/jwt/refresh/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refresh }),
+      });
+      if (refreshRes.ok) {
+        const data = await refreshRes.json();
+        const newToken = data.access;
+        localStorage.setItem("authToken", newToken);
+        localStorage.setItem("access_token", newToken);
+        localStorage.setItem("token", newToken);
+        res = await apiFetch(path, init);
+      }
+    }
+  }
+  return res;
+}

@@ -1,0 +1,9 @@
+Hi {{ first_name }}, your security is our priority.
+
+We answer the "Is my money safe?" question with verifiable facts:
+- SEC-Registered Investment Adviser compliance.
+- FinCEN MSB Registered.
+- 256-Bit SSL Encryption.
+- Blockchain Transparency via BSCScan.
+
+INVEST WITH CONFIDENCE: https://wolvcapital.com/dashboard/new-investment

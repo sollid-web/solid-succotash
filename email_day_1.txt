@@ -1,0 +1,14 @@
+Welcome to WolvCapital, {{ first_name }}!
+
+You've just joined a platform trusted by investors who believe that your money should work harder than you do. 
+
+WHAT MAKES WOLVCAPITAL DIFFERENT?
+We combine KYC-verified onboarding, institutional-grade custody, and blockchain-backed profit tokens.
+
+- KYC-Verified: Protecting your capital.
+- Real-Time Dashboard: Track ROI 24/7.
+- Institutional Custody: Funds held with licensed custodians.
+
+EXPLORE YOUR DASHBOARD: https://wolvcapital.com/dashboard
+
+P.S. Stay tuned. Tomorrow we show you exactly how our new WOLV Token rewards your profits on the blockchain.

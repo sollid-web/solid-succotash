@@ -1,0 +1,5 @@
+This is your final step, {{ first_name }}.
+
+The best time to start was yesterday. The second best time is now. Whether you start with the $100 Pioneer or $10,000 Summit VIP, it's time to put your capital to work.
+
+ACTIVATE NOW: https://wolvcapital.com/dashboard/new-investment

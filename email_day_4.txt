@@ -1,0 +1,9 @@
+Meet WOLV Token, {{ first_name }}.
+
+We've launched WOLV Token on the BNB Smart Chain. Every dollar of profit you earn is minted as a WOLV token directly to your crypto wallet.
+
+- On-Chain Proof: Permanent, verifiable records.
+- Audited: Scored 87/100 on SolidityScan.
+- Wallet Ready: Works with MetaMask and Trust Wallet.
+
+LEARN ABOUT WOLV: https://wolvcapital.com/wolv-token

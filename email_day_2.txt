@@ -1,0 +1,16 @@
+Hi {{ first_name }}, here's how it works.
+
+If you can't explain how your money grows, you shouldn't invest it. Here is the WolvCapital process:
+
+1. Complete KYC verification.
+2. Choose a plan (Pioneer, Vanguard, Horizon, or Summit).
+3. Deposit funds (held with licensed custodians).
+4. Track performance in real-time.
+5. Withdraw profits at plan maturity.
+
+CURRENT STATS:
+- 1% Daily ROI (Pioneer)
+- 90 Days minimum term
+- $100 Minimum to start
+
+VIEW PLANS: https://wolvcapital.com/plans

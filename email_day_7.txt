@@ -1,0 +1,8 @@
+Spend your profits anywhere, {{ first_name }}.
+
+WolvCapital gives you a Virtual Visa Infinite Card. 
+- Use Worldwide: Accepted anywhere Visa is.
+- 100+ Merchants: Netflix, Amazon, Apple Pay, and more.
+- Instant Access: Linked directly to your portfolio.
+
+VIEW YOUR CARD: https://wolvcapital.com/dashboard/card

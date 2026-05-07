@@ -1,0 +1,10 @@
+Which plan is right for you, {{ first_name }}?
+
+We offer four tiers to match your strategy:
+
+- Pioneer (Entry): $100 Min | 1% Daily | 90 Days
+- Vanguard (Growth): $1,000 Min | Higher ROI | 150 Days
+- Horizon (Advanced): $5,000 Min | Premium ROI | 180 Days
+- Summit VIP (Elite): $10,000 Min | Max ROI | 365 Days
+
+START YOUR FIRST INVESTMENT: https://wolvcapital.com/dashboard/new-investment

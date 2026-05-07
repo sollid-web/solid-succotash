@@ -1,0 +1,32 @@
+Dear {{ first_name|default:"Valued Investor" }},
+
+We are excited to announce that WolvCapital has launched the WOLV Token — a profit reward token that puts your investment earnings directly on the blockchain.
+
+What WOLV means for you:
+- Blockchain-verified profits that are verifiable anytime on BSCScan.
+- Fully audited smart contract with open-source verification.
+- 1,000,000,000 token hard cap; supply only grows with real profit distribution.
+- Instant wallet balance updates when your wallet is connected to our dashboard.
+
+How to receive your WOLV tokens:
+1) Log in to your dashboard at {{ dashboard_url }}.
+2) Connect your wallet (MetaMask or Trust Wallet).
+3) Add WOLV to your wallet with one click — no manual contract entry needed.
+4) Receive profits as WOLV tokens whenever your plan generates returns.
+
+Contract address:
+{{ contract_address }}
+
+View WOLV on BSCScan:
+https://bscscan.com/token/{{ contract_address }}
+
+Connect your wallet now:
+{{ dashboard_url }}
+
+Learn more:
+{{ wolv_token_url }}
+
+Thank you for trusting WolvCapital.
+
+WolvCapital Support
+https://wolvcapital.com

@@ -1,0 +1,6 @@
+Hi {{ first_name }},
+
+Got questions? We have answers regarding ROI, early withdrawals, and country availability.
+
+READ THE FAQ:
+https://wolvcapital.com/dashboard/new-investment

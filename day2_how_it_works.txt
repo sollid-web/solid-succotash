@@ -1,0 +1,11 @@
+Hi {{ first_name }},
+
+Here is exactly how WolvCapital works:
+1. Complete KYC.
+2. Choose a plan.
+3. Deposit funds.
+4. Track daily ROI.
+5. Withdraw profits.
+
+VIEW INVESTMENT PLANS:
+https://wolvcapital.com/plans

@@ -1,0 +1,10 @@
+Hi {{ first_name }},
+
+Choose the plan that fits your strategy:
+- Pioneer: $100 Min (1% daily)
+- Vanguard: $1,000 Min
+- Horizon: $5,000 Min
+- Summit VIP: $10,000 Min
+
+START HERE:
+https://wolvcapital.com/dashboard/new-investment

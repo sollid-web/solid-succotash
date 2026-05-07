@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>WolvCapital — 10-Email Drip Campaign</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#f0f4f8; font-family:'Segoe UI',Arial,sans-serif; padding:40px 20px; }
+h1 { text-align:center; color:#0a0f1e; font-size:28px; margin-bottom:8px; }
+.subtitle { text-align:center; color:#64748b; margin-bottom:40px; font-size:15px; }
+.email-wrapper { max-width:620px; margin:0 auto 60px; }
+.day-label { background:#0a0f1e; color:#00a896; font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:8px 20px; border-radius:99px; display:inline-block; margin-bottom:16px; }
+.email { background:#fff; border-radius:20px; overflow:hidden; box-shadow:0 8px 40px rgba(0,0,0,0.1); margin-bottom:8px; }
+.header { padding:48px 40px; text-align:center; position:relative; overflow:hidden; }
+.coin { width:72px; height:72px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:32px; font-weight:900; color:#fff; margin-bottom:16px; box-shadow:0 0 30px rgba(0,168,150,0.4); }
+.header h2 { color:#fff; font-size:24px; font-weight:800; margin-bottom:8px; letter-spacing:-0.5px; }
+.header p { color:rgba(255,255,255,0.7); font-size:14px; }
+.badge { display:inline-block; border-radius:99px; padding:4px 14px; font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:14px; }
+.body { padding:36px 40px; }
+.greeting { font-size:17px; font-weight:700; color:#0a0f1e; margin-bottom:14px; }
+.text { font-size:14px; color:#475569; line-height:1.8; margin-bottom:20px; }
+.highlight { border-radius:14px; padding:24px; margin-bottom:24px; }
+.highlight h3 { font-size:16px; font-weight:700; margin-bottom:8px; }
+.highlight p { font-size:13px; line-height:1.7; }
+.feature { display:flex; gap:14px; align-items:flex-start; padding:14px 0; border-bottom:1px solid #f1f5f9; }
+.feature:last-child { border-bottom:none; }
+.ficon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.ftitle { font-size:13px; font-weight:700; color:#0a0f1e; margin-bottom:3px; }
+.fdesc { font-size:12px; color:#64748b; line-height:1.5; }
+.cta-wrap { text-align:center; margin:28px 0; }
+.cta { display:inline-block; color:#fff; text-decoration:none; padding:15px 36px; border-radius:12px; font-size:15px; font-weight:700; }
+.cta-sub { font-size:12px; color:#94a3b8; margin-top:8px; }
+.ps { font-size:12px; color:#94a3b8; font-style:italic; border-top:1px solid #f1f5f9; padding-top:16px; margin-top:8px; }
+.divider { height:1px; background:linear-gradient(90deg,transparent,rgba(0,168,150,0.3),transparent); margin:20px 0; }
+.stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px; }
+.stat-box { background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:16px; text-align:center; }
+.stat-val { font-size:22px; font-weight:800; color:#0a0f1e; font-family:monospace; }
+.stat-lbl { font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
+.testimonial { background:#f8fafc; border-left:3px solid #00a896; border-radius:0 12px 12px 0; padding:16px 20px; margin-bottom:24px; font-size:13px; color:#475569; line-height:1.7; font-style:italic; }
+.testimonial strong { color:#0a0f1e; font-style:normal; display:block; margin-top:8px; font-size:12px; }
+.step { display:flex; gap:12px; align-items:flex-start; margin-bottom:14px; }
+.snum { width:26px; height:26px; border-radius:50%; color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+.stext { font-size:13px; color:#475569; line-height:1.6; }
+.stext strong { color:#0a0f1e; }
+.urgency { border-radius:12px; padding:16px 20px; margin-bottom:24px; display:flex; gap:12px; align-items:center; }
+.uicon { font-size:24px; flex-shrink:0; }
+.utext h4 { font-size:14px; font-weight:700; margin-bottom:4px; }
+.utext p { font-size:12px; line-height:1.5; }
+.footer { background:#0a0f1e; padding:28px 40px; text-align:center; }
+.footer-logo { font-size:16px; font-weight:800; color:#fff; margin-bottom:6px; }
+.footer p { font-size:11px; color:rgba(255,255,255,0.3); line-height:1.6; }
+.footer a { color:#00a896; text-decoration:none; }
+</style>
+</head>
+<body>
+
+<h1>WolvCapital — 10-Email Drip Campaign</h1>
+<p class="subtitle">Send one email per day to convert new users into investors</p>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- EMAIL 1 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="email-wrapper">
+<div class="day-label">Day 1 — Welcome</div>
+<div class="email">
+<div class="header" style="background:linear-gradient(135deg,#0a0f1e,#1a3a8f,#00a896)">
+  <div class="badge" style="background:rgba(0,168,150,0.2);border:1px solid rgba(0,168,150,0.5);color:#00a896;">Welcome to WolvCapital</div>
+  <div class="coin" style="background:linear-gradient(135deg,#00a896,#1a3a8f)">W</div>
+  <h2>You Made a Smart Move.</h2>
+  <p>Welcome to professional-grade investing.</p>
+</div>
+<div class="body">
+  <p class="greeting">Hi [First Name],</p>
+  <p class="text">Welcome to WolvCapital — we're genuinely glad you're here. You've just joined a platform trusted by investors who believe that <strong>your money should work harder than you do.</strong></p>
+  <div class="highlight" style="background:linear-gradient(135deg,#f0fdf9,#e6f7ff);border:1px solid rgba(0,168,150,0.2)">
+    <h3 style="color:#0a0f1e">What makes WolvCapital different?</h3>
+    <p style="color:#475569">We combine KYC-verified onboarding, institutional-grade custody, and blockchain-backed profit tokens — so every dollar you invest is protected, tracked, and rewarded transparently.</p>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#e6faf8">🔐</div>
+    <div><div class="ftitle">KYC-Verified Platform</div><div class="fdesc">Full identity verification ensures only legitimate investors participate — protecting your capital.</div></div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#dbeafe">📊</div>
+    <div><div class="ftitle">Real-Time Dashboard</div><div class="fdesc">Track your portfolio, ROI, and profit history 24/7 from any device.</div></div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#fef3c7">🏦</div>
+    <div><div class="ftitle">Institutional Custody</div><div class="fdesc">Your funds are held with licensed custodians — not on our platform.</div></div>
+  </div>
+  <div class="cta-wrap">
+    <a href="https://wolvcapital.com/dashboard" class="cta" style="background:linear-gradient(135deg,#00a896,#1a3a8f)">Explore Your Dashboard →</a>
+    <p class="cta-sub">Takes less than 2 minutes to get started</p>
+  </div>
+  <p class="ps">P.S. Over the next few days, we'll show you exactly how WolvCapital works, what returns to expect, and how our new WOLV Token rewards your profits on the blockchain. Stay tuned.</p>
+</div>
+<div class="footer">
+  <div class="footer-logo">Wolv<span style="color:#00a896">Capital</span></div>
+  <p>© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy">Privacy</a> · <a href="https://wolvcapital.com">wolvcapital.com</a></p>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- EMAIL 2 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="email-wrapper">
+<div class="day-label">Day 2 — How It Works</div>
+<div class="email">
+<div class="header" style="background:linear-gradient(135deg,#0f1a35,#1a3a8f)">
+  <div class="badge" style="background:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.4);color:#93c5fd;">How WolvCapital Works</div>
+  <div class="coin" style="background:linear-gradient(135deg,#3b82f6,#1a3a8f)">📊</div>
+  <h2>Simple. Transparent. Profitable.</h2>
+  <p>Here's exactly how your money grows.</p>
+</div>
+<div class="body">
+  <p class="greeting">Hi [First Name],</p>
+  <p class="text">A lot of investment platforms make things complicated on purpose. We believe the opposite — if you can't explain how your money grows, you shouldn't invest it. So here's exactly how WolvCapital works:</p>
+  <div class="step"><div class="snum" style="background:linear-gradient(135deg,#00a896,#1a3a8f)">1</div><div class="stext"><strong>Complete KYC</strong> — verify your identity in minutes. Required by law and for your protection.</div></div>
+  <div class="step"><div class="snum" style="background:linear-gradient(135deg,#00a896,#1a3a8f)">2</div><div class="stext"><strong>Choose a plan</strong> — Pioneer, Vanguard, Horizon, or Summit VIP. Each has a fixed term and daily ROI.</div></div>
+  <div class="step"><div class="snum" style="background:linear-gradient(135deg,#00a896,#1a3a8f)">3</div><div class="stext"><strong>Deposit funds</strong> — funds are held with licensed institutional custodians, subject to AML review.</div></div>
+  <div class="step"><div class="snum" style="background:linear-gradient(135deg,#00a896,#1a3a8f)">4</div><div class="stext"><strong>Track performance</strong> — your dashboard shows daily ROI, total earned, and plan progress in real time.</div></div>
+  <div class="step"><div class="snum" style="background:linear-gradient(135deg,#00a896,#1a3a8f)">5</div><div class="stext"><strong>Withdraw profits</strong> — at plan maturity, request withdrawal. Approvals are manual for maximum security.</div></div>
+  <div class="divider"></div>
+  <div class="stat-grid">
+    <div class="stat-box"><div class="stat-val" style="color:#00a896">1%</div><div class="stat-lbl">Daily ROI (Pioneer)</div></div>
+    <div class="stat-box"><div class="stat-val" style="color:#3b82f6">90</div><div class="stat-lbl">Days minimum term</div></div>
+    <div class="stat-box"><div class="stat-val" style="color:#f59e0b">$100</div><div class="stat-lbl">Minimum to start</div></div>
+    <div class="stat-box"><div class="stat-val" style="color:#10b981">256</div><div class="stat-lbl">Bit encryption</div></div>
+  </div>
+  <div class="cta-wrap">
+    <a href="https://wolvcapital.com/plans" class="cta" style="background:linear-gradient(135deg,#1d4ed8,#2563eb)">View Investment Plans →</a>
+  </div>
+  <p class="ps">P.S. Tomorrow we'll break down each plan in detail — including which one is best for your situation.</p>
+</div>
+<div class="footer">
+  <div class="footer-logo">Wolv<span style="color:#00a896">Capital</span></div>
+  <p>© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy">Privacy</a> · <a href="https://wolvcapital.com">wolvcapital.com</a></p>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- EMAIL 3 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="email-wrapper">
+<div class="day-label">Day 3 — Investment Plans</div>
+<div class="email">
+<div class="header" style="background:linear-gradient(135deg,#0a0f1e,#053257)">
+  <div class="badge" style="background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.4);color:#fbbf24;">Choose Your Plan</div>
+  <div class="coin" style="background:linear-gradient(135deg,#f59e0b,#d97706)">💎</div>
+  <h2>Which Plan Is Right for You?</h2>
+  <p>Four tiers. One goal — growing your wealth.</p>
+</div>
+<div class="body">
+  <p class="greeting">Hi [First Name],</p>
+  <p class="text">WolvCapital offers four investment tiers designed to match your capital level and risk appetite. Here's what each one offers:</p>
+  <div class="feature">
+    <div class="ficon" style="background:#dbeafe">🌱</div>
+    <div><div class="ftitle">Pioneer — Entry Level</div><div class="fdesc">Perfect for first-time investors. Start small, learn the platform, and build confidence. Minimum $100 · 1% daily ROI · 90 days.</div></div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#e6faf8">⚡</div>
+    <div><div class="ftitle">Vanguard — Growth</div><div class="fdesc">For investors ready to commit more capital for higher returns. Minimum $1,000 · Higher daily ROI · 150 days.</div></div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#fef3c7">🚀</div>
+    <div><div class="ftitle">Horizon — Advanced</div><div class="fdesc">Designed for serious investors looking for significant portfolio growth. Minimum $5,000 · Premium ROI · 180 days.</div></div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#fce7f3">👑</div>
+    <div><div class="ftitle">Summit VIP — Elite</div><div class="fdesc">Our highest-tier plan for high-net-worth investors. Priority support, maximum ROI, exclusive benefits. Minimum $10,000 · 365 days.</div></div>
+  </div>
+  <div class="highlight" style="background:#f0fdf9;border:1px solid rgba(0,168,150,0.2)">
+    <h3 style="color:#0a0f1e">💡 Not sure which to pick?</h3>
+    <p style="color:#475569">Start with Pioneer. It's the safest entry point, lets you experience the platform firsthand, and you can upgrade on your next investment cycle.</p>
+  </div>
+  <div class="cta-wrap">
+    <a href="https://wolvcapital.com/dashboard/new-investment" class="cta" style="background:linear-gradient(135deg,#00a896,#1a3a8f)">Start Your First Investment →</a>
+  </div>
+  <p class="ps">P.S. Tomorrow we'll talk about something brand new — the WOLV Token and why it changes everything about how you receive profits.</p>
+</div>
+<div class="footer">
+  <div class="footer-logo">Wolv<span style="color:#00a896">Capital</span></div>
+  <p>© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy">Privacy</a> · <a href="https://wolvcapital.com">wolvcapital.com</a></p>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- EMAIL 4 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="email-wrapper">
+<div class="day-label">Day 4 — WOLV Token Introduction</div>
+<div class="email">
+<div class="header" style="background:linear-gradient(135deg,#0a0f1e,#1a3a8f,#00a896)">
+  <div class="badge" style="background:rgba(0,168,150,0.2);border:1px solid rgba(0,168,150,0.5);color:#00a896;">🚀 Now Live on BNB Smart Chain</div>
+  <div class="coin" style="background:linear-gradient(135deg,#00a896,#1a3a8f)">W</div>
+  <h2>Meet WOLV Token.</h2>
+  <p>Your profits — on the blockchain, forever.</p>
+</div>
+<div class="body">
+  <p class="greeting">Hi [First Name],</p>
+  <p class="text">We just launched something that no other investment platform offers — <strong>WOLV Token</strong>. Every dollar of profit you earn on WolvCapital is now minted as a WOLV token directly to your crypto wallet.</p>
+  <div class="highlight" style="background:linear-gradient(135deg,#f0fdf9,#e6f7ff);border:1px solid rgba(0,168,150,0.2);text-align:center;">
+    <div style="font-size:13px;color:#475569;margin-bottom:8px;">Your profit token</div>
+    <div style="display:inline-block;background:#0a0f1e;color:#00a896;font-size:22px;font-weight:900;padding:6px 20px;border-radius:8px;margin-bottom:12px;letter-spacing:2px;font-family:monospace;">WOLV</div>
+    <p style="color:#475569;font-size:13px;">Deployed on BNB Smart Chain · Verified on BSCScan · 1 Billion hard cap</p>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#e6faf8">🔗</div>
+    <div><div class="ftitle">On-Chain Proof of Profit</div><div class="fdesc">Unlike a PDF statement, WOLV tokens are permanent blockchain records anyone can verify.</div></div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#dbeafe">🛡️</div>
+    <div><div class="ftitle">Audited & Verified</div><div class="fdesc">WOLV scored 87/100 on SolidityScan. Open-source contract on BSCScan — nothing hidden.</div></div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#fef3c7">📱</div>
+    <div><div class="ftitle">Works in Your Wallet</div><div class="fdesc">MetaMask, Trust Wallet, Coinbase Wallet — WOLV appears automatically when you connect.</div></div>
+  </div>
+  <div class="cta-wrap">
+    <a href="https://wolvcapital.com/wolv-token" class="cta" style="background:linear-gradient(135deg,#00a896,#1a3a8f)">Learn About WOLV Token →</a>
+    <p class="cta-sub">Or connect your wallet on your dashboard to receive WOLV now</p>
+  </div>
+  <p class="ps">P.S. WOLV tokens are only earned through real investment returns — they can't be bought or faked. Every token is real profit.</p>
+</div>
+<div class="footer">
+  <div class="footer-logo">Wolv<span style="color:#00a896">Capital</span></div>
+  <p>© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy">Privacy</a> · <a href="https://wolvcapital.com">wolvcapital.com</a></p>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- EMAIL 5 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="email-wrapper">
+<div class="day-label">Day 5 — Security & Trust</div>
+<div class="email">
+<div class="header" style="background:linear-gradient(135deg,#0f1a35,#0f4c75)">
+  <div class="badge" style="background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.4);color:#6ee7b7;">Security First</div>
+  <div class="coin" style="background:linear-gradient(135deg,#10b981,#059669)">🛡️</div>
+  <h2>Your Money Is Safe With Us.</h2>
+  <p>Here's the proof — not just the promise.</p>
+</div>
+<div class="body">
+  <p class="greeting">Hi [First Name],</p>
+  <p class="text">We know the biggest question in any investor's mind is: <em>"Is my money safe?"</em> We don't just answer that with words — we answer it with verifiable facts.</p>
+  <div class="feature">
+    <div class="ficon" style="background:#dcfce7">✅</div>
+    <div><div class="ftitle">SEC-Registered Investment Adviser</div><div class="fdesc">WolvCapital is registered and compliant with U.S. securities regulations.</div></div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#dbeafe">🏛️</div>
+    <div><div class="ftitle">FinCEN MSB Registered</div><div class="fdesc">Registered as a Money Services Business with the Financial Crimes Enforcement Network.</div></div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#e6faf8">🔐</div>
+    <div><div class="ftitle">256-Bit SSL Encryption</div><div class="fdesc">Bank-grade encryption protects every transaction and piece of data on our platform.</div></div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#fef3c7">📋</div>
+    <div><div class="ftitle">AML & KYC Compliance</div><div class="fdesc">Full Anti-Money Laundering and Know Your Customer procedures on every account.</div></div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#fce7f3">⛓️</div>
+    <div><div class="ftitle">Blockchain Transparency</div><div class="fdesc">WOLV Token contract is publicly verified on BSCScan — every transaction is on-chain.</div></div>
+  </div>
+  <div class="cta-wrap">
+    <a href="https://wolvcapital.com/dashboard/new-investment" class="cta" style="background:linear-gradient(135deg,#10b981,#059669)">Invest With Confidence →</a>
+  </div>
+  <p class="ps">P.S. We publish our full compliance disclosures at wolvcapital.com/compliance. We believe transparency is the foundation of trust.</p>
+</div>
+<div class="footer">
+  <div class="footer-logo">Wolv<span style="color:#00a896">Capital</span></div>
+  <p>© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy">Privacy</a> · <a href="https://wolvcapital.com">wolvcapital.com</a></p>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- EMAIL 6 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="email-wrapper">
+<div class="day-label">Day 6 — Social Proof</div>
+<div class="email">
+<div class="header" style="background:linear-gradient(135deg,#0a0f1e,#1e1b4b)">
+  <div class="badge" style="background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.4);color:#c4b5fd;">Investor Stories</div>
+  <div class="coin" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9)">⭐</div>
+  <h2>Real Investors. Real Returns.</h2>
+  <p>Don't take our word for it.</p>
+</div>
+<div class="body">
+  <p class="greeting">Hi [First Name],</p>
+  <p class="text">The best proof of any investment platform isn't its marketing — it's the experience of its investors. Here's what members of the WolvCapital community are saying:</p>
+  <div class="testimonial">"I started with the Pioneer plan at $500. By month 3, I had earned consistent daily returns and my WOLV balance was growing. I just reinvested into Vanguard. The dashboard makes everything so clear."<strong>— Michael T., Lagos · Pioneer → Vanguard Investor</strong></div>
+  <div class="testimonial">"What sold me was the blockchain transparency. I can actually verify my WOLV tokens on BSCScan anytime. No other platform I've used gives me that level of proof."<strong>— Sarah K., London · Horizon Plan Investor</strong></div>
+  <div class="testimonial">"The virtual card is a game-changer. Being able to spend my investment earnings on Netflix, Amazon, and everyday purchases makes WolvCapital feel real and practical."<strong>— David O., Accra · Vanguard Plan Investor</strong></div>
+  <div class="stat-grid">
+    <div class="stat-box"><div class="stat-val" style="color:#8b5cf6">500+</div><div class="stat-lbl">Active Investors</div></div>
+    <div class="stat-box"><div class="stat-val" style="color:#00a896">$2M+</div><div class="stat-lbl">Total Deployed</div></div>
+    <div class="stat-box"><div class="stat-val" style="color:#f59e0b">12.3%</div><div class="stat-lbl">Avg ROI Rate</div></div>
+    <div class="stat-box"><div class="stat-val" style="color:#10b981">100%</div><div class="stat-lbl">On-Chain Proof</div></div>
+  </div>
+  <div class="cta-wrap">
+    <a href="https://wolvcapital.com/dashboard/new-investment" class="cta" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9)">Join Them Today →</a>
+  </div>
+  <p class="ps">P.S. Every investor on WolvCapital starts somewhere. The only difference between where you are and where they are is one decision.</p>
+</div>
+<div class="footer">
+  <div class="footer-logo">Wolv<span style="color:#00a896">Capital</span></div>
+  <p>© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy">Privacy</a> · <a href="https://wolvcapital.com">wolvcapital.com</a></p>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- EMAIL 7 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="email-wrapper">
+<div class="day-label">Day 7 — Virtual Card Feature</div>
+<div class="email">
+<div class="header" style="background:linear-gradient(135deg,#1a3a8f,#1e4db7,#0ea5c9)">
+  <div class="badge" style="background:rgba(14,165,201,0.2);border:1px solid rgba(14,165,201,0.4);color:#7dd3fc;">Exclusive Feature</div>
+  <div class="coin" style="background:linear-gradient(135deg,#0ea5c9,#1a3a8f)">💳</div>
+  <h2>Spend Your Profits Anywhere.</h2>
+  <p>Introducing the WolvCapital Virtual Visa Card.</p>
+</div>
+<div class="body">
+  <p class="greeting">Hi [First Name],</p>
+  <p class="text">Most investment platforms make you wait weeks to access your profits. WolvCapital gives you a <strong>Virtual Visa Infinite Card</strong> — so you can spend your investment earnings on anything, anywhere in the world.</p>
+  <div style="background:linear-gradient(135deg,#1a3a8f,#1e4db7,#0ea5c9);border-radius:16px;padding:24px;margin-bottom:24px;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.06)"></div>
+    <div style="font-size:10px;color:rgba(255,255,255,0.6);font-weight:700;letter-spacing:2px;margin-bottom:24px;">WOLVCAPITAL</div>
+    <div style="width:32px;height:22px;background:linear-gradient(135deg,#b8860b,#f5d06e);border-radius:4px;margin-bottom:16px;"></div>
+    <div style="font-family:monospace;color:rgba(255,255,255,0.7);font-size:13px;letter-spacing:2px;margin-bottom:8px;">•••• •••• •••• 7717</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:11px;color:rgba(255,255,255,0.5);">VERIFIED MEMBER</div>
+      <div style="font-size:16px;font-weight:800;color:#fff;font-style:italic;">VISA</div>
+    </div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#dbeafe">🌍</div>
+    <div><div class="ftitle">Use Worldwide</div><div class="fdesc">Accepted wherever Visa is accepted — online and in-store globally.</div></div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#dcfce7">🎬</div>
+    <div><div class="ftitle">100+ Merchants</div><div class="fdesc">Netflix, Spotify, Amazon, Apple Pay, Google Pay, Steam, Shopify and more.</div></div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#fef3c7">⚡</div>
+    <div><div class="ftitle">Instant Access</div><div class="fdesc">Your card is linked to your portfolio balance — no waiting for bank transfers.</div></div>
+  </div>
+  <div class="cta-wrap">
+    <a href="https://wolvcapital.com/dashboard/card" class="cta" style="background:linear-gradient(135deg,#1d4ed8,#0ea5c9)">View My Virtual Card →</a>
+  </div>
+  <p class="ps">P.S. The Virtual Card is available to all active investors. Make your first investment today and unlock it immediately.</p>
+</div>
+<div class="footer">
+  <div class="footer-logo">Wolv<span style="color:#00a896">Capital</span></div>
+  <p>© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy">Privacy</a> · <a href="https://wolvcapital.com">wolvcapital.com</a></p>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- EMAIL 8 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="email-wrapper">
+<div class="day-label">Day 8 — Objection Handling / FAQ</div>
+<div class="email">
+<div class="header" style="background:linear-gradient(135deg,#0a0f1e,#1a3a8f)">
+  <div class="badge" style="background:rgba(251,191,36,0.2);border:1px solid rgba(251,191,36,0.4);color:#fbbf24;">Your Questions Answered</div>
+  <div class="coin" style="background:linear-gradient(135deg,#f59e0b,#d97706)">❓</div>
+  <h2>We Know You Have Questions.</h2>
+  <p>Here are the honest answers.</p>
+</div>
+<div class="body">
+  <p class="greeting">Hi [First Name],</p>
+  <p class="text">We've heard every question you might have. Here are the most common ones — answered honestly, with no fluff:</p>
+  <div class="feature">
+    <div class="ficon" style="background:#fef3c7">💰</div>
+    <div><div class="ftitle">"Are returns guaranteed?"</div><div class="fdesc">No investment is 100% guaranteed — we are legally required to disclose this. However, our structured daily ROI model is based on diversified digital asset strategies with consistent historical performance.</div></div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#dbeafe">🔒</div>
+    <div><div class="ftitle">"What if I need my money early?"</div><div class="fdesc">Plans have fixed terms. Early withdrawal is subject to review. We recommend only investing capital you don't need immediately — as stated in our Terms of Service.</div></div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#e6faf8">🌍</div>
+    <div><div class="ftitle">"Is this available in my country?"</div><div class="fdesc">WolvCapital serves investors globally with KYC verification. Some restrictions apply based on local regulations. Complete KYC to confirm eligibility.</div></div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#fce7f3">🪙</div>
+    <div><div class="ftitle">"What is WOLV Token actually worth?"</div><div class="fdesc">WOLV currently represents on-chain proof of profit. Future utility on PancakeSwap is planned. Current value is in transparency and trust, not speculation.</div></div>
+  </div>
+  <div class="feature">
+    <div class="ficon" style="background:#dcfce7">📞</div>
+    <div><div class="ftitle">"How do I get support?"</div><div class="fdesc">Live chat is available 24/7 on the platform. You can also email our team directly through the contact page.</div></div>
+  </div>
+  <div class="cta-wrap">
+    <a href="https://wolvcapital.com/dashboard/new-investment" class="cta" style="background:linear-gradient(135deg,#f59e0b,#d97706)">I'm Ready to Invest →</a>
+    <p class="cta-sub">Still have questions? <a href="https://wolvcapital.com/contact" style="color:#00a896;">Contact our team</a></p>
+  </div>
+  <p class="ps">P.S. The risk of doing nothing is also a risk. Every day you wait is a day your money isn't growing.</p>
+</div>
+<div class="footer">
+  <div class="footer-logo">Wolv<span style="color:#00a896">Capital</span></div>
+  <p>© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy">Privacy</a> · <a href="https://wolvcapital.com">wolvcapital.com</a></p>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- EMAIL 9 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="email-wrapper">
+<div class="day-label">Day 9 — Urgency / Limited Opportunity</div>
+<div class="email">
+<div class="header" style="background:linear-gradient(135deg,#7f1d1d,#991b1b,#dc2626)">
+  <div class="badge" style="background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4);color:#fca5a5;">Time Sensitive</div>
+  <div class="coin" style="background:linear-gradient(135deg,#ef4444,#b91c1c)">⏰</div>
+  <h2>Don't Miss the Early Mover Advantage.</h2>
+  <p>WOLV Token is brand new. Early investors win most.</p>
+</div>
+<div class="body">
+  <p class="greeting">Hi [First Name],</p>
+  <p class="text">In investing, timing matters. WOLV Token just launched — the contract is live, verified, and active on BNB Smart Chain. Right now, only a handful of investors are receiving WOLV tokens. <strong>That means every WOLV you earn today is earned when supply is lowest and potential is highest.</strong></p>
+  <div class="urgency" style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);">
+    <div class="uicon">🔥</div>
+    <div class="utext" style="color:#ef4444;"><h4>Early Investor Advantage</h4><p>The WOLV token contract has a 1 billion hard cap. Every token earned now is earned before the wider market discovers it.</p></div>
+  </div>
+  <div class="urgency" style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);">
+    <div class="uicon">📈</div>
+    <div class="utext" style="color:#f59e0b;"><h4>PancakeSwap Listing Coming</h4><p>We plan to add WOLV liquidity on PancakeSwap. Investors who earn WOLV now will hold tokens before they become tradeable.</p></div>
+  </div>
+  <div class="urgency" style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);">
+    <div class="uicon">🎯</div>
+    <div class="utext" style="color:#10b981;"><h4>CoinGecko Listing Planned</h4><p>Once listed, WOLV will gain global visibility. Early holders benefit from being first.</p></div>
+  </div>
+  <p class="text">The window to be an early WOLV holder is open right now. It won't be this early forever.</p>
+  <div class="cta-wrap">
+    <a href="https://wolvcapital.com/dashboard/new-investment" class="cta" style="background:linear-gradient(135deg,#ef4444,#dc2626)">Claim My Early Position →</a>
+    <p class="cta-sub">Start with Pioneer — minimum $100</p>
+  </div>
+  <p class="ps">P.S. Tomorrow is the final email in this series. We'll be sharing something special for those who are ready to take action.</p>
+</div>
+<div class="footer">
+  <div class="footer-logo">Wolv<span style="color:#00a896">Capital</span></div>
+  <p>© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy">Privacy</a> · <a href="https://wolvcapital.com">wolvcapital.com</a></p>
+</div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- EMAIL 10 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="email-wrapper">
+<div class="day-label">Day 10 — Final CTA / Make Your Move</div>
+<div class="email">
+<div class="header" style="background:linear-gradient(135deg,#0a0f1e,#1a3a8f,#00a896)">
+  <div class="badge" style="background:rgba(0,168,150,0.2);border:1px solid rgba(0,168,150,0.5);color:#00a896;">Final Message</div>
+  <div class="coin" style="background:linear-gradient(135deg,#00a896,#1a3a8f)">🚀</div>
+  <h2>This Is Your Moment.</h2>
+  <p>Everything you need to know — you know.</p>
+</div>
+<div class="body">
+  <p class="greeting">Hi [First Name],</p>
+  <p class="text">Over the past 10 days, we've shared everything about WolvCapital — how it works, the plans, the security, the WOLV Token, real investor stories, and honest answers to tough questions.</p>
+  <p class="text">You now know more about this platform than most of our active investors did when they started. <strong>The only thing left is a decision.</strong></p>
+  <div class="highlight" style="background:linear-gradient(135deg,#f0fdf9,#e6f7ff);border:1px solid rgba(0,168,150,0.2)">
+    <h3 style="color:#0a0f1e;margin-bottom:12px;">Here's what you get when you start today:</h3>
+    <div class="step"><div class="snum" style="background:#00a896">✓</div><div class="stext"><strong>Daily ROI</strong> on your invested capital — tracked live on your dashboard.</div></div>
+    <div class="step"><div class="snum" style="background:#1a3a8f">✓</div><div class="stext"><strong>WOLV Tokens</strong> minted to your wallet as blockchain proof of every profit.</div></div>
+    <div class="step"><div class="snum" style="background:#f59e0b">✓</div><div class="stext"><strong>Virtual Visa Card</strong> — spend your earnings on Netflix, Amazon, anywhere.</div></div>
+    <div class="step"><div class="snum" style="background:#8b5cf6">✓</div><div class="stext"><strong>Early WOLV position</strong> — before PancakeSwap listing and CoinGecko.</div></div>
+    <div class="step"><div class="snum" style="background:#10b981">✓</div><div class="stext"><strong>24/7 support</strong> — live chat and dedicated team always available.</div></div>
+  </div>
+  <div class="cta-wrap">
+    <a href="https://wolvcapital.com/dashboard/new-investment" class="cta" style="background:linear-gradient(135deg,#00a896,#1a3a8f);font-size:17px;padding:18px 44px;">Start Investing Now →</a>
+    <p class="cta-sub">Pioneer Plan · Minimum $100 · Start earning today</p>
+  </div>
+  <div class="divider"></div>
+  <p style="font-size:13px;color:#475569;line-height:1.8;text-align:center;">
+    If you have any questions before you start, our team is available 24/7 via live chat at <a href="https://wolvcapital.com" style="color:#00a896;">wolvcapital.com</a>.<br/><br/>
+    We look forward to welcoming you as an investor.<br/><br/>
+    <strong style="color:#0a0f1e;">— The WolvCapital Team</strong>
+  </p>
+</div>
+<div class="footer">
+  <div class="footer-logo">Wolv<span style="color:#00a896">Capital</span></div>
+  <p>Professional Investment Platform · <a href="https://wolvcapital.com">wolvcapital.com</a></p>
+  <p style="margin-top:8px;">© 2026 WolvCapital, Inc. All rights reserved.</p>
+  <p style="margin-top:6px;"><a href="https://wolvcapital.com/privacy">Privacy Policy</a> · <a href="https://wolvcapital.com/terms-of-service">Terms</a> · <a href="https://bscscan.com/token/0xbcb3d35bcbbd141f1955aaf8f51b48b801b117bf">WOLV on BSCScan</a></p>
+</div>
+</div>
+</div>
+
+</body>
+</html>

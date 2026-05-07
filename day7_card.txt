@@ -1,0 +1,6 @@
+Hi {{ first_name }},
+
+Spend your profits anywhere with the WolvCapital Virtual Visa Card. Works with Netflix, Amazon, and Apple Pay.
+
+VIEW YOUR CARD:
+https://wolvcapital.com/dashboard/card

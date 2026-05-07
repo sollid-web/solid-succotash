@@ -27,7 +27,9 @@ class SupportRequest(models.Model):
     topic: models.CharField = models.CharField(max_length=120, blank=True)
     source_url: models.CharField = models.CharField(max_length=255, blank=True)
     message: models.TextField = models.TextField()
-    status: models.CharField = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_PENDING)
+    status: models.CharField = models.CharField(
+        max_length=20, choices=STATUS_CHOICES, default=STATUS_PENDING
+    )
     admin_notes: models.TextField = models.TextField(blank=True)
     handled_by: models.ForeignKey = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -53,9 +55,15 @@ class Agreement(models.Model):
     """Versioned legal agreement presented to end users."""
 
     title: models.CharField = models.CharField(max_length=255)
-    slug: models.SlugField = models.SlugField(help_text="Stable identifier used in links and lookups.")
-    version: models.CharField = models.CharField(max_length=20, help_text="Semantic version label, e.g., 1.0.0")
-    body: models.TextField = models.TextField(help_text="Markdown/plain-text body rendered for the user.")
+    slug: models.SlugField = models.SlugField(
+        help_text="Stable identifier used in links and lookups."
+    )
+    version: models.CharField = models.CharField(
+        max_length=20, help_text="Semantic version label, e.g., 1.0.0"
+    )
+    body: models.TextField = models.TextField(
+        help_text="Markdown/plain-text body rendered for the user."
+    )
     effective_date: models.DateField = models.DateField(default=timezone.now)
     is_active: models.BooleanField = models.BooleanField(default=True)
     created_at: models.DateTimeField = models.DateTimeField(auto_now_add=True)
@@ -163,7 +171,7 @@ class EmailInbox(models.Model):
         null=True,
         blank=True,
         related_name="assigned_emails",
-        help_text="Admin user handling this email"
+        help_text="Admin user handling this email",
     )
     read_at = models.DateTimeField(null=True, blank=True)
     replied_at = models.DateTimeField(null=True, blank=True)
@@ -235,13 +243,12 @@ class EmailTemplate(models.Model):
     name = models.CharField(max_length=255, unique=True)
     subject = models.CharField(max_length=500)
     body = models.TextField(help_text="Use {{variable}} for placeholders")
-    category = models.CharField(max_length=100, blank=True, help_text="e.g., Support, Sales, Billing")
+    category = models.CharField(
+        max_length=100, blank=True, help_text="e.g., Support, Sales, Billing"
+    )
     is_active = models.BooleanField(default=True)
     created_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -264,9 +271,9 @@ class IncomingEmail(models.Model):
 
 
 class EmailAttachment(models.Model):
-    email = models.ForeignKey(IncomingEmail, related_name='attachments', on_delete=models.CASCADE)
+    email = models.ForeignKey(IncomingEmail, related_name="attachments", on_delete=models.CASCADE)
     filename = models.CharField(max_length=255)
-    file = models.FileField(upload_to='email_attachments/')
+    file = models.FileField(upload_to="email_attachments/")
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
 
@@ -291,8 +298,78 @@ class PlatformCertificate(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
+class DripCampaign(models.Model):
+    """Tracks user enrollment and progression through 10-email drip campaign."""
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="drip_campaign",
+    )
+    current_day = models.IntegerField(default=1, help_text="Current email day (1-10)")
+    last_sent = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="When the last email was sent",
+    )
+    active = models.BooleanField(default=True, help_text="Campaign is active for this user")
+    completed = models.BooleanField(default=False, help_text="User has completed all 10 emails")
+    enrolled_at = models.DateTimeField(
+        auto_now_add=True,
+        help_text="When user was enrolled",
+    )
+
+    class Meta:
+        verbose_name = "Drip Campaign"
+        verbose_name_plural = "Drip Campaigns"
+
+    def __str__(self) -> str:
+        return f"{self.user.email} — Day {self.current_day}/10"
+
     class Meta:
         ordering = ["-created_at"]
 
     def __str__(self) -> str:  # pragma: no cover - trivial
         return f"{self.title} ({self.certificate_id})"
+
+
+class DripCampaign(models.Model):
+    """Track user progress through 10-email automated marketing sequence."""
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="drip_campaign",
+        help_text="User enrolled in the campaign",
+    )
+    current_day = models.IntegerField(
+        default=1,
+        help_text="Current day of campaign (1-10)",
+    )
+    last_sent = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="Timestamp of last email sent",
+    )
+    active = models.BooleanField(
+        default=True,
+        help_text="Whether the campaign is actively sending emails",
+    )
+    completed = models.BooleanField(
+        default=False,
+        help_text="Whether user finished all 10 emails",
+    )
+    enrolled_at = models.DateTimeField(
+        auto_now_add=True,
+        help_text="When user was enrolled in campaign",
+    )
+
+    class Meta:
+        verbose_name = "Drip Campaign"
+        verbose_name_plural = "Drip Campaigns"
+        ordering = ["-enrolled_at"]
+
+    def __str__(self) -> str:  # pragma: no cover - trivial
+        status = "✅ Complete" if self.completed else f"Day {self.current_day}/10"
+        return f"{self.user.email} — {status}"

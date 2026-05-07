@@ -1,0 +1,6 @@
+Hi {{ first_name }},
+
+Welcome to WolvCapital! You've just joined a platform trusted by investors who believe that your money should work harder than you do.
+
+EXPLORE YOUR DASHBOARD:
+https://wolvcapital.com/dashboard

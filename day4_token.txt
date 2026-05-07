@@ -1,0 +1,6 @@
+Hi {{ first_name }},
+
+Meet WOLV Token. Every dollar of profit you earn is now minted as a WOLV token directly to your crypto wallet for on-chain proof.
+
+LEARN MORE:
+https://wolvcapital.com/wolv-token

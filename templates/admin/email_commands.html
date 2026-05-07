@@ -1,0 +1,143 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block title %}Email Commands - {{ site_title }}{% endblock %}
+
+{% block content %}
+<div class="module">
+    <h2>Email Commands</h2>
+    <p>Run email actions directly from the Django admin dashboard.</p>
+</div>
+
+<div class="module">
+    <h3>WOLV Token Announcement</h3>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="wolv_announcement" />
+        <div class="form-row">
+            <label for="id_wolv_test_email">Test recipient (optional)</label><br>
+            <input type="email" name="wolv_test_email" id="id_wolv_test_email" value="{{ form_data.wolv_test_email|default:'' }}" class="vTextField" style="width: 100%; max-width: 420px;" />
+            <p class="help">If set, the announcement will only be sent to this address.</p>
+        </div>
+        <div class="form-row">
+            <label><input type="checkbox" name="wolv_dry_run"{% if form_data.wolv_dry_run %} checked{% endif %} /> Dry run</label>
+        </div>
+        <p><strong>Audience:</strong> {{ wolv_recipient_count }} active investors</p>
+        <div class="submit-row">
+            <input type="submit" value="Send WOLV Announcement" class="default" />
+        </div>
+    </form>
+</div>
+
+<div class="module">
+    <h3>Manual Email</h3>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="manual_email" />
+        <div class="form-row">
+            <label><input type="checkbox" name="manual_to_all"{% if form_data.manual_to_all %} checked{% endif %} /> Send to all active users ({{ active_user_count }})</label>
+        </div>
+        <div class="form-row">
+            <label for="id_manual_to">Recipient email (single recipient)</label><br>
+            <input type="email" name="manual_to" id="id_manual_to" value="{{ form_data.manual_to|default:'' }}" class="vTextField" style="width: 100%; max-width: 420px;" />
+        </div>
+        <div class="form-row">
+            <label for="id_manual_subject">Subject</label><br>
+            <input type="text" name="manual_subject" id="id_manual_subject" value="{{ form_data.manual_subject|default:'' }}" class="vTextField" style="width: 100%; max-width: 620px;" />
+        </div>
+        <div class="form-row">
+            <label for="id_manual_message">Message</label><br>
+            <textarea name="manual_message" id="id_manual_message" rows="6" class="vLargeTextField" style="width: 100%; max-width: 620px;">{{ form_data.manual_message|default:'' }}</textarea>
+        </div>
+        <div class="submit-row">
+            <input type="submit" value="Send Manual Email" class="default" />
+        </div>
+    </form>
+</div>
+
+<div class="module">
+    <h3>Account Ready Email</h3>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="account_ready" />
+        <div class="form-row">
+            <label for="id_account_ready_email">User email</label><br>
+            <input type="email" name="account_ready_email" id="id_account_ready_email" value="{{ form_data.account_ready_email|default:'' }}" class="vTextField" style="width: 100%; max-width: 420px;" />
+        </div>
+        <div class="form-row">
+            <label for="id_dashboard_url">Dashboard URL</label><br>
+            <input type="text" name="dashboard_url" id="id_dashboard_url" value="{{ form_data.dashboard_url|default:'/dashboard/' }}" class="vTextField" style="width: 100%; max-width: 620px;" />
+        </div>
+        <div class="form-row">
+            <label for="id_login_url">Login URL</label><br>
+            <input type="text" name="login_url" id="id_login_url" value="{{ form_data.login_url|default:'/accounts/login/' }}" class="vTextField" style="width: 100%; max-width: 620px;" />
+        </div>
+        <div class="form-row">
+            <label for="id_password_reset_url">Password reset URL</label><br>
+            <input type="text" name="password_reset_url" id="id_password_reset_url" value="{{ form_data.password_reset_url|default:'/accounts/password/reset/' }}" class="vTextField" style="width: 100%; max-width: 620px;" />
+        </div>
+        <div class="submit-row">
+            <input type="submit" value="Send Account Ready Email" class="default" />
+        </div>
+    </form>
+</div>
+
+<div class="module">
+    <h3>Validation Reminder Email</h3>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="validation_reminder" />
+        <div class="form-row">
+            <label for="id_validation_email">Recipient email</label><br>
+            <input type="email" name="validation_email" id="id_validation_email" value="{{ form_data.validation_email|default:'' }}" class="vTextField" style="width: 100%; max-width: 420px;" />
+        </div>
+        <div class="form-row">
+            <label for="id_validation_name">Investor name</label><br>
+            <input type="text" name="validation_name" id="id_validation_name" value="{{ form_data.validation_name|default:'Investor' }}" class="vTextField" style="width: 100%; max-width: 420px;" />
+        </div>
+        <div class="submit-row">
+            <input type="submit" value="Send Validation Reminder" class="default" />
+        </div>
+    </form>
+</div>
+
+<div class="module">
+    <h3>Virtual Card Announcement</h3>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="virtual_card" />
+        <div class="form-row">
+            <label for="id_virtual_card_emails">Recipient emails</label><br>
+            <textarea name="virtual_card_emails" id="id_virtual_card_emails" rows="3" class="vLargeTextField" style="width: 100%; max-width: 620px;" placeholder="one@example.com, two@example.com">{{ form_data.virtual_card_emails|default:'' }}</textarea>
+            <p class="help">Comma-separated list of email addresses.</p>
+        </div>
+        <div class="submit-row">
+            <input type="submit" value="Send Virtual Card Email" class="default" />
+        </div>
+    </form>
+</div>
+
+<div class="module">
+    <h3>Test Email</h3>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="test_email" />
+        <div class="form-row">
+            <label for="id_test_email">Test recipient email</label><br>
+            <input type="email" name="test_email" id="id_test_email" value="{{ form_data.test_email|default:'' }}" class="vTextField" style="width: 100%; max-width: 420px;" />
+        </div>
+        <div class="form-row">
+            <label for="id_test_type">Email type</label><br>
+            <select name="test_type" id="id_test_type" class="vSelectField" style="width: 100%; max-width: 420px;">
+                <option value="test" {% if form_data.test_type == 'test' %}selected{% endif %}>Basic test</option>
+                <option value="welcome" {% if form_data.test_type == 'welcome' %}selected{% endif %}>Welcome email</option>
+                <option value="transaction" {% if form_data.test_type == 'transaction' %}selected{% endif %}>Transaction email</option>
+                <option value="investment" {% if form_data.test_type == 'investment' %}selected{% endif %}>Investment email</option>
+            </select>
+        </div>
+        <div class="submit-row">
+            <input type="submit" value="Send Test Email" class="default" />
+        </div>
+    </form>
+</div>
+{% endblock %}

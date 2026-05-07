@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WOLV Token is Live — WolvCapital</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f0f4f8; font-family: 'Segoe UI', Arial, sans-serif; }
+    .wrapper { max-width: 620px; margin: 40px auto; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,0.1); }
+    .header { background: linear-gradient(135deg, #0a0f1e 0%, #1a3a8f 50%, #00a896 100%); padding: 48px 40px; text-align: center; position: relative; overflow: hidden; }
+    .header::before { content: ''; position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+    .header::after { content: ''; position: absolute; bottom: -60px; left: -40px; width: 250px; height: 250px; border-radius: 50%; background: rgba(0,168,150,0.1); }
+    .coin { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #00a896, #1a3a8f); display: inline-flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 900; color: #fff; margin-bottom: 20px; box-shadow: 0 0 40px rgba(0,168,150,0.4); position: relative; z-index: 1; }
+    .header h1 { color: #ffffff; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 8px; position: relative; z-index: 1; }
+    .header p { color: rgba(255,255,255,0.7); font-size: 15px; position: relative; z-index: 1; }
+    .live-badge { display: inline-block; background: rgba(0,168,150,0.2); border: 1px solid rgba(0,168,150,0.5); border-radius: 99px; padding: 4px 14px; font-size: 11px; color: #00a896; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; position: relative; z-index: 1; }
+    .body { padding: 40px; }
+    .greeting { font-size: 18px; font-weight: 700; color: #0a0f1e; margin-bottom: 16px; }
+    .intro { font-size: 15px; color: #475569; line-height: 1.7; margin-bottom: 32px; }
+    .highlight-box { background: linear-gradient(135deg, #f0fdf9, #e6f7ff); border: 1px solid rgba(0,168,150,0.2); border-radius: 16px; padding: 28px; margin-bottom: 32px; text-align: center; }
+    .highlight-box h2 { font-size: 22px; font-weight: 800; color: #0a0f1e; margin-bottom: 8px; }
+    .highlight-box p { font-size: 14px; color: #475569; line-height: 1.6; }
+    .token-badge { display: inline-block; background: #0a0f1e; color: #00a896; font-size: 24px; font-weight: 900; padding: 8px 24px; border-radius: 10px; margin: 12px 0; letter-spacing: 2px; font-family: monospace; }
+    .features { margin-bottom: 32px; }
+    .feature { display: flex; align-items: flex-start; gap: 14px; padding: 16px 0; border-bottom: 1px solid #f1f5f9; }
+    .feature:last-child { border-bottom: none; }
+    .feature-icon { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #e6faf8, #dbeafe); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .feature-text h3 { font-size: 14px; font-weight: 700; color: #0a0f1e; margin-bottom: 3px; }
+    .feature-text p { font-size: 13px; color: #64748b; line-height: 1.5; }
+    .cta-section { text-align: center; margin-bottom: 32px; }
+    .cta-btn { display: inline-block; background: linear-gradient(135deg, #00a896, #1a3a8f); color: #ffffff; text-decoration: none; padding: 16px 40px; border-radius: 12px; font-size: 16px; font-weight: 700; letter-spacing: -0.3px; box-shadow: 0 8px 24px rgba(0,168,150,0.3); }
+    .cta-sub { font-size: 12px; color: #94a3b8; margin-top: 10px; }
+    .contract-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 20px; margin-bottom: 32px; }
+    .contract-box h4 { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+    .contract-addr { font-family: monospace; font-size: 12px; color: #00a896; word-break: break-all; }
+    .contract-network { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+    .steps { margin-bottom: 32px; }
+    .steps h3 { font-size: 16px; font-weight: 700; color: #0a0f1e; margin-bottom: 16px; }
+    .step { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+    .step-num { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #00a896, #1a3a8f); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .step p { font-size: 14px; color: #475569; line-height: 1.5; }
+    .step p strong { color: #0a0f1e; }
+    .footer { background: #0a0f1e; padding: 32px 40px; text-align: center; }
+    .footer-logo { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+    .footer-logo span { color: #00a896; }
+    .footer p { font-size: 12px; color: rgba(255,255,255,0.3); line-height: 1.6; margin-bottom: 4px; }
+    .footer a { color: #00a896; text-decoration: none; }
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(0,168,150,0.3), transparent); margin: 24px 0; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <div class="live-badge">🚀 Now Live on BNB Smart Chain</div>
+      <div class="coin">W</div>
+      <h1>Introducing WOLV Token</h1>
+      <p>Your profits. On the blockchain. Forever.</p>
+    </div>
+
+    <div class="body">
+      <p class="greeting">Dear {{ first_name|default:"Valued Investor" }},</p>
+      <p class="intro">
+        We have some incredibly exciting news to share with you. WolvCapital has just launched the <strong>WOLV Token</strong> — a first-of-its-kind profit reward token that puts your investment earnings directly on the blockchain, giving you verifiable, transparent, and permanent proof of every dollar you earn with us.
+      </p>
+
+      <div class="highlight-box">
+        <h2>🎉 Your Profits Are Now On-Chain</h2>
+        <div class="token-badge">WOLV</div>
+        <p>Every profit you earn on WolvCapital will now be minted as WOLV tokens directly to your connected wallet — publicly verifiable on BNB Smart Chain.</p>
+      </div>
+
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">🔗</div>
+          <div class="feature-text">
+            <h3>Blockchain-Verified Profits</h3>
+            <p>Every WOLV token represents real profit earned. Verifiable by anyone, anytime on BSCScan — no trust required.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🛡️</div>
+          <div class="feature-text">
+            <h3>Fully Audited Smart Contract</h3>
+            <p>The WOLV contract scored 87/100 on SolidityScan security audit. Open-source and verified on BSCScan.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">💎</div>
+          <div class="feature-text">
+            <h3>1 Billion Hard Cap</h3>
+            <p>WOLV has a maximum supply of 1,000,000,000 tokens. Supply only grows when real investor profits are distributed.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📱</div>
+          <div class="feature-text">
+            <h3>See Your Balance Instantly</h3>
+            <p>Connect your MetaMask or Trust Wallet on your dashboard and WOLV tokens appear automatically.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="steps">
+        <h3>🚀 How to Receive Your WOLV Tokens</h3>
+        <div class="step">
+          <div class="step-num">1</div>
+          <p><strong>Log in to your dashboard</strong> at wolvcapital.com and navigate to the WOLV Token section.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <p><strong>Connect your wallet</strong> — MetaMask or Trust Wallet. Click "Connect Wallet" and approve the connection.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <p><strong>Add WOLV to your wallet</strong> — click "+ Add WOLV to Wallet" and it imports automatically. No manual contract address needed.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <p><strong>Receive profits as WOLV</strong> — when your plan generates returns, WOLV tokens will be minted directly to your wallet.</p>
+        </div>
+      </div>
+
+      <div class="contract-box">
+        <h4>Verified Contract Address</h4>
+        <div class="contract-addr">{{ contract_address }}</div>
+        <div class="contract-network">BNB Smart Chain (BEP-20) · Verified on BSCScan</div>
+      </div>
+
+      <div class="cta-section">
+        <a href="{{ dashboard_url }}" class="cta-btn">
+          Connect My Wallet Now →
+        </a>
+        <p class="cta-sub">Or learn more at <a href="{{ wolv_token_url }}" style="color:#00a896;">{{ wolv_token_url }}</a></p>
+      </div>
+
+      <div class="divider"></div>
+
+      <p style="font-size: 13px; color: #94a3b8; line-height: 1.7; text-align: center;">
+        This is an exciting milestone for WolvCapital and for every one of our investors. We are committed to transparency, security, and innovation — and WOLV Token is our biggest step yet toward putting the power of blockchain directly in your hands.
+        <br /><br />
+        <strong style="color: #0a0f1e;">Thank you for trusting WolvCapital.</strong>
+      </p>
+    </div>
+
+    <div class="footer">
+      <div class="footer-logo">Wolv<span>Capital</span></div>
+      <p>Professional Investment Platform · <a href="https://wolvcapital.com">wolvcapital.com</a></p>
+      <p style="margin-top: 12px;">© 2026 WolvCapital, Inc. All rights reserved.</p>
+      <p style="margin-top: 8px;">
+        <a href="https://wolvcapital.com/privacy">Privacy Policy</a> ·
+        <a href="https://wolvcapital.com/terms-of-service">Terms of Service</a> ·
+        <a href="https://bscscan.com/token/{{ contract_address }}">View on BSCScan</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

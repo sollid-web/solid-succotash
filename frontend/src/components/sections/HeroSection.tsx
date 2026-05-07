@@ -23,7 +23,7 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
           <div className="space-y-8">
             <div className="max-w-xl">
               <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1E3A8A]">
-                {t('hero.eyebrow')}
+                Blockchain-Verified Investment Returns
               </span>
             </div>
 
@@ -34,6 +34,14 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
             <p className="max-w-2xl text-base leading-7 text-slate-700 sm:text-lg">
               {t('hero.subtitle')}
             </p>
+
+            {/* Blockchain badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#eff6ff] border border-[#2A52BE]/20 rounded-full">
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-[12px] font-semibold text-[#1E3A8A]">
+                Every profit recorded on BNB Chain · Verified by anyone · Always transparent
+              </span>
+            </div>
 
             <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap items-start sm:items-center">
               <Link
@@ -57,6 +65,8 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
               <span>{t('hero.badge.custody')}</span>
               <span>|</span>
               <span>{t('hero.badge.fincen')}</span>
+              <span>|</span>
+              <span>BNB Blockchain Verified</span>
             </div>
           </div>
 
@@ -64,7 +74,7 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
             <div className="relative mx-auto h-[520px] max-w-[420px] overflow-hidden rounded-[16px] shadow-2xl shadow-slate-900/10">
               <img
                 src="/images/hero/home-hero.webp"
-                alt="WolvCapital professional investment management"
+                alt="WolvCapital blockchain-verified investment management platform"
                 className="h-full w-full object-cover object-top"
                 loading="eager"
                 decoding="async"

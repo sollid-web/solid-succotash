@@ -5,30 +5,30 @@ import { LocaleProvider } from '@/components/LocaleProvider'
 import { detectLocale } from '@/lib/detectLocale'
 
 export const metadata: Metadata = {
-  title: 'WolvCapital | Professionally Managed Digital Asset Portfolios',
+  title: 'WolvCapital | Blockchain-Verified Investment Returns',
   description:
-    'KYC-verified digital asset management with 1–2% annual fees, institutional custody via Coinbase, and transparent reporting. Audit-verified platform.',
+    'KYC-verified investment platform with blockchain-recorded profit distribution. Every return you earn is issued as WOLV — a verified BEP20 token on BNB Chain. Institutional custody, transparent fees, SEC-registered.',
   keywords:
-    'digital asset investment, cryptocurrency portfolio, managed investments, institutional custody, KYC compliant, crypto management, WolvCapital, audited platform',
+    'blockchain investment platform, verified investment returns, WOLV token, BEP20 investment token, on-chain profit distribution, KYC investment platform, transparent investment, blockchain verified returns, WolvCapital, digital asset management',
   openGraph: {
-    title: 'Professional Digital Asset Management | WolvCapital',
+    title: 'WolvCapital | Your Returns. Verified on the Blockchain.',
     description:
-      'Professionally managed cryptocurrency portfolios with KYC verification, institutional custody (Coinbase), and transparent fees.',
+      'Every profit you earn at WolvCapital is recorded permanently on the BNB blockchain as WOLV tokens — independently verifiable, immutable, and transparent.',
     images: [
       {
         url: '/og-images/home-og.png',
         width: 1200,
         height: 630,
-        alt: 'WolvCapital Professional Digital Asset Management Platform',
+        alt: 'WolvCapital — Blockchain-Verified Investment Returns',
       },
     ],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Professional Digital Asset Management | WolvCapital',
+    title: 'WolvCapital | Your Returns. Verified on the Blockchain.',
     description:
-      'Professionally managed cryptocurrency portfolios with KYC verification, institutional custody, and audited compliance.',
+      'KYC-verified investment platform where every profit is recorded on-chain as WOLV tokens. Transparent, immutable, independently verifiable.',
     images: ['/og-images/home-og.png'],
   },
 }

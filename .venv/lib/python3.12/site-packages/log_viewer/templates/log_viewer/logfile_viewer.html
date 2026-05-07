@@ -1,0 +1,193 @@
+{% extends "admin/base_site.html" %}
+{% load static i18n %}
+{% block title %}{% trans "Django Log Viewer" %} - {{ block.super }}{% endblock %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo;
+    <a href="{% url 'log_viewer:log_file_view' %}">{% if custom_file_list_title %}{{ custom_file_list_title }}{% else %}{% trans "Django Log Viewer" %}{% endif %}</a>
+  </div>
+{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'admin/css/changelists.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'log_viewer/css/jquery.dataTables.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'log_viewer/css/log-viewer.css' %}">
+
+  {% if custom_style_file %}
+    <link type="text/css" href="{{ custom_style_file }}" rel="stylesheet">
+  {% endif %}
+{% endblock %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <script src="{% static 'log_viewer/js/jquery.min.js' %}"></script>
+  <script src="{% static 'log_viewer/js/jquery.dataTables.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+  <div class="django__log__viewer ">
+    <div id="content-main">
+      <div class="module filtered" id="changelist">
+        <form id="changelist-form" class="changelist-form-container">
+          <div class="results">
+            <div class="headers">
+              <h1 class="pull-left">{% if custom_file_list_title %}{{ custom_file_list_title }}{% else %}{% trans "Django Log Viewer" %}{% endif %}</h1>
+              <div class="download-buttons">
+                <a href="{% url 'log_viewer:log_download_zip_view' %}" class="btn-download pull-right">{% trans "Download all Log Files" %}</a>
+                <a href="{% url 'log_viewer:log_download_file_view' %}" class="btn-download pull-right btn-download-this-log" style="display:none">{% trans "Download this Log File" %}</a>
+              </div>
+            </div>
+            <table id="log-entries" class="display" style="width:100%">
+              <thead>
+                <tr>
+                  <th scope="col">{% trans 'No.' %}</th>
+                  <th scope="col">{% trans 'Log entries' %}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td colspan="2">{% trans 'No entries!' %}</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+        <div id="changelist-filter">
+          <h2>{% trans 'Log Files' %}</h2>
+{#          <div id="log-files-list">#}
+{#          </div>#}
+            <table id="log-files-list" class="display" style="width:100%">
+              <tbody>
+                <tr><td colspan="2">{% trans 'No entries!' %}</td></tr>
+              </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var entityMap = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;',
+      '/': '&#x2F;',
+      '`': '&#x60;',
+      '=': '&#x3D;'
+    };
+    function escapeHtml (string) {
+      return String(string).replace(/[&<>"'`=\/]/g, function fromEntityMap (s) {
+        return entityMap[s];
+      });
+    }
+
+    function loadDataTable(table_name, url_json) {
+      $(table_name).DataTable({
+        pageLength: {{ page_length }},
+        columns: [{data: 0}, {data: 1}],
+        ajax: function (data, callback, settings) {
+          $.ajax({
+            type: 'get',
+            url: url_json,
+            success:function(response){
+                const new_logs = [];
+                var next_page = response.next_page || 1;
+
+                try {
+                    response.logs.forEach(function(text, numb, logs){
+                      text = escapeHtml(text);
+                      new_logs.push([numb+1, text]);
+                    });
+                } catch {
+                    console.warn("This log file doesn't exist");
+                }
+
+
+                callback({
+                  data: new_logs,
+                  recordsTotal: next_page,
+                  recordsFiltered: next_page
+                });
+            }
+          });
+        }
+      });
+    }
+
+    function loadDataTableFiles(table_name, url_json) {
+      $(table_name).DataTable({
+        pageLength: {{ files_per_page }},
+        columns: [{data: 1}],
+        ajax: function (data, callback, settings) {
+          $.ajax({
+            type: 'get',
+            url: url_json,
+            success:function(response){
+                const new_logs = [];
+                let next_page = response.next_page_files || 1;
+                response.log_files.forEach(function(logs, numb){
+                    const keys = Object.keys(logs);
+                    Object.entries(logs).forEach(([file_name, xtra]) => {
+                        logs = '<a class="btn-load-json-log" href="javascript:;" '+
+                                   'data-file-name="'+file_name+'" '+
+                                   'data-href="'+url_json+file_name+'">'+xtra.display+'</a>'
+                    });
+                    new_logs.push([numb+1, logs]);
+                });
+
+                callback({
+                  data: new_logs,
+                  recordsTotal: next_page,
+                  recordsFiltered: next_page
+                });
+            }
+          });
+        }
+      });
+    }
+
+    function loadDataTableTrigger(url_json) {
+      var table_name ='table#log-entries';
+      if (!$.fn.dataTable.isDataTable(table_name)) {
+        loadDataTable(table_name, url_json);
+      }else {
+        table_dt = $(table_name).DataTable();
+        table_dt.destroy();
+        loadDataTable(table_name, url_json);
+      }
+    }
+
+    $(document).ready(function() {
+        // just blank entry to get the `log_files`
+        var url_json = "{% url 'log_viewer:log_json_view' xxxxx %}";
+        var table_name ='table#log-files-list';
+        loadDataTableFiles(table_name, url_json);
+        let params = new URLSearchParams(window.location.search);
+        loadDataTableTrigger(params.get("file"))
+
+    });
+
+    $(document).on('click', '.btn-load-json-log', function(){
+        // console.log(this);
+        $(this).closest('#log-files-list').find('li').removeClass('selected');
+        $(this).closest('li').addClass('selected');
+        loadDataTableTrigger($(this).data('href'));
+
+        let btnDownloadSingleFile = $('.btn-download-this-log');
+        let file_name = $(this).data('file-name');
+        var href = btnDownloadSingleFile.attr('href');
+
+        if(href.indexOf('file_name') > -1) {
+          href = href.replace(/\bfile_name=(.*)\b/, 'file_name=' + file_name)
+        }else {
+          href = href + '?file_name='+ file_name
+        }
+
+        btnDownloadSingleFile.attr('href', href);
+        btnDownloadSingleFile.show();
+    });
+  </script>
+{% endblock%}

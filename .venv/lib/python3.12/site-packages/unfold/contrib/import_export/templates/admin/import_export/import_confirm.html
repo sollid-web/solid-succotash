@@ -1,0 +1,16 @@
+{% load admin_urls i18n import_export_tags unfold %}
+
+{% block confirm_import_form %}
+    <form action="{% url opts|admin_urlname:"process_import" %}" method="post">
+        {% csrf_token %}
+
+        {{ confirm_form.as_p }}
+
+        <div class="flex mb-3 gap-3 items-center">
+            {% trans "Below is a preview of data to be imported. If you are satisfied with the results, click 'Confirm import'" %}
+            {% component "unfold/components/button.html" with submit=1 variant="primary" class="ml-auto" %}
+                {% trans "Confirm import" %}
+            {% endcomponent %}
+        </div>
+    </form>
+{% endblock %}

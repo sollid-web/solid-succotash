@@ -1,0 +1,32 @@
+{% load unfold i18n %}
+
+{% block fields_help %}
+    {% capture as fields_help silent %}
+        {% if import_or_export == "export" %}
+            {% trans "This exporter will export the following fields: " %}
+        {% elif import_or_export == "import" %}
+            {% trans "This importer will import the following fields: " %}
+        {% endif %}
+
+        {% if fields_list|length <= 1 %}
+            <code>
+                {{ fields_list.0.1|join:", " }}
+            </code>
+        {% else %}
+            <div class="flex flex-col gap-1 mt-2">
+                {% for resource, fields in fields_list %}
+                    <div>
+                        <span class="font-semibold">{{ resource }}</span>:
+                        <code>
+                            {{ fields|join:", " }}
+                        </code>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endcapture %}
+
+    {% if fields_list|length > 0 %}
+        {% include "unfold/helpers/messages/info.html" with message=fields_help %}
+    {% endif %}
+{% endblock %}

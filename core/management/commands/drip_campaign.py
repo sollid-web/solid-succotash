@@ -203,7 +203,7 @@ class Command(BaseCommand):
 
             try:
                 # Use EmailService to send templated email
-                email_service = EmailService()
+                email_service = EmailService
                 context = {
                     "first_name": first_name,
                     "dashboard_url": "https://wolvcapital.com/dashboard",
@@ -218,7 +218,7 @@ class Command(BaseCommand):
 
                 email_service.send_template(
                     template_name=email_data["template"],
-                    email=user.email,
+                    to_emails=user.email,
                     context=context,
                     subject=email_data["subject"],
                 )

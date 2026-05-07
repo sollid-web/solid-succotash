@@ -19,7 +19,7 @@ const WOLV_ABI = [
   { name: 'balanceOf', type: 'function', stateMutability: 'view', inputs: [{ name: 'account', type: 'address' }], outputs: [{ name: '', type: 'uint256' }] },
 ] as const;
 
-type Tab = 'distribute' | 'batch' | 'reclaim' | 'emergency';
+type Tab = 'distribute' | 'batch' | 'reclaim' | 'emergency' | 'recipients';
 
 export default function WolvAdminPage() {
   const { address, isConnected } = useAccount();
@@ -32,6 +32,8 @@ export default function WolvAdminPage() {
   const [batchText, setBatchText] = useState('');
   const [reclaimAddress, setReclaimAddress] = useState('');
   const [reclaimAmount, setReclaimAmount] = useState('');
+  const [recipients, setRecipients] = useState<any[]>([]);
+  const [fetchingRecipients, setFetchingRecipients] = useState(false);
   const [loading, setLoading] = useState(false);
   const [txHash, setTxHash] = useState('');
   const [error, setError] = useState('');
@@ -100,10 +102,48 @@ export default function WolvAdminPage() {
     finally { setLoading(false); }
   };
 
+  const fetchRecipients = async () => {
+    reset(); setFetchingRecipients(true);
+    try {
+      const apiKey = '3SBN2Z1YZ56R7EGC7F391J3NNZV6ST55BN'; // BSCScan API key
+      const url = `https://api.bscscan.com/api?module=account&action=tokentx&contractaddress=${WOLV_CONTRACT}&address=0x0000000000000000000000000000000000000000&page=1&offset=10000&startblock=0&endblock=99999999&sort=desc&apikey=${apiKey}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data.status === '1') {
+        const transfers = data.result.filter((tx: any) => tx.from === '0x0000000000000000000000000000000000000000');
+        const agg: { [key: string]: { total: bigint, count: number, lastTx: number } } = {};
+        transfers.forEach((tx: any) => {
+          const addr = tx.to.toLowerCase();
+          const amt = BigInt(tx.value);
+          if (!agg[addr]) agg[addr] = { total: 0n, count: 0, lastTx: 0 };
+          agg[addr].total += amt;
+          agg[addr].count += 1;
+          const ts = Number(tx.timeStamp);
+          if (ts > agg[addr].lastTx) agg[addr].lastTx = ts;
+        });
+        const list = Object.entries(agg).map(([addr, data]) => ({
+          address: addr,
+          totalWolv: data.total,
+          txCount: data.count,
+          lastMint: new Date(data.lastTx * 1000).toLocaleDateString()
+        }));
+        setRecipients(list);
+        setSuccess(`✅ Found ${list.length} profit recipients`);
+      } else {
+        setError('Failed to fetch recipients: ' + data.message);
+      }
+    } catch (e: any) {
+      setError('Error fetching recipients: ' + e.message);
+    } finally {
+      setFetchingRecipients(false);
+    }
+  };
+
   const tabs: { id: Tab; label: string; icon: string }[] = [
     { id: 'distribute', label: 'Distribute', icon: '📤' },
     { id: 'batch', label: 'Batch', icon: '📦' },
     { id: 'reclaim', label: 'Reclaim', icon: '🔥' },
+    { id: 'recipients', label: 'Recipients', icon: '👥' },
     { id: 'emergency', label: 'Emergency', icon: '🛡️' },
   ];
 
@@ -216,6 +256,30 @@ export default function WolvAdminPage() {
               <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', textAlign: 'center' }}>
                 Status: <span style={{ color: isPaused ? '#ef4444' : '#10b981', fontWeight: 600 }}>{isPaused ? '⏸ Paused' : '✅ Active'}</span>
               </div>
+            </div>
+          )}
+
+          {tab === 'recipients' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)', borderRadius: '10px', padding: '12px 16px', fontSize: '13px', color: '#fbbf24' }}>
+                📊 Lists all wallets that received WOLV profits via minting. Click "Fetch" to load from blockchain.
+              </div>
+              <button onClick={fetchRecipients} disabled={fetchingRecipients} style={btnStyle('#1a8fc1')}>
+                {fetchingRecipients ? 'Fetching...' : '🔄 Fetch Recipients'}
+              </button>
+              {recipients.length > 0 && (
+                <div style={{ maxHeight: '400px', overflowY: 'auto', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', padding: '12px' }}>
+                  {recipients.map((r, i) => (
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                      <div>
+                        <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.6)', fontFamily: 'monospace' }}>{r.address.slice(0,6)}...{r.address.slice(-4)}</div>
+                        <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)' }}>Total: {parseFloat(formatUnits(r.totalWolv, 18)).toFixed(2)} WOLV | Txs: {r.txCount} | Last: {r.lastMint}</div>
+                      </div>
+                      <button onClick={() => { setInvestor(r.address); setTab('distribute'); }} style={{ ...btnStyle('#00a896'), marginTop: 0, padding: '6px 12px', fontSize: '12px' }}>Distribute</button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 

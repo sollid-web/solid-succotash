@@ -1,6 +1,0 @@
-Hi {{ first_name }},
-
-Our community is growing! 500+ investors have already deployed $2M+. 
-
-SEE THE STORIES:
-https://wolvcapital.com/dashboard/new-investment

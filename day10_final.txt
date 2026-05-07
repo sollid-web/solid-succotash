@@ -1,6 +1,0 @@
-Hi {{ first_name }},
-
-This is it. The best time to start was yesterday. The second best time is now.
-
-ACTIVATE YOUR ACCOUNT:
-https://wolvcapital.com/dashboard/new-investment

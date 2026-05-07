@@ -1,6 +1,0 @@
-Hi {{ first_name }},
-
-Security is our priority. We are SEC-Registered, FinCEN MSB Registered, and use 256-bit encryption.
-
-INVEST WITH CONFIDENCE:
-https://wolvcapital.com/dashboard/new-investment

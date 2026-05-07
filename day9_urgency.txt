@@ -1,6 +1,0 @@
-Hi {{ first_name }},
-
-Timing matters. The WOLV token contract is live. Be an early mover before the supply hits the 1 billion cap.
-
-CLAIM YOUR POSITION:
-https://wolvcapital.com/dashboard/new-investment

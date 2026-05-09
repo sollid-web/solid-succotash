@@ -16,6 +16,7 @@ const NAV_LINKS = [
   { href: "/dashboard/deposit", label: "Deposit" },
   { href: "/dashboard/withdraw", label: "Withdraw" },
   { href: "/dashboard/new-investment", label: "Invest" },
+  { href: "/dashboard/stake", label: "⬡ Stake WOLV" },
   { href: "/wolv-token", label: "WOLV Token" },
   { href: "/dashboard/transactions", label: "Transactions" },
   { href: "/dashboard/support", label: "Support" },

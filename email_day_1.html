@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<style>
+  body { background:#f0f4f8; font-family:'Segoe UI',Arial,sans-serif; padding:40px 20px; }
+  .email { background:#fff; border-radius:20px; box-shadow:0 8px 40px rgba(0,0,0,0.1); max-width:600px; margin:auto; overflow:hidden; }
+  .header { padding:48px 40px; text-align:center; background:linear-gradient(135deg,#0a0f1e,#1a3a8f,#00a896); color:#fff; }
+  .body { padding:36px 40px; color:#475569; line-height:1.8; }
+  .cta { display:inline-block; color:#fff; text-decoration:none; padding:15px 36px; border-radius:12px; background:#00a896; font-weight:700; }
+</style>
+</head>
+<body>
+  <div class="email">
+    <div class="header">
+      <h2>You Made a Smart Move.</h2>
+      <p>Welcome to WolvCapital</p>
+    </div>
+    <div class="body">
+      <p>Hi {{ first_name }},</p>
+      <p>Welcome to WolvCapital—where your money works harder than you do.</p>
+      <div style="text-align:center; margin:30px 0;">
+        <a href="https://wolvcapital.com/dashboard" class="cta">Explore Your Dashboard →</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

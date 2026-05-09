@@ -9,6 +9,7 @@ const POOL_CONTRACT    = '0xb233cf74b14abf9d9702d585c540030125599579';
 const STAKING_CONTRACT = '0x4b62efee5695ed55cd362a0b818f4c5f9694322b';
 const BSCSCAN_URL      = `https://bscscan.com/token/${WOLV_CONTRACT}`;
 
+<<<<<<< HEAD
 // ── Brand colours ─────────────────────────────────────────────────────────────
 const B = {
   blue:       '#2A52BE',
@@ -33,6 +34,10 @@ function CopyButton({ text }: { text: string }) {
     </button>
   );
 }
+=======
+const WOLV_CONTRACT = '0xe0167279aef7bf4ad313d261da82e8366822270c';
+const BSCSCAN_URL = `https://bscscan.com/token/${WOLV_CONTRACT}`;
+>>>>>>> dd97181fee8a3905f7299b17a0c786a52dcff174
 
 export default function WolvTokenPage() {
   return (

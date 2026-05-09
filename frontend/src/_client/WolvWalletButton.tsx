@@ -5,7 +5,7 @@ import { formatUnits } from 'viem';
 import { useState } from 'react';
 import { WalletConnectQR } from '../components/WalletConnectQR';
 
-const WOLV_CONTRACT = '0xbcb3d35bcbbd141f1955aaf8f51b48b801b117bf';
+const WOLV_CONTRACT = '0xe0167279aef7bf4ad313d261da82e8366822270c';
 const WOLV_DECIMALS = 18;
 const PRICE_PER_WOLV = 1; // 1 WOLV = $1
 

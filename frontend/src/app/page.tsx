@@ -5,30 +5,30 @@ import { LocaleProvider } from '@/components/LocaleProvider'
 import { detectLocale } from '@/lib/detectLocale'
 
 export const metadata: Metadata = {
-  title: 'WolvCapital | Blockchain-Verified Investment Returns',
+  title: 'WolvCapital | Invest, Stake & Earn Blockchain-Verified Returns',
   description:
-    'KYC-verified investment platform with blockchain-recorded profit distribution. Every return you earn is issued as WOLV — a verified BEP20 token on BNB Chain. Institutional custody, transparent fees, SEC-registered.',
+    'KYC-verified investment platform with on-chain profit distribution and WOLV staking. Earn 8–25% APY, stake BNB or BUSD, and receive WOLV tokens — verified permanently on BNB Chain. SEC-registered, institutional custody.',
   keywords:
-    'blockchain investment platform, verified investment returns, WOLV token, BEP20 investment token, on-chain profit distribution, KYC investment platform, transparent investment, blockchain verified returns, WolvCapital, digital asset management',
+    'blockchain investment platform, WOLV staking, BNB staking, BUSD staking, verified investment returns, on-chain profit distribution, WOLV token, BEP20 investment token, KYC investment platform, transparent investment, blockchain verified returns, WolvCapital, crypto staking rewards, digital asset management, stake BNB earn rewards',
   openGraph: {
-    title: 'WolvCapital | Your Returns. Verified on the Blockchain.',
+    title: 'WolvCapital | Invest, Stake & Earn — Verified on BNB Chain',
     description:
-      'Every profit you earn at WolvCapital is recorded permanently on the BNB blockchain as WOLV tokens — independently verifiable, immutable, and transparent.',
+      'Stake BNB or BUSD and earn WOLV rewards on-chain. Every return is recorded permanently on the BNB blockchain — independently verifiable, immutable, and transparent.',
     images: [
       {
         url: '/og-images/home-og.png',
         width: 1200,
         height: 630,
-        alt: 'WolvCapital — Blockchain-Verified Investment Returns',
+        alt: 'WolvCapital — Blockchain-Verified Investment & Staking Platform',
       },
     ],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'WolvCapital | Your Returns. Verified on the Blockchain.',
+    title: 'WolvCapital | Invest, Stake & Earn — Verified on BNB Chain',
     description:
-      'KYC-verified investment platform where every profit is recorded on-chain as WOLV tokens. Transparent, immutable, independently verifiable.',
+      'Stake BNB or BUSD, earn 8–25% APY in WOLV tokens. KYC-verified platform with on-chain proof of every return. Transparent, immutable, verifiable.',
     images: ['/og-images/home-og.png'],
   },
 }

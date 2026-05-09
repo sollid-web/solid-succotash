@@ -23,7 +23,7 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
           <div className="space-y-8">
             <div className="max-w-xl">
               <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1E3A8A]">
-                Blockchain-Verified Investment Returns
+                Invest · Stake · Earn — All On-Chain
               </span>
             </div>
 
@@ -35,12 +35,28 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
               {t('hero.subtitle')}
             </p>
 
-            {/* Blockchain badge */}
+            {/* Live blockchain badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#eff6ff] border border-[#2A52BE]/20 rounded-full">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
               <span className="text-[12px] font-semibold text-[#1E3A8A]">
-                Every profit recorded on BNB Chain · Verified by anyone · Always transparent
+                Every profit recorded on BNB Chain · Stake BNB or BUSD · Earn WOLV rewards
               </span>
+            </div>
+
+            {/* Staking APY pills */}
+            <div className="flex flex-wrap gap-2">
+              {[
+                { plan: 'Pioneer',    apy: '8%',  days: '90d' },
+                { plan: 'Vanguard',   apy: '12%', days: '150d' },
+                { plan: 'Horizon',    apy: '18%', days: '180d' },
+                { plan: 'Summit VIP', apy: '25%', days: '365d' },
+              ].map(p => (
+                <div key={p.plan} className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm">
+                  <span className="text-[11px] font-semibold text-[#0F172A]">{p.plan}</span>
+                  <span className="text-[11px] font-bold text-[#2A52BE]">{p.apy} APY</span>
+                  <span className="text-[10px] text-slate-400">{p.days}</span>
+                </div>
+              ))}
             </div>
 
             <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap items-start sm:items-center">
@@ -66,7 +82,7 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
               <span>|</span>
               <span>{t('hero.badge.fincen')}</span>
               <span>|</span>
-              <span>BNB Blockchain Verified</span>
+              <span>BNB Chain Verified</span>
             </div>
           </div>
 
@@ -74,7 +90,7 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
             <div className="relative mx-auto h-[520px] max-w-[420px] overflow-hidden rounded-[16px] shadow-2xl shadow-slate-900/10">
               <img
                 src="/images/hero/home-hero.webp"
-                alt="WolvCapital blockchain-verified investment management platform"
+                alt="WolvCapital blockchain investment and staking platform — earn WOLV rewards"
                 className="h-full w-full object-cover object-top"
                 loading="eager"
                 decoding="async"

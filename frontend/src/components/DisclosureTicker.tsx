@@ -2,7 +2,7 @@
 
 import './DisclosureTicker.css'
 
-const tickerText = "WolvCapital is an SEC-registered investment adviser. View our disclosures for details on fees and services. Digital assets are speculative and involve high risk, including loss of principal. KYC required."
+const tickerText = "Stake BNB or BUSD on verified smart contracts. Earn WOLV rewards on BNB Chain. Principal at risk. KYC required."
 
 export default function DisclosureTicker() {
   return (

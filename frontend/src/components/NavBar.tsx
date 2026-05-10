@@ -27,7 +27,7 @@ export default function NavBar() {
         <div className="flex items-center justify-between h-[68px]">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 flex-shrink-0 hover:opacity-90 transition-opacity">
-            <div className="w-2 h-2 bg-[#2A52BE] rounded-sm"></div>
+            <img src="/wolv-icon.svg" alt="WolvCapital" width={32} height={32} style={{ borderRadius: "50%" }} />
             <span className="text-xl font-bold text-[#0F172A]">WolvCapital</span>
           </Link>
 

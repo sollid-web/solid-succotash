@@ -18,6 +18,7 @@ export default function NavBar() {
     { href: '/tokenomics', label: 'Tokenomics' },
     { href: '/roadmap', label: 'Roadmap' },
     { href: '/whitepaper', label: 'Whitepaper' },
+    { href: '/whitepaper', label: 'Whitepaper' },
     { href: '#plans', labelKey: 'nav.plans' },
     { href: '#compliance', labelKey: 'nav.compliance' },
     { href: '/blog', labelKey: 'nav.blog' },

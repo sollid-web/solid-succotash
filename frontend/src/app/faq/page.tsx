@@ -1,268 +1,433 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import { Shield, Lock, TrendingUp, Clock, CreditCard, HelpCircle, Users, FileCheck, Globe, Coins, Wallet, BarChart3 } from 'lucide-react'
+import type { Metadata } from "next";
+import Link from "next/link";
 
-export default function FAQPage(): JSX.Element {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, '') ?? 'https://wolvcapital.com'
-  const canonicalUrl = `${baseUrl}/faq`
+export const metadata: Metadata = {
+  title: "FAQ — WolvCapital | Frequently Asked Questions",
+  description:
+    "Answers to the most common questions about WolvCapital — investment plans, WOLV token, staking, withdrawals, KYC, security, and compliance.",
+  keywords:
+    "WolvCapital FAQ, WOLV token questions, staking FAQ, investment platform FAQ, digital asset investment questions, withdrawal process, KYC verification",
+  openGraph: {
+    title: "FAQ — WolvCapital",
+    description:
+      "Everything you need to know about investing, staking, and earning WOLV on WolvCapital.",
+    url: "https://wolvcapital.com/faq",
+    siteName: "WolvCapital",
+    type: "website",
+  },
+};
 
-  const faqs = [
-    // ── Account & Getting Started ──────────────────────────────────────────
-    {
-      icon: <Users className="w-6 h-6" />,
-      color: "blue",
-      category: "Getting Started",
-      question: "How do I sign up?",
-      answer: "Click 'Sign Up' in the header, provide a valid email and password, then verify your account via the confirmation email. KYC verification may be required before making deposits."
-    },
-    {
-      icon: <CreditCard className="w-6 h-6" />,
-      color: "green",
-      category: "Getting Started",
-      question: "What deposit methods are supported?",
-      answer: "We accept major cryptocurrencies including Bitcoin (BTC), Ethereum (ETH), USDT (TRC20/ERC20), and other supported digital assets. Full details appear on your deposit page once logged in."
-    },
-    {
-      icon: <TrendingUp className="w-6 h-6" />,
-      color: "purple",
-      category: "Investment Plans",
-      question: "What are the investment plans?",
-      answer: "WolvCapital offers four managed investment plans: Pioneer ($100 min, 90 days), Vanguard ($1,000 min, 150 days), Horizon ($5,000 min, 180 days), and Summit VIP ($15,000 min, 365 days). Each plan has a fixed lock period and defined returns."
-    },
-    {
-      icon: <Clock className="w-6 h-6" />,
-      color: "amber",
-      category: "Withdrawals",
-      question: "How long do withdrawals take?",
-      answer: "Withdrawal processing typically takes 24–72 hours after approval. Profit withdrawals are available at the end of your active investment plan. Processing time depends on network conditions and verification requirements."
-    },
-    {
-      icon: <Shield className="w-6 h-6" />,
-      color: "red",
-      category: "Withdrawals",
-      question: "Why are withdrawals manually reviewed?",
-      answer: "Manual review prevents fraudulent or unauthorised transfers and protects the entire user base. Our compliance team verifies account ownership, transaction integrity, and AML/KYC requirements before approval."
-    },
-    {
-      icon: <FileCheck className="w-6 h-6" />,
-      color: "indigo",
-      category: "Withdrawals",
-      question: "Are there fees for withdrawals?",
-      answer: "Network transaction fees apply depending on the blockchain used. Any additional platform fees are clearly disclosed before you confirm your withdrawal request. No hidden charges."
-    },
+const CATEGORIES = [
+  {
+    id: "getting-started",
+    label: "Getting Started",
+    icon: "🚀",
+    questions: [
+      {
+        q: "What is WolvCapital?",
+        a: "WolvCapital is a professionally managed digital asset investment platform. Investors deposit funds, choose a structured investment plan, and earn daily ROI — tracked live on a personal dashboard. Profits are distributed as WOLV tokens on BNB Smart Chain, giving every investor verifiable, blockchain-backed proof of their earnings.",
+      },
+      {
+        q: "How do I create an account?",
+        a: "Click Sign Up on the top right of any page. Enter your email and password, verify your email address, then complete KYC identity verification. Once KYC is approved, your dashboard is fully activated and you can make your first deposit.",
+      },
+      {
+        q: "What is the minimum investment?",
+        a: "The minimum is $100 on the Pioneer plan — our entry-level tier. Higher tiers start at $1,000 (Vanguard), $5,000 (Horizon), and $10,000 (Summit VIP). We recommend starting with Pioneer to familiarize yourself with the platform before committing larger capital.",
+      },
+      {
+        q: "Is WolvCapital available in my country?",
+        a: "WolvCapital serves investors globally. However, availability may be restricted based on local regulations in some jurisdictions. Complete KYC verification — the system will confirm your eligibility based on your country of residence during the verification process.",
+      },
+      {
+        q: "Do I need crypto experience to use WolvCapital?",
+        a: "No. WolvCapital is designed for both crypto-native and traditional investors. The dashboard is straightforward — deposit, choose a plan, and track returns. For WOLV Token features, a basic MetaMask or Trust Wallet is helpful but optional for the core investment experience.",
+      },
+    ],
+  },
+  {
+    id: "investment-plans",
+    label: "Investment Plans",
+    icon: "📊",
+    questions: [
+      {
+        q: "What investment plans are available?",
+        a: "WolvCapital offers four plans: Pioneer ($100 min · 1% daily ROI · 90 days), Vanguard ($1,000 min · higher ROI · 150 days), Horizon ($5,000 min · premium ROI · 180 days), and Summit VIP ($10,000 min · maximum ROI · 365 days). Each plan has a fixed term and structured daily return.",
+      },
+      {
+        q: "Are returns guaranteed?",
+        a: "No investment platform can legally guarantee returns. WolvCapital's structured daily ROI figures represent targets based on our portfolio management strategy and historical performance. Digital asset investments carry inherent risk including potential loss of principal. Please read our full Risk Disclosure before investing.",
+      },
+      {
+        q: "Can I run multiple plans simultaneously?",
+        a: "Yes. You can invest in multiple plans across different tiers at the same time. Each plan runs independently with its own term, ROI, and maturity date. This allows you to diversify your investment across timeframes and risk levels.",
+      },
+      {
+        q: "What happens when my plan matures?",
+        a: "When a plan reaches its maturity date, your principal and accumulated returns become available. You can withdraw the full amount, reinvest into a new plan, or do a combination of both. Your dashboard will notify you when a plan is approaching maturity.",
+      },
+      {
+        q: "Can I withdraw before my plan matures?",
+        a: "Plans operate on fixed terms and early withdrawal is subject to compliance review. We recommend only investing capital you do not require access to during the plan term. This is disclosed clearly before any investment is confirmed.",
+      },
+    ],
+  },
+  {
+    id: "wolv-token",
+    label: "WOLV Token",
+    icon: "🪙",
+    questions: [
+      {
+        q: "What is WOLV Token?",
+        a: "WOLV is a BEP-20 token on BNB Smart Chain issued by WolvCapital as verifiable, on-chain proof of investor profits. Every dollar you earn on WolvCapital is distributed as WOLV tokens directly to your connected wallet — creating a permanent, publicly auditable record on the blockchain.",
+      },
+      {
+        q: "How do I receive WOLV tokens?",
+        a: "Log into your dashboard, scroll to the WOLV Token section, and click Connect Wallet. Connect your MetaMask or Trust Wallet, then click Add WOLV to Wallet. WOLV tokens will be sent to your wallet address when profits are distributed. No manual contract address entry is needed.",
+      },
+      {
+        q: "What is the total supply of WOLV?",
+        a: "WOLV has a fixed total supply of 1,000,000,000 (one billion) tokens. All tokens were minted to the WolvCapital treasury at deployment — no additional tokens can ever be created. The contract contains no mint function. This is verifiable on BSCScan at contract 0xe0167279aef7bf4ad313d261da82e8366822270c.",
+      },
+      {
+        q: "Is WOLV tradeable on exchanges?",
+        a: "Not yet. WOLV is currently earned exclusively through WolvCapital investment returns and staking rewards. WolvCapital plans to add WOLV liquidity on PancakeSwap and apply for CoinGecko and CoinMarketCap listings in Q3 2026. Early investors earning WOLV now will hold tokens before exchange listing.",
+      },
+      {
+        q: "Can I verify my WOLV balance independently?",
+        a: "Yes. Your WOLV balance is always publicly verifiable on BSCScan. Go to bscscan.com, paste the WOLV contract address (0xe0167279aef7bf4ad313d261da82e8366822270c), click Token Holders, and find your wallet address. Your balance is on-chain and cannot be altered by anyone.",
+      },
+      {
+        q: "Why does my wallet show a security warning for WOLV?",
+        a: "Some wallet security scanners (like Blockaid) flag newly deployed tokens with low transaction history. This is a standard warning for new tokens — not an indicator of malicious code. WOLV scored 87/100 on SolidityScan audit and has no malicious functions. The warning will reduce as transaction history and liquidity grow. You can verify the contract source code yourself on BSCScan.",
+      },
+    ],
+  },
+  {
+    id: "staking",
+    label: "Staking",
+    icon: "⬡",
+    questions: [
+      {
+        q: "What is WOLV staking?",
+        a: "WOLV staking allows you to deposit your WOLV tokens into WolvCapital's audited staking contracts and earn additional APY rewards. It's a way to compound your investment earnings — the WOLV you earn from investment plans can be staked to generate further returns.",
+      },
+      {
+        q: "What staking tiers are available?",
+        a: "Four staking tiers are available: Starter (8% APY · 30-day lock), Growth (12% APY · 60-day lock), Pro (18% APY · 90-day lock), and Elite (25% APY · 180-day lock). Higher tiers offer better APY in exchange for longer lock periods.",
+      },
+      {
+        q: "How are staking rewards calculated?",
+        a: "Staking rewards are calculated using Chainlink price feeds integrated into the StakingContract. Chainlink's decentralized oracle network provides manipulation-resistant price data, ensuring APY calculations are fair and cannot be gamed by any single party.",
+      },
+      {
+        q: "Is the staking reward pool safe?",
+        a: "Yes. The RewardPool contract (0xb233cf74b14abf9d9702d585c540030125599579) is protected by a 48-hour timelock. No funds can be moved from the pool without a 48-hour delay — this prevents sudden unauthorized withdrawals. The pool balance is publicly visible on BSCScan at all times.",
+      },
+      {
+        q: "How do I start staking?",
+        a: "Log into your dashboard and click Stake WOLV in the navigation. Connect your wallet, select a staking tier, enter the amount of WOLV to stake, and confirm the transaction in MetaMask or Trust Wallet. Your stake is immediately active and rewards begin accruing.",
+      },
+      {
+        q: "Can I unstake early?",
+        a: "Each staking tier has a lock period. Unstaking before the lock period expires may result in forfeiture of accumulated rewards, depending on the tier terms. Full terms are displayed before you confirm any stake. We recommend staking only WOLV you do not need access to during the lock period.",
+      },
+      {
+        q: "Are the staking contracts audited?",
+        a: "Both the StakingContract and RewardPool are verified on BSCScan with public source code. The WOLV token contract scored 87/100 on SolidityScan. A full independent third-party audit of the staking contracts is planned for Q3 2026.",
+      },
+    ],
+  },
+  {
+    id: "withdrawals",
+    label: "Withdrawals",
+    icon: "💸",
+    questions: [
+      {
+        q: "How do I withdraw my funds?",
+        a: "Log into your dashboard, go to Withdraw, enter your destination wallet address and the amount, then submit the request. Your request enters the compliance review queue. Once approved, the payout is released to your wallet. Processing times vary by tier.",
+      },
+      {
+        q: "Why are withdrawals reviewed manually?",
+        a: "Every withdrawal undergoes manual human review to confirm account ownership, verify the destination address, and screen for AML compliance. This protects you from unauthorized transfers and ensures every payout goes to the correct wallet. It is a security feature, not a restriction.",
+      },
+      {
+        q: "How long do withdrawals take?",
+        a: "Standard withdrawal processing is typically completed within 1–5 business days after approval. Summit VIP investors receive priority processing. Once released, on-chain confirmation time depends on BNB Smart Chain network conditions — usually under 30 seconds.",
+      },
+      {
+        q: "What is the minimum withdrawal amount?",
+        a: "Minimum withdrawal amounts vary by plan tier. Details are displayed in your dashboard when submitting a withdrawal request. Network transaction fees are separate from platform minimums and depend on current BNB gas prices.",
+      },
+    ],
+  },
+  {
+    id: "security-compliance",
+    label: "Security & Compliance",
+    icon: "🛡️",
+    questions: [
+      {
+        q: "Is WolvCapital regulated?",
+        a: "Yes. WolvCapital is registered as an investment adviser with the U.S. Securities and Exchange Commission (SEC) and as a Money Services Business (MSB) with FinCEN. Full KYC/AML procedures are enforced on all accounts. Compliance disclosures are published at wolvcapital.com/compliance.",
+      },
+      {
+        q: "How are my funds protected?",
+        a: "Investor funds are held with licensed institutional custodians — not on the WolvCapital platform directly. This separates your assets from platform operations. Additionally, all platform connections are protected by 256-bit SSL encryption and all accounts require KYC verification.",
+      },
+      {
+        q: "What is KYC and why is it required?",
+        a: "KYC (Know Your Customer) is an identity verification process required by financial regulations globally. It protects you and the platform from fraud, money laundering, and unauthorized account access. Without KYC completion, deposits and withdrawals are not permitted.",
+      },
+      {
+        q: "What happens if I suspect unauthorized activity?",
+        a: "Contact our security team immediately at support via the dashboard or through wolvcapital.com/contact. Do not attempt any transactions. Our team will freeze your account pending investigation. We also recommend immediately changing your password and enabling two-factor authentication.",
+      },
+      {
+        q: "Has WolvCapital been audited?",
+        a: "The WOLV token smart contract has been analyzed on SolidityScan (score: 87/100). A full independent third-party security audit of the staking contracts is planned for Q3 2026. All smart contract source code is public and verifiable on BSCScan.",
+      },
+    ],
+  },
+  {
+    id: "virtual-card",
+    label: "Virtual Card",
+    icon: "💳",
+    questions: [
+      {
+        q: "What is the WolvCapital Virtual Card?",
+        a: "The WolvCapital Virtual Visa Infinite Card allows you to spend your investment earnings directly — on Netflix, Spotify, Amazon, Apple Pay, Google Pay, Steam, Shopify, and 100+ other merchants worldwide. It is linked to your portfolio balance and available to all active investors.",
+      },
+      {
+        q: "How do I get the Virtual Card?",
+        a: "The Virtual Card is activated when you have an active investment plan. Log into your dashboard and click Virtual Card in the navigation. Your card details are generated automatically — no application or credit check required.",
+      },
+      {
+        q: "Where can I use the Virtual Card?",
+        a: "The card is accepted anywhere Visa is accepted — online globally. It works with Apple Pay and Google Pay for contactless payments. A full list of supported merchants is available in your dashboard under the Virtual Card section.",
+      },
+    ],
+  },
+];
 
-    // ── WOLV Token ─────────────────────────────────────────────────────────
-    {
-      icon: <Coins className="w-6 h-6" />,
-      color: "teal",
-      category: "WOLV Token",
-      question: "What is the WOLV token?",
-      answer: "WOLV is WolvCapital's native BEP-20 profit token on BNB Smart Chain. It has a fixed supply of 1 billion tokens minted at deployment — no additional tokens can ever be created. 1 WOLV = $1 USD."
-    },
-    {
-      icon: <Wallet className="w-6 h-6" />,
-      color: "emerald",
-      category: "WOLV Token",
-      question: "How do I earn WOLV tokens?",
-      answer: "Two ways: (1) Stake BNB or BUSD in our audited smart contracts to earn WOLV rewards at 8–25% APY based on your chosen plan. (2) Invest in a managed portfolio plan — when profits are distributed, WOLV is sent to your connected wallet as verifiable proof of earnings."
-    },
-    {
-      icon: <BarChart3 className="w-6 h-6" />,
-      color: "violet",
-      category: "WOLV Token",
-      question: "What is WOLV staking?",
-      answer: "Staking lets you deposit BNB or BUSD into our on-chain smart contracts and earn WOLV rewards. Plans range from 90 to 365 days with APY of 8% to 25%. Rewards are calculated by the smart contract formula: (Stake USD × APY × Lock Days) ÷ 365."
-    },
-    {
-      icon: <Shield className="w-6 h-6" />,
-      color: "blue",
-      category: "WOLV Token",
-      question: "Are the staking contracts safe?",
-      answer: "All three contracts (WOLV Token, Reward Pool, Staking Contract) are publicly verified on BSCScan and Sourcify. The reward pool has a 48-hour timelock — no funds can be moved without advance on-chain notice. BNB pricing uses Chainlink oracles. A full third-party audit is scheduled for Q3 2026."
-    },
-    {
-      icon: <Clock className="w-6 h-6" />,
-      color: "pink",
-      category: "WOLV Token",
-      question: "Can I exit a staking position early?",
-      answer: "Yes. You can exit early at any time, but an exit fee applies to your principal: 2.0% (Pioneer), 2.5% (Vanguard), 3.0% (Horizon), or 3.5% (Summit VIP). No WOLV rewards are paid on early exits — only principal minus fee is returned."
-    },
-    {
-      icon: <Coins className="w-6 h-6" />,
-      color: "orange",
-      category: "WOLV Token",
-      question: "Where can I see the reward pool balance?",
-      answer: "The reward pool is publicly visible on BSCScan at 0xb233cf74b14abf9d9702d585c540030125599579. Anyone can check the available WOLV balance before staking. The pool is funded periodically by the WolvCapital treasury."
-    },
-
-    // ── Security & Compliance ──────────────────────────────────────────────
-    {
-      icon: <Lock className="w-6 h-6" />,
-      color: "cyan",
-      category: "Security",
-      question: "How is my account secured?",
-      answer: "We use 256-bit SSL encryption, optional two-factor authentication (2FA), 24/7 fraud monitoring, and KYC/AML compliance. Smart contract funds are protected by a 48-hour timelock and Chainlink price oracles."
-    },
-    {
-      icon: <Globe className="w-6 h-6" />,
-      color: "indigo",
-      category: "Compliance",
-      question: "Which countries are supported?",
-      answer: "WolvCapital serves investors from 120+ countries worldwide. Certain jurisdictions with regulatory restrictions may not be supported. Check our Terms of Service for details."
-    },
-    {
-      icon: <HelpCircle className="w-6 h-6" />,
-      color: "purple",
-      category: "Compliance",
-      question: "Is WolvCapital regulated?",
-      answer: "WolvCapital follows global compliance standards including KYC, AML, and PCI-DSS. Our smart contracts are publicly verifiable on BSCScan. Please review our Risk Disclosure and legal pages for complete information."
-    },
-    {
-      icon: <Users className="w-6 h-6" />,
-      color: "green",
-      category: "Referrals",
-      question: "How does the referral program work?",
-      answer: "Share your unique referral link with friends. When they sign up and make an active investment, you earn commission rewards. All referral payouts are manually reviewed and require admin approval."
-    },
-    {
-      icon: <HelpCircle className="w-6 h-6" />,
-      color: "red",
-      category: "Support",
-      question: "How do I contact support?",
-      answer: "Email support@mail.wolvcapital.com or use the contact form on our Contact page. Our support team is available 24/7 to assist with account issues, technical questions, or investment inquiries."
-    },
-  ]
-
-  const colorClasses: Record<string, {bg: string, text: string, border: string}> = {
-    blue:    { bg: "bg-blue-50",    text: "text-blue-600",    border: "border-blue-200" },
-    green:   { bg: "bg-green-50",   text: "text-green-600",   border: "border-green-200" },
-    purple:  { bg: "bg-purple-50",  text: "text-purple-600",  border: "border-purple-200" },
-    red:     { bg: "bg-red-50",     text: "text-red-600",     border: "border-red-200" },
-    amber:   { bg: "bg-amber-50",   text: "text-amber-600",   border: "border-amber-200" },
-    indigo:  { bg: "bg-indigo-50",  text: "text-indigo-600",  border: "border-indigo-200" },
-    teal:    { bg: "bg-teal-50",    text: "text-teal-600",    border: "border-teal-200" },
-    pink:    { bg: "bg-pink-50",    text: "text-pink-600",    border: "border-pink-200" },
-    orange:  { bg: "bg-orange-50",  text: "text-orange-600",  border: "border-orange-200" },
-    emerald: { bg: "bg-emerald-50", text: "text-emerald-600", border: "border-emerald-200" },
-    violet:  { bg: "bg-violet-50",  text: "text-violet-600",  border: "border-violet-200" },
-    cyan:    { bg: "bg-cyan-50",    text: "text-cyan-600",    border: "border-cyan-200" },
-  }
-
-  // Group by category
-  const categories = [...new Set(faqs.map(f => f.category))]
-
+export default function FAQPage() {
   return (
-    <div className="min-h-screen relative">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'FAQPage',
-            mainEntity: faqs.map(f => ({
-              '@type': 'Question',
-              name: f.question,
-              acceptedAnswer: { '@type': 'Answer', text: f.answer },
-            })),
-          }),
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#0a0f1e",
+        fontFamily: "'DM Sans', system-ui, sans-serif",
+        color: "#fff",
+      }}
+    >
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap');
+        details { border-bottom: 1px solid rgba(255,255,255,0.06); }
+        details:last-child { border-bottom: none; }
+        summary { padding: 18px 0; cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 15px; font-weight: 600; color: #fff; user-select: none; }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: '+'; font-size: 20px; color: rgba(255,255,255,0.3); flex-shrink: 0; transition: transform 0.2s; }
+        details[open] summary::after { content: '−'; color: #93c5fd; }
+        details[open] summary { color: #93c5fd; }
+        .answer { padding: 0 0 18px; font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.8; }
+        .cat-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; padding: 28px 32px; margin-bottom: 16px; }
+        .cat-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .cat-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(42,82,190,0.15); border: 1px solid rgba(42,82,190,0.25); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+      `}</style>
+
+      {/* Hero */}
+      <section
+        style={{
+          padding: "100px 24px 56px",
+          textAlign: "center",
+          background:
+            "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(42,82,190,0.12) 0%, transparent 70%)",
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
         }}
-      />
-
-      {/* Background */}
-      <div className="fixed inset-0 z-0">
-        <Image src="/images/legal/home-hero.png" alt="WolvCapital FAQ" fill priority className="object-cover object-center" quality={90} />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/75 to-black/85" />
-      </div>
-
-      {/* Content */}
-      <div className="relative z-10 min-h-screen py-20 px-4">
-        <div className="max-w-6xl mx-auto">
-
-          {/* Hero */}
-          <div className="text-center mb-16">
-            <Link href="/" className="inline-block mb-8">
-              <Image src="/wolv-icon.svg" alt="WolvCapital" width={56} height={56} style={{ borderRadius: '50%' }} />
-            </Link>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white drop-shadow-2xl mb-6">
-              Frequently Asked Questions
-            </h1>
-            <p className="text-xl md:text-2xl text-white/80 drop-shadow-lg max-w-3xl mx-auto leading-relaxed">
-              Everything you need to know about WolvCapital — investment plans, WOLV staking, security, and platform operations.
-            </p>
-
-            {/* Category pills */}
-            <div className="flex flex-wrap gap-2 justify-center mt-8">
-              {categories.map(c => (
-                <span key={c} className="px-4 py-2 rounded-full text-xs font-bold bg-white/10 border border-white/20 text-white">
-                  {c}
-                </span>
-              ))}
-            </div>
+      >
+        <div style={{ maxWidth: "600px", margin: "0 auto" }}>
+          <div
+            style={{
+              display: "inline-block",
+              background: "rgba(42,82,190,0.15)",
+              border: "1px solid rgba(42,82,190,0.4)",
+              borderRadius: "99px",
+              padding: "5px 16px",
+              fontSize: "11px",
+              color: "#93c5fd",
+              fontWeight: 700,
+              letterSpacing: "2px",
+              textTransform: "uppercase",
+              marginBottom: "20px",
+            }}
+          >
+            Support
           </div>
-
-          {/* FAQ by category */}
-          {categories.map(cat => (
-            <div key={cat} className="mb-12">
-              <h2 className="text-white font-bold text-lg mb-4 flex items-center gap-2">
-                <span className="w-1 h-5 bg-[#2A52BE] rounded-full inline-block" />
-                {cat}
-              </h2>
-              <div className="grid md:grid-cols-2 gap-5">
-                {faqs.filter(f => f.category === cat).map((faq, i) => {
-                  const colors = colorClasses[faq.color]
-                  return (
-                    <div key={i} className={`backdrop-blur-xl bg-white/95 rounded-2xl shadow-xl p-6 border ${colors.border} hover:shadow-2xl transition-all duration-300 hover:scale-[1.02]`}>
-                      <div className="flex items-start gap-4 mb-3">
-                        <div className={`${colors.bg} ${colors.text} p-3 rounded-xl flex-shrink-0`}>{faq.icon}</div>
-                        <h3 className="text-lg font-bold text-gray-900 leading-tight">{faq.question}</h3>
-                      </div>
-                      <p className="text-gray-700 leading-relaxed ml-[60px] text-sm">{faq.answer}</p>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          ))}
-
-          {/* CTA */}
-          <div className="backdrop-blur-xl bg-white/95 rounded-3xl shadow-2xl p-8 md:p-12 border border-white/20 text-center mt-8">
-            <div className="w-16 h-16 bg-[#2A52BE] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <HelpCircle className="w-9 h-9 text-white" strokeWidth={2.5} />
-            </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Still Have Questions?</h2>
-            <p className="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">
-              Our support team is available 24/7 to help with account setup, investment inquiries, WOLV staking, or any platform assistance you need.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact" className="inline-block bg-[#2A52BE] text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-[#244bb0] transition">
-                Contact Support
-              </Link>
-              <a href="mailto:support@mail.wolvcapital.com" className="inline-block bg-white border-2 border-[#2A52BE] text-[#2A52BE] px-8 py-4 rounded-full text-lg font-bold hover:bg-blue-50 transition">
-                Email Us
+          <h1
+            style={{
+              fontSize: "clamp(36px,6vw,54px)",
+              fontWeight: 800,
+              letterSpacing: "-1.5px",
+              lineHeight: 1.1,
+              marginBottom: "16px",
+            }}
+          >
+            Frequently Asked Questions
+          </h1>
+          <p
+            style={{
+              fontSize: "16px",
+              color: "rgba(255,255,255,0.45)",
+              lineHeight: 1.7,
+              marginBottom: "32px",
+            }}
+          >
+            Everything you need to know about investing, staking, and earning
+            WOLV on WolvCapital.
+          </p>
+          {/* Category pills */}
+          <div
+            style={{
+              display: "flex",
+              gap: "8px",
+              justifyContent: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            {CATEGORIES.map((cat) => (
+              <a
+                key={cat.id}
+                href={`#${cat.id}`}
+                style={{
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  borderRadius: "99px",
+                  padding: "6px 16px",
+                  fontSize: "13px",
+                  color: "rgba(255,255,255,0.6)",
+                  textDecoration: "none",
+                  fontWeight: 500,
+                  transition: "all 0.15s",
+                }}
+              >
+                {cat.icon} {cat.label}
               </a>
-            </div>
-          </div>
-
-          {/* Quick links */}
-          <div className="mt-8 backdrop-blur-xl bg-white/90 rounded-2xl shadow-xl p-6 border border-white/20">
-            <p className="text-center text-gray-700 text-lg mb-4 font-semibold">Explore More Resources</p>
-            <div className="flex flex-wrap justify-center gap-4">
-              {[
-                { href: "/plans",          label: "Investment Plans" },
-                { href: "/dashboard/stake", label: "WOLV Staking" },
-                { href: "/wolv-token",     label: "WOLV Token" },
-                { href: "/tokenomics",     label: "Tokenomics" },
-                { href: "/roadmap",        label: "Roadmap" },
-                { href: "/security",       label: "Security" },
-                { href: "/how-it-works",   label: "How It Works" },
-                { href: "/risk-disclosure", label: "Risk Disclosure" },
-              ].map(l => (
-                <Link key={l.href} href={l.href} className="text-[#2A52BE] hover:text-[#1E3A8A] font-medium underline text-sm">{l.label}</Link>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* FAQ Content */}
+      <section
+        style={{ maxWidth: "860px", margin: "0 auto", padding: "56px 24px 100px" }}
+      >
+        {CATEGORIES.map((cat) => (
+          <div key={cat.id} id={cat.id} style={{ scrollMarginTop: "80px" }}>
+            <div className="cat-card">
+              <div className="cat-header">
+                <div className="cat-icon">{cat.icon}</div>
+                <h2
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: 700,
+                    color: "#fff",
+                    letterSpacing: "-0.3px",
+                  }}
+                >
+                  {cat.label}
+                </h2>
+                <span
+                  style={{
+                    fontSize: "12px",
+                    color: "rgba(255,255,255,0.3)",
+                    marginLeft: "auto",
+                  }}
+                >
+                  {cat.questions.length} questions
+                </span>
+              </div>
+              {cat.questions.map((item, i) => (
+                <details key={i}>
+                  <summary>{item.q}</summary>
+                  <div className="answer">{item.a}</div>
+                </details>
+              ))}
+            </div>
+          </div>
+        ))}
+
+        {/* Still have questions */}
+        <div
+          style={{
+            marginTop: "16px",
+            background: "linear-gradient(135deg,rgba(42,82,190,0.1),rgba(42,82,190,0.05))",
+            border: "1px solid rgba(42,82,190,0.2)",
+            borderRadius: "20px",
+            padding: "40px",
+            textAlign: "center",
+          }}
+        >
+          <div style={{ fontSize: "32px", marginBottom: "12px" }}>💬</div>
+          <h3
+            style={{
+              fontSize: "20px",
+              fontWeight: 700,
+              color: "#fff",
+              marginBottom: "10px",
+            }}
+          >
+            Still have questions?
+          </h3>
+          <p
+            style={{
+              fontSize: "14px",
+              color: "rgba(255,255,255,0.45)",
+              marginBottom: "24px",
+              lineHeight: 1.7,
+            }}
+          >
+            Our support team is available 24/7. You can also read our full
+            platform documentation in the whitepaper.
+          </p>
+          <div
+            style={{
+              display: "flex",
+              gap: "12px",
+              justifyContent: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <Link
+              href="/dashboard/support"
+              style={{
+                background: "linear-gradient(135deg,#2A52BE,#1d4ed8)",
+                color: "#fff",
+                padding: "12px 28px",
+                borderRadius: "10px",
+                fontWeight: 700,
+                fontSize: "14px",
+                textDecoration: "none",
+              }}
+            >
+              Live Chat Support
+            </Link>
+            <Link
+              href="/whitepaper"
+              style={{
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.15)",
+                color: "#fff",
+                padding: "12px 28px",
+                borderRadius: "10px",
+                fontWeight: 600,
+                fontSize: "14px",
+                textDecoration: "none",
+              }}
+            >
+              Read Whitepaper
+            </Link>
+          </div>
+        </div>
+      </section>
     </div>
-  )
+  );
 }

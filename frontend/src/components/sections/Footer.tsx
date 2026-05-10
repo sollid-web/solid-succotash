@@ -23,6 +23,9 @@ export default function Footer() {
                   { key: 'footer.platform.faq', href: '/faq' },
                   { key: 'WOLV Token', href: '/wolv-token' },
                   { key: 'Whitepaper', href: '/whitepaper' },
+                  { key: 'Smart Contracts', href: '/smart-contracts' },
+                  { key: 'Whitepaper', href: '/whitepaper' },
+                  { key: 'Smart Contracts', href: '/smart-contracts' },
                 ].map((item) => (
                   <li key={item.key}><Link href={item.href} className="text-[#94A3B8] text-sm hover:text-white transition">{item.key.startsWith('footer') ? t(item.key) : item.key}</Link></li>
                 ))}

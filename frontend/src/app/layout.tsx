@@ -9,7 +9,6 @@ import AppChrome from '@/components/AppChrome'
 import GaPageView from '@/components/GaPageView'
 import SegmentProvider from '@/components/SegmentProvider'
 import RemoveSyncBannerClient from '@/components/RemoveSyncBannerClient'
-import TawkWidget from '@/components/TawkWidget'
 import '@/app/globals.css'
 
 export const metadata: Metadata = {
@@ -161,7 +160,6 @@ export default async function RootLayout({
           )}
 
           <Analytics />
-          <TawkWidget propertyId="1h5r7jmq1" />
         </SegmentProvider>
       </body>
     </html>

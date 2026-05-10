@@ -6,7 +6,7 @@ import NavBar from "@/components/NavBar";
 import DisclosureTicker from "@/components/DisclosureTicker";
 import MobileBottomBar from "@/components/MobileBottomBar";
 import Footer from "@/components/sections/Footer";
-import TawkToChat from "@/components/TawkToChat";
+import TidioWidget from "@/components/TidioWidget";
 
 export default function AppChrome({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -23,8 +23,8 @@ export default function AppChrome({ children }: { children: ReactNode }) {
       <main className="flex-1 w-full">{children}</main>
       <MobileBottomBar />
       <Footer />
-      {/* SupportChat is temporarily disabled while Tawk.to is restored as the primary live support channel. */}
-      <TawkToChat />
+      {/* Support Chat */}
+      <TidioWidget />
     </div>
   );
 }

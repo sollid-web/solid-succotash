@@ -15,6 +15,8 @@ export default function NavBar() {
   const navItems = [
     { href: '/', labelKey: 'nav.home' },
     { href: '/wolv-token', label: 'WOLV Token' },
+    { href: '/tokenomics', label: 'Tokenomics' },
+    { href: '/roadmap', label: 'Roadmap' },
     { href: '#plans', labelKey: 'nav.plans' },
     { href: '#compliance', labelKey: 'nav.compliance' },
     { href: '/blog', labelKey: 'nav.blog' },

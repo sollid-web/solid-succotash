@@ -22,6 +22,7 @@ export default function Footer() {
                   { key: 'footer.platform.virtualCard', href: '#virtual-card' },
                   { key: 'footer.platform.faq', href: '/faq' },
                   { key: 'WOLV Token', href: '/wolv-token' },
+                  { key: 'Whitepaper', href: '/whitepaper' },
                 ].map((item) => (
                   <li key={item.key}><Link href={item.href} className="text-[#94A3B8] text-sm hover:text-white transition">{item.key.startsWith('footer') ? t(item.key) : item.key}</Link></li>
                 ))}

@@ -3,20 +3,20 @@ import PublicLayout from '@/components/PublicLayout'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'WOLV Token — WolvCapital Profit Token on BNB Smart Chain',
-  description: 'WOLV is the native profit token of WolvCapital. Investors earn WOLV as verifiable on-chain proof of investment returns. Deployed and verified on BNB Smart Chain.',
-  keywords: 'WOLV token, WolvCapital token, BNB chain token, investment profit token, blockchain rewards, WOLV BEP20',
+  title: 'WOLV Token — Smart Chain Staking Rewards on BNB Smart Chain',
+  description: 'WOLV is the staking reward token of WolvCapital. Stake BNB or BUSD and earn WOLV as verifiable on-chain proof of your staking rewards. Deployed and verified on BNB Smart Chain.',
+  keywords: 'WOLV token, BNB Smart Chain, staking rewards, blockchain staking, BSCScan verified, WOLV BEP20, smart contract staking',
   openGraph: {
-    title: 'WOLV Token — WolvCapital Profit Token',
-    description: 'Earn WOLV tokens as verifiable proof of your investment returns on WolvCapital.',
+    title: 'WOLV Token — Smart Chain Staking Rewards',
+    description: 'Earn WOLV tokens as verified on-chain proof of your staking rewards on BNB Smart Chain.',
     url: 'https://wolvcapital.com/wolv-token',
     siteName: 'WolvCapital',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'WOLV Token — WolvCapital Profit Token',
-    description: 'Earn WOLV tokens as verifiable proof of your investment returns on WolvCapital.',
+    title: 'WOLV Token — Smart Chain Staking Rewards',
+    description: 'Earn WOLV tokens as verified on-chain proof of your staking rewards on BNB Smart Chain.',
     images: ['/og-images/wolv-token-og.png'],
   },
 }

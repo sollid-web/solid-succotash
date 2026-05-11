@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useConnect } from 'wagmi';
-import { walletConnect } from 'wagmi/connectors';
 
 interface WalletConnectQRProps {
   onClose?: () => void;
@@ -12,195 +11,91 @@ export function WalletConnectQR({ onClose }: WalletConnectQRProps) {
   const { connect, connectors } = useConnect();
   const [uri, setUri] = useState<string>('');
   const [qrError, setQrError] = useState(false);
+  const connectionAttempted = useRef(false);
+  const uriListener = useRef<((newUri: string) => void) | null>(null);
 
   useEffect(() => {
-    const walletConnectConnector = connectors.find(
-      (connector) => connector.id === 'walletConnect'
-    );
+    const connector = connectors.find((c) => c.id === 'walletConnect');
+    if (!connector || connectionAttempted.current) return;
 
-    if (walletConnectConnector && 'getProvider' in walletConnectConnector) {
-      const setupListener = async () => {
-        try {
-          const provider = await (walletConnectConnector as any).getProvider();
+    let provider: any;
+    const handleUri = (newUri: string) => setUri(newUri);
+    uriListener.current = handleUri;
 
-          const handleDisplayUri = (uri: string) => {
-            setUri(uri);
-          };
+    const setupProvider = async () => {
+      try {
+        provider = await connector.getProvider();
+        provider.on('display_uri', handleUri);
+        connectionAttempted.current = true;
+        connect({ connector });
+      } catch (error) {
+        console.error('Failed to initialize WalletConnect provider:', error);
+        setQrError(true);
+      }
+    };
 
-          provider.on('display_uri', handleDisplayUri);
+    setupProvider();
 
-          // Trigger connection to get URI
-          connect({ connector: walletConnectConnector });
-
-          return () => {
-            provider.off('display_uri', handleDisplayUri);
-          };
-        } catch (error) {
-          console.error('Failed to setup WalletConnect QR:', error);
-        }
-      };
-
-      setupListener();
-    }
+    return () => {
+      if (provider && uriListener.current) {
+        provider.removeListener('display_uri', uriListener.current);
+      }
+    };
   }, [connect, connectors]);
 
-  if (!uri) {
+  if (!uri && !qrError) {
     return (
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '16px',
-        padding: '20px',
-        background: 'rgba(0,0,0,0.8)',
-        borderRadius: '12px',
-        border: '1px solid rgba(255,255,255,0.1)'
-      }}>
-        <div style={{
-          width: '40px',
-          height: '40px',
-          border: '3px solid rgba(0,168,150,0.3)',
-          borderTop: '3px solid #00a896',
-          borderRadius: '50%',
-          animation: 'spin 1s linear infinite'
-        }} />
-        <p style={{ color: '#fff', margin: 0, fontSize: '14px' }}>
-          Generating QR Code...
-        </p>
-        <style jsx>{`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}</style>
+      <div className="flex min-h-[300px] flex-col items-center justify-center gap-4 rounded-3xl border border-teal-500/20 bg-slate-950 p-8 text-center text-slate-100">
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-teal-500/20 border-t-teal-300" />
+        <p className="max-w-xs text-sm text-slate-300">Initializing secure mobile connection...</p>
       </div>
     );
   }
 
-  const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(uri)}&bgcolor=0b2f6b&color=ffffff&format=png&margin=2`;
+  const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(uri)}&bgcolor=ffffff&color=0b2f6b&margin=2`;
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '16px',
-      padding: '24px',
-      background: 'rgba(11, 47, 107, 0.95)',
-      borderRadius: '16px',
-      border: '1px solid rgba(0,168,150,0.3)',
-      maxWidth: '320px'
-    }}>
-      <h3 style={{
-        color: '#fff',
-        margin: '0 0 8px 0',
-        fontSize: '18px',
-        fontWeight: 600,
-        textAlign: 'center'
-      }}>
-        Connect Wallet
-      </h3>
+    <div className="flex min-h-[420px] w-full flex-col items-center justify-between gap-6 rounded-3xl border border-teal-500/20 bg-[#0b2f6b] p-8 text-slate-100">
+      <div className="space-y-3 text-center">
+        <h3 className="text-xl font-semibold text-white">Scan to connect</h3>
+        <p className="text-sm text-slate-300">
+          Open your mobile wallet app, scan the QR code, and connect to WolvCapital on BNB Chain.
+        </p>
+      </div>
 
-      <p style={{
-        color: 'rgba(255,255,255,0.7)',
-        margin: 0,
-        fontSize: '14px',
-        textAlign: 'center',
-        lineHeight: 1.4
-      }}>
-        Scan this QR code with your mobile wallet app to connect
-      </p>
-
-      <div style={{
-        padding: '16px',
-        background: '#fff',
-        borderRadius: '12px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
+      <div className="rounded-3xl bg-white p-4 shadow-[0_18px_60px_rgba(0,0,0,0.18)]">
         {qrError ? (
-          <div style={{
-            width: '200px',
-            height: '200px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: 'rgba(0,0,0,0.05)',
-            borderRadius: '8px',
-            color: 'rgba(0,0,0,0.6)',
-            fontSize: '14px',
-            textAlign: 'center'
-          }}>
-            <div style={{ fontSize: '32px', marginBottom: '8px' }}>📱</div>
-            QR Code Error
+          <div className="min-h-[260px] w-[260px] rounded-3xl bg-red-500/10 p-6 text-center text-sm text-red-200">
+            Failed to generate QR code. Please try again.
           </div>
         ) : (
           <img
             src={qrSrc}
-            alt="WalletConnect QR Code"
-            style={{
-              width: '200px',
-              height: '200px',
-              borderRadius: '8px'
-            }}
+            alt="WalletConnect QR"
+            className="h-[260px] w-[260px] rounded-3xl object-cover"
             onError={() => setQrError(true)}
           />
         )}
       </div>
 
-      <div style={{
-        display: 'flex',
-        gap: '8px',
-        width: '100%'
-      }}>
+      <div className="grid w-full gap-3 sm:grid-cols-2">
         <button
-          onClick={() => navigator.clipboard.writeText(uri)}
-          style={{
-            flex: 1,
-            padding: '10px 16px',
-            background: 'rgba(0,168,150,0.1)',
-            border: '1px solid rgba(0,168,150,0.3)',
-            borderRadius: '8px',
-            color: '#00a896',
-            fontSize: '14px',
-            fontWeight: 500,
-            cursor: 'pointer'
+          type="button"
+          onClick={() => {
+            navigator.clipboard.writeText(uri);
           }}
+          className="rounded-2xl bg-teal-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-teal-400"
         >
           Copy Link
         </button>
-
-        {onClose && (
-          <button
-            onClick={onClose}
-            style={{
-              flex: 1,
-              padding: '10px 16px',
-              background: 'rgba(255,255,255,0.1)',
-              border: '1px solid rgba(255,255,255,0.2)',
-              borderRadius: '8px',
-              color: '#fff',
-              fontSize: '14px',
-              fontWeight: 500,
-              cursor: 'pointer'
-            }}
-          >
-            Close
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={onClose}
+          className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:border-teal-300/40"
+        >
+          Cancel
+        </button>
       </div>
-
-      <p style={{
-        color: 'rgba(255,255,255,0.5)',
-        margin: '8px 0 0 0',
-        fontSize: '12px',
-        textAlign: 'center',
-        lineHeight: 1.3
-      }}>
-        Compatible with MetaMask, Trust Wallet, Coinbase Wallet, and more
-      </p>
     </div>
   );
 }

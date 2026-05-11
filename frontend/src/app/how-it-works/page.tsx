@@ -53,7 +53,7 @@ const STEPS = [
     num: "04",
     title: "Choose an Investment Plan",
     description:
-      "Select a plan matching your capital level and investment horizon. WolvCapital offers four tiers — Pioneer ($100+), Vanguard ($1,000+), Horizon ($5,000+), and Summit VIP ($10,000+) — each with a fixed term and structured daily ROI.",
+      "Select a plan matching your capital level and investment horizon. WolvCapital offers four tiers — Pioneer ($100+), Vanguard ($1,000+), Horizon ($5,000+), and Summit VIP ($15,000+) — each with a fixed term and structured daily ROI.",
     icon: "📊",
     tag: "Investment",
   },
@@ -78,7 +78,7 @@ const STEPS = [
     num: "07",
     title: "Stake WOLV for Additional Rewards",
     description:
-      "Take your WOLV earnings further by staking them in WolvCapital's audited staking contracts. Choose from four staking tiers (Starter, Growth, Pro, Elite) offering 8%–25% APY. Rewards are powered by Chainlink price feeds and a 48-hour timelock-protected reward pool.",
+      "Take your WOLV earnings further by staking them in WolvCapital's audited staking contracts. Choose from four staking tiers (Pioneer, Vanguard, Horizon, Summit VIP) offering 8%–25% APY. Rewards are powered by Chainlink price feeds and a 48-hour timelock-protected reward pool.",
     icon: "⬡",
     tag: "Staking",
     highlight: true,

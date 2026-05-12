@@ -3,6 +3,7 @@ import { useAccount, useDisconnect, useReadContract } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { formatUnits } from 'viem';
 import { useState } from 'react';
+import { WalletConnectQR } from '../components/WalletConnectQR';
 
 const WOLV_CONTRACT = '0xe0167279aef7bf4ad313d261da82e8366822270c';
 const WOLV_DECIMALS = 18;
@@ -25,6 +26,7 @@ export function WolvWalletButton() {
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showQR, setShowQR] = useState(false);
 
   const { data: balance } = useReadContract({
     address: WOLV_CONTRACT,
@@ -95,7 +97,7 @@ export function WolvWalletButton() {
             Browser
           </button>
           <button
-            onClick={() => openConnectModal?.()}
+            onClick={() => setShowQR(true)}
             style={{ flex: 1, background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', borderRadius: '10px', padding: '12px 16px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}
           >
             📱 QR Code
@@ -136,6 +138,31 @@ export function WolvWalletButton() {
   );
 
   // QR Modal
+  if (showQR) {
+    return (
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'rgba(0,0,0,0.8)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1000,
+        padding: '20px'
+      }}>
+        <div style={{
+          position: 'relative',
+          maxWidth: '400px',
+          width: '100%'
+        }}>
+          <WalletConnectQR onClose={() => setShowQR(false)} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', padding: '2rem', textAlign: 'center' }}>
@@ -174,7 +201,7 @@ export function WolvWalletButton() {
           Browser
         </button>
         <button
-          onClick={() => openConnectModal?.()}
+          onClick={() => setShowQR(true)}
           style={{ flex: 1, background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', borderRadius: '10px', padding: '12px 16px', fontSize: '14px', fontWeight: 600, cursor: 'pointer' }}
         >
           📱 QR Code
@@ -187,4 +214,4 @@ export function WolvWalletButton() {
       )}
     </div>
   );
-}
+                }

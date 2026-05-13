@@ -1,6 +1,9 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const LiveChainMetrics = dynamic(() => import("./LiveChainMetrics"), { ssr: false });
 
 export const metadata: Metadata = {
   title: "Tokenomics — WolvCapital | WOLV Token Distribution & Supply",
@@ -65,6 +68,8 @@ export default function TokenomicsPage() {
       <section className="py-16 bg-white">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
+            <LiveChainMetrics />
+
             <span className="text-xs font-bold tracking-widest uppercase text-[#2A52BE] block mb-3">Allocation</span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]" style={{ letterSpacing: '-0.02em' }}>
               Token Distribution

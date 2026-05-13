@@ -9,7 +9,6 @@ import AppChrome from '@/components/AppChrome'
 import GaPageView from '@/components/GaPageView'
 import SegmentProvider from '@/components/SegmentProvider'
 import RemoveSyncBannerClient from '@/components/RemoveSyncBannerClient'
-import { WalletProvider } from '@/_client/WalletProvider'
 import '@/app/globals.css'
 
 export const metadata: Metadata = {
@@ -126,15 +125,13 @@ export default async function RootLayout({
           {/* 2. LocaleProvider must wrap AppChrome and children */}
           <LocaleProvider locale={locale}>
             <TranslationProvider initialLocale={locale}>
-              <WalletProvider>
-                <AppChrome>
-                {/* 3. Suspense boundary is CRITICAL for Next.js builds */}
-                <Suspense fallback={<div className="flex h-screen items-center justify-center">Loading...</div>}>
-                  {children}
-                </Suspense>
-              </AppChrome>
-              </WalletProvider>
-            </TranslationProvider>
+              <AppChrome>
+              {/* 3. Suspense boundary is CRITICAL for Next.js builds */}
+              <Suspense fallback={<div className="flex h-screen items-center justify-center">Loading...</div>}>
+                {children}
+              </Suspense>
+            </AppChrome>
+          </TranslationProvider>
           </LocaleProvider>
 
           {/* Analytics and Widgets */}

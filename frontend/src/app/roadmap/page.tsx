@@ -105,6 +105,9 @@ const STATUS_CONFIG = {
   upcoming:  { label: "Upcoming",   bg: "bg-[#f1f5f9]", text: "text-[#475569]", dot: "bg-[#94A3B8]", border: "border-[#CBD5E1]" },
 };
 
+import { generateOgMetadata } from '@/lib/og-metadata'
+export const metadata = generateOgMetadata('roadmap')
+
 export default function RoadmapPage() {
   return (
     <main className="min-h-screen bg-white">
@@ -212,3 +215,4 @@ export default function RoadmapPage() {
     </main>
   );
 }
+

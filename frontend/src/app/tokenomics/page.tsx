@@ -32,6 +32,9 @@ const PLANS = [
   { name: "Summit VIP", apy: "25%", days: 365, min: "$15,000", exit: "3.5%", wolv: "~25,000 WOLV per $100k staked/year" },
 ];
 
+import { generateOgMetadata } from '@/lib/og-metadata'
+export const metadata = generateOgMetadata('tokenomics')
+
 export default function TokenomicsPage() {
   return (
     <main className="min-h-screen bg-white">
@@ -233,4 +236,5 @@ export default function TokenomicsPage() {
     </main>
   );
 }
+
 

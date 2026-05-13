@@ -176,6 +176,9 @@ const SECTIONS = [
   },
 ];
 
+import { generateOgMetadata } from '@/lib/og-metadata'
+export const metadata = generateOgMetadata('whitepaper')
+
 export default function WhitepaperPage() {
   return (
     <div
@@ -503,3 +506,4 @@ export default function WhitepaperPage() {
     </div>
   );
 }
+

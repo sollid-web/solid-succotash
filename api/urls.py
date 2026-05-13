@@ -10,28 +10,14 @@ from . import views
 from .referrals_endpoints import referrals_rewards, referrals_summary
 
 router = DefaultRouter()
-router.register(
-    r"agreements", views.AgreementViewSet, basename="api-agreements"
-)
-router.register(
-    r"investments", views.UserInvestmentViewSet, basename="api-investments"
-)
-router.register(
-    r"transactions", views.TransactionViewSet, basename="api-transactions"
-)
-router.register(
-    r"plans", views.InvestmentPlanViewSet, basename="api-plans"
-)
-router.register(
-    r"crypto-wallets", views.CryptoWalletViewSet, basename="api-crypto-wallets"
-)
-router.register(
-    r"virtual-cards", views.VirtualCardViewSet, basename="api-virtual-cards"
-)
+router.register(r"agreements", views.AgreementViewSet, basename="api-agreements")
+router.register(r"investments", views.UserInvestmentViewSet, basename="api-investments")
+router.register(r"transactions", views.TransactionViewSet, basename="api-transactions")
+router.register(r"plans", views.InvestmentPlanViewSet, basename="api-plans")
+router.register(r"crypto-wallets", views.CryptoWalletViewSet, basename="api-crypto-wallets")
+router.register(r"virtual-cards", views.VirtualCardViewSet, basename="api-virtual-cards")
 router.register(r"kyc", views.KycApplicationViewSet, basename="api-kyc")
-router.register(
-    r"kyc-documents", views.KycDocumentViewSet, basename="api-kyc-documents"
-)
+router.register(r"kyc-documents", views.KycDocumentViewSet, basename="api-kyc-documents")
 router.register(
     r"notifications",
     views.UserNotificationViewSet,
@@ -90,6 +76,8 @@ urlpatterns = [
         views.UserDashboardAnalyticsView.as_view(),
         name="api-analytics-overview",
     ),
+    path("cron/roi/", views.RoiCronView.as_view(), name="api-cron-roi"),
+    path("cron/drip/", views.DripCronView.as_view(), name="api-cron-drip"),
     path("support/", views.SupportRequestView.as_view(), name="api-support"),
     path(
         "public/certificate/",
@@ -121,9 +109,7 @@ urlpatterns = [
         views.token_refresh_view,
         name="api-token-refresh",
     ),
-    path(
-        "auth/token/verify/", views.token_verify_view, name="api-token-verify"
-    ),
+    path("auth/token/verify/", views.token_verify_view, name="api-token-verify"),
     path(
         "auth/verification/resend/",
         views.resend_verification,

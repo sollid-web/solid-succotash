@@ -43,6 +43,8 @@ SECRET_KEY = env("SECRET_KEY", default=None)
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="sk_test_xxx_REPLACE_ME_xxx")
 STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET", default="whsec_YOUR_SECRET")
 STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY", default="pk_test_YOUR_KEY")
+ROI_CRON_SECRET = env("ROI_CRON_SECRET", default=None)
+DRIP_CRON_SECRET = env("DRIP_CRON_SECRET", default=None)
 STRIPE_ISSUING_ENABLED = True
 STRIPE_CARDHOLDER_TYPE = "individual"
 GROQ_API_KEY = env("GROQ_API_KEY", default="")
@@ -461,22 +463,19 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
- "core.middleware.RequestIDMiddleware",
+    "core.middleware.RequestIDMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
-    
     # 1. Authentication must happen first
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    
     # 2. Custom middlewares that need the 'user' attribute
     "wolvcapital.middleware.RequestIDMiddleware",
     "wolvcapital.middleware.LanguageMiddleware",
     "wolvcapital.middleware.PostgresRlsSessionMiddleware",
-    
     # 3. Remaining standard Django and Third-party apps
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -739,17 +738,17 @@ USE_TZ = True
 
 # Supported languages matching frontend i18n
 LANGUAGES = [
-    ('en', 'English'),
-    ('de', 'German'),
-    ('es', 'Spanish'),
-    ('fr', 'French'),
-    ('it', 'Italian'),
-    ('pt', 'Portuguese'),
-    ('ru', 'Russian'),
-    ('no', 'Norwegian'),
+    ("en", "English"),
+    ("de", "German"),
+    ("es", "Spanish"),
+    ("fr", "French"),
+    ("it", "Italian"),
+    ("pt", "Portuguese"),
+    ("ru", "Russian"),
+    ("no", "Norwegian"),
 ]
 
-LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
+LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -772,7 +771,7 @@ class JsonFormatter:
         import json
 
         from core.middleware import get_request_id
-          
+
         # local import to avoid circular
         rid = get_request_id()
         data = {

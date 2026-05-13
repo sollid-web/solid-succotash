@@ -90,3 +90,9 @@ cron:
     env:
       - key: DJANGO_SETTINGS_MODULE
         value: "wolvcapital.settings"
+  - name: drip-campaign
+    schedule: "0 9 * * *" # daily at 09:00 UTC
+    command: "python manage.py drip_campaign --send"
+    env:
+      - key: DJANGO_SETTINGS_MODULE
+        value: "wolvcapital.settings"

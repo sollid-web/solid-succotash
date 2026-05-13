@@ -1,5 +1,4 @@
 'use client';
-
 import '@rainbow-me/rainbowkit/styles.css';
 import { RainbowKitProvider, getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
@@ -9,13 +8,9 @@ import { useEffect, useState } from 'react';
 
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '';
 
-if (!projectId) {
-  console.warn('⚠️ NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set. Wallet connection will not work.');
-}
-
 const config = getDefaultConfig({
   appName: 'WolvCapital',
-  projectId: projectId,
+  projectId,
   chains: [bsc],
 });
 
@@ -25,11 +20,15 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
+  // Don't render the providers at all until client is mounted
+  // This prevents RainbowKit from triggering setState during SSR hydration
+  if (!mounted) return <>{children}</>;
+
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>
-          {mounted ? children : null}
+        <RainbowKitProvider modalSize="compact">
+          {children}
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>

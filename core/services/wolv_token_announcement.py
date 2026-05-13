@@ -9,7 +9,7 @@ User = get_user_model()
 SUBJECT = "🚀 Introducing WOLV Token — Your Profits Are Now On-Chain!"
 DASHBOARD_URL = "https://wolvcapital.com/dashboard"
 WOLV_TOKEN_URL = "https://wolvcapital.com/wolv-token"
-CONTRACT_ADDRESS = "0xbcb3d35bcbbd141f1955aaf8f51b48b801b117bf"
+CONTRACT_ADDRESS = "0xe0167279aef7bf4ad313d261da82e8366822270c"
 
 
 def get_wolv_token_recipients(test_email: str | None = None) -> list[dict[str, str]]:

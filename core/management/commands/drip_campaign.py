@@ -213,7 +213,7 @@ class Command(BaseCommand):
                     "contact_url": "https://wolvcapital.com/contact",
                     "new_investment_url": "https://wolvcapital.com/dashboard/new-investment",
                     "compliance_url": "https://wolvcapital.com/compliance",
-                    "bscscan_url": "https://bscscan.com/token/0xbcb3d35bcbbd141f1955aaf8f51b48b801b117bf",
+                    "bscscan_url": "https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c",
                 }
 
                 email_service.send_template(

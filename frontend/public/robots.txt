@@ -4,3 +4,6 @@ Allow: /
 Disallow: /canvas/
 
 Sitemap: https://www.wolvcapital.com/sitemap.xml
+
+User-agent: facebookexternalhit
+Disallow:

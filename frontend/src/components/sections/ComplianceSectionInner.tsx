@@ -7,7 +7,7 @@ const WOLV_ADDRESS    = '0xe0167279aef7bf4ad313d261da82e8366822270c' as const
 const POOL_ADDRESS    = '0xb233cf74b14abf9d9702d585c540030125599579' as const
 const STAKING_ADDRESS = '0x4b62efee5695ed55cd362a0b818f4c5f9694322b' as const
 
-const ERC20_ABI = [
+const BNB_BEP20_ABI = [
   { name: 'totalSupply', type: 'function', stateMutability: 'view', inputs: [], outputs: [{ type: 'uint256' }] },
 ] as const
 const POOL_ABI = [
@@ -23,7 +23,7 @@ function fmt(val: bigint | undefined) {
 }
 
 function Metrics() {
-  const { data: totalSupply } = useReadContract({ address: WOLV_ADDRESS, abi: ERC20_ABI, functionName: 'totalSupply' })
+  const { data: totalSupply } = useReadContract({ address: WOLV_ADDRESS, abi: BNB_BEP20_ABI, functionName: 'totalSupply' })
   const { data: poolBalance  } = useReadContract({ address: POOL_ADDRESS,  abi: POOL_ABI,  functionName: 'poolBalance' })
   const { data: bnbPrice     } = useReadContract({ address: STAKING_ADDRESS, abi: STAKING_ABI, functionName: 'getBnbPrice' })
 

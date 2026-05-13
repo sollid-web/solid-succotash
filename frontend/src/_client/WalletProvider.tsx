@@ -22,7 +22,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
 
   // Don't render the providers at all until client is mounted
   // This prevents RainbowKit from triggering setState during SSR hydration
-  if (!mounted) return <>{children}</>;
+  if (!mounted) return null;
 
   return (
     <WagmiProvider config={config}>

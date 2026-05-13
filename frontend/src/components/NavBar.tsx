@@ -122,7 +122,7 @@ export default function NavBar() {
                   item.label === 'WOLV Token'
                     ? 'bg-[#e6faf8] text-[#00a896] font-semibold'
                     : pathname === item.href
-                    ? 'bg-[#eff6ff] text-[#2A52BE]'
+                    ? 'bg-[#dbeafe] text-[#1d4ed8] font-semibold'
                     : 'text-[#475569] hover:bg-gray-50 hover:text-[#0F172A]'
                 )}
               >

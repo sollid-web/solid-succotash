@@ -1,0 +1,497 @@
+/* ============================================================
+   WolvCapital — Web3 Dark Theme
+   Import this in globals.css AFTER existing styles:
+   @import './web3-theme.css';
+   ============================================================ */
+
+/* ── 1. CSS Variables Override ────────────────────────────── */
+:root {
+  --brand-primary:    #2A52BE;
+  --brand-secondary:  #00a896;
+  --brand-accent:     #3b82f6;
+  --brand-dark:       #060c1a;
+  --brand-darker:     #030712;
+  --brand-light:      rgba(255,255,255,0.08);
+  --brand-gray:       rgba(255,255,255,0.35);
+
+  --web3-bg:          #060c1a;
+  --web3-bg-2:        #0d1b38;
+  --web3-bg-3:        #091525;
+  --web3-teal:        #00a896;
+  --web3-blue:        #2A52BE;
+  --web3-glow-teal:   rgba(0,168,150,0.15);
+  --web3-glow-blue:   rgba(42,82,190,0.15);
+  --web3-border:      rgba(42,82,190,0.18);
+  --web3-border-teal: rgba(0,168,150,0.2);
+  --web3-glass:       rgba(255,255,255,0.03);
+  --web3-glass-hover: rgba(255,255,255,0.06);
+
+  --brand-gradient:       linear-gradient(135deg, #2A52BE 0%, #00a896 100%);
+  --brand-gradient-hover: linear-gradient(135deg, #00a896 0%, #2A52BE 100%);
+  --hero-gradient:        linear-gradient(180deg, rgba(6,12,26,0.7) 0%, rgba(6,12,26,0.95) 100%);
+}
+
+/* ── 2. Base ──────────────────────────────────────────────── */
+html, body {
+  background-color: var(--web3-bg) !important;
+  color: rgba(255,255,255,0.85) !important;
+}
+
+/* Global grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(42,82,190,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(42,82,190,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+main, #__next, [data-nextjs-scroll-focus-boundary] {
+  background-color: transparent !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── 3. Typography ────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  color: #ffffff !important;
+}
+
+p, span, li, label {
+  color: rgba(255,255,255,0.6);
+}
+
+a {
+  color: var(--web3-teal);
+}
+
+/* ── 4. Navbar ────────────────────────────────────────────── */
+header, nav,
+[class*="navbar"], [class*="nav-"],
+[class*="header"] {
+  background: rgba(6,12,26,0.85) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid var(--web3-border) !important;
+  color: #fff !important;
+}
+
+header a, nav a {
+  color: rgba(255,255,255,0.75) !important;
+}
+
+header a:hover, nav a:hover {
+  color: var(--web3-teal) !important;
+}
+
+/* ── 5. Hero Section ──────────────────────────────────────── */
+.hero-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(6,12,26,0.6) 0%,
+    rgba(6,12,26,0.92) 100%
+  ) !important;
+}
+
+.hero-content {
+  color: #fff !important;
+}
+
+/* Animated glow orbs on hero */
+.hero-content::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -100px;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,168,150,0.12) 0%, transparent 70%);
+  pointer-events: none;
+  animation: orbPulse 8s ease-in-out infinite;
+}
+
+.hero-content::after {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  left: -100px;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(42,82,190,0.12) 0%, transparent 70%);
+  pointer-events: none;
+  animation: orbPulse 10s ease-in-out infinite reverse;
+}
+
+@keyframes orbPulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50%       { transform: scale(1.15); opacity: 1; }
+}
+
+/* ── 6. Section backgrounds ───────────────────────────────── */
+section,
+[class*="section"],
+[class*="Section"] {
+  background-color: transparent !important;
+}
+
+/* Alternate section tint */
+section:nth-of-type(even) {
+  background-color: rgba(13,27,56,0.4) !important;
+}
+
+/* ── 7. Cards ─────────────────────────────────────────────── */
+.card-brand,
+[class*="card"],
+[class*="Card"] {
+  background: var(--web3-glass) !important;
+  border: 1px solid var(--web3-border) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
+  color: #fff !important;
+}
+
+.card-brand:hover,
+[class*="card"]:hover {
+  background: var(--web3-glass-hover) !important;
+  border-color: var(--web3-border-teal) !important;
+  box-shadow: 0 12px 40px rgba(0,168,150,0.12) !important;
+  transform: translateY(-4px) !important;
+}
+
+/* ── 8. Staking Plan Cards ────────────────────────────────── */
+/* Pioneer — blue */
+[class*="pioneer"] [class*="card"],
+[class*="Pioneer"] [class*="card"] {
+  border-color: rgba(56,189,248,0.25) !important;
+  box-shadow: 0 0 30px rgba(56,189,248,0.06) !important;
+}
+
+/* Vanguard — purple */
+[class*="vanguard"] [class*="card"],
+[class*="Vanguard"] [class*="card"] {
+  border-color: rgba(168,85,247,0.25) !important;
+  box-shadow: 0 0 30px rgba(168,85,247,0.06) !important;
+}
+
+/* Horizon — orange */
+[class*="horizon"] [class*="card"],
+[class*="Horizon"] [class*="card"] {
+  border-color: rgba(249,115,22,0.25) !important;
+  box-shadow: 0 0 30px rgba(249,115,22,0.06) !important;
+}
+
+/* Summit — gold */
+[class*="summit"] [class*="card"],
+[class*="Summit"] [class*="card"] {
+  border-color: rgba(234,179,8,0.25) !important;
+  box-shadow: 0 0 30px rgba(234,179,8,0.06) !important;
+}
+
+/* ── 9. Buttons ───────────────────────────────────────────── */
+.btn-brand-primary {
+  background: linear-gradient(135deg, #2A52BE, #00a896) !important;
+  box-shadow: 0 0 20px rgba(0,168,150,0.3) !important;
+  color: #fff !important;
+}
+
+.btn-brand-primary:hover {
+  box-shadow: 0 0 30px rgba(0,168,150,0.5) !important;
+}
+
+.btn-brand-secondary {
+  background: transparent !important;
+  border-color: var(--web3-teal) !important;
+  color: var(--web3-teal) !important;
+}
+
+.btn-brand-secondary:hover {
+  background: var(--web3-teal) !important;
+  color: #fff !important;
+}
+
+.btn-cta-sky {
+  background: linear-gradient(135deg, #2A52BE 0%, #00a896 100%) !important;
+  border-color: rgba(0,168,150,0.4) !important;
+  color: #fff !important;
+  box-shadow: 0 0 24px rgba(0,168,150,0.25) !important;
+}
+
+.btn-cta-sky:hover {
+  box-shadow: 0 0 36px rgba(0,168,150,0.45) !important;
+  filter: brightness(1.1) !important;
+}
+
+/* ── 10. Inputs & Forms ───────────────────────────────────── */
+input, select, textarea {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid var(--web3-border) !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: rgba(255,255,255,0.3) !important;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--web3-teal) !important;
+  box-shadow: 0 0 0 3px rgba(0,168,150,0.15) !important;
+  outline: none !important;
+}
+
+select option {
+  background: var(--web3-bg-2) !important;
+  color: #fff !important;
+}
+
+/* ── 11. WOLV Wallet Styles ───────────────────────────────── */
+.wolv-wallet-box,
+.wolv-wallet-connected {
+  background: rgba(0,168,150,0.05) !important;
+  border-color: rgba(0,168,150,0.2) !important;
+}
+
+.wolv-wallet-icon {
+  background: rgba(0,168,150,0.15) !important;
+  color: var(--web3-teal) !important;
+}
+
+.wolv-wallet-text h3 { color: #fff !important; }
+.wolv-wallet-text p  { color: rgba(255,255,255,0.5) !important; }
+
+.wolv-address { color: rgba(255,255,255,0.6) !important; }
+
+.wolv-balance-card {
+  background: rgba(255,255,255,0.04) !important;
+  border-color: rgba(0,168,150,0.15) !important;
+}
+
+.wolv-balance-label { color: rgba(255,255,255,0.35) !important; }
+.wolv-balance-value { color: var(--web3-teal) !important; }
+.wolv-balance-sub   { color: rgba(255,255,255,0.25) !important; }
+
+.wolv-btn-connect {
+  background: linear-gradient(135deg, #2A52BE, #00a896) !important;
+  box-shadow: 0 0 20px rgba(0,168,150,0.3) !important;
+}
+
+.wolv-btn-connect:hover {
+  box-shadow: 0 0 30px rgba(0,168,150,0.5) !important;
+  filter: brightness(1.1) !important;
+}
+
+.wolv-btn-disconnect {
+  border-color: rgba(255,255,255,0.15) !important;
+  color: rgba(255,255,255,0.4) !important;
+}
+
+.wolv-btn-add {
+  background: transparent !important;
+  border-color: var(--web3-teal) !important;
+  color: var(--web3-teal) !important;
+}
+
+.wolv-btn-add:hover {
+  background: var(--web3-teal) !important;
+  color: #fff !important;
+}
+
+.wolv-success { color: var(--web3-teal) !important; }
+
+/* ── 12. Tables ───────────────────────────────────────────── */
+table {
+  background: transparent !important;
+  border-color: var(--web3-border) !important;
+}
+
+th {
+  background: rgba(42,82,190,0.1) !important;
+  color: rgba(255,255,255,0.5) !important;
+  border-color: var(--web3-border) !important;
+}
+
+td {
+  color: rgba(255,255,255,0.7) !important;
+  border-color: var(--web3-border) !important;
+}
+
+tr:hover td {
+  background: rgba(255,255,255,0.02) !important;
+}
+
+/* ── 13. FAQ Accordion ────────────────────────────────────── */
+[class*="faq"] details,
+[class*="FAQ"] details,
+[class*="accordion"],
+[class*="Accordion"] {
+  background: var(--web3-glass) !important;
+  border: 1px solid var(--web3-border) !important;
+  border-radius: 12px !important;
+  color: #fff !important;
+}
+
+[class*="faq"] summary,
+[class*="FAQ"] summary {
+  color: #fff !important;
+}
+
+/* ── 14. Footer ───────────────────────────────────────────── */
+footer,
+[class*="footer"],
+[class*="Footer"] {
+  background: rgba(3,7,18,0.95) !important;
+  border-top: 1px solid var(--web3-border) !important;
+  color: rgba(255,255,255,0.5) !important;
+}
+
+footer a, [class*="footer"] a {
+  color: rgba(255,255,255,0.5) !important;
+}
+
+footer a:hover, [class*="footer"] a:hover {
+  color: var(--web3-teal) !important;
+}
+
+/* ── 15. Badges & Pills ───────────────────────────────────── */
+[class*="badge"],
+[class*="Badge"],
+[class*="pill"],
+[class*="tag"],
+[class*="Tag"] {
+  background: rgba(0,168,150,0.1) !important;
+  border: 1px solid rgba(0,168,150,0.25) !important;
+  color: var(--web3-teal) !important;
+}
+
+/* LIVE badge */
+[class*="live"],
+[class*="Live"] {
+  background: rgba(0,168,150,0.15) !important;
+  color: var(--web3-teal) !important;
+  border-color: rgba(0,168,150,0.3) !important;
+}
+
+/* ── 16. Dividers & Borders ───────────────────────────────── */
+hr {
+  border-color: var(--web3-border) !important;
+}
+
+[class*="divider"] {
+  background: linear-gradient(90deg, transparent, var(--web3-border), transparent) !important;
+  height: 1px !important;
+  border: none !important;
+}
+
+/* ── 17. Scrollbar ────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--web3-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(42,82,190,0.4);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--web3-teal);
+}
+
+/* ── 18. Section heading accent line ──────────────────────── */
+h2::after {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 3px;
+  margin-top: 12px;
+  background: linear-gradient(90deg, var(--web3-teal), var(--web3-blue));
+  border-radius: 2px;
+}
+
+/* ── 19. Number/stat highlights ───────────────────────────── */
+[class*="apy"],
+[class*="APY"],
+[class*="percent"],
+[class*="stat-value"],
+[class*="metric"] {
+  font-family: 'DM Mono', monospace !important;
+  color: var(--web3-teal) !important;
+}
+
+/* ── 20. Blog content on dark ─────────────────────────────── */
+.blog-content {
+  color: rgba(255,255,255,0.75) !important;
+}
+.blog-content h1,
+.blog-content h2,
+.blog-content h3 {
+  color: #fff !important;
+}
+.blog-content p,
+.blog-content li { color: rgba(255,255,255,0.65) !important; }
+.blog-content a  { color: var(--web3-teal) !important; }
+.blog-content blockquote {
+  background: rgba(42,82,190,0.08) !important;
+  border-left-color: var(--web3-teal) !important;
+  color: rgba(255,255,255,0.65) !important;
+}
+.blog-content code {
+  background: rgba(255,255,255,0.08) !important;
+  color: var(--web3-teal) !important;
+}
+.blog-content pre {
+  background: rgba(255,255,255,0.05) !important;
+}
+
+/* ── 21. Certificate / Compliance panel on dark ───────────── */
+.certificate-border {
+  background: rgba(255,255,255,0.03) !important;
+  border-color: var(--web3-border) !important;
+}
+
+.panel-readable {
+  background: rgba(13,27,56,0.85) !important;
+  border: 1px solid var(--web3-border) !important;
+}
+
+.h-readable { color: #fff !important; }
+.p-readable { color: rgba(255,255,255,0.65) !important; }
+
+/* ── 22. White backgrounds that need flipping ─────────────── */
+.bg-white, .bg-gray-50, .bg-slate-50, .bg-gray-100 {
+  background-color: var(--web3-glass) !important;
+}
+
+.text-gray-900, .text-slate-900, .text-black {
+  color: #fff !important;
+}
+
+.text-gray-700, .text-slate-700 {
+  color: rgba(255,255,255,0.7) !important;
+}
+
+.text-gray-500, .text-slate-500 {
+  color: rgba(255,255,255,0.45) !important;
+}
+
+.border-gray-200, .border-slate-200, .border-gray-100 {
+  border-color: var(--web3-border) !important;
+}
+
+/* ── 23. Glow utility ─────────────────────────────────────── */
+.glow-teal {
+  box-shadow: 0 0 30px rgba(0,168,150,0.3);
+}
+.glow-blue {
+  box-shadow: 0 0 30px rgba(42,82,190,0.3);
+}
+.text-glow-teal {
+  text-shadow: 0 0 20px rgba(0,168,150,0.5);
+}

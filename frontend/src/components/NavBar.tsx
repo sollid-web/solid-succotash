@@ -53,7 +53,7 @@ export default function NavBar() {
                   {item.label === 'WOLV Token' && (
                     <span style={{
                       marginLeft: '6px', fontSize: '9px', background: '#00a896',
-                      color: '#fff', padding: '1px 6px', borderRadius: '99px',
+                      color: '#573939', padding: '1px 6px', borderRadius: '99px',
                       fontWeight: 700, verticalAlign: 'middle', letterSpacing: '0.5px',
                     }}>LIVE</span>
                   )}
@@ -129,7 +129,7 @@ export default function NavBar() {
                 <span>{item.label || t(item.labelKey!)}</span>
                 {item.label === 'WOLV Token' && (
                   <span style={{
-                    fontSize: '9px', background: '#00a896', color: '#fff',
+                    fontSize: '9px', background: '#00a896', color: '#1e539936',
                     padding: '2px 8px', borderRadius: '99px', fontWeight: 700, letterSpacing: '0.5px',
                   }}>LIVE</span>
                 )}

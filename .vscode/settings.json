@@ -20,7 +20,7 @@
         "editor.defaultFormatter": "charliermarsh.ruff"
     },
     "github.copilot.chat.byok.ollamaEndpoint": "http://172.20.10.13:11434",
-    "gitlens.ai.model": "ollama",
+    "gitlens.ai.model": "vscode",
     "gitlens.ai.ollama.url": "http://172.20.10.13:11434",
     "editor.inlineCompletionsAccessibilityVerbose": true,
     "diffEditor.experimental.useTrueInlineView": true,

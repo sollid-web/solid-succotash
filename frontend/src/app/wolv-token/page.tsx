@@ -1,31 +1,11 @@
 import Link from 'next/link'
 import PublicLayout from '@/components/PublicLayout'
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'WOLV Token — Smart Chain Staking Rewards on BNB Smart Chain',
-  description: 'WOLV is the staking reward token of WolvCapital. Stake BNB or BUSD and earn WOLV as verifiable on-chain proof of your staking rewards. Deployed and verified on BNB Smart Chain.',
-  keywords: 'WOLV token, BNB Smart Chain, staking rewards, blockchain staking, BSCScan verified, WOLV BEP20, smart contract staking',
-  openGraph: {
-    title: 'WOLV Token — Smart Chain Staking Rewards',
-    description: 'Earn WOLV tokens as verified on-chain proof of your staking rewards on BNB Smart Chain.',
-    url: 'https://wolvcapital.com/wolv-token',
-    siteName: 'WolvCapital',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'WOLV Token — Smart Chain Staking Rewards',
-    description: 'Earn WOLV tokens as verified on-chain proof of your staking rewards on BNB Smart Chain.',
-    images: ['/og-images/wolv-token-og.png'],
-  },
-}
+import { generateOgMetadata } from '@/lib/og-metadata'
 
 const WOLV_CONTRACT = '0xe0167279aef7bf4ad313d261da82e8366822270c'
 const POOL_CONTRACT = '0xb233cf74b14abf9d9702d585c540030125599579'
 const STAKING_CONTRACT = '0x4b62efee5695ed55cd362a0b818f4c5f9694322b'
 
-import { generateOgMetadata } from '@/lib/og-metadata'
 export const metadata = generateOgMetadata('wolv-token')
 
 export default function WolvTokenPage() {

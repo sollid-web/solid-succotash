@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { generateOgMetadata } from '@/lib/og-metadata'
 
-export const metadata: Metadata = {
+export const metadata = generateOgMetadata('whitepaper')
   title: "Whitepaper — WolvCapital | Platform Documentation",
   description:
     "WolvCapital official whitepaper. Full documentation covering platform architecture, tokenomics, staking contracts, compliance framework, revenue model, and roadmap.",
@@ -175,10 +176,6 @@ const SECTIONS = [
     ],
   },
 ];
-
-import { generateOgMetadata } from '@/lib/og-metadata'
-export const metadata = generateOgMetadata('whitepaper')
-
 export default function WhitepaperPage() {
   return (
     <div

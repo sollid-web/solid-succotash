@@ -1,15 +1,9 @@
 
-import type { Metadata } from "next";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 
-const LiveChainMetrics = dynamic(() => import("./LiveChainMetrics"), { ssr: false });
 
-export const metadata: Metadata = {
-  title: "Tokenomics — WolvCapital | WOLV Token Distribution & Supply",
-  description:
-    "WOLV token supply breakdown, distribution model, reward pool mechanics, and long-term sustainability plan. Fixed supply of 1 billion WOLV on BNB Smart Chain.",
-};
+
+
 
 const CONTRACTS = {
   token:   "0xe0167279aef7bf4ad313d261da82e8366822270c",
@@ -32,6 +26,7 @@ const PLANS = [
   { name: "Summit VIP", apy: "25%", days: 365, min: "$15,000", exit: "3.5%", wolv: "~25,000 WOLV per $100k staked/year" },
 ];
 
+import LiveChainMetricsWrapper from "./LiveChainMetricsWrapper"
 import { generateOgMetadata } from '@/lib/og-metadata'
 export const metadata = generateOgMetadata('tokenomics')
 
@@ -71,7 +66,7 @@ export default function TokenomicsPage() {
       <section className="py-16 bg-white">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
-            <LiveChainMetrics />
+            <LiveChainMetricsWrapper />
 
             <span className="text-xs font-bold tracking-widest uppercase text-[#2A52BE] block mb-3">Allocation</span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]" style={{ letterSpacing: '-0.02em' }}>

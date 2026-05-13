@@ -1,22 +1,7 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { generateOgMetadata } from '@/lib/og-metadata'
 
 export const metadata = generateOgMetadata('whitepaper')
-  title: "Whitepaper — WolvCapital | Platform Documentation",
-  description:
-    "WolvCapital official whitepaper. Full documentation covering platform architecture, tokenomics, staking contracts, compliance framework, revenue model, and roadmap.",
-  keywords:
-    "WolvCapital whitepaper, WOLV token documentation, investment platform whitepaper, BNB Smart Chain, staking, tokenomics, DeFi whitepaper",
-  openGraph: {
-    title: "WolvCapital Whitepaper — Official Platform Documentation",
-    description:
-      "Full technical and strategic documentation for the WolvCapital investment and staking platform.",
-    url: "https://wolvcapital.com/whitepaper",
-    siteName: "WolvCapital",
-    type: "website",
-  },
-};
 
 const CONTRACTS = [
   {

@@ -1,12 +1,6 @@
 
-import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "Roadmap — WolvCapital | Platform Development Timeline",
-  description:
-    "WolvCapital's development roadmap — from initial platform launch to full Web3 integration, DEX listing, third-party audit, and institutional-grade DeFi infrastructure.",
-};
 
 const PHASES = [
   {

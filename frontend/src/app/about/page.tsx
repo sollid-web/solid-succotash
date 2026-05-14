@@ -52,7 +52,7 @@ export default function AboutPage() {
                 Since inception, our mission has been to simplify access to digital asset opportunities while maintaining industry-leading security, compliance, and operational excellence.
               </p>
               <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
-                Our investment model focuses on sustainable daily returns ranging from 1% to 2%, supported by diversified digital asset strategies and automated risk management tools. We operate with a global mindset, serving verified investors across more than 120 countries.
+                Our investment model focuses on sustainable returns of 8%–25% APY, supported by diversified digital asset strategies and automated risk management tools. We operate with a global mindset, serving verified investors across more than 120 countries.
               </p>
             </div>
 
@@ -62,7 +62,7 @@ export default function AboutPage() {
                 We prioritize integrity, transparency, and professional risk management. Each investor benefits from:
               </p>
               <ul className="space-y-4 text-base sm:text-lg text-gray-700 list-disc pl-6">
-                <li>1%–2% Daily ROI Plans</li>
+                <li>8%–25% APY Staking Plans</li>
                 <li>256-bit SSL encryption</li>
                 <li>KYC & AML compliance</li>
                 <li>24/7 system monitoring and fraud detection</li>

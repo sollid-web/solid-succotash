@@ -58,10 +58,10 @@ const SECTIONS = [
     title: "Investment Plans",
     content: [
       "WolvCapital offers four investment tiers, each designed for a different investor profile. All plans operate on fixed terms with structured daily ROI.",
-      "Pioneer (Entry): Minimum $100 · 1% daily ROI · 90-day term. Designed for first-time investors exploring the platform with minimal capital commitment.",
-      "Vanguard (Growth): Minimum $1,000 · Enhanced daily ROI · 150-day term. For investors ready to commit meaningful capital for consistent compounding returns.",
-      "Horizon (Advanced): Minimum $5,000 · Premium daily ROI · 180-day term. For serious investors seeking significant portfolio growth over a structured period.",
-      "Summit VIP (Elite): Minimum $10,000 · Maximum daily ROI · 365-day term. Priority support, maximum returns, and exclusive platform benefits for high-net-worth investors.",
+      "Pioneer (Entry): Minimum $100 · 8% APY · 90-day term. Designed for first-time investors exploring the platform with minimal capital commitment.",
+      "Vanguard (Growth): Minimum $1,000 · 12% APY · 150-day term. For investors ready to commit meaningful capital for consistent compounding returns.",
+      "Horizon (Advanced): Minimum $5,000 · 18% APY · 180-day term. For serious investors seeking significant portfolio growth over a structured period.",
+      "Summit VIP (Elite): Minimum $10,000 · 25% APY · 365-day term. Priority support, maximum returns, and exclusive platform benefits for high-net-worth investors.",
     ],
   },
   {

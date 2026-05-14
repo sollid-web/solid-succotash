@@ -116,7 +116,7 @@ export default function ReferralPage() {
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">Proven Returns</h3>
-                  <p className="text-base sm:text-lg text-gray-700">1%-2% daily ROI model backed by diversified digital asset strategies.</p>
+                  <p className="text-base sm:text-lg text-gray-700">8%–25% APY staking plans backed by diversified digital asset strategies.</p>
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">Simple Dashboard</h3>

@@ -114,7 +114,7 @@ const CATEGORIES = [
       },
       {
         q: "What staking tiers are available?",
-        a: "Four staking tiers are available: Starter (8% APY · 30-day lock), Growth (12% APY · 60-day lock), Pro (18% APY · 90-day lock), and Elite (25% APY · 180-day lock). Higher tiers offer better APY in exchange for longer lock periods.",
+        a: "Four staking tiers are available: Pioneer (8% APY · 90-day lock), Vanguard (12% APY · 150-day lock), Horizon (18% APY · 180-day lock), and Summit VIP (25% APY · 365-day lock). Higher tiers offer better APY in exchange for longer lock periods.",
       },
       {
         q: "How are staking rewards calculated?",

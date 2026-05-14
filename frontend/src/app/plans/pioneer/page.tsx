@@ -6,7 +6,7 @@ export default function PioneerPlanPage() {
       plan={{
         slug: "pioneer",
         name: "Pioneer",
-        subtitleLine: "1% Daily ROI • 90 Days",
+        subtitleLine: "8% APY • 90 Days",
         supportingLine:
           "Minimum $100 to $999 • Ideal for new investors seeking a simple, structured start.",
         dailyRoiPct: 1,
@@ -76,7 +76,7 @@ export default function PioneerPlanPage() {
           "Start earning daily ROI with a plan built for new investors.",
         finalCtaLabel: "Activate Pioneer Plan",
         finalCtaMicrotext: "Takes minutes • KYC required • USDT/BTC supported",
-        stickyBarText: "Pioneer Plan • 1% Daily ROI",
+        stickyBarText: "Pioneer Plan • 8% APY",
         stickyCtaLabel: "Start Pioneer",
       }}
     />

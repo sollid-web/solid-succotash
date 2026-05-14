@@ -112,7 +112,7 @@ export default function SignupPage() {
               <h2 className="text-3xl font-bold mb-6 text-gray-900 text-center">Why Create an Account?</h2>
               <div className="grid md:grid-cols-2 gap-6">
                 {[
-                  { icon: "📊", title: "Access All Plans", desc: "Choose from 4 investment tiers with 1%–2% daily ROI" },
+                  { icon: "📊", title: "Access All Plans", desc: "Choose from 4 investment tiers with 8%–25% APY" },
                   { icon: "📈", title: "Real-Time Tracking", desc: "Monitor your daily ROI and portfolio growth live" },
                   { icon: "💰", title: "Weekly Withdrawals", desc: "Withdraw profits every 7 days with secure processing" },
                   { icon: "🛡️", title: "Professional Security", desc: "AML/KYC compliance and 256-bit encryption" },
@@ -144,7 +144,7 @@ export default function SignupPage() {
                 </li>
                 <li className="flex items-center gap-3">
                   <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold">3</span>
-                  <span>Start investing and earning 1%–2% daily ROI</span>
+                  <span>Start investing and earning 8%–25% APY</span>
                 </li>
               </ol>
             </div>

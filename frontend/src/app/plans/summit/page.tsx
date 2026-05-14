@@ -6,7 +6,7 @@ export default function SummitPlanPage() {
       plan={{
         slug: "summit",
         name: "Summit VIP",
-        subtitleLine: "2% Daily ROI • 365 Days",
+        subtitleLine: "25% APY • 365 Days",
         supportingLine:
           "Minimum $15,000 to $100,000 • Institutional/HNW plan for larger allocations.",
         dailyRoiPct: 2,
@@ -76,7 +76,7 @@ export default function SummitPlanPage() {
           "Start earning daily ROI with a plan built for higher allocations.",
         finalCtaLabel: "Activate Summit VIP",
         finalCtaMicrotext: "Takes minutes • KYC required • USDT/BTC supported",
-        stickyBarText: "Summit VIP • 2% Daily ROI",
+        stickyBarText: "Summit VIP • 25% APY",
         stickyCtaLabel: "Start Summit",
       }}
     />

@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import NavBar from "@/components/NavBar";
 import DisclosureTicker from "@/components/DisclosureTicker";
-import MobileBottomBar from "@/components/MobileBottomBar";
 import Footer from "@/components/sections/Footer";
 import TidioWidget from "@/components/TidioWidget";
 
@@ -20,7 +19,6 @@ export default function AppChrome({ children }: { children: ReactNode }) {
       <DisclosureTicker />
       <NavBar />
       <main className="flex-1 w-full pt-16">{children}</main>
-      <MobileBottomBar />
       <Footer />
       {/* Support Chat */}
       <TidioWidget />

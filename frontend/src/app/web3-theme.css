@@ -690,3 +690,24 @@ nav select {
 /* Any remaining light text on dark that looks invisible */
 .text-white { color: #ffffff !important; }
 .text-black { color: #ffffff !important; }
+
+/* ── Crisp chat widget mobile fix ─────────────────────────── */
+#crisp-chatbox {
+  z-index: 999 !important;
+}
+
+/* Prevent full screen takeover on mobile */
+@media (max-width: 768px) {
+  #crisp-chatbox [data-full-view="true"],
+  #crisp-chatbox .crisp-client {
+    height: 70vh !important;
+    max-height: 70vh !important;
+    bottom: 0 !important;
+    top: auto !important;
+  }
+
+  #crisp-chatbox iframe {
+    height: 70vh !important;
+    max-height: 70vh !important;
+  }
+}

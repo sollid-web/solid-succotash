@@ -17,8 +17,8 @@ export default function FAQSection() {
           <span className="text-[11px] font-bold tracking-widest text-brand-primary uppercase">{t('faq.eyebrow')}</span>
         </div>
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-[#0F172A] mb-4" style={{ letterSpacing: '-0.02em' }}>{t('faq.title')}</h2>
-          <p className="text-[#64748B] text-lg max-w-2xl mx-auto">{t('faq.subtitle')}</p>
+          <h2 className="text-4xl font-bold text-white mb-4" style={{ letterSpacing: '-0.02em' }}>{t('faq.title')}</h2>
+          <p className="text-[rgba(255,255,255,0.55)] text-lg max-w-2xl mx-auto">{t('faq.subtitle')}</p>
         </div>
         <div className="max-w-4xl mx-auto space-y-4">
           {FAQS.map((faq, idx) => (
@@ -39,7 +39,7 @@ export default function FAQSection() {
           ))}
         </div>
         <div className="text-center mt-12">
-          <Link href="/faq" className="inline-flex items-center px-8 py-3 bg-[#e2f5ff] text-[#0F172A] font-semibold rounded-md hover:bg-[#1E3A5F] transition">{t('faq.viewAll')}</Link>
+          <Link href="/faq" className="inline-flex items-center px-8 py-3 bg-transparent border border-[#00a896] text-[#00a896] font-semibold rounded-md hover:bg-[#00a896] hover:text-white transition">{t('faq.viewAll')}</Link>
         </div>
       </div>
     </section>

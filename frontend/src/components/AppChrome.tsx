@@ -16,7 +16,7 @@ export default function AppChrome({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-transparent">
       <DisclosureTicker />
       <NavBar />
       <main className="flex-1 w-full pt-16">{children}</main>

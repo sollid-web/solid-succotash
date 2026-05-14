@@ -495,3 +495,198 @@ h2::after {
 .text-glow-teal {
   text-shadow: 0 0 20px rgba(0,168,150,0.5);
 }
+
+/* ══════════════════════════════════════════════════════════
+   PATCH 1 — FAQ hover fix (white bg was blocking text)
+   ══════════════════════════════════════════════════════════ */
+
+/* Kill any white hover/active backgrounds on FAQ items */
+[class*="faq"] *:hover,
+[class*="FAQ"] *:hover,
+[class*="faq"] *:focus,
+[class*="FAQ"] *:focus,
+[class*="accordion"] *:hover,
+[class*="Accordion"] *:hover {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+/* Target the actual accordion trigger/summary/button specifically */
+[class*="faq"] button,
+[class*="FAQ"] button,
+[class*="accordion"] button,
+[class*="Accordion"] button,
+[class*="faq"] summary,
+[class*="FAQ"] summary {
+  background: transparent !important;
+  color: rgba(255,255,255,0.85) !important;
+}
+
+[class*="faq"] button:hover,
+[class*="FAQ"] button:hover,
+[class*="accordion"] button:hover,
+[class*="Accordion"] button:hover {
+  background: rgba(0,168,150,0.06) !important;
+  color: #fff !important;
+}
+
+/* FAQ expanded content text */
+[class*="faq"] p,
+[class*="FAQ"] p,
+[class*="accordion"] p,
+[class*="Accordion"] p {
+  color: rgba(255,255,255,0.65) !important;
+  background: transparent !important;
+}
+
+/* Tailwind divide lines between FAQ items */
+[class*="divide"] > * + * {
+  border-color: rgba(42,82,190,0.18) !important;
+}
+
+/* ══════════════════════════════════════════════════════════
+   PATCH 2 — Mobile nav menu visibility
+   ══════════════════════════════════════════════════════════ */
+
+/* Mobile menu container */
+[class*="mobile-menu"],
+[class*="mobileMenu"],
+[class*="MobileMenu"],
+[class*="drawer"],
+[class*="Drawer"],
+[class*="sidebar"],
+[class*="Sidebar"],
+/* Tailwind sheet/panel patterns */
+[class*="fixed"][class*="inset"],
+[class*="fixed"][class*="top-0"] {
+  background: rgba(6,12,26,0.98) !important;
+  backdrop-filter: blur(20px) !important;
+  border-right: 1px solid rgba(42,82,190,0.2) !important;
+}
+
+/* Mobile nav links */
+[class*="mobile-menu"] a,
+[class*="mobileMenu"] a,
+[class*="MobileMenu"] a,
+[class*="drawer"] a,
+[class*="Drawer"] a,
+[class*="sidebar"] a,
+[class*="Sidebar"] a {
+  color: rgba(255,255,255,0.85) !important;
+}
+
+[class*="mobile-menu"] a:hover,
+[class*="mobileMenu"] a:hover,
+[class*="drawer"] a:hover,
+[class*="sidebar"] a:hover {
+  color: var(--web3-teal) !important;
+  background: rgba(0,168,150,0.08) !important;
+}
+
+/* Active/selected nav item in mobile */
+[class*="mobile-menu"] a[class*="active"],
+[class*="mobile-menu"] a[aria-current],
+[class*="sidebar"] a[class*="active"] {
+  background: rgba(0,168,150,0.12) !important;
+  color: var(--web3-teal) !important;
+  border-left: 3px solid var(--web3-teal) !important;
+}
+
+/* ══════════════════════════════════════════════════════════
+   PATCH 3 — Header / Navbar logo & text visibility
+   ══════════════════════════════════════════════════════════ */
+
+/* Force all header text white */
+header *,
+nav *,
+[class*="navbar"] *,
+[class*="Navbar"] *,
+[class*="AppChrome"] header *,
+[class*="topbar"] * {
+  color: rgba(255,255,255,0.9) !important;
+}
+
+/* Logo text specifically */
+header span,
+nav span,
+[class*="logo"],
+[class*="Logo"],
+[class*="brand-name"],
+[class*="site-name"] {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+/* Logo icon/avatar background */
+[class*="logo"] [class*="icon"],
+[class*="logo"] div,
+header [class*="avatar"],
+nav [class*="avatar"] {
+  background: linear-gradient(135deg, #2A52BE, #00a896) !important;
+}
+
+/* Login / Sign up buttons in header */
+header button,
+nav button,
+header a[href*="login"],
+header a[href*="signup"],
+nav a[href*="login"],
+nav a[href*="signup"] {
+  border-color: rgba(255,255,255,0.25) !important;
+  color: #fff !important;
+}
+
+header a[href*="signup"]:hover,
+nav a[href*="signup"]:hover {
+  background: var(--web3-teal) !important;
+  border-color: var(--web3-teal) !important;
+}
+
+/* Language selector */
+header select,
+nav select {
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(255,255,255,0.15) !important;
+  color: #fff !important;
+}
+
+/* Ticker/announcement bar above nav */
+[class*="ticker"],
+[class*="Ticker"],
+[class*="announcement"],
+[class*="marquee"],
+[class*="Marquee"] {
+  background: rgba(0,168,150,0.12) !important;
+  border-bottom: 1px solid rgba(0,168,150,0.2) !important;
+  color: var(--web3-teal) !important;
+}
+
+[class*="ticker"] *,
+[class*="Ticker"] *,
+[class*="marquee"] * {
+  color: var(--web3-teal) !important;
+}
+
+/* ══════════════════════════════════════════════════════════
+   PATCH 4 — General white-background element cleanup
+   ══════════════════════════════════════════════════════════ */
+
+/* Any element that still has white bg */
+*[style*="background: white"],
+*[style*="background:#fff"],
+*[style*="background: #fff"],
+*[style*="background-color: white"],
+*[style*="background-color:#fff"],
+*[style*="background-color: #fff"] {
+  background: var(--web3-glass) !important;
+  color: #fff !important;
+}
+
+/* Tailwind bg-white override (belt + suspenders) */
+.bg-white {
+  background-color: rgba(255,255,255,0.04) !important;
+}
+
+/* Any remaining light text on dark that looks invisible */
+.text-white { color: #ffffff !important; }
+.text-black { color: #ffffff !important; }

@@ -8,7 +8,6 @@ import ComplianceSection from '@/components/sections/ComplianceSection'
 import SecuritySection from '@/components/sections/SecuritySection'
 import WolvTokenSection from '@/components/sections/WolvTokenSection'
 import FAQSection from '@/components/sections/FAQSection'
-import CTASection from '@/components/sections/CTASection'
 
 export default function HomePage() {
   const plansRef = useRef<HTMLDivElement>(null)
@@ -27,7 +26,6 @@ export default function HomePage() {
       <ComplianceSection />
       <SecuritySection />
       <FAQSection />
-      <CTASection />
     </div>
   )
 }

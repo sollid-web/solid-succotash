@@ -11,7 +11,7 @@ export default function FAQSection() {
     answer: t(`faq.a${i + 1}`),
   }))
   return (
-    <section id="faq" className="py-24 bg-white">
+    <section id="faq" className="py-24">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-4">
           <span className="text-[11px] font-bold tracking-widest text-brand-primary uppercase">{t('faq.eyebrow')}</span>
@@ -22,17 +22,17 @@ export default function FAQSection() {
         </div>
         <div className="max-w-4xl mx-auto space-y-4">
           {FAQS.map((faq, idx) => (
-            <div key={idx} className={`rounded-xl border transition-all ${openIdx === idx ? 'border-brand-primary bg-white shadow-lg' : 'border-[#E2E8F0] bg-white hover:border-[#CBD5E1] hover:shadow-md'}`}>
-              <button onClick={() => setOpenIdx(openIdx === idx ? null : idx)} className="w-full flex items-start gap-4 p-6 text-left hover:bg-gray-50 rounded-xl">
-                <div className="flex-shrink-0 w-10 h-10 bg-[#EFF6FF] rounded-lg flex items-center justify-center mt-0.5">
+            <div key={idx} className={`rounded-xl border transition-all ${openIdx === idx ? 'border-brand-primary bg-transparent shadow-lg' : 'border-[#2A52BE33] bg-transparent hover:border-[#00a896] hover:shadow-md'}`}>
+              <button onClick={() => setOpenIdx(openIdx === idx ? null : idx)} className="w-full flex items-start gap-4 p-6 text-left hover:bg-transparent rounded-xl">
+                <div className="flex-shrink-0 w-10 h-10 bg-[#2A52BE22] rounded-lg flex items-center justify-center mt-0.5">
                   <HelpCircle className="w-5 h-5 text-[#0F172A]" />
                 </div>
-                <div className="flex-1"><h3 className="font-bold text-[#0F172A] text-[15px]">{faq.question}</h3></div>
+                <div className="flex-1"><h3 className="font-bold text-white text-[15px]">{faq.question}</h3></div>
                 <div className={`flex-shrink-0 text-brand-primary text-2xl transition-transform ${openIdx === idx ? 'rotate-45' : ''}`}>+</div>
               </button>
               {openIdx === idx && (
-                <div className="px-6 pb-6 pt-0 border-t border-[#F1F5F9]">
-                  <p className="text-[#64748B] leading-relaxed text-sm">{faq.answer}</p>
+                <div className="px-6 pb-6 pt-0 border-t border-[#2A52BE33]">
+                  <p className="text-[rgba(255,255,255,0.65)] leading-relaxed text-sm">{faq.answer}</p>
                 </div>
               )}
             </div>

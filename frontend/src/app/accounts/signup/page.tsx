@@ -113,7 +113,7 @@ export default function SignupPage() {
               <div className="grid md:grid-cols-2 gap-6">
                 {[
                   { icon: "📊", title: "Access All Plans", desc: "Choose from 4 investment tiers with 8%–25% APY" },
-                  { icon: "📈", title: "Real-Time Tracking", desc: "Monitor your daily ROI and portfolio growth live" },
+                  { icon: "📈", title: "Real-Time Tracking", desc: "Monitor your APY and portfolio growth live" },
                   { icon: "💰", title: "Weekly Withdrawals", desc: "Withdraw profits every 7 days with secure processing" },
                   { icon: "🛡️", title: "Professional Security", desc: "AML/KYC compliance and 256-bit encryption" },
                   { icon: "🤝", title: "Referral Rewards", desc: "Earn 3% commission from your network's investments" },

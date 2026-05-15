@@ -25,7 +25,7 @@ const CATEGORIES = [
     questions: [
       {
         q: "What is WolvCapital?",
-        a: "WolvCapital is a professionally managed digital asset investment platform. Investors deposit funds, choose a structured investment plan, and earn daily ROI — tracked live on a personal dashboard. Profits are distributed as WOLV tokens on BNB Smart Chain, giving every investor verifiable, blockchain-backed proof of their earnings.",
+        a: "WolvCapital is a professionally managed digital asset investment platform. Investors deposit funds, choose a structured investment plan, and earn staking rewards — tracked live on a personal dashboard. Profits are distributed as WOLV tokens on BNB Smart Chain, giving every investor verifiable, blockchain-backed proof of their earnings.",
       },
       {
         q: "How do I create an account?",
@@ -52,11 +52,11 @@ const CATEGORIES = [
     questions: [
       {
         q: "What investment plans are available?",
-        a: "WolvCapital offers four plans: Pioneer ($100 min · 1% daily ROI · 90 days), Vanguard ($1,000 min · higher ROI · 150 days), Horizon ($5,000 min · premium ROI · 180 days), and Summit VIP ($10,000 min · maximum ROI · 365 days). Each plan has a fixed term and structured daily return.",
+        a: "WolvCapital offers four plans: Pioneer ($100 min · 8% APY · 90 days), Vanguard ($1,000 min · 12% APY · 150 days), Horizon ($5,000 min · 18% APY · 180 days), and Summit VIP ($15,000 min · 25% APY · 365 days). Each plan has a fixed term and structured daily return.",
       },
       {
         q: "Are returns guaranteed?",
-        a: "No investment platform can legally guarantee returns. WolvCapital's structured daily ROI figures represent targets based on our portfolio management strategy and historical performance. Digital asset investments carry inherent risk including potential loss of principal. Please read our full Risk Disclosure before investing.",
+        a: "No investment platform can legally guarantee returns. WolvCapital's structured APY figures represent targets based on our portfolio management strategy and historical performance. Digital asset investments carry inherent risk including potential loss of principal. Please read our full Risk Disclosure before investing.",
       },
       {
         q: "Can I run multiple plans simultaneously?",

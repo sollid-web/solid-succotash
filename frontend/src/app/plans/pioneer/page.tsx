@@ -24,7 +24,7 @@ export default function PioneerPlanPage() {
         calculatorCtaLabel: "Continue to Deposit & Activate",
         positioningTitle: "Designed for a steady start",
         positioningBody:
-          "The Pioneer Plan is built for investors who want clarity and simplicity. It provides daily ROI tracking with a defined window so you can build confidence before scaling.",
+          "The Pioneer Plan is built for investors who want clarity and simplicity. It provides APY tracking with a defined window so you can build confidence before scaling.",
         positioningBullets: [
           "You want a beginner-friendly plan with clear limits",
           "You prefer a 90-day investment window",
@@ -73,7 +73,7 @@ export default function PioneerPlanPage() {
         ],
         finalCtaHeadline: "Ready to activate Pioneer?",
         finalCtaSubhead:
-          "Start earning daily ROI with a plan built for new investors.",
+          "Start earning APY with a plan built for new investors.",
         finalCtaLabel: "Activate Pioneer Plan",
         finalCtaMicrotext: "Takes minutes • KYC required • USDT/BTC supported",
         stickyBarText: "Pioneer Plan • 8% APY",

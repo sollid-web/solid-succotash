@@ -18,10 +18,10 @@ const faqs: QAItem[] = [
   },
   {
     q: 'Are returns guaranteed?',
-    a: 'No. Investment returns are not guaranteed. Plans publish target daily ROI ranges, but actual performance varies and all investments carry risk.'
+    a: 'No. Investment returns are not guaranteed. Plans publish target APY ranges, but actual performance varies and all investments carry risk.'
   },
   {
-    q: 'How is daily ROI paid?',
+    q: 'How are staking rewards paid?',
     a: 'Daily ROI is calculated per active investment and recorded as a pending deposit. Funds are credited to your wallet only after an admin approves each ROI transaction.'
   },
   {

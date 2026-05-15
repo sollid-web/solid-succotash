@@ -73,7 +73,7 @@ export default function SummitPlanPage() {
         ],
         finalCtaHeadline: "Ready to activate Summit VIP?",
         finalCtaSubhead:
-          "Start earning daily ROI with a plan built for higher allocations.",
+          "Start earning APY with a plan built for higher allocations.",
         finalCtaLabel: "Activate Summit VIP",
         finalCtaMicrotext: "Takes minutes • KYC required • USDT/BTC supported",
         stickyBarText: "Summit VIP • 25% APY",

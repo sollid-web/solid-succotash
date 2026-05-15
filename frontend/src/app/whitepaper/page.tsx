@@ -57,7 +57,7 @@ const SECTIONS = [
     num: "04",
     title: "Investment Plans",
     content: [
-      "WolvCapital offers four investment tiers, each designed for a different investor profile. All plans operate on fixed terms with structured daily ROI.",
+      "WolvCapital offers four investment tiers, each designed for a different investor profile. All plans operate on fixed terms with structured APY.",
       "Pioneer (Entry): Minimum $100 · 8% APY · 90-day term. Designed for first-time investors exploring the platform with minimal capital commitment.",
       "Vanguard (Growth): Minimum $1,000 · 12% APY · 150-day term. For investors ready to commit meaningful capital for consistent compounding returns.",
       "Horizon (Advanced): Minimum $5,000 · 18% APY · 180-day term. For serious investors seeking significant portfolio growth over a structured period.",

@@ -174,7 +174,7 @@ export default function PlanDetailPage({ plan }: { plan: PlanDetail }) {
             </div>
 
             <p className="mt-4 text-xs text-gray-500">
-              Estimates shown are projections based on the plan’s daily ROI rate.
+              Estimates shown are projections based on the plan’s APY rate.
             </p>
 
             <div className="mt-6">

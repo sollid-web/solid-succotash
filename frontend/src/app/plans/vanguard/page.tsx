@@ -24,7 +24,7 @@ export default function VanguardPlanPage() {
         calculatorCtaLabel: "Continue to Deposit & Activate",
         positioningTitle: "Designed for balanced growth",
         positioningBody:
-          "The Vanguard Plan offers a measured approach with daily ROI visibility and defined limits. It’s a solid fit for investors who want structure without the longest lockup.",
+          "The Vanguard Plan offers a measured approach with APY visibility and defined limits. It’s a solid fit for investors who want structure without the longest lockup.",
         positioningBullets: [
           "You want a balanced plan with a mid-range ROI",
           "You’re comfortable with a 150-day growth window",
@@ -73,7 +73,7 @@ export default function VanguardPlanPage() {
         ],
         finalCtaHeadline: "Ready to activate Vanguard?",
         finalCtaSubhead:
-          "Start earning daily ROI with a plan built for balanced growth.",
+          "Start earning APY with a plan built for balanced growth.",
         finalCtaLabel: "Activate Vanguard Plan",
         finalCtaMicrotext: "Takes minutes • KYC required • USDT/BTC supported",
         stickyBarText: "Vanguard Plan • 1.25% Daily ROI",

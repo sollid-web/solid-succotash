@@ -24,9 +24,9 @@ export default function HorizonPlanPage() {
         calculatorCtaLabel: "Continue to Deposit & Activate",
         positioningTitle: "Designed for long-term crypto growth",
         positioningBody:
-          "The Horizon Plan is designed for investors who prefer a longer runway and consistent daily ROI tracking. If you’re building a disciplined strategy—rather than chasing short-term swings—this plan gives you a structured path and daily visibility.",
+          "The Horizon Plan is designed for investors who prefer a longer runway and consistent APY tracking. If you’re building a disciplined strategy—rather than chasing short-term swings—this plan gives you a structured path and daily visibility.",
         positioningBullets: [
-          "You want a mid-to-high tier plan with strong daily ROI",
+          "You want a mid-to-high tier plan with strong APY",
           "You’re comfortable with a 180-day growth window",
           "You prefer consistent dashboard tracking over constant trading",
           "You value a platform that enforces KYC and security standards",
@@ -73,7 +73,7 @@ export default function HorizonPlanPage() {
         ],
         finalCtaHeadline: "Ready to activate Horizon?",
         finalCtaSubhead:
-          "Start earning daily ROI with a plan built for long-term investors.",
+          "Start earning APY with a plan built for long-term investors.",
         finalCtaLabel: "Activate Horizon Plan",
         finalCtaMicrotext: "Takes minutes • KYC required • USDT/BTC supported",
         stickyBarText: "Horizon Plan • 1.5% Daily ROI",

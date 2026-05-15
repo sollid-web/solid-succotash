@@ -492,7 +492,7 @@ export default function DashboardPage() {
                           </span>
                           {dailyRoi > 0 && (
                             <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px" }}>
-                              {dailyRoi}% daily ROI
+                              {dailyRoi}% APY
                             </span>
                           )}
                         </div>

@@ -5,13 +5,13 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "How It Works — WolvCapital | Digital Asset Investment & Staking",
   description:
-    "Learn how WolvCapital works: create account, choose plan, deposit funds, earn daily ROI, stake WOLV tokens, and withdraw profits. Fully compliant, blockchain-verified investment platform.",
+    "Learn how WolvCapital works: create account, choose plan, deposit funds, earn staking rewards, stake WOLV tokens, and withdraw profits. Fully compliant, blockchain-verified investment platform.",
   keywords:
     "how it works, investment process, digital asset investment, WOLV staking, cryptocurrency investment, ROI tracking, secure investment platform, WolvCapital process",
   openGraph: {
     title: "How It Works — WolvCapital",
     description:
-      "Step-by-step guide to investing and staking on WolvCapital. Earn daily ROI + WOLV token rewards. KYC/AML compliant.",
+      "Step-by-step guide to investing and staking on WolvCapital. Earn APY + WOLV token rewards. KYC/AML compliant.",
     images: ["/og-images/home-og.png"],
     type: "website",
   },
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "How It Works — WolvCapital",
     description:
-      "Invest, earn daily ROI, stake WOLV tokens. Professional digital asset investment platform.",
+      "Invest, earn staking rewards, stake WOLV tokens. Professional digital asset investment platform.",
     images: ["/og-images/home-og.png"],
   },
 };
@@ -53,7 +53,7 @@ const STEPS = [
     num: "04",
     title: "Choose an Investment Plan",
     description:
-      "Select a plan matching your capital level and investment horizon. WolvCapital offers four tiers — Pioneer ($100+), Vanguard ($1,000+), Horizon ($5,000+), and Summit VIP ($15,000+) — each with a fixed term and structured daily ROI.",
+      "Select a plan matching your capital level and investment horizon. WolvCapital offers four tiers — Pioneer ($100+), Vanguard ($1,000+), Horizon ($5,000+), and Summit VIP ($15,000+) — each with a fixed term and structured APY.",
     icon: "📊",
     tag: "Investment",
   },
@@ -441,7 +441,7 @@ export default function HowItWorksPage() {
               lineHeight: 1.7,
             }}
           >
-            Join WolvCapital investors earning daily ROI and WOLV token rewards
+            Join WolvCapital investors earning APY and WOLV token rewards
             on BNB Smart Chain. Start with as little as $100.
           </p>
           <div

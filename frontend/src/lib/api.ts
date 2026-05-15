@@ -1,6 +1,6 @@
 // src/lib/api.ts
 
-const DEFAULT_API_BASE = "https://django-production-2764.up.railway.app";
+const DEFAULT_API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
 export function getApiBaseUrl() {
   // Use a single env var to avoid mixed backends.
@@ -10,7 +10,7 @@ export function getApiBaseUrl() {
     return envBase.replace(/\/$/, "");
   }
 
-  // Hard fallback (Railway backend)
+  
   return DEFAULT_API_BASE;
 }
 

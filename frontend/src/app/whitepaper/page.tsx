@@ -48,7 +48,7 @@ const SECTIONS = [
     title: "Platform Architecture",
     content: [
       "WolvCapital operates a two-layer architecture. The off-chain layer handles KYC verification, fiat onboarding, portfolio management, and manual withdrawal approvals — providing regulatory compliance and fraud prevention. The on-chain layer handles WOLV token distribution, staking contracts, and the reward pool.",
-      "The frontend is built on Next.js 16 deployed on Vercel, with a Django REST Framework backend on Railway. All smart contracts are deployed on BNB Smart Chain (BSC) — chosen for its low transaction fees, EVM compatibility, and large ecosystem.",
+      "The frontend is built on Next.js 16 deployed on Vercel, with a scalable cloud backend. All smart contracts are deployed on BNB Smart Chain (BSC) — chosen for its low transaction fees, EVM compatibility, and large ecosystem.",
       "Investment plans operate on fixed-term, fixed-ROI structures. Returns are calculated server-side and reflected in the investor dashboard daily. When profits are distributed, WOLV tokens are transferred from the treasury wallet to investor wallets — creating an on-chain record of every distribution.",
     ],
   },

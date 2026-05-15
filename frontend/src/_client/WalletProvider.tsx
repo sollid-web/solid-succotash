@@ -12,6 +12,7 @@ const config = getDefaultConfig({
   appName: 'WolvCapital',
   projectId,
   chains: [bsc],
+  ssr: true,
 });
 
 const queryClient = new QueryClient();
@@ -20,15 +21,11 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  // Don't render the providers at all until client is mounted
-  // This prevents RainbowKit from triggering setState during SSR hydration
-  if (!mounted) return null;
-
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider modalSize="compact">
-          {children}
+          {mounted ? children : <div style={{ visibility: 'hidden' }}>{children}</div>}
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>

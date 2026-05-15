@@ -5,12 +5,14 @@ import { Button } from '@/components/ui/Button'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import { useTranslation } from '@/components/TranslationProvider'
 import { cn } from '@/lib/cn'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function NavBar() {
   const pathname = usePathname()
   const { t } = useTranslation()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
   const navItems = [
     { href: '/', labelKey: 'nav.home' },
@@ -65,7 +67,7 @@ export default function NavBar() {
 
           {/* Desktop Auth */}
           <div className="hidden lg:flex items-center gap-4">
-            <LanguageSwitcher />
+            {mounted <LanguageSwitcher /><LanguageSwitcher /> <LanguageSwitcher />}
             <Link
               href="/accounts/login"
               className="text-sm font-medium text-white px-5 py-2 border border-[rgba(255,255,255,0.2)] rounded-[7px] hover:border-[#00a896] hover:text-[#00a896] transition-colors"
@@ -84,7 +86,7 @@ export default function NavBar() {
 
           {/* Mobile Right */}
           <div className="flex items-center gap-2 lg:hidden">
-            <LanguageSwitcher />
+            {mounted <LanguageSwitcher /><LanguageSwitcher /> <LanguageSwitcher />}
             <Link
               href="/accounts/login"
               className="text-xs font-medium text-white px-3 py-2 border border-[rgba(255,255,255,0.2)] rounded-[7px] hover:border-[#00a896] transition-colors"

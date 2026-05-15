@@ -6,7 +6,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenRefreshView
+from api.jwt import EmailOrUsernameTokenObtainPairView
 
 from transactions.admin import SystemStatusView
 
@@ -19,8 +20,8 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("api/", include("api.urls")),
     path("api/chat/", include("chat.urls")),
-    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("api/auth/jwt/create/", TokenObtainPairView.as_view(), name="jwt_create"),
+    path("api/token/", EmailOrUsernameTokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/auth/jwt/create/", EmailOrUsernameTokenObtainPairView.as_view(), name="jwt_create"),
     path("api/auth/jwt/refresh/", TokenRefreshView.as_view(), name="jwt_refresh"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/referrals/", include("referrals.urls")),

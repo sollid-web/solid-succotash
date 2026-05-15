@@ -3,12 +3,10 @@ import { useAccount, useChainId, useDisconnect, useReadContract, useSwitchChain 
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { formatUnits } from 'viem';
 import { useEffect, useState } from 'react';
-import { WalletConnectQR } from '../components/WalletConnectQR';
 
 const WOLV_CONTRACT = '0xe0167279aef7bf4ad313d261da82e8366822270c';
 const WOLV_DECIMALS = 18;
 const PRICE_PER_WOLV = 1;
-
 const WOLV_ABI = [
   {
     name: 'balanceOf',
@@ -33,7 +31,6 @@ export function WolvWalletButton({ compact = false }: WolvWalletButtonProps) {
   const [adding, setAdding] = useState(false);
   const [added, setAdded] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showQR, setShowQR] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [hasInjectedProvider, setHasInjectedProvider] = useState(false);
   const [isMobileBrowser, setIsMobileBrowser] = useState(false);
@@ -53,14 +50,12 @@ export function WolvWalletButton({ compact = false }: WolvWalletButtonProps) {
 
   useEffect(() => {
     if (!dropdownOpen) return;
-
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
       if (!target.closest('.wallet-dropdown')) {
         setDropdownOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [dropdownOpen]);
@@ -77,17 +72,22 @@ export function WolvWalletButton({ compact = false }: WolvWalletButtonProps) {
   const formattedBalance = rawBalance.toLocaleString(undefined, { maximumFractionDigits: 2 });
   const usdValue = (rawBalance * PRICE_PER_WOLV).toLocaleString(undefined, { maximumFractionDigits: 2 });
 
-  const preferWalletConnect = mounted && !hasInjectedProvider && isMobileBrowser;
+  const openWallet = () => {
+    setError(null);
+    if (!openConnectModal) {
+      setError('Wallet connection is not available.');
+      return;
+    }
+    openConnectModal();
+  };
 
   const addWolvToWallet = async () => {
     if (typeof window === 'undefined' || !(window as any).ethereum) {
       setError('Wallet extension not detected.');
       return;
     }
-
     setAdding(true);
     setError(null);
-
     try {
       await (window as any).ethereum.request({
         method: 'wallet_watchAsset',
@@ -105,35 +105,10 @@ export function WolvWalletButton({ compact = false }: WolvWalletButtonProps) {
     }
   };
 
-  const openWalletConnect = () => {
-    setError(null);
-    setShowQR(true);
-  };
-
-  const openBrowserWallet = () => {
-    setError(null);
-    if (!openConnectModal) {
-      setError('Browser wallet connection is not available.');
-      return;
-    }
-
-    openConnectModal();
-  };
-
   if (!mounted) {
     return (
       <div className="mx-auto flex max-w-md items-center justify-center rounded-[28px] border border-teal-500/20 bg-[#071a3c] p-6 text-center text-sm text-slate-400">
         Loading wallet interface...
-      </div>
-    );
-  }
-
-  if (showQR) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-5">
-        <div className="w-full max-w-lg rounded-[28px] border border-teal-500/20 bg-[#0b2f6b] p-6 shadow-[0_18px_40px_rgba(0,0,0,0.45)]">
-          <WalletConnectQR onClose={() => setShowQR(false)} />
-        </div>
       </div>
     );
   }
@@ -164,7 +139,6 @@ export function WolvWalletButton({ compact = false }: WolvWalletButtonProps) {
                   <div className="text-xs text-slate-400 uppercase tracking-wide">Connected Wallet</div>
                   <div className="mt-1 font-mono text-sm text-slate-300">{address}</div>
                 </div>
-
                 {isCorrectChain && (
                   <div className="text-center">
                     <div className="text-xs text-slate-400 uppercase tracking-wide">WOLV Balance</div>
@@ -172,17 +146,13 @@ export function WolvWalletButton({ compact = false }: WolvWalletButtonProps) {
                     <div className="text-xs text-slate-400">(~${usdValue})</div>
                   </div>
                 )}
-
                 {hasWrongChain && (
                   <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-center">
                     <p className="text-xs text-red-200">Wrong network</p>
                     <button
                       type="button"
                       onClick={() => {
-                        if (!switchChain) {
-                          setError('Network switching not supported.');
-                          return;
-                        }
+                        if (!switchChain) { setError('Network switching not supported.'); return; }
                         setError(null);
                         switchChain({ chainId: 56 });
                         setDropdownOpen(false);
@@ -194,13 +164,9 @@ export function WolvWalletButton({ compact = false }: WolvWalletButtonProps) {
                     </button>
                   </div>
                 )}
-
                 <button
                   type="button"
-                  onClick={() => {
-                    disconnect();
-                    setDropdownOpen(false);
-                  }}
+                  onClick={() => { disconnect(); setDropdownOpen(false); }}
                   className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 transition hover:border-teal-300/40"
                 >
                   Disconnect
@@ -234,10 +200,7 @@ export function WolvWalletButton({ compact = false }: WolvWalletButtonProps) {
             <button
               type="button"
               onClick={() => {
-                if (!switchChain) {
-                  setError('Network switching is not supported by this wallet.');
-                  return;
-                }
+                if (!switchChain) { setError('Network switching is not supported by this wallet.'); return; }
                 setError(null);
                 switchChain({ chainId: 56 });
               }}
@@ -277,19 +240,13 @@ export function WolvWalletButton({ compact = false }: WolvWalletButtonProps) {
     );
   }
 
+  // Not connected
   return (
     <div className={compact ? "relative" : "flex w-full max-w-md flex-col items-center gap-5 rounded-[28px] border border-white/10 bg-[#071a3c] p-6 text-center text-slate-200 sm:p-8"}>
       {compact ? (
         <button
           type="button"
-          onClick={() => {
-            setError(null);
-            if (!openConnectModal) {
-              setError('Connection not available.');
-              return;
-            }
-            openConnectModal();
-          }}
+          onClick={openWallet}
           className="rounded-2xl bg-teal-500 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-teal-400"
         >
           Connect
@@ -311,35 +268,18 @@ export function WolvWalletButton({ compact = false }: WolvWalletButtonProps) {
             </p>
           </div>
 
-          {preferWalletConnect ? (
-            <button
-              type="button"
-              onClick={openWalletConnect}
-              className="w-full rounded-2xl bg-teal-500 px-5 py-4 text-sm font-semibold text-slate-950 transition hover:bg-teal-400"
-            >
-              WalletConnect
-            </button>
-          ) : (
-            <div className="grid w-full gap-3 sm:grid-cols-2">
-              <button
-                type="button"
-                onClick={openBrowserWallet}
-                className="rounded-2xl bg-gradient-to-br from-teal-500 to-slate-900 px-5 py-4 text-sm font-semibold text-white transition hover:from-teal-400"
-              >
-                Browser
-              </button>
-              <button
-                type="button"
-                onClick={openWalletConnect}
-                className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm font-semibold text-white transition hover:border-teal-300/40"
-              >
-                WalletConnect
-              </button>
-            </div>
-          )}
+          <button
+            type="button"
+            onClick={openWallet}
+            className="w-full rounded-2xl bg-teal-500 px-5 py-4 text-sm font-semibold text-slate-950 transition hover:bg-teal-400"
+          >
+            Connect Wallet
+          </button>
 
           {(!hasInjectedProvider && !isMobileBrowser) && (
-            <p className="text-sm text-slate-500">No browser wallet found. Use WalletConnect if you prefer mobile or desktop wallet apps.</p>
+            <p className="text-sm text-slate-500">
+              No browser wallet detected. RainbowKit supports MetaMask, WalletConnect, and more.
+            </p>
           )}
 
           {error && <div className="rounded-2xl bg-red-500/10 px-4 py-3 text-sm text-red-200">{error}</div>}

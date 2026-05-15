@@ -118,10 +118,10 @@ export default function LoginPage() {
         {/* Card */}
         <div className="bg-white rounded-3xl shadow-2xl px-8 py-10">
 
-          <h1 className="text-2xl font-extrabold text-gray-900 mb-1 text-center">
+          <h1 className="text-2xl font-extrabold text-white mb-1 text-center">
             Welcome Back
           </h1>
-          <p className="text-sm text-gray-500 text-center mb-8">
+          <p className="text-sm text-blue-200 text-center mb-8">
             Sign in to access your investment dashboard
           </p>
 
@@ -145,7 +145,7 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-800 mb-1.5">
+              <label htmlFor="email" className="block text-sm font-semibold text-blue-200 mb-1.5">
                 Email Address
               </label>
               <input
@@ -153,14 +153,14 @@ export default function LoginPage() {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition text-sm"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition text-sm"
                 placeholder="you@example.com"
                 required
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-gray-800 mb-1.5">
+              <label htmlFor="password" className="block text-sm font-semibold text-blue-200 mb-1.5">
                 Password
               </label>
               <input
@@ -168,7 +168,7 @@ export default function LoginPage() {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition text-sm"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition text-sm"
                 placeholder="••••••••"
                 required
               />
@@ -177,7 +177,7 @@ export default function LoginPage() {
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-                <span className="text-sm text-gray-600">Remember me</span>
+                <span className="text-sm text-blue-200">Remember me</span>
               </label>
               <Link
                 href="/accounts/password/reset"
@@ -210,7 +210,7 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-8 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-blue-200">
               Don&apos;t have an account?{" "}
               <Link href="/accounts/signup" className="text-blue-600 font-bold hover:underline">
                 Sign Up
@@ -219,7 +219,7 @@ export default function LoginPage() {
           </div>
 
           <div className="mt-6 pt-6 border-t border-gray-100 text-center">
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-blue-300">
               By signing in, you agree to our{" "}
               <Link href="/terms-of-service" className="text-blue-600 hover:underline">Terms of Service</Link>
               {" "}and{" "}

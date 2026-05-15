@@ -98,14 +98,14 @@ export default function SignupPage() {
 
             {/* Benefits grid */}
             <div className="px-8 pt-10 pb-8 border-b border-gray-100">
-              <h2 className="text-xl font-bold text-gray-900 mb-6 text-center">Why Create an Account?</h2>
+              <h2 className="text-xl font-bold text-white mb-6 text-center">Why Create an Account?</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {benefits.map((b, i) => (
-                  <div key={i} className="flex items-start gap-3 p-4 rounded-2xl bg-blue-50 border border-blue-100">
+                  <div key={i} className="flex items-start gap-3 p-4 rounded-2xl bg-white/10 border border-white/20">
                     <span className="text-2xl flex-shrink-0 mt-0.5">{b.icon}</span>
                     <div>
-                      <p className="font-bold text-gray-900 text-sm">{b.title}</p>
-                      <p className="text-xs text-gray-600 mt-0.5">{b.desc}</p>
+                      <p className="font-bold text-white text-sm">{b.title}</p>
+                      <p className="text-xs text-blue-200 mt-0.5">{b.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -133,7 +133,7 @@ export default function SignupPage() {
 
             {/* Form */}
             <div className="px-8 py-10 max-w-md mx-auto">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Create Your Account</h2>
+              <h2 className="text-2xl font-bold text-white mb-6 text-center">Create Your Account</h2>
 
               {error && (
                 <div className="mb-5 text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl p-4">
@@ -149,58 +149,58 @@ export default function SignupPage() {
               {step === 'form' && (
                 <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); completeSignup() }}>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-800 mb-1.5">
+                    <label className="block text-sm font-semibold text-blue-200 mb-1.5">
                       Email Address
                     </label>
                     <input
                       type="email"
                       value={email}
                       onChange={e => setEmail(e.target.value)}
-                      className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all text-sm"
+                      className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all text-sm"
                       placeholder="you@example.com"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-800 mb-1.5">
+                    <label className="block text-sm font-semibold text-blue-200 mb-1.5">
                       Password
                     </label>
                     <input
                       type="password"
                       value={password}
                       onChange={e => setPassword(e.target.value)}
-                      className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all text-sm"
+                      className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all text-sm"
                       placeholder="••••••••"
                       minLength={8}
                       required
                     />
-                    <p className="text-xs text-gray-500 mt-1">Must be at least 8 characters</p>
+                    <p className="text-xs text-blue-300 mt-1">Must be at least 8 characters</p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-800 mb-1.5">
+                    <label className="block text-sm font-semibold text-blue-200 mb-1.5">
                       Confirm Password
                     </label>
                     <input
                       type="password"
                       value={confirmPassword}
                       onChange={e => setConfirmPassword(e.target.value)}
-                      className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all text-sm"
+                      className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all text-sm"
                       placeholder="••••••••"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-800 mb-1.5">
+                    <label className="block text-sm font-semibold text-blue-200 mb-1.5">
                       Referral Code <span className="font-normal text-gray-400">(Optional)</span>
                     </label>
                     <input
                       type="text"
                       value={referralCode}
                       onChange={e => setReferralCode(e.target.value.trim())}
-                      className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all text-sm"
+                      className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all text-sm"
                       placeholder="ABC123"
                     />
                   </div>
@@ -214,14 +214,14 @@ export default function SignupPage() {
                     {loading ? 'Creating Account...' : 'Create Free Account'}
                   </button>
 
-                  <p className="text-center text-sm text-gray-600 pt-1">
+                  <p className="text-center text-sm text-blue-200 pt-1">
                     Already have an account?{' '}
                     <Link href="/accounts/login" className="text-blue-600 font-bold hover:underline">
                       Sign In
                     </Link>
                   </p>
 
-                  <p className="text-center text-xs text-gray-400">
+                  <p className="text-center text-xs text-blue-300">
                     By creating an account, you agree to our{' '}
                     <Link href="/terms-of-service" className="text-blue-600 hover:underline">Terms of Service</Link>
                     {' '}and{' '}

@@ -1,4 +1,4 @@
-import { WalletProvider } from '@/_client/WalletProvider';
+import { WalletProviderClient } from '@/_client/WalletProviderClient';
 
 export const metadata = {
   title: 'WOLV Admin - Token Manager',
@@ -11,8 +11,8 @@ export default function WolvAdminLayout({
   children: React.ReactNode
 }) {
   return (
-    <WalletProvider>
+    <WalletProviderClient>
       {children}
-    </WalletProvider>
+    </WalletProviderClient>
   );
 }

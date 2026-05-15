@@ -20,6 +20,8 @@ urlpatterns = [
     path("api/", include("api.urls")),
     path("api/chat/", include("chat.urls")),
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/auth/jwt/create/", TokenObtainPairView.as_view(), name="jwt_create"),
+    path("api/auth/jwt/refresh/", TokenRefreshView.as_view(), name="jwt_refresh"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/referrals/", include("referrals.urls")),
 ]

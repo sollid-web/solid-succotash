@@ -49,6 +49,7 @@ const SECTIONS = [
     content: [
       "WolvCapital operates a two-layer architecture. The off-chain layer handles KYC verification, fiat onboarding, portfolio management, and manual withdrawal approvals — providing regulatory compliance and fraud prevention. The on-chain layer handles WOLV token distribution, staking contracts, and the reward pool.",
       "The frontend is built on Next.js 16 deployed on Vercel, with a scalable cloud backend. All smart contracts are deployed on BNB Smart Chain (BSC) — chosen for its low transaction fees, EVM compatibility, and large ecosystem.",
+      "Yield Generation: Staking rewards are funded entirely from the Investor Rewards allocation — 600,000,000 WOLV (60% of total supply) held in the timelock-protected RewardPool contract (0xb233cf74b14abf9d9702d585c540030125599579). This allocation is fixed at deployment and cannot be increased or minted. Rewards are distributed proportionally to stakers based on their tier APY and lock duration. The RewardPool contract is publicly verifiable on BSCScan, allowing any investor to confirm the remaining reward supply at any time.",
       "Investment plans operate on fixed-term, fixed-ROI structures. Returns are calculated server-side and reflected in the investor dashboard daily. When profits are distributed, WOLV tokens are transferred from the treasury wallet to investor wallets — creating an on-chain record of every distribution.",
     ],
   },
@@ -94,9 +95,7 @@ const SECTIONS = [
     title: "Tokenomics",
     content: [
       "Total Supply: 1,000,000,000 WOLV (fixed, immutable). No additional tokens can ever be minted. The contract contains no mint function.",
-      "Treasury (Investor Rewards): 70% — 700,000,000 WOLV. Distributed exclusively as investor profit rewards. Released only when investors earn returns on WolvCapital investment plans.",
-      "Staking Reward Pool: 20% — 200,000,000 WOLV. Reserved for staking APY rewards across all four staking tiers. Managed by the timelock-protected RewardPool contract.",
-      "Ecosystem Reserve: 10% — 100,000,000 WOLV. Reserved for future utility: exchange listings, liquidity provision, partnerships, and platform development. Subject to governance timelock before any release.",
+      "Investor Rewards: 60% — 600,000,000 WOLV. Distributed to investors via staking rewards and profit distributions over the platform lifetime.", "Treasury Reserve: 20% — 200,000,000 WOLV. Held in treasury for operational continuity, future reward pool top-ups, and platform development.", "Liquidity Reserve: 10% — 100,000,000 WOLV. Reserved for future DEX liquidity provision on PancakeSwap to enable open market trading.", "Team & Development: 7% — 70,000,000 WOLV. Allocated to the founding team and ongoing development. Subject to 12-month vesting schedule.", "Marketing & Growth: 3% — 30,000,000 WOLV. Reserved for partnerships, listings, community growth, and platform promotion.",
       "No tokens are allocated to founders, team, advisors, or investors for any purpose other than the categories above. WOLV had no ICO, no presale, and no private sale. All tokens in circulation represent earned investor rewards.",
     ],
   },

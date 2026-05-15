@@ -1,7 +1,7 @@
 'use client';
 import { WolvWalletButton } from './WolvWalletButton';
 
-export function WolvWalletSection() {
+export function WolvWalletSection(): import("react/jsx-runtime").JSX.Element {
   return (
     <div className="text-center">
       <div className="mb-4">

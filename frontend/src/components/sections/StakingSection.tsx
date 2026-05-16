@@ -27,7 +27,7 @@ export default function StakingSection() {
         </div>
         <div style={{ textAlign: 'center', marginBottom: '56px' }}>
           <h2 style={{ fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em', marginBottom: '16px', lineHeight: 1.1 }}>
-            Stake BNB or BUSD.<br />Earn WOLV On-Chain.
+            Stake & Earn WOLV On-Chain.
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '16px', maxWidth: '560px', margin: '0 auto', lineHeight: 1.7 }}>
             Lock your assets in our audited smart contracts and earn WOLV rewards at up to 25% APY. Every reward is recorded permanently on the BNB blockchain.
@@ -45,7 +45,7 @@ export default function StakingSection() {
         </div>
 
         {/* Plan cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '48px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '48px' }}>
           {PLANS.map(plan => (
             <div key={plan.id} style={{
               background: plan.featured ? plan.colorBg : 'rgba(255,255,255,0.03)',

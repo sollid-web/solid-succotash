@@ -22,7 +22,7 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[60%_40%] lg:items-center">
           <div className="space-y-8">
             <div className="max-w-xl">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#1E3A8A]">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-blue-300">
                 Invest · Stake · Earn — All On-Chain
               </span>
             </div>
@@ -31,14 +31,14 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
               {t('hero.title')}
             </h1>
 
-            <p className="max-w-2xl text-base leading-7 text-slate-700 sm:text-lg">
+            <p className="max-w-2xl text-base leading-7 text-slate-200 sm:text-lg">
               {t('hero.subtitle')}
             </p>
 
             {/* Live blockchain badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#eff6ff] border border-[#2A52BE]/20 rounded-full">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-blue-400/30 rounded-full">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-[12px] font-semibold text-[#1E3A8A]">
+              <span className="text-[12px] font-semibold text-blue-300">
                 Every profit recorded on BNB Chain · Stake BNB or BUSD · Earn WOLV rewards
               </span>
             </div>
@@ -69,13 +69,13 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
               </Link>
               <Link
                 href="/accounts/signup"
-                className="inline-flex min-h-[44px] items-center justify-center rounded-[7px] border-2 border-[#2A52BE] bg-white px-8 py-3.5 text-sm font-semibold text-[#1E3A8A] transition hover:bg-[#eff6ff]"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-[7px] border-2 border-[#2A52BE] bg-white px-8 py-3.5 text-sm font-semibold text-[#1E3A8A] transition hover:bg-blue-50"
               >
                 {t('hero.button.openAccount')}
               </Link>
             </div>
 
-            <div className="flex flex-wrap gap-3 text-[11px] uppercase tracking-[0.16em] text-slate-700">
+            <div className="flex flex-wrap gap-3 text-[11px] uppercase tracking-[0.16em] text-slate-300">
               <span>{t('hero.badge.encryption')}</span>
               <span>|</span>
               <span>{t('hero.badge.custody')}</span>

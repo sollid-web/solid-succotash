@@ -5,13 +5,13 @@ import { LocaleProvider } from '@/components/LocaleProvider'
 import { detectLocale } from '@/lib/detectLocale'
 
 export const metadata: Metadata = {
-  title: 'WolvCapital | Invest, Stake & Earn Blockchain-Verified Returns',
+  title: 'WolvCapital | Blockchain-Verified Returns, Invest, Stake & Earn On-Chain',
   description:
     'KYC-verified investment platform with on-chain profit distribution and WOLV staking. Earn 8–25% APY, stake BNB or BUSD, and receive WOLV tokens — verified permanently on BNB Chain. SEC-registered, institutional custody.',
   keywords:
     'blockchain investment platform, WOLV staking, BNB staking, BUSD staking, verified investment returns, on-chain profit distribution, WOLV token, BEP20 investment token, KYC investment platform, transparent investment, blockchain verified returns, WolvCapital, crypto staking rewards, digital asset management, stake BNB earn rewards',
   openGraph: {
-    title: 'WolvCapital | Invest, Stake & Earn — Verified on BNB Chain',
+    title: 'WolvCapital | Blockchain-Verified Returns, Invest, Stake & Earn On-Chain',
     description:
       'Stake BNB or BUSD and earn WOLV rewards on-chain. Every return is recorded permanently on the BNB blockchain — independently verifiable, immutable, and transparent.',
     images: [
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'WolvCapital | Invest, Stake & Earn — Verified on BNB Chain',
+    title: 'WolvCapital | Blockchain-Verified Returns, Invest, Stake & Earn On-Chain',
     description:
       'Stake BNB or BUSD, earn 8–25% APY in WOLV tokens. KYC-verified platform with on-chain proof of every return. Transparent, immutable, verifiable.',
     images: ['/og-images/home-og.png'],

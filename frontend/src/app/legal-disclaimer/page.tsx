@@ -4,137 +4,204 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Legal Disclaimer · WolvCapital Digital Investment Platform',
-  description:
-    'Read WolvCapital’s official legal disclaimer for secure investment returns, cryptocurrency investment opportunities, and U.S. regulatory compliance.',
-  keywords: [
-    'digital investment platform',
-    'U.S. fintech company',
-    'secure investment returns',
-    'cryptocurrency investment',
-    'regulated financial platform',
-    'legal disclaimer',
-    'WolvCapital'
-  ],
+  description: 'Read WolvCapital\'s official legal disclaimer for secure investment returns, cryptocurrency investment opportunities, and U.S. regulatory compliance.',
+  keywords: ['digital investment platform','U.S. fintech company','secure investment returns','cryptocurrency investment','regulated financial platform','legal disclaimer','WolvCapital'],
   openGraph: {
     title: 'WolvCapital Legal Disclaimer · U.S. Digital Investment Platform',
     description: 'Official investment disclaimer and compliance notice by WolvCapital, a U.S. regulated platform.',
-    images: [
-      {
-        url: '/images/legal/wolvcapital-legal-disclaimer.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'WolvCapital digital investment platform legal disclaimer',
-      },
-    ],
+    images: [{ url: '/images/legal/wolvcapital-legal-disclaimer.jpg', width: 1200, height: 630, alt: 'WolvCapital legal disclaimer' }],
   },
   robots: { index: true, follow: true },
 }
 
-export default function LegalDisclaimerPage() {
-    return (
-      <>
-        <div className="min-h-screen bg-hero-legal bg-cover bg-center bg-no-repeat">
-          <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
-            <div className="container mx-auto px-4 lg:px-8">
-              <div className="flex items-center justify-between h-20">
-                <Link href="/" className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#0b2f6b] to-[#2563eb] rounded-lg flex items-center justify-center">
-                    <span className="text-2xl font-bold text-[#0F172A]">W</span>
-                  </div>
-                  <span className="text-2xl font-bold text-[#0b2f6b]">WolvCapital</span>
-                </Link>
-              </div>
-            </div>
-          </nav>
+const sections = [
+  {
+    title: 'Important Notice',
+    text: 'WolvCapital is a U.S. regulated digital investment platform offering cryptocurrency-based financial services. By accessing or using our services, you acknowledge and agree to the following terms and conditions, which are designed to meet U.S. financial and data protection standards.',
+  },
+  {
+    title: 'No Guarantee of Returns',
+    text: 'Investment returns are subject to market conditions and platform performance. Past performance does not guarantee future results. All investments carry inherent risk, and you may receive back less than your original investment amount. WolvCapital does not provide any guarantee of performance.',
+  },
+  {
+    title: 'User Responsibility',
+    text: 'Users must ensure the accuracy of their account information and maintain the confidentiality of their credentials. You are solely responsible for compliance with all applicable laws and regulations in your jurisdiction.',
+    bullets: ['Maintaining the security of your account credentials','Providing accurate and up-to-date personal information','Understanding the risks associated with your investments','Complying with applicable laws and regulations in your jurisdiction'],
+  },
+  {
+    title: 'Service Availability',
+    text: 'Platform features are subject to availability and approval. Service interruptions may occur due to regulatory requirements, compliance reviews, or operational constraints:',
+    bullets: ['Scheduled maintenance and system upgrades','Technical difficulties or security concerns','Regulatory requirements or legal obligations','Market conditions or operational constraints'],
+  },
+  {
+    title: 'Manual Review Process',
+    text: 'All transactions undergo manual off-chain review for security and regulatory compliance purposes. Processing times typically range from 24–72 hours but may vary during high-volume periods or additional compliance checks.',
+  },
+  {
+    title: 'Limitation of Liability',
+    text: 'WolvCapital shall not be liable for any direct, indirect, incidental, or consequential damages arising from your use of the platform, investment losses, or service interruptions. All services are provided in accordance with applicable U.S. financial regulations.',
+  },
+]
 
-          <section className="pt-32 pb-16 relative overflow-hidden bg-black/40">
-            {/* Hero Background Image */}
-            {/* Background already applied to wrapper; optional secondary overlay retained */}
-            <div className="relative z-10 container mx-auto px-4 lg:px-8 max-w-6xl">
-              {/* Enhanced Legal Disclaimer Image Card */}
-              <div className="w-full flex flex-col items-center justify-center mb-8 mt-2">
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-blue-200 ring-4 ring-blue-100/40 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg w-full">
-                  <Image
-                    src="/images/legal/wolvcapital-legal-disclaimer.jpg"
-                    alt="WolvCapital Legal Disclaimer Document Signing"
-                    width={480}
-                    height={720}
-                    priority
-                    className="object-cover object-center w-full h-auto"
-                  />
-                  {/* Credibility Badge */}
-                  <div className="absolute top-4 left-4 bg-gradient-to-r from-[#0b2f6b] to-[#2563eb] text-[#0F172A] px-4 py-1 rounded-full shadow-lg text-xs font-bold tracking-wide flex items-center gap-2">
-                    <svg className="w-4 h-4 text-[#0F172A] mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                    Verified Legal Document
-                  </div>
-                </div>
-                <p className="text-sm text-gray-600 text-center mt-4 italic max-w-md">Signed and reviewed by legal counsel. All platform operations are subject to U.S. regulatory compliance and audit.</p>
+export default function LegalDisclaimerPage() {
+  return (
+    <div style={{ minHeight: '100vh', backgroundColor: '#060c1a' }}>
+
+      {/* ── NO inline nav — global NavBar handles it ── */}
+
+      {/* ── Web3 Hero ── */}
+      <div style={{
+        position: 'relative',
+        overflow: 'hidden',
+        padding: '80px 20px 64px',
+        background: 'linear-gradient(160deg,#060c1a 0%,#0d1f4e 40%,#0a2a2a 100%)',
+      }}>
+        {/* grid dot background */}
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 0,
+          backgroundImage: 'radial-gradient(circle, rgba(0,168,150,0.13) 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+        }} />
+        {/* glow blobs */}
+        <div style={{ position: 'absolute', top: '-80px', left: '10%', width: '340px', height: '340px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(42,82,190,0.35),transparent 70%)', zIndex: 0 }} />
+        <div style={{ position: 'absolute', bottom: '-60px', right: '5%', width: '280px', height: '280px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(0,168,150,0.25),transparent 70%)', zIndex: 0 }} />
+
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: '720px', margin: '0 auto', textAlign: 'center' }}>
+          {/* shield icon */}
+          <div style={{
+            width: '72px', height: '72px', borderRadius: '50%', margin: '0 auto 24px',
+            background: 'rgba(0,168,150,0.12)',
+            border: '1.5px solid rgba(0,168,150,0.4)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 0 32px rgba(0,168,150,0.2)',
+          }}>
+            <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="#00a896" strokeWidth="1.8">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+
+          <h1 style={{
+            fontSize: 'clamp(32px,6vw,52px)', fontWeight: 800, margin: '0 0 12px',
+            background: 'linear-gradient(135deg,#ffffff 30%,#00a896 100%)',
+            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+            lineHeight: 1.15,
+          }}>Legal Disclaimer</h1>
+
+          <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.5)', fontWeight: 400, margin: '0 0 28px' }}>
+            Last updated: November 2025
+          </p>
+
+          {/* verified pill */}
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '8px',
+            background: 'rgba(0,168,150,0.1)',
+            border: '1px solid rgba(0,168,150,0.35)',
+            borderRadius: '999px', padding: '9px 22px',
+            boxShadow: '0 0 20px rgba(0,168,150,0.1)',
+          }}>
+            <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#00a896" strokeWidth="2.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.85)', fontWeight: 500, letterSpacing: '0.02em' }}>
+              Verified &amp; reviewed by legal counsel · U.S. regulatory compliance
+            </span>
+          </div>
+
+          {/* stat chips */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '36px', flexWrap: 'wrap' }}>
+            {[
+              { label: 'Jurisdiction', value: 'United States' },
+              { label: 'Review Cycle', value: 'Quarterly' },
+              { label: 'Compliance', value: 'SEC · FinCEN · CFTC' },
+            ].map(({ label, value }) => (
+              <div key={label} style={{
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '10px', padding: '10px 18px', textAlign: 'center',
+              }}>
+                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '4px' }}>{label}</div>
+                <div style={{ fontSize: '13px', color: '#ffffff', fontWeight: 600 }}>{value}</div>
               </div>
-              <div className="text-center mb-12">
-                <h1 className="text-5xl lg:text-6xl font-extrabold text-[#0b2f6b] mb-4 drop-shadow-lg">Legal Disclaimer</h1>
-                <p className="text-gray-600 font-medium drop-shadow">Last updated: November 2025</p>
-              </div>
-              <div className="bg-white bg-opacity-90 rounded-2xl p-8 shadow-lg backdrop-blur-md mx-auto max-w-3xl">
-                <h2 className="text-3xl font-bold text-[#0b2f6b] mt-4 mb-6">Important Notice</h2>
-                <p className="text-lg text-gray-700 leading-relaxed">
-                  WolvCapital is a U.S. regulated digital investment platform offering cryptocurrency-based financial services. By accessing or using our services, you acknowledge and agree to the following terms and conditions, which are designed to meet U.S. financial and data protection standards.
-                </p>
-              </div>
-              <div className="prose max-w-none space-y-8 bg-white rounded-2xl p-8 lg:p-12 shadow-lg mt-12">
-                <p className="text-lg text-gray-700">
-                  Please read this disclaimer carefully before using our platform. These terms outline important limitations and responsibilities.
-                </p>
-                <div>
-                  <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">No Guarantee of Returns</h2>
-                  <p className="text-gray-700">
-                    Investment returns are subject to market conditions and platform performance. Past performance does not guarantee future results. All investments carry inherent risk, and you may receive back less than your original investment amount. WolvCapital does not provide any guarantee of performance.
-                  </p>
-                </div>
-                <div>
-                  <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">User Responsibility</h2>
-                  <p className="text-gray-700 mb-3">Users must ensure the accuracy of their account information and maintain the confidentiality of their credentials. You are solely responsible for compliance with all applicable laws and regulations in your jurisdiction:</p>
-                  <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                    <li>Maintaining the security of your account credentials</li>
-                    <li>Providing accurate and up-to-date personal information</li>
-                    <li>Understanding the risks associated with your investments</li>
-                    <li>Complying with applicable laws and regulations in your jurisdiction</li>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Content area ── */}
+      <div style={{ maxWidth: '820px', margin: '0 auto', padding: '40px 16px 64px' }}>
+
+        {/* image card */}
+        <div style={{
+          background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
+          borderRadius: '16px', overflow: 'hidden', marginBottom: '24px',
+        }}>
+          <Image
+            src="/images/legal/wolvcapital-legal-disclaimer.jpg"
+            alt="WolvCapital Legal Disclaimer Document"
+            width={820} height={340} priority
+            style={{ width: '100%', height: '220px', objectFit: 'cover', objectPosition: 'center top', display: 'block' }}
+          />
+          <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.45)', textAlign: 'center', padding: '12px 20px', margin: 0, fontStyle: 'italic' }}>
+            Signed and reviewed by legal counsel. All platform operations subject to U.S. regulatory compliance and audit.
+          </p>
+        </div>
+
+        {/* section cards */}
+        {sections.map(({ title, text, bullets }) => (
+          <div key={title} style={{
+            background: 'rgba(255,255,255,0.04)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: '16px', marginBottom: '16px', padding: '28px 28px 24px',
+            backdropFilter: 'blur(12px)',
+          }}>
+            <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+              <div style={{
+                width: '3px', minHeight: '26px', borderRadius: '4px', flexShrink: 0, marginTop: '4px',
+                background: 'linear-gradient(180deg,#2a52be,#00a896)',
+              }} />
+              <div style={{ flex: 1 }}>
+                <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#ffffff', margin: '0 0 12px', lineHeight: 1.3 }}>{title}</h2>
+                <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.75)', lineHeight: 1.8, margin: bullets ? '0 0 12px' : 0 }}>{text}</p>
+                {bullets && (
+                  <ul style={{ margin: 0, paddingLeft: '18px' }}>
+                    {bullets.map((b) => (
+                      <li key={b} style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.75, marginBottom: '6px' }}>{b}</li>
+                    ))}
                   </ul>
-                </div>
-                <div>
-                  <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">Service Availability</h2>
-                  <p className="text-gray-700 mb-3">Platform features are subject to availability and approval. Service interruptions may occur due to regulatory requirements, compliance reviews, or operational constraints:</p>
-                  <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                    <li>Scheduled maintenance and system upgrades</li>
-                    <li>Technical difficulties or security concerns</li>
-                    <li>Regulatory requirements or legal obligations</li>
-                    <li>Market conditions or operational constraints</li>
-                  </ul>
-                </div>
-                <div>
-                  <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">Manual Review Process</h2>
-                  <p className="text-gray-700">
-                    All transactions undergo manual off-chain review for security and regulatory compliance purposes. Processing times typically range from 24-72 hours but may vary during high-volume periods or additional compliance checks.
-                  </p>
-                </div>
-                <div>
-                  <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">Limitation of Liability</h2>
-                  <p className="text-gray-700">
-                    WolvCapital shall not be liable for any direct, indirect, incidental, or consequential damages arising from your use of the platform, investment losses, or service interruptions. All services are provided in accordance with applicable U.S. financial regulations.
-                  </p>
-                </div>
-                <div>
-                  <h2 className="text-3xl font-bold text-[#0b2f6b] mt-12 mb-6">Contact Information</h2>
-                  <p className="text-gray-700">
-                    If you have any questions about this Legal Disclaimer, please contact us at <a href="mailto:legal@wolvcapital.com" className="text-blue-600 hover:underline">legal@wolvcapital.com</a>. All communications are handled in accordance with U.S. regulatory requirements.
-                  </p>
-                </div>
-              </div>
-              <div className="text-center mt-12">
-                <Link href="/" className="text-[#2563eb] hover:text-[#1d4ed8] font-semibold">← Back to Home</Link>
+                )}
               </div>
             </div>
-          </section>
+          </div>
+        ))}
+
+        {/* contact card */}
+        <div style={{
+          background: 'rgba(0,168,150,0.07)',
+          border: '1px solid rgba(0,168,150,0.25)',
+          borderRadius: '16px', marginBottom: '16px', padding: '28px 28px 24px',
+        }}>
+          <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+            <div style={{ width: '3px', minHeight: '26px', borderRadius: '4px', flexShrink: 0, marginTop: '4px', background: 'linear-gradient(180deg,#00a896,#2a52be)' }} />
+            <div>
+              <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#ffffff', margin: '0 0 12px' }}>Contact Information</h2>
+              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.75)', lineHeight: 1.8, margin: 0 }}>
+                If you have any questions about this Legal Disclaimer, please contact us at{' '}
+                <a href="mailto:legal@wolvcapital.com" style={{ color: '#00a896', fontWeight: 600, textDecoration: 'underline' }}>
+                  legal@wolvcapital.com
+                </a>.
+                {' '}All communications are handled in accordance with U.S. regulatory requirements.
+              </p>
+            </div>
+          </div>
         </div>
-      </>
-    );
+
+        {/* back link */}
+        <div style={{ textAlign: 'center', paddingTop: '16px' }}>
+          <Link href="/" style={{ fontSize: '14px', fontWeight: 600, color: '#00a896', textDecoration: 'none', letterSpacing: '0.02em' }}>
+            ← Back to Home
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
 }

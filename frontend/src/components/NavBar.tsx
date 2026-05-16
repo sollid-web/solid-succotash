@@ -83,7 +83,7 @@ export default function NavBar() {
           </div>
 
           {/* Mobile Right */}
-          <div className="flex items-center gap-2 lg:hidden">
+          <div className="flex items-center gap-2 lg:hidden flex-shrink-0">
             <LanguageSwitcher />
             <Link
               href="/accounts/login"

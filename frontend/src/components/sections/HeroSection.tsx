@@ -27,7 +27,7 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
               </span>
             </div>
 
-            <h1 className="text-3xl font-bold leading-tight tracking-tight text-[#0F172A] sm:text-4xl md:text-5xl lg:text-[48px] lg:leading-[1.05]">
+            <h1 className="text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl md:text-5xl lg:text-[48px] lg:leading-[1.05]">
               {t('hero.title')}
             </h1>
 
@@ -52,9 +52,9 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
                 { plan: 'Summit VIP', apy: '25%', days: '365d' },
               ].map(p => (
                 <div key={p.plan} className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm">
-                  <span className="text-[11px] font-semibold text-[#0F172A]">{p.plan}</span>
+                  <span className="text-[11px] font-semibold text-gray-800">{p.plan}</span>
                   <span className="text-[11px] font-bold text-[#2A52BE]">{p.apy} APY</span>
-                  <span className="text-[10px] text-slate-400">{p.days}</span>
+                  <span className="text-[10px] text-gray-500">{p.days}</span>
                 </div>
               ))}
             </div>

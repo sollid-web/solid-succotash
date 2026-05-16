@@ -96,7 +96,7 @@ export default function NavBar() {
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="p-2 rounded-lg transition-colors"
-              style={{ background: 'rgba(255,255,255,0.06)' }}
+              style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)' }}
               aria-label="Toggle menu"
             >
               {mobileOpen ? (

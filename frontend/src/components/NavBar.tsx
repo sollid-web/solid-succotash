@@ -67,7 +67,7 @@ export default function NavBar() {
 
           {/* Desktop Auth */}
           <div className="hidden lg:flex items-center gap-4">
-            {mounted {mounted <LanguageSwitcher /><LanguageSwitcher /> <LanguageSwitcher />}{mounted <LanguageSwitcher /><LanguageSwitcher /> <LanguageSwitcher />} <LanguageSwitcher />}
+            {mounted && <LanguageSwitcher />}
             <Link
               href="/accounts/login"
               className="text-sm font-medium text-white px-5 py-2 border border-[rgba(255,255,255,0.2)] rounded-[7px] hover:border-[#00a896] hover:text-[#00a896] transition-colors"
@@ -86,7 +86,7 @@ export default function NavBar() {
 
           {/* Mobile Right */}
           <div className="flex items-center gap-2 lg:hidden">
-            {mounted {mounted <LanguageSwitcher /><LanguageSwitcher /> <LanguageSwitcher />}{mounted <LanguageSwitcher /><LanguageSwitcher /> <LanguageSwitcher />} <LanguageSwitcher />}
+            {mounted && <LanguageSwitcher />}
             <Link
               href="/accounts/login"
               className="text-xs font-medium text-white px-3 py-2 border border-[rgba(255,255,255,0.2)] rounded-[7px] hover:border-[#00a896] transition-colors"

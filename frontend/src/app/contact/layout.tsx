@@ -8,6 +8,7 @@ export const metadata: Metadata = {
     title: 'Contact WolvCapital — Investor Support & Compliance',
     description: 'Reach our investor support and compliance teams. Palo Alto, CA registered office.',
     url: 'https://wolvcapital.com/contact',
+    images: [{ url: '/og-images/contact-og.png', width: 1200, height: 630 }],
     type: 'website',
   },
   robots: { index: true, follow: true },

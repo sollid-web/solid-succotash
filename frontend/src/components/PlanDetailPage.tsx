@@ -69,26 +69,26 @@ export default function PlanDetailPage({ plan }: { plan: PlanDetail }) {
     "inline-flex items-center justify-center rounded-full bg-[#4AB3F4] px-7 py-3.5 text-sm sm:text-base font-bold text-[#0F172A] shadow-sm hover:bg-[#3aa6e6] transition";
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="h-20" />
+    <div style={{ minHeight: "100vh", backgroundColor: "#060c1a" }}>
+      <div style={{ height: "80px" }} />
 
       {/* Hero */}
-      <section className="py-10 sm:py-14 text-center">
+      <section style={{ padding: "48px 20px 40px", textAlign: "center", background: "linear-gradient(160deg,#060c1a 0%,#0d1f4e 45%,#0a3d35 100%)", borderBottom: "1px solid rgba(0,168,150,0.25)" }}>
         <div className="container mx-auto px-4 lg:px-8 max-w-3xl">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0b2f6b]">
+          <h1 style={{ fontSize: "clamp(28px,5vw,46px)", fontWeight: 800, color: "#ffffff", marginBottom: "12px" }}>
             {plan.name} Plan
           </h1>
-          <p className="mt-3 text-base sm:text-lg text-gray-700">{plan.subtitleLine}</p>
-          <p className="mt-2 text-sm text-gray-600">{plan.supportingLine}</p>
+          <p style={{ color: "rgba(255,255,255,0.75)" }}>{plan.subtitleLine}</p>
+          <p style={{ color: "rgba(255,255,255,0.65)" }}>{plan.supportingLine}</p>
 
           <div className="mt-6 flex flex-col items-center gap-2">
             <Link href={`/accounts/signup?plan=${plan.slug}`} className={ctaClass}>
               {plan.ctaLabel}
             </Link>
-            <p className="text-xs text-gray-500">{plan.ctaMicrotext}</p>
+            <p style={{ color: "rgba(255,255,255,0.45)" }}>{plan.ctaMicrotext}</p>
             <Link
               href="#roi-calculator"
-              className="text-sm font-semibold text-[#0b2f6b] underline underline-offset-4 hover:no-underline"
+              style={{ color: "#00c9b1" }}
             >
               {plan.secondaryLinkLabel}
             </Link>
@@ -99,7 +99,7 @@ export default function PlanDetailPage({ plan }: { plan: PlanDetail }) {
       {/* Highlights */}
       <section className="py-10">
         <div className="container mx-auto px-4 lg:px-8 max-w-4xl">
-          <h2 className="text-xl sm:text-2xl font-bold text-[#0b2f6b] text-center">
+          <h2 style={{ color: "#00c9b1" }}>
             {plan.highlightsTitle}
           </h2>
           <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -111,28 +111,28 @@ export default function PlanDetailPage({ plan }: { plan: PlanDetail }) {
             ].map((item) => {
               const Icon = item.icon;
               return (
-                <div key={item.label} className="rounded-2xl bg-white border border-gray-200 p-4 text-center">
-                  <Icon className="h-5 w-5 text-[#0b2f6b] mx-auto" aria-hidden="true" />
-                  <p className="mt-2 text-sm font-semibold text-[#0b2f6b]">{item.label}</p>
-                  <p className="mt-1 text-xs text-gray-600">{item.value}</p>
+                <div key={item.label} style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
+                  <Icon style={{ color: "#00c9b1" }} aria-hidden="true" />
+                  <p style={{ color: "#00c9b1" }}>{item.label}</p>
+                  <p style={{ color: "rgba(255,255,255,0.65)" }}>{item.value}</p>
                 </div>
               );
             })}
           </div>
-          <p className="mt-4 text-xs text-gray-500 text-center">{plan.highlightsNote}</p>
+          <p style={{ color: "rgba(255,255,255,0.45)" }}>{plan.highlightsNote}</p>
         </div>
       </section>
 
       {/* ROI Calculator */}
       <section id="roi-calculator" className="py-12">
         <div className="container mx-auto px-4 lg:px-8 max-w-3xl">
-          <div className="rounded-3xl border border-gray-200 bg-white p-6 sm:p-8 shadow-sm">
-            <h2 className="text-xl sm:text-2xl font-bold text-[#0b2f6b]">{plan.calculatorTitle}</h2>
-            <p className="mt-2 text-sm text-gray-600">{plan.calculatorHelper}</p>
+          <div style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
+            <h2 style={{ color: "#00c9b1" }}>{plan.calculatorTitle}</h2>
+            <p style={{ color: "rgba(255,255,255,0.65)" }}>{plan.calculatorHelper}</p>
 
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label style={{ color: "rgba(255,255,255,0.75)" }}>
                   Investment Amount (USD)
                 </label>
                 <input
@@ -143,37 +143,37 @@ export default function PlanDetailPage({ plan }: { plan: PlanDetail }) {
                   value={amountInput}
                   onChange={(e) => setAmountInput(e.target.value)}
                   placeholder="Enter investment amount"
-                  className="w-full rounded-xl border border-gray-200 px-4 py-3 text-gray-900 focus:border-[#4AB3F4] focus:ring focus:ring-[#4AB3F4]/30"
+                  style={{ border: "1px solid rgba(255,255,255,0.08)" }}
                 />
-                <p className="mt-2 text-xs text-gray-500">
+                <p style={{ color: "rgba(255,255,255,0.45)" }}>
                   Min {formatUsd(plan.minUsd)} • Max {formatUsd(plan.maxUsd)}
                 </p>
-                <div className="mt-4 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-700">
+                <div style={{ color: "rgba(255,255,255,0.75)" }}>
                   Plan: <span className="font-semibold">{plan.name}</span> ({plan.dailyRoiPct}% daily)
                 </div>
               </div>
 
-              <div className="rounded-2xl bg-gray-50 border border-gray-200 p-4">
-                <div className="flex items-center justify-between text-sm text-gray-600">
+              <div style={{ background: "rgba(255,255,255,0.04)" }}>
+                <div style={{ color: "rgba(255,255,255,0.65)" }}>
                   <span>Estimated Daily</span>
-                  <span className="font-semibold text-[#0b2f6b]">{formatUsd(dailyEarnings)}</span>
+                  <span style={{ color: "#00c9b1" }}>{formatUsd(dailyEarnings)}</span>
                 </div>
-                <div className="mt-2 flex items-center justify-between text-sm text-gray-600">
+                <div style={{ color: "rgba(255,255,255,0.65)" }}>
                   <span>Estimated Weekly</span>
-                  <span className="font-semibold text-[#0b2f6b]">{formatUsd(weeklyEstimate)}</span>
+                  <span style={{ color: "#00c9b1" }}>{formatUsd(weeklyEstimate)}</span>
                 </div>
-                <div className="mt-2 flex items-center justify-between text-sm text-gray-600">
+                <div style={{ color: "rgba(255,255,255,0.65)" }}>
                   <span>Estimated Monthly</span>
-                  <span className="font-semibold text-[#0b2f6b]">{formatUsd(monthlyEstimate)}</span>
+                  <span style={{ color: "#00c9b1" }}>{formatUsd(monthlyEstimate)}</span>
                 </div>
-                <div className="mt-2 flex items-center justify-between text-sm text-gray-600">
+                <div style={{ color: "rgba(255,255,255,0.65)" }}>
                   <span>Total Potential</span>
-                  <span className="font-semibold text-[#0b2f6b]">{formatUsd(totalPotential)}</span>
+                  <span style={{ color: "#00c9b1" }}>{formatUsd(totalPotential)}</span>
                 </div>
               </div>
             </div>
 
-            <p className="mt-4 text-xs text-gray-500">
+            <p style={{ color: "rgba(255,255,255,0.45)" }}>
               Estimates shown are projections based on the plan’s APY rate.
             </p>
 
@@ -189,12 +189,12 @@ export default function PlanDetailPage({ plan }: { plan: PlanDetail }) {
       {/* Positioning */}
       <section className="py-10">
         <div className="container mx-auto px-4 lg:px-8 max-w-3xl">
-          <h2 className="text-xl sm:text-2xl font-bold text-[#0b2f6b]">{plan.positioningTitle}</h2>
-          <p className="mt-3 text-sm sm:text-base text-gray-700 leading-relaxed">{plan.positioningBody}</p>
-          <ul className="mt-4 space-y-2 text-sm sm:text-base text-gray-700">
+          <h2 style={{ color: "#00c9b1" }}>{plan.positioningTitle}</h2>
+          <p style={{ color: "rgba(255,255,255,0.75)" }}>{plan.positioningBody}</p>
+          <ul style={{ color: "rgba(255,255,255,0.75)" }}>
             {plan.positioningBullets.map((item) => (
               <li key={item} className="flex items-start gap-2">
-                <CheckCircle2 className="h-5 w-5 text-[#0b2f6b]" aria-hidden="true" />
+                <CheckCircle2 style={{ color: "#00c9b1" }} aria-hidden="true" />
                 <span>{item}</span>
               </li>
             ))}
@@ -205,11 +205,11 @@ export default function PlanDetailPage({ plan }: { plan: PlanDetail }) {
       {/* Activation Steps */}
       <section className="py-12">
         <div className="container mx-auto px-4 lg:px-8 max-w-3xl">
-          <h2 className="text-xl sm:text-2xl font-bold text-[#0b2f6b]">{plan.activationTitle}</h2>
+          <h2 style={{ color: "#00c9b1" }}>{plan.activationTitle}</h2>
           <div className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
             {plan.activationSteps.map((step, idx) => (
-              <div key={step} className="rounded-2xl border border-gray-200 bg-white p-4 text-sm text-gray-700">
-                <div className="h-7 w-7 rounded-full bg-[#0b2f6b] text-[#0F172A] flex items-center justify-center font-semibold text-sm mb-3">
+              <div key={step} style={{ color: "rgba(255,255,255,0.75)" }}>
+                <div style={{ color: "#ffffff" }}>
                   {idx + 1}
                 </div>
                 {step}
@@ -227,19 +227,19 @@ export default function PlanDetailPage({ plan }: { plan: PlanDetail }) {
       {/* Trust & Security */}
       <section className="bg-[#F2F9FF] py-12">
         <div className="container mx-auto px-4 lg:px-8 max-w-3xl">
-          <div className="rounded-3xl bg-white border border-gray-200 p-6 sm:p-8">
-            <h2 className="text-xl sm:text-2xl font-bold text-[#0b2f6b]">{plan.trustTitle}</h2>
-            <p className="mt-2 text-sm sm:text-base text-gray-700">{plan.trustBody}</p>
-            <ul className="mt-4 space-y-3 text-sm sm:text-base text-gray-700">
+          <div style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
+            <h2 style={{ color: "#00c9b1" }}>{plan.trustTitle}</h2>
+            <p style={{ color: "rgba(255,255,255,0.75)" }}>{plan.trustBody}</p>
+            <ul style={{ color: "rgba(255,255,255,0.75)" }}>
               {plan.trustBullets.map((item) => (
                 <li key={item} className="flex items-start gap-2">
-                  <ShieldCheck className="h-5 w-5 text-[#0b2f6b]" aria-hidden="true" />
+                  <ShieldCheck style={{ color: "#00c9b1" }} aria-hidden="true" />
                   <span>{item}</span>
                 </li>
               ))}
             </ul>
             <div className="mt-4">
-              <Link href="/security" className="text-sm font-semibold text-[#0b2f6b] underline underline-offset-4 hover:no-underline">
+              <Link href="/security" style={{ color: "#00c9b1" }}>
                 {plan.trustLinkLabel}
               </Link>
             </div>
@@ -250,12 +250,12 @@ export default function PlanDetailPage({ plan }: { plan: PlanDetail }) {
       {/* FAQs */}
       <section className="py-12">
         <div className="container mx-auto px-4 lg:px-8 max-w-3xl">
-          <h2 className="text-xl sm:text-2xl font-bold text-[#0b2f6b]">{plan.faqTitle}</h2>
+          <h2 style={{ color: "#00c9b1" }}>{plan.faqTitle}</h2>
           <div className="mt-4 space-y-4">
             {plan.faqs.map((item) => (
-              <div key={item.q} className="rounded-2xl border border-gray-200 bg-white p-4">
-                <p className="font-semibold text-[#0b2f6b]">{item.q}</p>
-                <p className="mt-2 text-sm text-gray-700">{item.a}</p>
+              <div key={item.q} style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
+                <p style={{ color: "#00c9b1" }}>{item.q}</p>
+                <p style={{ color: "rgba(255,255,255,0.75)" }}>{item.a}</p>
               </div>
             ))}
           </div>
@@ -265,21 +265,21 @@ export default function PlanDetailPage({ plan }: { plan: PlanDetail }) {
       {/* Final CTA */}
       <section className="py-12 bg-[#F2F9FF]">
         <div className="container mx-auto px-4 lg:px-8 max-w-3xl text-center">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0b2f6b]">{plan.finalCtaHeadline}</h2>
-          <p className="mt-2 text-sm sm:text-base text-gray-700">{plan.finalCtaSubhead}</p>
+          <h2 style={{ color: "#00c9b1" }}>{plan.finalCtaHeadline}</h2>
+          <p style={{ color: "rgba(255,255,255,0.75)" }}>{plan.finalCtaSubhead}</p>
           <div className="mt-6 flex flex-col items-center gap-2">
             <Link href={`/accounts/signup?plan=${plan.slug}`} className={ctaClass}>
               {plan.finalCtaLabel}
             </Link>
-            <p className="text-xs text-gray-500">{plan.finalCtaMicrotext}</p>
+            <p style={{ color: "rgba(255,255,255,0.45)" }}>{plan.finalCtaMicrotext}</p>
           </div>
         </div>
       </section>
 
       {/* Sticky Mobile CTA */}
-      <div className="md:hidden fixed inset-x-0 bottom-0 z-[60] bg-white/95 backdrop-blur border-t border-gray-200">
+      <div style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
         <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-3">
-          <div className="text-xs font-semibold text-[#0b2f6b]">{plan.stickyBarText}</div>
+          <div style={{ color: "#00c9b1" }}>{plan.stickyBarText}</div>
           <Link href={`/accounts/signup?plan=${plan.slug}`} className={`${ctaClass} px-4 py-2 text-xs`}>
             {plan.stickyCtaLabel}
           </Link>

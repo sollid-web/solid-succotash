@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Terms of Service — WolvCapital',
@@ -17,212 +16,254 @@ export const metadata: Metadata = {
     description: 'User Agreement & Platform Rules',
     images: ['/og-images/terms-og.png'],
   },
-};
+}
 
 export default function TermsOfServicePage() {
+  const cardStyle = {
+    background: 'rgba(255,255,255,0.04)',
+    border: '1px solid rgba(255,255,255,0.08)',
+    borderRadius: '16px',
+    marginBottom: '16px',
+    padding: '28px 28px 24px',
+  }
+  const h2Style = { fontSize: '20px', fontWeight: 700, color: '#ffffff', margin: '0 0 14px', lineHeight: 1.3 }
+  const h3Style = { fontSize: '16px', fontWeight: 600, color: '#00c9b1', margin: '16px 0 8px' }
+  const pStyle = { fontSize: '15px', color: 'rgba(255,255,255,0.75)', lineHeight: 1.8, margin: '0 0 10px' }
+  const liStyle = { fontSize: '15px', color: 'rgba(255,255,255,0.72)', lineHeight: 1.75, marginBottom: '8px' }
+  const accentBar = { width: '3px', minHeight: '24px', borderRadius: '4px', background: 'linear-gradient(180deg,#2a52be,#00a896)', flexShrink: 0, marginTop: '4px' }
+  const stats = [
+    { value: 'Oct 2025', label: 'Effective Date' },
+    { value: 'BEP-20', label: 'Token Standard' },
+    { value: '5 Days', label: 'Max Withdrawal' },
+    { value: 'U.S. Law', label: 'Governed By' },
+  ]
+
   return (
-    <div className="min-h-screen bg-hero-terms bg-cover bg-center bg-no-repeat">
+    <div style={{ minHeight: '100vh', backgroundColor: '#060c1a' }}>
+
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-black/50 text-[#0F172A]">
-        <div className="container mx-auto px-4 lg:px-8 text-center">
-          <h1 className="text-5xl lg:text-6xl font-extrabold mb-6">Terms of Service</h1>
-          <p className="text-xl text-gray-200">Effective Date: October 2025</p>
-          <div className="mt-8 flex justify-center">
-            <div className="relative w-full max-w-[560px] aspect-[16/9] rounded-2xl overflow-hidden shadow-2xl border-2 border-white/20 mx-auto flex items-center justify-center">
-              <Image
-                src="/images/legal/legal-terms-hero.jpg"
-                alt="WolvCapital Terms of Service — participation and compliance"
-                fill
-                priority
-                className="object-cover object-center"
-                sizes="100vw"
-              />
+      <div style={{ background: 'linear-gradient(160deg,#060c1a 0%,#0d1f4e 45%,#0a3d35 100%)', borderBottom: '1px solid rgba(0,168,150,0.25)', padding: '80px 20px 0', position: 'relative', overflow: 'hidden', minHeight: '420px', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.07, backgroundImage: 'radial-gradient(circle, #00a896 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: 'linear-gradient(90deg,transparent,#00a896,transparent)', opacity: 0.6 }} />
+        <div style={{ position: 'absolute', top: '-80px', left: '-80px', width: '380px', height: '380px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(42,82,190,0.4),transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '0', right: '-60px', width: '320px', height: '320px', borderRadius: '50%', background: 'radial-gradient(circle,rgba(0,168,150,0.3),transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '24px', left: '24px', width: '28px', height: '28px', borderTop: '2px solid rgba(0,168,150,0.5)', borderLeft: '2px solid rgba(0,168,150,0.5)' }} />
+        <div style={{ position: 'absolute', top: '24px', right: '24px', width: '28px', height: '28px', borderTop: '2px solid rgba(0,168,150,0.5)', borderRight: '2px solid rgba(0,168,150,0.5)' }} />
+
+        <div style={{ maxWidth: '700px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1, flex: 1 }}>
+          <div style={{ position: 'relative', width: '88px', height: '88px', margin: '0 auto 28px' }}>
+            <div style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: '1px solid rgba(0,168,150,0.3)' }} />
+            <div style={{ position: 'absolute', inset: '8px', borderRadius: '50%', border: '1px solid rgba(0,168,150,0.5)' }} />
+            <div style={{ position: 'absolute', inset: '16px', borderRadius: '50%', background: 'rgba(0,168,150,0.15)', border: '1.5px solid rgba(0,168,150,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 24px rgba(0,168,150,0.3)' }}>
+              <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#00a896" strokeWidth="1.8">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+          </div>
+
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0,168,150,0.1)', border: '1px solid rgba(0,168,150,0.3)', borderRadius: '4px', padding: '4px 12px', marginBottom: '16px' }}>
+            <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00a896' }} />
+            <span style={{ fontSize: '11px', color: '#00c9b1', fontWeight: 700, letterSpacing: '0.12em' }}>LEGAL AGREEMENT</span>
+          </div>
+
+          <h1 style={{ fontSize: 'clamp(36px,7vw,58px)', fontWeight: 800, color: '#ffffff', margin: '0 0 14px', lineHeight: 1.08, textShadow: '0 0 60px rgba(0,168,150,0.25)' }}>Terms of Service</h1>
+          <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.5)', fontWeight: 400, margin: '0 0 32px' }}>
+            Effective Date: October 2025 · Addendum Effective: February 2, 2026
+          </p>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'rgba(0,168,150,0.08)', border: '1px solid rgba(0,168,150,0.3)', borderRadius: '999px', padding: '10px 24px', marginBottom: '48px' }}>
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#00a896" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+            <span style={{ fontSize: '13px', color: '#00c9b1', fontWeight: 600 }}>Binding agreement · Read fully before using the platform</span>
+          </div>
+        </div>
+
+        {/* stats bar */}
+        <div style={{ position: 'relative', zIndex: 1, borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(12px)', display: 'flex', justifyContent: 'center' }}>
+          {stats.map((s, i) => (
+            <div key={s.label} style={{ flex: 1, padding: '18px 12px', textAlign: 'center', borderRight: i < stats.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
+              <div style={{ fontSize: '15px', fontWeight: 700, color: '#00c9b1', marginBottom: '4px' }}>{s.value}</div>
+              <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.05em' }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div style={{ maxWidth: '820px', margin: '0 auto', padding: '40px 16px 80px' }}>
+
+        {/* Intro */}
+        <div style={{ ...cardStyle, marginBottom: '24px' }}>
+          <div style={{ display: 'flex', gap: '14px' }}>
+            <div style={accentBar} />
+            <p style={{ ...pStyle, margin: 0 }}>By accessing or using WolvCapital, you agree to comply with these Terms of Service. If you do not agree with any part of these terms, do not use the platform. These terms constitute a legally binding agreement between you and WolvCapital, Inc.</p>
+          </div>
+        </div>
+
+        {/* 1. Acceptance */}
+        <div style={cardStyle}>
+          <div style={{ display: 'flex', gap: '14px' }}>
+            <div style={accentBar} />
+            <div style={{ flex: 1 }}>
+              <h2 style={h2Style}>1. Acceptance of Terms</h2>
+              <p style={pStyle}>These terms constitute a legally binding agreement between you and WolvCapital. By registering, depositing funds, or using platform features, you accept all terms and policies in full.</p>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Content */}
-      <main className="min-h-screen bg-white">
-        <section className="max-w-4xl mx-auto py-16 px-4">
-          <div className="space-y-12">
-            <div>
-              <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                By accessing or using WolvCapital, you agree to comply with these Terms of Service. If you do not agree with any part of these terms, do not use the platform.
-              </p>
-            </div>
-
-            <div>
-              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">1. Acceptance of Terms</h2>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                These terms constitute a legally binding agreement between you and WolvCapital. By registering, depositing funds, or using platform features, you accept all terms and policies.
-              </p>
-            </div>
-
-            <div>
-              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">2. Eligibility</h2>
-              <p className="text-lg text-gray-700 leading-relaxed mb-4">
-                You must meet the following criteria:
-              </p>
-              <ul className="space-y-3 text-lg text-gray-700 list-disc pl-6">
-                <li>At least 18 years of age</li>
-                <li>Legally permitted to invest in digital assets in your jurisdiction</li>
-                <li>Capable of entering a binding contract</li>
-                <li>Able to pass KYC verification</li>
+        {/* 2. Eligibility */}
+        <div style={cardStyle}>
+          <div style={{ display: 'flex', gap: '14px' }}>
+            <div style={accentBar} />
+            <div style={{ flex: 1 }}>
+              <h2 style={h2Style}>2. Eligibility</h2>
+              <p style={{ ...pStyle }}>You must meet all of the following criteria to use the platform:</p>
+              <ul style={{ margin: 0, paddingLeft: '18px' }}>
+                {['At least 18 years of age','Legally permitted to invest in digital assets in your jurisdiction','Capable of entering a binding legal contract','Able to pass KYC/AML verification'].map(b => <li key={b} style={liStyle}>{b}</li>)}
               </ul>
             </div>
+          </div>
+        </div>
 
-            <div>
-              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">3. Investment Participation</h2>
-              <p className="text-lg text-gray-700 leading-relaxed mb-4">
-                All investment plans are subject to availability and review. WolvCapital reserves the right to:
-              </p>
-              <ul className="space-y-3 text-lg text-gray-700 list-disc pl-6">
-                <li>Modify investment plans and ROI rates</li>
-                <li>Suspend or terminate access at any time</li>
-                <li>Require additional verification for withdrawals</li>
+        {/* 3. Investment Participation */}
+        <div style={cardStyle}>
+          <div style={{ display: 'flex', gap: '14px' }}>
+            <div style={accentBar} />
+            <div style={{ flex: 1 }}>
+              <h2 style={h2Style}>3. Investment Participation</h2>
+              <p style={pStyle}>All investment plans are subject to availability and compliance review. WolvCapital operates four staking tiers on BNB Smart Chain — Pioneer (8% APY), Vanguard (12% APY), Horizon (18% APY), and Summit VIP (25% APY). WolvCapital reserves the right to:</p>
+              <ul style={{ margin: 0, paddingLeft: '18px' }}>
+                {['Modify investment plans and APY rates','Suspend or terminate platform access at any time','Require additional KYC/AML verification for withdrawals','Adjust reward pool allocations based on on-chain conditions'].map(b => <li key={b} style={liStyle}>{b}</li>)}
               </ul>
             </div>
+          </div>
+        </div>
 
-            <div>
-              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">4. Withdrawals & Payouts</h2>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                Withdrawal requests are processed manually and may require up to 5 business days. Additional verification may be requested for security purposes.
-              </p>
+        {/* 4. Withdrawals */}
+        <div style={cardStyle}>
+          <div style={{ display: 'flex', gap: '14px' }}>
+            <div style={accentBar} />
+            <div style={{ flex: 1 }}>
+              <h2 style={h2Style}>4. Withdrawals & Payouts</h2>
+              <p style={pStyle}>Withdrawal requests are processed manually and may require up to 5 business days. WOLV token rewards are distributed on-chain via the BNB Smart Chain Reward Pool contract. Additional compliance verification may be requested before disbursement. Investment plan maturity indicates eligibility for withdrawal review — not immediate disbursement.</p>
             </div>
+          </div>
+        </div>
 
-            <div>
-              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">5. Terms & Conditions Addendum</h2>
-              <p className="text-lg text-gray-700 leading-relaxed mb-4">
-                <span className="font-semibold">Addendum:</span> Capital Participation, Compounding &amp; Withdrawals
-              </p>
-              <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                This Addendum forms part of Wolv Capital’s Terms and Conditions and applies to all investors effective immediately (Addendum Effective Date: February 2, 2026).
-              </p>
-
-              <ol className="space-y-6 text-lg text-gray-700 list-decimal pl-6">
-                <li>
-                  <span className="font-semibold text-gray-900">Nature of the Platform</span>
-                  <p className="mt-2 leading-relaxed">
-                    Wolv Capital operates as a crypto trading and portfolio management platform. Returns distributed to investors are derived from active trading activities and portfolio deployment.
-                    The platform does not guarantee fixed, instant, or automated payouts.
-                  </p>
-                </li>
-                <li>
-                  <span className="font-semibold text-gray-900">Capital Participation &amp; Compounding</span>
-                  <p className="mt-2 leading-relaxed">
-                    Investors may choose to compound profits, make additional capital deposits, or maintain their current position. Compounding alone does not independently expand portfolio capacity.
-                    Accounts with limited capital participation may experience adjusted growth rates and extended liquidity timelines.
-                  </p>
-                </li>
-                <li>
-                  <span className="font-semibold text-gray-900">Withdrawals &amp; Maturity</span>
-                  <p className="mt-2 leading-relaxed">
-                    Investment plan maturity indicates eligibility for withdrawal review, not immediate disbursement. All withdrawals are processed according to operational liquidity availability,
-                    portfolio cycle completion, and internal risk management protocols.
-                  </p>
-                </li>
-                <li>
-                  <span className="font-semibold text-gray-900">Liquidity Management</span>
-                  <p className="mt-2 leading-relaxed">
-                    Wolv Capital reserves the right to schedule withdrawals to protect platform stability, ensure fair execution across investors, and maintain sustainable trading operations.
-                  </p>
-                </li>
-                <li>
-                  <span className="font-semibold text-gray-900">No Obligation to Reinvest</span>
-                  <p className="mt-2 leading-relaxed">
-                    Investors are under no obligation to make additional deposits. Participation decisions remain voluntary. Continued participation constitutes acceptance of the platform’s operational model and timelines.
-                  </p>
-                </li>
+        {/* 5. Addendum */}
+        <div style={{ ...cardStyle, border: '1px solid rgba(0,168,150,0.2)' }}>
+          <div style={{ display: 'flex', gap: '14px' }}>
+            <div style={{ ...accentBar, background: 'linear-gradient(180deg,#00a896,#2a52be)' }} />
+            <div style={{ flex: 1 }}>
+              <h2 style={h2Style}>5. Terms & Conditions Addendum</h2>
+              <p style={{ ...pStyle, color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}>Addendum Effective Date: February 2, 2026 · Capital Participation, Compounding & Withdrawals</p>
+              <ol style={{ margin: '12px 0 0', paddingLeft: '20px' }}>
+                {[
+                  { title: 'Nature of the Platform', text: 'Wolv Capital operates as a crypto trading and portfolio management platform. Returns distributed to investors are derived from active on-chain trading activities and portfolio deployment. The platform does not guarantee fixed, instant, or automated payouts.' },
+                  { title: 'Capital Participation & Compounding', text: 'Investors may choose to compound profits, make additional capital deposits, or maintain their current position. Compounding alone does not independently expand portfolio capacity. Accounts with limited capital participation may experience adjusted growth rates and extended liquidity timelines.' },
+                  { title: 'Withdrawals & Maturity', text: 'Investment plan maturity indicates eligibility for withdrawal review, not immediate disbursement. All withdrawals are processed according to operational liquidity availability, portfolio cycle completion, and internal risk management protocols.' },
+                  { title: 'Liquidity Management', text: 'Wolv Capital reserves the right to schedule withdrawals to protect platform stability, ensure fair execution across investors, and maintain sustainable trading operations.' },
+                  { title: 'No Obligation to Reinvest', text: 'Investors are under no obligation to make additional deposits. Participation decisions remain voluntary. Continued participation constitutes acceptance of the platform\'s operational model and timelines.' },
+                ].map((item, i) => (
+                  <li key={item.title} style={{ ...liStyle, marginBottom: '16px' }}>
+                    <strong style={{ color: '#ffffff', display: 'block', marginBottom: '4px' }}>{item.title}</strong>
+                    {item.text}
+                  </li>
+                ))}
               </ol>
             </div>
+          </div>
+        </div>
 
-
-            {/* Investment Terms & Risk Disclosures Section */}
-            <div>
-              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">6. Investment Terms &amp; Risk Disclosures</h2>
-              <div className="space-y-8">
-                <div>
-                  <h3 className="text-2xl font-semibold text-[#1e293b] mb-2">Nature of Returns</h3>
-                  <p className="text-lg text-gray-700 leading-relaxed">
-                    WolvCapital provides access to investment opportunities with <span className="font-semibold">projected returns</span> based on historical data, current market analysis, and our investment strategies. All returns are presented as <span className="font-semibold">target return ranges</span> and are subject to change. Actual returns may differ and are not guaranteed. Past performance does not indicate future results.
-                  </p>
+        {/* 6. Investment Terms & Risk */}
+        <div style={cardStyle}>
+          <div style={{ display: 'flex', gap: '14px' }}>
+            <div style={accentBar} />
+            <div style={{ flex: 1 }}>
+              <h2 style={h2Style}>6. Investment Terms & Risk Disclosures</h2>
+              {[
+                { title: 'Nature of Returns', text: 'WolvCapital provides access to investment opportunities with projected returns based on historical data, current market analysis, and our strategies. All returns are target ranges and are subject to change. Actual returns may differ and are not guaranteed. Past performance does not indicate future results.' },
+                { title: 'Market Risk Disclosure', text: 'Investing involves risk, including the potential loss of principal. Returns are subject to market conditions, economic factors, and other variables beyond our control. Market fluctuations can impact the value of your investments and overall account equity.' },
+                { title: 'Position Management', text: 'To protect client accounts and maintain platform integrity, WolvCapital may adjust or liquidate positions automatically in response to market movements or risk thresholds. These actions are taken to manage risk and may occur without prior notice.' },
+                { title: 'Margin and Account Risk', text: 'Investments may be subject to margin requirements. If your account falls below required thresholds, positions may be reduced or closed automatically. You are not obligated to deposit additional funds in the event of a margin call or account shortfall.' },
+                { title: 'Client Control & Options', text: 'You retain control over your investment decisions within the options provided by the platform. You may review, modify, or close your positions as permitted by platform features and policies.' },
+                { title: 'Risk Acknowledgment', text: 'By investing with WolvCapital, you acknowledge that all investments carry risk, returns are not guaranteed, and you may lose some or all of your invested capital. You agree to review all disclosures and seek independent advice if needed.' },
+                { title: 'Limitation of Liability', text: 'WolvCapital, its affiliates, and partners are not liable for any losses, damages, or expenses arising from investment activities, market movements, or platform operations. Our liability is limited to the maximum extent permitted by applicable U.S. law.' },
+              ].map(({ title, text }) => (
+                <div key={title} style={{ marginBottom: '18px' }}>
+                  <h3 style={h3Style}>{title}</h3>
+                  <p style={{ ...pStyle, margin: 0 }}>{text}</p>
                 </div>
-                <div>
-                  <h3 className="text-2xl font-semibold text-[#1e293b] mb-2">Market Risk Disclosure</h3>
-                  <p className="text-lg text-gray-700 leading-relaxed">
-                    Investing involves risk, including the potential loss of principal. Returns are subject to market conditions, economic factors, and other variables beyond our control. Market fluctuations can impact the value of your investments and overall account equity.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-2xl font-semibold text-[#1e293b] mb-2">Position Management</h3>
-                  <p className="text-lg text-gray-700 leading-relaxed">
-                    To protect client accounts and maintain platform integrity, WolvCapital may adjust or liquidate positions automatically in response to market movements or risk thresholds. These actions are taken to manage risk and may occur without prior notice.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-2xl font-semibold text-[#1e293b] mb-2">Margin and Account Risk</h3>
-                  <p className="text-lg text-gray-700 leading-relaxed">
-                    Investments may be subject to margin requirements. Market volatility can affect your account balance and equity. If your account falls below required thresholds, positions may be reduced or closed automatically. <span className="font-semibold">You are not obligated to deposit additional funds</span> in the event of a margin call or account shortfall.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-2xl font-semibold text-[#1e293b] mb-2">Client Control &amp; Options</h3>
-                  <p className="text-lg text-gray-700 leading-relaxed">
-                    You retain control over your investment decisions within the options provided by the platform. You may review, modify, or close your positions as permitted by the platform’s features and policies.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-2xl font-semibold text-[#1e293b] mb-2">Risk Acknowledgment</h3>
-                  <p className="text-lg text-gray-700 leading-relaxed">
-                    By investing with WolvCapital, you acknowledge and accept that all investments carry risk. You understand that returns are not guaranteed and that you may lose some or all of your invested capital. You agree to review all disclosures and seek independent advice if needed.
-                  </p>
-                </div>
-                <div>
-                  <h3 className="text-2xl font-semibold text-[#1e293b] mb-2">Limitation of Liability</h3>
-                  <p className="text-lg text-gray-700 leading-relaxed">
-                    WolvCapital, its affiliates, and partners are not liable for any losses, damages, or expenses arising from investment activities, market movements, or platform operations. Our liability is limited to the maximum extent permitted by law.
-                  </p>
-                </div>
-              </div>
+              ))}
             </div>
+          </div>
+        </div>
 
-            <div>
-              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">7. Account Security</h2>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                You are responsible for protecting your login credentials and account access. Notify support immediately if unauthorized activity is suspected.
-              </p>
+        {/* 7. Account Security */}
+        <div style={cardStyle}>
+          <div style={{ display: 'flex', gap: '14px' }}>
+            <div style={accentBar} />
+            <div style={{ flex: 1 }}>
+              <h2 style={h2Style}>7. Account Security</h2>
+              <p style={{ ...pStyle, margin: 0 }}>You are responsible for protecting your login credentials and account access. Enable two-factor authentication where available. Notify support immediately at <a href="mailto:support@mail.wolvcapital.com" style={{ color: '#00c9b1', textDecoration: 'underline' }}>support@mail.wolvcapital.com</a> if unauthorized activity is suspected.</p>
             </div>
+          </div>
+        </div>
 
-            <div>
-              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">7. Prohibited Activities</h2>
-              <p className="text-lg text-gray-700 leading-relaxed mb-4">
-                The following actions are strictly prohibited:
-              </p>
-              <ul className="space-y-3 text-lg text-gray-700 list-disc pl-6">
-                <li>Using the platform for money laundering or fraud</li>
-                <li>Creating multiple accounts</li>
-                <li>Attempting to exploit system vulnerabilities</li>
-                <li>Providing false information during KYC verification</li>
+        {/* 8. Prohibited Activities */}
+        <div style={cardStyle}>
+          <div style={{ display: 'flex', gap: '14px' }}>
+            <div style={accentBar} />
+            <div style={{ flex: 1 }}>
+              <h2 style={h2Style}>8. Prohibited Activities</h2>
+              <p style={pStyle}>The following actions are strictly prohibited and may result in immediate account termination:</p>
+              <ul style={{ margin: 0, paddingLeft: '18px' }}>
+                {['Using the platform for money laundering, fraud, or terrorist financing','Creating multiple accounts to circumvent platform rules','Attempting to exploit system vulnerabilities or smart contract weaknesses','Providing false or misleading information during KYC verification','Unauthorized scraping, copying, or redistribution of platform data'].map(b => <li key={b} style={liStyle}>{b}</li>)}
               </ul>
             </div>
+          </div>
+        </div>
 
-            <div>
-              <h2 className="text-3xl font-bold text-[#0b2f6b] mb-6">8. Changes to Terms</h2>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                WolvCapital may update these terms at any time. Continued use of the platform after changes constitutes acceptance.
-              </p>
+        {/* 9. Changes to Terms */}
+        <div style={cardStyle}>
+          <div style={{ display: 'flex', gap: '14px' }}>
+            <div style={accentBar} />
+            <div style={{ flex: 1 }}>
+              <h2 style={h2Style}>9. Changes to Terms</h2>
+              <p style={{ ...pStyle, margin: 0 }}>WolvCapital may update these terms at any time. We will notify users of material changes via email or platform notification. Continued use of the platform after changes are published constitutes full acceptance of the revised terms.</p>
             </div>
+          </div>
+        </div>
 
-            <div className="bg-blue-50 p-8 rounded-2xl">
-              <p className="text-lg text-gray-700 leading-relaxed font-semibold">
-                For questions about these terms, contact support@mail.wolvcapital.com
+        {/* 10. Governing Law */}
+        <div style={cardStyle}>
+          <div style={{ display: 'flex', gap: '14px' }}>
+            <div style={accentBar} />
+            <div style={{ flex: 1 }}>
+              <h2 style={h2Style}>10. Governing Law & Jurisdiction</h2>
+              <p style={{ ...pStyle, margin: 0 }}>These Terms of Service are governed by the laws of the United States of America. Any disputes arising from your use of WolvCapital shall be subject to the exclusive jurisdiction of U.S. federal and state courts. WolvCapital operates in compliance with FinCEN MSB registration requirements, SEC guidance, and applicable AML/KYC regulations.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Contact card */}
+        <div style={{ background: 'rgba(0,168,150,0.07)', border: '1px solid rgba(0,168,150,0.25)', borderRadius: '16px', padding: '28px', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#00a896" strokeWidth="2" style={{ flexShrink: 0, marginTop: '2px' }}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <div>
+              <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.8)', lineHeight: 1.75, margin: 0 }}>
+                For questions about these terms, contact us at{" "}
+                <a href="mailto:support@mail.wolvcapital.com" style={{ color: '#00c9b1', fontWeight: 600, textDecoration: 'underline' }}>support@mail.wolvcapital.com</a>
+                {" "}or visit our <Link href="/legal" style={{ color: '#00c9b1', fontWeight: 600, textDecoration: 'underline' }}>Legal & Compliance</Link> page.
               </p>
             </div>
           </div>
-        </section>
-      </main>
+        </div>
 
+        <div style={{ textAlign: 'center', paddingTop: '8px' }}>
+          <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '14px', fontWeight: 600, color: '#00a896', textDecoration: 'none' }}>← Back to Home</Link>
+        </div>
+      </div>
     </div>
   )
 }

@@ -1,3 +1,19 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Summit VIP Plan — 25% APY · 365 Days · WolvCapital',
+  description: 'WolvCapital Summit VIP: 25% APY over 365 days. Institutional-grade BNB Smart Chain staking. Minimum $15,000. Enhanced KYC. Maximum $100,000.',
+  alternates: { canonical: 'https://wolvcapital.com/plans/summit' },
+  openGraph: {
+    title: 'Summit VIP Plan — 25% APY · 365 Days · WolvCapital',
+    description: 'WolvCapital Summit VIP: 25% APY over 365 days. Institutional-grade BNB Smart Chain staking. Minimum $15,000. Enhanced KYC. Maximum $100,000.',
+    url: 'https://wolvcapital.com/plans/summit',
+    images: [{ url: '/og-images/plans-og.png', width: 1200, height: 630 }],
+    type: 'website',
+  },
+  robots: { index: true, follow: true },
+}
+
 import PlanDetailPage from "@/components/PlanDetailPage";
 
 export default function SummitPlanPage() {

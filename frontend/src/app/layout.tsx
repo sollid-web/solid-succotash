@@ -12,24 +12,34 @@ import RemoveSyncBannerClient from '@/components/RemoveSyncBannerClient'
 import '@/app/globals.css'
 
 export const metadata: Metadata = {
-  title: 'WolvCapital - Professional Investment Platform',
-  description: 'WolvCapital offers professional investment opportunities with manual off-chain approvals for maximum security.',
-  keywords: 'investment, platform, wolvcapital, professional, secure, blockchain',
-  authors: [{ name: 'WolvCapital Team' }],
+  metadataBase: new URL('https://wolvcapital.com'),
+  title: {
+    default: 'WolvCapital — BNB Smart Chain Staking & Digital Asset Investment',
+    template: '%s | WolvCapital',
+  },
+  description: 'WolvCapital is a U.S. regulated digital investment platform offering 8%–25% APY staking plans on BNB Smart Chain. Verified on-chain rewards, KYC compliant, FinCEN registered.',
+  keywords: [
+    'digital asset investment', 'BNB Smart Chain staking', 'crypto investment platform',
+    'WOLV token', 'BEP-20 staking', 'blockchain investment', 'crypto APY',
+    'regulated crypto platform', 'FinCEN registered', 'KYC investment platform',
+    'WolvCapital', 'secure crypto staking', 'on-chain rewards',
+  ],
+  authors: [{ name: 'WolvCapital', url: 'https://wolvcapital.com' }],
   creator: 'WolvCapital',
   publisher: 'WolvCapital',
-  metadataBase: new URL('https://wolvcapital.com'),
+  category: 'finance',
+  alternates: { canonical: 'https://wolvcapital.com' },
   openGraph: {
-    title: 'WolvCapital - Professional Investment Platform',
-    description: 'Professional investment platform with secure deposits, real-time tracking, and verified withdrawals.',
+    title: 'WolvCapital — BNB Smart Chain Staking & Digital Asset Investment',
+    description: 'U.S. regulated platform offering 8%–25% APY staking. WOLV token rewards on BNB Smart Chain. KYC compliant · FinCEN registered · On-chain transparent.',
     url: 'https://wolvcapital.com',
     siteName: 'WolvCapital',
     images: [
       {
-        url: '/og?page=home',
+        url: '/og-images/home-og.png',
         width: 1200,
         height: 630,
-        alt: 'WolvCapital - Managed Digital Asset Portfolios',
+        alt: 'WolvCapital — BNB Smart Chain Staking Platform',
       },
     ],
     locale: 'en_US',
@@ -37,9 +47,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'WolvCapital - Professional Investment Platform',
-    description: 'Professional investment platform with secure deposits, real-time tracking, and verified withdrawals.',
-    images: ['/og?page=home'],
+    title: 'WolvCapital — BNB Smart Chain Staking & Digital Asset Investment',
+    description: 'U.S. regulated platform offering 8%–25% APY staking. WOLV token on BNB Smart Chain.',
+    images: ['/og-images/home-og.png'],
+    creator: '@WolvCapital',
   },
   icons: {
     icon: [
@@ -50,6 +61,11 @@ export const metadata: Metadata = {
     shortcut: '/favicon.ico',
   },
   manifest: '/manifest.json',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
+  },
 }
 
 export default async function RootLayout({
@@ -99,6 +115,51 @@ export default async function RootLayout({
           }}
         />
       </head>
+      
+      {/* Organization + WebSite structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://wolvcapital.com/#organization",
+              "name": "WolvCapital",
+              "url": "https://wolvcapital.com",
+              "logo": "https://wolvcapital.com/wolv-icon.svg",
+              "description": "U.S. regulated digital asset investment platform offering BNB Smart Chain staking with 8%–25% APY.",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "516 High St",
+                "addressLocality": "Palo Alto",
+                "addressRegion": "CA",
+                "postalCode": "94301",
+                "addressCountry": "US"
+              },
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "email": "support@mail.wolvcapital.com",
+                "contactType": "customer support",
+                "availableLanguage": ["English"]
+              },
+              "sameAs": ["https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c"]
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://wolvcapital.com/#website",
+              "url": "https://wolvcapital.com",
+              "name": "WolvCapital",
+              "publisher": { "@id": "https://wolvcapital.com/#organization" },
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://wolvcapital.com/blog?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            }
+          ]
+        })}}
+      />
       <body className="min-h-screen bg-white">
         <RemoveSyncBannerClient />
         

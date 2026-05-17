@@ -1,14 +1,18 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Contact Us — WolvCapital | Support & Investor Assistance',
-  description: 'Reach out to WolvCapital support for account assistance, investment inquiries, or general platform help. Our team is available to support global investors.',
+  title: 'Contact Us — WolvCapital Investor Support',
+  description: 'Contact WolvCapital for account assistance, compliance inquiries, or partnership discussions. U.S. regulated digital investment platform — support@mail.wolvcapital.com.',
+  alternates: { canonical: 'https://wolvcapital.com/contact' },
+  openGraph: {
+    title: 'Contact WolvCapital — Investor Support & Compliance',
+    description: 'Reach our investor support and compliance teams. Palo Alto, CA registered office.',
+    url: 'https://wolvcapital.com/contact',
+    type: 'website',
+  },
+  robots: { index: true, follow: true },
 }
 
-export default function ContactLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function ContactLayout({ children }: { children: React.ReactNode }) {
   return children
 }

@@ -1,3 +1,19 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Vanguard Plan — 12% APY · 150 Days · WolvCapital',
+  description: 'Earn 12% APY over 150 days with WolvCapital Vanguard staking plan. BNB Smart Chain on-chain rewards. Minimum $1,000. KYC required.',
+  alternates: { canonical: 'https://wolvcapital.com/plans/vanguard' },
+  openGraph: {
+    title: 'Vanguard Plan — 12% APY · 150 Days · WolvCapital',
+    description: 'Earn 12% APY over 150 days with WolvCapital Vanguard staking plan. BNB Smart Chain on-chain rewards. Minimum $1,000. KYC required.',
+    url: 'https://wolvcapital.com/plans/vanguard',
+    images: [{ url: '/og-images/plans-og.png', width: 1200, height: 630 }],
+    type: 'website',
+  },
+  robots: { index: true, follow: true },
+}
+
 import PlanDetailPage from "@/components/PlanDetailPage";
 
 export default function VanguardPlanPage() {

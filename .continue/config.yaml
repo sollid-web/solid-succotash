@@ -1,13 +1,27 @@
-name: my-config
+name: Android-Ollama-Setup
 version: 1.0.0
+schema: v1
+
+# Define which models can be used
 models:
-  - name: Llama 3.2 3B (Agent)
-    provider: ollama
-    model: llama3.2:3b
-    apiBase: http://10.123.34.243:11434
-  - name: Qwen 1.5B (Chat)
+  - name: Qwen 1.5B Coder
     provider: ollama
     model: qwen2.5-coder:1.5b
-    apiBase: http://10.123.34.243:11434
+    apiBase: http://192.168.1.50:11434
 
+  - name: Llama 3.2 3B
+    provider: ollama
+    model: llama3.2:3b
+    apiBase: http://192.168.1.50:11434
 
+  - name: TinyLlama
+    provider: ollama
+    model: tinyllama:latest
+    apiBase: http://192.168.1.50:11434
+
+# Configure autocomplete to target the same network address
+
+  - name: Llama 3.2 3B
+    provider: ollama
+    model: llama3.2:3b
+    apiBase: http://192.168.1.50:11434

@@ -1,4 +1,6 @@
 "use client";
+import dynamic from "next/dynamic";
+const WalletConnectButton = dynamic(() => import("@/_client/WalletConnectButton"), { ssr: false });
 
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
@@ -204,6 +206,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
                 </div>                                                   
               </div>
             </div>                                                     
+            <WalletConnectButton />
             <button onClick={handleLogout} style={{                      
               padding: "8px 16px", borderRadius: "10px",
               background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)",

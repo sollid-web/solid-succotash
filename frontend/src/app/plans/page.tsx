@@ -2,8 +2,8 @@ import Link from 'next/link'
 import RiskDisclaimer from '@/components/RiskDisclaimer'
 
 export const metadata = {
-  title: 'Investment Plans — WolvCapital',
-  description: 'Review WolvCapital investment plan structures, eligibility, and key terms. Educational information only—no guarantees or predictions.',
+  title: 'Investment Plans — Pioneer, Vanguard, Horizon & Summit | Wolv Capital',
+  description: 'Choose from 4 staking plans with daily ROI. Pioneer starts at $50, Summit up to $50,000. All plans run on BNB Smart Chain with verifiable smart contracts.',
   openGraph: {
     title: 'Investment Plans — WolvCapital',
     description: 'Plan structures • Eligibility • Key terms (no guarantees)',

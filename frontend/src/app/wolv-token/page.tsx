@@ -6,8 +6,35 @@ const WOLV_CONTRACT = '0xe0167279aef7bf4ad313d261da82e8366822270c'
 const POOL_CONTRACT  = '0xb233cf74b14abf9d9702d585c540030125599579'
 const STAKING_CONTRACT = '0x4b62efee5695ed55cd362a0b818f4c5f9694322b'
 
-export const metadata = generateOgMetadata('wolv-token')
-
+export const metadata = {
+title: 'WOLV Token — The Native Asset of WolvCapital',
+  description:
+    'Discover the WOLV token, the utility token powering the WolvCapital ecosystem on the BNB Smart Chain. Explore tokenomics, use cases, and how to participate.',
+  alternates: {
+    canonical: 'https://wolvcapital.com/wolv-token',
+  },
+  openGraph: {
+    title: 'WOLV Token — The Native Asset of WolvCapital',
+    description: 'Explore the utility and tokenomics of the WOLV token on the BNB Smart Chain.',
+    url: 'https://wolvcapital.com/wolv-token',
+    siteName: 'WolvCapital',
+    images: [
+      {
+        url: 'https://wolvcapital.com/wolv-token-og.png', // Suggest using a stylized image of the WOLV logo here
+        width: 1200,
+        height: 630,
+        alt: 'WOLV Token Details',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'WOLV Token — Powering WolvCapital',
+    description: 'Explore the utility and tokenomics of the WOLV token on the BNB Smart Chain.',
+  },
+};
 export default function WolvTokenPage() {
   return (
     <PublicLayout backgroundClassName="bg-hero-wolv overlay-dark-60">

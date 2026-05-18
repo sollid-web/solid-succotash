@@ -73,7 +73,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  // 1. Fetch dynamic data from cookies to prevent prerender errors
   const cookieStore = await cookies()
   const locale = cookieStore.get('django_language')?.value || 'en'
 
@@ -86,7 +85,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <head>
-        {/* Structured Data Scripts */}
+        {/* FAQ structured data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -114,57 +113,84 @@ export default async function RootLayout({
             }),
           }}
         />
+
+        {/* Organization + WebSite + Trustpilot rating structured data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@graph': [
+                {
+                  '@type': 'Organization',
+                  '@id': 'https://wolvcapital.com/#organization',
+                  name: 'WolvCapital',
+                  url: 'https://wolvcapital.com',
+                  logo: 'https://wolvcapital.com/wolv-icon.svg',
+                  description: 'U.S. regulated digital asset investment platform offering BNB Smart Chain staking with 8%–25% APY.',
+                  aggregateRating: {
+                    '@type': 'AggregateRating',
+                    ratingValue: '4.2',
+                    reviewCount: '10',
+                    bestRating: '5',
+                    worstRating: '1',
+                  },
+                  review: [
+                    {
+                      '@type': 'Review',
+                      reviewRating: { '@type': 'Rating', ratingValue: '5' },
+                      author: { '@type': 'Person', name: 'Lucas' },
+                      datePublished: '2026-04-05',
+                      reviewBody: 'WolvCapital\'s support team genuinely deserves a review. Every time I reached out, I got a fast and clear response without the usual back-and-forth or generic replies.',
+                    },
+                    {
+                      '@type': 'Review',
+                      reviewRating: { '@type': 'Rating', ratingValue: '5' },
+                      author: { '@type': 'Person', name: 'Cunningham' },
+                      datePublished: '2026-04-18',
+                      reviewBody: 'I\'ve been using WolvCapital for a while now, specifically their Pioneer Investment Plan, and my experience has been genuinely positive so far.',
+                    },
+                  ],
+                  address: {
+                    '@type': 'PostalAddress',
+                    streetAddress: '516 High St',
+                    addressLocality: 'Palo Alto',
+                    addressRegion: 'CA',
+                    postalCode: '94301',
+                    addressCountry: 'US',
+                  },
+                  contactPoint: {
+                    '@type': 'ContactPoint',
+                    email: 'support@mail.wolvcapital.com',
+                    contactType: 'customer support',
+                    availableLanguage: ['English'],
+                  },
+                  sameAs: [
+                    'https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c',
+                  ],
+                },
+                {
+                  '@type': 'WebSite',
+                  '@id': 'https://wolvcapital.com/#website',
+                  url: 'https://wolvcapital.com',
+                  name: 'WolvCapital',
+                  publisher: { '@id': 'https://wolvcapital.com/#organization' },
+                  potentialAction: {
+                    '@type': 'SearchAction',
+                    target: 'https://wolvcapital.com/blog?q={search_term_string}',
+                    'query-input': 'required name=search_term_string',
+                  },
+                },
+              ],
+            }),
+          }}
+        />
       </head>
-      
-      {/* Organization + WebSite structured data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          "@context": "https://schema.org",
-          "@graph": [
-            {
-              "@type": "Organization",
-              "@id": "https://wolvcapital.com/#organization",
-              "name": "WolvCapital",
-              "url": "https://wolvcapital.com",
-              "logo": "https://wolvcapital.com/wolv-icon.svg",
-              "description": "U.S. regulated digital asset investment platform offering BNB Smart Chain staking with 8%–25% APY.",
-              "address": {
-                "@type": "PostalAddress",
-                "streetAddress": "516 High St",
-                "addressLocality": "Palo Alto",
-                "addressRegion": "CA",
-                "postalCode": "94301",
-                "addressCountry": "US"
-              },
-              "contactPoint": {
-                "@type": "ContactPoint",
-                "email": "support@mail.wolvcapital.com",
-                "contactType": "customer support",
-                "availableLanguage": ["English"]
-              },
-              "sameAs": ["https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c"]
-            },
-            {
-              "@type": "WebSite",
-              "@id": "https://wolvcapital.com/#website",
-              "url": "https://wolvcapital.com",
-              "name": "WolvCapital",
-              "publisher": { "@id": "https://wolvcapital.com/#organization" },
-              "potentialAction": {
-                "@type": "SearchAction",
-                "target": "https://wolvcapital.com/blog?q={search_term_string}",
-                "query-input": "required name=search_term_string"
-              }
-            }
-          ]
-        })}}
-      />
+
       <body className="min-h-screen bg-white">
         <RemoveSyncBannerClient />
-        
+
         <SegmentProvider writeKey={process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY || ''}>
-          {/* Tracking Scripts */}
           {metaPixelId && (
             <Script
               id="meta-pixel"
@@ -183,19 +209,16 @@ export default async function RootLayout({
             />
           )}
 
-          {/* 2. LocaleProvider must wrap AppChrome and children */}
           <LocaleProvider locale={locale}>
             <TranslationProvider initialLocale={locale}>
               <AppChrome>
-              {/* 3. Suspense boundary is CRITICAL for Next.js builds */}
-              <Suspense fallback={<div className="flex h-screen items-center justify-center">Loading...</div>}>
-                {children}
-              </Suspense>
-            </AppChrome>
-          </TranslationProvider>
+                <Suspense fallback={<div className="flex h-screen items-center justify-center">Loading...</div>}>
+                  {children}
+                </Suspense>
+              </AppChrome>
+            </TranslationProvider>
           </LocaleProvider>
 
-          {/* Analytics and Widgets */}
           {measurementId && (
             <>
               <Script

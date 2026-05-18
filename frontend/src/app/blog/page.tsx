@@ -3,14 +3,35 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllPostsMeta } from '@/lib/blog'
 
-export const metadata: Metadata = {
-  title: 'Blog — WolvCapital',
+export const metadata = {
+  title: 'Blog & Market Insights — WolvCapital',
   description:
-    'Educational articles on digital asset fundamentals, security practices, and risk awareness. Written in a professional, compliance-aware tone for informational purposes only.',
+    'Read expert insights on technology-driven asset growth, diversified digital investments, and virtual card solutions. Stay updated on secure, compliance-aware wealth management.',
   alternates: {
-    canonical: '/blog',
+    canonical: 'https://wolvcapital.com/blog', // Using absolute URLs for canonicals is better for SEO
   },
-}
+  openGraph: {
+    title: 'Blog & Market Insights — WolvCapital',
+    description: 'Insights on technology-driven asset growth, diversified digital investments, and global virtual card solutions.',
+    url: 'https://wolvcapital.com/blog',
+    siteName: 'WolvCapital',
+    images: [
+      {
+        url: 'https://wolvcapital.com/og-blog.png', // Make sure this image route exists in your public folder
+        width: 1200,
+        height: 630,
+        alt: 'WolvCapital Blog and Insights',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Blog & Market Insights — WolvCapital',
+    description: 'Insights on technology-driven asset growth, diversified digital investments, and global virtual card solutions.',
+  },
+};
 
 export default function BlogIndexPage() {
   const posts = getAllPostsMeta()

@@ -2,11 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "FAQ — WolvCapital | Frequently Asked Questions",
-  description:
-    "Answers to the most common questions about WolvCapital — investment plans, WOLV token, staking, withdrawals, KYC, security, and compliance.",
-  keywords:
-    "WolvCapital FAQ, WOLV token questions, staking FAQ, investment platform FAQ, digital asset investment questions, withdrawal process, KYC verification",
+  title: "FAQ — How Wolv Capital Staking Works | BNB Investment Questions",
+  description: "Answers to common questions about deposits, withdrawals, daily ROI, smart contract security, and the WOLV token. Everything you need before investing.",
+  keywords: [
+    "WolvCapital FAQ",
+    "WOLV token questions",
+    "staking FAQ",
+    "investment platform FAQ",
+    "digital asset investment questions",
+    "withdrawal process",
+    "KYC verification"
+  ],
   openGraph: {
     title: "FAQ — WolvCapital",
     description:

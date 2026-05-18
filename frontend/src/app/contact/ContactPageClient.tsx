@@ -1,10 +1,10 @@
 'use client'
-
+// src/app/contact/ContactPageClient.tsx
 import dynamic from 'next/dynamic'
 
 const MapWithOverlay = dynamic(() => import('@/components/MapWithOverlay'), { ssr: false })
 
-export default function ContactPage() {
+export default function ContactPageClient() {
   const inputStyle = {
     width: '100%', padding: '12px 16px',
     background: 'rgba(255,255,255,0.06)',

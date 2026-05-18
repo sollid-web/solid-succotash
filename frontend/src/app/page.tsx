@@ -5,9 +5,8 @@ import { LocaleProvider } from '@/components/LocaleProvider'
 import { detectLocale } from '@/lib/detectLocale'
 
 export const metadata: Metadata = {
-  title: 'WolvCapital | Blockchain-Verified Returns, Invest, Stake & Earn On-Chain',
-  description:
-    'KYC-verified investment platform with on-chain profit distribution and WOLV staking. Earn 8–25% APY, stake BNB or BUSD, and receive WOLV tokens — verified permanently on BNB Chain. SEC-registered, institutional custody.',
+  title: 'Wolv Capital — BNB Staking & Crypto Investment Platform',
+  description: 'Earn daily returns on BNB with Wolv Capitals transparent staking plans. Join thousands of investors earning passive income on the BSC network. Start from $50.',
   keywords:
     'blockchain investment platform, WOLV staking, BNB staking, BUSD staking, verified investment returns, on-chain profit distribution, WOLV token, BEP20 investment token, KYC investment platform, transparent investment, blockchain verified returns, WolvCapital, crypto staking rewards, digital asset management, stake BNB earn rewards',
   openGraph: {

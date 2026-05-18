@@ -1,19 +1,33 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "Smart Contracts — WolvCapital | Verified On-Chain Contracts",
+export const metadata = {
+  title: 'Smart Contracts & Security — WolvCapital',
   description:
-    "WolvCapital verified smart contract addresses on BNB Smart Chain. WOLV Token, RewardPool, and StakingContract — all open-source, audited, and verified on BSCScan.",
-  keywords:
-    "WolvCapital smart contracts, WOLV token contract, BNB Smart Chain contracts, BSCScan verified, staking contract, reward pool, blockchain contracts",
+    'Review the verified smart contracts and blockchain infrastructure securing the WolvCapital ecosystem. Transparent, audited, and built for decentralized asset management.',
+  alternates: {
+    canonical: 'https://wolvcapital.com/smart-contracts',
+  },
   openGraph: {
-    title: "Smart Contracts — WolvCapital",
-    description:
-      "All WolvCapital smart contracts — verified, open-source, and auditable on BSCScan.",
-    url: "https://wolvcapital.com/smart-contracts",
-    siteName: "WolvCapital",
-    type: "website",
+    title: 'Verified Smart Contracts — WolvCapital',
+    description: 'Review the blockchain infrastructure and verified smart contracts securing the WolvCapital platform.',
+    url: 'https://wolvcapital.com/smart-contracts',
+    siteName: 'WolvCapital',
+    images: [
+      {
+        url: 'https://wolvcapital.com/og-contracts.png', // Suggest using an image featuring code/nodes or a security shield
+        width: 1200,
+        height: 630,
+        alt: 'WolvCapital Smart Contract Security',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Verified Smart Contracts — WolvCapital',
+    description: 'Review the blockchain infrastructure and verified smart contracts securing our platform.',
   },
 };
 

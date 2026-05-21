@@ -1,16 +1,25 @@
-Hi {{ first_name }}, here's how it works.
+Hi {{ first_name }}, here's exactly how staking works at WolvCapital.
 
-If you can't explain how your money grows, you shouldn't invest it. Here is the WolvCapital process:
+If you can't explain how your money grows, you shouldn't stake it. Here is the WolvCapital process:
 
 1. Complete KYC verification.
-2. Choose a plan (Pioneer, Vanguard, Horizon, or Summit).
-3. Deposit funds (held with licensed custodians).
-4. Track performance in real-time.
-5. Withdraw profits at plan maturity.
+2. Choose a staking plan (Pioneer, Vanguard, Horizon, or Summit VIP).
+3. Stake BNB or BUSD — held in audited smart contracts, not with us.
+4. Track your WOLV reward accumulation in real time.
+5. Claim your WOLV rewards after your lock period ends.
 
-CURRENT STATS:
-- 1% Daily ROI (Pioneer)
-- 90 Days minimum term
-- $100 Minimum to start
+HOW REWARDS WORK:
+- Every reward is paid in WOLV tokens at $1 per WOLV.
+- WOLV is a BEP-20 token on BNB Smart Chain — fixed supply of 1 billion.
+- Rewards accumulate automatically in your on-chain reward pool.
+- Smart contracts are publicly verified on BSCScan — read the code yourself.
 
-VIEW PLANS: https://wolvcapital.com/plans
+CURRENT STAKING RATES:
+- Pioneer: 8% APY · 90 days · Min $100
+- Vanguard: 12% APY · 150 days · Min $1,000
+- Horizon: 18% APY · 180 days · Min $5,000
+- Summit VIP: 25% APY · 365 days · Min $15,000
+
+VIEW STAKING PLANS: https://wolvcapital.com/plans
+
+Past performance does not guarantee future staking rewards. Principal at risk.

@@ -1,9 +1,23 @@
 Meet WOLV Token, {{ first_name }}.
 
-We've launched WOLV Token on the BNB Smart Chain. Every dollar of profit you earn is minted as a WOLV token directly to your crypto wallet.
+WOLV is the native BEP-20 token of WolvCapital — and it's live on BNB Smart Chain right now.
 
-- On-Chain Proof: Permanent, verifiable records.
-- Audited: Scored 87/100 on SolidityScan.
-- Wallet Ready: Works with MetaMask and Trust Wallet.
+Every reward we distribute is minted as WOLV tokens, permanently recorded on the blockchain. This means your returns aren't just numbers on a screen — they're verifiable on-chain proof.
+
+WOLV TOKEN FACTS:
+- Token: WOLV · BNB Smart Chain
+- Fixed Supply: 1,000,000,000 WOLV (no minting beyond this)
+- Value: $1.00 per WOLV
+- Reward Pool: 1,000,000 WOLV allocated for stakers
+- Powered by: Chainlink price oracles for tamper-proof BNB/USD pricing
+- Audited: Verified on BSCScan — SolidityScan score 87/100
+
+VERIFIED CONTRACTS (check them yourself):
+- WOLV Token: 0xe0167279aef7bf4ad313d261da82e8366822270c
+- Reward Pool: 0xb233cf74b14abf9d9702d585c540030125599579
+- Staking Contract: 0x4b62efee5695ed55cd362a0b818f4c5f9694322b
+
+Compatible with MetaMask and Trust Wallet.
 
 LEARN ABOUT WOLV: https://wolvcapital.com/wolv-token
+VIEW TOKENOMICS: https://wolvcapital.com/tokenomics

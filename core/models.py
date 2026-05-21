@@ -300,41 +300,6 @@ class PlatformCertificate(models.Model):
 
 
 class DripCampaign(models.Model):
-    """Tracks user enrollment and progression through 10-email drip campaign."""
-
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="drip_campaign",
-    )
-    current_day = models.IntegerField(default=1, help_text="Current email day (1-10)")
-    last_sent = models.DateTimeField(
-        null=True,
-        blank=True,
-        help_text="When the last email was sent",
-    )
-    active = models.BooleanField(default=True, help_text="Campaign is active for this user")
-    completed = models.BooleanField(default=False, help_text="User has completed all 10 emails")
-    enrolled_at = models.DateTimeField(
-        auto_now_add=True,
-        help_text="When user was enrolled",
-    )
-
-    class Meta:
-        verbose_name = "Drip Campaign"
-        verbose_name_plural = "Drip Campaigns"
-
-    def __str__(self) -> str:
-        return f"{self.user.email} — Day {self.current_day}/10"
-
-    class Meta:
-        ordering = ["-created_at"]
-
-    def __str__(self) -> str:  # pragma: no cover - trivial
-        return f"{self.title} ({self.certificate_id})"
-
-
-class DripCampaign(models.Model):
     """Track user progress through 10-email automated marketing sequence."""
 
     user = models.OneToOneField(

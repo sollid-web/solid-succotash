@@ -1,0 +1,142 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>How WolvCapital Works</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e1a;font-family:'DM Sans',Arial,sans-serif;color:#e8eaf0;-webkit-font-smoothing:antialiased}
+.wrap{max-width:620px;margin:0 auto;background:#0a0e1a}
+.hdr{background:linear-gradient(135deg,#0d1226,#111827);padding:24px 40px;border-bottom:1px solid rgba(99,179,237,.15)}
+.hdr-inner{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:36px;height:36px;background:linear-gradient(135deg,#63b3ed,#4299e1);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:#0a0e1a;line-height:1}
+.logo-text{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;color:#f0f4ff}
+.badge{background:rgba(99,179,237,.1);border:1px solid rgba(99,179,237,.25);border-radius:20px;padding:5px 12px;font-size:11px;color:#63b3ed;letter-spacing:.5px;text-transform:uppercase}
+.hero{background:linear-gradient(160deg,#0f1729,#0a0e1a);padding:52px 40px 44px;position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.05)}
+.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(99,179,237,.08),transparent 70%)}
+.day-tag{font-family:'DM Mono',monospace;font-size:11px;color:#63b3ed;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;display:block}
+.hero h1{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#f0f4ff;line-height:1.25;letter-spacing:-.5px;margin-bottom:14px}
+.hero h1 em{color:#63b3ed;font-style:normal}
+.hero-sub{font-size:16px;color:#94a3b8;line-height:1.65;font-weight:300}
+.body{padding:40px 40px 0}
+.greet{font-size:16px;color:#94a3b8;margin-bottom:24px}
+.greet strong{color:#e8eaf0;font-weight:500}
+.p{font-size:15px;color:#94a3b8;line-height:1.75;margin-bottom:22px;font-weight:300}
+.p a,.link{color:#63b3ed;text-decoration:none;border-bottom:1px solid rgba(99,179,237,.3)}
+.steps{margin:28px 0}
+.step{display:flex;gap:20px;margin-bottom:24px}
+.step-num{width:36px;height:36px;background:rgba(99,179,237,.1);border:1px solid rgba(99,179,237,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;color:#63b3ed;flex-shrink:0;font-weight:500}
+.step-content{}
+.step-title{font-size:15px;font-weight:500;color:#e8eaf0;margin-bottom:4px}
+.step-desc{font-size:13px;color:#64748b;line-height:1.5}
+.rates-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:24px;margin:28px 0}
+.rates-title{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;font-family:'DM Mono',monospace}
+.rate-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.rate-row:last-child{border-bottom:none}
+.rate-name{font-size:14px;color:#e8eaf0;font-weight:500}
+.rate-meta{font-size:12px;color:#64748b;margin-top:2px}
+.rate-apy{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#63b3ed;text-align:right}
+.rate-min{font-size:11px;color:#64748b;text-align:right}
+.cta-wrap{padding:36px 40px;text-align:center}
+.cta-btn{display:inline-block;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;text-decoration:none;font-size:15px;font-weight:600;padding:16px 40px;border-radius:8px}
+.cta-sec{display:block;font-size:13px;color:#475569;margin-top:12px}
+.cta-sec a{color:#63b3ed;text-decoration:none}
+.disc{margin:0 40px 24px;padding:16px 20px;background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.1);border-radius:10px}
+.disc p{font-size:11px;color:#64748b;line-height:1.6}
+.ftr{padding:32px 40px;border-top:1px solid rgba(255,255,255,.06);text-align:center}
+.ftr-links{margin-bottom:14px}
+.ftr-links a{font-size:12px;color:#475569;text-decoration:none;margin:0 8px}
+.ftr-comp{margin-bottom:14px;font-size:11px;color:#475569}
+.ftr-copy{font-size:11px;color:#334155}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="hdr-inner">
+      <a class="logo" href="https://wolvcapital.com">
+        <div class="logo-mark">W</div>
+        <span class="logo-text">WolvCapital</span>
+      </a>
+      <span class="badge">Day 02 · How It Works</span>
+    </div>
+  </div>
+  <div class="hero">
+    <span class="day-tag">// The Process</span>
+    <h1>Simple. Transparent.<br><em>On-Chain.</em></h1>
+    <p class="hero-sub">If you can't explain how your money grows, you shouldn't stake it. Here is exactly how WolvCapital works.</p>
+  </div>
+  <div class="body">
+    <p class="greet">Hi <strong>{{ first_name }}</strong>,</p>
+    <p class="p">Understanding the process is the first step to confident staking. Here's the full WolvCapital flow — nothing hidden.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-title">Complete KYC Verification</div>
+          <div class="step-desc">Full identity verification in line with U.S. regulatory requirements. No anonymous accounts.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-title">Choose a Staking Plan</div>
+          <div class="step-desc">Select Pioneer, Vanguard, Horizon, or Summit VIP — stake BNB or BUSD to start earning WOLV rewards.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-title">Stake in Audited Smart Contracts</div>
+          <div class="step-desc">Your stake locks into publicly verified contracts on BNB Chain — not held by WolvCapital directly.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <div class="step-title">WOLV Rewards Accumulate On-Chain</div>
+          <div class="step-desc">Rewards build automatically. Every token is a permanent blockchain record, verifiable on BSCScan.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">05</div>
+        <div class="step-content">
+          <div class="step-title">Claim After Lock Period</div>
+          <div class="step-desc">When your term ends, claim WOLV directly to your MetaMask or Trust Wallet.</div>
+        </div>
+      </div>
+    </div>
+    <div class="rates-box">
+      <div class="rates-title">// Current Staking Rates</div>
+      <div class="rate-row">
+        <div><div class="rate-name">Pioneer</div><div class="rate-meta">90-day lock · BNB or BUSD</div></div>
+        <div><div class="rate-apy">8%</div><div class="rate-min">Min $100</div></div>
+      </div>
+      <div class="rate-row">
+        <div><div class="rate-name">Vanguard</div><div class="rate-meta">150-day lock · BNB or BUSD</div></div>
+        <div><div class="rate-apy">12%</div><div class="rate-min">Min $1,000</div></div>
+      </div>
+      <div class="rate-row">
+        <div><div class="rate-name">Horizon</div><div class="rate-meta">180-day lock · BNB or BUSD</div></div>
+        <div><div class="rate-apy">18%</div><div class="rate-min">Min $5,000</div></div>
+      </div>
+      <div class="rate-row">
+        <div><div class="rate-name">Summit VIP</div><div class="rate-meta">365-day lock · BNB or BUSD</div></div>
+        <div><div class="rate-apy">25%</div><div class="rate-min">Min $15,000</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="cta-wrap">
+    <a class="cta-btn" href="{{ plans_url }}">View All Staking Plans →</a>
+    <span class="cta-sec">Contracts verified on <a href="https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c">BSCScan</a> · Rewards in WOLV at $1/token</span>
+  </div>
+  <div class="disc"><p><strong>Risk Disclosure:</strong> Past performance does not guarantee future staking rewards. Principal at risk. Digital assets are highly volatile. <a href="https://wolvcapital.com/risk-disclosure" style="color:#63b3ed">Full disclosure →</a></p></div>
+  <div class="ftr">
+    <div class="ftr-links"><a href="{{ plans_url }}">Plans</a><a href="https://wolvcapital.com/wolv-token">WOLV Token</a><a href="https://wolvcapital.com/security">Security</a><a href="https://wolvcapital.com/faq">FAQ</a></div>
+    <div class="ftr-comp">🔒 FinCEN MSB Registered &nbsp;·&nbsp; 🔐 256-bit SSL &nbsp;·&nbsp; ✓ PCI-DSS Compliant</div>
+    <div class="ftr-copy">© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy" style="color:#334155;text-decoration:none">Privacy</a> · <a href="https://wolvcapital.com/terms-of-service" style="color:#334155;text-decoration:none">Terms</a></div>
+  </div>
+</div>
+</body></html>

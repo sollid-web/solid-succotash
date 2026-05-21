@@ -1,9 +1,27 @@
-Hi {{ first_name }}, your security is our priority.
+Hi {{ first_name }}, your security is our foundation — not an afterthought.
 
-We answer the "Is my money safe?" question with verifiable facts:
-- SEC-Registered Investment Adviser compliance.
-- FinCEN MSB Registered.
-- 256-Bit SSL Encryption.
-- Blockchain Transparency via BSCScan.
+We answer the "Is my money safe?" question with verifiable facts, not promises.
 
-INVEST WITH CONFIDENCE: https://wolvcapital.com/dashboard/new-investment
+PLATFORM SECURITY:
+- FinCEN MSB Registered — U.S. regulatory compliance.
+- 256-Bit SSL Encryption — bank-grade connection security.
+- Mandatory 2FA — only you can access your account.
+- KYC on every account — no anonymous positions.
+- AML screening on every transaction in real time.
+
+ON-CHAIN TRANSPARENCY:
+- Every reward distributed is permanently recorded on BNB Chain.
+- Staking, Reward Pool, and WOLV Token contracts are all publicly verified on BSCScan.
+- Chainlink oracles provide tamper-proof price feeds — no manipulation possible.
+- 24/7 automated monitoring for unusual platform activity.
+
+Don't take our word for it. Here's what verified investors say:
+
+★★★★☆ "WolvCapital's support team genuinely deserves a review. Every time I reached out, I got a fast and clear response." — LucasSG, Verified Investor
+
+★★★★☆ "I've been using WolvCapital for a while now, specifically their Pioneer Plan, and my experience has been genuinely positive." — CunninghamNL, Verified Investor
+
+Rated 4.3 on Trustpilot · 10 verified reviews
+SEE ALL REVIEWS: https://www.trustpilot.com/review/wolvcapital.com
+
+VIEW FULL SECURITY DETAILS: https://wolvcapital.com/security

@@ -1,14 +1,17 @@
-Welcome to WolvCapital, {{ first_name }}!
+Welcome to WolvCapital, {{ first_name }}.
 
-You've just joined a platform trusted by investors who believe that your money should work harder than you do. 
+You've just joined a platform built on one principle: your returns should be verifiable — not just promised.
 
 WHAT MAKES WOLVCAPITAL DIFFERENT?
-We combine KYC-verified onboarding, institutional-grade custody, and blockchain-backed profit tokens.
+We combine KYC-verified onboarding, institutional-grade custody, and audited smart contracts on BNB Chain. Every reward we distribute is recorded permanently on the blockchain — independently verifiable by anyone, anytime.
 
-- KYC-Verified: Protecting your capital.
-- Real-Time Dashboard: Track ROI 24/7.
-- Institutional Custody: Funds held with licensed custodians.
+- KYC-Verified: Full identity verification before any staking position opens.
+- Real-Time Dashboard: Track your staking rewards 24/7.
+- On-Chain Proof: Every WOLV token you earn is a permanent blockchain record.
+- Institutional Custody: Your principal held with licensed custodians.
 
 EXPLORE YOUR DASHBOARD: https://wolvcapital.com/dashboard
 
-P.S. Stay tuned. Tomorrow we show you exactly how our new WOLV Token rewards your profits on the blockchain.
+Important: All staking positions carry risk, including potential loss of principal. Only stake capital you can afford to lose. Review our Risk Disclosure before staking.
+
+P.S. Tomorrow we walk you through exactly how our staking plans work — and which one fits your goals.

@@ -1,10 +1,25 @@
-Which plan is right for you, {{ first_name }}?
+Which staking plan is right for you, {{ first_name }}?
 
-We offer four tiers to match your strategy:
+We offer four tiers to match your strategy and capital size. All plans stake BNB or BUSD and pay rewards in WOLV tokens at $1 each.
 
-- Pioneer (Entry): $100 Min | 1% Daily | 90 Days
-- Vanguard (Growth): $1,000 Min | Higher ROI | 150 Days
-- Horizon (Advanced): $5,000 Min | Premium ROI | 180 Days
-- Summit VIP (Elite): $10,000 Min | Max ROI | 365 Days
+⬡ PIONEER — Conservative
+$100 Minimum · 8% APY · 90-Day Lock · 2.0% Early Exit Fee
+Best for: First-time stakers getting started with crypto yield.
 
-START YOUR FIRST INVESTMENT: https://wolvcapital.com/dashboard/new-investment
+⬡ VANGUARD — Balanced (Most Popular)
+$1,000 Minimum · 12% APY · 150-Day Lock · 2.5% Early Exit Fee
+Best for: Investors who want steady growth with moderate commitment.
+
+⬡ HORIZON — Active
+$5,000 Minimum · 18% APY · 180-Day Lock · 3.0% Early Exit Fee
+Best for: Experienced investors seeking premium on-chain yields.
+
+⬡ SUMMIT VIP — Elite
+$15,000 Minimum · 25% APY · 365-Day Lock · 3.5% Early Exit Fee
+Best for: High-conviction investors maximising long-term WOLV accumulation.
+
+All contracts are publicly verified on BSCScan. Source code is readable by anyone.
+
+START STAKING: https://wolvcapital.com/dashboard/stake
+
+Note: Early exit incurs a fee on principal. Only stake capital you can afford to lose for the full lock period.

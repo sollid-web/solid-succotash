@@ -1,8 +1,16 @@
-Spend your profits anywhere, {{ first_name }}.
+Spend your WOLV rewards anywhere, {{ first_name }}.
 
-WolvCapital gives you a Virtual Visa Infinite Card. 
-- Use Worldwide: Accepted anywhere Visa is.
-- 100+ Merchants: Netflix, Amazon, Apple Pay, and more.
-- Instant Access: Linked directly to your portfolio.
+Your staking rewards don't have to sit in a wallet. WolvCapital gives you a Virtual Visa Infinite Card — linked directly to your portfolio so you can spend your earnings in the real world.
+
+VIRTUAL CARD FEATURES:
+- Accepted anywhere Visa is — worldwide.
+- 100+ merchants including Netflix, Amazon, Apple Pay, and more.
+- Instant access — linked directly to your WolvCapital portfolio.
+- No physical card needed.
+
+This is what makes WolvCapital different: you stake BNB or BUSD, earn WOLV rewards on-chain, and spend them instantly — all from one platform.
 
 VIEW YOUR CARD: https://wolvcapital.com/dashboard/card
+
+Not staking yet? Your card is waiting — open a staking position first.
+START STAKING: https://wolvcapital.com/dashboard/stake

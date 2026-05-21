@@ -1,5 +1,26 @@
 This is your final step, {{ first_name }}.
 
-The best time to start was yesterday. The second best time is now. Whether you start with the $100 Pioneer or $10,000 Summit VIP, it's time to put your capital to work.
+Over the past 10 days you've seen exactly what WolvCapital is built on:
 
-ACTIVATE NOW: https://wolvcapital.com/dashboard/new-investment
+✓ Audited smart contracts on BNB Chain — verified by anyone on BSCScan.
+✓ WOLV Token — on-chain proof of every reward distributed.
+✓ FinCEN MSB Registered — U.S. regulatory compliance.
+✓ Chainlink price oracles — tamper-proof, decentralised pricing.
+✓ Institutional custody — your principal in licensed hands.
+✓ Rated 4.3 on Trustpilot by verified investors.
+
+The best time to start was yesterday. The second best time is now.
+
+Whether you begin with the $100 Pioneer plan or go straight to the $15,000 Summit VIP, your staking position is waiting — and every day you wait is a day of WOLV rewards you're not earning.
+
+STAKING PLANS:
+- Pioneer: 8% APY · 90 days · Min $100
+- Vanguard: 12% APY · 150 days · Min $1,000
+- Horizon: 18% APY · 180 days · Min $5,000
+- Summit VIP: 25% APY · 365 days · Min $15,000
+
+START STAKING NOW: https://wolvcapital.com/dashboard/stake
+READ OUR WHITEPAPER: https://wolvcapital.com/whitepaper
+SEE TRUSTPILOT REVIEWS: https://www.trustpilot.com/review/wolvcapital.com
+
+Important: All staking positions carry risk, including potential loss of principal. Digital assets are highly volatile. WolvCapital is not a bank and does not offer FDIC or SIPC insurance. Only stake capital you can afford to lose entirely.

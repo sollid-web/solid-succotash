@@ -1,11 +1,20 @@
-Real Investors. Real Returns.
+Real investors. Real on-chain returns, {{ first_name }}.
 
-Hi {{ first_name }}, here is what our community says:
-"The virtual card is a game-changer. Spending my earnings on Netflix makes it feel real." — David O.
+Here is what our verified community says about staking with WolvCapital:
 
-STATS:
-- 500+ Active Investors
-- $2M+ Total Deployed
-- 12.3% Avg ROI Rate
+★★★★☆ "WolvCapital's support team genuinely deserves a review. Every time I reached out, I got a fast and clear response without the usual back-and-forth or generic replies." — LucasSG, Verified Investor
 
-JOIN THEM: https://wolvcapital.com/dashboard/new-investment
+★★★★☆ "I've been using WolvCapital for a while now, specifically their Pioneer Investment Plan, and my experience has been genuinely positive so far." — CunninghamNL, Verified Investor
+
+Rated 4.3/5 on Trustpilot · 10 verified reviews
+READ ALL REVIEWS: https://www.trustpilot.com/review/wolvcapital.com
+
+PLATFORM STATS:
+- 4 audited staking plans — 8% to 25% APY
+- BNB or BUSD accepted
+- WOLV rewards at $1 per token, paid on-chain
+- Smart contracts verified on BSCScan
+
+JOIN THEM: https://wolvcapital.com/dashboard/stake
+
+Past performance does not guarantee future staking rewards. Principal at risk.

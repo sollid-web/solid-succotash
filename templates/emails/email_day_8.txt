@@ -1,7 +1,22 @@
-Questions, {{ first_name }}? We have answers.
+Questions, {{ first_name }}? We have straight answers.
 
-- Are returns guaranteed? No investment is 100% guaranteed, but our ROI is based on consistent digital asset strategies.
-- Early withdrawal? Plans have fixed terms; early withdrawal is subject to review.
-- Where is this available? Globally, pending KYC.
+Q: Are staking rewards guaranteed?
+A: No. All staking positions carry risk, including potential loss of principal. Digital assets are highly volatile. WOLV rewards are distributed from our audited Reward Pool — but past performance does not guarantee future returns. We disclose this clearly because we believe in transparency over promises.
 
-READ MORE: https://wolvcapital.com/dashboard/new-investment
+Q: What happens when my lock period ends?
+A: You can claim your WOLV rewards directly to your wallet. Every token is on-chain proof of your earnings — verifiable on BSCScan.
+
+Q: Can I exit early?
+A: Plans have fixed lock periods. Early exit is subject to a fee on principal (2.0%–3.5% depending on plan). We recommend only staking capital you can commit for the full term.
+
+Q: Where are my assets held?
+A: Your stake is locked in our audited smart contracts on BNB Chain — not held by WolvCapital directly. Contracts are publicly verified on BSCScan.
+
+Q: Which countries does WolvCapital serve?
+A: Globally, pending KYC verification.
+
+Q: Is WolvCapital regulated?
+A: WolvCapital is FinCEN MSB Registered and operates in compliance with U.S. AML/KYC requirements.
+
+READ OUR FULL FAQ: https://wolvcapital.com/faq
+REVIEW RISK DISCLOSURE: https://wolvcapital.com/risk-disclosure

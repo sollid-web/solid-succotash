@@ -1,5 +1,23 @@
-Don't miss the Early Mover advantage.
+Don't miss the early mover advantage, {{ first_name }}.
 
-Hi {{ first_name }}, the WOLV Token contract is live on BNB Smart Chain. With a 1 billion hard cap, early investors who earn tokens now are positioned best before wider market discovery.
+The WOLV Token contract is live on BNB Smart Chain right now — with a fixed hard cap of 1 billion tokens. No additional minting. Ever.
 
-CLAIM YOUR POSITION: https://wolvcapital.com/dashboard/new-investment
+Early stakers who accumulate WOLV now are positioned before wider market discovery. Every reward you earn is a permanent, verifiable token on BNB Chain.
+
+WHY THIS MATTERS:
+- Fixed supply of 1,000,000,000 WOLV — scarcity is built in.
+- 1 WOLV = $1.00 — stable entry-point reward valuation.
+- Reward Pool: 1,000,000 WOLV allocated for stakers.
+- Powered by Chainlink oracles — tamper-proof pricing.
+- Audited contracts verified publicly on BSCScan.
+
+STAKING PLANS:
+- Pioneer: 8% APY · 90 days · Min $100
+- Vanguard: 12% APY · 150 days · Min $1,000
+- Horizon: 18% APY · 180 days · Min $5,000
+- Summit VIP: 25% APY · 365 days · Min $15,000
+
+CLAIM YOUR POSITION: https://wolvcapital.com/dashboard/stake
+LEARN ABOUT WOLV TOKEN: https://wolvcapital.com/wolv-token
+
+Principal at risk. Only stake capital you can afford to lose.

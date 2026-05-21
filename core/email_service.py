@@ -61,9 +61,15 @@ class EmailService:
             return False
 
         ctx: dict[str, Any] = context.copy() if context else {}
+        # Branding + site helpers expected by templates
         ctx.setdefault("brand_name", cls.BRAND_NAME)
         ctx.setdefault("support_email", getattr(settings, "SUPPORT_EMAIL", None))
         ctx.setdefault("current_timestamp", timezone.now())
+        ctx.setdefault("site_url", getattr(settings, "SITE_URL", "https://wolvcapital.com"))
+        ctx.setdefault("current_year", timezone.now().year)
+        # expose BRAND config dict under both brand_config and BRAND for templates
+        ctx.setdefault("brand_config", getattr(settings, "BRAND", {}))
+        ctx.setdefault("BRAND", getattr(settings, "BRAND", {}))
 
         html_template = f"emails/{template_name}.html"
         text_template = f"emails/{template_name}.txt"
@@ -287,4 +293,3 @@ def send_email(subject, to, body=None, bcc=None, template_name=None, context=Non
         subject=subject,
         bcc=bcc,
     )
-

@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import NavBar from "@/components/NavBar";
 import DisclosureTicker from "@/components/DisclosureTicker";
 import Footer from "@/components/sections/Footer";
-import TidioWidget from "@/components/TidioWidget";
+import TawkWidget from "@/components/TawkWidget";
 
 export default function AppChrome({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -21,7 +21,7 @@ export default function AppChrome({ children }: { children: ReactNode }) {
       <main className="flex-1 w-full pt-16">{children}</main>
       <Footer />
       {/* Support Chat */}
-      <TidioWidget />
+      <TawkWidget />
     </div>
   );
 }

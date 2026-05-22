@@ -45,7 +45,14 @@ export default function TrustpilotWidget() {
       {/* Score */}
       <div className="flex flex-col gap-1">
         <p className="text-xs text-gray-500">Rated on Trustpilot</p>
-        <p className="text-3xl font-medium">4.3</p>
+        <p className="text-3xl font-medium">4.3
+
+
+
+
+
+      
+        </p>
         <div className="flex gap-1 my-1">
           {[1, 2, 3, 4].map((i) => (
             <span

@@ -4,10 +4,11 @@ import { WalletProviderClient } from "@/_client/WalletProviderClient";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
+          
+    <WalletProviderClient>
     <DashboardShell>
-      <WalletProviderClient>
         {children}
-      </WalletProviderClient>
-    </DashboardShell>
-  );
-}
+      </DashboardShell>
+    </WalletProviderClient>
+    );
+  }

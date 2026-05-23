@@ -18,7 +18,7 @@ Contract address:
 {{ contract_address }}
 
 View WOLV on BSCScan:
-https://bscscan.com/token/{{ contract_address }}
+https://wolvcapital.com/go/wolv-token
 
 Connect your wallet now:
 {{ dashboard_url }}

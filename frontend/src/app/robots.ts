@@ -5,10 +5,13 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
+        allow: [
+          '/',
+          '/accounts/signup' // 🚀 ADD THIS LINE TO UNBLOCK THE SIGNUP ROUTE
+        ],
         disallow: [
           '/dashboard/',
-          '/accounts/',
+          '/accounts/',      // This will continue protecting your users' deep dashboards
           '/admin/',
           '/wolv-admin/',
           '/checkout/',

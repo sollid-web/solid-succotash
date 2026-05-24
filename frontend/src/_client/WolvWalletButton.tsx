@@ -121,25 +121,30 @@ function QRConnectTab() {
       provider.signer?.on?.('display_uri', onSignerUri);
       provider.on?.('connect', onConnect);
 
+      // ... previous event listeners setup code (provider.on, provider.signer.on, etc.)
+
       listenerCleanupRef.current = () => {
         provider.off?.('display_uri', onDisplayUri);
         provider.signer?.off?.('display_uri', onSignerUri);
         provider.off?.('connect', onConnect);
       };
 
-      // Trigger connection and catch completion context asynchronously
-      connectAsync({ connector: wcConnector })
-        .then((res) => {
-          console.log('[QRConnectTab] Remote session approved via promise resolution:', res);
-        })
-        .catch((err) => {
-          // Suppress errors caused by intentional cancellation/rotation setups
-          if (err?.message?.includes('User rejected') || err?.code === 4001) {
-            console.log('[QRConnectTab] Remote session request rejected or canceled.');
-            return;
-          }
-          console.error('[QRConnectTab] connectAsync encountered an error:', err);
-        });
+      // FIX: Defer the execution to the next event loop tick.
+      // This ensures React completely finishes rendering/hydrating before 
+      // Wagmi/RainbowKit mutations alter context state.
+      setTimeout(() => {
+        connectAsync({ connector: wcConnector })
+          .then((res) => {
+            console.log('[QRConnectTab] Remote session approved via promise resolution:', res);
+          })
+          .catch((err) => {
+            if (err?.message?.includes('User rejected') || err?.code === 4001) {
+              console.log('[QRConnectTab] Remote session request rejected or canceled.');
+              return;
+            }
+            console.error('[QRConnectTab] connectAsync encountered an error:', err);
+          });
+      }, 0);
 
       // Fallback: if the provider already has a pending URI in state
       setTimeout(() => {

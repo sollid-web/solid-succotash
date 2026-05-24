@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic";
 const WalletConnectButton = dynamic(() => import("@/_client/WalletConnectButton"), { ssr: false });
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import type { ReactNode } from "react";
 import { apiFetch } from "@/lib/api";
 import { usePathname, useRouter } from "next/navigation";  
@@ -19,7 +19,7 @@ const NAV_LINKS = [
   { href: "/dashboard/withdraw", label: "Withdraw" },
   { href: "/dashboard/new-investment", label: "Invest" },
   { href: "/dashboard/stake", label: "⬡ Stake WOLV" },
-  { href: "/wolv-token", label: "WOLV Token" },
+  { href: "/dashboard/wolv-token", label: "WOLV Token" },
   { href: "/dashboard/transactions", label: "Transactions" },
   { href: "/dashboard/support", label: "Support" },
   { href: "/dashboard/kyc", label: "KYC" },
@@ -31,6 +31,10 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
   const [checking, setChecking] = useState(true);
   const [user, setUser] = useState<any>(null);
   const [kycVerified, setKycVerified] = useState<boolean | null>(null);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState<number>(0);
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const notificationsRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const checkAuth = async () => {                              
@@ -74,6 +78,77 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
     return () => { active = false; };
   }, []);
 
+  // Fetch unread notification count (important only)
+  const fetchUnreadCount = async () => {
+    try {
+      const res = await apiFetch("/api/notifications/unread-count/");
+      if (!res.ok) return;
+      const data = await res.json();
+      // backend returns { unread: number } or a number
+      const count = typeof data === "number" ? data : data?.unread ?? 0;
+      setUnreadCount(count || 0);
+    } catch (e) {
+      // noop
+    }
+  };
+
+  useEffect(() => {
+    // keep unread count in sync after user loads
+    fetchUnreadCount();
+  }, [user]);
+
+  // close dropdown when clicking outside
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (notificationsRef.current && !notificationsRef.current.contains(e.target as Node)) {
+        setNotificationsOpen(false);
+      }
+    };
+    if (notificationsOpen) window.addEventListener("click", handleClick);
+    return () => window.removeEventListener("click", handleClick);
+  }, [notificationsOpen]);
+
+  const fetchNotifications = async () => {
+    try {
+      const res = await apiFetch("/api/notifications/?limit=10");
+      if (!res.ok) return setNotifications([]);
+      const data = await res.json();
+      // Filter to important notifications: deposit, withdrawal, kyc, system_alert
+      const important = (data || []).filter((n: any) => {
+        const t = String(n.notification_type || "").toLowerCase();
+        return (
+          t.startsWith("deposit_") ||
+          t.startsWith("withdrawal_") ||
+          t.startsWith("kyc_") ||
+          t === "system_alert" ||
+          t.startsWith("wallet_")
+        ) && t !== "roi_payout"; // exclude ROI
+      });
+      setNotifications(important.slice(0, 10));
+    } catch (e) {
+      setNotifications([]);
+    }
+  };
+
+  const openNotifications = async () => {
+    if (!notificationsOpen) {
+      await fetchNotifications();
+      setNotificationsOpen(true);
+    } else {
+      setNotificationsOpen(false);
+    }
+  };
+
+  const markAsRead = async (id: string) => {
+    try {
+      const res = await apiFetch(`/api/notifications/${id}/mark-read/`, { method: "POST" });
+      if (res.ok) {
+        setNotifications(n => n.map(x => (x.id === id ? { ...x, is_read: true } : x)));
+        setUnreadCount(c => Math.max(0, c - 1));
+      }
+    } catch {}
+  };
+
   const handleLogout = async () => {
     try { 
       await apiFetch("/api/auth/logout/", { method: "POST", headers: { "Content-Type": "application/json" } }); 
@@ -116,11 +191,113 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
           height: 2px; background: linear-gradient(90deg, #2563eb, #1d4ed8);                                                    
           border-radius: 2px 2px 0 0;
         }
+        .header-bar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 10px;
+          min-height: 64px;
+        }
+        .header-actions {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+          min-width: 0;
+        }
+        .user-chip {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 6px 12px;
+          border-radius: 10px;
+          background: rgba(255,255,255,0.05);
+          border: 1px solid rgba(255,255,255,0.08);
+          min-width: 0;
+        }
+        .user-name {
+          color: #fff;
+          font-size: 13px;
+          font-weight: 500;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 120px;
+        }
+        .notification-button {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px;
+          border-radius: 10px;
+          background: rgba(255,255,255,0.02);
+          border: 1px solid rgba(255,255,255,0.04);
+          color: #fff;
+          cursor: pointer;
+          min-width: 40px;
+        }
+        .notification-button span {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .connect-wallet-button {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 8px 14px;
+          border-radius: 10px;
+          background: linear-gradient(135deg, #2A52BE, #1E3A8A);
+          border: none;
+          color: #fff;
+          font-size: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          white-space: nowrap;
+          box-shadow: 0 4px 12px rgba(42,82,190,0.3);
+        }
+        .logout-button {
+          padding: 8px 14px;
+          border-radius: 10px;
+          background: rgba(239,68,68,0.1);
+          border: 1px solid rgba(239,68,68,0.2);
+          color: #f87171;
+          font-size: 12px;
+          font-weight: 600;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          transition: all 0.2s;
+        }
+        .notification-dropdown {
+          position: absolute;
+          right: 0;
+          top: 44px;
+          width: 360px;
+          background: #071026;
+          border: 1px solid rgba(255,255,255,0.06);
+          border-radius: 12px;
+          padding: 12px;
+          box-shadow: 0 12px 40px rgba(2,6,23,0.6);
+          z-index: 100;
+        }
+        @media (max-width: 640px) {
+          .header-bar { padding: 10px 0; }
+          .user-chip { padding: 6px 10px; }
+          .user-name { display: none; }
+          .notification-button { gap: 0; padding: 8px; }
+          .logout-button { padding: 8px 10px; font-size: 11px; }
+          .notification-dropdown { width: calc(100vw - 32px); max-width: 360px; right: 0; }
+          .nav-link { padding: 12px 10px; font-size: 12px; }
+        }
         .shell-card {                                                
           background: rgba(255,255,255,0.04);                        
           border: 1px solid rgba(255,255,255,0.08);
           border-radius: 20px;                                     
-        }                                                          
+        }
         input, select, textarea {                                    
           background: rgba(255,255,255,0.05) !important;
           border: 1px solid rgba(255,255,255,0.12) !important;                                                                  
@@ -177,7 +354,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
         background: "rgba(10,15,30,0.95)", backdropFilter: "blur(20px)",
         borderBottom: "1px solid rgba(255,255,255,0.06)",
       }}>
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 16px", height: "64px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div className="header-bar" style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 16px" }}>
           {/* Brand */}
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <div style={{
@@ -193,26 +370,63 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
             </div>
           </div>
 
-          {/* User + Logout */}
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "6px 12px", borderRadius: "10px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
+          {/* User + Notifications + Logout */}
+          <div className="header-actions" style={{ minWidth: 0 }}>
+            <div className="user-chip">
               <div style={{ width: "30px", height: "30px", borderRadius: "8px", background: "linear-gradient(135deg, #1a3a8f, #00a896)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: "13px" }}>
-                {userInitial.toUpperCase()}                              
-              </div>                                                     
-              <div>                                                                   
-                <div style={{ color: "#fff", fontSize: "13px", fontWeight: 500 }}>{userName}</div>
-                <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px" }}>                                                     
-                  {kycVerified ? "✓ Verified" : "Not verified"}                                                                       
-                </div>                                                   
+                {userInitial.toUpperCase()}
               </div>
-            </div>                                                     
+              <div>
+                <div className="user-name">{userName}</div>
+              </div>
+            </div>
+
+            {/* Notifications */}
+            <div style={{ position: "relative" }} ref={notificationsRef}>
+              <button onClick={openNotifications} aria-label="Notifications" className="notification-button">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h11z"></path><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+                {unreadCount > 0 && (
+                  <span style={{ background: "#ef4444", color: "#fff", borderRadius: "999px", padding: "2px 6px", fontSize: "12px", fontWeight: 700, minWidth: "20px", textAlign: "center" }}>{unreadCount}</span>
+                )}
+              </button>
+
+              {/* Dropdown */}
+              {notificationsOpen && (
+                <div style={{ position: "absolute", right: 0, top: "44px", width: "360px", background: "#071026", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "12px", padding: "12px", boxShadow: "0 12px 40px rgba(2,6,23,0.6)" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
+                    <div style={{ color: "#fff", fontWeight: 700 }}>Notifications</div>
+                    <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)" }}>{unreadCount} unread</div>
+                  </div>
+                  <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                    {notifications.length === 0 && (
+                      <div style={{ color: "rgba(255,255,255,0.4)", padding: "12px 0" }}>No recent important notifications.</div>
+                    )}
+                    {notifications.map(n => (
+                      <div key={n.id} style={{ display: "flex", gap: "10px", padding: "10px 0", borderBottom: "1px solid rgba(255,255,255,0.02)" }}>
+                        <div style={{ flex: "0 0 40px" }}>
+                          <div style={{ width: "36px", height: "36px", borderRadius: "8px", background: n.is_read ? "rgba(255,255,255,0.03)" : "linear-gradient(135deg,#2563eb,#1d4ed8)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700 }}>{(n.title || "?").charAt(0)}</div>
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ color: "#fff", fontWeight: 600 }}>{n.title}</div>
+                          <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "13px", marginTop: "4px" }}>{n.message}</div>
+                          <div style={{ marginTop: "6px", display: "flex", gap: "8px", alignItems: "center" }}>
+                            {n.action_url ? (<Link href={n.action_url} style={{ color: "#00a896", fontSize: "13px" }}>View</Link>) : null}
+                            {!n.is_read && (<button onClick={() => markAsRead(n.id)} style={{ background: "transparent", border: "none", color: "rgba(255,255,255,0.6)", cursor: "pointer", fontSize: "13px" }}>Mark read</button>)}
+                          </div>
+                        </div>
+                        <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px" }}>{new Date(n.created_at).toLocaleString()}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginTop: "10px" }}>
+                    <button onClick={() => { notifications.forEach((x:any)=> { if(!x.is_read) markAsRead(x.id); }); setNotificationsOpen(false); }} className="btn-cta-sky">Mark all read</button>
+                    <Link href="/dashboard/notifications" style={{ color: "rgba(255,255,255,0.6)", fontSize: "13px" }}>See all</Link>
+                  </div>
+                </div>
+              )}
+            </div>
             <WalletConnectButton />
-            <button onClick={handleLogout} style={{                      
-              padding: "8px 16px", borderRadius: "10px",
-              background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)",
-              color: "#f87171", fontSize: "13px", fontWeight: 600, cursor: "pointer",
-              display: "flex", alignItems: "center", gap: "6px", transition: "all 0.2s",                                          
-            }}>
+            <button onClick={handleLogout} className="logout-button">
               <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>

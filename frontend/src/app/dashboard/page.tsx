@@ -241,32 +241,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* ── Header ── */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 fade-up fade-up-1">
-          <div>
-            <div style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "4px" }}>
-              WolvCapital
-            </div>
-            <h1 style={{ color: "#fff", fontSize: "26px", fontWeight: 700, letterSpacing: "-0.5px", lineHeight: 1.2 }}>
-              Portfolio Overview
-            </h1>
-            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px", marginTop: "4px" }}>
-              Monitor balances, ROI, and active plan performance
-            </p>
-          </div>
-          <Link href="/dashboard/new-investment"
-            style={{
-              display: "inline-flex", alignItems: "center", gap: "8px",
-              padding: "12px 24px", borderRadius: "12px",
-              background: "linear-gradient(135deg, #1d4ed8, #2563eb)",
-              color: "#fff", fontWeight: 600, fontSize: "14px",
-              boxShadow: "0 8px 32px rgba(37,99,235,0.22)",
-              textDecoration: "none", whiteSpace: "nowrap",
-              transition: "all 0.2s",
-            }}>
-            <span style={{ fontSize: "16px" }}>+</span> New Investment
-          </Link>
-        </div>
+        {/* removed the portfolio overview hero section for mobile-first dashboard layout */}
 
         {/* ── Virtual Card Banner ── */}
         <div className="fade-up fade-up-2 mb-6" style={{
@@ -319,7 +294,7 @@ export default function DashboardPage() {
         </div>
 
         {/* ── Stats Grid ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-3 fade-up fade-up-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3 fade-up fade-up-3">
           <MetricCard
             label="Total Invested"
             value={money(totalInvested)}
@@ -352,15 +327,6 @@ export default function DashboardPage() {
             accent="#00a896"
             loading={loading}
           />
-          <MetricCard
-            label="Withdrawals"
-            value={money(wallet?.total_withdrawals ?? 0)}
-            sub="Approved"
-            icon="↑"
-            accent="#8b5cf6"
-            loading={loading}
-            className="col-span-2 sm:col-span-1"
-          />
         </div>
 
         {/* ── ROI Rate Banner ── */}
@@ -371,7 +337,7 @@ export default function DashboardPage() {
           }}>
             <div>
               <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px" }}>Overall ROI Rate</div>
-              <Link href="/wolv-token" style={{ color: "rgba(255,255,255,0.3)", fontSize: "11px", marginTop: "4px", display: "inline-block", textDecoration: "underline" }}>
+              <Link href="/dashboard/wolv-token" style={{ color: "rgba(255,255,255,0.3)", fontSize: "11px", marginTop: "4px", display: "inline-block", textDecoration: "underline" }}>
                 These profits become WOLV tokens →
               </Link>
             </div>
@@ -384,10 +350,10 @@ export default function DashboardPage() {
 
         {/* ── WOLV Wallet ── */}
         <section className="fade-up fade-up-4 mb-6">
-          <Link href="/wolv-token" style={{ textDecoration: "none", display: "block", marginBottom: "16px" }}>
+          <Link href="/dashboard/wolv-token" style={{ textDecoration: "none", display: "block", marginBottom: "16px" }}>
             <h2 style={{ color: "#fff", fontSize: "18px", fontWeight: 600 }}>WOLV Token</h2>
             <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", marginTop: "2px" }}>
-              Connect your wallet to receive profit tokens
+              Connect your wallet and view WOLV token rewards without leaving the dashboard.
             </p>
           </Link>
           <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(0,168,150,0.2)", borderRadius: "20px", padding: "24px" }}>
@@ -694,18 +660,6 @@ export default function DashboardPage() {
 
       </main>
 
-      {/* Mobile CTA */}
-      <div className="sm:hidden fixed bottom-4 inset-x-0 px-4 z-40">
-        <Link href="/dashboard/new-investment" style={{
-          display: "flex", alignItems: "center", justifyContent: "center",
-          width: "100%", padding: "16px", borderRadius: "16px",
-          background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
-          color: "#fff", fontWeight: 700, fontSize: "15px",
-          textDecoration: "none", boxShadow: "0 8px 32px rgba(37,99,235,0.35)",
-        }}>
-          + Start New Investment
-        </Link>
-      </div>
     </div>
   );
 }

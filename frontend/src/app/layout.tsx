@@ -85,6 +85,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <head>
+        <meta name="google-site-verification" content="z2bE7_WWwLyDUFbwY9UFtrHVf1xXvFqq_iauSokX5yI" />
         {/* FAQ structured data */}
         <script
           type="application/ld+json"

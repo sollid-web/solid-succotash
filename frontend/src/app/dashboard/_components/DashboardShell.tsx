@@ -181,7 +181,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
   return (                                                     
     <div style={{ minHeight: "100vh", background: "#0a0f1e", fontFamily: "'DM Sans', system-ui, sans-serif" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }                                                                  
         .nav-link { transition: all 0.2s; white-space: nowrap; }
         .nav-link:hover { color: #fff !important; }
@@ -229,14 +229,15 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
         .notification-button {
           display: inline-flex;
           align-items: center;
-          gap: 8px;
-          padding: 8px;
+          gap: 6px;
+          padding: 8px 10px;
           border-radius: 10px;
-          background: rgba(255,255,255,0.02);
-          border: 1px solid rgba(255,255,255,0.04);
+          background: rgba(255,255,255,0.06);
+          border: 1px solid rgba(255,255,255,0.1);
           color: #fff;
           cursor: pointer;
           min-width: 40px;
+          flex-shrink: 0;
         }
         .notification-button span {
           display: inline-flex;
@@ -382,7 +383,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
             </div>
 
             {/* Notifications */}
-            <div style={{ position: "relative" }} ref={notificationsRef}>
+            <div style={{ position: "relative", flexShrink: 0 }} ref={notificationsRef}>
               <button onClick={openNotifications} aria-label="Notifications" className="notification-button">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h11z"></path><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
                 {unreadCount > 0 && (
@@ -392,7 +393,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
 
               {/* Dropdown */}
               {notificationsOpen && (
-                <div style={{ position: "absolute", right: 0, top: "44px", width: "360px", background: "#071026", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "12px", padding: "12px", boxShadow: "0 12px 40px rgba(2,6,23,0.6)" }}>
+                <div style={{ position: "absolute", right: 0, top: "44px", width: "360px", maxWidth: "calc(100vw - 24px)", background: "#071026", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "12px", padding: "12px", boxShadow: "0 12px 40px rgba(2,6,23,0.6)", zIndex: 200 }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
                     <div style={{ color: "#fff", fontWeight: 700 }}>Notifications</div>
                     <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)" }}>{unreadCount} unread</div>
@@ -420,7 +421,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
                   </div>
                   <div style={{ display: "flex", justifyContent: "space-between", marginTop: "10px" }}>
                     <button onClick={() => { notifications.forEach((x:any)=> { if(!x.is_read) markAsRead(x.id); }); setNotificationsOpen(false); }} className="btn-cta-sky">Mark all read</button>
-                    <Link href="/dashboard/notifications" style={{ color: "rgba(255,255,255,0.6)", fontSize: "13px" }}>See all</Link>
+                    <Link href="/dashboard/transactions" onClick={() => setNotificationsOpen(false)} style={{ color: "rgba(255,255,255,0.6)", fontSize: "13px" }}>See all activity</Link>
                   </div>
                 </div>
               )}

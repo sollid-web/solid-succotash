@@ -341,7 +341,7 @@ export default function DashboardPage() {
                 These profits become WOLV tokens →
               </Link>
             </div>
-            <div style={{ color: "#f59e0b", fontWeight: 700, fontSize: "20px", fontFamily: "'DM Mono', monospace" }}>
+            <div style={{ color: "#f59e0b", fontWeight: 700, fontSize: "20px", fontFamily: "Inter, 'DM Sans', system-ui, sans-serif", fontVariantNumeric: "tabular-nums" }}>
               +{roiRate}%
             </div>
           </div>
@@ -467,7 +467,7 @@ export default function DashboardPage() {
                         <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "2px" }}>
                           Amount
                         </div>
-                        <div style={{ color: "#fff", fontWeight: 700, fontSize: "22px", fontFamily: "'DM Mono', monospace" }}>
+                        <div style={{ color: "#fff", fontWeight: 700, fontSize: "22px", fontFamily: "Inter, 'DM Sans', system-ui, sans-serif", fontVariantNumeric: "tabular-nums" }}>
                           {money(Number(inv.amount) || 0)}
                         </div>
                       </div>
@@ -518,7 +518,7 @@ export default function DashboardPage() {
                           <div style={{ color: "#10b981", fontSize: "10px", letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "3px" }}>
                             Total Earned
                           </div>
-                          <div style={{ color: "#10b981", fontSize: "15px", fontWeight: 700, fontFamily: "'DM Mono', monospace" }}>
+                          <div style={{ color: "#10b981", fontSize: "15px", fontWeight: 700, fontFamily: "Inter, 'DM Sans', system-ui, sans-serif", fontVariantNumeric: "tabular-nums" }}>
                             {Number.isFinite(totalEarned) ? money(totalEarned) : "-"}
                           </div>
                         </div>
@@ -530,7 +530,7 @@ export default function DashboardPage() {
                           <div style={{ color: "#00a896", fontSize: "10px", letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "3px" }}>
                             Expected Total
                           </div>
-                          <div style={{ color: "#00a896", fontSize: "15px", fontWeight: 700, fontFamily: "'DM Mono', monospace" }}>
+                          <div style={{ color: "#00a896", fontSize: "15px", fontWeight: 700, fontFamily: "Inter, 'DM Sans', system-ui, sans-serif", fontVariantNumeric: "tabular-nums" }}>
                             {Number.isFinite(expectedTotal) ? money(expectedTotal) : "-"}
                           </div>
                         </div>
@@ -691,7 +691,7 @@ function MetricCard({ label, value, sub, icon, accent, loading, className }: {
               {icon}
             </div>
           </div>
-          <div style={{ color: "#fff", fontSize: "20px", fontWeight: 700, fontFamily: "'DM Mono', monospace", marginBottom: "4px", letterSpacing: "-0.5px" }}>
+          <div style={{ color: "#fff", fontSize: "20px", fontWeight: 700, fontFamily: "Inter, 'DM Sans', system-ui, sans-serif", fontVariantNumeric: "tabular-nums", marginBottom: "4px", letterSpacing: "-0.5px" }}>
             {value}
           </div>
           <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "11px" }}>{sub}</div>

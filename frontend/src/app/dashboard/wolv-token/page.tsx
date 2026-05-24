@@ -41,7 +41,18 @@ export default function DashboardWolvTokenPage() {
         .dashboard-wolv-list-item:hover { background: rgba(255,255,255,0.07); border-color: rgba(0,168,150,0.3); }
         .dashboard-wolv-list-item span:first-child { display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.65); font-size: 13px; font-weight: 500; }
         .dashboard-wolv-list-item span:last-child { color: #00c9b1; font-weight: 700; font-family: monospace; font-size: 13px; }
-        .dashboard-wolv-stat-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 16px; opacity: 0.7; }
+        .wolv-wallet-card { background: linear-gradient(135deg, rgba(42,82,190,0.18) 0%, rgba(0,168,150,0.12) 100%); border: 1px solid rgba(42,82,190,0.35); border-radius: 28px; padding: 32px; backdrop-filter: blur(20px); position: relative; overflow: hidden; }
+        .wolv-wallet-card::before { content: ''; position: absolute; top: -40px; right: -40px; width: 160px; height: 160px; background: radial-gradient(circle, rgba(42,82,190,0.18) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+        .wolv-wallet-card::after { content: ''; position: absolute; bottom: -30px; left: -30px; width: 120px; height: 120px; background: radial-gradient(circle, rgba(0,168,150,0.12) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+        .wolv-wallet-inner { position: relative; z-index: 1; }
+        .wolv-wallet-icon-ring { display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 20px; background: linear-gradient(135deg, rgba(42,82,190,0.35), rgba(0,168,150,0.25)); border: 1px solid rgba(42,82,190,0.3); margin-bottom: 20px; font-size: 28px; box-shadow: 0 8px 24px rgba(42,82,190,0.2); }
+        .wolv-wallet-title { font-size: 22px; font-weight: 700; color: #fff; margin: 0 0 8px; }
+        .wolv-wallet-desc { color: rgba(255,255,255,0.6); font-size: 14px; line-height: 1.7; margin: 0 0 24px; }
+        .wolv-wallet-cta-wrap { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 20px; }
+        .wolv-wallet-cta-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 12px; }
+        .wolv-wallet-features { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
+        .wolv-wallet-feature { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(255,255,255,0.5); }
+        .wolv-wallet-feature-dot { width: 6px; height: 6px; border-radius: 50%; background: #00c9b1; flex-shrink: 0; }
         .dashboard-wolv-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; position: relative; z-index: 1; }
         .dashboard-wolv-link { color: #00c9b1; font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.2s; }
         .dashboard-wolv-link:hover { color: #00e8d1; text-decoration: underline; }
@@ -88,15 +99,26 @@ export default function DashboardWolvTokenPage() {
       </div>
 
       <div className="dashboard-wolv-grid">
-        <div className="dashboard-wolv-card">
-          <h2>Connect Your Wallet</h2>
-          <p>
-            Connect your wallet here to claim WOLV tokens earned from staking rewards and monitor your reward balance directly in the dashboard.
-          </p>
-          <div style={{ marginTop: "20px" }}>
-            <WalletProvider>
-              <WolvWalletSection />
-            </WalletProvider>
+        <div className="wolv-wallet-card">
+          <div className="wolv-wallet-inner">
+            <div className="wolv-wallet-icon-ring">🔗</div>
+            <h2 className="wolv-wallet-title">Connect Your Wallet</h2>
+            <p className="wolv-wallet-desc">
+              Link your Web3 wallet to claim WOLV tokens earned through staking rewards and monitor
+              your on-chain reward balance directly from your dashboard.
+            </p>
+            <div className="wolv-wallet-cta-wrap">
+              <div className="wolv-wallet-cta-label">Wallet Connection</div>
+              <WalletProvider>
+                <WolvWalletSection />
+              </WalletProvider>
+              <div className="wolv-wallet-features">
+                <div className="wolv-wallet-feature"><span className="wolv-wallet-feature-dot" />BNB Smart Chain</div>
+                <div className="wolv-wallet-feature"><span className="wolv-wallet-feature-dot" />Non-custodial</div>
+                <div className="wolv-wallet-feature"><span className="wolv-wallet-feature-dot" />Instant rewards</div>
+                <div className="wolv-wallet-feature"><span className="wolv-wallet-feature-dot" />Secure &amp; private</div>
+              </div>
+            </div>
           </div>
         </div>
 

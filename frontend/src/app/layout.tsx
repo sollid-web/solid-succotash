@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   creator: 'WolvCapital',
   publisher: 'WolvCapital',
   category: 'finance',
-  alternates: { canonical: 'https://wolvcapital.com' },
+  alternates: { canonical: 'https://www.wolvcapital.com' },
   openGraph: {
     title: 'WolvCapital — BNB Smart Chain Staking & Digital Asset Investment',
     description: 'U.S. regulated platform offering 8%–25% APY staking. WOLV token rewards on BNB Smart Chain. KYC compliant · FinCEN registered · On-chain transparent.',

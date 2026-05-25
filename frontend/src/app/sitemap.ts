@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { getAllPostsMeta } from '@/lib/blog'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, '') ?? 'https://wolvcapital.com'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, '') ?? 'https://www.wolvcapital.com'
   const now = new Date().toISOString()
   const blogPosts = getAllPostsMeta()
 

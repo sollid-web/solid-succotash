@@ -12,7 +12,7 @@ import RemoveSyncBannerClient from '@/components/RemoveSyncBannerClient'
 import '@/app/globals.css'
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://wolvcapital.com'),
+  metadataBase: new URL('https://www.wolvcapital.com'),
   title: {
     default: 'WolvCapital — BNB Smart Chain Staking & Digital Asset Investment',
     template: '%s | WolvCapital',

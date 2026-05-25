@@ -60,6 +60,7 @@ class Transaction(models.Model):
         ("deposit", "Deposit"),
         ("withdrawal", "Withdrawal"),
         ("profit", "Profit"),
+        ("manual_credit", "Manual Credit"),
     ]
 
     PAYMENT_METHOD_CHOICES = [

@@ -25,7 +25,7 @@ def approve_transaction(txn: Transaction, admin_user: User, notes: str = "") -> 
     except UserWallet.DoesNotExist:
         wallet = UserWallet.objects.create(user=txn.user)
 
-    if txn.tx_type == "deposit":
+    if txn.tx_type in ("deposit", "manual_credit"):
         # Credit the wallet
         wallet.balance += txn.amount
         wallet.save(update_fields=["balance", "updated_at"])
@@ -68,7 +68,7 @@ def approve_transaction(txn: Transaction, admin_user: User, notes: str = "") -> 
         notify_withdrawal_approved,
     )
 
-    if txn.tx_type == "deposit":
+    if txn.tx_type in ("deposit", "manual_credit"):
         notify_deposit_approved(txn.user, txn, notes)
     elif txn.tx_type == "withdrawal":
         notify_withdrawal_approved(txn.user, txn, notes)
@@ -218,6 +218,10 @@ def create_transaction(
             notification_type = "new_withdrawal"
             title = f"New Withdrawal Request: ${amount_display}"
             priority = "high" if amount_decimal >= wd_thresh else "medium"
+        elif tx_type == "manual_credit":
+            notification_type = "new_deposit"
+            title = f"Manual Credit Applied: ${amount_display}"
+            priority = "medium"
         else:
             raise ValidationError("Invalid transaction type")
 

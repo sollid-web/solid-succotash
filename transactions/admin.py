@@ -1,5 +1,25 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
+from django.db import connection
+from django.http import JsonResponse
+from django.views import View
+
 from .models import Transaction, CryptocurrencyWallet, VirtualCard
+
+
+class SystemStatusView(View):
+    def get(self, request):
+        # Basic DB connectivity check
+        try:
+            connection.ensure_connection()
+            db_ok = True
+        except Exception:
+            db_ok = False
+
+        return JsonResponse({
+            "status": "ok" if db_ok else "degraded",
+            "database": "connected" if db_ok else "error",
+        })
 
 
 @admin.register(Transaction)

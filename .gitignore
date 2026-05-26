@@ -62,3 +62,4 @@ lib/
 *.egg-info/
 __pycache__/
 .gitignore
+patch_*.py

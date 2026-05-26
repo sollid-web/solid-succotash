@@ -401,6 +401,89 @@ UNFOLD = {
                     },
                 ],
             },
+            {
+                "title": "KYC Verification",
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": "KYC Applications",
+                        "icon": "verified_user",
+                        "link": "/admin/users/kycapplication/",
+                    },
+                    {
+                        "title": "KYC Documents",
+                        "icon": "description",
+                        "link": "/admin/users/kycdocument/",
+                    },
+                ],
+            },
+            {
+                "title": "Investments",
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": "Investment Plans",
+                        "icon": "trending_up",
+                        "link": "/admin/investments/investmentplan/",
+                    },
+                    {
+                        "title": "User Investments",
+                        "icon": "savings",
+                        "link": "/admin/investments/userinvestment/",
+                    },
+                ],
+            },
+            {
+                "title": "Communications",
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": "Send Email",
+                        "icon": "mail",
+                        "link": "/admin/users/user/send-email/",
+                    },
+                    {
+                        "title": "Email Inbox",
+                        "icon": "inbox",
+                        "link": "/admin/core/emailinbox/",
+                    },
+                    {
+                        "title": "Email Templates",
+                        "icon": "edit_note",
+                        "link": "/admin/core/emailtemplate/",
+                    },
+                    {
+                        "title": "Support Requests",
+                        "icon": "support_agent",
+                        "link": "/admin/core/supportrequest/",
+                    },
+                ],
+            },
+            {
+                "title": "Referrals",
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": "Referral Codes",
+                        "icon": "share",
+                        "link": "/admin/referrals/referralcode/",
+                    },
+                    {
+                        "title": "Referrals",
+                        "icon": "group_add",
+                        "link": "/admin/referrals/referral/",
+                    },
+                    {
+                        "title": "Referral Rewards",
+                        "icon": "card_giftcard",
+                        "link": "/admin/referrals/referralreward/",
+                    },
+                ],
+            },
         ],
     },
     "TABS": [

@@ -56,3 +56,9 @@ MANIFEST
 .vercel
 Dockerfile
 .env*.local
+boto3/
+bin/
+lib/
+*.egg-info/
+__pycache__/
+.gitignore

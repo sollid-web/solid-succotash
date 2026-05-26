@@ -57,8 +57,16 @@ class TransactionAdmin(UnfoldModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         if obj:
-            return self.readonly_fields + ("user", "tx_type", "amount", "payment_method")
+            # status is always readonly — must use approve/reject actions
+            return self.readonly_fields + ("user", "tx_type", "amount", "payment_method", "status")
         return self.readonly_fields
+
+    def has_change_permission(self, request, obj=None):
+        # Block editing existing transactions directly
+        # All approvals must go through approve/reject actions
+        if obj and obj.status != "pending":
+            return False
+        return True
 
     # ── Display helpers ──────────────────────
 

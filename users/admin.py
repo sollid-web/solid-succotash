@@ -242,7 +242,7 @@ class KycDocumentAdmin(UnfoldModelAdmin):
             "fields": ("user", "document_type", "status", "document_number")
         }),
         ("Document Images", {
-            "fields": ("front_image_preview", "back_image_preview"),
+            "fields": ("document_preview_full",),
         }),
         ("Review", {
             "fields": ("notes", "reviewed_by", "reviewed_at"),
@@ -284,18 +284,18 @@ class KycDocumentAdmin(UnfoldModelAdmin):
         )
 
     def front_image_preview(self, obj):
-        url = getattr(obj.front_image, "url", None) if hasattr(obj, "front_image") and obj.front_image else None
+        url = obj.document_file.url if obj.document_file else None
         return self._image_tag(url, "Front of Document")
     front_image_preview.short_description = "Front Image"
 
     def back_image_preview(self, obj):
-        url = getattr(obj.back_image, "url", None) if hasattr(obj, "back_image") and obj.back_image else None
+        url = None
         return self._image_tag(url, "Back of Document")
     back_image_preview.short_description = "Back Image"
 
     def document_preview(self, obj):
         """Thumbnail for list view."""
-        url = getattr(obj.front_image, "url", None) if hasattr(obj, "front_image") and obj.front_image else None
+        url = obj.document_file.url if obj.document_file else None
         if not url:
             return "No image"
         return format_html(

@@ -158,3 +158,10 @@ urlpatterns = [
         name="api-checkout-completion",
     ),
 ]
+
+from users.password_reset_views import password_reset_request, password_reset_confirm
+
+urlpatterns += [
+    path("auth/password/reset/", password_reset_request, name="password-reset-request"),
+    path("auth/password/reset/confirm/", password_reset_confirm, name="password-reset-confirm"),
+]

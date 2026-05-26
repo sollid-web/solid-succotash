@@ -226,7 +226,7 @@ class UserWalletSerializer(serializers.ModelSerializer):
         from transactions.models import Transaction
         total = (
             Transaction.objects.filter(
-                user=obj.user, tx_type="deposit", status="approved"
+                user=obj.user, tx_type__in=["deposit", "manual_credit"], status="approved"
             ).aggregate(total=Sum("amount"))["total"]
             or Decimal("0.00")
         )

@@ -411,7 +411,7 @@ class UserDashboardAnalyticsView(APIView):
                             "Withdrawal"
                             if tx_type == "withdrawal"
                             else (
-                                "ROI" if tx_type == "profit" else (tx_type or "Transaction").title()
+                                "ROI" if tx_type == "profit" else ("Deposit" if tx_type == "manual_credit" else (tx_type or "Transaction").title())
                             )
                         )
                     ),

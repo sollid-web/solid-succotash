@@ -1,0 +1,61 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<div style="max-width:640px;">
+  <h2 style="margin-bottom:16px;">📧 Send Email to User</h2>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div style="padding:10px 16px;margin-bottom:16px;border-radius:6px;
+        background:{% if message.tags == 'error' %}#fee2e2{% else %}#dcfce7{% endif %};
+        color:{% if message.tags == 'error' %}#dc2626{% else %}#16a34a{% endif %};">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="post" style="background:#fff;padding:24px;border-radius:8px;border:1px solid #e5e7eb;">
+    {% csrf_token %}
+    <table style="width:100%;border-collapse:collapse;">
+      {% for field in form %}
+        <tr style="margin-bottom:12px;">
+          <th style="text-align:left;padding:8px 12px 8px 0;width:80px;font-size:13px;color:#374151;">
+            {{ field.label }}
+          </th>
+          <td style="padding:4px 0;">
+            {{ field }}
+            {% if field.errors %}
+              <p style="color:#dc2626;font-size:12px;margin:4px 0 0;">{{ field.errors|join:", " }}</p>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+    <div style="margin-top:20px;display:flex;gap:12px;">
+      <button type="submit"
+        style="background:#2563eb;color:white;padding:10px 24px;border:none;border-radius:6px;cursor:pointer;font-size:14px;">
+        Send Email
+      </button>
+      <a href=".."
+        style="background:#f3f4f6;color:#374151;padding:10px 24px;border-radius:6px;text-decoration:none;font-size:14px;">
+        Cancel
+      </a>
+    </div>
+  </form>
+
+  <p style="margin-top:16px;font-size:12px;color:#6b7280;">
+    Sent from: <strong>support@mail.wolvcapital.com</strong> via Resend
+  </p>
+</div>
+
+<style>
+  input[type=email], input[type=text], textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+  textarea { font-family: inherit; resize: vertical; }
+</style>
+{% endblock %}

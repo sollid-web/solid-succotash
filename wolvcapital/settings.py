@@ -72,15 +72,7 @@ KOYEB_PUBLIC_DOMAIN = env("KOYEB_PUBLIC_DOMAIN", default=None)
 CUSTOM_DOMAIN = env("CUSTOM_DOMAIN", default=None)
 
 # Dynamic ALLOWED_HOSTS for multi-environment deployment
-ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "*.railway.app",
-    "django-production-2764.up.railway.app",
-    "*.koyeb.app",  # Accept any Koyeb subdomain
-    "wolvcapital.com",
-    "www.wolvcapital.com",
-]
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
 
 # Add custom domains if provided
 if KOYEB_PUBLIC_DOMAIN:
@@ -89,13 +81,13 @@ if CUSTOM_DOMAIN:
     ALLOWED_HOSTS.append(CUSTOM_DOMAIN)
     ALLOWED_HOSTS.append(f"www.{CUSTOM_DOMAIN}")
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://*.railway.app",
-    "https://django-production-2764.up.railway.app",
-    "https://*.koyeb.app",
-    "https://wolvcapital.com",
-    "https://www.wolvcapital.com",
-]
+CSRF_TRUSTED_ORIGINS = env.list(
+    "CSRF_TRUSTED_ORIGINS",
+    default=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ],
+)
 
 # Add custom domain CSRF origins if provided
 if KOYEB_PUBLIC_DOMAIN:
@@ -104,13 +96,13 @@ if CUSTOM_DOMAIN:
     CSRF_TRUSTED_ORIGINS.append(f"https://{CUSTOM_DOMAIN}")
     CSRF_TRUSTED_ORIGINS.append(f"https://www.{CUSTOM_DOMAIN}")
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "https://wolvcapital.com",
-    "https://www.wolvcapital.com",
-    "https://django-production-2764.up.railway.app",
-]
+CORS_ALLOWED_ORIGINS = env.list(
+    "CORS_ALLOWED_ORIGINS",
+    default=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ],
+)
 
 # Add custom domain CORS origins if provided
 if KOYEB_PUBLIC_DOMAIN:

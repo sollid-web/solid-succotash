@@ -44,7 +44,7 @@ const nextConfig = {
     // Proxy API calls from the frontend domain to the Django backend.
     // This ensures links like https://wolvcapital.com/api/auth/verify-email/?token=...
     // reach Django instead of returning a Next.js 404.
-    const backendBase = process.env.NEXT_PUBLIC_API_URL || 'https://django-production-2764.up.railway.app'
+    const backendBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
     return [
       // Proxy Django static assets (needed for admin CSS/JS).
       {

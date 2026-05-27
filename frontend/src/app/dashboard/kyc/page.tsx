@@ -1,7 +1,9 @@
-  'use client'  
+'use client'
 import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { apiFetch } from '@/lib/api'
+
+// ─── Types ───────────────────────────────────────────────────────────────────
 
 interface KYCStep {
   id: number
@@ -9,18 +11,22 @@ interface KYCStep {
   description: string
   status: 'completed' | 'pending' | 'required' | 'failed'
   required: boolean
-}interface DocumentMetadata {
+}
+
+interface DocumentMetadata {
   name: string
   type?: string
   size?: number
   source?: 'local' | 'server'
 }
+
 interface KycApplication {
   id: string
   status: 'draft' | 'pending' | 'approved' | 'rejected'
   personal_info: Record<string, any> | null
   document_info: {
-    government_id?: DocumentMetadata | null
+    government_id_front?: DocumentMetadata | null
+    government_id_back?: DocumentMetadata | null
     proof_of_address?: DocumentMetadata | null
     [key: string]: any
   } | null
@@ -34,149 +40,259 @@ interface KycApplication {
   created_at: string
   updated_at: string
 }
+
+// ─── Constants ────────────────────────────────────────────────────────────────
+
 const DEFAULT_KYC_STEPS: KYCStep[] = [
   {
     id: 1,
     title: 'Email Verification',
     description: 'Verify your email address',
     status: 'completed',
-    required: true
+    required: true,
   },
   {
     id: 2,
     title: 'Personal Information',
     description: 'Complete your personal profile',
     status: 'required',
-    required: true
+    required: true,
   },
   {
     id: 3,
     title: 'Identity Documents',
-    description: 'Upload government-issued ID and proof of address',
+    description: 'Upload government-issued ID (front & back) and proof of address',
     status: 'required',
-    required: true
+    required: true,
   },
   {
     id: 4,
     title: 'Enhanced Verification',
     description: 'Additional verification for higher limits (optional)',
     status: 'required',
-    required: true
-  }
+    required: true,
+  },
 ]
 
 const APPLICATION_STATUS_TO_STEP_STATUS: Record<KycApplication['status'], KYCStep['status']> = {
   draft: 'required',
   pending: 'pending',
   approved: 'completed',
-  rejected: 'failed'
+  rejected: 'failed',
 }
 
-const hasJsonContent = (value: Record<string, any> | null | undefined) => Boolean(value && Object.keys(value).length > 0)
-
-const hasPersonalInfoSubmission = (application: KycApplication | null) => {
-  if (!application) {
-    return false
-  }
-
-  if (application.status === 'approved' || application.status === 'rejected') {
-    return true
-  }
-
-  return Boolean(application.personal_info_submitted_at || hasJsonContent(application.personal_info))
+const STATUS_LABEL: Record<KycApplication['status'], string> = {
+  draft: 'Not Started',
+  pending: 'Pending Review',
+  approved: 'Approved',
+  rejected: 'Action Required',
 }
 
-const hasDocumentSubmission = (application: KycApplication | null) => {
-  if (!application) {
-    return false
-  }
-
-  if (application.status === 'approved' || application.status === 'rejected') {
-    return true
-  }
-
-  return Boolean(application.document_submitted_at || hasJsonContent(application.document_info))
+const STATUS_BADGE_CLASS: Record<KycApplication['status'], string> = {
+  draft: 'bg-slate-700 text-slate-300',
+  pending: 'bg-amber-900/60 text-amber-300 border border-amber-700',
+  approved: 'bg-emerald-900/60 text-emerald-300 border border-emerald-700',
+  rejected: 'bg-red-900/60 text-red-300 border border-red-700',
 }
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+const hasJsonContent = (v: Record<string, any> | null | undefined) =>
+  Boolean(v && Object.keys(v).length > 0)
+
+const hasPersonalInfoSubmission = (app: KycApplication | null) => {
+  if (!app) return false
+  if (app.status === 'approved' || app.status === 'rejected') return true
+  return Boolean(app.personal_info_submitted_at || hasJsonContent(app.personal_info))
+}
+
+const hasDocumentSubmission = (app: KycApplication | null) => {
+  if (!app) return false
+  if (app.status === 'approved' || app.status === 'rejected') return true
+  return Boolean(app.document_submitted_at || hasJsonContent(app.document_info))
+}
+
+const formatFileSize = (bytes?: number) => {
+  if (!bytes) return ''
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+}
+
+// ─── Sub-components ───────────────────────────────────────────────────────────
+
+function StepIcon({ status }: { status: string }) {
+  if (status === 'completed')
+    return (
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+      </svg>
+    )
+  if (status === 'pending')
+    return (
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    )
+  if (status === 'failed')
+    return (
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    )
+  return (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+    </svg>
+  )
+}
+
+function stepColor(status: string) {
+  if (status === 'completed') return 'text-emerald-400 bg-emerald-900/50 border-emerald-700'
+  if (status === 'pending') return 'text-amber-400 bg-amber-900/50 border-amber-700'
+  if (status === 'failed') return 'text-red-400 bg-red-900/50 border-red-700'
+  return 'text-slate-400 bg-slate-800 border-slate-600'
+}
+
+// Upload dropzone for a single file slot
+interface DropZoneProps {
+  id: string
+  label: string
+  sublabel: string
+  badge?: string      // e.g. "FRONT" | "BACK"
+  badgeColor?: string
+  file: DocumentMetadata | null
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  required?: boolean
+}
+
+function DropZone({ id, label, sublabel, badge, badgeColor = 'bg-blue-700 text-blue-100', file, onChange, required }: DropZoneProps) {
+  const hasFile = Boolean(file)
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center gap-2">
+        <span className="text-sm font-semibold text-slate-200">{label}</span>
+        {badge && (
+          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full tracking-widest uppercase ${badgeColor}`}>
+            {badge}
+          </span>
+        )}
+        {required && <span className="text-[10px] text-red-400 font-semibold">Required</span>}
+      </div>
+      <div className="relative group">
+        <input
+          type="file"
+          id={id}
+          accept=".jpg,.jpeg,.png,.pdf"
+          onChange={onChange}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+          aria-label={label}
+        />
+        <div
+          className={`
+            border-2 border-dashed rounded-xl p-5 text-center transition-all duration-200
+            ${hasFile
+              ? 'border-emerald-500 bg-emerald-950/40'
+              : 'border-slate-600 bg-slate-900/60 group-hover:border-blue-500 group-hover:bg-slate-900/90'
+            }
+          `}
+        >
+          {hasFile ? (
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-10 h-10 rounded-full bg-emerald-900/60 border border-emerald-600 flex items-center justify-center">
+                <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <p className="text-sm text-emerald-300 font-medium truncate max-w-[180px]">{file!.name}</p>
+              {file!.size && (
+                <p className="text-xs text-emerald-500">{formatFileSize(file!.size)}</p>
+              )}
+              <p className="text-[11px] text-emerald-600 mt-0.5">
+                {file!.source === 'server' ? '✓ On file — click to replace' : '✓ Ready to submit'}
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-2 py-1">
+              <div className="w-10 h-10 rounded-full bg-slate-800 border border-slate-600 flex items-center justify-center group-hover:border-blue-500 transition-colors">
+                <svg className="w-5 h-5 text-slate-400 group-hover:text-blue-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+              </div>
+              <p className="text-sm text-slate-300 font-medium">{sublabel}</p>
+              <p className="text-[11px] text-slate-500">JPG, PNG or PDF · max 5 MB</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function KYCPage() {
-  const [kycSteps, setKycSteps] = useState<KYCStep[]>(() => DEFAULT_KYC_STEPS.map(step => ({ ...step })))
+  const [kycSteps, setKycSteps] = useState<KYCStep[]>(() =>
+    DEFAULT_KYC_STEPS.map(s => ({ ...s }))
+  )
   const [latestApplication, setLatestApplication] = useState<KycApplication | null>(null)
   const [loadingStatus, setLoadingStatus] = useState(true)
   const [fetchError, setFetchError] = useState('')
-
   const [selectedStep, setSelectedStep] = useState(2)
+  const [messageTone, setMessageTone] = useState<'success' | 'error'>('success')
+  const [submitMessage, setSubmitMessage] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const [personalInfo, setPersonalInfo] = useState({
     firstName: '',
     lastName: '',
     dateOfBirth: '',
     nationality: '',
-    address: ''
+    address: '',
   })
+
+  // Three upload slots: front of ID, back of ID, proof of address
   const [uploadedFiles, setUploadedFiles] = useState({
-    governmentId: null as DocumentMetadata | null,
-    proofOfAddress: null as DocumentMetadata | null
+    governmentIdFront: null as DocumentMetadata | null,
+    governmentIdBack: null as DocumentMetadata | null,
+    proofOfAddress: null as DocumentMetadata | null,
   })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitMessage, setSubmitMessage] = useState('')
-  const statusLabelMap: Record<KycApplication['status'], string> = {
-    draft: 'Not Started',
-    pending: 'Pending Review',
-    approved: 'Approved',
-    rejected: 'Action Required'
-  }
-  const detailStatusClass: Record<KycApplication['status'], string> = {
-    draft: 'bg-gray-100 text-gray-700',
-    pending: 'bg-yellow-100 text-yellow-700',
-    approved: 'bg-green-100 text-green-700',
-    rejected: 'bg-red-100 text-red-700'
-  }
 
-  const statusFromApplication = useCallback((application: KycApplication | null, hasSubmission: boolean): KYCStep['status'] => {
-    if (!application) {
-      return 'required'
-    }
+  // ── Derivation helpers ─────────────────────────────────────────────────────
 
-    if (!hasSubmission) {
-      if (application.status === 'approved') {
-        return 'completed'
+  const statusFromApplication = useCallback(
+    (app: KycApplication | null, hasSubmission: boolean): KYCStep['status'] => {
+      if (!app) return 'required'
+      if (!hasSubmission) {
+        if (app.status === 'approved') return 'completed'
+        if (app.status === 'rejected') return 'failed'
+        return 'required'
       }
-      if (application.status === 'rejected') {
-        return 'failed'
-      }
-      return 'required'
-    }
+      return APPLICATION_STATUS_TO_STEP_STATUS[app.status] ?? 'required'
+    },
+    []
+  )
 
-    return APPLICATION_STATUS_TO_STEP_STATUS[application.status] ?? 'required'
-  }, [])
+  const deriveSteps = useCallback(
+    (app: KycApplication | null) => {
+      const personalInfoSubmitted = hasPersonalInfoSubmission(app)
+      const documentSubmitted = hasDocumentSubmission(app)
+      return DEFAULT_KYC_STEPS.map(step => {
+        if (step.id === 2) return { ...step, status: statusFromApplication(app, personalInfoSubmitted) }
+        if (step.id === 3) return { ...step, status: statusFromApplication(app, documentSubmitted) }
+        if (step.id === 4) {
+          const hasProgress = Boolean(app && app.status !== 'draft')
+          return { ...step, status: hasProgress ? statusFromApplication(app, hasProgress) : 'required' as const }
+        }
+        return { ...step }
+      })
+    },
+    [statusFromApplication]
+  )
 
-  const deriveSteps = useCallback((application: KycApplication | null) => {
-    const personalInfoSubmitted = hasPersonalInfoSubmission(application)
-    const documentSubmitted = hasDocumentSubmission(application)
+  // ── Effects ────────────────────────────────────────────────────────────────
 
-    return DEFAULT_KYC_STEPS.map(step => {
-      if (step.id === 2) {
-        const status = statusFromApplication(application, personalInfoSubmitted)
-        return { ...step, status }
-      }
-
-      if (step.id === 3) {
-        const status = statusFromApplication(application, documentSubmitted)
-        return { ...step, status }
-      }
-
-      if (step.id === 4) {
-        const hasProgress = Boolean(application && application.status !== 'draft')
-        const status = statusFromApplication(application, Boolean(hasProgress))
-        return { ...step, status: hasProgress ? status : 'required' }
-      }
-
-      return { ...step }
-    })
-  }, [statusFromApplication])
-
-  useEffect(() => {
-    setKycSteps(deriveSteps(latestApplication))
-  }, [latestApplication, deriveSteps])
+  useEffect(() => { setKycSteps(deriveSteps(latestApplication)) }, [latestApplication, deriveSteps])
 
   useEffect(() => {
     if (latestApplication?.personal_info) {
@@ -186,7 +302,7 @@ export default function KYCPage() {
         lastName: info.last_name || info.lastName || '',
         dateOfBirth: info.date_of_birth || info.dateOfBirth || '',
         nationality: info.nationality || '',
-        address: info.address || ''
+        address: info.address || '',
       })
     }
   }, [latestApplication])
@@ -195,8 +311,11 @@ export default function KYCPage() {
     if (latestApplication?.document_info) {
       const docs = latestApplication.document_info
       setUploadedFiles({
-        governmentId: docs?.government_id
-          ? { ...docs.government_id, source: docs.government_id.source || 'server' }
+        governmentIdFront: docs?.government_id_front
+          ? { ...docs.government_id_front, source: docs.government_id_front.source || 'server' }
+          : null,
+        governmentIdBack: docs?.government_id_back
+          ? { ...docs.government_id_back, source: docs.government_id_back.source || 'server' }
           : null,
         proofOfAddress: docs?.proof_of_address
           ? { ...docs.proof_of_address, source: docs.proof_of_address.source || 'server' }
@@ -205,64 +324,27 @@ export default function KYCPage() {
     }
   }, [latestApplication])
 
+  // ── API helpers ────────────────────────────────────────────────────────────
+
   const fetchKycStatus = useCallback(async () => {
     try {
       setFetchError('')
       const response = await apiFetch('/api/kyc/', {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
       })
-
-      if (!response.ok) {
-        throw new Error('Unable to fetch KYC status')
-      }
-
+      if (!response.ok) throw new Error('Unable to fetch KYC status')
       const payload = await response.json()
       const latest = Array.isArray(payload) ? payload[0] : payload
       setLatestApplication(latest ?? null)
-    } catch (error) {
-      console.error('KYC fetch error:', error)
+    } catch {
       setFetchError('Unable to load your KYC status. Please refresh and try again.')
     } finally {
       setLoadingStatus(false)
     }
   }, [])
 
-  useEffect(() => {
-    fetchKycStatus()
-  }, [fetchKycStatus])
-  const [messageTone, setMessageTone] = useState<'success' | 'error'>('success')
-
-  const handleFileUpload = (type: 'governmentId' | 'proofOfAddress') => (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      const validTypes = ['image/jpeg', 'image/png', 'application/pdf']
-      if (!validTypes.includes(file.type)) {
-        alert('Please upload a valid file type (JPG, PNG, or PDF)')
-        return
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        alert('File size must be less than 5MB')
-        return
-      }
-      setUploadedFiles(prev => ({
-        ...prev,
-        [type]: {
-          file,
-          name: file.name,
-          type: file.type,
-          size: file.size,
-          source: 'local'
-        }
-      }))
-    }
-  }
-
-  const updateStepStatus = (stepId: number, status: KYCStep['status']) => {
-    setKycSteps(prev => prev.map(step => (step.id === stepId ? { ...step, status } : step)))
-  }
+  useEffect(() => { fetchKycStatus() }, [fetchKycStatus])
 
   const extractErrorMessage = async (response: Response) => {
     try {
@@ -271,16 +353,12 @@ export default function KYCPage() {
       if (typeof data === 'string') return data
       if (data.detail) return data.detail
       if (data.error) return data.error
-      // Aggregate field errors (DRF style {field: [messages]})
-      const fieldMessages: string[] = []
-      Object.entries(data).forEach(([key, val]) => {
-        if (Array.isArray(val)) {
-          fieldMessages.push(`${key}: ${val.join(', ')}`)
-        } else if (typeof val === 'string') {
-          fieldMessages.push(`${key}: ${val}`)
-        }
+      const msgs: string[] = []
+      Object.entries(data).forEach(([k, v]) => {
+        if (Array.isArray(v)) msgs.push(`${k}: ${v.join(', ')}`)
+        else if (typeof v === 'string') msgs.push(`${k}: ${v}`)
       })
-      return fieldMessages.length ? fieldMessages.join(' | ') : 'Something went wrong. Please try again.'
+      return msgs.length ? msgs.join(' | ') : 'Something went wrong. Please try again.'
     } catch {
       return 'Something went wrong. Please try again.'
     }
@@ -288,65 +366,92 @@ export default function KYCPage() {
 
   const normalizeDate = (value: string): string => {
     if (!value) return value
-    // Accept MM/DD/YYYY and convert to YYYY-MM-DD
-    const mdY = /^(\d{2})\/(\d{2})\/(\d{4})$/
     const iso = /^(\d{4})-(\d{2})-(\d{2})$/
+    const mdY = /^(\d{2})\/(\d{2})\/(\d{4})$/
     if (iso.test(value)) return value
     const match = value.match(mdY)
     if (match) {
-      const [_, mm, dd, yyyy] = match
+      const [, mm, dd, yyyy] = match
       return `${yyyy}-${mm}-${dd}`
     }
-    return value // fallback, let backend validate
+    return value
   }
 
+  // ── Upload handler ─────────────────────────────────────────────────────────
+
+  const handleFileUpload =
+    (type: 'governmentIdFront' | 'governmentIdBack' | 'proofOfAddress') =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0]
+      if (!file) return
+      const validTypes = ['image/jpeg', 'image/png', 'application/pdf']
+      if (!validTypes.includes(file.type)) {
+        alert('Please upload a valid file type (JPG, PNG, or PDF)')
+        return
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must be less than 5 MB')
+        return
+      }
+      // Screenshot detection — warn if filename contains common screenshot keywords
+      const lowerName = file.name.toLowerCase()
+      const screenshotKeywords = ['screenshot', 'screen_shot', 'screengrab', 'capture', 'chatgpt', 'whatsapp', 'telegram']
+      if (screenshotKeywords.some(kw => lowerName.includes(kw))) {
+        const proceed = window.confirm(
+          'This file appears to be a screenshot. KYC documents must be direct photos of your physical ID, not screenshots. Screenshots will be rejected during review.\n\nDo you still want to upload this file?'
+        )
+        if (!proceed) return
+      }
+      setUploadedFiles(prev => ({
+        ...prev,
+        [type]: { file, name: file.name, type: file.type, size: file.size, source: 'local' },
+      }))
+    }
+
+  // ── Submit handlers ────────────────────────────────────────────────────────
+
   const handlePersonalInfoSubmit = async () => {
-    if (!personalInfo.firstName || !personalInfo.lastName || !personalInfo.dateOfBirth || !personalInfo.nationality || !personalInfo.address) {
+    if (
+      !personalInfo.firstName ||
+      !personalInfo.lastName ||
+      !personalInfo.dateOfBirth ||
+      !personalInfo.nationality ||
+      !personalInfo.address
+    ) {
       setMessageTone('error')
       setSubmitMessage('All fields are required.')
       return
     }
-
     setIsSubmitting(true)
     setMessageTone('success')
     setSubmitMessage('')
-
-    const payload = {
-      first_name: personalInfo.firstName.trim(),
-      last_name: personalInfo.lastName.trim(),
-      date_of_birth: normalizeDate(personalInfo.dateOfBirth.trim()),
-      nationality: personalInfo.nationality.trim(),
-      address: personalInfo.address.trim(),
-    }
-
     try {
       const response = await apiFetch('/api/kyc/personal-info/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          first_name: personalInfo.firstName.trim(),
+          last_name: personalInfo.lastName.trim(),
+          date_of_birth: normalizeDate(personalInfo.dateOfBirth.trim()),
+          nationality: personalInfo.nationality.trim(),
+          address: personalInfo.address.trim(),
+        }),
       })
-
       if (!response.ok) {
-        let detail = ''
-        if (response.status >= 500) {
-          detail = 'Server error processing your information. Please retry shortly or contact support.'
-        } else {
-          detail = await extractErrorMessage(response)
-        }
+        const detail =
+          response.status >= 500
+            ? 'Server error processing your information. Please retry shortly or contact support.'
+            : await extractErrorMessage(response)
         setMessageTone('error')
         setSubmitMessage(detail)
         return
       }
-
       const data = await response.json()
       setLatestApplication(data)
       setMessageTone('success')
-      setSubmitMessage('Personal information submitted! Your KYC is pending review.')
+      setSubmitMessage('Personal information saved. Proceed to upload your documents.')
       setTimeout(() => setSubmitMessage(''), 4000)
-    } catch (error) {
-      console.error('KYC personal info error:', error)
+    } catch {
       setMessageTone('error')
       setSubmitMessage('Network error submitting information. Please retry.')
     } finally {
@@ -355,59 +460,55 @@ export default function KYCPage() {
   }
 
   const handleDocumentSubmit = async () => {
-    if (!uploadedFiles.governmentId || !uploadedFiles.proofOfAddress) {
-      alert('Please upload both required documents')
+    if (!uploadedFiles.governmentIdFront || !uploadedFiles.governmentIdBack) {
+      setMessageTone('error')
+      setSubmitMessage('Please upload both the front and back of your government-issued ID.')
+      return
+    }
+    if (!uploadedFiles.proofOfAddress) {
+      setMessageTone('error')
+      setSubmitMessage('Please upload a proof of address document.')
       return
     }
     setIsSubmitting(true)
     setMessageTone('success')
     setSubmitMessage('')
 
-    try {
-      // backend expects one file per request; map our two types
-      const docs: Array<['governmentId' | 'proofOfAddress', string]> = [
-        ['governmentId', 'passport'],
-        ['proofOfAddress', 'national_id'],
-      ]
+    // Map slot → { docType for API, label for errors }
+    const docs: Array<{
+      key: 'governmentIdFront' | 'governmentIdBack' | 'proofOfAddress'
+      docType: string
+      label: string
+    }> = [
+      { key: 'governmentIdFront', docType: 'national_id', label: 'ID front' },
+      { key: 'governmentIdBack', docType: 'national_id_back', label: 'ID back' },
+      { key: 'proofOfAddress', docType: 'proof_of_address', label: 'Proof of address' },
+    ]
 
-      for (const [key, docType] of docs) {
-        // our `uploadedFiles` map is keyed by the input name, but the stored
-        // value is a small object that additionally carries the actual
-        // `File` instance.  the existing `DocumentMetadata` type doesn't
-        // include that field which leads to a type error during the build.
-        // rather than widening the type across the entire app (which isn't
-        // used anywhere else) we simply cast to `any` here so the compiler
-        // stops complaining while retaining runtime safety via the null
-        // check below.
+    try {
+      for (const { key, docType, label } of docs) {
         const fileData: any = uploadedFiles[key]
-        if (!fileData || !fileData.file) continue
+        if (!fileData?.file) continue
 
         const form = new FormData()
         form.append('document_type', docType)
         form.append('document_file', fileData.file)
 
-        const resp = await apiFetch('/api/kyc-documents/', {
-          method: 'POST',
-          body: form,
-        })
-
+        const resp = await apiFetch('/api/kyc-documents/', { method: 'POST', body: form })
         if (!resp.ok) {
-          let detail = ''
-          if (resp.status >= 500) {
-            detail = 'Server error uploading document. Please retry shortly.'
-          } else {
-            detail = await extractErrorMessage(resp)
-          }
+          const detail =
+            resp.status >= 500
+              ? `Server error uploading ${label}. Please retry shortly.`
+              : await extractErrorMessage(resp)
           throw new Error(detail)
         }
       }
 
       await fetchKycStatus()
       setMessageTone('success')
-      setSubmitMessage('Documents uploaded successfully! Your KYC is under review.')
-      setTimeout(() => setSubmitMessage(''), 3000)
+      setSubmitMessage('All documents submitted successfully. Your KYC application is now under review.')
+      setTimeout(() => setSubmitMessage(''), 4000)
     } catch (error) {
-      console.error('KYC document upload error:', error)
       setMessageTone('error')
       setSubmitMessage((error as Error).message || 'Unable to upload documents. Please try again.')
     } finally {
@@ -415,315 +516,295 @@ export default function KYCPage() {
     }
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed': return 'text-green-600 bg-green-100'
-      case 'pending': return 'text-yellow-600 bg-yellow-100'
-      case 'failed': return 'text-red-600 bg-red-100'
-      default: return 'text-slate-300 bg-slate-700'
-    }
-  }
+  // ── Render helpers ─────────────────────────────────────────────────────────
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'completed': 
-        return (
-          <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-        )
-      case 'pending':
-        return (
-          <svg className="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        )
-      case 'failed':
-        return (
-          <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        )
-      default:
-        return (
-          <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        )
-    }
-  }
+  const completedSteps = kycSteps.filter(s => s.status === 'completed').length
+  const progress = (completedSteps / kycSteps.length) * 100
 
   const renderStepContent = () => {
-    const step = kycSteps.find(s => s.id === selectedStep)
-    
     switch (selectedStep) {
-      case 1: // Email Verification
+      // ── Step 1: Email ──────────────────────────────────────────────────────
+      case 1:
         return (
-          <div className="space-y-6">
-            <div className="flex items-center space-x-3 p-4 bg-slate-900/80 rounded-xl border border-slate-700">
-              <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-[#0F172A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-semibold text-green-800">Email Verified Successfully</h3>
-                <p className="text-sm text-green-600">Your email address has been confirmed and is ready for use.</p>
-              </div>
+          <div className="flex items-start gap-4 p-5 bg-emerald-950/30 border border-emerald-800 rounded-xl">
+            <div className="w-10 h-10 rounded-full bg-emerald-900/60 border border-emerald-600 flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="font-semibold text-emerald-300">Email Verified</h3>
+              <p className="text-sm text-emerald-500 mt-0.5">Your email address has been confirmed and is linked to your account.</p>
             </div>
           </div>
         )
 
-      case 2: // Personal Information
+      // ── Step 2: Personal Info ──────────────────────────────────────────────
+      case 2:
         return (
-          <div className="space-y-6">
+          <div className="space-y-5">
             {submitMessage && (
-              <div className={`p-4 border rounded-xl ${messageTone === 'error' ? 'bg-slate-900/80 border-red-600' : 'bg-slate-900/80 border-green-600'}`}>
-                <p className={`text-sm ${messageTone === 'error' ? 'text-red-300' : 'text-green-300'}`}>
-                  {submitMessage}
-                </p>
+              <div className={`p-4 rounded-xl border text-sm ${messageTone === 'error' ? 'bg-red-950/30 border-red-700 text-red-300' : 'bg-emerald-950/30 border-emerald-700 text-emerald-300'}`}>
+                {submitMessage}
               </div>
             )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[
+                { id: 'firstName', label: 'First Name', placeholder: 'John', key: 'firstName' as const },
+                { id: 'lastName', label: 'Last Name', placeholder: 'Doe', key: 'lastName' as const },
+              ].map(field => (
+                <div key={field.id}>
+                  <label htmlFor={field.id} className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                    {field.label} <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id={field.id}
+                    value={personalInfo[field.key]}
+                    onChange={e => setPersonalInfo(prev => ({ ...prev, [field.key]: e.target.value }))}
+                    className="w-full px-4 py-2.5 border border-slate-700 bg-slate-900 text-slate-100 placeholder-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition text-sm"
+                    placeholder={field.placeholder}
+                  />
+                </div>
+              ))}
+
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-slate-300 mb-2">
-                  First Name
-                </label>
-                <input
-                  type="text"
-                  id="firstName"
-                  value={personalInfo.firstName}
-                  onChange={(e) => setPersonalInfo(prev => ({ ...prev, firstName: e.target.value }))}
-                  className="w-full px-4 py-2 border border-slate-700 bg-slate-950/95 text-slate-100 placeholder-slate-500 rounded-lg focus:ring-2 focus:ring-[#00a896]/40 focus:border-[#00a896]"
-                  placeholder="Enter your first name"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-slate-300 mb-2">
-                  Last Name
-                </label>
-                <input
-                  type="text"
-                  id="lastName"
-                  value={personalInfo.lastName}
-                  onChange={(e) => setPersonalInfo(prev => ({ ...prev, lastName: e.target.value }))}
-                  className="w-full px-4 py-2 border border-slate-700 bg-slate-950/95 text-slate-100 placeholder-slate-500 rounded-lg focus:ring-2 focus:ring-[#00a896]/40 focus:border-[#00a896]"
-                  placeholder="Enter your last name"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="dateOfBirth" className="block text-sm font-medium text-slate-300 mb-2">
-                  Date of Birth
+                <label htmlFor="dateOfBirth" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                  Date of Birth <span className="text-red-400">*</span>
                 </label>
                 <input
                   type="date"
                   id="dateOfBirth"
                   value={personalInfo.dateOfBirth}
-                  onChange={(e) => setPersonalInfo(prev => ({ ...prev, dateOfBirth: e.target.value }))}
-                  className="w-full px-4 py-2 border border-slate-700 bg-slate-950/95 text-slate-100 placeholder-slate-500 rounded-lg focus:ring-2 focus:ring-[#00a896]/40 focus:border-[#00a896]"
-                  required
+                  onChange={e => setPersonalInfo(prev => ({ ...prev, dateOfBirth: e.target.value }))}
+                  className="w-full px-4 py-2.5 border border-slate-700 bg-slate-900 text-slate-100 rounded-lg focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition text-sm"
                 />
               </div>
+
               <div>
-                <label htmlFor="nationality" className="block text-sm font-medium text-slate-300 mb-2">
-                  Nationality
+                <label htmlFor="nationality" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                  Nationality <span className="text-red-400">*</span>
                 </label>
                 <select
                   id="nationality"
                   value={personalInfo.nationality}
-                  onChange={(e) => setPersonalInfo(prev => ({ ...prev, nationality: e.target.value }))}
-                  className="w-full px-4 py-2 border border-slate-700 bg-slate-950/95 text-slate-100 placeholder-slate-500 rounded-lg focus:ring-2 focus:ring-[#00a896]/40 focus:border-[#00a896]"
-                  required
+                  onChange={e => setPersonalInfo(prev => ({ ...prev, nationality: e.target.value }))}
+                  className="w-full px-4 py-2.5 border border-slate-700 bg-slate-900 text-slate-100 rounded-lg focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition text-sm"
                 >
-                  <option value="">Select your nationality</option>
+                  <option value="">Select nationality</option>
                   <option value="US">United States</option>
-                  <option value="NO">Norway</option>
                   <option value="GB">United Kingdom</option>
+                  <option value="NG">Nigeria</option>
+                  <option value="NO">Norway</option>
                   <option value="DE">Germany</option>
                   <option value="CA">Canada</option>
+                  <option value="AU">Australia</option>
+                  <option value="FR">France</option>
+                  <option value="ZA">South Africa</option>
+                  <option value="KE">Kenya</option>
+                  <option value="GH">Ghana</option>
+                  <option value="IN">India</option>
+                  <option value="AE">United Arab Emirates</option>
+                  <option value="other">Other</option>
                 </select>
               </div>
             </div>
+
             <div>
-              <label htmlFor="address" className="block text-sm font-medium text-slate-300 mb-2">
-                Address
+              <label htmlFor="address" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                Full Residential Address <span className="text-red-400">*</span>
               </label>
               <textarea
                 id="address"
                 rows={3}
                 value={personalInfo.address}
-                onChange={(e) => setPersonalInfo(prev => ({ ...prev, address: e.target.value }))}
-                className="w-full px-4 py-2 border border-slate-700 bg-slate-950/95 text-slate-100 placeholder-slate-500 rounded-lg focus:ring-2 focus:ring-[#00a896]/40 focus:border-[#00a896]"
-                placeholder="Enter your full address"
-                required
+                onChange={e => setPersonalInfo(prev => ({ ...prev, address: e.target.value }))}
+                className="w-full px-4 py-2.5 border border-slate-700 bg-slate-900 text-slate-100 placeholder-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 transition text-sm resize-none"
+                placeholder="Street address, city, state, postal code, country"
               />
             </div>
-            <button 
+
+            <button
               onClick={handlePersonalInfoSubmit}
               disabled={isSubmitting}
-              className="btn-cta-sky inline-flex w-full items-center justify-center py-3 rounded-lg transition font-semibold disabled:opacity-50"
+              className="w-full py-3 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-700 disabled:text-slate-500 text-white rounded-lg font-semibold text-sm transition-all duration-150"
             >
-              {isSubmitting ? 'Saving...' : 'Save Information'}
+              {isSubmitting ? 'Saving…' : 'Save & Continue'}
             </button>
           </div>
         )
 
-      case 3: // Identity Documents
+      // ── Step 3: Documents ──────────────────────────────────────────────────
+      case 3:
         return (
           <div className="space-y-6">
             {submitMessage && (
-              <div className={`p-4 border rounded-xl ${messageTone === 'error' ? 'bg-slate-900/80 border-red-600' : 'bg-slate-900/80 border-green-600'}`}>
-                <p className={`text-sm ${messageTone === 'error' ? 'text-red-300' : 'text-green-300'}`}>
-                  {submitMessage}
-                </p>
+              <div className={`p-4 rounded-xl border text-sm ${messageTone === 'error' ? 'bg-red-950/30 border-red-700 text-red-300' : 'bg-emerald-950/30 border-emerald-700 text-emerald-300'}`}>
+                {submitMessage}
               </div>
             )}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Government ID Upload */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-100">Government-issued ID</h3>
-                <div className="relative">
-                  <input
-                    type="file"
-                    id="governmentId"
-                    accept=".jpg,.jpeg,.png,.pdf"
-                    onChange={handleFileUpload('governmentId')}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                    aria-label="Upload government-issued identification"
-                  />
-                  <div className={`border-2 border-dashed rounded-lg p-6 text-center transition cursor-pointer ${
-                    uploadedFiles.governmentId ? 'border-emerald-300 bg-emerald-950/75' : 'border-slate-700 bg-slate-950/80 hover:border-[#00a896]'
-                  }`}>
-                    {uploadedFiles.governmentId ? (
-                      <>
-                        <svg className="w-12 h-12 text-green-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <p className="text-sm text-green-600 font-medium mb-2">{uploadedFiles.governmentId.name}</p>
-                        <p className="text-xs text-green-500">
-                          {uploadedFiles.governmentId.source === 'server' ? 'File on record' : 'Ready to submit'}
-                        </p>
-                      </>
-                    ) : (
-                      <>
-                        <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                        </svg>
-                        <p className="text-sm text-slate-300 mb-2">Upload a photo of your ID</p>
-                        <p className="text-xs text-slate-400">Passport, Driver's License, or National ID</p>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
 
-              {/* Proof of Address Upload */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-100">Proof of Address</h3>
-                <div className="relative">
-                  <input
-                    type="file"
-                    id="proofOfAddress"
-                    accept=".jpg,.jpeg,.png,.pdf"
-                    onChange={handleFileUpload('proofOfAddress')}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                    aria-label="Upload proof of address document"
-                  />
-                  <div className={`border-2 border-dashed rounded-lg p-6 text-center transition cursor-pointer ${
-                    uploadedFiles.proofOfAddress ? 'border-emerald-300 bg-emerald-950/75' : 'border-slate-700 bg-slate-950/80 hover:border-[#00a896]'
-                  }`}>
-                    {uploadedFiles.proofOfAddress ? (
-                      <>
-                        <svg className="w-12 h-12 text-green-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <p className="text-sm text-green-600 font-medium mb-2">{uploadedFiles.proofOfAddress.name}</p>
-                        <p className="text-xs text-green-500">
-                          {uploadedFiles.proofOfAddress.source === 'server' ? 'File on record' : 'Ready to submit'}
-                        </p>
-                      </>
-                    ) : (
-                      <>
-                        <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                        </svg>
-                        <p className="text-sm text-slate-300 mb-2">Upload proof of address</p>
-                        <p className="text-xs text-slate-400">Utility bill, bank statement, or lease agreement</p>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-slate-900/80 border border-slate-700 rounded-xl p-4">
-              <div className="flex items-start space-x-3">
-                <div className="w-6 h-6 bg-[#2563eb] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            {/* ── Government-issued ID ──────────────────────────────────────── */}
+            <div className="rounded-xl border border-slate-700 bg-slate-900/50 p-5 space-y-4">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-blue-900/60 border border-blue-700 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
                   </svg>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-blue-800 mb-1">Document Guidelines</h4>
-                  <ul className="text-sm text-blue-700 space-y-1">
-                    <li>• Ensure documents are clear and fully visible</li>
-                    <li>• No edited or modified images</li>
-                    <li>• Documents must be current and valid</li>
-                    <li>• Accepted formats: JPG, PNG, PDF (max 5MB each)</li>
+                  <h3 className="text-sm font-semibold text-slate-100">Government-Issued Photo ID</h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Passport · National ID card · Driver's licence — both sides required
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <DropZone
+                  id="governmentIdFront"
+                  label="ID Card"
+                  sublabel="Upload front side"
+                  badge="FRONT"
+                  badgeColor="bg-blue-800 text-blue-200"
+                  file={uploadedFiles.governmentIdFront}
+                  onChange={handleFileUpload('governmentIdFront')}
+                  required
+                />
+                <DropZone
+                  id="governmentIdBack"
+                  label="ID Card"
+                  sublabel="Upload back side"
+                  badge="BACK"
+                  badgeColor="bg-slate-700 text-slate-300"
+                  file={uploadedFiles.governmentIdBack}
+                  onChange={handleFileUpload('governmentIdBack')}
+                  required
+                />
+              </div>
+
+              {/* Visual completeness indicator */}
+              <div className="flex items-center gap-2 pt-1">
+                <div className={`h-1.5 flex-1 rounded-full ${uploadedFiles.governmentIdFront ? 'bg-emerald-500' : 'bg-slate-700'}`} />
+                <div className={`h-1.5 flex-1 rounded-full ${uploadedFiles.governmentIdBack ? 'bg-emerald-500' : 'bg-slate-700'}`} />
+                <span className="text-[11px] text-slate-500 ml-1">
+                  {[uploadedFiles.governmentIdFront, uploadedFiles.governmentIdBack].filter(Boolean).length}/2 sides
+                </span>
+              </div>
+            </div>
+
+            {/* ── Proof of Address ─────────────────────────────────────────── */}
+            <div className="rounded-xl border border-slate-700 bg-slate-900/50 p-5 space-y-4">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-purple-900/60 border border-purple-700 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-slate-100">Proof of Address</h3>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Utility bill · Bank statement · Official lease — issued within the last 3 months
+                  </p>
+                </div>
+              </div>
+
+              <DropZone
+                id="proofOfAddress"
+                label="Address Document"
+                sublabel="Upload your proof of address"
+                file={uploadedFiles.proofOfAddress}
+                onChange={handleFileUpload('proofOfAddress')}
+                required
+              />
+            </div>
+
+            {/* ── Guidelines ───────────────────────────────────────────────── */}
+            <div className="rounded-xl border border-slate-700/60 bg-slate-900/40 p-4">
+              <div className="flex items-start gap-3">
+                <svg className="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div>
+                  <p className="text-xs font-semibold text-slate-300 mb-1.5">Submission requirements</p>
+                  <ul className="text-xs text-slate-500 space-y-1">
+                    <li>• Photos must be taken directly with your camera — no screenshots</li>
+                    <li>• All four corners of the document must be fully visible</li>
+                    <li>• Text and photos must be sharp and legible</li>
+                    <li>• Documents must be valid and unedited</li>
+                    <li>• Accepted: JPG, PNG, PDF · Maximum 5 MB per file</li>
                   </ul>
                 </div>
               </div>
             </div>
-            
-            <button 
+
+            {/* ── Submit ───────────────────────────────────────────────────── */}
+            <button
               onClick={handleDocumentSubmit}
-              disabled={isSubmitting || !uploadedFiles.governmentId || !uploadedFiles.proofOfAddress}
-              className="btn-cta-sky inline-flex w-full items-center justify-center py-3 rounded-lg transition font-semibold disabled:opacity-50"
+              disabled={
+                isSubmitting ||
+                !uploadedFiles.governmentIdFront ||
+                !uploadedFiles.governmentIdBack ||
+                !uploadedFiles.proofOfAddress
+              }
+              className="w-full py-3 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed text-white rounded-lg font-semibold text-sm transition-all duration-150 flex items-center justify-center gap-2"
             >
-              {isSubmitting ? 'Submitting...' : 'Submit Documents'}
+              {isSubmitting ? (
+                <>
+                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                  </svg>
+                  Uploading documents…
+                </>
+              ) : (
+                'Submit Documents for Review'
+              )}
             </button>
+
+            {/* Slot completeness summary */}
+            {(!uploadedFiles.governmentIdFront || !uploadedFiles.governmentIdBack || !uploadedFiles.proofOfAddress) && (
+              <p className="text-xs text-center text-slate-600">
+                {[
+                  !uploadedFiles.governmentIdFront && 'ID front',
+                  !uploadedFiles.governmentIdBack && 'ID back',
+                  !uploadedFiles.proofOfAddress && 'proof of address',
+                ]
+                  .filter(Boolean)
+                  .join(', ')}{' '}
+                still needed
+              </p>
+            )}
           </div>
         )
 
-      case 4: // Enhanced Verification
+      // ── Step 4: Enhanced ───────────────────────────────────────────────────
+      case 4:
         return (
           <div className="space-y-6">
-            <div className="bg-slate-900/80 rounded-xl p-6 border border-slate-700">
-              <h3 className="text-lg font-semibold text-slate-100 mb-4">Enhanced Verification Benefits</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                <div className="flex items-start space-x-2">
-                  <svg className="w-5 h-5 text-purple-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-purple-800">Higher withdrawal limits ($50,000+)</span>
-                </div>
-                <div className="flex items-start space-x-2">
-                  <svg className="w-5 h-5 text-purple-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-purple-800">Priority customer support</span>
-                </div>
-                <div className="flex items-start space-x-2">
-                  <svg className="w-5 h-5 text-purple-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-purple-800">Faster transaction processing</span>
-                </div>
-                <div className="flex items-start space-x-2">
-                  <svg className="w-5 h-5 text-purple-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-purple-800">Access to premium investment plans</span>
-                </div>
+            <div className="rounded-xl border border-purple-800/50 bg-purple-950/20 p-5">
+              <h3 className="text-sm font-semibold text-purple-300 mb-3">Enhanced Verification Benefits</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-purple-300">
+                {[
+                  'Higher withdrawal limits ($50,000+)',
+                  'Priority customer support',
+                  'Faster transaction processing',
+                  'Access to premium investment plans',
+                ].map(benefit => (
+                  <div key={benefit} className="flex items-start gap-2">
+                    <svg className="w-4 h-4 text-purple-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    {benefit}
+                  </div>
+                ))}
               </div>
             </div>
-
             <div className="text-center">
-              <h4 className="text-lg font-semibold text-slate-100 mb-2">Video Call Verification</h4>
-              <p className="text-slate-300 mb-6">Schedule a brief video call with our verification team</p>
-              <button className="bg-purple-600 text-[#0F172A] px-8 py-3 rounded-lg hover:bg-purple-700 transition font-semibold">
+              <h4 className="text-sm font-semibold text-slate-200 mb-1">Video Call Verification</h4>
+              <p className="text-xs text-slate-400 mb-4">Schedule a brief video call with our verification team</p>
+              <button className="px-6 py-2.5 bg-purple-700 hover:bg-purple-600 text-white rounded-lg text-sm font-semibold transition">
                 Schedule Video Call
               </button>
             </div>
@@ -731,201 +812,191 @@ export default function KYCPage() {
         )
 
       default:
-        return <div>Select a step to view details</div>
+        return null
     }
   }
 
-  const completedSteps = kycSteps.filter(step => step.status === 'completed').length
-  const progress = (completedSteps / kycSteps.length) * 100
+  // ─── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-[#0b2f6b] to-[#2563eb] rounded-3xl p-8 text-[#0F172A]">
-        <div className="flex items-center justify-between mb-6">
+    <div className="space-y-6">
+      {/* ── Header ─────────────────────────────────────────────────────────── */}
+      <div className="bg-gradient-to-br from-[#0b2f6b] via-[#1a3f7f] to-[#2563eb] rounded-2xl p-6 text-white">
+        <div className="flex items-start justify-between mb-4">
           <div>
-            <h1 className="text-3xl font-bold mb-2">KYC Verification</h1>
-            <p className="text-xl opacity-90">Complete your identity verification</p>
+            <h1 className="text-2xl font-bold">KYC Verification</h1>
+            <p className="text-blue-200 text-sm mt-1">Complete your identity verification to unlock full account access</p>
           </div>
-          <div className="text-right">
-            <div className="text-3xl font-bold">{completedSteps}/{kycSteps.length}</div>
-            <div className="text-sm opacity-80">Steps Completed</div>
+          <div className="text-right flex-shrink-0">
+            <div className="text-2xl font-bold">{completedSteps}/{kycSteps.length}</div>
+            <div className="text-xs text-blue-200 mt-0.5">Steps complete</div>
           </div>
         </div>
-        
-        {/* Progress Bar */}
-        <progress
-          value={Math.max(0, Math.min(100, progress))}
-          max={100}
-          className="kyc-progress"
-        />
 
-        {latestApplication && (
-          <div className="mt-4 flex items-center justify-between text-sm">
-            <span className="uppercase tracking-wide text-[#0F172A]/80">Current Status</span>
-            <span className="px-3 py-1 rounded-full bg-white/20 text-[#0F172A] font-semibold">
-              {statusLabelMap[latestApplication.status]}
-            </span>
+        {/* Progress */}
+        <div className="space-y-1.5">
+          <div className="h-2 bg-white/20 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-white rounded-full transition-all duration-500"
+              style={{ width: `${Math.max(0, Math.min(100, progress))}%` }}
+            />
           </div>
-        )}
+          <div className="flex justify-between text-xs text-blue-200">
+            <span>{Math.round(progress)}% complete</span>
+            {latestApplication && (
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${STATUS_BADGE_CLASS[latestApplication.status]}`}>
+                {STATUS_LABEL[latestApplication.status]}
+              </span>
+            )}
+          </div>
+        </div>
       </div>
 
+      {/* ── Status / Error banners ──────────────────────────────────────────── */}
       {loadingStatus && (
-        <div className="bg-slate-950/95 border border-slate-800 rounded-2xl shadow-lg p-4 flex items-center space-x-3">
-          <div className="w-4 h-4 border-2 border-[#2563eb] border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-sm text-slate-300">Refreshing your latest KYC status…</p>
+        <div className="flex items-center gap-3 px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-sm text-slate-400">
+          <svg className="w-4 h-4 animate-spin text-blue-400 flex-shrink-0" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+          </svg>
+          Loading your verification status…
         </div>
       )}
 
       {fetchError && (
-        <div className="bg-slate-900/80 border border-red-600 text-red-300 rounded-2xl p-4">
+        <div className="px-4 py-3 bg-red-950/30 border border-red-800 rounded-xl text-sm text-red-300">
           {fetchError}
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Steps Sidebar */}
+      {/* ── Rejection alert ─────────────────────────────────────────────────── */}
+      {latestApplication?.status === 'rejected' && latestApplication.rejection_reason && (
+        <div className="px-4 py-4 bg-red-950/30 border border-red-700 rounded-xl">
+          <div className="flex items-start gap-3">
+            <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <p className="text-sm font-semibold text-red-300">Action required</p>
+              <p className="text-sm text-red-400 mt-0.5">{latestApplication.rejection_reason}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Main grid ───────────────────────────────────────────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Steps sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-slate-950/95 border border-slate-800 rounded-2xl shadow-lg p-6 space-y-4">
-            <h2 className="text-xl font-bold text-slate-100 mb-4">Verification Steps</h2>
-            {kycSteps.map((step, index) => (
-              <div
+          <div className="bg-slate-950/95 border border-slate-800 rounded-2xl p-5 space-y-2">
+            <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 px-1">
+              Verification Steps
+            </h2>
+            {kycSteps.map(step => (
+              <button
                 key={step.id}
                 onClick={() => setSelectedStep(step.id)}
-                className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                className={`w-full text-left p-3.5 rounded-xl border transition-all duration-150 ${
                   selectedStep === step.id
-                    ? 'border-[#2563eb] bg-slate-900'
-                    : 'border-slate-700 hover:border-slate-500'
+                    ? 'border-blue-600 bg-blue-950/40'
+                    : 'border-slate-800 hover:border-slate-600 bg-transparent'
                 }`}
               >
-                <div className="flex items-center space-x-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${getStatusColor(step.status)}`}>
-                    {getStatusIcon(step.status)}
+                <div className="flex items-center gap-3">
+                  <div className={`w-7 h-7 rounded-full border flex items-center justify-center flex-shrink-0 ${stepColor(step.status)}`}>
+                    <StepIcon status={step.status} />
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2">
-                      <h3 className={`font-semibold ${selectedStep === step.id ? 'text-[#2563eb]' : 'text-slate-100'}`}>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className={`text-sm font-semibold truncate ${selectedStep === step.id ? 'text-blue-300' : 'text-slate-200'}`}>
                         {step.title}
-                      </h3>
+                      </span>
                       {step.required && (
-                        <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">Required</span>
+                        <span className="text-[9px] font-bold text-red-400 border border-red-800 rounded px-1 py-0.5 uppercase tracking-wider flex-shrink-0">
+                          Required
+                        </span>
                       )}
                     </div>
-                    <p className="text-sm text-slate-300">{step.description}</p>
+                    <p className="text-xs text-slate-500 mt-0.5 leading-snug">{step.description}</p>
                   </div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
 
-        {/* Step Content */}
+        {/* Step content */}
         <div className="lg:col-span-2">
-          <div className="bg-slate-950/95 border border-slate-800 rounded-2xl shadow-lg p-8">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-slate-100 mb-2">
-                {kycSteps.find(s => s.id === selectedStep)?.title}
-              </h2>
-              <p className="text-slate-300">
-                {kycSteps.find(s => s.id === selectedStep)?.description}
-              </p>
-            </div>
-
-            {latestApplication && (
-              <div className="mb-6 rounded-xl border border-slate-700 bg-slate-900/80 p-4">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p className="text-sm text-slate-400">Application status</p>
-                    <p className="text-lg font-semibold text-slate-100">
-                      {statusLabelMap[latestApplication.status]}
-                    </p>
-                  </div>
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${detailStatusClass[latestApplication.status]}`}>
-                    {statusLabelMap[latestApplication.status]}
-                  </span>
+          <div className="bg-slate-950/95 border border-slate-800 rounded-2xl p-6">
+            {/* Step header */}
+            <div className="mb-5 pb-4 border-b border-slate-800">
+              <div className="flex items-center justify-between gap-3 flex-wrap">
+                <div>
+                  <h2 className="text-lg font-bold text-slate-100">
+                    {kycSteps.find(s => s.id === selectedStep)?.title}
+                  </h2>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    {kycSteps.find(s => s.id === selectedStep)?.description}
+                  </p>
                 </div>
-                {latestApplication.last_submitted_at && (
-                  <p className="mt-3 text-sm text-slate-400">
-                    Last submitted: {new Date(latestApplication.last_submitted_at).toLocaleString()}
-                  </p>
-                )}
-                {latestApplication.reviewer_notes && (
-                  <p className="mt-3 text-sm text-gray-700">
-                    <span className="font-semibold">Reviewer notes:</span> {latestApplication.reviewer_notes}
-                  </p>
-                )}
-                {latestApplication.status === 'rejected' && latestApplication.rejection_reason && (
-                  <p className="mt-2 text-sm text-red-700">
-                    <span className="font-semibold">Action required:</span> {latestApplication.rejection_reason}
-                  </p>
+                {latestApplication && (
+                  <span className={`text-xs font-semibold px-3 py-1 rounded-full flex-shrink-0 ${STATUS_BADGE_CLASS[latestApplication.status]}`}>
+                    {STATUS_LABEL[latestApplication.status]}
+                  </span>
                 )}
               </div>
-            )}
-            
+
+              {latestApplication?.last_submitted_at && (
+                <p className="text-xs text-slate-600 mt-2">
+                  Last submitted: {new Date(latestApplication.last_submitted_at).toLocaleString()}
+                </p>
+              )}
+              {latestApplication?.reviewer_notes && (
+                <p className="text-xs text-slate-400 mt-1">
+                  <span className="text-slate-300 font-medium">Reviewer note:</span> {latestApplication.reviewer_notes}
+                </p>
+              )}
+            </div>
+
             {renderStepContent()}
           </div>
         </div>
       </div>
 
-      {/* Help Section */}
-      <div className="bg-slate-950/95 border border-slate-800 rounded-2xl shadow-lg p-8">
-        <h2 className="text-xl font-bold text-slate-100 mb-4">Need Help?</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex items-start space-x-4">
-            <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center">
-              <svg className="w-5 h-5 text-[#2563eb]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      {/* ── Help ────────────────────────────────────────────────────────────── */}
+      <div className="bg-slate-950/95 border border-slate-800 rounded-2xl p-6">
+        <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Need Help?</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="flex items-start gap-3">
+            <div className="w-9 h-9 bg-slate-900 border border-slate-700 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
               </svg>
             </div>
             <div>
-              <h3 className="font-semibold text-slate-100 mb-1">Live Chat Support</h3>
-              <p className="text-sm text-slate-300">Get instant help with verification</p>
-              <Link href="/dashboard/support" className="text-[#2563eb] text-sm hover:underline">
-                Start Chat →
+              <h3 className="text-sm font-semibold text-slate-200">Live Chat Support</h3>
+              <p className="text-xs text-slate-500 mt-0.5">Get instant help with your verification</p>
+              <Link href="/dashboard/support" className="text-xs text-blue-400 hover:underline mt-1 inline-block">
+                Start a chat →
               </Link>
             </div>
           </div>
-          
-          <div className="flex items-start space-x-4">
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-              <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex items-start gap-3">
+            <div className="w-9 h-9 bg-slate-900 border border-slate-700 rounded-lg flex items-center justify-center flex-shrink-0">
+              <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
             </div>
             <div>
-              <h3 className="font-semibold text-slate-100 mb-1">Email Support</h3>
-              <p className="text-sm text-slate-300">Send us your verification questions</p>
-              <a href="mailto:support@mail.wolvcapital.com" className="text-[#2563eb] text-sm hover:underline">
+              <h3 className="text-sm font-semibold text-slate-200">Email Support</h3>
+              <p className="text-xs text-slate-500 mt-0.5">Send us your verification questions</p>
+              <a href="mailto:support@mail.wolvcapital.com" className="text-xs text-blue-400 hover:underline mt-1 inline-block">
                 support@mail.wolvcapital.com →
               </a>
             </div>
           </div>
         </div>
       </div>
-      <style jsx>{`
-        .kyc-progress {
-          width: 100%;
-          height: 0.75rem;
-          border-radius: 9999px;
-          background-color: rgba(12, 13, 22, 0.94);
-          overflow: hidden;
-          appearance: none;
-        }
-        .kyc-progress::-webkit-progress-bar {
-          background-color: rgba(255, 255, 255, 0.2);
-          border-radius: 9999px;
-        }
-        .kyc-progress::-webkit-progress-value {
-          background-color: #0F172A;
-          border-radius: 9999px;
-          transition: width 0.3s ease;
-        }
-        .kyc-progress::-moz-progress-bar {
-          background-color: #0F172A;
-          border-radius: 9999px;
-          transition: width 0.3s ease;
-        }
-      `}</style>
     </div>
   )
 }

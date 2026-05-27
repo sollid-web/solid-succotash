@@ -81,6 +81,18 @@ Every financial action requires human oversight. Automated services calculate re
    # Edit .env with local settings
    ```
 
+   In local development, ensure the backend and frontend URLs are configured via env vars:
+
+   ```env
+   NEXT_PUBLIC_API_URL=http://localhost:8000
+   NEXT_PUBLIC_SITE_URL=http://localhost:3000
+   ALLOWED_HOSTS=localhost,127.0.0.1
+   CSRF_TRUSTED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+   CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+   ```
+
+   For production, set the corresponding production hosts and origins instead of hardcoding them.
+
 3. **Bootstrap Database**
 
    ```bash

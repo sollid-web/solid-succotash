@@ -1014,3 +1014,11 @@ DJOSER = {
     "USER_CREATE_PASSWORD_RETYPE": False,
     "SERIALIZERS": {},
 }
+
+# ------------------------------------------------------------------
+# SimpleJWT email login fix
+# ------------------------------------------------------------------
+SIMPLE_JWT = {
+    **SIMPLE_JWT,
+    "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
+}

@@ -4,7 +4,6 @@
     "builder": "DOCKERFILE"
   },
   "deploy": {
-    "startCommand": "bash start.sh",
     "healthcheckPath": "/healthz/",
     "healthcheckTimeout": 10
   }

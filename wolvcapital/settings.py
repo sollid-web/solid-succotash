@@ -1005,3 +1005,12 @@ SESSION_COOKIE_DOMAIN = None  # Let Django handle this automatically
 # ... last existing line in settings.py ...
 
 TRUSTPILOT_BCC_ADDRESS = "wolvcapital.com+bebbe29c9e@invite.trustpilot.com"
+
+# ------------------------------------------------------------------
+# Djoser Configuration
+# ------------------------------------------------------------------
+DJOSER = {
+    "LOGIN_FIELD": "email",
+    "USER_CREATE_PASSWORD_RETYPE": False,
+    "SERIALIZERS": {},
+}

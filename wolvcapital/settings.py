@@ -620,7 +620,17 @@ BRAND = {
 
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        "OPTIONS": {
+            "access_key": os.environ.get("SUPABASE_S3_ACCESS_KEY_ID"),
+            "secret_key": os.environ.get("SUPABASE_S3_SECRET_ACCESS_KEY"),
+            "endpoint_url": os.environ.get("SUPABASE_S3_ENDPOINT"),
+            "region_name": os.environ.get("SUPABASE_S3_REGION"),
+            "bucket_name": os.environ.get("SUPABASE_S3_BUCKET", "media"),
+            "file_overwrite": False,
+            "default_acl": "public-read",
+            "querystring_auth": False,
+        },
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",

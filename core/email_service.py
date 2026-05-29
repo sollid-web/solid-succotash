@@ -285,6 +285,26 @@ class EmailService:
 # Optional utility function
 
 
+    @classmethod
+    def send_admin_alert(cls, subject: str, message: str) -> bool:
+        """Send an alert email to the platform admin."""
+        import os
+        import resend
+        resend.api_key = os.environ.get("RESEND_API_KEY", "")
+        admin_email = os.environ.get("ADMIN_ALERT_EMAIL", "admin@wolvcapital.com")
+        try:
+            resend.Emails.send({
+                "from": f"WolvCapital Alerts <support@mail.wolvcapital.com>",
+                "to": admin_email,
+                "subject": f"[WolvCapital Alert] {subject}",
+                "text": message,
+            })
+            return True
+        except Exception as e:
+            logger.error(f"Admin alert email failed: {e}")
+            return False
+
+
 def send_email(subject, to, body=None, bcc=None, template_name=None, context=None):
     return EmailService._send(
         template_name=template_name or "system",

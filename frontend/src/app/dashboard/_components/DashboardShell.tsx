@@ -93,8 +93,11 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
   };
 
   useEffect(() => {
-    // keep unread count in sync after user loads
+    // keep unread count in sync after user loads — poll every 60s
+    if (!user) return;
     fetchUnreadCount();
+    const interval = setInterval(fetchUnreadCount, 60_000);
+    return () => clearInterval(interval);
   }, [user]);
 
   // close dropdown when clicking outside
@@ -144,7 +147,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
       const res = await apiFetch(`/api/notifications/${id}/mark-read/`, { method: "POST" });
       if (res.ok) {
         setNotifications(n => n.map(x => (x.id === id ? { ...x, is_read: true } : x)));
-        setUnreadCount(c => Math.max(0, c - 1));
+        await fetchUnreadCount();
       }
     } catch {}
   };
@@ -393,7 +396,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
 
               {/* Dropdown */}
               {notificationsOpen && (
-                <div style={{ position: "absolute", right: 0, top: "44px", width: "360px", maxWidth: "calc(100vw - 24px)", background: "#071026", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "12px", padding: "12px", boxShadow: "0 12px 40px rgba(2,6,23,0.6)", zIndex: 200 }}>
+                <div style={{ position: "fixed", right: "12px", top: "70px", width: "min(360px, calc(100vw - 24px))", background: "#071026", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "12px", padding: "12px", boxShadow: "0 12px 40px rgba(2,6,23,0.6)", zIndex: 9999 }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
                     <div style={{ color: "#fff", fontWeight: 700 }}>Notifications</div>
                     <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)" }}>{unreadCount} unread</div>
@@ -420,7 +423,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
                     ))}
                   </div>
                   <div style={{ display: "flex", justifyContent: "space-between", marginTop: "10px" }}>
-                    <button onClick={() => { notifications.forEach((x:any)=> { if(!x.is_read) markAsRead(x.id); }); setNotificationsOpen(false); }} className="btn-cta-sky">Mark all read</button>
+                    <button onClick={async () => { await Promise.all(notifications.filter((x:any)=>!x.is_read).map((x:any)=>markAsRead(x.id))); await fetchUnreadCount(); setNotificationsOpen(false); }} className="btn-cta-sky">Mark all read</button>
                     <Link href="/dashboard/transactions" onClick={() => setNotificationsOpen(false)} style={{ color: "rgba(255,255,255,0.6)", fontSize: "13px" }}>See all activity</Link>
                   </div>
                 </div>

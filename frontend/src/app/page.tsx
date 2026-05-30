@@ -13,9 +13,9 @@ export const metadata: Metadata = {
     title: 'WolvCapital | Blockchain-Verified Returns, Invest, Stake & Earn On-Chain',
     description:
       'Stake BNB or BUSD and earn WOLV rewards on-chain. Every return is recorded permanently on the BNB blockchain — independently verifiable, immutable, and transparent.',
-    images: [
+      images: [
       {
-        url: '/og-images/home-og.png',
+        url: "https://www.wolvcapital.com/images/hero/home-hero.webp",
         width: 1200,
         height: 630,
         alt: 'WolvCapital — Blockchain-Verified Investment & Staking Platform',
@@ -28,7 +28,14 @@ export const metadata: Metadata = {
     title: 'WolvCapital | Blockchain-Verified Returns, Invest, Stake & Earn On-Chain',
     description:
       'Stake BNB or BUSD, earn 8–25% APY in WOLV tokens. KYC-verified platform with on-chain proof of every return. Transparent, immutable, verifiable.',
-    images: ['/og-images/home-og.png'],
+    images: [
+      {
+        url: "https://www.wolvcapital.com/images/hero/home-hero.webp",
+        width: 1200,
+        height: 630,
+        alt: 'WolvCapital — Blockchain-Verified Investment & Staking Platform',
+      },
+    ],
   },
 }
 

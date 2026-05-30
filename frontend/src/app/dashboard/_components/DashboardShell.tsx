@@ -86,7 +86,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
       if (!res.ok) return;
       const data = await res.json();
       // backend returns { unread: number } or a number
-      const count = typeof data === "number" ? data : data?.unread ?? 0;
+      const count = typeof data === "number" ? data : data?.count ?? data?.unread ?? data?.unread_count ?? 0;
       setUnreadCount(count || 0);
     } catch (e) {
       // noop

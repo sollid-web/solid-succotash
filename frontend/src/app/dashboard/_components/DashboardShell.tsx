@@ -101,6 +101,22 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
     return () => clearInterval(interval);
   }, [user]);
 
+  // KYC persistent notification
+  const [kycNotifDismissed, setKycNotifDismissed] = useState(false);
+  const [kycStatus, setKycStatus] = useState<string | null>(null);
+  useEffect(() => {
+    const fetchKycForBanner = async () => {
+      try {
+        const res = await apiFetch("/api/kyc/");
+        if (!res.ok) return;
+        const data = await res.json();
+        const latest = Array.isArray(data) ? data[0] : data;
+        setKycStatus(latest?.status ?? null);
+      } catch {}
+    };
+    if (user) fetchKycForBanner();
+  }, [user]);
+
   // close dropdown when clicking outside
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -137,6 +153,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
   const openNotifications = async () => {
     if (!notificationsOpen) {
       await fetchNotifications();
+      await fetchUnreadCount();
       setNotificationsOpen(true);
     } else {
       setNotificationsOpen(false);
@@ -352,6 +369,20 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
       `}</style>
+
+      {/* KYC Persistent Banner */}
+      {kycStatus && kycStatus !== "approved" && !kycNotifDismissed && (
+        <div style={{ background: kycStatus === "rejected" ? "rgba(239,68,68,0.12)" : "rgba(245,158,11,0.12)", borderBottom: kycStatus === "rejected" ? "1px solid rgba(239,68,68,0.3)" : "1px solid rgba(245,158,11,0.3)", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", position: "sticky", top: 0, zIndex: 60 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+            <span style={{ fontSize: "18px" }}>{kycStatus === "rejected" ? "🚫" : "⚠️"}</span>
+            <span style={{ color: kycStatus === "rejected" ? "#fca5a5" : "#fcd34d", fontSize: "13px", fontWeight: 600 }}>
+              {kycStatus === "rejected" ? "Your KYC was rejected — please review and resubmit." : kycStatus === "pending" ? "Your KYC is under review. We will notify you once complete." : "Complete your KYC verification to unlock full account access."}
+            </span>
+            <a href="/dashboard/kyc" style={{ color: "#60a5fa", fontSize: "12px", textDecoration: "underline" }}>Go to KYC →</a>
+          </div>
+          <button onClick={() => setKycNotifDismissed(true)} style={{ background: "transparent", border: "none", color: "rgba(255,255,255,0.4)", cursor: "pointer", fontSize: "20px", lineHeight: 1, flexShrink: 0 }}>×</button>
+        </div>
+      )}
 
       {/* Header */}
       <header style={{

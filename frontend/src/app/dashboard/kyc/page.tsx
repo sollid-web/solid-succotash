@@ -177,7 +177,7 @@ function DropZone({ id, label, sublabel, badge, badgeColor = 'bg-blue-700 text-b
             {badge}
           </span>
         )}
-        {required && <span className="text-[10px] text-red-400 font-semibold">Required</span>}
+        {required && !file && <span className="text-[10px] text-red-400 font-semibold">Required</span>}
       </div>
       <div className="relative group">
         <input
@@ -281,8 +281,8 @@ export default function KYCPage() {
         if (step.id === 2) return { ...step, status: statusFromApplication(app, personalInfoSubmitted) }
         if (step.id === 3) return { ...step, status: statusFromApplication(app, documentSubmitted) }
         if (step.id === 4) {
-          const hasProgress = Boolean(app && app.status !== 'draft')
-          return { ...step, status: hasProgress ? statusFromApplication(app, hasProgress) : 'required' as const }
+          if (!app || app.status === 'draft') return { ...step, status: 'required' as const }
+          return { ...step, status: APPLICATION_STATUS_TO_STEP_STATUS[app.status] ?? 'required' }
         }
         return { ...step }
       })
@@ -911,11 +911,13 @@ export default function KYCPage() {
                       <span className={`text-sm font-semibold truncate ${selectedStep === step.id ? 'text-blue-300' : 'text-slate-200'}`}>
                         {step.title}
                       </span>
-                      {step.required && (
-                        <span className="text-[9px] font-bold text-red-400 border border-red-800 rounded px-1 py-0.5 uppercase tracking-wider flex-shrink-0">
-                          Required
-                        </span>
-                      )}
+                      {step.status === 'completed' ? null : step.status === 'pending' ? (
+                        <span className="text-[9px] font-bold text-amber-400 border border-amber-700 rounded px-1 py-0.5 uppercase tracking-wider flex-shrink-0">Pending</span>
+                      ) : step.status === 'failed' ? (
+                        <span className="text-[9px] font-bold text-red-400 border border-red-800 rounded px-1 py-0.5 uppercase tracking-wider flex-shrink-0">Rejected</span>
+                      ) : step.required ? (
+                        <span className="text-[9px] font-bold text-red-400 border border-red-800 rounded px-1 py-0.5 uppercase tracking-wider flex-shrink-0">Required</span>
+                      ) : null}
                     </div>
                     <p className="text-xs text-slate-500 mt-0.5 leading-snug">{step.description}</p>
                   </div>

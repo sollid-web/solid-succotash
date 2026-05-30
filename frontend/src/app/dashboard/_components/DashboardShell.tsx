@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 import { apiFetch } from "@/lib/api";
 import { usePathname, useRouter } from "next/navigation";  
 import Link from "next/link";
+import SupportChat from "@/components/SupportChat";
 
 type DashboardShellProps = {
   children: ReactNode;
@@ -473,6 +474,8 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
         {banner && <div style={{ marginBottom: "24px" }}>{banner}</div>}
         {children}
       </main>
+
+      <SupportChat />
 
       {/* Footer */}
       <footer style={{ borderTop: "1px solid rgba(255,255,255,0.05)", padding: "24px 16px", textAlign: "center" }}>

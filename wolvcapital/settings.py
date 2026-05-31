@@ -628,6 +628,8 @@ STORAGES = {
             "region_name": os.environ.get("SUPABASE_S3_REGION"),
             "bucket_name": os.environ.get("SUPABASE_S3_BUCKET", "media"),
             "file_overwrite": False,
+                        "signature_version": "s3v4",
+                        "addressing_style": "path",
             "default_acl": "public-read",
             "querystring_auth": False,
         },

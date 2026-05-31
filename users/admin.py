@@ -239,13 +239,13 @@ class KycDocumentAdmin(UnfoldModelAdmin):
 
     fieldsets = (
         ("Document Info", {
-            "fields": ("user", "document_type", "status", "document_number")
+            "fields": ("user", "document_type", "status")
         }),
         ("Document Images", {
-            "fields": ("document_preview_full",),
+            "fields": ("front_image_preview", "back_image_preview"),
         }),
         ("Review", {
-            "fields": ("notes", "reviewed_by", "reviewed_at"),
+            "fields": ("rejection_reason", "reviewed_by", "reviewed_at"),
         }),
         ("Timestamps", {
             "fields": ("created_at", "updated_at"),
@@ -283,8 +283,15 @@ class KycDocumentAdmin(UnfoldModelAdmin):
             label, url, url, url,
         )
 
+    def _supabase_url(self, obj):
+        """Build correct Supabase public URL."""
+        if not obj.document_file:
+            return None
+        file_name = obj.document_file.name
+        return f"https://iwywtguyfuiudtqyamkg.supabase.co/storage/v1/object/public/media/{file_name}"
+
     def front_image_preview(self, obj):
-        url = obj.document_file.url if obj.document_file else None
+        url = self._supabase_url(obj)
         return self._image_tag(url, "Front of Document")
     front_image_preview.short_description = "Front Image"
 
@@ -295,7 +302,7 @@ class KycDocumentAdmin(UnfoldModelAdmin):
 
     def document_preview(self, obj):
         """Thumbnail for list view."""
-        url = obj.document_file.url if obj.document_file else None
+        url = self._supabase_url(obj)
         if not url:
             return "No image"
         return format_html(

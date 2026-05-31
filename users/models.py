@@ -236,8 +236,10 @@ class KycDocument(models.Model):
 
     DOCUMENT_TYPE_CHOICES = [
         ("passport", "Passport"),
-        ("national_id", "National ID"),
+        ("national_id", "National ID - Front"),
+        ("national_id_back", "National ID - Back"),
         ("drivers_license", "Driver's License"),
+        ("proof_of_address", "Proof of Address"),
     ]
 
     STATUS_CHOICES = [

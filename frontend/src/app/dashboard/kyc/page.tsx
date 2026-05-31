@@ -108,7 +108,7 @@ const hasPersonalInfoSubmission = (app: KycApplication | null) => {
 
 const hasDocumentSubmission = (app: KycApplication | null) => {
   if (!app) return false
-  if (app.status === 'approved' || app.status === 'rejected') return true
+  if (app.status === 'approved' || app.status === 'rejected' || app.status === 'pending') return true
   return Boolean(app.document_submitted_at || hasJsonContent(app.document_info))
 }
 
@@ -740,28 +740,42 @@ export default function KYCPage() {
             </div>
 
             {/* ── Submit ───────────────────────────────────────────────────── */}
-            <button
-              onClick={handleDocumentSubmit}
-              disabled={
-                isSubmitting ||
-                !uploadedFiles.governmentIdFront ||
-                !uploadedFiles.governmentIdBack ||
-                !uploadedFiles.proofOfAddress
-              }
-              className="w-full py-3 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed text-white rounded-lg font-semibold text-sm transition-all duration-150 flex items-center justify-center gap-2"
-            >
-              {isSubmitting ? (
-                <>
-                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-                  </svg>
-                  Uploading documents…
-                </>
-              ) : (
-                'Submit Documents for Review'
-              )}
-            </button>
+            {/* Lock form if already submitted and pending/approved */}
+            {latestApplication?.status === 'pending' || latestApplication?.status === 'approved' ? (
+              <div className="w-full py-4 px-5 bg-amber-950/30 border border-amber-700 rounded-xl text-center">
+                <p className="text-sm font-semibold text-amber-300">
+                  {latestApplication?.status === 'approved' ? '✅ Documents Approved' : '⏳ Documents Under Review'}
+                </p>
+                <p className="text-xs text-amber-500 mt-1">
+                  {latestApplication?.status === 'approved'
+                    ? 'Your identity documents have been verified.'
+                    : 'Your documents have been submitted and are being reviewed. You cannot resubmit until a decision is made.'}
+                </p>
+              </div>
+            ) : (
+              <button
+                onClick={handleDocumentSubmit}
+                disabled={
+                  isSubmitting ||
+                  !uploadedFiles.governmentIdFront ||
+                  !uploadedFiles.governmentIdBack ||
+                  !uploadedFiles.proofOfAddress
+                }
+                className="w-full py-3 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed text-white rounded-lg font-semibold text-sm transition-all duration-150 flex items-center justify-center gap-2"
+              >
+                {isSubmitting ? (
+                  <>
+                    <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                    </svg>
+                    Uploading documents…
+                  </>
+                ) : (
+                  'Submit Documents for Review'
+                )}
+              </button>
+            )}
 
             {/* Slot completeness summary */}
             {(!uploadedFiles.governmentIdFront || !uploadedFiles.governmentIdBack || !uploadedFiles.proofOfAddress) && (

@@ -277,6 +277,12 @@ def submit_kyc_document(user, document_type: str, document_file) -> KycDocument:
     kyc_application, _ = KycApplication.objects.select_for_update().get_or_create(user=user)
 
     # Create or update document
+    # Set correct content type so Supabase accepts the file
+    if hasattr(document_file, 'content_type') and document_file.content_type:
+        document_file.content_type = document_file.content_type
+    else:
+        document_file.content_type = "image/jpeg"
+
     document, created = KycDocument.objects.select_for_update().get_or_create(
         user=user,
         document_type=document_type,

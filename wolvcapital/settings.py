@@ -632,6 +632,7 @@ STORAGES = {
                         "addressing_style": "path",
             "default_acl": "public-read",
             "querystring_auth": False,
+                        "object_parameters": {"ContentType": "image/jpeg"},
         },
     },
     "staticfiles": {

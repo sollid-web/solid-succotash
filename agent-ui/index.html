@@ -245,22 +245,20 @@
 
   async function fetchSessions() {
     try {
-      const res = await fetch(`${API}/api/chat/sessions/`, {
-        headers: { Authorization: `Token ${token}` }
-      })
-      if (res.status === 401) { logout(); return }
+      const res = await fetch(`${API}/api/chat/sessions/`)
+      if (!res.ok) return
       const data = await res.json()
       const sessions = data.sessions || []
 
       // Notify on new session
-      if (sessions.length > prevSessionCount && prevSessionCount >= 0) {
+      if (sessions.length > prevSessionCount && prevSessionCount > 0) {
         const newest = sessions[0]
         triggerAlert(`🚨 ${newest.user_name || newest.user_email || 'Someone'} needs help!`)
       }
       prevSessionCount = sessions.length
       sessionsData = sessions
       renderSessions(sessions)
-    } catch {}
+    } catch(e) { console.log('Sessions error:', e) }
   }
 
   async function fetchMessages(sessionId) {

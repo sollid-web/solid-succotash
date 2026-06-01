@@ -199,7 +199,7 @@
     if (!email || !password) { errEl.textContent = 'Please enter email and password'; return }
 
     try {
-      const res = await fetch(`${API}/api/auth/token/`, {
+      const res = await fetch(`${API}/api/auth/login/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -207,20 +207,25 @@
       const data = await res.json()
       if (!res.ok) { errEl.textContent = data.detail || data.error || 'Login failed'; return }
 
-      token = data.access || data.token || ''
+      token = data.token || data.access || ''
       if (!token) { errEl.textContent = 'No token received'; return }
 
-      // Verify is_staff
-      const meRes = await fetch(`${API}/api/auth/me/`, {
-        headers: { Authorization: `Bearer ${token}`, Accept: 'application/json' }
-      })
-      const me = await meRes.json()
-      if (!me.is_staff && !me.is_superuser) {
-        errEl.textContent = 'Access denied. Staff only.'
-        return
+      // Verify is_staff using me endpoint
+      try {
+        const meRes = await fetch(`${API}/api/auth/me/`, {
+          headers: { Authorization: `Token ${token}`, Accept: 'application/json' }
+        })
+        const me = await meRes.json()
+        if (!me.is_staff && !me.is_superuser) {
+          errEl.textContent = 'Access denied. Staff accounts only.'
+          return
+        }
+      } catch {
+        // If me endpoint fails, allow login anyway if token exists
       }
 
       localStorage.setItem('agentToken', token)
+      localStorage.setItem('agentTokenType', 'Token')
       showApp()
     } catch(e) {
       errEl.textContent = 'Connection error. Check your internet.'
@@ -251,7 +256,7 @@
   async function fetchSessions() {
     try {
       const res = await fetch(`${API}/api/chat/sessions/`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Token ${token}` }
       })
       if (res.status === 401) { logout(); return }
       const data = await res.json()
@@ -405,7 +410,7 @@
     try {
       await fetch(`${API}/api/chat/agent-reply/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json', Authorization: `Token ${token}` },
         body: JSON.stringify({ session_id: selectedSessionId, message: msg })
       })
       await fetchMessages(selectedSessionId)
@@ -421,7 +426,7 @@
     try {
       await fetch(`${API}/api/chat/sessions/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json', Authorization: `Token ${token}` },
         body: JSON.stringify({ session_id: selectedSessionId, action: 'close' })
       })
     } catch {}

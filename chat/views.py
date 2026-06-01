@@ -376,3 +376,41 @@ def get_messages(request, session_id):
         session_id=session_id
     ).values("role", "content", "is_human_handover", "created_at")
     return JsonResponse({"messages": list(messages)})
+
+
+@csrf_exempt
+@require_POST
+def visitor_ping(request):
+    """Called when a logged-in user enters the dashboard."""
+    try:
+        payload = json.loads(request.body.decode("utf-8"))
+    except json.JSONDecodeError:
+        return JsonResponse({"ok": True})
+
+    user_email = str(payload.get("user_email", "")).strip()
+    user_name = str(payload.get("user_name", "")).strip()
+    page = str(payload.get("page", "dashboard")).strip()
+
+    try:
+        resend.api_key = os.environ.get("RESEND_API_KEY", "")
+        from django.utils import timezone
+        resend.Emails.send({
+            "from": "WolvCapital Support <support@mail.wolvcapital.com>",
+            "to": ["admin@wolvcapital.com"],
+            "subject": f"👤 User Online — {user_name or user_email}",
+            "html": f"""
+            <h2>A user just entered the dashboard</h2>
+            <p><strong>Name:</strong> {user_name or "Unknown"}</p>
+            <p><strong>Email:</strong> {user_email or "Unknown"}</p>
+            <p><strong>Page:</strong> {page}</p>
+            <p><strong>Time:</strong> {timezone.now().strftime("%Y-%m-%d %H:%M:%S UTC")}</p>
+            <a href="https://api.wolvcapital.com/admin/chat/chatsession/"
+               style="background:#2563eb;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:bold;">
+               Open Support Inbox
+            </a>
+            """,
+        })
+    except Exception as e:
+        print(f"Visitor ping email failed: {e}")
+
+    return JsonResponse({"ok": True})

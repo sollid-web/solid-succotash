@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import chat, request_human, agent_reply, get_sessions, get_messages
+from .views import chat, request_human, agent_reply, get_sessions, get_messages, visitor_ping
 
 urlpatterns = [
     path("", chat, name="chat"),
@@ -7,4 +7,5 @@ urlpatterns = [
     path("agent-reply/", agent_reply, name="agent_reply"),
     path("sessions/", get_sessions, name="chat_sessions"),
     path("messages/<str:session_id>/", get_messages, name="chat_messages"),
+    path("visitor/", visitor_ping, name="visitor_ping"),
 ]

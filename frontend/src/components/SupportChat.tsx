@@ -345,6 +345,27 @@ export default function SupportChat() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages, chatOpen])
 
+  // Poll for new agent replies every 5 seconds
+  useEffect(() => {
+    if (!sessionId || !backendUrl) return
+    const interval = window.setInterval(async () => {
+      try {
+        const res = await fetch(`${backendUrl}/api/chat/messages/${sessionId}/`)
+        if (!res.ok) return
+        const data = await res.json()
+        const serverMessages: ChatMessage[] = (data.messages || []).map((m: any) => ({
+          role: m.role as "user" | "assistant",
+          content: m.content,
+          time: new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }),
+        }))
+        if (serverMessages.length > messages.length) {
+          setMessages(serverMessages)
+        }
+      } catch {}
+    }, 5000)
+    return () => window.clearInterval(interval)
+  }, [sessionId, backendUrl, messages.length])
+
   function showToast(type: ToastType, title: string, desc: string) {
     const id = `${type}-${Date.now()}`
     const toast: ToastItem = { id, type, title, desc }
@@ -457,9 +478,53 @@ export default function SupportChat() {
     }
   }
 
-  function handleTalkToHuman() {
+  async function handleTalkToHuman() {
     setChatOpen(true)
-    showToast("chat", "🤝 Human Support Requested", "You can now send your message and our support team will receive the handover request.")
+    setLoading(true)
+
+    try {
+      // Get user info from auth token
+      const token = window.localStorage.getItem("authToken")
+      let userEmail = ""
+      let userName = ""
+
+      if (token && backendUrl) {
+        try {
+          const meRes = await fetch(`${backendUrl}/api/auth/me/`, {
+            headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+          })
+          if (meRes.ok) {
+            const me = await meRes.json()
+            userEmail = me.email || ""
+            userName = `${me.first_name || ""} ${me.last_name || ""}`.trim() || me.email || ""
+          }
+        } catch {}
+      }
+
+      // Notify backend — triggers email alert to admin
+      await fetch(`${backendUrl}/api/chat/human/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          session_id: sessionId,
+          user_email: userEmail,
+          user_name: userName,
+        }),
+      })
+
+      // Show message in chat
+      const handoverMsg: ChatMessage = {
+        role: "assistant",
+        content: "✅ A human agent has been notified and will join this chat shortly. Please describe your issue and we will respond as soon as possible.",
+        time: timeNow(),
+      }
+      setMessages((current) => [...current, handoverMsg])
+      showToast("chat", "🤝 Agent Notified", "Our support team has been alerted and will respond shortly.")
+    } catch {
+      showToast("chat", "⚠️ Request Sent", "Our team has been notified. Please wait for a response.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   function handleTicketSubmit() {

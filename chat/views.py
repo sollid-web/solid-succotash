@@ -1,4 +1,6 @@
 import json
+import os
+import resend
 
 from django.conf import settings
 from django.db import transaction
@@ -258,3 +260,119 @@ def chat(request):
 
     except Exception as exc:
         return JsonResponse({"error": str(exc)}, status=500)
+
+# --- Placeholders for Agent Handover ---
+from django.http import JsonResponse
+
+def request_human(request):
+    return JsonResponse({"status": "placeholder"})
+
+def agent_reply(request):
+    return JsonResponse({"status": "placeholder"})
+
+def get_sessions(request):
+    return JsonResponse({"status": "placeholder"})
+
+def get_messages(request):
+    return JsonResponse({"status": "placeholder"})
+
+
+@csrf_exempt
+@require_POST
+def request_human(request):
+    try:
+        payload = json.loads(request.body.decode("utf-8"))
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+
+    session_id = str(payload.get("session_id", "")).strip()
+    user_email = str(payload.get("user_email", "")).strip()
+    user_name = str(payload.get("user_name", "")).strip()
+
+    if not session_id:
+        return JsonResponse({"error": "session_id required"}, status=400)
+
+    from .models import ChatSession
+    from django.utils import timezone
+    session, _ = ChatSession.objects.get_or_create(session_id=session_id)
+    session.status = "waiting"
+    session.user_email = user_email
+    session.user_name = user_name
+    session.human_requested_at = timezone.now()
+    session.save()
+
+    recent = ChatMessage.objects.filter(session_id=session_id).order_by("-created_at")[:5]
+    transcript = "\n".join([f"{m.role.upper()}: {m.content}" for m in reversed(list(recent))])
+
+    if not session.alert_sent:
+        try:
+            resend.api_key = os.environ.get("RESEND_API_KEY", "")
+            resend.Emails.send({
+                "from": "WolvCapital Support <support@mail.wolvcapital.com>",
+                "to": ["support@wolvcapital.com", "admin@wolvcapital.com"],
+                "subject": f"🚨 Human Support Requested — {user_name or user_email or session_id}",
+                "html": f"""
+                <h2>A user is requesting human support</h2>
+                <p><strong>Name:</strong> {user_name or "Unknown"}</p>
+                <p><strong>Email:</strong> {user_email or "Unknown"}</p>
+                <p><strong>Session:</strong> {session_id}</p>
+                <h3>Recent conversation:</h3>
+                <pre style="background:#f4f4f4;padding:12px;border-radius:6px;">{transcript}</pre>
+                <br>
+                <a href="https://api.wolvcapital.com/admin/chat/chatsession/"
+                   style="background:#2563eb;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;">
+                   View Chat Sessions
+                </a>
+                """,
+            })
+            session.alert_sent = True
+            session.save()
+        except Exception as e:
+            print(f"Email alert failed: {e}")
+
+    return JsonResponse({"status": "waiting", "message": "A human agent will join shortly."})
+
+
+@csrf_exempt
+def agent_reply(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=405)
+    try:
+        payload = json.loads(request.body.decode("utf-8"))
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+
+    session_id = str(payload.get("session_id", "")).strip()
+    message = str(payload.get("message", "")).strip()
+
+    if not session_id or not message:
+        return JsonResponse({"error": "session_id and message required"}, status=400)
+
+    from django.utils import timezone
+    from .models import ChatSession
+    ChatMessage.objects.create(
+        session_id=session_id,
+        role=ChatMessage.ASSISTANT,
+        content=message,
+        is_human_handover=True,
+    )
+    ChatSession.objects.filter(session_id=session_id).update(
+        status="active",
+        agent_joined_at=timezone.now(),
+    )
+    return JsonResponse({"status": "sent"})
+
+
+def get_sessions(request):
+    from .models import ChatSession
+    sessions = ChatSession.objects.filter(
+        status__in=["waiting", "active"]
+    ).values("session_id", "user_email", "user_name", "status", "human_requested_at", "updated_at")
+    return JsonResponse({"sessions": list(sessions)})
+
+
+def get_messages(request, session_id):
+    messages = ChatMessage.objects.filter(
+        session_id=session_id
+    ).values("role", "content", "is_human_handover", "created_at")
+    return JsonResponse({"messages": list(messages)})

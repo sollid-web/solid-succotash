@@ -216,12 +216,15 @@
           headers: { Authorization: `Token ${token}`, Accept: 'application/json' }
         })
         const me = await meRes.json()
-        if (!me.is_staff && !me.is_superuser) {
+        console.log('ME RESPONSE:', JSON.stringify(me))
+        const isStaff = me.is_staff || me.is_superuser || me.role === 'admin' || me.user?.is_staff || me.user?.is_superuser
+        if (!isStaff) {
           errEl.textContent = 'Access denied. Staff accounts only.'
           return
         }
-      } catch {
-        // If me endpoint fails, allow login anyway if token exists
+      } catch(e) {
+        console.log('ME ERROR:', e)
+        // Allow login if me endpoint fails
       }
 
       localStorage.setItem('agentToken', token)

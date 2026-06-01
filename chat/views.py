@@ -414,3 +414,30 @@ def visitor_ping(request):
         print(f"Visitor ping email failed: {e}")
 
     return JsonResponse({"ok": True})
+
+
+@csrf_exempt
+def manage_session(request):
+    """Close a session."""
+    if request.method != "POST":
+        from .models import ChatSession
+        from django.utils import timezone
+        sessions = ChatSession.objects.filter(
+            status__in=["waiting", "active"]
+        ).values("session_id", "user_email", "user_name", "status", "human_requested_at", "updated_at")
+        return JsonResponse({"sessions": list(sessions)})
+    try:
+        payload = json.loads(request.body.decode("utf-8"))
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    action = payload.get("action")
+    session_id = payload.get("session_id")
+    if action == "close" and session_id:
+        from .models import ChatSession
+        from django.utils import timezone
+        ChatSession.objects.filter(session_id=session_id).update(
+            status="closed",
+            closed_at=timezone.now()
+        )
+        return JsonResponse({"status": "closed"})
+    return JsonResponse({"error": "Invalid action"}, status=400)

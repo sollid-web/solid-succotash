@@ -33,3 +33,14 @@ if settings.DEBUG:
 admin.site.site_header = "WolvCapital Administration"
 admin.site.site_title = "WolvCapital Admin"
 admin.site.index_title = "Welcome to WolvCapital Administration"
+# Agent UI
+from django.views.generic import TemplateView
+from django.views.static import serve
+import os
+
+urlpatterns += [
+    path("agent/", serve, {
+        "path": "index.html",
+        "document_root": os.path.join(settings.BASE_DIR, "agent-ui")
+    }),
+]

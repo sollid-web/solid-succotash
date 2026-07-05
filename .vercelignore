@@ -2,6 +2,7 @@
 venv
 frontend
 .venv
+agent-ui
 frontend_perfect_backup.zip
 
 __pycache__
@@ -9,14 +10,7 @@ __pycache__
 
 node_modules
 .next
-
-wolvcapital
-core
-templates
-static
-users
-transactions
-investments
-referrals
-api
-chat
+.env.local
+db.sqlite3
+downloads
+email_attachments

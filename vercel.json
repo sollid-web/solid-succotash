@@ -1,0 +1,23 @@
+{
+  "buildCommand": "pip install -r requirements.txt && python manage.py collectstatic --noinput",
+  "outputDirectory": ".",
+  "env": {
+    "DJANGO_SETTINGS_MODULE": "wolvcapital.settings",
+    "DEBUG": "0"
+  },
+  "functions": {
+    "api/**": {
+      "runtime": "python3.12"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/api/index.py"
+    }
+  ]
+}

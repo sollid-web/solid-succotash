@@ -3,9 +3,15 @@
 
 import os
 import sys
-from dotenv import load_dotenv
 
-load_dotenv('.env.local')
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv('.env.local')
+except ModuleNotFoundError:
+    # Allow command discovery/preflight in environments where optional deps
+    # are not installed yet (for example, platform build analyzers).
+    pass
 
 def main():
     """Run administrative tasks."""

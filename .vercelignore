@@ -1,5 +1,6 @@
 .git
 venv
+frontend
 .venv
 frontend_perfect_backup.zip
 

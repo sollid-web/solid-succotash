@@ -4,7 +4,13 @@ from django.db.models import Sum
 from django.utils import timezone
 from rest_framework import serializers
 
-from core.models import Agreement, PlatformCertificate, SupportRequest, UserAgreementAcceptance
+from core.models import (
+    Agreement,
+    CampaignAnnouncement,
+    PlatformCertificate,
+    SupportRequest,
+    UserAgreementAcceptance,
+)
 from investments.models import InvestmentPlan, UserInvestment
 from transactions.models import CryptocurrencyWallet, Transaction, VirtualCard
 from users.models import KycApplication, KycDocument, Profile, UserNotification, UserWallet
@@ -54,6 +60,50 @@ class AgreementSerializer(serializers.ModelSerializer):
     def get_accepted_at(self, obj):
         acceptance = self._get_acceptance(obj)
         return acceptance.accepted_at if acceptance else None
+
+
+class CampaignAnnouncementSerializer(serializers.ModelSerializer):
+    is_live = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = CampaignAnnouncement
+        fields = [
+            "id",
+            "title",
+            "slug",
+            "summary",
+            "body",
+            "cta_label",
+            "cta_url",
+            "publish_at",
+            "expires_at",
+            "is_published",
+            "is_live",
+        ]
+        read_only_fields = fields
+
+
+class AdminCampaignAnnouncementSerializer(serializers.ModelSerializer):
+    is_live = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = CampaignAnnouncement
+        fields = [
+            "id",
+            "title",
+            "slug",
+            "summary",
+            "body",
+            "cta_label",
+            "cta_url",
+            "publish_at",
+            "expires_at",
+            "is_published",
+            "is_live",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = ["id", "is_live", "created_at", "updated_at"]
 
 
 class InvestmentPlanSerializer(serializers.ModelSerializer):

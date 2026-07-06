@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 
 declare global {
   interface Window {
-    gtag?: (...args: any[]) => void
+    gtag?: (...args: unknown[]) => void
   }
 }
 

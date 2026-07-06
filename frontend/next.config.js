@@ -12,9 +12,9 @@ const nextConfig = {
   // Disabling the built-in redirect prevents this loop while keeping our
   // rewrite proxy for /admin/* intact.
   skipTrailingSlashRedirect: true,
-  // Ensure middleware doesn't normalize URLs in a way that strips trailing
+  // Ensure proxy doesn't normalize URLs in a way that strips trailing
   // slashes before our admin rewrites run.
-  skipMiddlewareUrlNormalize: true,
+  skipProxyUrlNormalize: true,
   // i18n removed - not supported in App Router, handled via middleware instead
   images: {
     remotePatterns: [
@@ -58,5 +58,10 @@ const nextConfig = {
     ]
   },
 }
+
+// Fix: suppress lockfile root inference warning when the monorepo root
+// contains package-lock.json files at multiple levels.
+if (!nextConfig.turbopack) nextConfig.turbopack = {}
+nextConfig.turbopack.root = __dirname
 
 module.exports = nextConfig

@@ -11,6 +11,8 @@ from .referrals_endpoints import referrals_rewards, referrals_summary
 
 router = DefaultRouter()
 router.register(r"agreements", views.AgreementViewSet, basename="api-agreements")
+router.register(r"campaigns", views.CampaignAnnouncementViewSet, basename="api-campaigns")
+router.register(r"admin/campaigns", views.AdminCampaignAnnouncementViewSet, basename="api-admin-campaigns")
 router.register(r"investments", views.UserInvestmentViewSet, basename="api-investments")
 router.register(r"transactions", views.TransactionViewSet, basename="api-transactions")
 router.register(r"plans", views.InvestmentPlanViewSet, basename="api-plans")

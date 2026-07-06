@@ -8,6 +8,7 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.management import call_command
 from django.db import connection
+from django.db import models
 from django.db.models import Count, Sum
 from django.db.models.functions import TruncDate
 from django.shortcuts import get_object_or_404
@@ -29,7 +30,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from core.models import Agreement, SupportRequest, UserAgreementAcceptance
+from core.models import Agreement, CampaignAnnouncement, SupportRequest, UserAgreementAcceptance
 from investments.models import InvestmentPlan, UserInvestment
 from investments.services import (
     approve_investment,
@@ -63,10 +64,12 @@ from .permissions import IsPlatformAdmin
 from .serializers import (
     AdminKycApplicationSerializer,
     AdminKycDocumentSerializer,
+    AdminCampaignAnnouncementSerializer,
     AdminTransactionSerializer,
     AdminUserInvestmentSerializer,
     AgreementSerializer,
     CryptocurrencyWalletSerializer,
+    CampaignAnnouncementSerializer,
     EmailPreferencesSerializer,
     InvestmentPlanSerializer,
     KycApplicationSerializer,
@@ -228,6 +231,30 @@ class AgreementViewSet(viewsets.ReadOnlyModelViewSet):
             serializer.data,
             status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
         )
+
+
+class CampaignAnnouncementViewSet(viewsets.ReadOnlyModelViewSet):
+    """Public list of website campaigns and offers."""
+
+    serializer_class = CampaignAnnouncementSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        now = timezone.now()
+        return CampaignAnnouncement.objects.filter(
+            is_published=True,
+            publish_at__lte=now,
+        ).filter(
+            models.Q(expires_at__isnull=True) | models.Q(expires_at__gte=now)
+        ).order_by("-publish_at", "-created_at")
+
+
+class AdminCampaignAnnouncementViewSet(viewsets.ModelViewSet):
+    """Admin CRUD for campaign announcements."""
+
+    queryset = CampaignAnnouncement.objects.all()
+    serializer_class = AdminCampaignAnnouncementSerializer
+    permission_classes = [IsPlatformAdmin]
 
 
 class InvestmentPlanViewSet(viewsets.ReadOnlyModelViewSet):

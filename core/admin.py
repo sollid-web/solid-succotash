@@ -4,6 +4,7 @@ from django.utils.html import format_html
 
 from .models import (
     Agreement,
+    CampaignAnnouncement,
     EmailInbox,
     EmailTemplate,
     PlatformCertificate,
@@ -378,6 +379,32 @@ class EmailTemplateAdmin(admin.ModelAdmin):
         if not change:
             obj.created_by = request.user
         super().save_model(request, obj, form, change)
+
+
+@admin.register(CampaignAnnouncement)
+class CampaignAnnouncementAdmin(admin.ModelAdmin):
+    list_display = ("title", "slug", "is_published", "publish_at", "expires_at")
+    list_filter = ("is_published", "publish_at")
+    search_fields = ("title", "slug", "summary", "body")
+    prepopulated_fields = {"slug": ("title",)}
+    readonly_fields = ("created_at", "updated_at")
+    ordering = ("-publish_at", "-created_at")
+
+    fieldsets = (
+        ("Content", {
+            "fields": ("title", "slug", "summary", "body"),
+        }),
+        ("Action", {
+            "fields": ("cta_label", "cta_url"),
+        }),
+        ("Publishing", {
+            "fields": ("is_published", "publish_at", "expires_at"),
+        }),
+        ("Timestamps", {
+            "fields": ("created_at", "updated_at"),
+            "classes": ("collapse",),
+        }),
+    )
 
 
 @admin.register(PlatformCertificate)

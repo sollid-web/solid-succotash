@@ -338,3 +338,34 @@ class DripCampaign(models.Model):
     def __str__(self) -> str:  # pragma: no cover - trivial
         status = "✅ Complete" if self.completed else f"Day {self.current_day}/10"
         return f"{self.user.email} — {status}"
+
+
+class CampaignAnnouncement(models.Model):
+    """Public-facing campaign or offer announcement shown on the website."""
+
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True)
+    summary = models.CharField(max_length=320, blank=True)
+    body = models.TextField(blank=True)
+    cta_label = models.CharField(max_length=80, blank=True)
+    cta_url = models.URLField(blank=True)
+    publish_at = models.DateTimeField(default=timezone.now)
+    expires_at = models.DateTimeField(null=True, blank=True)
+    is_published = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Campaign Announcement"
+        verbose_name_plural = "Campaign Announcements"
+        ordering = ["-publish_at", "-created_at"]
+
+    def __str__(self) -> str:  # pragma: no cover - trivial
+        return self.title
+
+    @property
+    def is_live(self) -> bool:
+        now = timezone.now()
+        if not self.is_published or self.publish_at > now:
+            return False
+        return not self.expires_at or self.expires_at >= now

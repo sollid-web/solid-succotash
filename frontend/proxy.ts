@@ -24,7 +24,7 @@ function parseAcceptLanguage(header: string) {
     .map((item) => item.locale)
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const url = request.nextUrl
   const { pathname, searchParams } = url
   const res = NextResponse.next()

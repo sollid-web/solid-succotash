@@ -490,11 +490,18 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
           })}                                                        
           
           {(user?.is_staff || user?.is_superuser) && (
-            <Link href="/admin/withdrawals" style={{
-              padding: "14px 16px", fontSize: "13px", fontWeight: 400,
-              color: "rgba(255,255,255,0.4)", whiteSpace: "nowrap",
-              borderBottom: "2px solid transparent",                   
-            }}>Admin</Link>
+            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+              <Link href="/admin/withdrawals" style={{
+                padding: "14px 16px", fontSize: "13px", fontWeight: 400,
+                color: "rgba(255,255,255,0.4)", whiteSpace: "nowrap",
+                borderBottom: "2px solid transparent",
+              }}>Admin</Link>
+              <Link href="/admin/campaigns" style={{
+                padding: "14px 16px", fontSize: "13px", fontWeight: 400,
+                color: "rgba(255,255,255,0.4)", whiteSpace: "nowrap",
+                borderBottom: "2px solid transparent",
+              }}>Campaigns</Link>
+            </div>
           )}
                                                   
         </div>

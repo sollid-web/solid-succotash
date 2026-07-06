@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const locale = request.cookies.get('django_language')?.value || 'en'
   const response = NextResponse.next()
   

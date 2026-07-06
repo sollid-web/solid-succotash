@@ -1,0 +1,62 @@
+/* ─── Sidebar layout fixes ─────────────────────────────────────────────────
+   Prevents the vertical scrollbar from floating mid-screen over content and
+   removes the unintended right-padding gap in the sidebar container.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Prevent the sidebar wrapper from producing a horizontal scrollbar that
+   causes the scrollbar thumb to appear mid-screen instead of at the edge. */
+#nav-sidebar,
+[data-menu],
+aside {
+    overflow-x: hidden !important;
+}
+
+/* Remove Unfold's default right-hand padding on the nav container and let
+   the inner scroll track sit flush against the right edge. */
+#nav-sidebar nav,
+aside nav {
+    padding-right: 0 !important;
+    overflow-y: auto !important;
+}
+
+/* ─── Navigation hierarchy / indentation ───────────────────────────────────
+   Unfold collapses child nav items under their section headers without visual
+   indentation, making the list look flat. Add a left-indent to child links.
+   ───────────────────────────────────────────────────────────────────────── */
+#nav-sidebar ul li a,
+aside ul li a {
+    padding-left: 1.25rem;
+    font-size: 0.875rem;
+}
+
+/* Section/group headers sit at the base indentation level. */
+#nav-sidebar ul li[data-level="0"] > a,
+aside nav .nav-group-title {
+    padding-left: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.55;
+}
+
+/* ─── Active link contrast fix ─────────────────────────────────────────────
+   The default Unfold dark-blue active state has very poor contrast against
+   the dark sidebar background. Override with a clear #007bff + white text.
+   ───────────────────────────────────────────────────────────────────────── */
+#nav-sidebar a[aria-current="page"],
+#nav-sidebar a.active,
+aside a[aria-current="page"],
+aside a.active {
+    background-color: #007bff !important;
+    color: #ffffff !important;
+    border-radius: 0.375rem;
+}
+
+/* Ensure any nested icon or text inside the active link inherits white. */
+#nav-sidebar a[aria-current="page"] *,
+#nav-sidebar a.active *,
+aside a[aria-current="page"] *,
+aside a.active * {
+    color: #ffffff !important;
+}

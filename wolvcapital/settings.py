@@ -296,6 +296,9 @@ UNFOLD = {
     "SHOW_VIEW_ON_SITE": True,
     "THEME": "dark",
     "STYLES": [
+        # Always load the sidebar layout + active-link contrast fixes.
+        lambda request: "/static/admin/css/admin_custom.css",
+        # Per-superuser overrides (kept for backwards compatibility).
         lambda request: "/static/admin/css/custom.css" if request.user.is_superuser else "",
     ],
     "SCRIPTS": [

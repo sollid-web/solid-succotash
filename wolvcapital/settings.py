@@ -112,9 +112,14 @@ if CUSTOM_DOMAIN:
     CORS_ALLOWED_ORIGINS.append(f"https://www.{CUSTOM_DOMAIN}")
 
 CORS_ALLOWED_ORIGIN_REGEXES: list[str] = [
-    r"^https://.*\\.vercel\\.app$",
-    r"^https://.*\\.up\\.railway\\.app$",
+    r"^https://.*\.vercel\.app$",
+    r"^https://.*\.up\.railway\.app$",
 ]
+
+# Allow all Vercel preview subdomains automatically.
+# Production deployments use CUSTOM_DOMAIN; previews use *.vercel.app.
+if not DEBUG:
+    ALLOWED_HOSTS.append(".vercel.app")  # leading dot = wildcard for all subdomains
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_ALL_ORIGINS = False
@@ -564,10 +569,14 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 if not DATABASE_URL:
     raise ValueError("DATABASE_URL environment variable is required")
 
+# conn_max_age=0: required for serverless (Vercel) to prevent exhausting
+# Supabase session-mode pool (EMAXCONNSESSION). Each function invocation
+# opens and closes its own connection rather than holding one open.
+_IS_SERVERLESS = bool(os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"))
 DATABASES = {
     "default": dj_database_url.config(
         default=DATABASE_URL,
-        conn_max_age=600,
+        conn_max_age=0 if _IS_SERVERLESS else 600,
         ssl_require=not DATABASE_URL.startswith("sqlite"),
     ),
 }

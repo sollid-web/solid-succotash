@@ -5,11 +5,6 @@
     "DJANGO_SETTINGS_MODULE": "wolvcapital.settings",
     "DEBUG": "0"
   },
-  "functions": {
-    "api/**": {
-      "runtime": "python3.12"
-    }
-  },
   "rewrites": [
     {
       "source": "/api/(.*)",

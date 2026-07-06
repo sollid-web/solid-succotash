@@ -9,22 +9,22 @@ description = "Django investment platform with manual approval workflows"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "Django==5.0.7",
-    "django-allauth==0.57.0",
+    "Django==5.2.1",
+    "django-allauth==0.63.3",
     "django-environ==0.11.2",
     "python-dotenv==1.0.1",
-    "djangorestframework==3.14.0",
-    "djangorestframework-simplejwt==5.3.0",
-    "django-anymail[resend]==10.3",
-    "gunicorn==21.2.0",
-    "whitenoise==6.5.0",
-    "psycopg2-binary==2.9.7",
-    "pillow==10.0.0",
-    "django-cors-headers==4.2.0",
+    "djangorestframework==3.15.2",
+    "djangorestframework-simplejwt==5.3.1",
+    "django-anymail==12.0",
+    "gunicorn==22.0.0",
+    "whitenoise==6.6.0",
+    "psycopg2-binary==2.9.10",
+    "pillow==10.4.0",
+    "django-cors-headers==4.4.0",
     "django-extensions==3.2.3",
     "stripe==6.0.0",
     "dj-database-url==2.1.0",
-    "django-jazzmin==2.6.0",
+    "django-jazzmin==3.0.3",
 ]
 
 [project.optional-dependencies]

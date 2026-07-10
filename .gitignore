@@ -69,3 +69,7 @@ __pycache__/
 *.pyo
 venv/
 .venv/
+.venv/
+venv/
+__pycache__/
+*.pyc

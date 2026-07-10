@@ -64,3 +64,8 @@ __pycache__/
 .gitignore
 patch_*.py
 frontend.zip
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/

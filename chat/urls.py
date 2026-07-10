@@ -18,6 +18,7 @@ except Exception as e:
     widget_js = _placeholder
 
 urlpatterns = [
+    path("test/", lambda r: __import__("django.http", fromlist=["JsonResponse"]).JsonResponse({"ok": True}), name="chat_test"),
     path("", chat, name="chat"),
     path("human/", request_human, name="chat_human"),
     path("agent-reply/", agent_reply, name="agent_reply"),

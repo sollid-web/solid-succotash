@@ -14,7 +14,7 @@ def _chat_id() -> str:
     return os.environ.get("TELEGRAM_CHAT_ID", "")
 
 
-def send_telegram(text: str, reply_markup: dict | None = None):
+def send_telegram(text: str, reply_markup: None = None):
     token = _token()
     chat_id = _chat_id()
     if not token or not chat_id:

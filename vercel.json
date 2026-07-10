@@ -1,12 +1,18 @@
 {
-  "buildCommand": "pip install -r requirements.txt && python manage.py collectstatic --noinput",
+  "buildCommand": "pip install -r requirements.txt --no-cache-dir && python manage.py collectstatic --noinput && find . -name \"__pycache__\" -type d -exec rm -rf {} + 2>/dev/null; true",
   "outputDirectory": ".",
   "env": {
     "DJANGO_SETTINGS_MODULE": "wolvcapital.settings",
     "DEBUG": "0"
   },
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index.py" },
-    { "source": "/(.*)", "destination": "/api/index.py" }
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/api/index.py"
+    }
   ]
 }

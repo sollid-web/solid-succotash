@@ -1,8 +1,9 @@
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
 .venv
 venv
-__pycache__
-*.pyc
-*.pyo
-.git
-node_modules
-agent-ui
+*.egg-info
+.eggs
+bin/

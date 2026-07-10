@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 
 from groq import Groq
 
-from .models import ChatMessage
+from .models import ChatMessage, ChatSession
 
 client = Groq(api_key=settings.GROQ_API_KEY)
 
@@ -228,6 +228,26 @@ def chat(request):
         is_human_handover=False,
     )
 
+    # Telegram alert for visitor message (swipe-reply to respond)
+    try:
+        from .telegram import notify_new_message
+        _sess = ChatSession.objects.filter(session_id=session_id).first()
+        notify_new_message(
+            session_id, user_content,
+            user_name=(_sess.user_name if _sess else "") or "",
+            user_email=(_sess.user_email if _sess else "") or "",
+        )
+    except Exception as _e:
+        print(f"[Telegram] notify failed: {_e}")
+
+    # If a human agent is active, skip the AI so it doesn't talk over them
+    try:
+        _active = ChatSession.objects.filter(session_id=session_id, status="active").exists()
+    except Exception:
+        _active = False
+    if _active:
+        return JsonResponse({"reply": None, "human_active": True})
+
     session_history = get_recent_session_messages(session_id)
     prompt_messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
@@ -301,6 +321,12 @@ def request_human(request):
     session.user_name = user_name
     session.human_requested_at = timezone.now()
     session.save()
+
+    try:
+        from .telegram import notify_human_requested
+        notify_human_requested(session_id, user_name, user_email)
+    except Exception as _e:
+        print(f"[Telegram] human-request notify failed: {_e}")
 
     recent = ChatMessage.objects.filter(session_id=session_id).order_by("-created_at")[:5]
     transcript = "\n".join([f"{m.role.upper()}: {m.content}" for m in reversed(list(recent))])

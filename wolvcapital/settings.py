@@ -48,6 +48,8 @@ DRIP_CRON_SECRET = env("DRIP_CRON_SECRET", default=None)
 STRIPE_ISSUING_ENABLED = True
 STRIPE_CARDHOLDER_TYPE = "individual"
 GROQ_API_KEY = env("GROQ_API_KEY", default="")
+TELEGRAM_BOT_TOKEN = env("TELEGRAM_BOT_TOKEN", default="")
+TELEGRAM_CHAT_ID = env("TELEGRAM_CHAT_ID", default="")
 
 # Startup debugging for Railway/production deployment
 print("🔧 Django startup: Loading environment...", file=sys.stderr)

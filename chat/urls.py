@@ -1,5 +1,7 @@
 from django.urls import path
 from .views import chat, request_human, agent_reply, manage_session, get_messages, visitor_ping
+from .telegram_webhook import telegram_webhook
+from .widget_view import widget_js
 
 urlpatterns = [
     path("", chat, name="chat"),
@@ -8,4 +10,6 @@ urlpatterns = [
     path("sessions/", manage_session, name="chat_sessions"),
     path("messages/<str:session_id>/", get_messages, name="chat_messages"),
     path("visitor/", visitor_ping, name="visitor_ping"),
+    path("telegram-webhook/", telegram_webhook, name="telegram_webhook"),
+    path("widget.js", widget_js, name="widget_js"),
 ]

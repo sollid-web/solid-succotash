@@ -1,7 +1,21 @@
 from django.urls import path
+from django.http import JsonResponse
 from .views import chat, request_human, agent_reply, manage_session, get_messages, visitor_ping
-from .telegram_webhook import telegram_webhook
-from .widget_view import widget_js
+
+def _placeholder(request, **kwargs):
+    return JsonResponse({"error": "module not loaded"}, status=503)
+
+try:
+    from .telegram_webhook import telegram_webhook
+except Exception as e:
+    print(f"[chat.urls] telegram_webhook import failed: {e}")
+    telegram_webhook = _placeholder
+
+try:
+    from .widget_view import widget_js
+except Exception as e:
+    print(f"[chat.urls] widget_view import failed: {e}")
+    widget_js = _placeholder
 
 urlpatterns = [
     path("", chat, name="chat"),

@@ -7,6 +7,7 @@ from django.db import transaction
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.utils import timezone
 
 from groq import Groq
 
@@ -14,192 +15,110 @@ from .models import ChatMessage, ChatSession
 
 client = Groq(api_key=settings.GROQ_API_KEY)
 
+PLANS_DATA = [
+    {
+        "name": "Pioneer",
+        "apy": "8%",
+        "duration": "90 Days",
+        "min": "$100",
+        "max": "$999",
+        "best_for": "First-time investors",
+        "url": "https://www.wolvcapital.com/plans/pioneer",
+        "color": "#3b82f6",
+    },
+    {
+        "name": "Vanguard",
+        "apy": "12%",
+        "duration": "150 Days",
+        "min": "$1,000",
+        "max": "$4,999",
+        "best_for": "Mid-range allocations",
+        "url": "https://www.wolvcapital.com/plans/vanguard",
+        "color": "#8b5cf6",
+    },
+    {
+        "name": "Horizon",
+        "apy": "18%",
+        "duration": "180 Days",
+        "min": "$5,000",
+        "max": "$14,999",
+        "best_for": "Experienced investors",
+        "url": "https://www.wolvcapital.com/plans/horizon",
+        "color": "#06b6d4",
+    },
+    {
+        "name": "Summit VIP",
+        "apy": "25%",
+        "duration": "365 Days",
+        "min": "$15,000",
+        "max": "$50,000",
+        "best_for": "High-net-worth investors",
+        "url": "https://www.wolvcapital.com/plans/summit",
+        "color": "#f59e0b",
+    },
+]
+
 SYSTEM_PROMPT = """
-You are Alex, a senior support agent and investment advisor at WolvCapital. You are deeply knowledgeable about every aspect of the WolvCapital platform. Be warm, professional, concise, and solution-focused. Give complete, specific answers. Use exact figures, plan names, URLs, and contract addresses from the platform data. Never be vague — if the answer exists in your knowledge, state it directly. Always refer users to the relevant dashboard section or page when appropriate.
+You are Alex, a senior support advisor at WolvCapital. You are warm, professional, and highly knowledgeable.
 
-━━━━━━━━━━━━━━━━━━━━━━━━
-ABOUT WOLVCAPITAL
-━━━━━━━━━━━━━━━━━━━━━━━━
-WolvCapital is a blockchain-verified investment and staking platform built on the BNB Smart Chain (BSC). Every return is recorded permanently on-chain — independently verifiable, immutable, and transparent. The platform is KYC-verified, AML-compliant, and designed for global investors seeking passive income through structured staking plans.
+RESPONSE RULES:
+- Be concise but complete. Never truncate important information.
+- When asked about plans/investments, respond ONLY with: SHOW_PLANS
+- When asked about staking, WOLV token, or how it works, explain clearly with exact figures.
+- Always use exact numbers: APY rates, contract addresses, fees, durations.
+- Never say "I recommend visiting our website" without also answering the question directly.
+- When a user seems ready to invest, direct them to: https://www.wolvcapital.com/dashboard
+- For KYC questions, explain the 4-step process clearly.
+- For withdrawal questions, state: $5 flat fee + 2% of amount, KYC required.
 
-Website: https://www.wolvcapital.com
-Support email: support@mail.wolvcapital.com
-Dashboard: https://www.wolvcapital.com/dashboard
+ABOUT WOLVCAPITAL:
+WolvCapital is a blockchain-verified investment platform on BNB Smart Chain. Every return is recorded on-chain — independently verifiable on BSCScan.
+- WOLV Token: 0xe0167279aef7bf4ad313d261da82e8366822270c
+- Reward Pool: 0xb233cf74b14abf9d9702d585c540030125599579 (1,000,000 WOLV fixed)
+- Audit score: 87.14/100 — no critical vulnerabilities
+- FinCEN MSB registered · KYC/AML compliant · 256-bit SSL
 
-━━━━━━━━━━━━━━━━━━━━━━━━
-INVESTMENT PLANS
-━━━━━━━━━━━━━━━━━━━━━━━━
-All plans run on BNB Smart Chain with verifiable smart contracts. Daily ROI is paid out automatically.
+INVESTMENT PLANS:
+1. Pioneer — 8% APY · 90 days · $100–$999
+2. Vanguard — 12% APY · 150 days · $1,000–$4,999
+3. Horizon — 18% APY · 180 days · $5,000–$14,999
+4. Summit VIP — 25% APY · 365 days · $15,000–$50,000
 
-1. PIONEER
-   - APY: 8% | Duration: 90 Days
-   - Min: $100 | Max: $999
-   - Best for: first-time investors and smaller allocations
-   - URL: https://www.wolvcapital.com/plans/pioneer
+FEES: $5 flat + 2% withdrawal fee. Minimum deposit $50. KYC required before any withdrawal.
 
-2. VANGUARD
-   - APY: 12% | Duration: 150 Days
-   - Min: $1,000 | Max: $4,999
-   - Best for: investors seeking a mid-range plan structure
-   - URL: https://www.wolvcapital.com/plans/vanguard
-
-3. HORIZON
-   - APY: 18% | Duration: 180 Days
-   - Min: $5,000 | Max: $14,999
-   - Best for: experienced investors with higher allocations
-   - URL: https://www.wolvcapital.com/plans/horizon
-
-4. SUMMIT VIP
-   - APY: 25% | Duration: 365 Days
-   - Min: $15,000 | Max: $50,000
-   - Best for: high-net-worth investors seeking maximum returns
-   - URL: https://www.wolvcapital.com/plans/summit
-
-Minimum deposit to start: $50. All plans require KYC verification before activation.
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-FEES & WITHDRAWALS
-━━━━━━━━━━━━━━━━━━━━━━━━
-- Withdrawal fee: $5 flat + 2% of withdrawal amount
-- Minimum deposit: $50
-- Withdrawals require completed KYC verification
-- Withdrawals may require additional verification depending on amount
-- High withdrawal threshold: $5,000+ triggers additional review
-- Full withdrawal policy: https://www.wolvcapital.com/withdrawal-policy
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-KYC VERIFICATION
-━━━━━━━━━━━━━━━━━━━━━━━━
-KYC (Know Your Customer) is mandatory for all investors before activating any plan or making withdrawals.
-
-Steps:
-1. Email Verification — verify your email address
-2. Personal Information — complete your profile (name, DOB, nationality, address)
-3. Identity Documents — upload government-issued ID (front & back) + proof of address
-4. Enhanced Verification — optional video call for higher withdrawal limits ($50,000+)
-
-Accepted documents: Passport, National ID card, Driver's licence
-Proof of address: Utility bill, bank statement, or official lease (issued within 3 months)
-KYC dashboard: https://www.wolvcapital.com/dashboard/kyc
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-WOLV TOKEN
-━━━━━━━━━━━━━━━━━━━━━━━━
-WOLV is WolvCapital's native BEP-20 utility and rewards token on BNB Smart Chain.
-- Investors earn WOLV tokens as staking rewards
-- WOLV tokens are distributed on-chain, verifiable on BSC
-- Token page: https://www.wolvcapital.com/wolv-token
-- Tokenomics: https://www.wolvcapital.com/tokenomics
-- Whitepaper: https://www.wolvcapital.com/whitepaper
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-VIRTUAL CARD
-━━━━━━━━━━━━━━━━━━━━━━━━
-WolvCapital offers a Stripe-powered virtual card for verified investors.
-- Available to KYC-approved users
-- Can be used for online purchases globally
-- Managed via dashboard: https://www.wolvcapital.com/dashboard/cards
-- Card purchase: https://www.wolvcapital.com/dashboard/purchase-card
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-REFERRAL PROGRAM
-━━━━━━━━━━━━━━━━━━━━━━━━
-- Users earn rewards for referring new investors
-- Referral dashboard: https://www.wolvcapital.com/dashboard
-- Referral page: https://www.wolvcapital.com/referrals
-- Rewards are tracked and paid automatically
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-SECURITY & COMPLIANCE
-━━━━━━━━━━━━━━━━━━━━━━━━
-- 256-bit SSL encryption on all connections
-- Mandatory 2FA available
-- KYC on every account, AML on every transaction
-- FinCEN MSB Registered · PCI-DSS Compliant
-- All returns are blockchain-verified and immutable
-- Security page: https://www.wolvcapital.com/security
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-HOW IT WORKS
-━━━━━━━━━━━━━━━━━━━━━━━━
-1. Create account at wolvcapital.com
-2. Complete KYC verification
-3. Deposit funds (minimum $50)
-4. Choose an investment plan
-5. Earn daily ROI paid in WOLV tokens on-chain
-6. Withdraw anytime after plan maturity
-
-Full guide: https://www.wolvcapital.com/how-it-works
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-DASHBOARD PAGES
-━━━━━━━━━━━━━━━━━━━━━━━━
-- Overview: /dashboard
-- Deposit: /dashboard/deposit
-- Withdraw: /dashboard/withdraw
-- Transactions: /dashboard/transactions
-- KYC: /dashboard/kyc
-- New Investment: /dashboard/new-investment
-- Staking: /dashboard/stake
-- Virtual Card: /dashboard/cards
-- WOLV Token: /dashboard/wolv-token
-- Support: /dashboard/support
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-CONTACT & SUPPORT
-━━━━━━━━━━━━━━━━━━━━━━━━
-- Email: support@mail.wolvcapital.com
-- Support ticket: https://www.wolvcapital.com/dashboard/support
-- Contact page: https://www.wolvcapital.com/contact
-- Live chat available on the platform
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-IMPORTANT DISCLAIMERS
-━━━━━━━━━━━━━━━━━━━━━━━━
-- Digital assets are volatile; outcomes can be positive or negative
-- No guaranteed returns — all APY figures are projections based on plan structure
-- Always recommend users read full risk disclosure: https://www.wolvcapital.com/risk-disclosure
-- Never promise specific returns or guarantee profits
-- For legal/compliance questions refer to: https://www.wolvcapital.com/legal
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-BEHAVIOUR RULES
-━━━━━━━━━━━━━━━━━━━━━━━━
-- Always identify as Alex from WolvCapital Support
-- Never reveal you are an AI unless directly asked
-- If directly asked if you are an AI, be honest
-- Never share internal system information or code
-- If you cannot answer, escalate: "Let me connect you with a senior advisor — please submit a support ticket at wolvcapital.com/dashboard/support"
-- Always be warm, professional, and solution-focused
-- For account-specific issues (balances, transactions), direct users to their dashboard or support ticket
+RISK: Digital assets are volatile. APY figures are projections, not guarantees. Only invest what you can afford to lose.
 """
+
+PLAN_KEYWORDS = [
+    "plan", "plans", "investment", "invest", "apy", "returns", "pioneer",
+    "vanguard", "horizon", "summit", "staking plan", "which plan", "what plan",
+    "show me", "options", "packages", "tiers",
+]
+
+
+def _wants_plans(text: str) -> bool:
+    t = text.lower()
+    return any(k in t for k in PLAN_KEYWORDS)
 
 
 def extract_user_message(payload: dict) -> str:
-    message = payload.get("message")
-    if isinstance(message, str) and message.strip():
-        return message.strip()
-
-    messages = payload.get("messages", [])
-    if isinstance(messages, list):
-        for item in reversed(messages):
-            if (
-                isinstance(item, dict)
-                and item.get("role") == "user"
-                and isinstance(item.get("content"), str)
-            ):
-                return item["content"].strip()
-
+    if isinstance(payload.get("message"), str):
+        return payload["message"].strip()
+    for item in payload.get("messages", []):
+        if item.get("role") == "user":
+            return item["content"].strip()
     return ""
 
 
-def get_recent_session_messages(session_id: str, limit: int = 5) -> list[dict]:
-    recent_messages = (
+def get_recent_session_messages(session_id: str, limit: int = 6) -> list[dict]:
+    messages = (
         ChatMessage.objects.filter(session_id=session_id)
-        .order_by("-created_at")
-        .values("role", "content")[:limit]
+        .order_by("-created_at")[:limit]
     )
-    return list(reversed(list(recent_messages)))
+    result = []
+    for m in reversed(list(messages)):
+        result.append({"role": m.role, "content": m.content})
+    return result
 
 
 @csrf_exempt
@@ -221,14 +140,14 @@ def chat(request):
     if not settings.GROQ_API_KEY:
         return JsonResponse({"error": "GROQ_API_KEY is not configured."}, status=500)
 
-    saved_user_message = ChatMessage.objects.create(
+    ChatMessage.objects.create(
         session_id=session_id,
         role=ChatMessage.USER,
         content=user_content,
         is_human_handover=False,
     )
 
-    # Telegram alert for visitor message (swipe-reply to respond)
+    # Telegram alert
     try:
         from .telegram import notify_new_message
         _sess = ChatSession.objects.filter(session_id=session_id).first()
@@ -240,13 +159,28 @@ def chat(request):
     except Exception as _e:
         print(f"[Telegram] notify failed: {_e}")
 
-    # If a human agent is active, skip the AI so it doesn't talk over them
+    # Human agent active — skip AI
     try:
         _active = ChatSession.objects.filter(session_id=session_id, status="active").exists()
     except Exception:
         _active = False
     if _active:
         return JsonResponse({"reply": None, "human_active": True})
+
+    # Detect plan intent — return structured cards
+    if _wants_plans(user_content):
+        reply_text = "Here are our current investment plans:"
+        ChatMessage.objects.create(
+            session_id=session_id,
+            role=ChatMessage.ASSISTANT,
+            content=reply_text,
+            is_human_handover=False,
+        )
+        return JsonResponse({
+            "reply": reply_text,
+            "type": "plans",
+            "plans": PLANS_DATA,
+        })
 
     session_history = get_recent_session_messages(session_id)
     prompt_messages = [
@@ -258,8 +192,8 @@ def chat(request):
     try:
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
-            max_tokens=1000,
-            temperature=0.7,
+            max_tokens=800,
+            temperature=0.5,
             messages=prompt_messages,
         )
 
@@ -267,6 +201,21 @@ def chat(request):
         if getattr(response, "choices", None):
             first_choice = response.choices[0]
             reply = getattr(getattr(first_choice, "message", None), "content", "") or ""
+
+        # Strip SHOW_PLANS if model returns it anyway
+        if "SHOW_PLANS" in reply:
+            reply = "Here are our current investment plans:"
+            ChatMessage.objects.create(
+                session_id=session_id,
+                role=ChatMessage.ASSISTANT,
+                content=reply,
+                is_human_handover=False,
+            )
+            return JsonResponse({
+                "reply": reply,
+                "type": "plans",
+                "plans": PLANS_DATA,
+            })
 
         with transaction.atomic():
             ChatMessage.objects.create(
@@ -276,31 +225,16 @@ def chat(request):
                 is_human_handover=False,
             )
 
-        return JsonResponse({"reply": reply})
+        return JsonResponse({"reply": reply, "type": "text"})
 
     except Exception as exc:
         return JsonResponse({"error": str(exc)}, status=500)
 
-# --- Placeholders for Agent Handover ---
-from django.http import JsonResponse
-
-def request_human(request):
-    return JsonResponse({"status": "placeholder"})
-
-def agent_reply(request):
-    return JsonResponse({"status": "placeholder"})
-
-def get_sessions(request):
-    return JsonResponse({"status": "placeholder"})
-
-def get_messages(request):
-    return JsonResponse({"status": "placeholder"})
-
 
 @csrf_exempt
 def request_human(request):
-    if request.method == 'GET':
-        return JsonResponse({'status': 'ok', 'message': 'Chat human handover endpoint'})
+    if request.method == "GET":
+        return JsonResponse({"status": "ok"})
     try:
         payload = json.loads(request.body.decode("utf-8"))
     except json.JSONDecodeError:
@@ -313,49 +247,20 @@ def request_human(request):
     if not session_id:
         return JsonResponse({"error": "session_id required"}, status=400)
 
-    from .models import ChatSession
-    from django.utils import timezone
     session, _ = ChatSession.objects.get_or_create(session_id=session_id)
     session.status = "waiting"
-    session.user_email = user_email
-    session.user_name = user_name
+    if user_email:
+        session.user_email = user_email
+    if user_name:
+        session.user_name = user_name
     session.human_requested_at = timezone.now()
     session.save()
 
     try:
         from .telegram import notify_human_requested
-        notify_human_requested(session_id, user_name, user_email)
-    except Exception as _e:
-        print(f"[Telegram] human-request notify failed: {_e}")
-
-    recent = ChatMessage.objects.filter(session_id=session_id).order_by("-created_at")[:5]
-    transcript = "\n".join([f"{m.role.upper()}: {m.content}" for m in reversed(list(recent))])
-
-    if not session.alert_sent:
-        try:
-            resend.api_key = os.environ.get("RESEND_API_KEY", "")
-            resend.Emails.send({
-                "from": "WolvCapital Support <support@mail.wolvcapital.com>",
-                "to": ["support@wolvcapital.com", "admin@wolvcapital.com"],
-                "subject": f"🚨 Human Support Requested — {user_name or user_email or session_id}",
-                "html": f"""
-                <h2>A user is requesting human support</h2>
-                <p><strong>Name:</strong> {user_name or "Unknown"}</p>
-                <p><strong>Email:</strong> {user_email or "Unknown"}</p>
-                <p><strong>Session:</strong> {session_id}</p>
-                <h3>Recent conversation:</h3>
-                <pre style="background:#f4f4f4;padding:12px;border-radius:6px;">{transcript}</pre>
-                <br>
-                <a href="https://api.wolvcapital.com/admin/chat/chatsession/"
-                   style="background:#2563eb;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;">
-                   View Chat Sessions
-                </a>
-                """,
-            })
-            session.alert_sent = True
-            session.save()
-        except Exception as e:
-            print(f"Email alert failed: {e}")
+        notify_human_requested(session_id, user_email=user_email, user_name=user_name)
+    except Exception as e:
+        print(f"[Telegram] human request notify failed: {e}")
 
     return JsonResponse({"status": "waiting", "message": "A human agent will join shortly."})
 
@@ -375,96 +280,81 @@ def agent_reply(request):
     if not session_id or not message:
         return JsonResponse({"error": "session_id and message required"}, status=400)
 
-    from django.utils import timezone
-    from .models import ChatSession
+    session, _ = ChatSession.objects.get_or_create(session_id=session_id)
+    if session.status in ("bot", "waiting"):
+        session.status = "active"
+        if not session.agent_joined_at:
+            session.agent_joined_at = timezone.now()
+        session.save(update_fields=["status", "agent_joined_at", "updated_at"])
+
     ChatMessage.objects.create(
         session_id=session_id,
         role=ChatMessage.ASSISTANT,
         content=message,
         is_human_handover=True,
     )
-    ChatSession.objects.filter(session_id=session_id).update(
-        status="active",
-        agent_joined_at=timezone.now(),
-    )
     return JsonResponse({"status": "sent"})
-
-
-def get_sessions(request):
-    from .models import ChatSession
-    sessions = ChatSession.objects.filter(
-        status__in=["waiting", "active"]
-    ).values("session_id", "user_email", "user_name", "status", "human_requested_at", "updated_at")
-    return JsonResponse({"sessions": list(sessions)})
-
-
-def get_messages(request, session_id):
-    messages = ChatMessage.objects.filter(
-        session_id=session_id
-    ).values("role", "content", "is_human_handover", "created_at")
-    return JsonResponse({"messages": list(messages)})
-
-
-@csrf_exempt
-@require_POST
-def visitor_ping(request):
-    """Called when a logged-in user enters the dashboard."""
-    try:
-        payload = json.loads(request.body.decode("utf-8"))
-    except json.JSONDecodeError:
-        return JsonResponse({"ok": True})
-
-    user_email = str(payload.get("user_email", "")).strip()
-    user_name = str(payload.get("user_name", "")).strip()
-    page = str(payload.get("page", "dashboard")).strip()
-
-    try:
-        resend.api_key = os.environ.get("RESEND_API_KEY", "")
-        from django.utils import timezone
-        resend.Emails.send({
-            "from": "WolvCapital Support <support@mail.wolvcapital.com>",
-            "to": ["admin@wolvcapital.com"],
-            "subject": f"👤 User Online — {user_name or user_email}",
-            "html": f"""
-            <h2>A user just entered the dashboard</h2>
-            <p><strong>Name:</strong> {user_name or "Unknown"}</p>
-            <p><strong>Email:</strong> {user_email or "Unknown"}</p>
-            <p><strong>Page:</strong> {page}</p>
-            <p><strong>Time:</strong> {timezone.now().strftime("%Y-%m-%d %H:%M:%S UTC")}</p>
-            <a href="https://api.wolvcapital.com/admin/chat/chatsession/"
-               style="background:#2563eb;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:bold;">
-               Open Support Inbox
-            </a>
-            """,
-        })
-    except Exception as e:
-        print(f"Visitor ping email failed: {e}")
-
-    return JsonResponse({"ok": True})
 
 
 @csrf_exempt
 def manage_session(request):
-    """Close a session."""
+    if request.method == "GET":
+        sessions = ChatSession.objects.order_by("-updated_at")[:50]
+        return JsonResponse({
+            "sessions": [
+                {
+                    "session_id": s.session_id,
+                    "user_email": s.user_email,
+                    "user_name": s.user_name,
+                    "status": s.status,
+                    "human_requested_at": s.human_requested_at.isoformat() if s.human_requested_at else None,
+                    "updated_at": s.updated_at.isoformat(),
+                }
+                for s in sessions
+            ]
+        })
+    if request.method == "POST":
+        try:
+            payload = json.loads(request.body.decode("utf-8"))
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
+        action = payload.get("action")
+        session_id = payload.get("session_id")
+        if action == "close" and session_id:
+            ChatSession.objects.filter(session_id=session_id).update(status="closed")
+            return JsonResponse({"status": "closed"})
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+@csrf_exempt
+def get_messages(request, session_id: str):
+    messages = ChatMessage.objects.filter(session_id=session_id).order_by("created_at")
+    return JsonResponse({
+        "messages": [
+            {
+                "role": m.role,
+                "content": m.content,
+                "is_human_handover": m.is_human_handover,
+                "created_at": m.created_at.isoformat(),
+            }
+            for m in messages
+        ]
+    })
+
+
+@csrf_exempt
+def visitor_ping(request):
     if request.method != "POST":
-        from .models import ChatSession
-        from django.utils import timezone
-        sessions = ChatSession.objects.filter(
-            status__in=["waiting", "active"]
-        ).values("session_id", "user_email", "user_name", "status", "human_requested_at", "updated_at")
-        return JsonResponse({"sessions": list(sessions)})
+        return JsonResponse({"status": "ok"})
     try:
         payload = json.loads(request.body.decode("utf-8"))
     except json.JSONDecodeError:
-        return JsonResponse({"error": "Invalid JSON"}, status=400)
-    action = payload.get("action")
-    session_id = payload.get("session_id")
-    if action == "close" and session_id:
-        from .models import ChatSession
-        from django.utils import timezone
-        ChatSession.objects.filter(session_id=session_id).update(
-            status="closed",
-            closed_at=timezone.now()
-        )
-        return JsonResponse({"status": "closed"})
-    return JsonResponse({"error": "Invalid action"}, status=400)
+        return JsonResponse({"status": "ok"})
+    session_id = str(payload.get("session_id", "")).strip()
+    page = str(payload.get("page", "")).strip()
+    if session_id:
+        session, created = ChatSession.objects.get_or_create(session_id=session_id)
+        if page and not session.user_name:
+            pass
+        session.save(update_fields=["updated_at"])
+    return JsonResponse({"status": "ok"})

@@ -5,7 +5,7 @@ WIDGET_JS = r"""(function(){
 if(window.__wolvChat)return;
 window.__wolvChat=true;
 
-var API="https://api.wolvcapital.com/api/chat";
+var API="https://django-beige.vercel.app/api/chat";
 var SK="wolv_sid";
 var sid=localStorage.getItem(SK);
 if(!sid){sid="wv_"+Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem(SK,sid);}

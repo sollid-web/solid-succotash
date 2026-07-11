@@ -4,7 +4,7 @@ from django.views.decorators.http import require_GET
 WIDGET_JS = r"""(function(){
   if (window.__wolvChat) return;
   window.__wolvChat = true;
-  var API = "https://api.wolvcapital.com/api/chat";
+  var API = "https://django-beige.vercel.app/api/chat";
   var SS_KEY = "wolv_chat_session";
   var sid = localStorage.getItem(SS_KEY);
   if (!sid) { sid = "wv_" + Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem(SS_KEY, sid); }

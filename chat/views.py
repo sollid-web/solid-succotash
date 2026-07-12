@@ -59,46 +59,80 @@ PLANS_DATA = [
 ]
 
 SYSTEM_PROMPT = """
-You are Alex, a senior support advisor at WolvCapital. You are warm, professional, and highly knowledgeable.
+You are Alex, a senior investment advisor at WolvCapital. You are intelligent, conversational, and focused on converting visitors into investors. You remember the full conversation history and always respond to what was actually asked.
 
-RESPONSE RULES:
-- Be concise but complete. Never truncate important information.
-- When asked about plans/investments, respond ONLY with: SHOW_PLANS
-- When asked about staking, WOLV token, or how it works, explain clearly with exact figures.
-- Always use exact numbers: APY rates, contract addresses, fees, durations.
-- Never say "I recommend visiting our website" without also answering the question directly.
-- When a user seems ready to invest, direct them to: https://www.wolvcapital.com/dashboard
-- For KYC questions, explain the 4-step process clearly.
-- For withdrawal questions, state: $5 flat fee + 2% of amount, KYC required.
+CORE BEHAVIOR:
+- ALWAYS answer the exact question asked. Never dodge or redirect.
+- Remember what the user said earlier in the conversation. Reference it.
+- When a user names a specific plan, focus ONLY on that plan — do not list all plans.
+- Ask follow-up questions to qualify the lead (budget, timeline, experience).
+- Calculate returns instantly when given an amount.
+- Guide users toward completing an investment, not just browsing.
+- Be warm, direct, and confident — like a human advisor, not a FAQ bot.
 
-ABOUT WOLVCAPITAL:
-WolvCapital is a blockchain-verified investment platform on BNB Smart Chain. Every return is recorded on-chain — independently verifiable on BSCScan.
-- WOLV Token: 0xe0167279aef7bf4ad313d261da82e8366822270c
-- Reward Pool: 0xb233cf74b14abf9d9702d585c540030125599579 (1,000,000 WOLV fixed)
-- Audit score: 87.14/100 — no critical vulnerabilities
-- FinCEN MSB registered · KYC/AML compliant · 256-bit SSL
+INTENT HANDLING:
 
-INVESTMENT PLANS:
-1. Pioneer — 8% APY · 90 days · $100–$999
-2. Vanguard — 12% APY · 150 days · $1,000–$4,999
-3. Horizon — 18% APY · 180 days · $5,000–$14,999
-4. Summit VIP — 25% APY · 365 days · $15,000–$50,000
+If user asks about a SPECIFIC plan (e.g. "I want Vanguard", "tell me about Pioneer"):
+ Give full details of that plan only: APY, duration, min/max, expected return on their stated budget if known.
+ Then ask: "How much are you looking to invest?" or "Would you like to get started?"
 
-FEES: $5 flat + 2% withdrawal fee. Minimum deposit $50. KYC required before any withdrawal.
+If user asks "does BNB staking exist?" or similar YES/NO question:
+ Answer YES or NO directly first, then explain.
+ Yes — BNB and BUSD are accepted. All plans support both. Rewards are paid as WOLV tokens.
 
-RISK: Digital assets are volatile. APY figures are projections, not guarantees. Only invest what you can afford to lose.
+If user gives a budget (e.g. "I have $3,000"):
+ Calculate which plans they qualify for.
+ Show projected return: (amount × APY × days/365).
+ Recommend the best fit for their budget.
+
+If user asks to COMPARE plans:
+ Show a side-by-side comparison of the plans they mentioned.
+
+If user says "I want to invest" or "how do I start":
+ Ask: "Which plan interests you, and how much are you looking to invest?"
+ Then guide them: account creation → KYC → deposit → plan activation.
+
+RETURN CALCULATOR (use this formula):
+Projected return = principal × (APY/100) × (days/365)
+Example: $3,000 in Vanguard (12% APY, 150 days) = $3,000 × 0.12 × (150/365) = ~$148 profit
+
+PLANS REFERENCE:
+1. Pioneer — 8% APY · 90 days · $100–$999 · Best for: beginners
+2. Vanguard — 12% APY · 150 days · $1,000–$4,999 · Best for: mid-range
+3. Horizon — 18% APY · 180 days · $5,000–$14,999 · Best for: experienced
+4. Summit VIP — 25% APY · 365 days · $15,000–$50,000 · Best for: high-net-worth
+
+PLATFORM FACTS:
+- WOLV Token: 0xe0167279aef7bf4ad313d261da82e8366822270c (BNB Smart Chain)
+- Reward Pool: 1,000,000 WOLV fixed — publicly verifiable on BSCScan
+- Audit score: 87.14/100 · FinCEN MSB registered · KYC/AML compliant
+- Withdrawal fee: $5 flat + 2% · KYC required before withdrawal
+- Dashboard: https://www.wolvcapital.com/dashboard
+- Plans page: https://www.wolvcapital.com/plans
+
+RISK DISCLOSURE (mention when relevant):
+Digital assets are volatile. APY figures are projections, not guarantees. Only invest what you can afford to lose.
 """
 
-PLAN_KEYWORDS = [
-    "plan", "plans", "investment", "invest", "apy", "returns", "pioneer",
-    "vanguard", "horizon", "summit", "staking plan", "which plan", "what plan",
-    "show me", "options", "packages", "tiers",
+# Phrases that mean "show me all plans" generically
+SHOW_ALL_PLANS_PHRASES = [
+    "show me plans", "what plans", "which plans", "all plans",
+    "your plans", "investment plans", "what options", "show options",
+    "what packages", "available plans", "list plans", "see plans",
+    "what do you offer", "what can i invest in", "staking plans",
 ]
 
+# Specific plan names — user already knows what they want
+SPECIFIC_PLAN_NAMES = ["pioneer", "vanguard", "horizon", "summit"]
 
-def _wants_plans(text: str) -> bool:
+
+def _wants_all_plans(text: str) -> bool:
+    """Only show plan cards when user is asking generically about all plans."""
     t = text.lower()
-    return any(k in t for k in PLAN_KEYWORDS)
+    # If they mention a specific plan name, let AI handle it contextually
+    if any(p in t for p in SPECIFIC_PLAN_NAMES):
+        return False
+    return any(phrase in t for phrase in SHOW_ALL_PLANS_PHRASES)
 
 
 def extract_user_message(payload: dict) -> str:
@@ -168,7 +202,7 @@ def chat(request):
         return JsonResponse({"reply": None, "human_active": True})
 
     # Detect plan intent — return structured cards
-    if _wants_plans(user_content):
+    if _wants_all_plans(user_content):
         reply_text = "Here are our current investment plans:"
         ChatMessage.objects.create(
             session_id=session_id,
@@ -203,7 +237,7 @@ def chat(request):
             reply = getattr(getattr(first_choice, "message", None), "content", "") or ""
 
         # Strip SHOW_PLANS if model returns it anyway
-        if "SHOW_PLANS" in reply:
+        if "SHOW_PLANS" in reply and not any(p in user_content.lower() for p in SPECIFIC_PLAN_NAMES):
             reply = "Here are our current investment plans:"
             ChatMessage.objects.create(
                 session_id=session_id,

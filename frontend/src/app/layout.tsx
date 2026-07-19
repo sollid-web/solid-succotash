@@ -241,8 +241,20 @@ export default async function RootLayout({
 
           <Analytics />
           <Script
-            src="https://investor-chat.lovable.app/widget.js"
-            data-site="wolvcapital"
+            id="neural-support-config"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{ __html: `
+              window.NeuralSupportConfig = {
+                convexUrl: "https://quirky-spider-81.convex.site",
+                siteUrl: "https://wolvcapital.com",
+                primaryColor: "#2A52BE",
+                greeting: "Hi! How can I help you today?",
+                agentName: "Alex",
+              };
+            `}}
+          />
+          <Script
+            src="https://quirky-spider-81.convex.site/widget.js"
             strategy="afterInteractive"
           />
         </SegmentProvider>

@@ -254,7 +254,7 @@ export default async function RootLayout({
             `}}
           />
           <Script
-            src="https://neural-ai-support.vercel.app/widget.js"
+            src="/widget.js"
             strategy="afterInteractive"
           />
         </SegmentProvider>

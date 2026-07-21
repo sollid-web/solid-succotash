@@ -242,7 +242,7 @@ export default async function RootLayout({
           <Analytics />
           <Script
             id="neural-support-config"
-            strategy="afterInteractive"
+            strategy="beforeInteractive"
             dangerouslySetInnerHTML={{ __html: `
               window.NeuralSupportConfig = {
                 convexUrl: "https://quirky-spider-81.convex.cloud",

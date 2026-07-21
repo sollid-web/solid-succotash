@@ -245,7 +245,7 @@ export default async function RootLayout({
             strategy="afterInteractive"
             dangerouslySetInnerHTML={{ __html: `
               window.NeuralSupportConfig = {
-                convexUrl: "https://coordinated-chipmunk-111.convex.cloud",
+                convexUrl: "https://quirky-spider-81.convex.cloud",
                 siteUrl: "https://wolvcapital.com",
                 primaryColor: "#2A52BE",
                 greeting: "Hi! How can I help you today?",
@@ -254,7 +254,7 @@ export default async function RootLayout({
             `}}
           />
           <Script
-            src="https://coordinated-chipmunk-111.convex.cloud/widget.js"
+            src="https://neural-ai-support.vercel.app/widget.js"
             strategy="afterInteractive"
           />
         </SegmentProvider>

@@ -4,19 +4,14 @@
   var config = window.NeuralSupportConfig || {};
 
   // Auto-fix: force .convex.cloud — /api/query and /api/mutation only work on .convex.cloud, not .convex.site
-  var rawUrl = (config.convexUrl || '').replace(/\\/+$/, '');
-  var CONVEX_URL = rawUrl.replace('.convex.site', '.convex.cloud');
+  var CONVEX_URL = (config.convexUrl || 'https://quirky-spider-81.convex.cloud').replace(/\/+$/, '').replace('.convex.site', '.convex.cloud');
 
-  var SITE_URL = config.siteUrl || window.location.origin;
-  var PRIMARY = config.primaryColor || '#6366f1';
-  var GREETING = config.greeting || "Hi! How can I help you today? 👋";
-  var AGENT_NAME = config.agentName || 'Support';
+  var SITE_URL = config.siteUrl || 'https://wolvcapital.com';
+  var PRIMARY = config.primaryColor || '#2A52BE';
+  var GREETING = config.greeting || 'Hi! How can I help you today?';
+  var AGENT_NAME = config.agentName || 'Alex';
   var POSITION = config.position || 'right'; // 'right' | 'left'
 
-  if (!CONVEX_URL) {
-    console.warn('[NeuralSupport] convexUrl not configured');
-    return;
-  }
 
   // ── Session ID ──────────────────────────────────────────────────────────────
   var SESSION_KEY = 'ns_session_' + SITE_URL;

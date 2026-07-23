@@ -245,7 +245,7 @@ export default async function RootLayout({
             strategy="beforeInteractive"
             dangerouslySetInnerHTML={{ __html: `
               window.NeuralSupportConfig = {
-                convexUrl: "https://quirky-spider-81.convex.cloud",
+                convexUrl: "https://ceaseless-crocodile-860.convex.cloud",
                 siteUrl: "https://wolvcapital.com",
                 primaryColor: "#2A52BE",
                 greeting: "Hi! How can I help you today?",

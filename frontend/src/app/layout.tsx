@@ -126,8 +126,8 @@ export default async function RootLayout({
                   description: 'U.S. regulated digital asset investment platform offering BNB Smart Chain staking with 8%–25% APY.',
                   aggregateRating: {
                     '@type': 'AggregateRating',
-                    ratingValue: '4.2',
-                    reviewCount: '10',
+                    ratingValue: '4.5',
+                    reviewCount: '12',
                     bestRating: '5',
                     worstRating: '1',
                   },
@@ -163,6 +163,7 @@ export default async function RootLayout({
                   },
                   sameAs: [
                     'https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c',
+                    'https://www.trustpilot.com/review/wolvcapital.com',
                   ],
                 },
                 {

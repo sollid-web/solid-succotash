@@ -15,6 +15,7 @@ export default function NavBar() {
   const navItems = [
     { href: '/', labelKey: 'nav.home' },
     { href: '/wolv-token', label: 'WOLV Token' },
+    { href: '/presale', label: 'Presale' },
     { href: '/tokenomics', label: 'Tokenomics' },
     { href: '/roadmap', label: 'Roadmap' },
     { href: '/whitepaper', label: 'Whitepaper' },
@@ -44,7 +45,7 @@ export default function NavBar() {
                   href={item.href}
                   className={cn(
                     'text-sm font-medium transition-colors duration-200 tracking-tighter',
-                    item.label === 'WOLV Token'
+                    (item.label === 'WOLV Token' || item.label === 'Presale')
                       ? 'text-[#00a896] hover:text-[#00c9b1] font-semibold'
                       : pathname === item.href
                       ? 'text-white border-b-2 border-[#00a896] pb-1'
@@ -52,7 +53,7 @@ export default function NavBar() {
                   )}
                 >
                   {item.label || t(item.labelKey!)}
-                  {item.label === 'WOLV Token' && (
+                  {(item.label === 'WOLV Token' || item.label === 'Presale') && (
                     <span style={{
                       marginLeft: '6px', fontSize: '9px', background: '#00a896',
                       color: '#fff', padding: '1px 6px', borderRadius: '99px',
@@ -123,32 +124,32 @@ export default function NavBar() {
                 onClick={() => setMobileOpen(false)}
                 className={cn(
                   'flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-colors',
-                  item.label === 'WOLV Token'
+                  (item.label === 'WOLV Token' || item.label === 'Presale')
                     ? 'text-[#00a896] font-semibold'
                     : pathname === item.href
                     ? 'text-[#00a896] font-semibold'
                     : 'text-[rgba(255,255,255,0.75)] hover:text-white'
                 )}
                 style={
-                  item.label === 'WOLV Token'
+                  (item.label === 'WOLV Token' || item.label === 'Presale')
                     ? { background: 'rgba(0,168,150,0.08)', border: '1px solid rgba(0,168,150,0.2)' }
                     : pathname === item.href
                     ? { background: 'rgba(42,82,190,0.12)', border: '1px solid rgba(42,82,190,0.25)' }
                     : {}
                 }
                 onMouseEnter={e => {
-                  if (item.label !== 'WOLV Token' && pathname !== item.href) {
+                  if (item.label !== 'WOLV Token' && item.label !== 'Presale' && pathname !== item.href) {
                     (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.05)'
                   }
                 }}
                 onMouseLeave={e => {
-                  if (item.label !== 'WOLV Token' && pathname !== item.href) {
+                  if (item.label !== 'WOLV Token' && item.label !== 'Presale' && pathname !== item.href) {
                     (e.currentTarget as HTMLElement).style.background = 'transparent'
                   }
                 }}
               >
                 <span>{item.label || t(item.labelKey!)}</span>
-                {item.label === 'WOLV Token' && (
+                {(item.label === 'WOLV Token' || item.label === 'Presale') && (
                   <span style={{
                     fontSize: '9px', background: '#00a896', color: '#fff',
                     padding: '2px 8px', borderRadius: '99px', fontWeight: 700, letterSpacing: '0.5px',

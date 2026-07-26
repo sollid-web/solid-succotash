@@ -23,6 +23,10 @@ const PAGE_COPY: Record<string, { title: string; description: string }> = {
     title: 'Whitepaper — WolvCapital',
     description: 'Technical architecture, tokenomics model, and governance framework in full detail.',
   },
+  presale: {
+    title: 'WOLV Presale — WolvCapital',
+    description: 'Buy WOLV at $0.50 in the public presale. Verified contract, fixed hard cap, instant delivery.',
+  },
 }
 
 export function generateOgMetadata(pageKey: string, overrides: Partial<Metadata> = {}): Metadata {

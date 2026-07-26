@@ -19,6 +19,11 @@ const CONTRACTS = [
     address: "0x7cd22f3c08b4195225da7d043cbe00da118d31ec",
     note: "Chainlink price feeds · 4 staking tiers · Verified",
   },
+  {
+    label: "Presale Contract",
+    address: "0x04b5c5e204e812c176ce632f3781ea88c500497c",
+    note: "$0.50/WOLV · $50,000 hard cap · Chainlink BNB/USD · Verified",
+  },
 ];
 
 const SECTIONS = [
@@ -95,8 +100,9 @@ const SECTIONS = [
     title: "Tokenomics",
     content: [
       "Total Supply: 1,000,000,000 WOLV (fixed, immutable). No additional tokens can ever be minted. The contract contains no mint function.",
-      "Investor Rewards: 60% — 600,000,000 WOLV. Distributed to investors via staking rewards and profit distributions over the platform lifetime.", "Treasury Reserve: 20% — 200,000,000 WOLV. Held in treasury for operational continuity, future reward pool top-ups, and platform development.", "Liquidity Reserve: 10% — 100,000,000 WOLV. Reserved for future DEX liquidity provision on PancakeSwap to enable open market trading.", "Team & Development: 7% — 70,000,000 WOLV. Allocated to the founding team and ongoing development. Subject to 12-month vesting schedule.", "Marketing & Growth: 3% — 30,000,000 WOLV. Reserved for partnerships, listings, community growth, and platform promotion.",
-      "No tokens are allocated to founders, team, advisors, or investors for any purpose other than the categories above. WOLV had no ICO, no presale, and no private sale. All tokens in circulation represent earned investor rewards.",
+      "Investor Rewards: 60% — 600,000,000 WOLV. Distributed to investors via staking rewards and profit distributions over the platform lifetime.", "Treasury Reserve: 20% — 200,000,000 WOLV. Held in treasury for operational continuity, future reward pool top-ups, and platform development.", "Liquidity Reserve: 10% — 100,000,000 WOLV. Reserved for future DEX liquidity provision on PancakeSwap to enable open market trading. A portion of this allocation funds the public presale described below, ahead of listing.", "Team & Development: 7% — 70,000,000 WOLV. Allocated to the founding team and ongoing development. Subject to 12-month vesting schedule.", "Marketing & Growth: 3% — 30,000,000 WOLV. Reserved for partnerships, listings, community growth, and platform promotion.",
+      "No tokens are allocated to founders, team, advisors, or investors for any purpose other than the categories above. All tokens in circulation represent either earned investor rewards or tokens purchased in the public presale below — none are pre-mined to founders or distributed through private allocations.",
+      "Presale: WolvCapital runs a public presale of WOLV sourced from the Liquidity Reserve allocation, ahead of DEX listing. The presale sells WOLV for BNB at a fixed price of $0.50 per WOLV (converted via a Chainlink BNB/USD price feed), with a $50,000 hard cap on total funds raised and immediate on-chain token delivery to the buyer's wallet — there is no vesting or lock-up on tokens purchased. The presale contract is treasury-controlled: the treasury may pause the sale, withdraws raised BNB, and reclaims any unsold WOLV once the sale window closes. Contract: 0x04b5c5e204e812c176ce632f3781ea88c500497c — verified on BSCScan and Sourcify.",
     ],
   },
   {

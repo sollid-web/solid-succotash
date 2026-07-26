@@ -43,6 +43,14 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
               </span>
             </div>
 
+            {/* Presale badge */}
+            <Link href="/presale" className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/15 border border-orange-400/40 rounded-full hover:bg-orange-500/25 transition">
+              <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+              <span className="text-[12px] font-semibold text-orange-300">
+                🔥 WOLV Presale live · $0.50/WOLV · Join now →
+              </span>
+            </Link>
+
             {/* Staking APY pills */}
             <div className="flex flex-wrap gap-2">
               {[
@@ -72,6 +80,12 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
                 className="inline-flex min-h-[44px] items-center justify-center rounded-[7px] border-2 border-[#2A52BE] bg-white px-8 py-3.5 text-sm font-semibold text-[#1E3A8A] transition hover:bg-blue-50"
               >
                 {t('hero.button.openAccount')}
+              </Link>
+              <Link
+                href="/presale"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-[7px] bg-gradient-to-r from-orange-500 to-amber-600 px-8 py-3.5 text-sm font-bold text-white transition hover:brightness-110"
+              >
+                Join Presale →
               </Link>
             </div>
 

@@ -39,6 +39,12 @@ const PAGES: Record<string, { title: string; subtitle: string; accent: string; t
     accent: '#60a5fa',
     tag: 'Technical Documentation',
   },
+  presale: {
+    title: 'WOLV Presale',
+    subtitle: 'Buy WOLV at $0.50 in the public presale. Verified contract, fixed hard cap, instant delivery.',
+    accent: '#f97316',
+    tag: 'LIVE · Presale',
+  },
 }
 
 // ── Staking tier configs ──────────────────────────────────────────────────────

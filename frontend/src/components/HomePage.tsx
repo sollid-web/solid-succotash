@@ -1,6 +1,7 @@
 'use client'
 import { useRef } from 'react'
 import HeroSection from '@/components/sections/HeroSection'
+import PresaleHeroBanner from '@/components/sections/PresaleHeroBanner'
 import TrustpilotWidget from '@/components/TrustpilotWidget'
 import RiskBar from '@/components/sections/RiskBar'
 import HowItWorksSection from '@/components/sections/HowItWorksSection'
@@ -18,6 +19,7 @@ export default function HomePage() {
   return (
     <div>
       <HeroSection onPlansClick={handlePlansClick} />
+      <PresaleHeroBanner />
       <TrustpilotWidget />
       <RiskBar />
       <HowItWorksSection />

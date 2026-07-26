@@ -1,6 +1,6 @@
 ---
 title: "Why We Built WolvCapital (and What We Refuse to Be)"
-date: "2026-03-31"
+publishedAt: "2026-03-31"
 description: "WolvCapital's founding philosophy and core principles"
 author: "WolvCapital"
 ---

@@ -254,7 +254,7 @@ export default async function RootLayout({
             `}}
           />
           <Script
-            src="/widget.js"
+            src="https://ceaseless-crocodile-860.convex.site/widget.js"
             strategy="afterInteractive"
           />
         </SegmentProvider>

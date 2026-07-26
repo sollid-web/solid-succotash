@@ -7,8 +7,8 @@ import Link from "next/link";
 
 const CONTRACTS = {
   token:   "0xe0167279aef7bf4ad313d261da82e8366822270c",
-  pool:    "0xb233cf74b14abf9d9702d585c540030125599579",
-  staking: "0x4b62efee5695ed55cd362a0b818f4c5f9694322b",
+  pool:    "0x7310f3e07627ce98246973e068bf2ff294f84e5f",
+  staking: "0x7cd22f3c08b4195225da7d043cbe00da118d31ec",
 };
 
 const DISTRIBUTION = [
@@ -198,7 +198,7 @@ export default function TokenomicsPage() {
           <div className="flex flex-col gap-4 mb-10">
             {[
               { name: "WOLV Token",       address: CONTRACTS.token,   desc: "Fixed supply · No mint · BEP-20",     url: `https://bscscan.com/address/${CONTRACTS.token}#code` },
-              { name: "Reward Pool",      address: CONTRACTS.pool,    desc: "48hr timelock · Treasury funded",      url: `https://bscscan.com/address/${CONTRACTS.pool}#code` },
+              { name: "Reward Pool",      address: CONTRACTS.pool,    desc: "48hr timelock · Treasury funded",      url: `https://bscscan.com/token/${CONTRACTS.token}?a=${CONTRACTS.pool}` },
               { name: "Staking Contract", address: CONTRACTS.staking, desc: "Chainlink oracle · 4 staking plans",  url: `https://bscscan.com/address/${CONTRACTS.staking}#code` },
             ].map(c => (
               <div key={c.name} className="bg-white border border-[#bfdbfe] rounded-xl px-6 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

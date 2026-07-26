@@ -3,8 +3,8 @@ import PublicLayout from '@/components/PublicLayout'
 import { generateOgMetadata } from '@/lib/og-metadata'
 
 const WOLV_CONTRACT = '0xe0167279aef7bf4ad313d261da82e8366822270c'
-const POOL_CONTRACT  = '0xb233cf74b14abf9d9702d585c540030125599579'
-const STAKING_CONTRACT = '0x4b62efee5695ed55cd362a0b818f4c5f9694322b'
+const POOL_CONTRACT  = '0x7310f3e07627ce98246973e068bf2ff294f84e5f'
+const STAKING_CONTRACT = '0x7cd22f3c08b4195225da7d043cbe00da118d31ec'
 
 export const metadata = {
 title: 'WOLV Token — The Native Asset of WolvCapital',
@@ -258,7 +258,7 @@ export default function WolvTokenPage() {
                       className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 bg-black/20 rounded-lg">
                       <span className="text-white font-medium mb-2 sm:mb-0">{contract.name}</span>
                       <a
-                        href={`https://bscscan.com/address/${contract.address}#code`}
+                        href={contract.name === 'Reward Pool Contract' ? `https://bscscan.com/token/${WOLV_CONTRACT}?a=${contract.address}` : `https://bscscan.com/address/${contract.address}#code`}
                         target="_blank" rel="noopener noreferrer"
                         className="text-teal-400 hover:text-teal-300 font-mono text-sm break-all"
                       >

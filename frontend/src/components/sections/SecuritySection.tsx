@@ -61,8 +61,8 @@ const STANDARDS = [
 
 const CONTRACTS = [
   { name: 'WOLV Token',       address: '0xe0167279aef7bf4ad313d261da82e8366822270c', label: 'Fixed supply · No mint · BEP20' },
-  { name: 'Reward Pool',      address: '0xb233cf74b14abf9d9702d585c540030125599579', label: '48hr timelock · Treasury funded' },
-  { name: 'Staking Contract', address: '0x4b62efee5695ed55cd362a0b818f4c5f9694322b', label: 'BNB & BUSD · Chainlink oracle' },
+  { name: 'Reward Pool',      address: '0x7310f3e07627ce98246973e068bf2ff294f84e5f', label: '48hr timelock · Treasury funded' },
+  { name: 'Staking Contract', address: '0x7cd22f3c08b4195225da7d043cbe00da118d31ec', label: 'BNB & BUSD · Chainlink oracle' },
 ]
 
 export default function SecuritySection() {
@@ -128,7 +128,7 @@ export default function SecuritySection() {
                   <div className="text-[#64748B] text-xs">{c.label}</div>
                 </div>
                 <a
-                  href={`https://bscscan.com/address/${c.address}#code`}
+                  href={c.name === 'Reward Pool' ? `https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c?a=${c.address}` : `https://bscscan.com/address/${c.address}#code`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[11px] font-mono text-[#00a896] hover:underline break-all"

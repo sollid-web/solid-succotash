@@ -17,7 +17,7 @@ const PAGES: Record<string, { title: string; subtitle: string; accent: string; t
   },
   'wolv-token': {
     title: 'WOLV Token',
-    subtitle: 'The core utility token powering the WolvCapital ecosystem. 1 WOLV = $1.00 USD.',
+    subtitle: 'The core utility token powering the WolvCapital ecosystem. Fixed supply, no mint, no pause.',
     accent: BASE_COLOR,
     tag: 'LIVE · BNB Chain',
   },
@@ -119,7 +119,7 @@ function PageImage({ page }: { page: typeof PAGES[string] }) {
             { label: 'Chain', value: 'BNB Smart Chain' },
             { label: 'Max Supply', value: '1,000,000,000' },
             { label: 'APY up to', value: '25%' },
-            { label: 'Peg', value: '$1.00 USD' },
+            { label: 'Mint', value: 'None · Fixed Supply' },
           ].map(s => (
             <div key={s.label} style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
               <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', textTransform: 'uppercase', letterSpacing: '1px' }}>{s.label}</span>

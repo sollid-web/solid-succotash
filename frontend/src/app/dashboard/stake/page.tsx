@@ -5,8 +5,8 @@ import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { parseUnits, formatUnits } from 'viem'
 
 // ── Contract addresses ────────────────────────────────────────────────────────
-const STAKING_ADDRESS = '0x4b62efee5695ed55cd362a0b818f4c5f9694322b' as const
-const POOL_ADDRESS    = '0xb233cf74b14abf9d9702d585c540030125599579' as const
+const STAKING_ADDRESS = '0x7cd22f3c08b4195225da7d043cbe00da118d31ec' as const
+const POOL_ADDRESS    = '0x7310f3e07627ce98246973e068bf2ff294f84e5f' as const
 const WOLV_ADDRESS    = '0xe0167279aef7bf4ad313d261da82e8366822270c' as const
 const BUSD_ADDRESS    = '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56' as const
 

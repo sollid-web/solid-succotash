@@ -15,7 +15,7 @@ export interface PostMeta {
   title: string
   description: string
   publishedAt: string
-  updatedAt?: string
+  updatedAt: string
   coverImage?: string
   coverImageAlt?: string
 }
@@ -50,7 +50,7 @@ export function getAllPostsMeta(): PostMeta[] {
         title: data.title || slug,
         description: data.description || '',
         publishedAt: data.publishedAt || '',
-        updatedAt: data.updatedAt || undefined,
+        updatedAt: data.updatedAt || data.publishedAt || '',
         coverImage: data.coverImage || undefined,
         coverImageAlt: data.coverImageAlt || undefined,
       } as PostMeta
@@ -77,7 +77,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     title: data.title || slug,
     description: data.description || '',
     publishedAt: data.publishedAt || '',
-    updatedAt: data.updatedAt || undefined,
+    updatedAt: data.updatedAt || data.publishedAt || '',
     coverImage: data.coverImage || undefined,
     coverImageAlt: data.coverImageAlt || undefined,
     contentHtml: processed.toString(),

@@ -2,9 +2,13 @@ export function getApiBaseUrl(): string {
   return process.env.NEXT_PUBLIC_API_URL || ''
 }
 
+export function buildApiUrl(path: string): string {
+  if (path.startsWith('http')) return path
+  return `${getApiBaseUrl()}${path}`
+}
+
 export async function apiFetch(path: string, options: RequestInit = {}): Promise<Response> {
-  const base = path.startsWith('http') ? '' : getApiBaseUrl()
-  const url = path.startsWith('http') ? path : `${base}${path}`
+  const url = buildApiUrl(path)
 
   const headers = new Headers(options.headers || {})
   if (!headers.has('Content-Type') && typeof options.body === 'string') {

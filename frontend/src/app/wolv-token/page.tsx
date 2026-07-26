@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import PublicLayout from '@/components/PublicLayout'
 import { generateOgMetadata } from '@/lib/og-metadata'
+import WolvPriceStat from '@/components/WolvPriceStat'
 
 const WOLV_CONTRACT = '0xe0167279aef7bf4ad313d261da82e8366822270c'
 const POOL_CONTRACT  = '0x7310f3e07627ce98246973e068bf2ff294f84e5f'
@@ -141,7 +142,6 @@ export default function WolvTokenPage() {
                 { label: 'Total Supply',    value: '1,000,000,000', sub: 'WOLV — Fixed Forever' },
                 { label: 'Token Standard',  value: 'BEP-20',        sub: 'BNB Smart Chain' },
                 { label: 'Reward Pool',     value: '600,000,000',   sub: 'WOLV (60% Allocated)' },
-                { label: 'Current Price',   value: '$1.00',         sub: 'Pre-listing reference' },
               ].map((stat, i) => (
                 <div key={i} className="px-6 py-6 text-center"
                   style={{ background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(10px)' }}>
@@ -150,6 +150,7 @@ export default function WolvTokenPage() {
                   <div className="text-xs text-gray-500">{stat.sub}</div>
                 </div>
               ))}
+              <WolvPriceStat contractAddress={WOLV_CONTRACT} />
             </div>
 
             {/* Contract address pill */}

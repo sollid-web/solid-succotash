@@ -33,7 +33,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     ...blogPosts.map((post) => ({
       url: `${baseUrl}/blog/${post.slug}`,
-      lastModified: new Date(post.updatedAt).toISOString(),
+      lastModified: post.updatedAt && !isNaN(new Date(post.updatedAt).getTime()) ? new Date(post.updatedAt).toISOString() : now,
       changeFrequency: 'yearly' as const,
       priority: 0.5,
     })),

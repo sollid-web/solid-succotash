@@ -1,0 +1,23 @@
+Subject: You're earning — here's how to earn more
+
+Hey there,
+
+Once you have a fixed-yield plan running, you'll start accumulating regular WOLV tokens on your user dashboard. But what do you do with those tokens? 
+
+You can let them sit, you can move them to an external wallet, or you can utilize our Direct Staking Dashboard to double-dip on your allocations.
+
+Direct staking allows you to take your accumulated WOLV tokens (or extra BNB) and lock them directly into our dedicated token liquidity contracts. 
+
+For example: An investor runs a $1,000 Horizon plan, earning steady fixed distributions. They take their daily WOLV payouts and route them immediately into the direct staking protocol. They also stake $200 BNB separately. They receive ~$90 APY gain at maturity plus daily WOLV rewards on the $200 staking position — two separate payouts, from the same account, running in parallel.
+
+The staking dashboard is live in your account. You don't need to wait for your investment plan to mature to access it.
+
+Open the Staking Dashboard: {{ stake_url }}
+
+Starts at $50. WOLV rewards begin accumulating the same day.
+
+---
+Risk disclosure: Both investment plans and direct staking carry risk including potential loss of principal. Returns are not guaranteed. WOLV token values fluctuate with market conditions. Full disclosure: https://wolvcapital.com/risk-disclosure
+
+Plans | WOLV Token | FAQ | Contact
+© 2026 WolvCapital, Inc.

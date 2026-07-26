@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>We put your profits on the blockchain</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e1a;font-family:'DM Sans',Arial,sans-serif;color:#e8eaf0;-webkit-font-smoothing:antialiased}
+.wrap{max-width:620px;margin:0 auto;background:#0a0e1a}
+.hdr{background:#0d1226;padding:22px 36px;border-bottom:1px solid rgba(99,179,237,.12)}
+.hdr-inner{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:34px;height:34px;background:#3b82f6;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#fff;line-height:1}
+.logo-text{font-family:'Playfair Display',serif;font-size:19px;font-weight:600;color:#f0f4ff}
+.badge{font-size:11px;color:#63b3ed;letter-spacing:.5px;text-transform:uppercase}
+.hero{padding:48px 36px 40px;border-bottom:1px solid rgba(255,255,255,.05)}
+.hero h1{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:#f0f4ff;line-height:1.2;letter-spacing:-.5px;margin-bottom:16px}
+.hero h1 em{color:#63b3ed;font-style:normal}
+.hero-sub{font-size:16px;color:#94a3b8;line-height:1.7;font-weight:300}
+.body{padding:36px 36px 0}
+.greet{font-size:16px;color:#94a3b8;margin-bottom:22px}
+.greet strong{color:#e8eaf0;font-weight:500}
+.p{font-size:15px;color:#94a3b8;line-height:1.8;margin-bottom:20px;font-weight:300}
+.p strong{color:#e8eaf0;font-weight:500}
+.chain-box{background:#0f1729;border:1px solid rgba(99,179,237,.15);border-radius:12px;padding:24px;margin:28px 0}
+.chain-title{font-size:12px;color:#63b3ed;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px}
+.chain-row{margin-bottom:14px}
+.chain-row:last-child{margin-bottom:0}
+.chain-label{font-size:12px;color:#64748b;margin-bottom:4px}
+.chain-val{font-family:'DM Mono',monospace;font-size:12px;color:#94a3b8;word-break:break-all;background:rgba(255,255,255,.03);padding:8px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.05)}
+.chain-val a{color:#63b3ed;text-decoration:none}
+.proof-row{display:flex;align-items:flex-start;gap:16px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.proof-row:last-child{border-bottom:none}
+.proof-num{width:28px;height:28px;background:rgba(99,179,237,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#63b3ed;flex-shrink:0;margin-top:2px}
+.proof-body{}
+.proof-title{font-size:14px;font-weight:500;color:#e8eaf0;margin-bottom:3px}
+.proof-desc{font-size:13px;color:#64748b;line-height:1.55}
+.cta-wrap{padding:36px 36px;text-align:center}
+.cta-btn{display:inline-block;background:#3b82f6;color:#fff;text-decoration:none;font-size:15px;font-weight:600;padding:16px 44px;border-radius:8px;letter-spacing:.1px}
+.cta-sub{font-size:13px;color:#475569;margin-top:12px}
+.disc{margin:0 36px 24px;padding:14px 18px;background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.1);border-radius:8px}
+.disc p{font-size:11px;color:#64748b;line-height:1.6}
+.ftr{padding:28px 36px;border-top:1px solid rgba(255,255,255,.06);text-align:center}
+.ftr-links{margin-bottom:12px}
+.ftr-links a{font-size:12px;color:#475569;text-decoration:none;margin:0 8px}
+.ftr-copy{font-size:11px;color:#334155}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="hdr-inner">
+      <a class="logo" href="https://wolvcapital.com">
+        <div class="logo-mark">W</div>
+        <span class="logo-text">WolvCapital</span>
+      </a>
+      <span class="badge">Day 02</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>We don't just say you earned it.<br><em>We prove it.</em></h1>
+    <p class="hero-sub">Your profits aren't a number in our database. They're WOLV tokens on BNB Smart Chain — permanently recorded, independently verifiable by anyone with a browser.</p>
+  </div>
+
+  <div class="body">
+    <p class="greet">Hi <strong>{{ first_name }}</strong>,</p>
+
+    <p class="p">Most investment platforms ask you to trust a dashboard. We think that's not enough. Every reward WolvCapital distributes is a real on-chain token transfer — meaning the proof lives on a public blockchain, not in a spreadsheet we control.</p>
+
+    <div class="chain-box">
+      <div class="chain-title">WOLV Token · Live on BNB Smart Chain</div>
+      <div class="chain-row">
+        <div class="chain-label">Contract address</div>
+        <div class="chain-val"><a href="https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c" target="_blank">0xe0167279aef7bf4ad313d261da82e8366822270c</a></div>
+      </div>
+      <div class="chain-row">
+        <div class="chain-label">Reward pool address</div>
+        <div class="chain-val"><a href="https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c?a=0xb233cf74b14abf9d9702d585c540030125599579" target="_blank">0xb233cf74b14abf9d9702d585c540030125599579</a></div>
+      </div>
+      <div class="chain-row">
+        <div class="chain-label">Total supply</div>
+        <div class="chain-val">1,000,000,000 WOLV (fixed — no minting)</div>
+      </div>
+      <div class="chain-row">
+        <div class="chain-label">Reward pool allocation</div>
+        <div class="chain-val">1,000,000 WOLV (publicly verifiable)</div>
+      </div>
+    </div>
+
+    <p class="p">Click either address above. BSCScan will show you every token transfer in real time — including rewards paid to investors. <strong>This is what transparent returns look like.</strong></p>
+
+    <div style="margin:28px 0">
+      <div class="proof-row">
+        <div class="proof-num">1</div>
+        <div class="proof-body">
+          <div class="proof-title">You stake BNB or BUSD</div>
+          <div class="proof-desc">Choose a plan, complete KYC, deposit. Your position is recorded on-chain immediately.</div>
+        </div>
+      </div>
+      <div class="proof-row">
+        <div class="proof-num">2</div>
+        <div class="proof-body">
+          <div class="proof-title">WOLV rewards accumulate daily</div>
+          <div class="proof-desc">Your dashboard shows real-time WOLV balance. Each increment is a real token transfer from the reward pool.</div>
+        </div>
+      </div>
+      <div class="proof-row">
+        <div class="proof-num">3</div>
+        <div class="proof-body">
+          <div class="proof-title">Claim to your wallet anytime</div>
+          <div class="proof-desc">Connect MetaMask or Trust Wallet to transfer your WOLV to your own address. You own it outright.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-wrap">
+    <a class="cta-btn" href="{{ bscscan_url }}">Verify the WOLV Contract on BSCScan →</a>
+    <p class="cta-sub">No account needed. Takes 30 seconds. See the proof before you invest.</p>
+  </div>
+
+  <div class="disc">
+    <p><strong>Risk disclosure:</strong> Staking positions carry risk including potential loss of principal. Digital assets are volatile. Past performance does not guarantee future rewards. <a href="https://wolvcapital.com/risk-disclosure" style="color:#63b3ed">Full disclosure →</a></p>
+  </div>
+
+  <div class="ftr">
+    <div class="ftr-links">
+      <a href="https://wolvcapital.com/plans">Plans</a>
+      <a href="https://wolvcapital.com/wolv-token">WOLV Token</a>
+      <a href="https://wolvcapital.com/faq">FAQ</a>
+      <a href="https://wolvcapital.com/contact">Contact</a>
+    </div>
+    <div class="ftr-copy">© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy" style="color:#334155;text-decoration:none">Privacy</a> · <a href="https://wolvcapital.com/unsubscribe" style="color:#334155;text-decoration:none">Unsubscribe</a></div>
+  </div>
+</div>
+</body>
+</html>

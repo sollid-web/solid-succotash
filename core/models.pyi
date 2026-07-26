@@ -1,0 +1,96 @@
+from datetime import date, datetime
+
+from django.contrib.auth.models import User
+from django.db import models
+
+
+class SupportRequest(models.Model):
+    user: User | None
+    full_name: str
+    contact_email: str
+    topic: str
+    source_url: str
+    message: str
+    status: str
+    admin_notes: str
+    handled_by: User | None
+    responded_at: datetime | None
+    ip_address: str | None
+    user_agent: str
+    created_at: datetime
+    updated_at: datetime
+
+
+class Agreement(models.Model):
+    title: str
+    slug: str
+    version: str
+    body: str
+    effective_date: datetime
+    is_active: bool
+    created_at: datetime
+    updated_at: datetime
+
+
+class UserAgreementAcceptance(models.Model):
+    user: User
+    agreement: Agreement
+    accepted_at: datetime
+    ip_address: str | None
+    user_agent: str
+    agreement_hash: str
+    agreement_version: str
+
+
+class PlatformCertificate(models.Model):
+    title: str
+    certificate_id: str
+    issue_date: date
+    jurisdiction: str
+    issuing_authority: str
+    verification_url: str
+    authority_seal_url: str
+    signature_1_url: str
+    signature_2_url: str
+    is_active: bool
+    created_at: datetime
+    updated_at: datetime
+
+
+class EmailInbox(models.Model):
+    message_id: str
+    subject: str
+    from_email: str
+    from_name: str
+    to_email: str
+    cc: str
+    bcc: str
+    reply_to: str
+    body_text: str
+    body_html: str
+    has_attachments: bool
+    attachment_info: dict
+    status: str
+    priority: str
+    is_starred: bool
+    labels: str
+    folder: str
+    assigned_to: User | None
+    read_at: datetime | None
+    replied_at: datetime | None
+    received_at: datetime
+    ip_address: str | None
+    created_at: datetime
+    updated_at: datetime
+    raw_headers: dict
+    raw_email: str
+
+
+class EmailTemplate(models.Model):
+    name: str
+    subject: str
+    body: str
+    category: str
+    is_active: bool
+    created_at: datetime
+    updated_at: datetime

@@ -1,0 +1,58 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Transaction Submitted - {{ brand_name }}{% endblock %}
+
+{% block content %}
+<h2>📋 Transaction Submitted</h2>
+
+<p>Dear {{ user.first_name|default:user.email }},</p>
+
+<p>Your {{ transaction.get_transaction_type_display|lower }} request has been submitted successfully and is now under review.</p>
+
+<div class="info-box">
+    <h3>Transaction Under Review</h3>
+    <p>Our admin team will review your request and process it within 24-48 hours.</p>
+</div>
+
+<table class="details-table">
+    <tr>
+        <td>Transaction ID:</td>
+        <td>{{ transaction.id }}</td>
+    </tr>
+    <tr>
+        <td>Type:</td>
+        <td>{{ transaction.get_transaction_type_display }}</td>
+    </tr>
+    <tr>
+        <td>Amount:</td>
+        <td>${{ transaction.amount }}</td>
+    </tr>
+    <tr>
+        <td>Payment Method:</td>
+        <td>{{ transaction.get_payment_method_display }}</td>
+    </tr>
+    <tr>
+        <td>Reference:</td>
+        <td>{{ transaction.reference }}</td>
+    </tr>
+    <tr>
+        <td>Status:</td>
+        <td><strong style="color: #F59E0B;">Pending Review</strong></td>
+    </tr>
+    <tr>
+        <td>Submitted:</td>
+        <td>{{ transaction.created_at|date:"F d, Y \a\t g:i A" }}</td>
+    </tr>
+</table>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}{{ dashboard_url }}" class="btn">View Dashboard</a>
+</div>
+
+<p>You'll receive another notification once your transaction has been reviewed.</p>
+
+<p>Thank you for using {{ brand_name }}!</p>
+
+<p>Best regards,<br>
+The {{ brand_name }} Team</p>
+{% endblock %}

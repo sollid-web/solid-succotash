@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Your money should work harder than you do</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e1a;font-family:'DM Sans',Arial,sans-serif;color:#e8eaf0;-webkit-font-smoothing:antialiased}
+.wrap{max-width:620px;margin:0 auto;background:#0a0e1a}
+.hdr{background:#0d1226;padding:22px 36px;border-bottom:1px solid rgba(99,179,237,.12)}
+.hdr-inner{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:34px;height:34px;background:#3b82f6;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#fff;line-height:1}
+.logo-text{font-family:'Playfair Display',serif;font-size:19px;font-weight:600;color:#f0f4ff}
+.badge{font-size:11px;color:#63b3ed;letter-spacing:.5px;text-transform:uppercase}
+.hero{padding:48px 36px 40px;border-bottom:1px solid rgba(255,255,255,.05)}
+.stat-row{display:flex;gap:8px;align-items:center;margin-bottom:20px}
+.stat-pill{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:20px;padding:5px 12px;font-size:12px;color:#f87171;font-weight:500}
+.hero h1{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:#f0f4ff;line-height:1.2;letter-spacing:-.5px;margin-bottom:16px}
+.hero h1 em{color:#63b3ed;font-style:normal;display:block}
+.hero-sub{font-size:16px;color:#94a3b8;line-height:1.7;font-weight:300}
+.body{padding:36px 36px 0}
+.greet{font-size:16px;color:#94a3b8;margin-bottom:22px}
+.greet strong{color:#e8eaf0;font-weight:500}
+.p{font-size:15px;color:#94a3b8;line-height:1.8;margin-bottom:20px;font-weight:300}
+.p strong{color:#e8eaf0;font-weight:500}
+.compare-box{background:#0f1729;border:1px solid rgba(255,255,255,.07);border-radius:12px;overflow:hidden;margin:28px 0}
+.compare-row{display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.05)}
+.compare-row:last-child{border-bottom:none}
+.compare-label{font-size:13px;color:#64748b;width:160px;flex-shrink:0}
+.compare-val{font-size:14px;font-weight:500}
+.compare-val.bad{color:#f87171}
+.compare-val.good{color:#34d399}
+.cta-wrap{padding:36px 36px;text-align:center}
+.cta-btn{display:inline-block;background:#3b82f6;color:#fff;text-decoration:none;font-size:15px;font-weight:600;padding:16px 44px;border-radius:8px;letter-spacing:.1px}
+.cta-sub{font-size:13px;color:#475569;margin-top:12px}
+.disc{margin:0 36px 24px;padding:14px 18px;background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.1);border-radius:8px}
+.disc p{font-size:11px;color:#64748b;line-height:1.6}
+.ftr{padding:28px 36px;border-top:1px solid rgba(255,255,255,.06);text-align:center}
+.ftr-links{margin-bottom:12px}
+.ftr-links a{font-size:12px;color:#475569;text-decoration:none;margin:0 8px}
+.ftr-comp{font-size:11px;color:#475569;margin-bottom:10px}
+.ftr-copy{font-size:11px;color:#334155}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="hdr-inner">
+      <a class="logo" href="https://wolvcapital.com">
+        <div class="logo-mark">W</div>
+        <span class="logo-text">WolvCapital</span>
+      </a>
+      <span class="badge">Day 01</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="stat-row">
+      <span class="stat-pill">High-yield staking · BNB Chain</span>
+    </div>
+    <h1>Your money is<br><em>losing value right now.</em></h1>
+    <p class="hero-sub">Inflation runs at 3–4%. Your savings account pays 0.5%. That gap costs you hundreds every year. There's a better way.</p>
+  </div>
+
+  <div class="body">
+    <p class="greet">Hi <strong>{{ first_name }}</strong>,</p>
+
+    <p class="p">WolvCapital was built for one reason: to give investors access to the kind of returns that were previously reserved for hedge funds and institutional desks — verified on-chain, not just promised in a brochure.</p>
+
+    <div class="compare-box">
+      <div class="compare-row">
+        <span class="compare-label">Traditional savings</span>
+        <span class="compare-val bad">~0.5% APY</span>
+      </div>
+      <div class="compare-row">
+        <span class="compare-label">S&P 500 (avg)</span>
+        <span class="compare-val bad">~10% APY (with full market risk)</span>
+      </div>
+      <div class="compare-row">
+        <span class="compare-label">WolvCapital Pioneer</span>
+        <span class="compare-val good">8% APY · 90 days · from $100</span>
+      </div>
+      <div class="compare-row">
+        <span class="compare-label">WolvCapital Summit VIP</span>
+        <span class="compare-val good">25% APY · 365 days · from $5,000</span>
+      </div>
+    </div>
+
+    <p class="p">Every reward we pay you is a <strong>WOLV token on BNB Smart Chain</strong> — permanently recorded, independently verifiable. Not a number in a spreadsheet we control. A token in a wallet you own.</p>
+
+    <p class="p">Over the next 9 days, I'll show you exactly how this works — the math, the contracts, the security setup. But first, take 2 minutes to see which plan fits your situation.</p>
+  </div>
+
+  <div class="cta-wrap">
+    <a class="cta-btn" href="{{ plans_url }}">See All Investment Plans →</a>
+    <p class="cta-sub">No commitment. Starts at $100. KYC takes under 5 minutes.</p>
+  </div>
+
+  <div class="disc">
+    <p><strong>Risk disclosure:</strong> Staking positions carry risk including potential loss of principal. Digital assets are volatile. Past performance does not guarantee future rewards. Only invest capital you can afford to lose. <a href="https://wolvcapital.com/risk-disclosure" style="color:#63b3ed">Full disclosure →</a></p>
+  </div>
+
+  <div class="ftr">
+    <div class="ftr-links">
+      <a href="https://wolvcapital.com/plans">Plans</a>
+      <a href="https://wolvcapital.com/wolv-token">WOLV Token</a>
+      <a href="https://wolvcapital.com/faq">FAQ</a>
+      <a href="https://wolvcapital.com/contact">Contact</a>
+    </div>
+    <div class="ftr-comp">🔒 FinCEN MSB Registered &nbsp;·&nbsp; ✓ Audited Smart Contracts &nbsp;·&nbsp; 🔐 256-bit SSL</div>
+    <div class="ftr-copy">© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy" style="color:#334155;text-decoration:none">Privacy</a> · <a href="https://wolvcapital.com/unsubscribe" style="color:#334155;text-decoration:none">Unsubscribe</a></div>
+  </div>
+</div>
+</body>
+</html>

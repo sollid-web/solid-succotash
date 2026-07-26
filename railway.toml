@@ -1,0 +1,8 @@
+# Railway cron configuration
+[[crons]]
+command = "python manage.py complete_expired_plans"
+schedule = "0 1 * * *"
+
+[[crons]]
+command = "python manage.py payout_roi"
+schedule = "0 2 * * *"

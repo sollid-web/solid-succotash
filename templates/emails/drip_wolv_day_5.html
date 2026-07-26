@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Here's everything we can't hide (and why that's good)</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e1a;font-family:'DM Sans',Arial,sans-serif;color:#e8eaf0;-webkit-font-smoothing:antialiased}
+.wrap{max-width:620px;margin:0 auto;background:#0a0e1a}
+.hdr{background:#0d1226;padding:22px 36px;border-bottom:1px solid rgba(99,179,237,.12)}
+.hdr-inner{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:34px;height:34px;background:#3b82f6;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#fff;line-height:1}
+.logo-text{font-family:'Playfair Display',serif;font-size:19px;font-weight:600;color:#f0f4ff}
+.badge{font-size:11px;color:#63b3ed;letter-spacing:.5px;text-transform:uppercase}
+.hero{padding:48px 36px 40px;border-bottom:1px solid rgba(255,255,255,.05)}
+.hero h1{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:#f0f4ff;line-height:1.2;letter-spacing:-.5px;margin-bottom:16px}
+.hero h1 em{color:#34d399;font-style:normal}
+.hero-sub{font-size:16px;color:#94a3b8;line-height:1.7;font-weight:300}
+.body{padding:36px 36px 0}
+.greet{font-size:16px;color:#94a3b8;margin-bottom:22px}
+.greet strong{color:#e8eaf0;font-weight:500}
+.p{font-size:15px;color:#94a3b8;line-height:1.8;margin-bottom:20px;font-weight:300}
+.p strong{color:#e8eaf0;font-weight:500}
+.audit-score{background:#0f1729;border:1px solid rgba(52,211,153,.2);border-radius:12px;padding:24px;margin:28px 0;display:flex;align-items:center;gap:24px}
+.score-num{font-family:'Playfair Display',serif;font-size:52px;font-weight:700;color:#34d399;line-height:1;flex-shrink:0}
+.score-body{}
+.score-title{font-size:16px;font-weight:500;color:#e8eaf0;margin-bottom:4px}
+.score-desc{font-size:13px;color:#64748b;line-height:1.5}
+.security-list{margin:28px 0}
+.sec-item{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.sec-item:last-child{border-bottom:none}
+.sec-check{width:22px;height:22px;background:rgba(52,211,153,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.check-icon{width:10px;height:10px;border-right:2px solid #34d399;border-bottom:2px solid #34d399;transform:rotate(45deg) translate(-1px,-2px)}
+.sec-body{}
+.sec-title{font-size:14px;font-weight:500;color:#e8eaf0;margin-bottom:2px}
+.sec-desc{font-size:13px;color:#64748b;line-height:1.5}
+.cta-wrap{padding:36px 36px;text-align:center}
+.cta-btn{display:inline-block;background:#3b82f6;color:#fff;text-decoration:none;font-size:15px;font-weight:600;padding:16px 44px;border-radius:8px;letter-spacing:.1px}
+.cta-sub{font-size:13px;color:#475569;margin-top:12px}
+.disc{margin:0 36px 24px;padding:14px 18px;background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.1);border-radius:8px}
+.disc p{font-size:11px;color:#64748b;line-height:1.6}
+.ftr{padding:28px 36px;border-top:1px solid rgba(255,255,255,.06);text-align:center}
+.ftr-links{margin-bottom:12px}
+.ftr-links a{font-size:12px;color:#475569;text-decoration:none;margin:0 8px}
+.ftr-copy{font-size:11px;color:#334155}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="hdr-inner">
+      <a class="logo" href="https://wolvcapital.com">
+        <div class="logo-mark">W</div>
+        <span class="logo-text">WolvCapital</span>
+      </a>
+      <span class="badge">Day 05</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>Transparency is our<br><em>competitive advantage.</em></h1>
+    <p class="hero-sub">Every security claim we make is independently verifiable. Here's the proof, not the pitch.</p>
+  </div>
+
+  <div class="body">
+    <p class="greet">Hi <strong>{{ first_name }}</strong>,</p>
+    <p class="p">Most platforms give you a security page with a list of buzzwords. We do something different: we give you the addresses, audit scores, and links so you can verify everything yourself before you move a single dollar.</p>
+
+    <div class="audit-score">
+      <div class="score-num">87</div>
+      <div class="score-body">
+        <div class="score-title">Smart contract audit score — 87.14/100</div>
+        <div class="score-desc">Independent third-party audit of our staking and reward pool contracts. No critical vulnerabilities. Full report available on request.</div>
+      </div>
+    </div>
+
+    <div class="security-list">
+      <div class="sec-item">
+        <div class="sec-check"><div class="check-icon"></div></div>
+        <div class="sec-body">
+          <div class="sec-title">Fixed supply — no minting ever</div>
+          <div class="sec-desc">1,000,000,000 WOLV total. The contract has no mint function. Supply is verifiable on BSCScan right now.</div>
+        </div>
+      </div>
+      <div class="sec-item">
+        <div class="sec-check"><div class="check-icon"></div></div>
+        <div class="sec-body">
+          <div class="sec-title">Reward pool locked on-chain</div>
+          <div class="sec-desc">1,000,000 WOLV reward allocation sits at <span style="font-family:monospace;font-size:11px;color:#63b3ed">0xb233cf74...</span> — the balance decreases as rewards are paid. Every payout is permanent and public.</div>
+        </div>
+      </div>
+      <div class="sec-item">
+        <div class="sec-check"><div class="check-icon"></div></div>
+        <div class="sec-body">
+          <div class="sec-title">KYC/AML compliant</div>
+          <div class="sec-desc">Full identity verification before any position opens. No anonymous accounts. FinCEN MSB registered.</div>
+        </div>
+      </div>
+      <div class="sec-item">
+        <div class="sec-check"><div class="check-icon"></div></div>
+        <div class="sec-body">
+          <div class="sec-title">256-bit SSL + PCI-DSS compliant</div>
+          <div class="sec-desc">All data in transit is encrypted. Payment processing meets PCI-DSS Level 1 standards.</div>
+        </div>
+      </div>
+      <div class="sec-item">
+        <div class="sec-check"><div class="check-icon"></div></div>
+        <div class="sec-body">
+          <div class="sec-title">Non-custodial WOLV rewards</div>
+          <div class="sec-desc">WOLV tokens are paid directly to your connected wallet. We never hold your reward tokens on your behalf.</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="p">None of this removes market risk — crypto is volatile and staking carries principal risk. But it does mean the <strong>platform itself is structured to be transparent</strong>, not just trustworthy-sounding.</p>
+  </div>
+
+  <div class="cta-wrap">
+    <a class="cta-btn" href="{{ smart_contracts_url }}">Read Our Smart Contract Documentation →</a>
+    <p class="cta-sub">Or <a href="{{ bscscan_url }}" style="color:#63b3ed;text-decoration:none">verify the contract on BSCScan yourself</a>.</p>
+  </div>
+
+  <div class="disc">
+    <p><strong>Risk disclosure:</strong> Security audits reduce but do not eliminate smart contract risk. Staking involves risk of principal loss. Digital assets are volatile. <a href="https://wolvcapital.com/risk-disclosure" style="color:#63b3ed">Full disclosure →</a></p>
+  </div>
+
+  <div class="ftr">
+    <div class="ftr-links">
+      <a href="https://wolvcapital.com/plans">Plans</a>
+      <a href="https://wolvcapital.com/wolv-token">WOLV Token</a>
+      <a href="https://wolvcapital.com/security">Security</a>
+      <a href="https://wolvcapital.com/contact">Contact</a>
+    </div>
+    <div class="ftr-copy">© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy" style="color:#334155;text-decoration:none">Privacy</a> · <a href="https://wolvcapital.com/unsubscribe" style="color:#334155;text-decoration:none">Unsubscribe</a></div>
+  </div>
+</div>
+</body>
+</html>

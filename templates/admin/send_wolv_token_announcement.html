@@ -1,0 +1,43 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}Send WOLV Announcement - {{ site_title }}{% endblock %}
+
+{% block content %}
+<div class="module">
+    <h2>WOLV Token Announcement</h2>
+    <p>Send the WOLV Token announcement email to all active investors, or test it first using a single address.</p>
+
+    <form method="post" style="margin-bottom: 30px;">
+        {% csrf_token %}
+        <div class="form-row">
+            <label for="id_test_email">Test email address</label><br>
+            <input type="email" name="test_email" id="id_test_email" value="{{ test_email|default:'' }}" class="vTextField" style="width: 100%; max-width: 480px;" />
+            <p class="help">Optional. If set, the announcement will only be sent to this address.</p>
+        </div>
+
+        <div class="form-row" style="margin: 16px 0;">
+            <label><input type="checkbox" name="dry_run" id="id_dry_run"{% if dry_run %} checked{% endif %} /> Dry run</label>
+            <p class="help">Show recipient details without sending email.</p>
+        </div>
+
+        <div class="submit-row">
+            <input type="submit" class="default" value="Send Announcement" />
+        </div>
+    </form>
+
+    <div class="card" style="padding: 20px; border: 1px solid #ddd; border-radius: 8px; background: #fff;">
+        <h3>Recipient summary</h3>
+        <p><strong>Audience:</strong> {{ recipient_count }}</p>
+        <p><strong>Mode:</strong> {% if test_email %}Test{% else %}All active investors{% endif %}</p>
+        <p><strong>Dry run:</strong> {% if dry_run %}Yes{% else %}No{% endif %}</p>
+    </div>
+
+    {% if preview_list %}
+    <div class="card" style="padding: 20px; border: 1px solid #ddd; border-radius: 8px; background: #fff; margin-top: 20px;">
+        <h3>Preview recipient emails</h3>
+        <pre style="white-space: pre-wrap;">{{ preview_list }}</pre>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

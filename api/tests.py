@@ -1,0 +1,529 @@
+from decimal import Decimal
+
+from django.contrib.auth import get_user_model
+from django.test import TestCase
+from rest_framework.test import APIClient
+
+from core.models import SupportRequest
+from investments.models import InvestmentPlan, UserInvestment
+from users.models import UserNotification
+
+
+class PublicPlansAPITests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        InvestmentPlan.objects.create(
+            name="APIPlan",
+            description="API",
+            daily_roi=Decimal("1.00"),
+            duration_days=14,
+            min_amount=Decimal("100"),
+            max_amount=Decimal("1000"),
+        )
+
+    def test_list_plans_public(self):
+        resp = self.client.get("/api/plans/")
+        self.assertEqual(resp.status_code, 200)
+        self.assertGreaterEqual(len(resp.json()), 1)
+
+
+class UserInvestmentsAPITests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.user = User.objects.create_user(
+            username="api_user", email="api_user@example.com", password="pass12345"
+        )
+        self.other = User.objects.create_user(
+            username="api_other", email="api_other@example.com", password="pass12345"
+        )
+        self.client = APIClient()
+        self.plan = InvestmentPlan.objects.create(
+            name="UserPlan",
+            description="User",
+            daily_roi=Decimal("1.00"),
+            duration_days=14,
+            min_amount=Decimal("100"),
+            max_amount=Decimal("1000"),
+        )
+        UserInvestment.objects.create(user=self.user, plan=self.plan, amount=Decimal("200"))
+        UserInvestment.objects.create(user=self.other, plan=self.plan, amount=Decimal("300"))
+
+    def test_user_sees_only_own_investments(self):
+        self.client.login(username="api_user", password="pass12345")
+        resp = self.client.get("/api/investments/")
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(len(resp.json()), 1)
+
+
+class AdminInvestmentsAPITests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.admin = User.objects.create_user(
+            username="api_admin",
+            email="api_admin@example.com",
+            password="pass12345",
+            is_staff=True,
+            is_superuser=True,
+        )
+        self.user = User.objects.create_user(
+            username="api_norm", email="api_norm@example.com", password="pass12345"
+        )
+        self.client = APIClient()
+        plan = InvestmentPlan.objects.create(
+            name="AdminPlan",
+            description="Admin",
+            daily_roi=Decimal("1.00"),
+            duration_days=14,
+            min_amount=Decimal("100"),
+            max_amount=Decimal("1000"),
+        )
+        UserInvestment.objects.create(user=self.user, plan=plan, amount=Decimal("150"))
+
+    def test_admin_access(self):
+        self.client.force_authenticate(user=self.admin)
+        resp = self.client.get("/api/admin/investments/")
+        self.assertEqual(resp.status_code, 200)
+        self.assertGreaterEqual(len(resp.json()), 1)
+
+    def test_non_admin_forbidden(self):
+        self.client.force_authenticate(user=self.user)
+        resp = self.client.get("/api/admin/investments/")
+        self.assertNotEqual(resp.status_code, 200)
+
+
+class SupportRequestAPITests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+    def test_support_request_requires_contact_email(self):
+        resp = self.client.post("/api/support/", {"message": "Need assistance"}, format="json")
+        self.assertEqual(resp.status_code, 400)
+
+    def test_support_request_success(self):
+        payload = {
+            "message": "Unable to locate payout report",
+            "contact_email": "investor@example.com",
+            "topic": "reports",
+        }
+        resp = self.client.post("/api/support/", payload, format="json")
+        self.assertEqual(resp.status_code, 201)
+        data = resp.json()
+        self.assertIn("reference", data)
+        self.assertTrue(SupportRequest.objects.filter(pk=data["reference"]).exists())
+
+
+class SupportRequestStatusVisibilityAPITests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.user = User.objects.create_user(
+            username="support_user",
+            email="support_user@example.com",
+            password="pass12345",
+        )
+        self.other = User.objects.create_user(
+            username="support_other",
+            email="support_other@example.com",
+            password="pass12345",
+        )
+        self.client = APIClient()
+
+        # Create two requests, one for each user
+        self.mine = SupportRequest.objects.create(
+            user=self.user,
+            contact_email=self.user.email,
+            full_name="Support User",
+            topic="billing",
+            message="Help with billing",
+            status=SupportRequest.STATUS_IN_PROGRESS,
+            admin_notes="We are reviewing your request.",
+        )
+        SupportRequest.objects.create(
+            user=self.other,
+            contact_email=self.other.email,
+            full_name="Other",
+            topic="security",
+            message="Other issue",
+            status=SupportRequest.STATUS_RESOLVED,
+            admin_notes="Resolved.",
+        )
+
+    def test_requires_authentication(self):
+        resp = self.client.get("/api/support/requests/")
+        self.assertIn(resp.status_code, {401, 403})
+
+    def test_user_sees_only_own_support_requests_and_status_fields(self):
+        self.client.login(username="support_user", password="pass12345")
+        resp = self.client.get("/api/support/requests/")
+        self.assertEqual(resp.status_code, 200)
+
+        payload = resp.json()
+        self.assertEqual(len(payload), 1)
+        self.assertEqual(payload[0]["id"], self.mine.id)
+        self.assertIn("status", payload[0])
+        self.assertIn("responded_at", payload[0])
+        self.assertIn("admin_notes", payload[0])
+
+
+class NotificationAPITests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.user = User.objects.create_user(
+            username="notif_api_user", email="notif@example.com", password="pass12345"
+        )
+        self.other = User.objects.create_user(
+            username="notif_api_other", email="notif_other@example.com", password="pass12345"
+        )
+        self.client = APIClient()
+        UserNotification.objects.create(
+            user=self.user,
+            notification_type="system_alert",
+            title="Alert",
+            message="System upgraded",
+        )
+        self.notification = UserNotification.objects.create(
+            user=self.user,
+            notification_type="welcome",
+            title="Welcome",
+            message="Hello",
+        )
+        UserNotification.objects.create(
+            user=self.other,
+            notification_type="system_alert",
+            title="Other",
+            message="Hidden",
+        )
+
+    def test_list_notifications_scoped_to_user(self):
+        self.client.login(username="notif_api_user", password="pass12345")
+        resp = self.client.get("/api/notifications/")
+        self.assertEqual(resp.status_code, 200)
+        payload = resp.json()
+        # User has 2 manually created notifications (welcome auto-notification
+        # requires email verification which is not done in this test)
+        self.assertEqual(len(payload), 2)
+        # Verify only this user's notifications are returned (not 'other' user's)
+        titles = [n["title"] for n in payload]
+        self.assertIn("Alert", titles)
+        self.assertIn("Welcome", titles)
+        self.assertNotIn("Other", titles)
+
+    def test_mark_read_via_api(self):
+        self.client.login(username="notif_api_user", password="pass12345")
+        resp = self.client.post(f"/api/notifications/{self.notification.pk}/mark-read/")
+        self.assertEqual(resp.status_code, 200)
+        self.notification.refresh_from_db()
+        self.assertTrue(self.notification.is_read)
+
+
+class EmailPreferencesAPITests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.user = User.objects.create_user(
+            username="prefs_user", email="prefs@example.com", password="pass12345"
+        )
+        self.client = APIClient()
+        self.client.login(username="prefs_user", password="pass12345")
+
+    def test_get_preferences(self):
+        resp = self.client.get("/api/profile/email-preferences/")
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertIn("email_notifications_enabled", data)
+
+    def test_update_preferences(self):
+        resp = self.client.patch(
+            "/api/profile/email-preferences/",
+            {"email_notifications_enabled": False, "email_security_alerts": False},
+            format="json",
+        )
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertFalse(data["email_notifications_enabled"])
+        self.assertFalse(data["email_security_alerts"])
+
+
+class KycPersonalInfoAPITests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.user = User.objects.create_user(
+            username="kyc_user", email="kyc_user@example.com", password="pass12345"
+        )
+        self.client = APIClient()
+        self.client.login(username="kyc_user", password="pass12345")
+
+    def test_submit_personal_info_success(self):
+        payload = {
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "date_of_birth": "1990-01-01",
+            "nationality": "US",
+            "address": "123 Main Street",
+        }
+        resp = self.client.post("/api/kyc/personal-info/", payload, format="json")
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertEqual(data["status"], "pending")
+        self.assertIn("personal_info_submitted_at", data)
+
+    def test_submit_personal_info_missing_fields_returns_400(self):
+        # Missing required fields should now yield a 400 (serializer validation) not a 500
+        payload = {"first_name": "Only"}
+        resp = self.client.post("/api/kyc/personal-info/", payload, format="json")
+        self.assertEqual(resp.status_code, 400)
+
+
+class KycDocumentsAPITests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.user = User.objects.create_user(
+            username="kyc_docs_user", email="kyc_docs_user@example.com", password="pass12345"
+        )
+        self.client = APIClient()
+        self.client.login(username="kyc_docs_user", password="pass12345")
+
+        # Ensure there is an application by first submitting personal info (creates pending application)
+        personal_payload = {
+            "first_name": "Doc",
+            "last_name": "Tester",
+            "date_of_birth": "1992-02-02",
+            "nationality": "US",
+            "address": "456 Secondary Ave",
+        }
+        self.client.post("/api/kyc/personal-info/", personal_payload, format="json")
+
+    def test_submit_documents_success(self):
+        payload = {
+            "government_id": {"name": "passport.png", "type": "image/png", "size": 12345},
+            "proof_of_address": {"name": "utility.pdf", "type": "application/pdf", "size": 23456},
+        }
+        resp = self.client.post("/api/kyc/documents/", payload, format="json")
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertEqual(data["status"], "pending")
+        self.assertIn("document_submitted_at", data)
+
+    def test_submit_documents_missing_one_returns_400(self):
+        payload = {
+            "government_id": {"name": "passport.png", "type": "image/png", "size": 12345},
+            # Missing proof_of_address
+        }
+        resp = self.client.post("/api/kyc/documents/", payload, format="json")
+        self.assertEqual(resp.status_code, 400)
+
+
+class KycAdminWorkflowAPITests(TestCase):
+    """Full KYC admin workflow using file upload endpoints and admin approval."""
+
+    def setUp(self):
+        User = get_user_model()
+        self.user_password = "userpass123"
+        self.user = User.objects.create_user(
+            username="flow_user",
+            email="flow_user@example.com",
+            password=self.user_password,
+        )
+
+        self.admin = User.objects.create_user(
+            username="flow_admin",
+            email="flow_admin@example.com",
+            password="adminpass123",
+            is_staff=True,
+            is_superuser=True,
+        )
+
+        self.client = APIClient()
+        self.admin_client = APIClient()
+
+    def _get_jwt_for_user(self, username_or_email, password):
+        resp = self.client.post(
+            "/api/auth/jwt/create/",
+            {"email": username_or_email, "password": password},
+            format="json",
+        )
+        self.assertEqual(resp.status_code, 200)
+        return resp.json()["access"]
+
+    def test_user_submits_document_and_admin_approves_then_application_approved(self):
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from users.models import KycApplication
+
+        # User obtains JWT and sets Authorization header
+        access = self._get_jwt_for_user(self.user.email, self.user_password)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+
+        # Submit a document file
+        uploaded = SimpleUploadedFile("passport.png", b"fakepngdata", content_type="image/png")
+        resp = self.client.post(
+            "/api/kyc-documents/",
+            {"document_type": "passport", "document_file": uploaded},
+            format="multipart",
+        )
+        self.assertEqual(resp.status_code, 201)
+        data = resp.json()
+        self.assertEqual(data["status"], "pending")
+
+        doc_id = data["id"]
+
+        # Admin lists pending documents
+        self.admin_client.force_authenticate(user=self.admin)
+        list_resp = self.admin_client.get("/api/admin/kyc-documents/?status=pending")
+        self.assertEqual(list_resp.status_code, 200)
+        items = list_resp.json()
+        self.assertTrue(any(str(item.get("id")) == str(doc_id) for item in items))
+
+        # Admin approves the document
+        approve_resp = self.admin_client.patch(
+            f"/api/admin/kyc-documents/{doc_id}/",
+            {"approval_action": "approve", "approval_notes": "Looks good"},
+            format="json",
+        )
+        self.assertEqual(approve_resp.status_code, 200)
+        self.assertEqual(approve_resp.json()["status"], "approved")
+
+        # Document should now show as approved when user lists their documents
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+        doc_resp = self.client.get(f"/api/kyc-documents/{doc_id}/")
+        self.assertEqual(doc_resp.status_code, 200)
+        self.assertEqual(doc_resp.json()["status"], "approved")
+
+    def test_rejection_flow(self):
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from users.models import KycApplication
+
+        access = self._get_jwt_for_user(self.user.email, self.user_password)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+
+        uploaded = SimpleUploadedFile("id.jpg", b"fakejpg", content_type="image/jpeg")
+        resp = self.client.post(
+            "/api/kyc-documents/",
+            {"document_type": "national_id", "document_file": uploaded},
+            format="multipart",
+        )
+        self.assertEqual(resp.status_code, 201)
+        doc_id = resp.json()["id"]
+
+        # Admin rejects document
+        self.admin_client.force_authenticate(user=self.admin)
+        rej_resp = self.admin_client.patch(
+            f"/api/admin/kyc-documents/{doc_id}/",
+            {"approval_action": "reject", "approval_notes": "Blurry image"},
+            format="json",
+        )
+        self.assertEqual(rej_resp.status_code, 200)
+        self.assertEqual(rej_resp.json()["status"], "rejected")
+
+        # Document should now show as rejected when user lists their documents
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+        doc_resp = self.client.get(f"/api/kyc-documents/{doc_id}/")
+        self.assertEqual(doc_resp.status_code, 200)
+        self.assertEqual(doc_resp.json()["status"], "rejected")
+        self.assertEqual(doc_resp.json()["rejection_reason"], "Blurry image")
+
+    def test_duplicate_submission(self):
+        """Uploading the same document type twice should update existing entry."""
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        # first submission
+        access = self._get_jwt_for_user(self.user.email, self.user_password)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+        first_file = SimpleUploadedFile("id1.png", b"first", content_type="image/png")
+        resp1 = self.client.post(
+            "/api/kyc-documents/",
+            {"document_type": "passport", "document_file": first_file},
+            format="multipart",
+        )
+        self.assertEqual(resp1.status_code, 201)
+        data1 = resp1.json()
+        self.assertEqual(data1["status"], "pending")
+        # second submission with same type
+        second_file = SimpleUploadedFile("id2.png", b"second", content_type="image/png")
+        resp2 = self.client.post(
+            "/api/kyc-documents/",
+            {"document_type": "passport", "document_file": second_file},
+            format="multipart",
+        )
+        self.assertEqual(resp2.status_code, 201)
+        data2 = resp2.json()
+        # should refer to same id and be pending
+        self.assertEqual(data1["id"], data2["id"])
+        self.assertEqual(data2["status"], "pending")
+
+    def test_invalid_file_type(self):
+        """Reject upload if the file content type is not allowed."""
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        access = self._get_jwt_for_user(self.user.email, self.user_password)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+        bad_file = SimpleUploadedFile("script.exe", b"executable", content_type="application/octet-stream")
+        resp = self.client.post(
+            "/api/kyc-documents/",
+            {"document_type": "passport", "document_file": bad_file},
+            format="multipart",
+        )
+        self.assertEqual(resp.status_code, 400)
+        # response may be a list of errors or dict; ensure invalid-type message present
+        body = resp.json()
+        if isinstance(body, dict):
+            self.assertTrue(any("Invalid file type" in str(v) for v in body.values()))
+        else:
+            self.assertTrue(any("Invalid file type" in str(item) for item in body))
+
+    def test_file_too_large(self):
+        """Reject upload if the file is larger than limit."""
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        access = self._get_jwt_for_user(self.user.email, self.user_password)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+        large_content = b"x" * (6 * 1024 * 1024)  # 6MB
+        large_file = SimpleUploadedFile("big.png", large_content, content_type="image/png")
+        resp = self.client.post(
+            "/api/kyc-documents/",
+            {"document_type": "passport", "document_file": large_file},
+            format="multipart",
+        )
+        self.assertEqual(resp.status_code, 400)
+        body = resp.json()
+        if isinstance(body, dict):
+            self.assertTrue(any("File too large" in str(v) for v in body.values()))
+        else:
+            self.assertTrue(any("File too large" in str(item) for item in body))
+
+    def test_unauthenticated_submit(self):
+        """Must be logged in to submit documents."""
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        file = SimpleUploadedFile("id.png", b"data", content_type="image/png")
+        resp = self.client.post(
+            "/api/kyc-documents/",
+            {"document_type": "passport", "document_file": file},
+            format="multipart",
+        )
+        self.assertEqual(resp.status_code, 401)
+
+    def test_regular_user_cannot_access_admin_endpoint(self):
+        """Normal users should not access admin document APIs."""
+        access = self._get_jwt_for_user(self.user.email, self.user_password)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+        resp = self.client.get("/api/admin/kyc-documents/")
+        self.assertIn(resp.status_code, (401, 403))
+
+    def test_user_cannot_see_other_users_documents(self):
+        """Users should only see their own documents."""
+        from django.contrib.auth import get_user_model
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        User = get_user_model()
+        # provide username since custom user extends AbstractUser
+        other = User.objects.create_user(
+            email="other@example.com", username="other", password="pass1234"
+        )
+        # create doc for other user
+        self.admin_client.force_authenticate(user=self.admin)
+        other_file = SimpleUploadedFile("o.png", b"o", content_type="image/png")
+        self.admin_client.post(
+            "/api/kyc-documents/",
+            {"document_type": "passport", "document_file": other_file},
+            format="multipart",
+        )
+        # login as original user and list
+        access = self._get_jwt_for_user(self.user.email, self.user_password)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {access}")
+        list_resp = self.client.get("/api/kyc-documents/")
+        self.assertEqual(list_resp.status_code, 200)
+        items = list_resp.json()
+        self.assertTrue(all(item["user_email"] == self.user.email for item in items))

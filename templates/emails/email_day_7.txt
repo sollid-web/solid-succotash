@@ -1,0 +1,23 @@
+Subject: Your WOLV is waiting — have you claimed it?
+
+Hey there,
+
+If you have an active account with us, your rewards are accumulating. But because we respect on-chain ownership, we don't force-feed tokens into your external wallets without your authorization. 
+
+Your tokens sit in our verified vault contract until you hit "Claim."
+
+When you log into your portal and view your dashboard balance, that number represents real cryptographic tokens minted and reserved specifically for your account index.
+
+WOLV contract address (BNB Smart Chain):
+0xe0167279aef7bf4ad313d261da82e8366822270c
+
+If you haven't opened an account yet — this is what you're missing. Your rewards accumulate from the moment your first position opens.
+
+Connect Wallet and Check My WOLV Balance: {{ dashboard_url }}
+Or open an account first if you haven't yet: {{ plans_url }}
+
+---
+Risk disclosure: WOLV token values fluctuate with market conditions. Staking involves risk. Full disclosure: https://wolvcapital.com/risk-disclosure
+
+Plans | WOLV Token | FAQ | Contact
+© 2026 WolvCapital, Inc.

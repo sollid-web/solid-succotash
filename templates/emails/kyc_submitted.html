@@ -1,0 +1,52 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}KYC Application Submitted - {{ brand_name }}{% endblock %}
+
+{% block content %}
+<h2 style="color: #2196F3; font-size: 24px; font-weight: 600; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">📋 KYC Application Submitted</h2>
+
+<p style="font-size: 16px; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">Dear {{ user.first_name|default:user.email }},</p>
+
+<p style="font-size: 16px; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">Thank you for submitting your KYC (Know Your Customer) information. We have received your application and it is now under review.</p>
+
+<div style="background-color: #f0f9f5; border-left: 4px solid #10B981; padding: 20px; margin: 25px 0; border-radius: 0 6px 6px 0;">
+    <h3 style="color: #10B981; font-size: 18px; font-weight: 600; margin: 0 0 10px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">Application Received</h3>
+    <p style="font-size: 16px; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">Your KYC application has been successfully submitted and is queued for review by our compliance team.</p>
+</div>
+
+<h3 style="color: #444444; font-size: 18px; font-weight: 600; margin: 25px 0 15px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">What Happens Next?</h3>
+
+<p style="font-size: 16px; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">Our team will review your application within 1-2 business days. We may request additional information if needed. You'll receive an email notification once your application has been reviewed.</p>
+
+<div style="background-color: #f8f9fa; border-left: 4px solid #2196F3; padding: 20px; margin: 25px 0; border-radius: 0 6px 6px 0;">
+    <h3 style="color: #2196F3; font-size: 18px; font-weight: 600; margin: 0 0 15px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">Application Status</h3>
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <td style="padding: 12px 0; border-bottom: 1px solid #e5e5e5; vertical-align: top; font-weight: 600; color: #555555; width: 40%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">Current Status:</td>
+            <td style="padding: 12px 0; border-bottom: 1px solid #e5e5e5; vertical-align: top; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;"><strong style="color: #F59E0B;">Pending Review</strong></td>
+        </tr>
+        <tr>
+            <td style="padding: 12px 0; border-bottom: 1px solid #e5e5e5; vertical-align: top; font-weight: 600; color: #555555; width: 40%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">Submitted:</td>
+            <td style="padding: 12px 0; border-bottom: 1px solid #e5e5e5; vertical-align: top; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">{{ application.last_submitted_at|date:"F d, Y \a\t g:i A"|default:"Today" }}</td>
+        </tr>
+        {% if application.id %}
+        <tr>
+            <td style="padding: 12px 0; vertical-align: top; font-weight: 600; color: #555555; width: 40%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">Application ID:</td>
+            <td style="padding: 12px 0; vertical-align: top; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; word-break: break-all;">{{ application.id }}</td>
+        </tr>
+        {% endif %}
+    </table>
+</div>
+
+<h3 style="color: #444444; font-size: 18px; font-weight: 600; margin: 25px 0 15px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">Need Help?</h3>
+
+<p style="font-size: 16px; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">If you have any questions about your KYC application or need assistance, please visit your dashboard or contact our support team.</p>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}/dashboard/kyc/" style="display: inline-block; padding: 14px 28px; background-color: #2196F3; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">View Your Application</a>
+</div>
+
+<p style="font-size: 16px; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">Thank you for using {{ brand_name }}!</p>
+
+<p style="font-size: 16px; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">Best regards,<br>The {{ brand_name }} Team</p>
+{% endblock %}

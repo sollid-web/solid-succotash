@@ -1,0 +1,72 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Investment Approved - {{ brand_name }}{% endblock %}
+
+{% block content %}
+<h2>🎉 Investment Approved</h2>
+
+<p>Dear {{ user.first_name|default:user.email }},</p>
+
+<p>Congratulations! Your investment has been approved and is now active. You'll start earning returns according to your selected plan.</p>
+
+<div class="success-box">
+    <h3>Investment Activated</h3>
+    <p>Your investment is now generating returns. Daily payouts will be processed automatically.</p>
+</div>
+
+<table class="details-table">
+    <tr>
+        <td>Investment ID:</td>
+        <td>{{ investment.id }}</td>
+    </tr>
+    <tr>
+        <td>Plan:</td>
+        <td>{{ investment.plan.name }}</td>
+    </tr>
+    <tr>
+        <td>Amount Invested:</td>
+        <td>${{ investment.amount }}</td>
+    </tr>
+    <tr>
+        <td>Daily ROI:</td>
+        <td>{{ investment.plan.daily_roi_percentage }}%</td>
+    </tr>
+    <tr>
+        <td>Duration:</td>
+        <td>{{ investment.plan.duration_days }} days</td>
+    </tr>
+    <tr>
+        <td>Expected Total Return:</td>
+        <td>${{ investment.total_return }}</td>
+    </tr>
+    <tr>
+        <td>Start Date:</td>
+        <td>{{ investment.start_date|date:"F d, Y" }}</td>
+    </tr>
+    <tr>
+        <td>End Date:</td>
+        <td>{{ investment.end_date|date:"F d, Y" }}</td>
+    </tr>
+</table>
+
+{% if admin_notes %}
+<div class="info-box">
+    <h3>Admin Notes</h3>
+    <p>{{ admin_notes }}</p>
+</div>
+{% endif %}
+
+<h3>What happens next?</h3>
+<p>Starting today, you'll receive daily ROI payments based on your investment plan. These payments will be automatically credited to your wallet once approved by our admin team.</p>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}{{ dashboard_url }}" class="btn">View Dashboard</a>
+</div>
+
+<p>You can track your investment progress and daily returns in your dashboard.</p>
+
+<p>Thank you for investing with {{ brand_name }}!</p>
+
+<p>Best regards,<br>
+The {{ brand_name }} Team</p>
+{% endblock %}

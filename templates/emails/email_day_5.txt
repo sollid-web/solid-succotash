@@ -1,0 +1,22 @@
+Subject: Here's everything we can't hide (and why that's good)
+
+Hey there,
+
+In decentralized finance, security isn't about branding; it's about architecture. When we launched our updated smart contracts, we built them to ensure that no single person — not even our development team — can alter the core payout mechanics once your position is active.
+
+Here is exactly what is hardcoded into our system:
+
+- Immutable Lock Periods: Once your plan is active, the timelines are fixed. No early clawbacks, no unexpected fee alterations.
+- Audited Codebases: Our smart contracts have undergone extensive code reviews to minimize structural vulnerabilities.
+- Non-custodial WOLV rewards: WOLV tokens are paid directly to your connected wallet address. The contract handles distributions programmatically; we don't hold your reward tokens on your behalf.
+
+None of this removes market risk — crypto is volatile and staking carries principal risk. But it does mean the platform itself is structured to be transparent, not just trustworthy-sounding.
+
+Read Our Smart Contract Documentation: {{ smart_contracts_url }}
+Verify the contract on BSCScan yourself: {{ bscscan_url }}
+
+---
+Risk disclosure: Security audits reduce but do not eliminate smart contract risk. Staking involves risk of principal loss. Digital assets are volatile. Full disclosure: https://wolvcapital.com/risk-disclosure
+
+Plans | WOLV Token | Security | Contact
+© 2026 WolvCapital, Inc.

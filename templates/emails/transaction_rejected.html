@@ -1,0 +1,67 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Transaction Rejected - {{ brand_name }}{% endblock %}
+
+{% block content %}
+<h2>❌ Transaction Rejected</h2>
+
+<p>Dear {{ user.first_name|default:user.email }},</p>
+
+<p>We regret to inform you that your {{ transaction.get_transaction_type_display|lower }} transaction has been rejected after review.</p>
+
+<div class="danger-box">
+    <h3>Transaction Rejected</h3>
+    <p>Your transaction could not be processed at this time.</p>
+</div>
+
+<table class="details-table">
+    <tr>
+        <td>Transaction ID:</td>
+        <td>{{ transaction.id }}</td>
+    </tr>
+    <tr>
+        <td>Type:</td>
+        <td>{{ transaction.get_transaction_type_display }}</td>
+    </tr>
+    <tr>
+        <td>Amount:</td>
+        <td>${{ transaction.amount }}</td>
+    </tr>
+    <tr>
+        <td>Payment Method:</td>
+        <td>{{ transaction.get_payment_method_display }}</td>
+    </tr>
+    <tr>
+        <td>Status:</td>
+        <td><strong style="color: #EF4444;">Rejected</strong></td>
+    </tr>
+    <tr>
+        <td>Reviewed:</td>
+        <td>{{ transaction.rejected_at|date:"F d, Y \a\t g:i A" }}</td>
+    </tr>
+</table>
+
+{% if admin_notes %}
+<div class="warning-box">
+    <h3>Reason for Rejection</h3>
+    <p>{{ admin_notes }}</p>
+</div>
+{% endif %}
+
+<h3>What's next?</h3>
+<p>You can:</p>
+<ul style="margin: 20px 0; padding-left: 30px;">
+    <li style="margin-bottom: 10px;">Review the rejection reason above</li>
+    <li style="margin-bottom: 10px;">Submit a new transaction with correct information</li>
+    <li style="margin-bottom: 10px;">Contact our support team if you need clarification</li>
+</ul>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}{{ dashboard_url }}" class="btn">Go to Dashboard</a>
+</div>
+
+<p>If you have any questions about this rejection, please don't hesitate to contact our support team.</p>
+
+<p>Best regards,<br>
+The {{ brand_name }} Team</p>
+{% endblock %}

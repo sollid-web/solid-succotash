@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Stake once. Earn WOLV automatically.</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e1a;font-family:'DM Sans',Arial,sans-serif;color:#e8eaf0;-webkit-font-smoothing:antialiased}
+.wrap{max-width:620px;margin:0 auto;background:#0a0e1a}
+.hdr{background:#0d1226;padding:22px 36px;border-bottom:1px solid rgba(99,179,237,.12)}
+.hdr-inner{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:34px;height:34px;background:#3b82f6;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#fff;line-height:1}
+.logo-text{font-family:'Playfair Display',serif;font-size:19px;font-weight:600;color:#f0f4ff}
+.badge{font-size:11px;color:#63b3ed;letter-spacing:.5px;text-transform:uppercase}
+.hero{padding:48px 36px 40px;border-bottom:1px solid rgba(255,255,255,.05)}
+.hero h1{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:#f0f4ff;line-height:1.2;letter-spacing:-.5px;margin-bottom:16px}
+.hero h1 em{color:#63b3ed;font-style:normal}
+.hero-sub{font-size:16px;color:#94a3b8;line-height:1.7;font-weight:300}
+.body{padding:36px 36px 0}
+.greet{font-size:16px;color:#94a3b8;margin-bottom:22px}
+.greet strong{color:#e8eaf0;font-weight:500}
+.p{font-size:15px;color:#94a3b8;line-height:1.8;margin-bottom:20px;font-weight:300}
+.p strong{color:#e8eaf0;font-weight:500}
+.plans{margin:24px 0;display:flex;flex-direction:column;gap:10px}
+.plan{background:#0f1729;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:20px 22px;position:relative}
+.plan.featured{border-color:rgba(99,179,237,.3)}
+.plan-featured-tag{position:absolute;top:-10px;right:16px;background:#3b82f6;color:#fff;font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;padding:4px 10px;border-radius:10px}
+.plan-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.plan-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:#f0f4ff}
+.plan-apy{font-size:22px;font-weight:500;color:#34d399}
+.plan-meta{display:flex;gap:16px;margin-bottom:10px}
+.plan-meta span{font-size:12px;color:#64748b}
+.plan-meta span strong{color:#94a3b8;font-weight:500}
+.plan-return{font-size:13px;color:#63b3ed;background:rgba(99,179,237,.08);padding:8px 12px;border-radius:6px;display:inline-block}
+.cta-wrap{padding:36px 36px;text-align:center}
+.cta-btn{display:inline-block;background:#3b82f6;color:#fff;text-decoration:none;font-size:15px;font-weight:600;padding:16px 44px;border-radius:8px;letter-spacing:.1px}
+.cta-sub{font-size:13px;color:#475569;margin-top:12px}
+.disc{margin:0 36px 24px;padding:14px 18px;background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.1);border-radius:8px}
+.disc p{font-size:11px;color:#64748b;line-height:1.6}
+.ftr{padding:28px 36px;border-top:1px solid rgba(255,255,255,.06);text-align:center}
+.ftr-links{margin-bottom:12px}
+.ftr-links a{font-size:12px;color:#475569;text-decoration:none;margin:0 8px}
+.ftr-copy{font-size:11px;color:#334155}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="hdr-inner">
+      <a class="logo" href="https://wolvcapital.com">
+        <div class="logo-mark">W</div>
+        <span class="logo-text">WolvCapital</span>
+      </a>
+      <span class="badge">Day 03</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>Four plans.<br><em>One decision.</em></h1>
+    <p class="hero-sub">From $100 to $5,000 minimum — there's a plan built for where you are right now, not where you hope to be.</p>
+  </div>
+
+  <div class="body">
+    <p class="greet">Hi <strong>{{ first_name }}</strong>,</p>
+    <p class="p">Here's every plan, with the exact math so you know what to expect before you commit a single dollar.</p>
+
+    <div class="plans">
+      <div class="plan">
+        <div class="plan-top">
+          <span class="plan-name">Pioneer</span>
+          <span class="plan-apy">8% APY</span>
+        </div>
+        <div class="plan-meta">
+          <span><strong>$100</strong> minimum</span>
+          <span><strong>90 days</strong> lock period</span>
+        </div>
+        <div class="plan-return">$100 invested → ~$102 after 90 days + WOLV rewards</div>
+      </div>
+
+      <div class="plan">
+        <div class="plan-top">
+          <span class="plan-name">Vanguard</span>
+          <span class="plan-apy">12% APY</span>
+        </div>
+        <div class="plan-meta">
+          <span><strong>$500</strong> minimum</span>
+          <span><strong>120 days</strong> lock period</span>
+        </div>
+        <div class="plan-return">$500 invested → ~$520 after 120 days + WOLV rewards</div>
+      </div>
+
+      <div class="plan featured">
+        <span class="plan-featured-tag">Most popular</span>
+        <div class="plan-top">
+          <span class="plan-name">Horizon</span>
+          <span class="plan-apy">18% APY</span>
+        </div>
+        <div class="plan-meta">
+          <span><strong>$1,000</strong> minimum</span>
+          <span><strong>180 days</strong> lock period</span>
+        </div>
+        <div class="plan-return">$1,000 invested → ~$1,090 after 180 days + WOLV rewards</div>
+      </div>
+
+      <div class="plan">
+        <div class="plan-top">
+          <span class="plan-name">Summit VIP</span>
+          <span class="plan-apy">25% APY</span>
+        </div>
+        <div class="plan-meta">
+          <span><strong>$5,000</strong> minimum</span>
+          <span><strong>365 days</strong> lock period</span>
+        </div>
+        <div class="plan-return">$5,000 invested → ~$6,250 after 365 days + WOLV rewards</div>
+      </div>
+    </div>
+
+    <p class="p">All returns are projections based on stated APY. <strong>WOLV tokens are paid on top of your principal return</strong> — they're separate from the fiat-denominated gain shown above. Tomorrow I'll show you the real numbers on what that WOLV payout looks like.</p>
+  </div>
+
+  <div class="cta-wrap">
+    <a class="cta-btn" href="{{ plans_url }}">Open My Account and Choose a Plan →</a>
+    <p class="cta-sub">KYC takes under 5 minutes. Pioneer starts at $100.</p>
+  </div>
+
+  <div class="disc">
+    <p><strong>Risk disclosure:</strong> Returns shown are projections based on stated APY, not guaranteed. Staking involves risk of principal loss. Digital assets are volatile. <a href="https://wolvcapital.com/risk-disclosure" style="color:#63b3ed">Full disclosure →</a></p>
+  </div>
+
+  <div class="ftr">
+    <div class="ftr-links">
+      <a href="https://wolvcapital.com/plans">Plans</a>
+      <a href="https://wolvcapital.com/wolv-token">WOLV Token</a>
+      <a href="https://wolvcapital.com/faq">FAQ</a>
+      <a href="https://wolvcapital.com/contact">Contact</a>
+    </div>
+    <div class="ftr-copy">© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy" style="color:#334155;text-decoration:none">Privacy</a> · <a href="https://wolvcapital.com/unsubscribe" style="color:#334155;text-decoration:none">Unsubscribe</a></div>
+  </div>
+</div>
+</body>
+</html>

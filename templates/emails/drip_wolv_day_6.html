@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>You're earning — here's how to earn more</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e1a;font-family:'DM Sans',Arial,sans-serif;color:#e8eaf0;-webkit-font-smoothing:antialiased}
+.wrap{max-width:620px;margin:0 auto;background:#0a0e1a}
+.hdr{background:#0d1226;padding:22px 36px;border-bottom:1px solid rgba(99,179,237,.12)}
+.hdr-inner{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:34px;height:34px;background:#3b82f6;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#fff;line-height:1}
+.logo-text{font-family:'Playfair Display',serif;font-size:19px;font-weight:600;color:#f0f4ff}
+.badge{font-size:11px;color:#63b3ed;letter-spacing:.5px;text-transform:uppercase}
+.hero{padding:48px 36px 40px;border-bottom:1px solid rgba(255,255,255,.05)}
+.hero h1{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:#f0f4ff;line-height:1.2;letter-spacing:-.5px;margin-bottom:16px}
+.hero h1 em{color:#63b3ed;font-style:normal}
+.hero-sub{font-size:16px;color:#94a3b8;line-height:1.7;font-weight:300}
+.body{padding:36px 36px 0}
+.greet{font-size:16px;color:#94a3b8;margin-bottom:22px}
+.greet strong{color:#e8eaf0;font-weight:500}
+.p{font-size:15px;color:#94a3b8;line-height:1.8;margin-bottom:20px;font-weight:300}
+.p strong{color:#e8eaf0;font-weight:500}
+.stream-box{margin:28px 0;display:flex;flex-direction:column;gap:4px}
+.stream{background:#0f1729;border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:18px 20px}
+.stream-label{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.stream-name{font-size:16px;font-weight:500;color:#e8eaf0;margin-bottom:4px}
+.stream-desc{font-size:13px;color:#64748b;line-height:1.5}
+.stream-return{font-size:13px;color:#34d399;margin-top:8px;font-weight:500}
+.plus-sign{text-align:center;font-size:22px;color:#475569;padding:4px 0;line-height:1}
+.total-box{background:rgba(99,179,237,.06);border:1px solid rgba(99,179,237,.2);border-radius:10px;padding:18px 20px;text-align:center}
+.total-label{font-size:12px;color:#64748b;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.total-val{font-size:24px;font-weight:500;color:#63b3ed}
+.example-box{background:#0f1729;border-left:3px solid #34d399;border-radius:0 8px 8px 0;padding:16px 18px;margin:28px 0}
+.example-box p{font-size:14px;color:#94a3b8;line-height:1.7}
+.example-box strong{color:#e8eaf0}
+.cta-wrap{padding:36px 36px;text-align:center}
+.cta-btn{display:inline-block;background:#3b82f6;color:#fff;text-decoration:none;font-size:15px;font-weight:600;padding:16px 44px;border-radius:8px;letter-spacing:.1px}
+.cta-sub{font-size:13px;color:#475569;margin-top:12px}
+.disc{margin:0 36px 24px;padding:14px 18px;background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.1);border-radius:8px}
+.disc p{font-size:11px;color:#64748b;line-height:1.6}
+.ftr{padding:28px 36px;border-top:1px solid rgba(255,255,255,.06);text-align:center}
+.ftr-links{margin-bottom:12px}
+.ftr-links a{font-size:12px;color:#475569;text-decoration:none;margin:0 8px}
+.ftr-copy{font-size:11px;color:#334155}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="hdr-inner">
+      <a class="logo" href="https://wolvcapital.com">
+        <div class="logo-mark">W</div>
+        <span class="logo-text">WolvCapital</span>
+      </a>
+      <span class="badge">Day 06</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>Two income streams.<br><em>One platform.</em></h1>
+    <p class="hero-sub">Your investment plan is one stream. Staking BNB or BUSD directly for WOLV is the second. Most investors on WolvCapital run both simultaneously.</p>
+  </div>
+
+  <div class="body">
+    <p class="greet">Hi <strong>{{ first_name }}</strong>,</p>
+    <p class="p">Here's something most people don't realize until they've been on the platform for a while: your investment plan and WOLV staking are completely separate — and you can run both at the same time.</p>
+
+    <div class="stream-box">
+      <div class="stream">
+        <div class="stream-label">Stream 1</div>
+        <div class="stream-name">Investment plan (Pioneer / Vanguard / Horizon / Summit VIP)</div>
+        <div class="stream-desc">Locks capital for a fixed term. Returns principal + APY gain in fiat at maturity.</div>
+        <div class="stream-return">8–25% APY on your principal</div>
+      </div>
+
+      <div class="plus-sign">+</div>
+
+      <div class="stream">
+        <div class="stream-label">Stream 2</div>
+        <div class="stream-name">Direct BNB/BUSD staking for WOLV</div>
+        <div class="stream-desc">Stake separately from your investment plan. Rewards accumulate as WOLV tokens in real time, claimable to your wallet any time you choose.</div>
+        <div class="stream-return">WOLV rewards paid daily — no lock on claims</div>
+      </div>
+
+      <div class="plus-sign" style="color:transparent;font-size:4px;padding:0">·</div>
+
+      <div class="total-box">
+        <div class="total-label">Combined yield potential</div>
+        <div class="total-val">APY gains + daily WOLV rewards</div>
+      </div>
+    </div>
+
+    <div class="example-box">
+      <p><strong>Example:</strong> Investor on Horizon plan ($1,000 · 18% APY · 180 days) also stakes $200 BNB separately. They receive ~$90 APY gain at maturity <em>plus</em> daily WOLV rewards on the $200 staking position — two separate payouts, from the same account, running in parallel.</p>
+    </div>
+
+    <p class="p">The staking dashboard is live in your account. You don't need to wait for your investment plan to mature to access it.</p>
+  </div>
+
+  <div class="cta-wrap">
+    <a class="cta-btn" href="{{ stake_url }}">Open the Staking Dashboard →</a>
+    <p class="cta-sub">Starts at $50. WOLV rewards begin accumulating the same day.</p>
+  </div>
+
+  <div class="disc">
+    <p><strong>Risk disclosure:</strong> Both investment plans and direct staking carry risk including potential loss of principal. Returns are not guaranteed. WOLV token values fluctuate with market conditions. <a href="https://wolvcapital.com/risk-disclosure" style="color:#63b3ed">Full disclosure →</a></p>
+  </div>
+
+  <div class="ftr">
+    <div class="ftr-links">
+      <a href="https://wolvcapital.com/plans">Plans</a>
+      <a href="https://wolvcapital.com/wolv-token">WOLV Token</a>
+      <a href="https://wolvcapital.com/faq">FAQ</a>
+      <a href="https://wolvcapital.com/contact">Contact</a>
+    </div>
+    <div class="ftr-copy">© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy" style="color:#334155;text-decoration:none">Privacy</a> · <a href="https://wolvcapital.com/unsubscribe" style="color:#334155;text-decoration:none">Unsubscribe</a></div>
+  </div>
+</div>
+</body>
+</html>

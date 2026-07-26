@@ -1,0 +1,25 @@
+Dear {{FirstName}},
+
+Following a recent internal reconciliation, we would like to provide a clear overview of your current investment portfolio for transparency and clarity.
+
+Active Investments
+- Vanguard Plan
+  Invested Capital: $4,999.00
+  Start Date: 20 November 2025
+
+- Horizon Plan
+  Invested Capital: $9,000.00
+  Start Date: 23 November 2025
+
+- Horizon Plan
+  Invested Capital: $7,800.00
+  Start Date: 28 November 2025
+
+How Your Dashboard Works
+- Total Invested reflects only your invested capital.
+- Profit / ROI reflects earnings generated from active investment plans.
+- Wallet Balance shows available, withdrawable funds.
+
+Kind regards,
+WolvCapital Client Services
+support@.wolvcapital.com

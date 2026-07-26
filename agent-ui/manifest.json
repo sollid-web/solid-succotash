@@ -1,0 +1,14 @@
+{
+  "name": "WolvCapital Agent",
+  "short_name": "WolvSupport",
+  "description": "WolvCapital Live Support Agent Panel",
+  "start_url": "/agent/",
+  "display": "standalone",
+  "background_color": "#04142e",
+  "theme_color": "#04142e",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/static/admin/img/favicon-32x32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/static/admin/img/logo-dark.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

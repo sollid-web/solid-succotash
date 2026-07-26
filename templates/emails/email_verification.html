@@ -1,0 +1,36 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Verify Your Email - {{ brand_name|escape }}{% endblock %}
+
+{% block content %}
+<h2 style="color: #2196F3; font-size: 24px; font-weight: 600; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">Verify Your Email Address</h2>
+
+<p style="font-size: 16px; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">Hello!</p>
+
+<p style="font-size: 16px; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">Thank you for signing up with {{ brand_name|escape }}! To complete your registration and activate your account, please verify your email address by clicking the button below.</p>
+
+<div style="background-color: #f0f9f5; border-left: 4px solid #10B981; padding: 20px; margin: 25px 0; border-radius: 0 6px 6px 0;">
+    <h3 style="color: #444444; font-size: 18px; font-weight: 600; margin: 0 0 15px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">🔐 Security Notice</h3>
+    <p style="font-size: 16px; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">This verification link will expire in 2 hours for your security.</p>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ verify_url }}" style="display: inline-block; padding: 16px 32px; background-color: #2196F3; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 18px; margin: 10px 5px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">Verify Email Address</a>
+</div>
+
+<p style="font-size: 14px; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #666666; line-height: 1.6;">Or copy and paste this link into your browser:</p>
+
+<div style="background-color: #f8f9fa; padding: 15px; margin: 15px 0; border-radius: 6px; word-break: break-all;">
+    <code style="font-size: 14px; font-family: 'Courier New', monospace; color: #2196F3;">{{ verify_url }}</code>
+</div>
+
+<div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 20px; margin: 25px 0; border-radius: 0 6px 6px 0;">
+    <h3 style="color: #856404; font-size: 18px; font-weight: 600; margin: 0 0 15px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">⚠️ Didn't sign up?</h3>
+    <p style="font-size: 16px; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #856404; line-height: 1.6;">If you didn't create an account with {{ brand_name|escape }}, please ignore this email or contact our support team if you have concerns.</p>
+</div>
+
+<p style="font-size: 16px; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">Once verified, you'll be able to log in and start exploring our investment opportunities!</p>
+
+<p style="font-size: 16px; margin: 0 0 20px 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #333333; line-height: 1.6;">Best regards,<br>
+The {{ brand_name|escape }} Team</p>
+{% endblock %}

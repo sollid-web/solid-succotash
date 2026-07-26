@@ -1,0 +1,139 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wolvcapital"
+version = "1.0.0"
+description = "Django investment platform with manual approval workflows"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "Django==5.2.1",
+    "django-allauth==0.63.3",
+    "django-environ==0.11.2",
+    "python-dotenv==1.0.1",
+    "djangorestframework==3.15.2",
+    "djangorestframework-simplejwt==5.3.1",
+    "django-anymail==12.0",
+    "gunicorn==22.0.0",
+    "whitenoise==6.6.0",
+    "psycopg2-binary==2.9.10",
+    "pillow==10.4.0",
+    "django-cors-headers==4.4.0",
+    "django-extensions==3.2.3",
+    "stripe==6.0.0",
+    "dj-database-url==2.1.0",
+    "django-jazzmin==3.0.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==7.4.0",
+    "pytest-django==4.5.2",
+    "black==23.7.0",
+    "isort==5.12.0",
+    "flake8==6.0.0",
+]
+
+[tool.setuptools.packages.find]
+exclude = ["frontend*", "static*", "assets*", "templates*", "email_attachments*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+  | migrations
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+skip = ["migrations"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+exclude = [
+  ".git",
+  "__pycache__",
+  "migrations",
+  "static",
+  "staticfiles",
+  ".venv",
+]
+
+[tool.ruff.lint]
+# Expand to include imports (I), errors (E), warnings (W), and code quality (B)
+select = [
+  "F",   # Pyflakes: undefined names, unused imports
+  "E",   # pycodestyle errors
+  "W",   # pycodestyle warnings
+  "I",   # isort: import sorting
+  "B",   # flake8-bugbear: likely bugs
+  "UP",  # pyupgrade: modern Python idioms
+]
+ignore = [
+  "E501",  # line too long (handled by formatter)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests.py" = ["F401", "F811", "F405", "F541", "E402", "B017"]
+"**/admin.py" = ["F401", "E722"]
+"check_admin.py" = ["F401", "F541", "E402"]
+"create_admin.py" = ["F541", "E402"]
+"test_email.py" = ["E402"]  # Django setup requires imports after django.setup()
+"core/health_check.py" = ["F401", "F541"]
+"core/management/commands/test_login.py" = ["F541"]
+"core/management/commands/verify_db.py" = ["F401"]
+"core/views.py" = ["E402", "B904"]
+"api/views.py" = ["F401", "B904"]
+"api/tests.py" = ["E402"]
+"api/serializers.py" = ["B904"]
+"transactions/views.py" = ["F401"]
+"transactions/tests.py" = ["E402"]
+"users/apps.py" = ["F401"]
+"users/notification_service.py" = ["F541"]
+"users/management/commands/promote_admin.py" = ["B904"]
+"users/tests.py" = ["E402"]
+"investments/tests.py" = ["E402"]
+"test_notifications.py" = ["F405", "F541"]
+"core/pdf_letterhead.py" = ["W291"]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+warn_unused_ignores = false
+check_untyped_defs = false
+disallow_untyped_defs = false
+no_implicit_optional = false
+warn_return_any = false
+warn_unreachable = false
+# Custom AUTH_USER_MODEL type conflicts—ignore until full annotation
+disable_error_code = ["assignment", "misc", "typeddict-item", "attr-defined", "dict-item"]
+plugins = ["mypy_django_plugin.main"]
+exclude = [
+  ".*/migrations/.*",
+  ".*/static/.*",
+  ".*/staticfiles/.*",
+]
+
+# Scope checks to the most critical modules first
+files = [
+  "transactions/services.py",
+  "investments/services.py",
+  "core/views.py",
+]

@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Virtual Card - WolvCapital{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'cards/card.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="wc-card-container">
+    <div class="wc-card-header">
+        <h1>Virtual Card</h1>
+        <p>Your secure cryptocurrency spending card</p>
+    </div>
+
+    <!-- Card Display Section -->
+    <div class="wc-card-wrapper">
+        <div class="wc-card-flip" id="cardFlip">
+            <!-- Front of card -->
+            <div class="wc-card-face wc-card-front">
+                <div class="wc-card-background">
+                    <div class="wc-card-content">
+                        <div class="wc-card-brand">WolvCapital</div>
+                        <div class="wc-card-number">
+                            •••• •••• •••• {{ card.last4 }}
+                        </div>
+                        <div class="wc-card-bottom">
+                            <div class="wc-card-holder">
+                                <span class="wc-card-label">CARDHOLDER NAME</span>
+                                <span class="wc-card-value">{{ user.get_full_name|default:user.username|upper }}</span>
+                            </div>
+                            <div class="wc-card-expiry">
+                                <span class="wc-card-label">EXPIRES</span>
+                                <span class="wc-card-value">{{ card.exp_month|stringformat:"02d" }}/{{ card.exp_year|last:2 }}</span>
+                            </div>
+                        </div>
+                        <div class="wc-card-chip"></div>
+                    </div>
+                </div>
+                {% if is_frozen %}
+                <div class="wc-card-frozen-overlay">
+                    <div class="wc-frozen-badge">FROZEN</div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Back of card -->
+            <div class="wc-card-face wc-card-back">
+                <div class="wc-card-background">
+                    <div class="wc-card-back-content">
+                        <div class="wc-card-stripe"></div>
+                        <div class="wc-card-cvc-box">
+                            <span class="wc-cvc-label">CVC</span>
+                            <span class="wc-cvc-value">{{ card.cvc }}</span>
+                        </div>
+                        <div class="wc-card-back-notice">
+                            <small>Never share your CVC or card number with anyone</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Details Section -->
+    <div class="wc-card-details">
+        <button class="wc-btn wc-btn-flip" onclick="wcFlipCard()" title="Flip card to see CVC">
+            <span class="wc-btn-icon">🔄</span>
+            See CVC
+        </button>
+        
+        <div class="wc-card-numbers-grid">
+            <div class="wc-card-number-item">
+                <label>Card Number</label>
+                <div class="wc-copy-wrapper">
+                    <code class="wc-card-code">{{ card.number }}</code>
+                    <button class="wc-copy-btn" onclick="wcCopyToClipboard('{{ card.number }}', 'Card number')">
+                        📋 Copy
+                    </button>
+                </div>
+            </div>
+
+            <div class="wc-card-number-item">
+                <label>CVC</label>
+                <div class="wc-copy-wrapper">
+                    <code class="wc-card-code">{{ card.cvc }}</code>
+                    <button class="wc-copy-btn" onclick="wcCopyToClipboard('{{ card.cvc }}', 'CVC')">
+                        📋 Copy
+                    </button>
+                </div>
+            </div>
+
+            <div class="wc-card-number-item">
+                <label>Expiry</label>
+                <div class="wc-copy-wrapper">
+                    <code class="wc-card-code">{{ card.exp_month|stringformat:"02d" }}/{{ card.exp_year }}</code>
+                    <button class="wc-copy-btn" onclick="wcCopyToClipboard('{{ card.exp_month|stringformat:\"02d\" }}/{{ card.exp_year }}', 'Expiry')">
+                        📋 Copy
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Status Section -->
+    <div class="wc-card-status">
+        <div class="wc-status-indicator {% if is_frozen %}frozen{% else %}active{% endif %}">
+            <span class="wc-status-dot"></span>
+            <span class="wc-status-text">
+                {% if is_frozen %}Card is FROZEN{% else %}Card is ACTIVE{% endif %}
+            </span>
+        </div>
+
+        <button class="wc-btn {% if is_frozen %}wc-btn-unfreeze{% else %}wc-btn-freeze{% endif %}" 
+                onclick="wcToggleFreezeCard()" id="freezeBtn">
+            {% if is_frozen %}🔓 Unfreeze Card{% else %}❄️ Freeze Card{% endif %}
+        </button>
+
+        <p class="wc-card-status-note">
+            {% if is_frozen %}
+                Your card is currently frozen and cannot be used for purchases. Click "Unfreeze Card" to resume spending.
+            {% else %}
+                Your card is active and ready to use. Click "Freeze Card" to temporarily disable it for security.
+            {% endif %}
+        </p>
+    </div>
+
+    <!-- Spending Limits Section -->
+    <div class="wc-card-limits">
+        <h3>Spending Limits</h3>
+        <div class="wc-limits-grid">
+            <div class="wc-limit-item">
+                <label>Daily Limit</label>
+                <span class="wc-limit-value">$5,000</span>
+            </div>
+            <div class="wc-limit-item">
+                <label>Monthly Limit</label>
+                <span class="wc-limit-value">$50,000</span>
+            </div>
+            <div class="wc-limit-item">
+                <label>Transaction Limit</label>
+                <span class="wc-limit-value">$10,000</span>
+            </div>
+        </div>
+        <p class="wc-limits-note">Contact support to customize spending limits</p>
+    </div>
+
+    <!-- Recent Transactions Section -->
+    <div class="wc-card-transactions">
+        <h3>Recent Transactions</h3>
+        {% if transactions %}
+            <div class="wc-transactions-list">
+                {% for txn in transactions %}
+                    <div class="wc-transaction-item">
+                        <div class="wc-transaction-merchant">
+                            <div class="wc-merchant-icon">💳</div>
+                            <div class="wc-merchant-details">
+                                <div class="wc-merchant-name">{{ txn.merchant }}</div>
+                                <div class="wc-merchant-time">
+                                    {% now "d M Y" as today %}
+                                    {% if txn.date|date:"d M Y" == today %}
+                                        Today at {{ txn.date|time:"H:i" }}
+                                    {% else %}
+                                        {{ txn.date|date:"d M Y H:i" }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wc-transaction-amount {% if txn.type == 'refund' %}refund{% else %}purchase{% endif %}">
+                            <span class="wc-amount-symbol">{% if txn.type == 'refund' %}+{% else %}-{% endif %}</span>
+                            <span class="wc-amount">{{ txn.currency }} {{ txn.amount|floatformat:2 }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="wc-transactions-empty">
+                <p>No transactions yet. Use your card to make your first purchase.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Copy Notification Toast -->
+    <div class="wc-copy-toast" id="copyToast">
+        <span id="copyToastMessage"></span>
+    </div>
+</div>
+
+<!-- CSRF Token (for fetch requests) -->
+<script>
+    const CSRF_TOKEN = "{{ csrf_token }}";
+</script>
+
+<script src="{% static 'cards/card.js' %}"></script>
+{% endblock %}

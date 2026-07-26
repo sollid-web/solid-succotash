@@ -1,0 +1,35 @@
+KYC Application Submitted - {{ brand_name }}
+
+Dear {{ user.first_name|default:user.email }},
+
+Thank you for submitting your KYC (Know Your Customer) information. We have received your application and it is now under review.
+
+Application Received
+Your KYC application has been successfully submitted and is queued for review by our compliance team.
+
+What Happens Next?
+Our team will review your application within 1-2 business days. We may request additional information if needed. You'll receive an email notification once your application has been reviewed.
+
+Application Status:
+- Current Status: Pending Review
+- Submitted: {{ application.last_submitted_at|date:"F d, Y \a\t g:i A"|default:"Today" }}
+{% if application.id %}- Application ID: {{ application.id }}
+{% endif %}
+
+Need Help?
+If you have any questions about your KYC application or need assistance, please visit your dashboard or contact our support team.
+
+View Your Application: {{ site_url }}/dashboard/kyc/
+
+Thank you for using {{ brand_name }}!
+
+Best regards,
+The {{ brand_name }} Team
+
+---
+© {{ current_year }} {{ brand_name }}. All rights reserved.
+Visit our website: {{ site_url }}
+{% if user %}
+This email was sent to {{ user.email }}. 
+Manage email preferences: {{ site_url }}/profile/email-preferences/
+{% endif %}

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WolvCapital OG Image Generator</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #1a1a1a;
+      color: white;
+      padding: 20px;
+    }
+    .canvas-container {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      align-items: center;
+    }
+    canvas {
+      border: 2px solid #00C2FF;
+      border-radius: 8px;
+      max-width: 100%;
+    }
+    .controls {
+      background: #2a2a2a;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    button {
+      background: #00C2FF;
+      color: #0C1A3A;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      margin: 5px;
+    }
+    button:hover {
+      background: #00A8E0;
+    }
+    h2 {
+      color: #00C2FF;
+      margin-top: 0;
+    }
+    .image-title {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <h2>WolvCapital OG Image Generator</h2>
+    <p>Click each button to generate and download the corresponding OG image (1200x630px)</p>
+    <div>
+      <button onclick="generateHomeOG()">1. Home/Secure Investment</button>
+      <button onclick="generateAboutOG()">2. About Us</button>
+      <button onclick="generatePlansOG()">3. Investment Plans</button>
+      <button onclick="generateReferralOG()">4. Referral Program</button>
+      <button onclick="generateRiskOG()">5. Risk Disclosure</button>
+      <button onclick="generateTermsOG()">6. Terms of Service</button>
+      <button onclick="generatePrivacyOG()">7. Privacy Policy</button>
+    </div>
+  </div>
+
+  <div class="canvas-container" id="canvasContainer"></div>
+
+  <script>
+    const WIDTH = 1200;
+    const HEIGHT = 630;
+
+    function createCanvas(title) {
+      const container = document.getElementById('canvasContainer');
+      const wrapper = document.createElement('div');
+      wrapper.style.textAlign = 'center';
+      
+      const titleDiv = document.createElement('div');
+      titleDiv.className = 'image-title';
+      titleDiv.textContent = title;
+      
+      const canvas = document.createElement('canvas');
+      canvas.width = WIDTH;
+      canvas.height = HEIGHT;
+      
+      wrapper.appendChild(titleDiv);
+      wrapper.appendChild(canvas);
+      container.appendChild(wrapper);
+      
+      return canvas;
+    }
+
+    function drawGradientBackground(ctx) {
+      const gradient = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT);
+      gradient.addColorStop(0, '#0C1A3A');
+      gradient.addColorStop(0.5, '#0A1530');
+      gradient.addColorStop(1, '#00152A');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, WIDTH, HEIGHT);
+    }
+
+    function drawNetworkLines(ctx) {
+      ctx.strokeStyle = 'rgba(0, 194, 255, 0.15)';
+      ctx.lineWidth = 1;
+      
+      // Horizontal lines
+      for (let i = 0; i < 8; i++) {
+        ctx.beginPath();
+        ctx.moveTo(0, i * 90);
+        ctx.lineTo(WIDTH, i * 90);
+        ctx.stroke();
+      }
+      
+      // Vertical lines
+      for (let i = 0; i < 14; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * 100, 0);
+        ctx.lineTo(i * 100, HEIGHT);
+        ctx.stroke();
+      }
+      
+      // Glowing nodes
+      ctx.fillStyle = 'rgba(0, 194, 255, 0.4)';
+      for (let i = 0; i < 20; i++) {
+        const x = Math.random() * WIDTH;
+        const y = Math.random() * HEIGHT;
+        ctx.beginPath();
+        ctx.arc(x, y, 3, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Glow effect
+        const glow = ctx.createRadialGradient(x, y, 3, x, y, 20);
+        glow.addColorStop(0, 'rgba(0, 194, 255, 0.3)');
+        glow.addColorStop(1, 'rgba(0, 194, 255, 0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(x, y, 20, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function drawLogo(ctx, x, y, scale = 1) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(scale, scale);
+      
+      // W icon
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 48px Arial';
+      ctx.fillText('W', 0, 0);
+      
+      // WolvCapital text
+      ctx.font = 'bold 32px Arial';
+      ctx.fillText('olvCapital', 45, 0);
+      
+      ctx.restore();
+    }
+
+    function drawBadge(ctx, text, x, y) {
+      const padding = 20;
+      const badgeHeight = 50;
+      
+      ctx.font = 'bold 18px Arial';
+      const textWidth = ctx.measureText(text).width;
+      const badgeWidth = textWidth + padding * 2;
+      
+      // Badge background with glow
+      const glowGradient = ctx.createRadialGradient(x, y, 0, x, y, 100);
+      glowGradient.addColorStop(0, 'rgba(0, 194, 255, 0.2)');
+      glowGradient.addColorStop(1, 'rgba(0, 194, 255, 0)');
+      ctx.fillStyle = glowGradient;
+      ctx.fillRect(x - badgeWidth/2 - 20, y - badgeHeight/2 - 20, badgeWidth + 40, badgeHeight + 40);
+      
+      // Badge border
+      ctx.strokeStyle = '#00C2FF';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(x - badgeWidth/2, y - badgeHeight/2, badgeWidth, badgeHeight, 14);
+      ctx.stroke();
+      
+      // Badge background
+      ctx.fillStyle = 'rgba(0, 194, 255, 0.1)';
+      ctx.fill();
+      
+      // Badge text
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(text, x - textWidth/2, y + 6);
+    }
+
+    function generateHomeOG() {
+      const canvas = createCanvas('home-og.png');
+      const ctx = canvas.getContext('2d');
+      
+      drawGradientBackground(ctx);
+      drawNetworkLines(ctx);
+      drawLogo(ctx, 60, 80);
+      
+      // Main headline
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 72px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('Secure Digital Asset', WIDTH/2, 280);
+      ctx.fillText('Investment', WIDTH/2, 360);
+      
+      // Subtext
+      ctx.font = '36px Arial';
+      ctx.fillStyle = '#00C2FF';
+      ctx.fillText('Earn 1%–2% Daily ROI', WIDTH/2, 430);
+      
+      // Badge
+      drawBadge(ctx, 'Trusted by 45,000+ Investors', WIDTH - 200, HEIGHT - 70);
+      
+      downloadCanvas(canvas, 'home-og.png');
+    }
+
+    function generateAboutOG() {
+      const canvas = createCanvas('about-og.png');
+      const ctx = canvas.getContext('2d');
+      
+      drawGradientBackground(ctx);
+      
+      // Global map dots
+      ctx.fillStyle = 'rgba(0, 194, 255, 0.2)';
+      for (let i = 0; i < 100; i++) {
+        const x = Math.random() * WIDTH;
+        const y = Math.random() * HEIGHT;
+        ctx.beginPath();
+        ctx.arc(x, y, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      
+      // Connection lines
+      ctx.strokeStyle = 'rgba(0, 194, 255, 0.15)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i < 30; i++) {
+        ctx.beginPath();
+        ctx.moveTo(Math.random() * WIDTH, Math.random() * HEIGHT);
+        ctx.lineTo(Math.random() * WIDTH, Math.random() * HEIGHT);
+        ctx.stroke();
+      }
+      
+      drawLogo(ctx, 60, 80);
+      
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 80px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('About WolvCapital', WIDTH/2, 300);
+      
+      ctx.font = '32px Arial';
+      ctx.fillStyle = '#00C2FF';
+      ctx.fillText('Global, Secure, Transparent', WIDTH/2, 380);
+      ctx.fillText('Digital Asset Management', WIDTH/2, 430);
+      
+      downloadCanvas(canvas, 'about-og.png');
+    }
+
+    function generatePlansOG() {
+      const canvas = createCanvas('plans-og.png');
+      const ctx = canvas.getContext('2d');
+      
+      drawGradientBackground(ctx);
+      drawNetworkLines(ctx);
+      drawLogo(ctx, 60, 80);
+      
+      // ROI Bar Chart
+      const bars = [
+        { height: 120, label: '1.0%' },
+        { height: 150, label: '1.25%' },
+        { height: 180, label: '1.5%' },
+        { height: 200, label: '2.0%' }
+      ];
+      
+      const barWidth = 80;
+      const spacing = 30;
+      const startX = 150;
+      const baseY = 450;
+      
+      bars.forEach((bar, i) => {
+        const x = startX + (barWidth + spacing) * i;
+        
+        // Bar glow
+        const glow = ctx.createLinearGradient(x, baseY - bar.height, x, baseY);
+        glow.addColorStop(0, 'rgba(0, 194, 255, 0.8)');
+        glow.addColorStop(1, 'rgba(0, 194, 255, 0.3)');
+        
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.roundRect(x, baseY - bar.height, barWidth, bar.height, 8);
+        ctx.fill();
+        
+        // Bar outline
+        ctx.strokeStyle = '#00C2FF';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        // Label
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = 'bold 20px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(bar.label, x + barWidth/2, baseY - bar.height - 15);
+      });
+      
+      // Title
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 72px Arial';
+      ctx.fillText('Investment Plans', WIDTH/2, 200);
+      
+      ctx.font = '32px Arial';
+      ctx.fillStyle = '#00C2FF';
+      ctx.fillText('1%–2% Daily ROI • Flexible Withdrawals', WIDTH/2, 520);
+      
+      downloadCanvas(canvas, 'plans-og.png');
+    }
+
+    function generateReferralOG() {
+      const canvas = createCanvas('referral-og.png');
+      const ctx = canvas.getContext('2d');
+      
+      drawGradientBackground(ctx);
+      drawNetworkLines(ctx);
+      drawLogo(ctx, 60, 80);
+      
+      // Handshake/teamwork graphic (abstract)
+      ctx.strokeStyle = '#00C2FF';
+      ctx.lineWidth = 4;
+      
+      // Two circles representing people
+      ctx.beginPath();
+      ctx.arc(450, 350, 60, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      ctx.beginPath();
+      ctx.arc(750, 350, 60, 0, Math.PI * 2);
+      ctx.stroke();
+      
+      // Connection line
+      ctx.beginPath();
+      ctx.moveTo(510, 350);
+      ctx.lineTo(690, 350);
+      ctx.stroke();
+      
+      // Glow effect
+      const glow = ctx.createRadialGradient(600, 350, 0, 600, 350, 200);
+      glow.addColorStop(0, 'rgba(0, 194, 255, 0.3)');
+      glow.addColorStop(1, 'rgba(0, 194, 255, 0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(400, 250, 400, 200);
+      
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 72px Arial';
+      ctx.fillText('Referral Program', WIDTH/2, 180);
+      
+      ctx.font = '32px Arial';
+      ctx.fillStyle = '#00C2FF';
+      ctx.fillText('Earn Rewards by Inviting Investors', WIDTH/2, 520);
+      
+      downloadCanvas(canvas, 'referral-og.png');
+    }
+
+    function generateRiskOG() {
+      const canvas = createCanvas('risk-disclosure-og.png');
+      const ctx = canvas.getContext('2d');
+      
+      drawGradientBackground(ctx);
+      
+      // Warning shield
+      ctx.strokeStyle = '#00C2FF';
+      ctx.lineWidth = 4;
+      
+      const shieldX = WIDTH/2;
+      const shieldY = 340;
+      const shieldSize = 120;
+      
+      ctx.beginPath();
+      ctx.moveTo(shieldX, shieldY - shieldSize);
+      ctx.lineTo(shieldX + shieldSize/2, shieldY - shieldSize/2);
+      ctx.lineTo(shieldX + shieldSize/2, shieldY + shieldSize/2);
+      ctx.lineTo(shieldX, shieldY + shieldSize);
+      ctx.lineTo(shieldX - shieldSize/2, shieldY + shieldSize/2);
+      ctx.lineTo(shieldX - shieldSize/2, shieldY - shieldSize/2);
+      ctx.closePath();
+      ctx.stroke();
+      
+      // Exclamation mark
+      ctx.fillStyle = '#00C2FF';
+      ctx.fillRect(shieldX - 10, shieldY - 40, 20, 50);
+      ctx.beginPath();
+      ctx.arc(shieldX, shieldY + 30, 10, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Glow
+      const glow = ctx.createRadialGradient(shieldX, shieldY, 0, shieldX, shieldY, 200);
+      glow.addColorStop(0, 'rgba(0, 194, 255, 0.2)');
+      glow.addColorStop(1, 'rgba(0, 194, 255, 0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(shieldX - 200, shieldY - 200, 400, 400);
+      
+      drawLogo(ctx, 60, 80);
+      
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 72px Arial';
+      ctx.fillText('Risk Disclosure', WIDTH/2, 150);
+      
+      ctx.font = '28px Arial';
+      ctx.fillStyle = '#00C2FF';
+      ctx.fillText('Understand Digital Asset Investment Risks', WIDTH/2, 530);
+      
+      downloadCanvas(canvas, 'risk-disclosure-og.png');
+    }
+
+    function generateTermsOG() {
+      const canvas = createCanvas('terms-og.png');
+      const ctx = canvas.getContext('2d');
+      
+      drawGradientBackground(ctx);
+      drawNetworkLines(ctx);
+      drawLogo(ctx, 60, 80);
+      
+      // Document icon
+      ctx.strokeStyle = '#00C2FF';
+      ctx.lineWidth = 3;
+      
+      const docX = WIDTH/2 - 100;
+      const docY = 280;
+      
+      ctx.beginPath();
+      ctx.roundRect(docX, docY, 200, 260, 12);
+      ctx.stroke();
+      
+      // Document lines
+      ctx.strokeStyle = 'rgba(0, 194, 255, 0.5)';
+      ctx.lineWidth = 2;
+      for (let i = 0; i < 6; i++) {
+        ctx.beginPath();
+        ctx.moveTo(docX + 30, docY + 60 + i * 35);
+        ctx.lineTo(docX + 170, docY + 60 + i * 35);
+        ctx.stroke();
+      }
+      
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 72px Arial';
+      ctx.fillText('Terms of Service', WIDTH/2, 200);
+      
+      ctx.font = '28px Arial';
+      ctx.fillStyle = '#00C2FF';
+      ctx.fillText('User Agreement & Platform Rules', WIDTH/2, 580);
+      
+      downloadCanvas(canvas, 'terms-og.png');
+    }
+
+    function generatePrivacyOG() {
+      const canvas = createCanvas('privacy-og.png');
+      const ctx = canvas.getContext('2d');
+      
+      drawGradientBackground(ctx);
+      drawNetworkLines(ctx);
+      drawLogo(ctx, 60, 80);
+      
+      // Shield with lock
+      ctx.strokeStyle = '#00C2FF';
+      ctx.lineWidth = 4;
+      
+      const shieldX = WIDTH/2;
+      const shieldY = 340;
+      const shieldSize = 100;
+      
+      // Shield outline
+      ctx.beginPath();
+      ctx.moveTo(shieldX, shieldY - shieldSize);
+      ctx.lineTo(shieldX + shieldSize/2, shieldY - shieldSize/2);
+      ctx.lineTo(shieldX + shieldSize/2, shieldY + shieldSize/2);
+      ctx.lineTo(shieldX, shieldY + shieldSize);
+      ctx.lineTo(shieldX - shieldSize/2, shieldY + shieldSize/2);
+      ctx.lineTo(shieldX - shieldSize/2, shieldY - shieldSize/2);
+      ctx.closePath();
+      ctx.stroke();
+      
+      // Lock
+      ctx.beginPath();
+      ctx.arc(shieldX, shieldY - 10, 25, Math.PI, 0, false);
+      ctx.stroke();
+      
+      ctx.fillStyle = '#00C2FF';
+      ctx.fillRect(shieldX - 35, shieldY - 10, 70, 50);
+      ctx.strokeRect(shieldX - 35, shieldY - 10, 70, 50);
+      
+      // Glow
+      const glow = ctx.createRadialGradient(shieldX, shieldY, 0, shieldX, shieldY, 200);
+      glow.addColorStop(0, 'rgba(0, 194, 255, 0.3)');
+      glow.addColorStop(1, 'rgba(0, 194, 255, 0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(shieldX - 200, shieldY - 200, 400, 400);
+      
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 72px Arial';
+      ctx.fillText('Privacy Policy', WIDTH/2, 180);
+      
+      ctx.font = '36px Arial';
+      ctx.fillStyle = '#00C2FF';
+      ctx.fillText('Your Data. Protected.', WIDTH/2, 550);
+      
+      downloadCanvas(canvas, 'privacy-og.png');
+    }
+
+    function downloadCanvas(canvas, filename) {
+      setTimeout(() => {
+        canvas.toBlob((blob) => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          a.click();
+          URL.revokeObjectURL(url);
+        }, 'image/png');
+      }, 100);
+    }
+
+    // Add roundRect support for older browsers
+    if (!CanvasRenderingContext2D.prototype.roundRect) {
+      CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+        if (w < 2 * r) r = w / 2;
+        if (h < 2 * r) r = h / 2;
+        this.beginPath();
+        this.moveTo(x + r, y);
+        this.arcTo(x + w, y, x + w, y + h, r);
+        this.arcTo(x + w, y + h, x, y + h, r);
+        this.arcTo(x, y + h, x, y, r);
+        this.arcTo(x, y, x + w, y, r);
+        this.closePath();
+        return this;
+      };
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+Subject: Stake once. Earn WOLV automatically.
+
+Hey there,
+
+Let's look at the structure of our core fixed-yield accounts. We designed these tiers to serve different levels of commitment, ensuring that whether you're starting small or allocating significant capital, the rules remain entirely predictable.
+
+Here is how our active investment plans break down:
+
+- Pioneer Plan: 8% APY | 90-day lock | $100 Min
+  $100 invested → ~$102 at maturity + WOLV rewards
+
+- Vanguard Plan: 10% APY | 180-day lock | $500 Min
+  $500 invested → ~$525 at maturity + WOLV rewards
+
+- Horizon Plan: 12% APY | 270-day lock | $1,000 Min
+  $1,000 invested → ~$1,090 at maturity + WOLV rewards
+
+- Summit VIP: 14% APY | 365-day lock | $5,000 Min
+  $5,000 invested → ~$6,250 after 365 days + WOLV rewards
+
+All returns are projections based on stated APY. WOLV tokens are paid on top of your principal return — they're separate from the fiat-denominated gain shown above. Tomorrow I'll show you the real numbers on what that WOLV payout looks like.
+
+Open My Account and Choose a Plan: {{ plans_url }}
+
+KYC takes under 5 minutes. Pioneer starts at $100.
+
+---
+Risk disclosure: Returns shown are projections based on stated APY, not guaranteed. Staking involves risk of principal loss. Digital assets are volatile. Full disclosure: https://wolvcapital.com/risk-disclosure
+
+Plans | WOLV Token | FAQ | Contact
+© 2026 WolvCapital, Inc.

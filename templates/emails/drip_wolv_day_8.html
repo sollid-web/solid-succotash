@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>The questions everyone asks before they invest</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e1a;font-family:'DM Sans',Arial,sans-serif;color:#e8eaf0;-webkit-font-smoothing:antialiased}
+.wrap{max-width:620px;margin:0 auto;background:#0a0e1a}
+.hdr{background:#0d1226;padding:22px 36px;border-bottom:1px solid rgba(99,179,237,.12)}
+.hdr-inner{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:34px;height:34px;background:#3b82f6;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#fff;line-height:1}
+.logo-text{font-family:'Playfair Display',serif;font-size:19px;font-weight:600;color:#f0f4ff}
+.badge{font-size:11px;color:#63b3ed;letter-spacing:.5px;text-transform:uppercase}
+.hero{padding:48px 36px 40px;border-bottom:1px solid rgba(255,255,255,.05)}
+.hero h1{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:#f0f4ff;line-height:1.2;letter-spacing:-.5px;margin-bottom:16px}
+.hero h1 em{color:#63b3ed;font-style:normal}
+.hero-sub{font-size:16px;color:#94a3b8;line-height:1.7;font-weight:300}
+.body{padding:36px 36px 0}
+.greet{font-size:16px;color:#94a3b8;margin-bottom:22px}
+.greet strong{color:#e8eaf0;font-weight:500}
+.p{font-size:15px;color:#94a3b8;line-height:1.8;margin-bottom:20px;font-weight:300}
+.faq-list{margin:24px 0;display:flex;flex-direction:column;gap:2px}
+.faq{background:#0f1729;border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:20px 22px}
+.faq-q{font-size:15px;font-weight:500;color:#e8eaf0;margin-bottom:10px}
+.faq-q::before{content:"Q: ";color:#63b3ed;font-weight:400}
+.faq-a{font-size:14px;color:#94a3b8;line-height:1.7;font-weight:300}
+.faq-a strong{color:#e8eaf0;font-weight:500}
+.faq-a a{color:#63b3ed;text-decoration:none}
+.cta-wrap{padding:36px 36px;text-align:center}
+.cta-btn{display:inline-block;background:#3b82f6;color:#fff;text-decoration:none;font-size:15px;font-weight:600;padding:16px 44px;border-radius:8px;letter-spacing:.1px}
+.cta-sub{font-size:13px;color:#475569;margin-top:12px}
+.disc{margin:0 36px 24px;padding:14px 18px;background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.1);border-radius:8px}
+.disc p{font-size:11px;color:#64748b;line-height:1.6}
+.ftr{padding:28px 36px;border-top:1px solid rgba(255,255,255,.06);text-align:center}
+.ftr-links{margin-bottom:12px}
+.ftr-links a{font-size:12px;color:#475569;text-decoration:none;margin:0 8px}
+.ftr-copy{font-size:11px;color:#334155}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="hdr-inner">
+      <a class="logo" href="https://wolvcapital.com">
+        <div class="logo-mark">W</div>
+        <span class="logo-text">WolvCapital</span>
+      </a>
+      <span class="badge">Day 08</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>Is it safe?<br><em>Honest answers.</em></h1>
+    <p class="hero-sub">Five questions we hear every week — answered directly, with on-chain proof for every claim.</p>
+  </div>
+
+  <div class="body">
+    <p class="greet">Hi <strong>{{ first_name }}</strong>,</p>
+    <p class="p">We know what you're thinking. Here it is, straight:</p>
+
+    <div class="faq-list">
+      <div class="faq">
+        <div class="faq-q">Is WOLV a real token or just a number in your system?</div>
+        <div class="faq-a">WOLV is a real BEP-20 token deployed on BNB Smart Chain. Contract: <a href="https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c">0xe0167279...</a> — you can verify every transfer on BSCScan. It's not a balance we maintain internally. It's a token in your wallet.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">What happens to my money during the lock period?</div>
+        <div class="faq-a">Your principal is held with licensed custodians — not pooled into a fund we control. The lock period exists because the staking contract generates returns over a fixed time horizon. <strong>You cannot withdraw principal early</strong>, but you can claim WOLV rewards at any point during the lock.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">What if WOLV's price drops?</div>
+        <div class="faq-a">Your fiat principal return (APY on your investment plan) is <strong>separate from WOLV token value</strong>. If WOLV drops, your principal return is unaffected. WOLV rewards are additional — you can hold them, trade them, or claim and convert. Like any asset, WOLV value is not guaranteed.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">Has the platform been audited?</div>
+        <div class="faq-a">Yes. Independent third-party audit scored our smart contracts at <strong>87.14/100</strong>. No critical vulnerabilities were identified. Full audit report available on request via <a href="https://wolvcapital.com/contact">our contact page</a>.</div>
+      </div>
+      <div class="faq">
+        <div class="faq-q">What's the minimum I can actually start with?</div>
+        <div class="faq-a"><strong>$100 on Pioneer (8% APY, 90 days)</strong>. KYC takes under 5 minutes. You can start today and have a live position by end of day. The minimum for Vanguard is $500, Horizon is $1,000, and Summit VIP is $5,000.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-wrap">
+    <a class="cta-btn" href="{{ faq_url }}">Read the Full FAQ →</a>
+    <p class="cta-sub">Or <a href="{{ plans_url }}" style="color:#63b3ed;text-decoration:none">go straight to plans</a> — Pioneer starts at $100.</p>
+  </div>
+
+  <div class="disc">
+    <p><strong>Risk disclosure:</strong> Staking involves risk of principal loss. WOLV token values fluctuate. APY returns are projections, not guarantees. Past performance does not guarantee future results. <a href="https://wolvcapital.com/risk-disclosure" style="color:#63b3ed">Full disclosure →</a></p>
+  </div>
+
+  <div class="ftr">
+    <div class="ftr-links">
+      <a href="https://wolvcapital.com/plans">Plans</a>
+      <a href="https://wolvcapital.com/wolv-token">WOLV Token</a>
+      <a href="https://wolvcapital.com/security">Security</a>
+      <a href="https://wolvcapital.com/contact">Contact</a>
+    </div>
+    <div class="ftr-copy">© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy" style="color:#334155;text-decoration:none">Privacy</a> · <a href="https://wolvcapital.com/unsubscribe" style="color:#334155;text-decoration:none">Unsubscribe</a></div>
+  </div>
+</div>
+</body>
+</html>

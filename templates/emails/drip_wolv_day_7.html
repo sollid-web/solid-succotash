@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Your WOLV is waiting — have you claimed it?</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e1a;font-family:'DM Sans',Arial,sans-serif;color:#e8eaf0;-webkit-font-smoothing:antialiased}
+.wrap{max-width:620px;margin:0 auto;background:#0a0e1a}
+.hdr{background:#0d1226;padding:22px 36px;border-bottom:1px solid rgba(99,179,237,.12)}
+.hdr-inner{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:34px;height:34px;background:#3b82f6;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#fff;line-height:1}
+.logo-text{font-family:'Playfair Display',serif;font-size:19px;font-weight:600;color:#f0f4ff}
+.badge{font-size:11px;color:#63b3ed;letter-spacing:.5px;text-transform:uppercase}
+.hero{padding:48px 36px 40px;border-bottom:1px solid rgba(255,255,255,.05)}
+.hero h1{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:#f0f4ff;line-height:1.2;letter-spacing:-.5px;margin-bottom:16px}
+.hero h1 em{color:#63b3ed;font-style:normal}
+.hero-sub{font-size:16px;color:#94a3b8;line-height:1.7;font-weight:300}
+.body{padding:36px 36px 0}
+.greet{font-size:16px;color:#94a3b8;margin-bottom:22px}
+.greet strong{color:#e8eaf0;font-weight:500}
+.p{font-size:15px;color:#94a3b8;line-height:1.8;margin-bottom:20px;font-weight:300}
+.p strong{color:#e8eaf0;font-weight:500}
+.wallet-steps{margin:28px 0;display:flex;flex-direction:column;gap:2px}
+.wstep{background:#0f1729;border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:18px 20px;display:flex;align-items:flex-start;gap:16px}
+.wstep-num{width:30px;height:30px;background:rgba(99,179,237,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#63b3ed;flex-shrink:0}
+.wstep-body{}
+.wstep-title{font-size:14px;font-weight:500;color:#e8eaf0;margin-bottom:3px}
+.wstep-desc{font-size:13px;color:#64748b;line-height:1.55}
+.arrow-down{text-align:center;color:#334155;font-size:18px;padding:4px 0;line-height:1}
+.wallet-note{background:rgba(99,179,237,.06);border:1px solid rgba(99,179,237,.15);border-radius:10px;padding:18px 20px;margin:20px 0;text-align:center}
+.wallet-note p{font-size:14px;color:#94a3b8;line-height:1.65}
+.wallet-note strong{color:#63b3ed}
+.contract-tag{font-family:'DM Mono',monospace;font-size:11px;color:#63b3ed;background:rgba(99,179,237,.08);padding:6px 10px;border-radius:5px;display:inline-block;margin-top:8px;word-break:break-all}
+.cta-wrap{padding:36px 36px;text-align:center}
+.cta-btn{display:inline-block;background:#3b82f6;color:#fff;text-decoration:none;font-size:15px;font-weight:600;padding:16px 44px;border-radius:8px;letter-spacing:.1px}
+.cta-sub{font-size:13px;color:#475569;margin-top:12px}
+.disc{margin:0 36px 24px;padding:14px 18px;background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.1);border-radius:8px}
+.disc p{font-size:11px;color:#64748b;line-height:1.6}
+.ftr{padding:28px 36px;border-top:1px solid rgba(255,255,255,.06);text-align:center}
+.ftr-links{margin-bottom:12px}
+.ftr-links a{font-size:12px;color:#475569;text-decoration:none;margin:0 8px}
+.ftr-copy{font-size:11px;color:#334155}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="hdr-inner">
+      <a class="logo" href="https://wolvcapital.com">
+        <div class="logo-mark">W</div>
+        <span class="logo-text">WolvCapital</span>
+      </a>
+      <span class="badge">Day 07</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>Your WOLV is waiting.<br><em>Check your balance.</em></h1>
+    <p class="hero-sub">If you've already started staking, your WOLV rewards are accumulating right now. Here's how to connect your wallet and see them.</p>
+  </div>
+
+  <div class="body">
+    <p class="greet">Hi <strong>{{ first_name }}</strong>,</p>
+    <p class="p">One thing that surprises new investors: WOLV rewards don't sit in a WolvCapital account. They're sent to <strong>your wallet</strong> — MetaMask, Trust Wallet, or any BEP-20 compatible address you provide. That means you own them outright, from day one.</p>
+
+    <p class="p">If you haven't connected a wallet yet, here's exactly how:</p>
+
+    <div class="wallet-steps">
+      <div class="wstep">
+        <div class="wstep-num">1</div>
+        <div class="wstep-body">
+          <div class="wstep-title">Open MetaMask or Trust Wallet</div>
+          <div class="wstep-desc">Any BEP-20 compatible wallet works. Make sure you're on BNB Smart Chain (not Ethereum mainnet).</div>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="wstep">
+        <div class="wstep-num">2</div>
+        <div class="wstep-body">
+          <div class="wstep-title">Add WOLV as a custom token</div>
+          <div class="wstep-desc">In MetaMask: Assets → Import Token → paste the contract address below. Trust Wallet detects it automatically.</div>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="wstep">
+        <div class="wstep-num">3</div>
+        <div class="wstep-body">
+          <div class="wstep-title">Connect your wallet in dashboard</div>
+          <div class="wstep-desc">Go to your WolvCapital dashboard → Wallet → Connect. Your WOLV balance syncs in real time.</div>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="wstep">
+        <div class="wstep-num">4</div>
+        <div class="wstep-body">
+          <div class="wstep-title">Claim any time you're eligible</div>
+          <div class="wstep-desc">Hit "Claim WOLV" in your dashboard. Tokens transfer directly to your wallet address — no withdrawal form, no wait time.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wallet-note">
+      <p><strong>WOLV contract address (BNB Smart Chain)</strong></p>
+      <div class="contract-tag">0xe0167279aef7bf4ad313d261da82e8366822270c</div>
+    </div>
+
+    <p class="p">If you haven't opened an account yet — this is what you're missing. Your rewards accumulate from the moment your first position opens.</p>
+  </div>
+
+  <div class="cta-wrap">
+    <a class="cta-btn" href="{{ dashboard_url }}">Connect Wallet and Check My WOLV Balance →</a>
+    <p class="cta-sub">Or <a href="{{ plans_url }}" style="color:#63b3ed;text-decoration:none">open an account first</a> if you haven't yet.</p>
+  </div>
+
+  <div class="disc">
+    <p><strong>Risk disclosure:</strong> WOLV token values fluctuate with market conditions. Staking involves risk. <a href="https://wolvcapital.com/risk-disclosure" style="color:#63b3ed">Full disclosure →</a></p>
+  </div>
+
+  <div class="ftr">
+    <div class="ftr-links">
+      <a href="https://wolvcapital.com/plans">Plans</a>
+      <a href="https://wolvcapital.com/wolv-token">WOLV Token</a>
+      <a href="https://wolvcapital.com/faq">FAQ</a>
+      <a href="https://wolvcapital.com/contact">Contact</a>
+    </div>
+    <div class="ftr-copy">© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy" style="color:#334155;text-decoration:none">Privacy</a> · <a href="https://wolvcapital.com/unsubscribe" style="color:#334155;text-decoration:none">Unsubscribe</a></div>
+  </div>
+</div>
+</body>
+</html>

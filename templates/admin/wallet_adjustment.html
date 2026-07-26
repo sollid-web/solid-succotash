@@ -1,0 +1,23 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+<h2>{{ title }}</h2>
+
+<p>
+    <strong>User:</strong> {{ wallet.user }}<br>
+    <strong>Current Balance:</strong> {{ wallet.balance }}
+</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <input type="hidden" name="apply" value="1">
+
+    <div class="submit-row">
+        <input type="submit" value="Confirm" class="default">
+        <a href="../" class="button cancel-link">Cancel</a>
+    </div>
+</form>
+{% endblock %}

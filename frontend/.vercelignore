@@ -1,0 +1,11 @@
+# Block node_modules from uploading (Vercel installs these on the server)
+node_modules/
+.next/
+out/
+build/
+
+# Just in case it tries to look upwards for python elements
+../venv/
+../.venv/
+../lib/
+../__pycache__/

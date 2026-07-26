@@ -1,0 +1,46 @@
+"""
+URL configuration for WolvCapital investment platform.
+"""
+
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import include, path
+from rest_framework_simplejwt.views import TokenRefreshView
+from api.jwt import EmailOrUsernameTokenObtainPairView
+
+from transactions.admin import SystemStatusView
+
+
+urlpatterns = [
+    path("api/cards/", include("cards.urls")),
+    path("", include("core.urls")),  # Root, /healthz/, /agreements/x/pdf/, /contact/, /inbox/
+    path("admin/", admin.site.urls),
+    path("admin/system-status/", SystemStatusView.as_view(), name="system_status"),
+    path("accounts/", include("allauth.urls")),
+    path("api/", include("api.urls")),
+    path("api/chat/", include("chat.urls")),
+    path("api/token/", EmailOrUsernameTokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/auth/jwt/create/", EmailOrUsernameTokenObtainPairView.as_view(), name="jwt_create"),
+    path("api/auth/jwt/refresh/", TokenRefreshView.as_view(), name="jwt_refresh"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/referrals/", include("referrals.urls")),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+admin.site.site_header = "WolvCapital Administration"
+admin.site.site_title = "WolvCapital Admin"
+admin.site.index_title = "Welcome to WolvCapital Administration"
+# Agent UI
+from django.views.generic import TemplateView
+from django.views.static import serve
+import os
+
+urlpatterns += [
+    path("agent/", serve, {
+        "path": "index.html",
+        "document_root": os.path.join(settings.BASE_DIR, "agent-ui")
+    }),
+]

@@ -1,0 +1,15 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+<h1>Reject KYC Document</h1>
+<form method="post" style="max-width:400px;">
+    {% csrf_token %}
+    <p>Please provide a reason for rejection:</p>
+    <textarea name="reason" rows="4" style="width:100%;"></textarea>
+    <div style="margin-top:20px;">
+        <input type="submit" value="Submit" class="default" />
+        <a href="{{ request.META.HTTP_REFERER }}" class="button">Cancel</a>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Last email. One question.</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e1a;font-family:'DM Sans',Arial,sans-serif;color:#e8eaf0;-webkit-font-smoothing:antialiased}
+.wrap{max-width:620px;margin:0 auto;background:#0a0e1a}
+.hdr{background:#0d1226;padding:22px 36px;border-bottom:1px solid rgba(99,179,237,.12)}
+.hdr-inner{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:34px;height:34px;background:#3b82f6;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#fff;line-height:1}
+.logo-text{font-family:'Playfair Display',serif;font-size:19px;font-weight:600;color:#f0f4ff}
+.badge{font-size:11px;color:#63b3ed;letter-spacing:.5px;text-transform:uppercase}
+.body{padding:52px 36px 0}
+.greet{font-size:18px;color:#94a3b8;margin-bottom:28px}
+.greet strong{color:#e8eaf0;font-weight:500}
+.p{font-size:16px;color:#94a3b8;line-height:1.85;margin-bottom:22px;font-weight:300}
+.p strong{color:#e8eaf0;font-weight:500}
+.recap-box{background:#0f1729;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:24px;margin:32px 0}
+.recap-title{font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px}
+.recap-item{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:14px;color:#94a3b8}
+.recap-item:last-child{margin-bottom:0}
+.recap-dot{width:6px;height:6px;border-radius:50%;background:#63b3ed;flex-shrink:0}
+.recap-item strong{color:#e8eaf0;font-weight:500}
+.question-block{margin:32px 0;padding:28px;background:rgba(99,179,237,.05);border:1px solid rgba(99,179,237,.15);border-radius:12px;text-align:center}
+.question-text{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:#f0f4ff;line-height:1.35;margin-bottom:12px}
+.question-sub{font-size:14px;color:#64748b;line-height:1.6}
+.reply-note{font-size:14px;color:#94a3b8;line-height:1.75;margin-bottom:28px;font-style:italic}
+.cta-wrap{padding:0 0 36px;text-align:center}
+.cta-btn{display:inline-block;background:#3b82f6;color:#fff;text-decoration:none;font-size:15px;font-weight:600;padding:16px 44px;border-radius:8px;letter-spacing:.1px}
+.cta-sub{font-size:13px;color:#475569;margin-top:12px}
+.sign-off{padding:0 36px 36px}
+.sign-off p{font-size:14px;color:#64748b;line-height:1.7}
+.disc{margin:0 36px 24px;padding:14px 18px;background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.1);border-radius:8px}
+.disc p{font-size:11px;color:#64748b;line-height:1.6}
+.ftr{padding:28px 36px;border-top:1px solid rgba(255,255,255,.06);text-align:center}
+.ftr-links{margin-bottom:12px}
+.ftr-links a{font-size:12px;color:#475569;text-decoration:none;margin:0 8px}
+.ftr-copy{font-size:11px;color:#334155}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="hdr-inner">
+      <a class="logo" href="https://wolvcapital.com">
+        <div class="logo-mark">W</div>
+        <span class="logo-text">WolvCapital</span>
+      </a>
+      <span class="badge">Day 10 · Final</span>
+    </div>
+  </div>
+
+  <div class="body">
+    <p class="greet">Hi <strong>{{ first_name }}</strong>,</p>
+
+    <p class="p">This is the last email in this sequence. I'm not going to pitch you again. You've seen everything over the last 9 days — the math, the contracts, the security setup, the objections addressed honestly.</p>
+
+    <p class="p">Here's what we covered:</p>
+
+    <div class="recap-box">
+      <div class="recap-title">9-day summary</div>
+      <div class="recap-item"><div class="recap-dot"></div><span><strong>Day 1:</strong> Why savings accounts are losing you money</span></div>
+      <div class="recap-item"><div class="recap-dot"></div><span><strong>Day 2:</strong> WOLV is a real on-chain token — verifiable on BSCScan</span></div>
+      <div class="recap-item"><div class="recap-dot"></div><span><strong>Day 3:</strong> Four plans from $100 to $5,000 minimum</span></div>
+      <div class="recap-item"><div class="recap-dot"></div><span><strong>Day 4:</strong> Exact return calculations for every plan</span></div>
+      <div class="recap-item"><div class="recap-dot"></div><span><strong>Day 5:</strong> Audit score 87.14/100 · Fixed supply · No minting</span></div>
+      <div class="recap-item"><div class="recap-dot"></div><span><strong>Day 6:</strong> Two income streams running in parallel</span></div>
+      <div class="recap-item"><div class="recap-dot"></div><span><strong>Day 7:</strong> How to connect your wallet and claim WOLV</span></div>
+      <div class="recap-item"><div class="recap-dot"></div><span><strong>Day 8:</strong> Five hard questions — answered directly</span></div>
+      <div class="recap-item"><div class="recap-dot"></div><span><strong>Day 9:</strong> The reward pool is finite and running down</span></div>
+    </div>
+
+    <div class="question-block">
+      <div class="question-text">What would it take<br>for you to start?</div>
+      <div class="question-sub">Reply to this email. I'll read it personally and respond the same day.</div>
+    </div>
+
+    <p class="reply-note">If it's a question, I'll answer it. If it's a concern, I'll address it honestly — including telling you if WolvCapital isn't right for your situation. And if you're ready, Pioneer starts at $100 and takes 5 minutes to open.</p>
+  </div>
+
+  <div class="cta-wrap">
+    <a class="cta-btn" href="{{ signup_url }}">I'm Ready — Open My Account →</a>
+    <p class="cta-sub">Pioneer · $100 minimum · 8% APY · 90 day lock. KYC under 5 minutes.</p>
+  </div>
+
+  <div class="sign-off">
+    <p>— The WolvCapital Team<br>
+    <a href="https://wolvcapital.com/contact" style="color:#63b3ed;text-decoration:none">wolvcapital.com/contact</a></p>
+  </div>
+
+  <div class="disc">
+    <p><strong>Risk disclosure:</strong> All investment plans and staking carry risk including potential loss of principal. Digital assets are volatile. Returns are projections, not guarantees. Past performance does not guarantee future results. Only invest capital you can afford to lose. <a href="https://wolvcapital.com/risk-disclosure" style="color:#63b3ed">Full disclosure →</a></p>
+  </div>
+
+  <div class="ftr">
+    <div class="ftr-links">
+      <a href="https://wolvcapital.com/plans">Plans</a>
+      <a href="https://wolvcapital.com/wolv-token">WOLV Token</a>
+      <a href="https://wolvcapital.com/faq">FAQ</a>
+      <a href="https://wolvcapital.com/contact">Contact</a>
+    </div>
+    <div class="ftr-copy">© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy" style="color:#334155;text-decoration:none">Privacy</a> · <a href="https://wolvcapital.com/unsubscribe" style="color:#334155;text-decoration:none">Unsubscribe</a></div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>What $500 looks like after 90 days</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0e1a;font-family:'DM Sans',Arial,sans-serif;color:#e8eaf0;-webkit-font-smoothing:antialiased}
+.wrap{max-width:620px;margin:0 auto;background:#0a0e1a}
+.hdr{background:#0d1226;padding:22px 36px;border-bottom:1px solid rgba(99,179,237,.12)}
+.hdr-inner{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:34px;height:34px;background:#3b82f6;border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:#fff;line-height:1}
+.logo-text{font-family:'Playfair Display',serif;font-size:19px;font-weight:600;color:#f0f4ff}
+.badge{font-size:11px;color:#63b3ed;letter-spacing:.5px;text-transform:uppercase}
+.hero{padding:48px 36px 40px;border-bottom:1px solid rgba(255,255,255,.05)}
+.hero h1{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:#f0f4ff;line-height:1.2;letter-spacing:-.5px;margin-bottom:16px}
+.hero h1 em{color:#63b3ed;font-style:normal}
+.hero-sub{font-size:16px;color:#94a3b8;line-height:1.7;font-weight:300}
+.body{padding:36px 36px 0}
+.greet{font-size:16px;color:#94a3b8;margin-bottom:22px}
+.greet strong{color:#e8eaf0;font-weight:500}
+.p{font-size:15px;color:#94a3b8;line-height:1.8;margin-bottom:20px;font-weight:300}
+.p strong{color:#e8eaf0;font-weight:500}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:28px 0}
+.calc-card{background:#0f1729;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:20px}
+.calc-plan{font-size:12px;color:#64748b;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.calc-input{font-size:20px;font-weight:500;color:#e8eaf0;margin-bottom:2px}
+.calc-days{font-size:12px;color:#64748b;margin-bottom:14px}
+.calc-divider{height:1px;background:rgba(255,255,255,.05);margin-bottom:14px}
+.calc-out-label{font-size:11px;color:#64748b;margin-bottom:4px}
+.calc-out-val{font-size:22px;font-weight:500;color:#34d399;margin-bottom:4px}
+.calc-wolv{font-size:12px;color:#63b3ed}
+.note-box{background:#0f1729;border-left:3px solid #63b3ed;border-radius:0 8px 8px 0;padding:16px 18px;margin:28px 0}
+.note-box p{font-size:14px;color:#94a3b8;line-height:1.65}
+.note-box strong{color:#e8eaf0}
+.cta-wrap{padding:36px 36px;text-align:center}
+.cta-btn{display:inline-block;background:#3b82f6;color:#fff;text-decoration:none;font-size:15px;font-weight:600;padding:16px 44px;border-radius:8px;letter-spacing:.1px}
+.cta-sub{font-size:13px;color:#475569;margin-top:12px}
+.disc{margin:0 36px 24px;padding:14px 18px;background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.1);border-radius:8px}
+.disc p{font-size:11px;color:#64748b;line-height:1.6}
+.ftr{padding:28px 36px;border-top:1px solid rgba(255,255,255,.06);text-align:center}
+.ftr-links{margin-bottom:12px}
+.ftr-links a{font-size:12px;color:#475569;text-decoration:none;margin:0 8px}
+.ftr-copy{font-size:11px;color:#334155}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <div class="hdr-inner">
+      <a class="logo" href="https://wolvcapital.com">
+        <div class="logo-mark">W</div>
+        <span class="logo-text">WolvCapital</span>
+      </a>
+      <span class="badge">Day 04</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>No projections.<br><em>Just the math.</em></h1>
+    <p class="hero-sub">Here's exactly what four different investment amounts look like at maturity — WOLV rewards included.</p>
+  </div>
+
+  <div class="body">
+    <p class="greet">Hi <strong>{{ first_name }}</strong>,</p>
+    <p class="p">People say "potential returns" and give you a percentage. I'm going to give you actual dollar amounts — so you can decide if this is worth your time before you ever touch your wallet.</p>
+
+    <div class="calc-grid">
+      <div class="calc-card">
+        <div class="calc-plan">Pioneer · 8% APY</div>
+        <div class="calc-input">$500 in</div>
+        <div class="calc-days">90 days</div>
+        <div class="calc-divider"></div>
+        <div class="calc-out-label">At maturity</div>
+        <div class="calc-out-val">$510</div>
+        <div class="calc-wolv">+ ~40 WOLV tokens</div>
+      </div>
+      <div class="calc-card">
+        <div class="calc-plan">Vanguard · 12% APY</div>
+        <div class="calc-input">$1,000 in</div>
+        <div class="calc-days">120 days</div>
+        <div class="calc-divider"></div>
+        <div class="calc-out-label">At maturity</div>
+        <div class="calc-out-val">$1,039</div>
+        <div class="calc-wolv">+ ~83 WOLV tokens</div>
+      </div>
+      <div class="calc-card">
+        <div class="calc-plan">Horizon · 18% APY</div>
+        <div class="calc-input">$5,000 in</div>
+        <div class="calc-days">180 days</div>
+        <div class="calc-divider"></div>
+        <div class="calc-out-label">At maturity</div>
+        <div class="calc-out-val">$5,443</div>
+        <div class="calc-wolv">+ ~443 WOLV tokens</div>
+      </div>
+      <div class="calc-card">
+        <div class="calc-plan">Summit VIP · 25% APY</div>
+        <div class="calc-input">$10,000 in</div>
+        <div class="calc-days">365 days</div>
+        <div class="calc-divider"></div>
+        <div class="calc-out-label">At maturity</div>
+        <div class="calc-out-val">$12,500</div>
+        <div class="calc-wolv">+ ~2,500 WOLV tokens</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <p><strong>WOLV token value isn't fixed.</strong> The amounts above show fiat principal + projected APY return. WOLV tokens are additional — their value depends on market price at the time you claim them. The more the platform grows, the more demand for WOLV. You can verify the current pool balance at any time on BSCScan.</p>
+    </div>
+
+    <p class="p">Tomorrow I'll cover what our security setup actually looks like — because trust isn't a pitch, it's something you should be able to verify independently.</p>
+  </div>
+
+  <div class="cta-wrap">
+    <a class="cta-btn" href="{{ plans_url }}">Choose My Plan and Get Started →</a>
+    <p class="cta-sub">Pioneer starts at $100. KYC takes under 5 minutes.</p>
+  </div>
+
+  <div class="disc">
+    <p><strong>Risk disclosure:</strong> Returns shown are projections based on stated APY rates. Past performance does not guarantee future returns. WOLV token values fluctuate with market conditions. Staking involves risk of principal loss. <a href="https://wolvcapital.com/risk-disclosure" style="color:#63b3ed">Full disclosure →</a></p>
+  </div>
+
+  <div class="ftr">
+    <div class="ftr-links">
+      <a href="https://wolvcapital.com/plans">Plans</a>
+      <a href="https://wolvcapital.com/wolv-token">WOLV Token</a>
+      <a href="https://wolvcapital.com/faq">FAQ</a>
+      <a href="https://wolvcapital.com/contact">Contact</a>
+    </div>
+    <div class="ftr-copy">© 2026 WolvCapital, Inc. · <a href="https://wolvcapital.com/privacy" style="color:#334155;text-decoration:none">Privacy</a> · <a href="https://wolvcapital.com/unsubscribe" style="color:#334155;text-decoration:none">Unsubscribe</a></div>
+  </div>
+</div>
+</body>
+</html>

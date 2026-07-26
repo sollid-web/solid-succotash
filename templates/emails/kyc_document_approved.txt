@@ -1,0 +1,26 @@
+KYC Document Approved - {{ brand_name }}
+
+Dear {{ user.first_name|default:user.email }},
+
+Your {{ document.get_document_type_display|lower }} has been reviewed and approved as part of your KYC application.
+
+Document Details:
+- Document Type: {{ document.get_document_type_display }}
+- Approved On: {{ document.reviewed_at|date:"F d, Y \a\t g:i A" }}
+{% if notes %}- Notes: {{ notes }}
+{% endif %}
+
+If all required documents are approved, your full KYC application status may be updated shortly. You can check your KYC dashboard for the latest information.
+
+View KYC Status: {{ site_url }}/dashboard/kyc/
+
+Best regards,
+The {{ brand_name }} Team
+
+---
+© {{ current_year }} {{ brand_name }}. All rights reserved.
+Visit our website: {{ site_url }}
+{% if user %}
+This email was sent to {{ user.email }}. 
+Manage email preferences: {{ site_url }}/profile/email-preferences/
+{% endif %}

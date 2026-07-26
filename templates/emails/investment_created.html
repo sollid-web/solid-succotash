@@ -1,0 +1,54 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Investment Submitted - {{ brand_name }}{% endblock %}
+
+{% block content %}
+<h2>📈 Investment Submitted</h2>
+
+<p>Dear {{ user.first_name|default:user.email }},</p>
+
+<p>Your investment request has been submitted successfully and is now under review by our admin team.</p>
+
+<div class="info-box">
+    <h3>Investment Under Review</h3>
+    <p>We'll review your investment request and notify you once it's processed.</p>
+</div>
+
+<table class="details-table">
+    <tr>
+        <td>Investment Plan:</td>
+        <td>{{ investment.plan.name }}</td>
+    </tr>
+    <tr>
+        <td>Amount:</td>
+        <td>${{ investment.amount }}</td>
+    </tr>
+    <tr>
+        <td>Daily ROI:</td>
+        <td>{{ investment.plan.daily_roi_percentage }}%</td>
+    </tr>
+    <tr>
+        <td>Duration:</td>
+        <td>{{ investment.plan.duration_days }} days</td>
+    </tr>
+    <tr>
+        <td>Expected Return:</td>
+        <td>${{ investment.total_return }}</td>
+    </tr>
+    <tr>
+        <td>Status:</td>
+        <td><strong style="color: #F59E0B;">Pending Review</strong></td>
+    </tr>
+</table>
+
+<div style="text-align: center; margin: 30px 0;">
+    <a href="{{ site_url }}{{ dashboard_url }}" class="btn">View Dashboard</a>
+</div>
+
+<p>Once approved, your investment will start generating returns according to the selected plan.</p>
+
+<p>Thank you for investing with {{ brand_name }}!</p>
+
+<p>Best regards,<br>
+The {{ brand_name }} Team</p>
+{% endblock %}

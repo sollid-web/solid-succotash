@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 
 const CONTRACTS = [
   { name: "WOLV Token",       address: "0xe0167279aef7bf4ad313d261da82e8366822270c", desc: "Fixed supply · No mint · BEP-20", url: "https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c" },
-  { name: "Reward Pool",      address: "0xb233cf74b14abf9d9702d585c540030125599579", desc: "48hr timelock · Treasury funded",  url: "https://bscscan.com/address/0xb233cf74b14abf9d9702d585c540030125599579#code" },
-  { name: "Staking Contract", address: "0x4b62efee5695ed55cd362a0b818f4c5f9694322b", desc: "Chainlink oracle · Auditable",      url: "https://bscscan.com/address/0x4b62efee5695ed55cd362a0b818f4c5f9694322b#code" },
+  { name: "Reward Pool",      address: "0x7310f3e07627ce98246973e068bf2ff294f84e5f", desc: "48hr timelock · Treasury funded",  url: "https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c?a=0x7310f3e07627ce98246973e068bf2ff294f84e5f" },
+  { name: "Staking Contract", address: "0x7cd22f3c08b4195225da7d043cbe00da118d31ec", desc: "Chainlink oracle · Auditable",      url: "https://bscscan.com/address/0x7cd22f3c08b4195225da7d043cbe00da118d31ec#code" },
 ];
 
 export default function SecurityPage(): JSX.Element {

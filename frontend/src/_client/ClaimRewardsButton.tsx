@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 
 // Replace with your actual Staking/Rewards Contract Address on BNB Chain
 
-const REWARDS_CONTRACT = '0xb233cf74b14abf9d9702d585c540030125599579'; 
+const REWARDS_CONTRACT = '0x7310f3e07627ce98246973e068bf2ff294f84e5f'; 
 
 const REWARDS_ABI = [
 

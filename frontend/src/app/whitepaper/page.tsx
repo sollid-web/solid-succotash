@@ -11,12 +11,12 @@ const CONTRACTS = [
   },
   {
     label: "Reward Pool",
-    address: "0xb233cf74b14abf9d9702d585c540030125599579",
+    address: "0x7310f3e07627ce98246973e068bf2ff294f84e5f",
     note: "48-hour timelock · Owner-funded · Verified",
   },
   {
     label: "Staking Contract",
-    address: "0x4b62efee5695ed55cd362a0b818f4c5f9694322b",
+    address: "0x7cd22f3c08b4195225da7d043cbe00da118d31ec",
     note: "Chainlink price feeds · 4 staking tiers · Verified",
   },
 ];
@@ -49,7 +49,7 @@ const SECTIONS = [
     content: [
       "WolvCapital operates a two-layer architecture. The off-chain layer handles KYC verification, fiat onboarding, portfolio management, and manual withdrawal approvals — providing regulatory compliance and fraud prevention. The on-chain layer handles WOLV token distribution, staking contracts, and the reward pool.",
       "The frontend is built on Next.js 16 deployed on Vercel, with a scalable cloud backend. All smart contracts are deployed on BNB Smart Chain (BSC) — chosen for its low transaction fees, EVM compatibility, and large ecosystem.",
-      "Yield Generation: Staking rewards are funded entirely from the Investor Rewards allocation — 600,000,000 WOLV (60% of total supply) held in the timelock-protected RewardPool contract (0xb233cf74b14abf9d9702d585c540030125599579). This allocation is fixed at deployment and cannot be increased or minted. Rewards are distributed proportionally to stakers based on their tier APY and lock duration. The RewardPool contract is publicly verifiable on BSCScan, allowing any investor to confirm the remaining reward supply at any time.",
+      "Yield Generation: Staking rewards are funded entirely from the Investor Rewards allocation — 600,000,000 WOLV (60% of total supply) held in the timelock-protected RewardPool contract (0x7310f3e07627ce98246973e068bf2ff294f84e5f). This allocation is fixed at deployment and cannot be increased or minted. Rewards are distributed proportionally to stakers based on their tier APY and lock duration. The RewardPool contract is publicly verifiable on BSCScan, allowing any investor to confirm the remaining reward supply at any time.",
       "Investment plans operate on fixed-term, fixed-ROI structures. Returns are calculated server-side and reflected in the investor dashboard daily. When profits are distributed, WOLV tokens are transferred from the treasury wallet to investor wallets — creating an on-chain record of every distribution.",
     ],
   },
@@ -83,8 +83,8 @@ const SECTIONS = [
     title: "Staking System",
     content: [
       "WolvCapital's staking system allows WOLV holders to stake their tokens and earn additional APY rewards. The system consists of two audited smart contracts: the StakingContract and the RewardPool.",
-      "StakingContract (0x4b62efee5695ed55cd362a0b818f4c5f9694322b): Handles stake deposits, lock periods, reward calculations using Chainlink price feeds, and claim processing. Four staking tiers are available: Starter (8% APY), Growth (12% APY), Pro (18% APY), and Elite (25% APY).",
-      "RewardPool (0xb233cf74b14abf9d9702d585c540030125599579): Holds the WOLV reward supply available for staker claims. Protected by a 48-hour timelock — no funds can be moved without a 48-hour delay, preventing sudden rug pulls or unauthorized withdrawals.",
+      "StakingContract (0x7cd22f3c08b4195225da7d043cbe00da118d31ec): Handles stake deposits, lock periods, reward calculations using Chainlink price feeds, and claim processing. Four staking tiers are available: Starter (8% APY), Growth (12% APY), Pro (18% APY), and Elite (25% APY).",
+      "RewardPool (0x7310f3e07627ce98246973e068bf2ff294f84e5f): Holds the WOLV reward supply available for staker claims. Protected by a 48-hour timelock — no funds can be moved without a 48-hour delay, preventing sudden rug pulls or unauthorized withdrawals.",
       "Chainlink integration: Reward calculations incorporate Chainlink's decentralized price feeds for fair and manipulation-resistant APY computation. This eliminates reliance on a single price source and protects stakers from oracle manipulation attacks.",
       "The reward pool was initially funded with 1,000,000 WOLV from the treasury. WolvCapital commits to maintaining adequate pool funding as the staking user base grows. Pool balance is publicly visible on BSCScan at all times.",
     ],
@@ -370,7 +370,7 @@ export default function WhitepaperPage() {
                   </div>
                 </div>
                 <a
-                  href={`https://bscscan.com/address/${c.address}#code`}
+                  href={c.label === 'Reward Pool' ? `https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c?a=${c.address}` : `https://bscscan.com/address/${c.address}#code`}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{

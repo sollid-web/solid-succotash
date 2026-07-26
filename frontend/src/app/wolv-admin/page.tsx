@@ -7,8 +7,8 @@ import { parseUnits, formatUnits } from 'viem';
 
 // ── Contracts ─────────────────────────────────────────────────────────────────
 const WOLV_V2      = '0xe0167279aef7bf4ad313d261da82e8366822270c' as const;
-const POOL         = '0xb233cf74b14abf9d9702d585c540030125599579' as const;
-const STAKING      = '0x4b62efee5695ed55cd362a0b818f4c5f9694322b' as const;
+const POOL         = '0x7310f3e07627ce98246973e068bf2ff294f84e5f' as const;
+const STAKING      = '0x7cd22f3c08b4195225da7d043cbe00da118d31ec' as const;
 
 // ── ABIs ──────────────────────────────────────────────────────────────────────
 const ERC20_ABI = [
@@ -241,7 +241,7 @@ export default function WolvAdminPage() {
             { label: 'Reward Pool', addr: POOL },
             { label: 'Staking', addr: STAKING },
           ].map(c => (
-            <a key={c.addr} href={`https://bscscan.com/address/${c.addr}#code`} target="_blank" rel="noreferrer"
+            <a key={c.addr} href={c.label === 'Reward Pool' ? `https://bscscan.com/token/${WOLV_V2}?a=${c.addr}` : `https://bscscan.com/address/${c.addr}#code`} target="_blank" rel="noreferrer"
               style={{ padding: '6px 14px', borderRadius: '8px', fontSize: '12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)', textDecoration: 'none' }}>
               {c.label} ↗
             </a>

@@ -4,8 +4,8 @@ import { formatUnits } from 'viem'
 import { WalletProviderClient } from '@/_client/WalletProviderClient'
 
 const WOLV_ADDRESS    = '0xe0167279aef7bf4ad313d261da82e8366822270c' as const
-const POOL_ADDRESS    = '0xb233cf74b14abf9d9702d585c540030125599579' as const
-const STAKING_ADDRESS = '0x4b62efee5695ed55cd362a0b818f4c5f9694322b' as const
+const POOL_ADDRESS    = '0x7310f3e07627ce98246973e068bf2ff294f84e5f' as const
+const STAKING_ADDRESS = '0x7cd22f3c08b4195225da7d043cbe00da118d31ec' as const
 
 const BNB_BEP20_ABI = [
   { name: 'totalSupply', type: 'function', stateMutability: 'view', inputs: [], outputs: [{ type: 'uint256' }] },
@@ -15,6 +15,7 @@ const POOL_ABI = [
 ] as const
 const STAKING_ABI = [
   { name: 'getBnbPrice', type: 'function', stateMutability: 'view', inputs: [], outputs: [{ type: 'uint256' }] },
+  { name: 'wolvPerUsd',  type: 'function', stateMutability: 'view', inputs: [], outputs: [{ type: 'uint256' }] },
 ] as const
 
 function fmt(val: bigint | undefined) {
@@ -26,8 +27,12 @@ function Metrics() {
   const { data: totalSupply } = useReadContract({ address: WOLV_ADDRESS, abi: BNB_BEP20_ABI, functionName: 'totalSupply' })
   const { data: poolBalance  } = useReadContract({ address: POOL_ADDRESS,  abi: POOL_ABI,  functionName: 'poolBalance' })
   const { data: bnbPrice     } = useReadContract({ address: STAKING_ADDRESS, abi: STAKING_ABI, functionName: 'getBnbPrice' })
+  const { data: wolvPerUsd   } = useReadContract({ address: STAKING_ADDRESS, abi: STAKING_ABI, functionName: 'wolvPerUsd' })
 
   const bnbPriceFmt = bnbPrice ? `$${(Number(bnbPrice) / 1e8).toFixed(2)}` : '—'
+  const rewardRateFmt = wolvPerUsd
+    ? `$${(1 / Number(formatUnits(wolvPerUsd, 18))).toFixed(2)}`
+    : '—'
 
   const stats = [
     { label: 'WOLV Minted',   value: fmt(totalSupply), sub: 'Total supply on-chain',      icon: '⬡', color: '#2A52BE' },
@@ -35,7 +40,7 @@ function Metrics() {
     { label: 'BNB Price',     value: bnbPriceFmt,       sub: 'Live via Chainlink oracle',  icon: '⚡', color: '#3b82f6' },
     { label: 'Max Supply',    value: '1,000,000,000',   sub: 'Hard capped · No inflation', icon: '🔒', color: '#60a5fa' },
     { label: 'Staking Plans', value: '4 Active',        sub: '8% – 25% APY',              icon: '📈', color: '#2A52BE' },
-    { label: '1 WOLV =',      value: '$1.00 USD',       sub: 'Platform peg',              icon: '💎', color: '#00a896' },
+    { label: 'Reward Rate',   value: rewardRateFmt,     sub: 'Per WOLV · set on-chain, adjustable', icon: '💎', color: '#00a896' },
   ]
 
   return (
@@ -77,7 +82,7 @@ function Metrics() {
             { name: 'Reward Pool',      addr: POOL_ADDRESS    },
             { name: 'Staking Contract', addr: STAKING_ADDRESS },
           ].map(c => (
-            <a key={c.name} href={`https://bscscan.com/address/${c.addr}#code`} target="_blank" rel="noopener noreferrer"
+            <a key={c.name} href={c.name === 'Reward Pool' ? `https://bscscan.com/token/${WOLV_ADDRESS}?a=${c.addr}` : `https://bscscan.com/address/${c.addr}#code`} target="_blank" rel="noopener noreferrer"
               style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 16px', borderRadius: '8px', background: 'rgba(42,82,190,0.1)', border: '1px solid rgba(42,82,190,0.25)', color: '#fff', fontSize: '12px', fontWeight: 600, textDecoration: 'none' }}>
               <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00a896', display: 'inline-block' }} />
               {c.name} ↗

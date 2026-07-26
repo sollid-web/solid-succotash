@@ -128,7 +128,7 @@ const CATEGORIES = [
       },
       {
         q: "Is the staking reward pool safe?",
-        a: "Yes. The RewardPool contract (0xb233cf74b14abf9d9702d585c540030125599579) is protected by a 48-hour timelock. No funds can be moved from the pool without a 48-hour delay — this prevents sudden unauthorized withdrawals. The pool balance is publicly visible on BSCScan at all times.",
+        a: "Yes. The RewardPool contract (0x7310f3e07627ce98246973e068bf2ff294f84e5f) is protected by a 48-hour timelock. No funds can be moved from the pool without a 48-hour delay — this prevents sudden unauthorized withdrawals. The pool balance is publicly visible on BSCScan at all times.",
       },
       {
         q: "How do I start staking?",

@@ -1,8 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import { apiFetch, buildApiUrl } from '@/lib/api'
 import Link from 'next/link'
+import { pressableTapProps } from '@/lib/motionPress'
 
 interface CompanyWallet {
   currency: string
@@ -171,9 +173,9 @@ export default function DepositPage() {
             </div>
           </div>
 
-          <button type="submit" disabled={loading} className="btn-cta-sky" style={{ width: "fit-content" }}>
+          <motion.button type="submit" disabled={loading} {...pressableTapProps} className="btn-cta-sky" style={{ width: "fit-content" }}>
             {loading ? 'Submitting...' : 'Submit Deposit'}
-          </button>
+          </motion.button>
         </form>
       </div>
     </div>

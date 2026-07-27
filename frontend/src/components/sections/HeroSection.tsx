@@ -2,7 +2,12 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 import { useTranslation } from '@/components/TranslationProvider'
+import { MotionLink, pressableTapProps } from '@/lib/motionPress'
+
+// Purely additive inner-glow, no color values changed — just a subtle glass edge.
+const glassGlow = 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]'
 
 // Immutable constructor args of the deployed WOLVPresale contract
 // (0x04b5c5e204e812c176ce632f3781ea88c500497c) — fixed on-chain, safe to hardcode.
@@ -59,9 +64,10 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
         </p>
 
         {/* Presale status card */}
-        <Link
+        <MotionLink
           href="/presale"
-          className="block p-4 rounded-xl bg-slate-900/80 border border-slate-800 backdrop-blur-md space-y-2 hover:border-orange-400/40 transition"
+          {...pressableTapProps}
+          className={`block p-4 rounded-xl bg-slate-900/80 border border-slate-800 backdrop-blur-md space-y-2 hover:border-orange-400/40 transition ${glassGlow}`}
         >
           <div className="flex justify-between items-center text-xs">
             <span className="flex items-center gap-2 font-semibold text-amber-400">
@@ -74,33 +80,39 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
             <span>{timeLeft ? `${timeLeft} left · $50,000 hard cap` : 'Hard cap $50,000'}</span>
             <span className="text-orange-400 font-semibold">Join Presale →</span>
           </div>
-        </Link>
+        </MotionLink>
 
         {/* Staking APY tiers */}
         <div className="grid grid-cols-2 gap-2 text-center text-xs">
           {PLANS.map(p => (
-            <div key={p.plan} className="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800 backdrop-blur-sm">
+            <motion.div
+              key={p.plan}
+              {...pressableTapProps}
+              className={`p-2.5 rounded-lg bg-slate-900/60 border border-slate-800 backdrop-blur-sm ${glassGlow}`}
+            >
               <div className="text-slate-400 text-[10px]">{p.plan} ({p.days})</div>
               <div className="text-blue-400 font-bold text-sm">{p.apy} APY</div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
         {/* Action buttons */}
         <div className="flex flex-col sm:flex-row gap-3 pt-1">
-          <Link
+          <MotionLink
             href="/presale"
+            {...pressableTapProps}
             className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 transition shadow-lg shadow-orange-500/20 text-center"
           >
             Join Presale →
-          </Link>
-          <Link
+          </MotionLink>
+          <MotionLink
             href="/plans"
             onClick={() => onPlansClick?.()}
+            {...pressableTapProps}
             className="w-full sm:flex-1 py-3 px-6 rounded-lg font-semibold text-slate-200 border border-slate-700 bg-slate-900/50 hover:bg-slate-800 transition text-center"
           >
             {t('hero.button.viewPlans')}
-          </Link>
+          </MotionLink>
         </div>
 
         <Link href="/accounts/signup" className="block text-center text-sm text-blue-300 hover:text-blue-200 underline underline-offset-2">

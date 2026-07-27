@@ -1,5 +1,6 @@
 'use client'
 import { useRef } from 'react'
+import { useLenis } from 'lenis/dist/lenis-react'
 import HeroSection from '@/components/sections/HeroSection'
 import PresaleHeroBanner from '@/components/sections/PresaleHeroBanner'
 import TrustpilotWidget from '@/components/TrustpilotWidget'
@@ -13,8 +14,13 @@ import FAQSection from '@/components/sections/FAQSection'
 
 export default function HomePage() {
   const plansRef = useRef<HTMLDivElement>(null)
+  const lenis = useLenis()
   const handlePlansClick = () => {
-    plansRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (lenis && plansRef.current) {
+      lenis.scrollTo(plansRef.current)
+    } else {
+      plansRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }
   }
   return (
     <div>

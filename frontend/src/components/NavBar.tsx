@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useLenis } from 'lenis/dist/lenis-react'
 import { Button } from '@/components/ui/Button'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
 import { useTranslation } from '@/components/TranslationProvider'
@@ -11,6 +12,16 @@ export default function NavBar() {
   const pathname = usePathname()
   const { t } = useTranslation()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const lenis = useLenis()
+
+  const handleHashClick = (e: React.MouseEvent, href: string) => {
+    if (!href.startsWith('#')) return
+    const target = document.querySelector(href)
+    if (target && lenis) {
+      e.preventDefault()
+      lenis.scrollTo(target as HTMLElement)
+    }
+  }
 
   const navItems = [
     { href: '/', labelKey: 'nav.home' },
@@ -43,6 +54,7 @@ export default function NavBar() {
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  onClick={(e) => handleHashClick(e, item.href)}
                   className={cn(
                     'text-sm font-medium transition-colors duration-200 tracking-tighter',
                     (item.label === 'WOLV Token' || item.label === 'Presale')
@@ -121,7 +133,7 @@ export default function NavBar() {
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={() => setMobileOpen(false)}
+                onClick={(e) => { handleHashClick(e, item.href); setMobileOpen(false) }}
                 className={cn(
                   'flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-colors',
                   (item.label === 'WOLV Token' || item.label === 'Presale')

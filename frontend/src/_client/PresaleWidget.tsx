@@ -1,8 +1,10 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import { useAccount, useWriteContract, useReadContract, useChainId, useSwitchChain } from 'wagmi'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { formatUnits, parseEther } from 'viem'
+import { pressableTapProps } from '@/lib/motionPress'
 
 const PRESALE_ADDRESS = '0x04b5c5e204e812c176ce632f3781ea88c500497c' as const
 
@@ -146,7 +148,7 @@ export default function PresaleWidget() {
           { label: 'Hard Cap', value: hardCapFmt ? `$${hardCapFmt.toLocaleString()}` : '—' },
           { label: 'Raised', value: `$${raisedFmt.toLocaleString(undefined, { maximumFractionDigits: 0 })}` },
         ].map(s => (
-          <div key={s.label} style={{ borderRadius: '12px', padding: '14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', textAlign: 'center' }}>
+          <div key={s.label} style={{ borderRadius: '12px', padding: '14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', textAlign: 'center' }}>
             <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '4px' }}>{s.label}</div>
             <div style={{ color: '#00c9b1', fontWeight: 700, fontSize: '14px', fontFamily: 'monospace' }}>{s.value}</div>
           </div>
@@ -175,10 +177,10 @@ export default function PresaleWidget() {
       {wrongChain && (
         <div style={{ padding: '16px', borderRadius: '16px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', textAlign: 'center', marginBottom: '16px' }}>
           <p style={{ color: '#fca5a5', fontSize: '13px', fontWeight: 600, margin: '0 0 10px' }}>Wrong network — switch to BNB Chain</p>
-          <button type="button" onClick={() => switchChain({ chainId: 56 })} disabled={isSwitching}
+          <motion.button type="button" onClick={() => switchChain({ chainId: 56 })} disabled={isSwitching} {...pressableTapProps}
             style={{ width: '100%', padding: '11px', borderRadius: '12px', background: '#ef4444', border: 'none', color: '#fff', fontSize: '13px', fontWeight: 700, cursor: 'pointer', opacity: isSwitching ? 0.6 : 1 }}>
             {isSwitching ? 'Switching…' : 'Switch to BNB Chain'}
-          </button>
+          </motion.button>
         </div>
       )}
 
@@ -200,7 +202,7 @@ export default function PresaleWidget() {
           </div>
         )}
 
-        <button onClick={handleBuy} disabled={loading || (!isLive && isConnected && !wrongChain)} style={{
+        <motion.button onClick={handleBuy} disabled={loading || (!isLive && isConnected && !wrongChain)} {...pressableTapProps} style={{
           width: '100%', padding: '14px', borderRadius: '10px', fontSize: '15px', marginTop: '16px',
           fontWeight: 700, border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
           background: loading || (!isLive && isConnected) ? 'rgba(255,255,255,0.1)' : 'linear-gradient(135deg,#2A52BE,#00a896)',
@@ -208,7 +210,7 @@ export default function PresaleWidget() {
           boxShadow: loading ? 'none' : '0 8px 24px rgba(0,168,150,0.3)',
         }}>
           {!isConnected ? '🔗 Connect Wallet to Buy' : loading ? 'Processing...' : !isLive ? statusBadge.text : 'Buy WOLV →'}
-        </button>
+        </motion.button>
 
         {isConnected && purchasedFmt > 0 && (
           <div style={{ marginTop: '14px', textAlign: 'center', color: 'rgba(255,255,255,0.4)', fontSize: '12px' }}>

@@ -1,7 +1,9 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { apiFetch } from "@/lib/api";
+import { pressableTapProps } from "@/lib/motionPress";
 
 type WalletResponse = { balance?: string | number; total_deposits?: string | number; total_withdrawals?: string | number };
 type Investment = { id: number; status?: string; amount?: string | number; plan_name?: string; plan?: { name?: string }; ends_at?: string; created_at?: string };
@@ -116,9 +118,9 @@ export default function WithdrawPage() {
             <label>Reference / Notes</label>
             <input value={reference} onChange={e => setReference(e.target.value)} placeholder="e.g., Payout to bank" />
           </div>
-          <button type="submit" disabled={loading || !hasActiveCard} className="btn-cta-sky" style={{ width: "fit-content" }}>
+          <motion.button type="submit" disabled={loading || !hasActiveCard} {...pressableTapProps} className="btn-cta-sky" style={{ width: "fit-content" }}>
             {loading ? "Submitting..." : hasActiveCard ? "Request Withdrawal" : "Activate Card First"}
-          </button>
+          </motion.button>
         </form>
       </div>
     </div>

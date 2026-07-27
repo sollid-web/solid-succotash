@@ -58,12 +58,25 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
     <section className="relative min-h-screen bg-[#070B19] text-white flex flex-col justify-center px-4 py-16 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-blue-600/10 via-transparent to-[#070B19] pointer-events-none z-0" />
 
-      {/* Ambient glow orbs — low-opacity, positioned away from headline/CTA text, breathing slowly. */}
+      {/* Ambient glow orbs — layered pairs (larger/softer outer + smaller/sharper inner) for
+          more organic depth than a single orb, positioned away from headline/CTA text. */}
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute -left-24 top-0 w-[500px] h-[500px] rounded-full bg-blue-600/10 blur-[120px] z-0"
+        animate={{ scale: [1, 1.15, 1] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+      />
       <motion.div
         aria-hidden
         className="pointer-events-none absolute -left-16 top-8 w-[400px] h-[400px] rounded-full bg-blue-600/15 blur-[140px] z-0"
         animate={{ scale: [1, 1.08, 1], opacity: [0.12, 0.18, 0.12] }}
         transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute -right-16 bottom-0 w-[400px] h-[400px] rounded-full bg-amber-500/10 blur-[120px] z-0"
+        animate={{ scale: [1, 1.15, 1] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
       />
       <motion.div
         aria-hidden

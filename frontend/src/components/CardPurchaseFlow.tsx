@@ -1,8 +1,10 @@
 'use client'
 
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { Loader2, CheckCircle2, XCircle } from 'lucide-react'
+import { pressableTapProps } from '@/lib/motionPress'
 
 export default function CardPurchaseFlow() {
   const router = useRouter()
@@ -69,12 +71,13 @@ export default function CardPurchaseFlow() {
               className="w-full px-3 py-2 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:border-indigo-500"
             />
             {error && <p className="text-red-400 text-sm">{error}</p>}
-            <button
+            <motion.button
               onClick={handleProceed}
+              {...pressableTapProps}
               className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 rounded text-[#0F172A] font-semibold"
             >
               Proceed to Payment
-            </button>
+            </motion.button>
           </div>
         )}
 
@@ -87,18 +90,20 @@ export default function CardPurchaseFlow() {
             <div className="p-4 bg-gray-800 rounded border border-gray-700 font-mono">
               WALLET-ADDRESS-1234-ABCD
             </div>
-            <button
+            <motion.button
               onClick={handleConfirmPayment}
+              {...pressableTapProps}
               className="w-full py-2 bg-green-600 hover:bg-green-700 rounded text-[#0F172A] font-semibold"
             >
               I have made the payment
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               onClick={() => setStep(1)}
+              {...pressableTapProps}
               className="w-full py-2 mt-2 bg-gray-700 hover:bg-gray-600 rounded text-gray-200 font-medium"
             >
               Back
-            </button>
+            </motion.button>
           </div>
         )}
 
@@ -111,24 +116,26 @@ export default function CardPurchaseFlow() {
                 <p className="text-green-300">
                   Card request submitted. Pending admin approval.
                 </p>
-                <button
+                <motion.button
                   onClick={() => router.push('/dashboard')}
+                  {...pressableTapProps}
                   className="mt-4 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded"
                 >
                   Back to dashboard
-                </button>
+                </motion.button>
               </>
             )}
             {!loading && error && (
               <>
                 <XCircle className="mx-auto text-red-400" />
                 <p className="text-red-300">{error}</p>
-                <button
+                <motion.button
                   onClick={() => router.push('/dashboard')}
+                  {...pressableTapProps}
                   className="mt-4 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded"
                 >
                   Back to dashboard
-                </button>
+                </motion.button>
               </>
             )}
           </div>

@@ -1,8 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { apiFetch } from '@/lib/api'
+import { pressableTapProps } from '@/lib/motionPress'
 
 type Withdrawal = {
   id: string
@@ -101,20 +103,22 @@ export default function AdminWithdrawalsPage() {
               />
 
               <div className="mt-3 flex gap-2">
-                <button
+                <motion.button
                   disabled={actionId === row.id}
                   onClick={() => submitAction(row.id, 'approved')}
+                  {...pressableTapProps}
                   className="px-3 py-2 bg-green-600 text-[#0F172A] rounded text-sm"
                 >
                   Approve
-                </button>
-                <button
+                </motion.button>
+                <motion.button
                   disabled={actionId === row.id}
                   onClick={() => submitAction(row.id, 'rejected')}
+                  {...pressableTapProps}
                   className="px-3 py-2 bg-red-600 text-[#0F172A] rounded text-sm"
                 >
                   Reject
-                </button>
+                </motion.button>
               </div>
             </div>
           ))

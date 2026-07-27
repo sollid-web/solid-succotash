@@ -15,6 +15,12 @@ export default function SwipeRow({ children, className }: SwipeRowProps) {
     <div ref={containerRef} className={`overflow-hidden ${className ?? ''}`}>
       <motion.div
         className="flex gap-4 w-max cursor-grab active:cursor-grabbing select-none"
+        // Reserve vertical panning for native page scroll; only horizontal
+        // movement is captured by the drag gesture below. Without this the
+        // browser can't disambiguate a vertical scroll from a horizontal
+        // swipe over the row, which is what made scrolling past it feel
+        // sticky/resistant.
+        style={{ touchAction: 'pan-y' }}
         drag="x"
         dragConstraints={containerRef}
         dragElastic={0.15}

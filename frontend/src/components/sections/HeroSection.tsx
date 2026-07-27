@@ -58,29 +58,20 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
     <section className="relative min-h-screen bg-[#070B19] text-white flex flex-col justify-center px-4 py-16 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-blue-600/10 via-transparent to-[#070B19] pointer-events-none z-0" />
 
-      {/* Ambient glow orbs — layered pairs (larger/softer outer + smaller/sharper inner) for
-          more organic depth than a single orb, positioned away from headline/CTA text. */}
+      {/* Ambient glow orbs. Previously 4 layered elements at blur-120/140px with
+          backdrop-blur-xl cards sampling them every frame — real scroll jank,
+          especially on mobile. Back to 2, lighter blur, GPU-hinted via willChange. */}
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute -left-24 top-0 w-[500px] h-[500px] rounded-full bg-blue-600/10 blur-[120px] z-0"
-        animate={{ scale: [1, 1.15, 1] }}
-        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute -left-16 top-8 w-[400px] h-[400px] rounded-full bg-blue-600/15 blur-[140px] z-0"
+        className="pointer-events-none absolute -left-16 top-8 w-[400px] h-[400px] rounded-full bg-blue-600/15 blur-[90px] z-0"
+        style={{ willChange: 'transform, opacity' }}
         animate={{ scale: [1, 1.08, 1], opacity: [0.12, 0.18, 0.12] }}
         transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute -right-16 bottom-0 w-[400px] h-[400px] rounded-full bg-amber-500/10 blur-[120px] z-0"
-        animate={{ scale: [1, 1.15, 1] }}
-        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-      />
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute -right-10 bottom-10 w-[350px] h-[350px] rounded-full bg-amber-500/10 blur-[140px] z-0"
+        className="pointer-events-none absolute -right-10 bottom-10 w-[350px] h-[350px] rounded-full bg-amber-500/10 blur-[90px] z-0"
+        style={{ willChange: 'transform, opacity' }}
         animate={{ scale: [1, 1.08, 1], opacity: [0.12, 0.18, 0.12] }}
         transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
       />
@@ -122,7 +113,7 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
           <MotionLink
             href="/presale"
             {...pressableTapProps}
-            className={`block p-4 rounded-xl bg-[#0b1329]/60 border border-white/10 border-t-white/20 backdrop-blur-xl space-y-2 hover:border-orange-400/40 transition ${glassGlow}`}
+            className={`block p-4 rounded-xl bg-[#0b1329]/60 border border-white/10 border-t-white/20 backdrop-blur-md space-y-2 hover:border-orange-400/40 transition ${glassGlow}`}
           >
             <div className="flex justify-between items-center text-xs">
               <span className="flex items-center gap-2 font-semibold text-amber-400">
@@ -146,7 +137,7 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
               {...pressableTapProps}
               whileHover={{ y: -3 }}
               whileTap={{ scale: 0.97, boxShadow: '0 0 20px rgba(96,165,250,0.25)' }}
-              className={`p-2.5 rounded-lg bg-[#0b1329]/60 border border-white/10 border-t-white/20 backdrop-blur-xl transition-shadow ${glassGlow}`}
+              className={`p-2.5 rounded-lg bg-[#0b1329]/60 border border-white/10 border-t-white/20 backdrop-blur-md transition-shadow ${glassGlow}`}
             >
               <div className="text-slate-400 text-[10px]">{p.plan} ({p.days})</div>
               <div className="text-blue-400 font-bold text-sm">{p.apy} APY</div>

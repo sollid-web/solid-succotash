@@ -56,14 +56,30 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
 
   return (
     <section className="relative min-h-screen bg-[#070B19] text-white flex flex-col justify-center px-4 py-16 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-blue-600/10 via-transparent to-[#070B19] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-blue-600/10 via-transparent to-[#070B19] pointer-events-none z-0" />
 
-      {/* Ambient floating orb behind the headline — same tokens already used in this file, just animated. */}
+      {/* Ambient glow orbs — low-opacity, positioned away from headline/CTA text, breathing slowly. */}
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-20 -translate-x-1/2 w-[420px] h-[420px] rounded-full bg-gradient-to-br from-blue-600/10 via-transparent to-orange-500/10 blur-3xl"
-        animate={{ scale: [1, 1.15, 1], x: [0, 24, -12, 0], y: [0, -18, 10, 0] }}
-        transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
+        className="pointer-events-none absolute -left-16 top-8 w-[400px] h-[400px] rounded-full bg-blue-600/15 blur-[140px] z-0"
+        animate={{ scale: [1, 1.08, 1], opacity: [0.12, 0.18, 0.12] }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute -right-10 bottom-10 w-[350px] h-[350px] rounded-full bg-amber-500/10 blur-[140px] z-0"
+        animate={{ scale: [1, 1.08, 1], opacity: [0.12, 0.18, 0.12] }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+      />
+
+      {/* Sleek low-opacity dot-grid texture so the ambient light filters through a subtle technical surface. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.03] z-0"
+        style={{
+          backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }}
       />
 
       <motion.div
@@ -93,7 +109,7 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
           <MotionLink
             href="/presale"
             {...pressableTapProps}
-            className={`block p-4 rounded-xl bg-slate-900/80 border border-slate-800 border-t-white/10 backdrop-blur-md space-y-2 hover:border-orange-400/40 transition ${glassGlow}`}
+            className={`block p-4 rounded-xl bg-[#0b1329]/60 border border-white/10 border-t-white/20 backdrop-blur-xl space-y-2 hover:border-orange-400/40 transition ${glassGlow}`}
           >
             <div className="flex justify-between items-center text-xs">
               <span className="flex items-center gap-2 font-semibold text-amber-400">
@@ -117,7 +133,7 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
               {...pressableTapProps}
               whileHover={{ y: -3 }}
               whileTap={{ scale: 0.97, boxShadow: '0 0 20px rgba(96,165,250,0.25)' }}
-              className={`p-2.5 rounded-lg bg-slate-900/60 border border-slate-800 border-t-white/10 backdrop-blur-md transition-shadow ${glassGlow}`}
+              className={`p-2.5 rounded-lg bg-[#0b1329]/60 border border-white/10 border-t-white/20 backdrop-blur-xl transition-shadow ${glassGlow}`}
             >
               <div className="text-slate-400 text-[10px]">{p.plan} ({p.days})</div>
               <div className="text-blue-400 font-bold text-sm">{p.apy} APY</div>

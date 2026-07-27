@@ -320,14 +320,14 @@ export default function StakePage() {
       {/* Tabs */}
       <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
         {(['stake', 'positions'] as const).map(t => (
-          <button key={t} onClick={() => { setTab(t); setError(''); setSuccess('') }} style={{
+          <motion.button key={t} onClick={() => { setTab(t); setError(''); setSuccess('') }} {...pressableTapProps} style={{
             padding: '9px 22px', borderRadius: '8px', fontSize: '13px', fontWeight: 600,
             cursor: 'pointer', border: 'none',
             background: tab === t ? '#2A52BE' : 'rgba(255,255,255,0.06)',
             color: tab === t ? '#fff' : 'rgba(255,255,255,0.4)',
           }}>
             {t === 'stake' ? '⬡ Stake' : `📊 My Positions${stakeCount && stakeCount > 0n ? ` (${stakeCount})` : ''}`}
-          </button>
+          </motion.button>
         ))}
       </div>
 
@@ -355,12 +355,12 @@ export default function StakePage() {
             {/* Token toggle */}
             <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
               {(['BNB', 'BUSD'] as Token[]).map(t => (
-                <button key={t} onClick={() => setToken(t)} style={{
+                <motion.button key={t} onClick={() => setToken(t)} {...pressableTapProps} style={{
                   padding: '8px 24px', borderRadius: '8px', fontSize: '13px', fontWeight: 600,
                   cursor: 'pointer', border: 'none',
                   background: token === t ? plan.color : 'rgba(255,255,255,0.06)',
                   color: token === t ? '#fff' : 'rgba(255,255,255,0.4)',
-                }}>{t}</button>
+                }}>{t}</motion.button>
               ))}
             </div>
 
@@ -429,9 +429,9 @@ export default function StakePage() {
           {!isConnected && (
             <div style={{ textAlign: 'center', padding: '48px 24px', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.06)' }}>
               <p style={{ color: 'rgba(255,255,255,0.4)', marginBottom: '16px' }}>Connect your wallet to view your staking positions</p>
-              <button onClick={() => openConnectModal?.()} style={{ padding: '12px 28px', borderRadius: '10px', background: '#2A52BE', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
+              <motion.button onClick={() => openConnectModal?.()} {...pressableTapProps} style={{ padding: '12px 28px', borderRadius: '10px', background: '#2A52BE', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
                 Connect Wallet
-              </button>
+              </motion.button>
             </div>
           )}
 
@@ -445,9 +445,9 @@ export default function StakePage() {
             <div style={{ textAlign: 'center', padding: '48px 24px', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.06)' }}>
               <div style={{ fontSize: '32px', marginBottom: '12px' }}>⬡</div>
               <p style={{ color: 'rgba(255,255,255,0.4)', marginBottom: '16px' }}>No active staking positions found</p>
-              <button onClick={() => setTab('stake')} style={{ padding: '10px 24px', borderRadius: '8px', background: '#2A52BE', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: '13px' }}>
+              <motion.button onClick={() => setTab('stake')} {...pressableTapProps} style={{ padding: '10px 24px', borderRadius: '8px', background: '#2A52BE', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: '13px' }}>
                 Start Staking →
-              </button>
+              </motion.button>
             </div>
           )}
 
@@ -458,9 +458,9 @@ export default function StakePage() {
                 <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)' }}>
                   Last updated: {lastRefresh ? new Date(lastRefresh).toLocaleTimeString() : '—'} · Auto-refreshes every 30s
                 </div>
-                <button onClick={loadPositions} disabled={posLoading} style={{ padding: '6px 14px', borderRadius: '6px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', fontSize: '12px', cursor: 'pointer', fontWeight: 500 }}>
+                <motion.button onClick={loadPositions} disabled={posLoading} {...pressableTapProps} style={{ padding: '6px 14px', borderRadius: '6px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', fontSize: '12px', cursor: 'pointer', fontWeight: 500 }}>
                   ↻ Refresh
-                </button>
+                </motion.button>
               </div>
 
               {/* Positions */}

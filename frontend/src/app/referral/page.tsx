@@ -22,9 +22,9 @@ export const metadata = {
 };
 
 export default function ReferralPage() {
-  // Replace with dynamic data where required (e.g., code from props/session)
-  const exampleCode = 'WOLV-AF67P9';
-  const signupUrl = `${process.env.NEXT_PUBLIC_BASE_URL ?? ''}/signup?ref=${exampleCode}`;
+  // Real per-user referral links are only available once logged in (see the
+  // dashboard's Referral Program section) — this public page shares itself.
+  const shareUrl = `${process.env.NEXT_PUBLIC_BASE_URL ?? 'https://www.wolvcapital.com'}/referral`;
 
   return (
     <PublicLayout>
@@ -146,9 +146,9 @@ export default function ReferralPage() {
               <p className="text-base sm:text-lg text-gray-200 mb-6 max-w-2xl mx-auto">
                 Log in to your dashboard to access your unique referral link and start building passive income today.
               </p>
-              <a href="/dashboard" className="inline-block bg-white text-[#0b2f6b] px-8 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl">
-                Go to Dashboard
-              </a>
+              <div className="flex justify-center">
+                <ReferralCTA signupUrl={shareUrl} />
+              </div>
             </div>
           </div>
         </div>

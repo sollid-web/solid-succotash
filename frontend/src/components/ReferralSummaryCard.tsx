@@ -2,7 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
+import { motion } from "framer-motion"
 import { apiFetch } from "@/lib/api"
+import { pressableTapProps } from "@/lib/motionPress"
 
 interface SummaryData {
   code: string
@@ -58,61 +60,83 @@ export default function ReferralSummaryCard() {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl shadow-lg p-6">
-        <p className="text-gray-600">Loading referral summary…</p>
+      <div style={{
+        background: "rgba(255,255,255,0.03)", border: "1px solid rgba(0,168,150,0.2)", borderRadius: "20px", padding: "24px",
+        backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)",
+      }}>
+        <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px" }}>Loading referral summary…</p>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="bg-white rounded-2xl shadow-lg p-6">
-        <p className="text-gray-600 mb-3">{error}</p>
-        <Link href="/accounts/login" className="btn-cta-sky px-4 py-2 rounded-lg font-semibold">Log in</Link>
+      <div style={{
+        background: "rgba(255,255,255,0.03)", border: "1px solid rgba(0,168,150,0.2)", borderRadius: "20px", padding: "24px",
+        backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)",
+      }}>
+        <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px", marginBottom: "12px" }}>{error}</p>
+        <Link href="/accounts/login" style={{
+          display: "inline-block", padding: "9px 18px", borderRadius: "10px",
+          background: "linear-gradient(135deg, #1d4ed8, #2563eb)", color: "#fff", fontWeight: 600, fontSize: "13px", textDecoration: "none",
+        }}>Log in</Link>
       </div>
     )
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6">
-      <h3 className="text-lg font-semibold text-gray-800 mb-2">Your Referral Summary</h3>
+    <div style={{
+      background: "rgba(255,255,255,0.03)", border: "1px solid rgba(0,168,150,0.2)", borderRadius: "20px", padding: "24px",
+      backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)",
+      boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.05), 0 20px 50px rgba(0,0,0,0.25)",
+    }}>
       {summary ? (
         <div className="space-y-4">
-          <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3">
+          <div style={{
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "12px",
+            padding: "12px 16px",
+          }}>
             <div>
-              <p className="text-sm text-gray-600">Referral Code</p>
-              <p className="font-mono text-lg tracking-wider text-gray-800">{summary.code}</p>
+              <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "11px", letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "3px" }}>Referral Code</p>
+              <p style={{ fontFamily: "monospace", fontSize: "16px", letterSpacing: "1px", color: "#fff" }}>{summary.code}</p>
             </div>
-            <button
+            <motion.button
               onClick={handleCopyLink}
-              className="btn-cta-sky px-3 py-2 rounded-lg font-semibold"
+              {...pressableTapProps}
+              style={{
+                padding: "9px 16px", borderRadius: "10px", fontWeight: 600, fontSize: "13px",
+                background: copied ? "rgba(16,185,129,0.15)" : "linear-gradient(135deg, #1d4ed8, #2563eb)",
+                color: copied ? "#10b981" : "#fff",
+                border: copied ? "1px solid rgba(16,185,129,0.3)" : "none",
+              }}
             >
               {copied ? "Copied" : "Copy Link"}
-            </button>
+            </motion.button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-blue-50 rounded-xl p-4 text-center">
-              <p className="text-sm text-blue-700">Total Referrals</p>
-              <p className="text-2xl font-bold text-blue-900">{summary.referred_count}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div style={{ background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.15)", borderRadius: "10px", padding: "12px", textAlign: "center" }}>
+              <p style={{ color: "#93c5fd", fontSize: "10px", letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "3px" }}>Total Referrals</p>
+              <p style={{ color: "#93c5fd", fontSize: "20px", fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>{summary.referred_count}</p>
             </div>
-            <div className="bg-purple-50 rounded-xl p-4 text-center">
-              <p className="text-sm text-purple-700">Rewards Count</p>
-              <p className="text-2xl font-bold text-purple-900">{summary.total_rewards}</p>
+            <div style={{ background: "rgba(139,92,246,0.08)", border: "1px solid rgba(139,92,246,0.15)", borderRadius: "10px", padding: "12px", textAlign: "center" }}>
+              <p style={{ color: "#c4b5fd", fontSize: "10px", letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "3px" }}>Rewards Count</p>
+              <p style={{ color: "#c4b5fd", fontSize: "20px", fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>{summary.total_rewards}</p>
             </div>
-            <div className="bg-emerald-50 rounded-xl p-4 text-center">
-              <p className="text-sm text-emerald-700">Latest Reward</p>
-              <p className="text-lg font-semibold text-emerald-900">
+            <div style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.15)", borderRadius: "10px", padding: "12px", textAlign: "center" }}>
+              <p style={{ color: "#10b981", fontSize: "10px", letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "3px" }}>Latest Reward</p>
+              <p style={{ color: "#10b981", fontSize: "15px", fontWeight: 700 }}>
                 {summary.latest_reward?.amount ?? "—"}
               </p>
-              <p className="text-xs text-emerald-700">
+              <p style={{ color: "rgba(16,185,129,0.7)", fontSize: "10px" }}>
                 {summary.latest_reward?.status ?? "—"}
               </p>
             </div>
           </div>
-          <p className="text-xs text-gray-500">Rewards require manual admin approval per policy.</p>
+          <p style={{ color: "rgba(255,255,255,0.3)", fontSize: "11px" }}>Rewards require manual admin approval per policy.</p>
         </div>
       ) : (
-        <p className="text-gray-600">No referral data available yet.</p>
+        <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "13px" }}>No referral data available yet.</p>
       )}
     </div>
   )

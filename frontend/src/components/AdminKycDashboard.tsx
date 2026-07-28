@@ -1,8 +1,10 @@
 "use client"
 
 import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { apiFetch } from '@/lib/api'
+import { pressableTapProps } from '@/lib/motionPress'
 
 interface KycDocument {
   id: string
@@ -209,13 +211,14 @@ export default function AdminKycDashboard() {
                           className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                           rows={4}
                         />
-                        <button
+                        <motion.button
                           onClick={() => handleApprove(app.id)}
                           disabled={actionLoading}
+                          {...pressableTapProps}
                           className="mt-3 w-full bg-green-600 text-[#0F172A] py-2 rounded-lg hover:bg-green-700 transition disabled:opacity-50"
                         >
                           {actionLoading ? 'Processing...' : 'Approve'}
-                        </button>
+                        </motion.button>
                       </div>
 
                       <div>
@@ -227,30 +230,33 @@ export default function AdminKycDashboard() {
                           className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500"
                           rows={4}
                         />
-                        <button
+                        <motion.button
                           onClick={() => handleReject(app.id)}
                           disabled={actionLoading}
+                          {...pressableTapProps}
                           className="mt-3 w-full bg-red-600 text-[#0F172A] py-2 rounded-lg hover:bg-red-700 transition disabled:opacity-50"
                         >
                           {actionLoading ? 'Processing...' : 'Reject'}
-                        </button>
+                        </motion.button>
                       </div>
                     </div>
 
-                    <button
+                    <motion.button
                       onClick={() => setSelectedApp(null)}
+                      {...pressableTapProps}
                       className="w-full bg-gray-400 text-[#0F172A] py-2 rounded-lg hover:bg-gray-500 transition"
                     >
                       Close
-                    </button>
+                    </motion.button>
                   </div>
                 ) : (
-                  <button
+                  <motion.button
                     onClick={() => setSelectedApp(app)}
+                    {...pressableTapProps}
                     className="btn-cta-sky px-4 py-2 rounded-lg font-semibold"
                   >
                     Review Document
-                  </button>
+                  </motion.button>
                 )}
               </div>
             ))}

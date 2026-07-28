@@ -1,8 +1,10 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { pressableTapProps } from '@/lib/motionPress'
 
 const CHECKOUT_ITEMS = [
   {
@@ -93,10 +95,11 @@ export default function CheckoutPage() {
                         </div>
                         <div className="flex items-center gap-3">
                           <span className="text-lg font-bold text-slate-900">${item.amount}</span>
-                          <button
+                          <motion.button
                             type="button"
                             onClick={() => handleAddToCheckout(item.id)}
                             disabled={isAdded}
+                            {...pressableTapProps}
                             className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
                               isAdded
                                 ? 'cursor-not-allowed bg-slate-300 text-slate-700'
@@ -104,7 +107,7 @@ export default function CheckoutPage() {
                             }`}
                           >
                             {isAdded ? 'Added' : 'Add to checkout'}
-                          </button>
+                          </motion.button>
                         </div>
                       </div>
                     </div>
@@ -173,10 +176,11 @@ export default function CheckoutPage() {
                 <p className="text-sm font-semibold text-slate-700">Selected items</p>
                 <p className="mt-3 text-3xl font-bold text-slate-900">${subtotal}</p>
               </div>
-              <button
+              <motion.button
                 type="button"
                 disabled={!isCheckoutReady}
                 onClick={handleCompleteCheckout}
+                {...pressableTapProps}
                 className={`inline-flex w-full items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold text-[#0F172A] transition ${
                   !isCheckoutReady
                     ? 'cursor-not-allowed bg-slate-300'
@@ -184,7 +188,7 @@ export default function CheckoutPage() {
                 }`}
               >
                 Complete checkout
-              </button>
+              </motion.button>
               <p className="text-xs text-slate-500">
                 The success page will load with the completed status and trigger the Trustpilot invitation widget.
               </p>

@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import PublicLayout from '@/components/PublicLayout'
 import { generateOgMetadata } from '@/lib/og-metadata'
+import WolvPriceStat from '@/components/WolvPriceStat'
 
 const WOLV_CONTRACT = '0xe0167279aef7bf4ad313d261da82e8366822270c'
-const POOL_CONTRACT  = '0xb233cf74b14abf9d9702d585c540030125599579'
-const STAKING_CONTRACT = '0x4b62efee5695ed55cd362a0b818f4c5f9694322b'
+const POOL_CONTRACT  = '0x7310f3e07627ce98246973e068bf2ff294f84e5f'
+const STAKING_CONTRACT = '0x7cd22f3c08b4195225da7d043cbe00da118d31ec'
 
 export const metadata = {
 title: 'WOLV Token — The Native Asset of WolvCapital',
@@ -141,7 +142,6 @@ export default function WolvTokenPage() {
                 { label: 'Total Supply',    value: '1,000,000,000', sub: 'WOLV — Fixed Forever' },
                 { label: 'Token Standard',  value: 'BEP-20',        sub: 'BNB Smart Chain' },
                 { label: 'Reward Pool',     value: '600,000,000',   sub: 'WOLV (60% Allocated)' },
-                { label: 'Current Price',   value: '$1.00',         sub: 'Pre-listing reference' },
               ].map((stat, i) => (
                 <div key={i} className="px-6 py-6 text-center"
                   style={{ background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(10px)' }}>
@@ -150,6 +150,7 @@ export default function WolvTokenPage() {
                   <div className="text-xs text-gray-500">{stat.sub}</div>
                 </div>
               ))}
+              <WolvPriceStat contractAddress={WOLV_CONTRACT} />
             </div>
 
             {/* Contract address pill */}
@@ -258,7 +259,7 @@ export default function WolvTokenPage() {
                       className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 bg-black/20 rounded-lg">
                       <span className="text-white font-medium mb-2 sm:mb-0">{contract.name}</span>
                       <a
-                        href={`https://bscscan.com/address/${contract.address}#code`}
+                        href={contract.name === 'Reward Pool Contract' ? `https://bscscan.com/token/${WOLV_CONTRACT}?a=${contract.address}` : `https://bscscan.com/address/${contract.address}#code`}
                         target="_blank" rel="noopener noreferrer"
                         className="text-teal-400 hover:text-teal-300 font-mono text-sm break-all"
                       >

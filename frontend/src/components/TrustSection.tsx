@@ -82,12 +82,12 @@ export default function TrustSection() {
           <div className="max-w-3xl mx-auto space-y-3">
             {[
               { name: 'WOLV Token',        addr: '0xe0167279aef7bf4ad313d261da82e8366822270c' },
-              { name: 'Reward Pool',       addr: '0xb233cf74b14abf9d9702d585c540030125599579' },
-              { name: 'Staking Contract',  addr: '0x4b62efee5695ed55cd362a0b818f4c5f9694322b' },
+              { name: 'Reward Pool',       addr: '0x7310f3e07627ce98246973e068bf2ff294f84e5f' },
+              { name: 'Staking Contract',  addr: '0x7cd22f3c08b4195225da7d043cbe00da118d31ec' },
             ].map(c => (
               <div key={c.name} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 bg-gray-50 rounded-xl border border-gray-200">
                 <span className="font-semibold text-gray-800 mb-1 sm:mb-0">{c.name}</span>
-                <a href={`https://bscscan.com/address/${c.addr}#code`} target="_blank" rel="noopener noreferrer"
+                <a href={c.name === 'Reward Pool' ? `https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c?a=${c.addr}` : `https://bscscan.com/address/${c.addr}#code`} target="_blank" rel="noopener noreferrer"
                   className="font-mono text-xs text-blue-600 hover:text-blue-800 break-all">
                   {c.addr.slice(0, 10)}...{c.addr.slice(-8)} ↗
                 </a>

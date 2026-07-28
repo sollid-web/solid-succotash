@@ -11,13 +11,18 @@ const CONTRACTS = [
   },
   {
     label: "Reward Pool",
-    address: "0xb233cf74b14abf9d9702d585c540030125599579",
+    address: "0x7310f3e07627ce98246973e068bf2ff294f84e5f",
     note: "48-hour timelock · Owner-funded · Verified",
   },
   {
     label: "Staking Contract",
-    address: "0x4b62efee5695ed55cd362a0b818f4c5f9694322b",
+    address: "0x7cd22f3c08b4195225da7d043cbe00da118d31ec",
     note: "Chainlink price feeds · 4 staking tiers · Verified",
+  },
+  {
+    label: "Presale Contract",
+    address: "0x04b5c5e204e812c176ce632f3781ea88c500497c",
+    note: "$0.50/WOLV · $50,000 hard cap · Chainlink BNB/USD · Verified",
   },
 ];
 
@@ -49,7 +54,7 @@ const SECTIONS = [
     content: [
       "WolvCapital operates a two-layer architecture. The off-chain layer handles KYC verification, fiat onboarding, portfolio management, and manual withdrawal approvals — providing regulatory compliance and fraud prevention. The on-chain layer handles WOLV token distribution, staking contracts, and the reward pool.",
       "The frontend is built on Next.js 16 deployed on Vercel, with a scalable cloud backend. All smart contracts are deployed on BNB Smart Chain (BSC) — chosen for its low transaction fees, EVM compatibility, and large ecosystem.",
-      "Yield Generation: Staking rewards are funded entirely from the Investor Rewards allocation — 600,000,000 WOLV (60% of total supply) held in the timelock-protected RewardPool contract (0xb233cf74b14abf9d9702d585c540030125599579). This allocation is fixed at deployment and cannot be increased or minted. Rewards are distributed proportionally to stakers based on their tier APY and lock duration. The RewardPool contract is publicly verifiable on BSCScan, allowing any investor to confirm the remaining reward supply at any time.",
+      "Yield Generation: Staking rewards are funded entirely from the Investor Rewards allocation — 600,000,000 WOLV (60% of total supply) held in the timelock-protected RewardPool contract (0x7310f3e07627ce98246973e068bf2ff294f84e5f). This allocation is fixed at deployment and cannot be increased or minted. Rewards are distributed proportionally to stakers based on their tier APY and lock duration. The RewardPool contract is publicly verifiable on BSCScan, allowing any investor to confirm the remaining reward supply at any time.",
       "Investment plans operate on fixed-term, fixed-ROI structures. Returns are calculated server-side and reflected in the investor dashboard daily. When profits are distributed, WOLV tokens are transferred from the treasury wallet to investor wallets — creating an on-chain record of every distribution.",
     ],
   },
@@ -83,8 +88,8 @@ const SECTIONS = [
     title: "Staking System",
     content: [
       "WolvCapital's staking system allows WOLV holders to stake their tokens and earn additional APY rewards. The system consists of two audited smart contracts: the StakingContract and the RewardPool.",
-      "StakingContract (0x4b62efee5695ed55cd362a0b818f4c5f9694322b): Handles stake deposits, lock periods, reward calculations using Chainlink price feeds, and claim processing. Four staking tiers are available: Starter (8% APY), Growth (12% APY), Pro (18% APY), and Elite (25% APY).",
-      "RewardPool (0xb233cf74b14abf9d9702d585c540030125599579): Holds the WOLV reward supply available for staker claims. Protected by a 48-hour timelock — no funds can be moved without a 48-hour delay, preventing sudden rug pulls or unauthorized withdrawals.",
+      "StakingContract (0x7cd22f3c08b4195225da7d043cbe00da118d31ec): Handles stake deposits, lock periods, reward calculations using Chainlink price feeds, and claim processing. Four staking tiers are available: Starter (8% APY), Growth (12% APY), Pro (18% APY), and Elite (25% APY).",
+      "RewardPool (0x7310f3e07627ce98246973e068bf2ff294f84e5f): Holds the WOLV reward supply available for staker claims. Protected by a 48-hour timelock — no funds can be moved without a 48-hour delay, preventing sudden rug pulls or unauthorized withdrawals.",
       "Chainlink integration: Reward calculations incorporate Chainlink's decentralized price feeds for fair and manipulation-resistant APY computation. This eliminates reliance on a single price source and protects stakers from oracle manipulation attacks.",
       "The reward pool was initially funded with 1,000,000 WOLV from the treasury. WolvCapital commits to maintaining adequate pool funding as the staking user base grows. Pool balance is publicly visible on BSCScan at all times.",
     ],
@@ -95,8 +100,9 @@ const SECTIONS = [
     title: "Tokenomics",
     content: [
       "Total Supply: 1,000,000,000 WOLV (fixed, immutable). No additional tokens can ever be minted. The contract contains no mint function.",
-      "Investor Rewards: 60% — 600,000,000 WOLV. Distributed to investors via staking rewards and profit distributions over the platform lifetime.", "Treasury Reserve: 20% — 200,000,000 WOLV. Held in treasury for operational continuity, future reward pool top-ups, and platform development.", "Liquidity Reserve: 10% — 100,000,000 WOLV. Reserved for future DEX liquidity provision on PancakeSwap to enable open market trading.", "Team & Development: 7% — 70,000,000 WOLV. Allocated to the founding team and ongoing development. Subject to 12-month vesting schedule.", "Marketing & Growth: 3% — 30,000,000 WOLV. Reserved for partnerships, listings, community growth, and platform promotion.",
-      "No tokens are allocated to founders, team, advisors, or investors for any purpose other than the categories above. WOLV had no ICO, no presale, and no private sale. All tokens in circulation represent earned investor rewards.",
+      "Investor Rewards: 60% — 600,000,000 WOLV. Distributed to investors via staking rewards and profit distributions over the platform lifetime.", "Treasury Reserve: 20% — 200,000,000 WOLV. Held in treasury for operational continuity, future reward pool top-ups, and platform development.", "Liquidity Reserve: 10% — 100,000,000 WOLV. Reserved for future DEX liquidity provision on PancakeSwap to enable open market trading. A portion of this allocation funds the public presale described below, ahead of listing.", "Team & Development: 7% — 70,000,000 WOLV. Allocated to the founding team and ongoing development. Subject to 12-month vesting schedule.", "Marketing & Growth: 3% — 30,000,000 WOLV. Reserved for partnerships, listings, community growth, and platform promotion.",
+      "No tokens are allocated to founders, team, advisors, or investors for any purpose other than the categories above. All tokens in circulation represent either earned investor rewards or tokens purchased in the public presale below — none are pre-mined to founders or distributed through private allocations.",
+      "Presale: WolvCapital runs a public presale of WOLV sourced from the Liquidity Reserve allocation, ahead of DEX listing. The presale sells WOLV for BNB at a fixed price of $0.50 per WOLV (converted via a Chainlink BNB/USD price feed), with a $50,000 hard cap on total funds raised and immediate on-chain token delivery to the buyer's wallet — there is no vesting or lock-up on tokens purchased. The presale contract is treasury-controlled: the treasury may pause the sale, withdraws raised BNB, and reclaims any unsold WOLV once the sale window closes. Contract: 0x04b5c5e204e812c176ce632f3781ea88c500497c — verified on BSCScan and Sourcify.",
     ],
   },
   {
@@ -370,7 +376,7 @@ export default function WhitepaperPage() {
                   </div>
                 </div>
                 <a
-                  href={`https://bscscan.com/address/${c.address}#code`}
+                  href={c.label === 'Reward Pool' ? `https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c?a=${c.address}` : `https://bscscan.com/address/${c.address}#code`}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{

@@ -58,6 +58,14 @@ main {
   padding: 0 !important;
 }
 
+/* Snappier, less "sticky" touch response on interactive elements —
+   removes the ~300ms tap delay / double-tap-zoom without affecting
+   normal page scrolling. Complements the onTap-based (not onTapStart)
+   haptic/press feedback in src/lib/motionPress.ts. */
+button, a, [role='button'] {
+  touch-action: manipulation;
+}
+
 /* Custom Component Classes */
 @layer components {
   .btn-brand-primary {

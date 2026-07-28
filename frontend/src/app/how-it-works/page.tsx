@@ -117,12 +117,12 @@ const CONTRACTS = [
   },
   {
     label: "Reward Pool",
-    address: "0xb233cf74b14abf9d9702d585c540030125599579",
+    address: "0x7310f3e07627ce98246973e068bf2ff294f84e5f",
     note: "48-hour timelock · Funded with 1M WOLV",
   },
   {
     label: "Staking Contract",
-    address: "0x4b62efee5695ed55cd362a0b818f4c5f9694322b",
+    address: "0x7cd22f3c08b4195225da7d043cbe00da118d31ec",
     note: "Chainlink price feeds · 4 staking tiers",
   },
 ];
@@ -387,7 +387,7 @@ export default function HowItWorksPage() {
                 </div>
               </div>
               <a
-                href={`https://bscscan.com/address/${c.address}#code`}
+                href={c.label === 'Reward Pool' ? `https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c?a=${c.address}` : `https://bscscan.com/address/${c.address}#code`}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{

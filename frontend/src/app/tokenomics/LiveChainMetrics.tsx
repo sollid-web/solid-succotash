@@ -4,7 +4,7 @@ import { formatUnits } from 'viem';
 import { WalletProviderClient } from '@/_client/WalletProviderClient';
 
 const WOLV_ADDRESS = '0xe0167279aef7bf4ad313d261da82e8366822270c' as const;
-const POOL_ADDRESS = '0xb233cf74b14abf9d9702d585c540030125599579' as const;
+const POOL_ADDRESS = '0x7310f3e07627ce98246973e068bf2ff294f84e5f' as const;
 const BURN_ADDRESS = '0x000000000000000000000000000000000000dEaD' as const;
 
 const ERC20_ABI = [

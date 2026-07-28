@@ -1,8 +1,8 @@
 import Link from 'next/link'
 
 const WOLV_CONTRACT = '0xe0167279aef7bf4ad313d261da82e8366822270c'
-const POOL_CONTRACT = '0xb233cf74b14abf9d9702d585c540030125599579'
-const STAKING_CONTRACT = '0x4b62efee5695ed55cd362a0b818f4c5f9694322b'
+const POOL_CONTRACT = '0x7310f3e07627ce98246973e068bf2ff294f84e5f'
+const STAKING_CONTRACT = '0x7cd22f3c08b4195225da7d043cbe00da118d31ec'
 
 export default function WolvTokenSection() {
   return (
@@ -38,8 +38,8 @@ export default function WolvTokenSection() {
             { label: 'Symbol',        value: 'WOLV' },
             { label: 'Network',       value: 'BNB Smart Chain' },
             { label: 'Max Supply',    value: '1,000,000,000' },
-            { label: '1 WOLV =',      value: '$1.00 USD' },
-            { label: 'Reward Pool',   value: '1,000,000 WOLV' },
+            { label: 'Mint Function', value: 'None' },
+            { label: 'Reward Pool',   value: 'Live on BSCScan' },
           ].map(s => (
             <div key={s.label} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
               <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>{s.label}</div>
@@ -77,7 +77,7 @@ export default function WolvTokenSection() {
           ].map(c => (
             <div key={c.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.06)', flexWrap: 'wrap', gap: '8px' }}>
               <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', fontWeight: 500 }}>{c.name}</span>
-              <a href={`https://bscscan.com/address/${c.address}#code`} target="_blank" rel="noopener noreferrer" style={{ color: '#00a896', fontSize: '12px', fontFamily: 'monospace' }}>
+              <a href={c.name === 'Reward Pool' ? `https://bscscan.com/token/${WOLV_CONTRACT}?a=${c.address}` : `https://bscscan.com/address/${c.address}#code`} target="_blank" rel="noopener noreferrer" style={{ color: '#00a896', fontSize: '12px', fontFamily: 'monospace' }}>
                 {c.address.slice(0, 10)}...{c.address.slice(-8)} ↗
               </a>
             </div>

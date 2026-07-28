@@ -8,6 +8,18 @@ import { WalletProvider } from '@/_client/WalletProvider';
 const WolvWalletSection = dynamic(() => import('@/_client/WolvWalletSection').then(mod => ({ default: mod.WolvWalletSection })), { ssr: false });
 import { apiFetch } from "@/lib/api";
 
+// Immutable constructor args of the deployed WOLVPresale contract
+// (0x04b5c5e204e812c176ce632f3781ea88c500497c) — fixed on-chain, safe to hardcode.
+const PRESALE_END_TIME = 1785686442; // 2026-08-02T16:00:42Z
+
+function formatPresaleTimeLeft(seconds: number) {
+  if (seconds <= 0) return null;
+  const d = Math.floor(seconds / 86400);
+  const h = Math.floor((seconds % 86400) / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  return `${d}d ${h}h ${m}m`;
+}
+
 interface WalletData {
   balance: number;
   total_deposits: number;
@@ -103,6 +115,20 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [now] = useState(() => new Date());
+  const [presaleTimeLeft, setPresaleTimeLeft] = useState<string | null>(
+    formatPresaleTimeLeft(PRESALE_END_TIME - Math.floor(Date.now() / 1000)),
+  );
+  const [presaleEnded, setPresaleEnded] = useState(Math.floor(Date.now() / 1000) >= PRESALE_END_TIME);
+
+  useEffect(() => {
+    const tick = () => {
+      const secondsLeft = PRESALE_END_TIME - Math.floor(Date.now() / 1000);
+      setPresaleTimeLeft(formatPresaleTimeLeft(secondsLeft));
+      setPresaleEnded(secondsLeft <= 0);
+    };
+    const interval = setInterval(tick, 60_000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -242,6 +268,40 @@ export default function DashboardPage() {
         )}
 
         {/* removed the portfolio overview hero section for mobile-first dashboard layout */}
+
+        {/* ── Presale Banner ── */}
+        {!presaleEnded && (
+          <Link href="/presale" className="fade-up fade-up-1 mb-6 block" style={{
+            borderRadius: "20px",
+            background: "linear-gradient(135deg, rgba(245,158,11,0.16) 0%, rgba(217,119,6,0.08) 100%)",
+            border: "1px solid rgba(245,158,11,0.3)",
+            padding: "16px 20px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "12px",
+            textDecoration: "none",
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0 }}>
+              <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#f59e0b", flexShrink: 0 }} className="animate-pulse" />
+              <div style={{ minWidth: 0 }}>
+                <div style={{ color: "#fbbf24", fontWeight: 700, fontSize: "13px" }}>
+                  🔥 WOLV Presale Live — $0.50 / WOLV
+                </div>
+                <div style={{ color: "rgba(255,255,255,0.55)", fontSize: "11px", marginTop: "2px" }}>
+                  {presaleTimeLeft ? `${presaleTimeLeft} left · $50,000 hard cap` : "Hard cap $50,000"}
+                </div>
+              </div>
+            </div>
+            <span style={{
+              padding: "8px 16px", borderRadius: "10px", flexShrink: 0,
+              background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.35)",
+              color: "#fbbf24", fontSize: "12px", fontWeight: 700, whiteSpace: "nowrap",
+            }}>
+              Buy Now →
+            </span>
+          </Link>
+        )}
 
         {/* ── Virtual Card Banner ── */}
         <div className="fade-up fade-up-2 mb-6" style={{

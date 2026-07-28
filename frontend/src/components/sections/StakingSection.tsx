@@ -1,4 +1,8 @@
+'use client'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
+import SwipeRow from '@/components/motion/SwipeRow'
+import { pressableTapProps } from '@/lib/motionPress'
 
 const PLANS = [
   { id: 'pioneer',  name: 'Pioneer',    sub: 'Conservative · 90 days',  apy: '8%',  min: '$100',    lockDays: 90,  exitFee: '2.0%', token: 'BNB or BUSD', color: '#3b82f6', colorBg: 'rgba(59,130,246,0.1)' },
@@ -45,14 +49,18 @@ export default function StakingSection() {
         </div>
 
         {/* Plan cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginBottom: '48px' }}>
+        <div style={{ marginBottom: '48px' }}>
+        <SwipeRow>
           {PLANS.map(plan => (
-            <div key={plan.id} style={{
+            <motion.div key={plan.id} {...pressableTapProps} style={{
               background: plan.featured ? plan.colorBg : 'rgba(255,255,255,0.03)',
               border: `1px solid ${plan.featured ? plan.color : 'rgba(255,255,255,0.08)'}`,
               borderRadius: '20px', padding: '28px',
               position: 'relative', overflow: 'hidden',
               transition: 'all 0.2s',
+              width: '300px', flexShrink: 0,
+              backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+              boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.08)',
             }}>
               {plan.featured && (
                 <div style={{ position: 'absolute', top: '16px', right: '16px', background: plan.color, color: '#fff', fontSize: '10px', fontWeight: 700, padding: '3px 10px', borderRadius: '99px', letterSpacing: '0.5px' }}>
@@ -88,8 +96,9 @@ export default function StakingSection() {
               }}>
                 Start Staking →
               </Link>
-            </div>
+            </motion.div>
           ))}
+        </SwipeRow>
         </div>
 
         {/* Bottom note */}

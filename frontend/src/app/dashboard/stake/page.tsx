@@ -1,12 +1,15 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
+import { motion } from 'framer-motion'
 import { useAccount, useWriteContract, useReadContract, usePublicClient } from 'wagmi'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { parseUnits, formatUnits } from 'viem'
+import SwipeRow from '@/components/motion/SwipeRow'
+import { pressableTapProps } from '@/lib/motionPress'
 
 // ── Contract addresses ────────────────────────────────────────────────────────
-const STAKING_ADDRESS = '0x4b62efee5695ed55cd362a0b818f4c5f9694322b' as const
-const POOL_ADDRESS    = '0xb233cf74b14abf9d9702d585c540030125599579' as const
+const STAKING_ADDRESS = '0x7cd22f3c08b4195225da7d043cbe00da118d31ec' as const
+const POOL_ADDRESS    = '0x7310f3e07627ce98246973e068bf2ff294f84e5f' as const
 const WOLV_ADDRESS    = '0xe0167279aef7bf4ad313d261da82e8366822270c' as const
 const BUSD_ADDRESS    = '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56' as const
 
@@ -317,14 +320,14 @@ export default function StakePage() {
       {/* Tabs */}
       <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
         {(['stake', 'positions'] as const).map(t => (
-          <button key={t} onClick={() => { setTab(t); setError(''); setSuccess('') }} style={{
+          <motion.button key={t} onClick={() => { setTab(t); setError(''); setSuccess('') }} {...pressableTapProps} style={{
             padding: '9px 22px', borderRadius: '8px', fontSize: '13px', fontWeight: 600,
             cursor: 'pointer', border: 'none',
             background: tab === t ? '#2A52BE' : 'rgba(255,255,255,0.06)',
             color: tab === t ? '#fff' : 'rgba(255,255,255,0.4)',
           }}>
             {t === 'stake' ? '⬡ Stake' : `📊 My Positions${stakeCount && stakeCount > 0n ? ` (${stakeCount})` : ''}`}
-          </button>
+          </motion.button>
         ))}
       </div>
 
@@ -332,17 +335,19 @@ export default function StakePage() {
       {tab === 'stake' && (
         <>
           {/* Plan cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))', gap: '12px', marginBottom: '28px' }}>
-            {PLANS.map(p => (
-              <div key={p.id} onClick={() => setSelectedPlan(p.id)} style={cardStyle(selectedPlan === p.id, p.color)}>
-                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: p.color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '16px', marginBottom: '10px' }}>⬡</div>
-                <div style={{ color: '#fff', fontWeight: 700, fontSize: '14px', marginBottom: '2px' }}>{p.name}</div>
-                <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', marginBottom: '10px' }}>{p.sub}</div>
-                <div style={{ color: p.color, fontWeight: 800, fontSize: '26px', fontFamily: 'monospace', marginBottom: '2px' }}>{p.apyLabel}</div>
-                <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', marginBottom: '4px' }}>APY</div>
-                <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px' }}>Min {p.min} · Exit {p.exitFee}</div>
-              </div>
-            ))}
+          <div style={{ marginBottom: '28px' }}>
+            <SwipeRow>
+              {PLANS.map(p => (
+                <motion.div key={p.id} onClick={() => setSelectedPlan(p.id)} {...pressableTapProps} style={{ ...cardStyle(selectedPlan === p.id, p.color), width: '190px', flexShrink: 0 }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: p.color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '16px', marginBottom: '10px' }}>⬡</div>
+                  <div style={{ color: '#fff', fontWeight: 700, fontSize: '14px', marginBottom: '2px' }}>{p.name}</div>
+                  <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', marginBottom: '10px' }}>{p.sub}</div>
+                  <div style={{ color: p.color, fontWeight: 800, fontSize: '26px', fontFamily: 'monospace', marginBottom: '2px' }}>{p.apyLabel}</div>
+                  <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', marginBottom: '4px' }}>APY</div>
+                  <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px' }}>Min {p.min} · Exit {p.exitFee}</div>
+                </motion.div>
+              ))}
+            </SwipeRow>
           </div>
 
           {/* Form */}
@@ -350,12 +355,12 @@ export default function StakePage() {
             {/* Token toggle */}
             <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
               {(['BNB', 'BUSD'] as Token[]).map(t => (
-                <button key={t} onClick={() => setToken(t)} style={{
+                <motion.button key={t} onClick={() => setToken(t)} {...pressableTapProps} style={{
                   padding: '8px 24px', borderRadius: '8px', fontSize: '13px', fontWeight: 600,
                   cursor: 'pointer', border: 'none',
                   background: token === t ? plan.color : 'rgba(255,255,255,0.06)',
                   color: token === t ? '#fff' : 'rgba(255,255,255,0.4)',
-                }}>{t}</button>
+                }}>{t}</motion.button>
               ))}
             </div>
 
@@ -401,7 +406,7 @@ export default function StakePage() {
               </div>
             )}
 
-            <button onClick={handleStake} disabled={loading} style={{
+            <motion.button onClick={handleStake} disabled={loading} {...pressableTapProps} style={{
               width: '100%', padding: '14px', borderRadius: '10px', fontSize: '15px',
               fontWeight: 700, border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
               background: loading ? 'rgba(255,255,255,0.1)' : `linear-gradient(135deg,${plan.color},${plan.color}cc)`,
@@ -409,7 +414,7 @@ export default function StakePage() {
               boxShadow: loading ? 'none' : `0 8px 24px ${plan.color}40`,
             }}>
               {!isConnected ? '🔗 Connect Wallet to Stake' : loading ? 'Processing...' : `Stake ${token} → Earn WOLV`}
-            </button>
+            </motion.button>
 
             <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: '10px', marginTop: '10px', lineHeight: 1.6 }}>
               Funds locked for {plan.lockDays} days. Early exit incurs {plan.exitFee} fee on principal. Rewards paid in WOLV at $1/WOLV. Principal at risk.
@@ -424,9 +429,9 @@ export default function StakePage() {
           {!isConnected && (
             <div style={{ textAlign: 'center', padding: '48px 24px', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.06)' }}>
               <p style={{ color: 'rgba(255,255,255,0.4)', marginBottom: '16px' }}>Connect your wallet to view your staking positions</p>
-              <button onClick={() => openConnectModal?.()} style={{ padding: '12px 28px', borderRadius: '10px', background: '#2A52BE', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
+              <motion.button onClick={() => openConnectModal?.()} {...pressableTapProps} style={{ padding: '12px 28px', borderRadius: '10px', background: '#2A52BE', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
                 Connect Wallet
-              </button>
+              </motion.button>
             </div>
           )}
 
@@ -440,9 +445,9 @@ export default function StakePage() {
             <div style={{ textAlign: 'center', padding: '48px 24px', background: 'rgba(255,255,255,0.02)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.06)' }}>
               <div style={{ fontSize: '32px', marginBottom: '12px' }}>⬡</div>
               <p style={{ color: 'rgba(255,255,255,0.4)', marginBottom: '16px' }}>No active staking positions found</p>
-              <button onClick={() => setTab('stake')} style={{ padding: '10px 24px', borderRadius: '8px', background: '#2A52BE', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: '13px' }}>
+              <motion.button onClick={() => setTab('stake')} {...pressableTapProps} style={{ padding: '10px 24px', borderRadius: '8px', background: '#2A52BE', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: '13px' }}>
                 Start Staking →
-              </button>
+              </motion.button>
             </div>
           )}
 
@@ -453,9 +458,9 @@ export default function StakePage() {
                 <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.25)' }}>
                   Last updated: {lastRefresh ? new Date(lastRefresh).toLocaleTimeString() : '—'} · Auto-refreshes every 30s
                 </div>
-                <button onClick={loadPositions} disabled={posLoading} style={{ padding: '6px 14px', borderRadius: '6px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', fontSize: '12px', cursor: 'pointer', fontWeight: 500 }}>
+                <motion.button onClick={loadPositions} disabled={posLoading} {...pressableTapProps} style={{ padding: '6px 14px', borderRadius: '6px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)', fontSize: '12px', cursor: 'pointer', fontWeight: 500 }}>
                   ↻ Refresh
-                </button>
+                </motion.button>
               </div>
 
               {/* Positions */}
@@ -517,14 +522,14 @@ export default function StakePage() {
                       {/* Actions */}
                       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                         {!locked && !p.claimed && (
-                          <button onClick={() => handleClaim(p.stakeId)} disabled={loading || pending === 0} style={btnStyle('#00a896')}>
+                          <motion.button onClick={() => handleClaim(p.stakeId)} disabled={loading || pending === 0} {...pressableTapProps} style={btnStyle('#00a896')}>
                             Claim {pending > 0 ? `${pending.toFixed(2)} WOLV` : 'Rewards'}
-                          </button>
+                          </motion.button>
                         )}
                         {locked && (
-                          <button onClick={() => handleExit(p.stakeId)} disabled={loading} style={btnStyle('#ef4444', true)}>
+                          <motion.button onClick={() => handleExit(p.stakeId)} disabled={loading} {...pressableTapProps} style={btnStyle('#ef4444', true)}>
                             Early Exit ({plan.exitFee} fee)
-                          </button>
+                          </motion.button>
                         )}
                         <a href={`https://bscscan.com/address/${STAKING_ADDRESS}#code`} target="_blank" rel="noreferrer" style={{ ...btnStyle('#2A52BE', true), textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>
                           Verify WOLV Balance on BSCScan ↗

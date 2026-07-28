@@ -126,8 +126,8 @@ export default async function RootLayout({
                   description: 'U.S. regulated digital asset investment platform offering BNB Smart Chain staking with 8%–25% APY.',
                   aggregateRating: {
                     '@type': 'AggregateRating',
-                    ratingValue: '4.2',
-                    reviewCount: '10',
+                    ratingValue: '4.5',
+                    reviewCount: '12',
                     bestRating: '5',
                     worstRating: '1',
                   },
@@ -163,6 +163,7 @@ export default async function RootLayout({
                   },
                   sameAs: [
                     'https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c',
+                    'https://www.trustpilot.com/review/wolvcapital.com',
                   ],
                 },
                 {
@@ -241,8 +242,20 @@ export default async function RootLayout({
 
           <Analytics />
           <Script
-            src="https://investor-chat.lovable.app/widget.js"
-            data-site="wolvcapital"
+            id="neural-support-config"
+            strategy="beforeInteractive"
+            dangerouslySetInnerHTML={{ __html: `
+              window.NeuralSupportConfig = {
+                convexUrl: "https://ceaseless-crocodile-860.convex.cloud",
+                siteUrl: "https://wolvcapital.com",
+                primaryColor: "#2A52BE",
+                greeting: "Hi! How can I help you today?",
+                agentName: "Alex",
+              };
+            `}}
+          />
+          <Script
+            src="https://ceaseless-crocodile-860.convex.site/widget.js"
             strategy="afterInteractive"
           />
         </SegmentProvider>

@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 
 import { WalletProvider } from '@/_client/WalletProvider';
 const WolvWalletSection = dynamic(() => import('@/_client/WolvWalletSection').then(mod => ({ default: mod.WolvWalletSection })), { ssr: false });
+const ReferralSummaryCard = dynamic(() => import('@/components/ReferralSummaryCard'), { ssr: false });
 import { apiFetch } from "@/lib/api";
 import { pressableTapProps, MotionLink } from "@/lib/motionPress";
 
@@ -440,6 +441,17 @@ export default function DashboardPage() {
               <WolvWalletSection />
             </WalletProvider>
           </div>
+        </motion.section>
+
+        {/* ── Referral Program ── */}
+        <motion.section variants={itemVariants} className="mb-6">
+          <Link href="/referral" style={{ textDecoration: "none", display: "block", marginBottom: "16px" }}>
+            <h2 style={{ color: "#fff", fontSize: "18px", fontWeight: 600 }}>Referral Program</h2>
+            <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", marginTop: "2px" }}>
+              Share your link and earn lifetime commissions on every investment your referrals make.
+            </p>
+          </Link>
+          <ReferralSummaryCard />
         </motion.section>
 
         {/* ── Active Plans ── */}

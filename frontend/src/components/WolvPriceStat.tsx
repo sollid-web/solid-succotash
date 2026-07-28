@@ -7,8 +7,8 @@ interface Props {
 }
 
 export default function WolvPriceStat({ contractAddress }: Props) {
-  const [value, setValue] = useState('$1.00')
-  const [sub, setSub] = useState('Pre-listing reference')
+  const [value, setValue] = useState('$0.50')
+  const [sub, setSub] = useState('Presale reference')
 
   useEffect(() => {
     let cancelled = false

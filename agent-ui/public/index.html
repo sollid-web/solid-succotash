@@ -1,43 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wolv-Invest | Crypto Investment Platform</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #0a0a23;
+      color: #fff;
+    }
+    header {
+      background-color: #111;
+      padding: 20px;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2em;
+      color: #00d1b2;
+    }
+    nav {
+      background-color: #1a1a3d;
+      text-align: center;
+      padding: 10px;
+    }
+    nav a {
+      color: #ccc;
+      margin: 0 15px;
+      text-decoration: none;
+    }
+    .hero {
+      padding: 40px;
+      text-align: center;
+      background: #151542;
+    }
+    .hero h2 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 1.2em;
+      color: #bbb;
+    }
+    .section {
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .plans {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .plan {
+      background-color: #1f1f3d;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .plan h3 {
+      color: #00d1b2;
+    }
+    .testimonials li {
+      margin-bottom: 10px;
+    }
+    footer {
+      background-color: #111;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9em;
+      color: #888;
+    }
+    form input, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 5px;
+    }
+    form button {
+      background-color: #00d1b2;
+      color: #000;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Wolv-Invest</h1>
+  </header>
+  <nav>
+    <a href="#plans">Plans</a>
+    <a href="#loans">Loaning</a>
+    <a href="#about">About</a>
+    <a href="#testimonials">Testimonials</a>
+    <a href="#faq">FAQs</a>
+    <a href="#contact">Contact</a>
+    <a href="#login">Login/Register</a>
+  </nav>
+  <section class="hero">
+    <h2>Secure Your Future with Crypto Investments</h2>
+    <p>Join our expert crypto investment team and grow your wealth today.</p>
+  </section>
+  <section id="plans" class="section">
+    <h2>Investment Plans</h2>
+    <div class="plans">
+      <div class="plan">
+        <h3>Basic Plan</h3>
+        <p>Deposit: $300 - $999</p>
+        <p>No access to loan services</p>
+      </div>
+      <div class="plan">
+        <h3>Amateur Plan</h3>
+        <p>Minimum Deposit: $1,000</p>
+        <p><strong>Eligible for loan application</strong></p>
+      </div>
+      <div class="plan">
+        <h3>Thrive Plan</h3>
+        <p>Minimum Deposit: $1,000</p>
+        <p><strong>Eligible for loan application</strong></p>
+      </div>
+      <div class="plan">
+        <h3>Retirement Plan</h3>
+        <p>Minimum Deposit: $1,000</p>
+        <p><strong>Eligible for loan application</strong></p>
+      </div>
+    </div>
+  </section>
+  <section id="loans" class="section">
+    <h2>Loaning Services</h2>
+    <p>Wolv-Invest offers exclusive loan services to qualified investors on the <strong>Amateur Plan</strong> and above. Whether you need capital for business, emergencies, or strategic investments, we’ve got you covered.</p>
+    <ul>
+      <li>Loan eligibility starts at the Amateur Plan tier and above</li>
+      <li>Simple online application process</li>
+      <li>Flexible repayment terms and low-interest rates</li>
+      <li>Transparent approval and disbursement process</li>
+    </ul>
+    <p><strong>Note:</strong> Basic Plan members are not eligible for loans. Upgrade your plan to access more financial benefits.</p>
+  </section>
+  <section id="about" class="section">
+    <h2>About Us</h2>
+    <p>Wolv-Invest is led by a team of experienced crypto investors committed to helping you achieve financial freedom through smart and secure crypto investments. Our new Loaning Services help empower our clients with access to capital when they need it most.</p>
+  </section>
+  <section id="testimonials" class="section">
+    <h2>What Our Clients Say</h2>
+    <ul class="testimonials">
+      <li>"I've seen amazing returns with Wolv-Invest!" - Michael T.</li>
+      <li>"A trustworthy team that delivers results." - Cynthia O.</li>
+      <li>"Excellent support and clear guidance." - James K.</li>
+    </ul>
+  </section>
+  <section id="faq" class="section">
+    <h2>FAQs</h2>
+    <p><strong>Q: How do I start investing?</strong><br />A: Just register, choose a plan, and fund your account.</p>
+    <p><strong>Q: How secure is my investment?</strong><br />A: We use top-tier security and diversified crypto strategies to manage risk.</p>
+    <p><strong>Q: Who can apply for a loan?</strong><br />A: Only members on the Amateur Plan and higher are eligible to apply for loans.</p>
+  </section>
+  <section id="contact" class="section">
+    <h2>Contact Us</h2>
+    <form>
+      <input type="text" placeholder="Your Name" required />
+      <input type="email" placeholder="Your Email" required />
+      <textarea placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
+  <section id="login" class="section">
+    <h2>Login / Register</h2>
+    <p><a href="#">Click here to access your dashboard (Coming Soon)</a></p>
+  </section>
+  <footer>
+    <p>&copy; 2025 Wolv-Invest. All rights reserved.</p>
+  </footer>
+</body>
 </html>

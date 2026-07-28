@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/`,                    lastModified: now, changeFrequency: 'daily',   priority: 1.0 },
     { url: `${baseUrl}/plans`,               lastModified: now, changeFrequency: 'weekly',  priority: 0.95 },
     { url: `${baseUrl}/wolv-token`,          lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
+    { url: `${baseUrl}/presale`,             lastModified: now, changeFrequency: 'daily',   priority: 0.9 },
     { url: `${baseUrl}/how-it-works`,        lastModified: now, changeFrequency: 'monthly', priority: 0.85 },
     { url: `${baseUrl}/tokenomics`,          lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/roadmap`,             lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
@@ -22,6 +23,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/leadership`,         lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${baseUrl}/referral`,           lastModified: now, changeFrequency: 'monthly', priority: 0.65 },
     { url: `${baseUrl}/faq`,               lastModified: now, changeFrequency: 'weekly',  priority: 0.75 },
+    { url: `${baseUrl}/campaigns`,          lastModified: now, changeFrequency: 'weekly',  priority: 0.6 },
+    { url: `${baseUrl}/market-data`,        lastModified: now, changeFrequency: 'daily',   priority: 0.6 },
 
     // ── Plan detail pages ─────────────────────────────────────────
     { url: `${baseUrl}/plans/pioneer`,  lastModified: now, changeFrequency: 'weekly', priority: 0.85 },

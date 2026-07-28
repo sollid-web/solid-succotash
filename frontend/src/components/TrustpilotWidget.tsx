@@ -45,7 +45,7 @@ export default function TrustpilotWidget() {
       {/* Score */}
       <div className="flex flex-col gap-1">
         <p className="text-xs text-gray-500">Rated on Trustpilot</p>
-        <p className="text-3xl font-medium">4.3
+        <p className="text-3xl font-medium">4.5
 
 
 
@@ -65,12 +65,12 @@ export default function TrustpilotWidget() {
           ))}
           <span
             className="w-6 h-6 rounded flex items-center justify-center"
-            style={{ background: 'linear-gradient(to right, #00B67A 40%, #DCDCE6 40%)' }}
+            style={{ background: 'linear-gradient(to right, #00B67A 50%, #DCDCE6 50%)' }}
           >
             <StarIcon />
           </span>
         </div>
-        <p className="text-xs text-gray-500">10 verified reviews</p>
+        <p className="text-xs text-gray-500">12 verified reviews</p>
       </div>
 
       {/* Reviews */}

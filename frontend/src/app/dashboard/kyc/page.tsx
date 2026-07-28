@@ -1,7 +1,9 @@
 'use client'
 import { useCallback, useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { apiFetch } from '@/lib/api'
+import { pressableTapProps } from '@/lib/motionPress'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -625,13 +627,14 @@ export default function KYCPage() {
               />
             </div>
 
-            <button
+            <motion.button
               onClick={handlePersonalInfoSubmit}
               disabled={isSubmitting}
+              {...pressableTapProps}
               className="w-full py-3 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-700 disabled:text-slate-500 text-white rounded-lg font-semibold text-sm transition-all duration-150"
             >
               {isSubmitting ? 'Saving…' : 'Save & Continue'}
-            </button>
+            </motion.button>
           </div>
         )
 
@@ -753,7 +756,7 @@ export default function KYCPage() {
                 </p>
               </div>
             ) : (
-              <button
+              <motion.button
                 onClick={handleDocumentSubmit}
                 disabled={
                   isSubmitting ||
@@ -761,6 +764,7 @@ export default function KYCPage() {
                   !uploadedFiles.governmentIdBack ||
                   !uploadedFiles.proofOfAddress
                 }
+                {...pressableTapProps}
                 className="w-full py-3 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed text-white rounded-lg font-semibold text-sm transition-all duration-150 flex items-center justify-center gap-2"
               >
                 {isSubmitting ? (
@@ -774,7 +778,7 @@ export default function KYCPage() {
                 ) : (
                   'Submit Documents for Review'
                 )}
-              </button>
+              </motion.button>
             )}
 
             {/* Slot completeness summary */}
@@ -818,9 +822,9 @@ export default function KYCPage() {
             <div className="text-center">
               <h4 className="text-sm font-semibold text-slate-200 mb-1">Video Call Verification</h4>
               <p className="text-xs text-slate-400 mb-4">Schedule a brief video call with our verification team</p>
-              <button className="px-6 py-2.5 bg-purple-700 hover:bg-purple-600 text-white rounded-lg text-sm font-semibold transition">
+              <motion.button {...pressableTapProps} className="px-6 py-2.5 bg-purple-700 hover:bg-purple-600 text-white rounded-lg text-sm font-semibold transition">
                 Schedule Video Call
-              </button>
+              </motion.button>
             </div>
           </div>
         )
@@ -907,9 +911,10 @@ export default function KYCPage() {
               Verification Steps
             </h2>
             {kycSteps.map(step => (
-              <button
+              <motion.button
                 key={step.id}
                 onClick={() => setSelectedStep(step.id)}
+                {...pressableTapProps}
                 className={`w-full text-left p-3.5 rounded-xl border transition-all duration-150 ${
                   selectedStep === step.id
                     ? 'border-blue-600 bg-blue-950/40'
@@ -936,7 +941,7 @@ export default function KYCPage() {
                     <p className="text-xs text-slate-500 mt-0.5 leading-snug">{step.description}</p>
                   </div>
                 </div>
-              </button>
+              </motion.button>
             ))}
           </div>
         </div>

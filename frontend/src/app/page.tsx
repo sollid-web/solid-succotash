@@ -49,7 +49,10 @@ export default async function Page({
 
   return (
     <LocaleProvider locale={locale}>
-      <PublicLayout backgroundClassName="bg-hero-home overlay-dark-60">
+      {/* HeroSection paints its own opaque background over this whole area now,
+          so the bg-hero-home image class is never actually visible here — it
+          was just wasted download/decode/paint weight sitting behind it. */}
+      <PublicLayout backgroundClassName="bg-[#070B19]">
         <HomePageContent />
       </PublicLayout>
     </LocaleProvider>

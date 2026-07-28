@@ -1,7 +1,42 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 import { useTranslation } from '@/components/TranslationProvider'
+import { MotionLink, pressableTapProps } from '@/lib/motionPress'
+
+// Purely additive inner-glow, no color values changed — just a subtle glass edge.
+const glassGlow = 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]'
+
+// Immutable constructor args of the deployed WOLVPresale contract
+// (0x04b5c5e204e812c176ce632f3781ea88c500497c) — fixed on-chain, safe to hardcode.
+const PRESALE_END_TIME = 1785686442 // 2026-08-02T16:00:42Z
+
+function formatTimeLeft(seconds: number) {
+  if (seconds <= 0) return null
+  const d = Math.floor(seconds / 86400)
+  const h = Math.floor((seconds % 86400) / 3600)
+  const m = Math.floor((seconds % 3600) / 60)
+  return `${d}d ${h}h ${m}m`
+}
+
+const PLANS = [
+  { plan: 'Pioneer', apy: '8%', days: '90d' },
+  { plan: 'Vanguard', apy: '12%', days: '150d' },
+  { plan: 'Horizon', apy: '18%', days: '180d' },
+  { plan: 'Summit VIP', apy: '25%', days: '365d' },
+]
+
+// Entrance stagger: headline -> description -> presale badge -> APY cards -> CTA buttons.
+const containerVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
+}
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 100, damping: 20 } },
+}
 
 interface HeroSectionProps {
   onPlansClick?: () => void
@@ -9,97 +44,138 @@ interface HeroSectionProps {
 
 export default function HeroSection({ onPlansClick }: HeroSectionProps) {
   const { t } = useTranslation()
+  const [timeLeft, setTimeLeft] = useState<string | null>(
+    formatTimeLeft(PRESALE_END_TIME - Math.floor(Date.now() / 1000)),
+  )
+
+  useEffect(() => {
+    const tick = () => setTimeLeft(formatTimeLeft(PRESALE_END_TIME - Math.floor(Date.now() / 1000)))
+    const interval = setInterval(tick, 60_000)
+    return () => clearInterval(interval)
+  }, [])
 
   return (
-    <section
-      className="relative overflow-hidden bg-cover bg-center bg-[url('/images/hero/hero-bg.webp')]"
-      style={{ minHeight: '80vh' }}
-    >
-      <div className="absolute inset-0 bg-slate-950/10" />
-      <div className="absolute inset-0 bg-gradient-to-r from-white/15 via-white/10 to-transparent" />
+    <section className="relative min-h-screen bg-[#070B19] text-white flex flex-col justify-center px-4 py-16 overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-blue-600/10 via-transparent to-[#070B19] pointer-events-none z-0" />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[60%_40%] lg:items-center">
-          <div className="space-y-8">
-            <div className="max-w-xl">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-blue-300">
-                Invest · Stake · Earn — All On-Chain
-              </span>
-            </div>
+      {/* Ambient glow orbs. Previously 4 layered elements at blur-120/140px with
+          backdrop-blur-xl cards sampling them every frame — real scroll jank,
+          especially on mobile. Back to 2, lighter blur, GPU-hinted via willChange. */}
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute -left-16 top-8 w-[400px] h-[400px] rounded-full bg-blue-600/15 blur-[90px] z-0"
+        style={{ willChange: 'transform, opacity' }}
+        animate={{ scale: [1, 1.08, 1], opacity: [0.12, 0.18, 0.12] }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute -right-10 bottom-10 w-[350px] h-[350px] rounded-full bg-amber-500/10 blur-[90px] z-0"
+        style={{ willChange: 'transform, opacity' }}
+        animate={{ scale: [1, 1.08, 1], opacity: [0.12, 0.18, 0.12] }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+      />
 
-            <h1 className="text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl md:text-5xl lg:text-[48px] lg:leading-[1.05]">
+      {/* Sleek low-opacity dot-grid texture so the ambient light filters through a subtle technical surface. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.03] z-0"
+        style={{
+          backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)',
+          backgroundSize: '28px 28px',
+        }}
+      />
+
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        className="relative z-10 max-w-xl mx-auto w-full space-y-6"
+      >
+        <motion.div variants={itemVariants}>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-blue-300">
+            Invest · Stake · Earn — All On-Chain
+          </p>
+
+          <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200">
               {t('hero.title')}
-            </h1>
+            </span>
+          </h1>
+        </motion.div>
 
-            <p className="max-w-2xl text-base leading-7 text-slate-200 sm:text-lg">
-              {t('hero.subtitle')}
-            </p>
+        <motion.p variants={itemVariants} className="text-sm sm:text-base text-slate-300 leading-relaxed">
+          {t('hero.subtitle')}
+        </motion.p>
 
-            {/* Live blockchain badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border border-blue-400/30 rounded-full">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-[12px] font-semibold text-blue-300">
-                Every profit recorded on BNB Chain · Stake BNB or BUSD · Earn WOLV rewards
+        {/* Presale status card */}
+        <motion.div variants={itemVariants}>
+          <MotionLink
+            href="/presale"
+            {...pressableTapProps}
+            className={`block p-4 rounded-xl bg-[#0b1329]/60 border border-white/10 border-t-white/20 backdrop-blur-md space-y-2 hover:border-orange-400/40 transition ${glassGlow}`}
+          >
+            <div className="flex justify-between items-center text-xs">
+              <span className="flex items-center gap-2 font-semibold text-amber-400">
+                <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
+                🔥 WOLV Presale Live
               </span>
+              <span className="text-slate-400">$0.50 / WOLV</span>
             </div>
+            <div className="flex justify-between items-center text-[11px] text-slate-400">
+              <span>{timeLeft ? `${timeLeft} left · $50,000 hard cap` : 'Hard cap $50,000'}</span>
+              <span className="text-orange-400 font-semibold">Join Presale →</span>
+            </div>
+          </MotionLink>
+        </motion.div>
 
-            {/* Staking APY pills */}
-            <div className="flex flex-wrap gap-2">
-              {[
-                { plan: 'Pioneer',    apy: '8%',  days: '90d' },
-                { plan: 'Vanguard',   apy: '12%', days: '150d' },
-                { plan: 'Horizon',    apy: '18%', days: '180d' },
-                { plan: 'Summit VIP', apy: '25%', days: '365d' },
-              ].map(p => (
-                <div key={p.plan} className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#E2E8F0] rounded-full shadow-sm">
-                  <span className="text-[11px] font-semibold text-gray-800">{p.plan}</span>
-                  <span className="text-[11px] font-bold text-[#2A52BE]">{p.apy} APY</span>
-                  <span className="text-[10px] text-gray-500">{p.days}</span>
-                </div>
-              ))}
-            </div>
+        {/* Staking APY tiers */}
+        <motion.div variants={itemVariants} className="grid grid-cols-2 gap-2 text-center text-xs">
+          {PLANS.map(p => (
+            <motion.div
+              key={p.plan}
+              {...pressableTapProps}
+              whileHover={{ y: -3 }}
+              whileTap={{ scale: 0.97, boxShadow: '0 0 20px rgba(96,165,250,0.25)' }}
+              className={`p-2.5 rounded-lg bg-[#0b1329]/60 border border-white/10 border-t-white/20 backdrop-blur-md transition-shadow ${glassGlow}`}
+            >
+              <div className="text-slate-400 text-[10px]">{p.plan} ({p.days})</div>
+              <div className="text-blue-400 font-bold text-sm">{p.apy} APY</div>
+            </motion.div>
+          ))}
+        </motion.div>
 
-            <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap items-start sm:items-center">
-              <Link
-                href="/plans"
-                onClick={() => onPlansClick?.()}
-                className="inline-flex min-h-[44px] items-center justify-center rounded-[7px] bg-[#2A52BE] px-8 py-3.5 text-sm font-bold text-white transition hover:bg-[#244bb0]"
-              >
-                {t('hero.button.viewPlans')}
-              </Link>
-              <Link
-                href="/accounts/signup"
-                className="inline-flex min-h-[44px] items-center justify-center rounded-[7px] border-2 border-[#2A52BE] bg-white px-8 py-3.5 text-sm font-semibold text-[#1E3A8A] transition hover:bg-blue-50"
-              >
-                {t('hero.button.openAccount')}
-              </Link>
-            </div>
+        {/* Action buttons */}
+        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-3 pt-1">
+          <MotionLink
+            href="/presale"
+            {...pressableTapProps}
+            className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 transition shadow-lg shadow-orange-500/20 text-center"
+          >
+            Join Presale →
+          </MotionLink>
+          <MotionLink
+            href="/plans"
+            onClick={() => onPlansClick?.()}
+            {...pressableTapProps}
+            className="w-full sm:flex-1 py-3 px-6 rounded-lg font-semibold text-slate-200 border border-slate-700 bg-slate-900/50 hover:bg-slate-800 transition text-center"
+          >
+            {t('hero.button.viewPlans')}
+          </MotionLink>
+        </motion.div>
 
-            <div className="flex flex-wrap gap-3 text-[11px] uppercase tracking-[0.16em] text-slate-300">
-              <span>{t('hero.badge.encryption')}</span>
-              <span>|</span>
-              <span>{t('hero.badge.custody')}</span>
-              <span>|</span>
-              <span>{t('hero.badge.fincen')}</span>
-              <span>|</span>
-              <span>BNB Chain Verified</span>
-            </div>
-          </div>
+        <Link href="/accounts/signup" className="block text-center text-sm text-blue-300 hover:text-blue-200 underline underline-offset-2">
+          {t('hero.button.openAccount')} →
+        </Link>
 
-          <div className="hidden lg:block">
-            <div className="relative mx-auto h-[520px] max-w-[420px] overflow-hidden rounded-[16px] shadow-2xl shadow-slate-900/10">
-              <img
-                src="/images/hero/home-hero.webp"
-                alt="WolvCapital blockchain investment and staking platform — earn WOLV rewards"
-                className="h-full w-full object-cover object-top"
-                loading="eager"
-                decoding="async"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#2A52BE]/15" />
-            </div>
-          </div>
+        {/* Trust badges */}
+        <div className="pt-4 border-t border-slate-800/80 flex flex-wrap justify-between gap-2 text-[10px] text-slate-400 tracking-wider">
+          <span>{t('hero.badge.encryption')}</span>
+          <span>{t('hero.badge.custody')}</span>
+          <span>{t('hero.badge.fincen')}</span>
+          <span>BNB CHAIN VERIFIED</span>
         </div>
-      </div>
+      </motion.div>
     </section>
   )
 }

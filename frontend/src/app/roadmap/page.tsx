@@ -53,6 +53,7 @@ const PHASES = [
     period: "Q3 – Q4 2025",
     status: "active",
     items: [
+      "Public presale live — $0.50/WOLV, $50,000 hard cap, verified on BSCScan & Sourcify",
       "BSCScan token profile approval",
       "PancakeSwap liquidity pool creation",
       "CoinGecko listing application",

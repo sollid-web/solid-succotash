@@ -1,14 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { useAccount, useWriteContract, useReadContract } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { parseUnits, formatUnits } from 'viem';
+import { pressableTapProps } from '@/lib/motionPress';
 
 // ── Contracts ─────────────────────────────────────────────────────────────────
 const WOLV_V2      = '0xe0167279aef7bf4ad313d261da82e8366822270c' as const;
-const POOL         = '0xb233cf74b14abf9d9702d585c540030125599579' as const;
-const STAKING      = '0x4b62efee5695ed55cd362a0b818f4c5f9694322b' as const;
+const POOL         = '0x7310f3e07627ce98246973e068bf2ff294f84e5f' as const;
+const STAKING      = '0x7cd22f3c08b4195225da7d043cbe00da118d31ec' as const;
 
 // ── ABIs ──────────────────────────────────────────────────────────────────────
 const ERC20_ABI = [
@@ -224,7 +226,7 @@ export default function WolvAdminPage() {
         {!isConnected ? (
           <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(0,168,150,0.2)', borderRadius: '16px', padding: '32px', textAlign: 'center', marginBottom: '24px' }}>
             <p style={{ color: 'rgba(255,255,255,0.5)', marginBottom: '16px' }}>Connect your treasury wallet to manage the reward pool</p>
-            <button onClick={() => openConnectModal?.()} style={btn()}>Connect Treasury Wallet</button>
+            <motion.button onClick={() => openConnectModal?.()} {...pressableTapProps} style={btn()}>Connect Treasury Wallet</motion.button>
           </div>
         ) : (
           <div style={{ background: 'rgba(0,168,150,0.08)', border: '1px solid rgba(0,168,150,0.2)', borderRadius: '12px', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
@@ -241,7 +243,7 @@ export default function WolvAdminPage() {
             { label: 'Reward Pool', addr: POOL },
             { label: 'Staking', addr: STAKING },
           ].map(c => (
-            <a key={c.addr} href={`https://bscscan.com/address/${c.addr}#code`} target="_blank" rel="noreferrer"
+            <a key={c.addr} href={c.label === 'Reward Pool' ? `https://bscscan.com/token/${WOLV_V2}?a=${c.addr}` : `https://bscscan.com/address/${c.addr}#code`} target="_blank" rel="noreferrer"
               style={{ padding: '6px 14px', borderRadius: '8px', fontSize: '12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)', textDecoration: 'none' }}>
               {c.label} ↗
             </a>
@@ -251,9 +253,9 @@ export default function WolvAdminPage() {
         {/* Tabs */}
         <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', flexWrap: 'wrap' }}>
           {TABS.map(t => (
-            <button key={t.id} onClick={() => { setTab(t.id); reset(); }} style={{ padding: '10px 18px', borderRadius: '10px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', border: 'none', background: tab === t.id ? 'rgba(0,168,150,0.2)' : 'rgba(255,255,255,0.04)', color: tab === t.id ? '#00a896' : 'rgba(255,255,255,0.5)', borderBottom: tab === t.id ? '2px solid #00a896' : '2px solid transparent' }}>
+            <motion.button key={t.id} onClick={() => { setTab(t.id); reset(); }} {...pressableTapProps} style={{ padding: '10px 18px', borderRadius: '10px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', border: 'none', background: tab === t.id ? 'rgba(0,168,150,0.2)' : 'rgba(255,255,255,0.04)', color: tab === t.id ? '#00a896' : 'rgba(255,255,255,0.5)', borderBottom: tab === t.id ? '2px solid #00a896' : '2px solid transparent' }}>
               {t.icon} {t.label}
-            </button>
+            </motion.button>
           ))}
         </div>
 
@@ -297,9 +299,9 @@ export default function WolvAdminPage() {
                 <input style={inputStyle} type="number" placeholder="e.g. 500000" value={fundAmt} onChange={e => setFundAmt(e.target.value)} />
                 <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', marginTop: '6px' }}>This will trigger an approve + fund transaction if needed.</p>
               </div>
-              <button onClick={handleFund} disabled={loading || !isConnected} style={btn('#00a896', loading || !isConnected)}>
+              <motion.button onClick={handleFund} disabled={loading || !isConnected} {...pressableTapProps} style={btn('#00a896', loading || !isConnected)}>
                 {loading ? 'Processing...' : '💰 Fund Reward Pool'}
-              </button>
+              </motion.button>
             </div>
           )}
 
@@ -321,20 +323,20 @@ export default function WolvAdminPage() {
                 <div>
                   <label style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '1px', display: 'block', marginBottom: '8px' }}>WOLV Amount</label>
                   <input style={inputStyle} type="number" placeholder="e.g. 100000" value={wdAmt} onChange={e => setWdAmt(e.target.value)} />
-                  <button onClick={handleQueueWithdraw} disabled={loading || !isConnected} style={btn('#f59e0b', loading || !isConnected)}>
+                  <motion.button onClick={handleQueueWithdraw} disabled={loading || !isConnected} {...pressableTapProps} style={btn('#f59e0b', loading || !isConnected)}>
                     {loading ? 'Processing...' : '🔐 Queue Withdrawal (starts 48hr timer)'}
-                  </button>
+                  </motion.button>
                 </div>
               )}
 
               {wdPending && (
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                  <button onClick={handleExecuteWithdraw} disabled={loading || !isConnected || !wdReady} style={btn('#10b981', loading || !isConnected || !wdReady)}>
+                  <motion.button onClick={handleExecuteWithdraw} disabled={loading || !isConnected || !wdReady} {...pressableTapProps} style={btn('#10b981', loading || !isConnected || !wdReady)}>
                     ✅ Execute
-                  </button>
-                  <button onClick={handleCancelWithdraw} disabled={loading || !isConnected} style={btn('#ef4444', loading || !isConnected)}>
+                  </motion.button>
+                  <motion.button onClick={handleCancelWithdraw} disabled={loading || !isConnected} {...pressableTapProps} style={btn('#ef4444', loading || !isConnected)}>
                     ❌ Cancel
-                  </button>
+                  </motion.button>
                 </div>
               )}
             </div>
@@ -350,12 +352,12 @@ export default function WolvAdminPage() {
                 Staking status: <strong style={{ color: stakingPaused ? '#ef4444' : '#10b981' }}>{stakingPaused ? '⏸ Paused' : '✅ Active'}</strong>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                <button onClick={() => handlePause(true)} disabled={loading || !isConnected || !!stakingPaused} style={btn('#ef4444', loading || !isConnected || !!stakingPaused)}>
+                <motion.button onClick={() => handlePause(true)} disabled={loading || !isConnected || !!stakingPaused} {...pressableTapProps} style={btn('#ef4444', loading || !isConnected || !!stakingPaused)}>
                   ⏸ Pause Staking
-                </button>
-                <button onClick={() => handlePause(false)} disabled={loading || !isConnected || !stakingPaused} style={btn('#10b981', loading || !isConnected || !stakingPaused)}>
+                </motion.button>
+                <motion.button onClick={() => handlePause(false)} disabled={loading || !isConnected || !stakingPaused} {...pressableTapProps} style={btn('#10b981', loading || !isConnected || !stakingPaused)}>
                   ▶️ Resume Staking
-                </button>
+                </motion.button>
               </div>
             </div>
           )}

@@ -10,7 +10,10 @@ import { QRCodeSVG } from 'qrcode.react';
 
 const WOLV_CONTRACT = '0xe0167279aef7bf4ad313d261da82e8366822270c';
 const WOLV_DECIMALS = 18;
-const PRICE_PER_WOLV = 1;
+// Matches the deployed StakingContract's wolvPerUsd() rate (2 WOLV per $1)
+// and the WOLVPresale contract's $0.50/WOLV price — kept in sync manually
+// since this is a simple display-only estimate, not a live price feed.
+const PRICE_PER_WOLV = 0.5;
 const WOLV_ABI = [
   {
     name: 'balanceOf',

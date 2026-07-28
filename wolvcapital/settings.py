@@ -1049,3 +1049,9 @@ SIMPLE_JWT = {
     **SIMPLE_JWT,
     "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
 }
+
+# Pusher Configuration
+PUSHER_APP_ID = '2173662'
+PUSHER_KEY = 'b9cc4a723e4a8e6cfd75'
+PUSHER_SECRET = '5cf4d6f83bf99ddab95f'
+PUSHER_CLUSTER = 'eu'

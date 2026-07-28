@@ -102,14 +102,10 @@ export default function NavBar() {
           </div>
 
           {/* Mobile Right */}
-          <div className="flex items-center gap-2 lg:hidden flex-shrink-0">
-            <LanguageSwitcher />
-            <Link
-              href="/accounts/login"
-              className="text-xs font-medium text-white px-3 py-2 border border-[rgba(255,255,255,0.2)] rounded-[7px] hover:border-[#00a896] transition-colors"
-            >
-              {t('nav.login')}
-            </Link>
+          <div className="flex items-center gap-2 lg:hidden flex-shrink-0 min-w-0">
+            <WalletProviderClient>
+              <WolvWalletButton compact />
+            </WalletProviderClient>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="p-2 rounded-lg transition-colors"
@@ -134,11 +130,15 @@ export default function NavBar() {
       {mobileOpen && (
         <div className="lg:hidden" style={{ background: 'rgba(6,12,26,0.98)', borderTop: '1px solid rgba(42,82,190,0.2)', backdropFilter: 'blur(20px)' }}>
           <div className="px-4 py-4 flex flex-col gap-1">
-            <div className="pb-3 mb-2 flex items-center justify-between" style={{ borderBottom: '1px solid rgba(42,82,190,0.2)' }}>
-              <span className="text-xs font-semibold uppercase tracking-wide text-[rgba(255,255,255,0.4)]">WOLV Wallet</span>
-              <WalletProviderClient>
-                <WolvWalletButton compact />
-              </WalletProviderClient>
+            <div className="pb-3 mb-2 flex items-center justify-between gap-2" style={{ borderBottom: '1px solid rgba(42,82,190,0.2)' }}>
+              <LanguageSwitcher />
+              <Link
+                href="/accounts/login"
+                onClick={() => setMobileOpen(false)}
+                className="text-xs font-medium text-white px-3 py-2 border border-[rgba(255,255,255,0.2)] rounded-[7px] hover:border-[#00a896] transition-colors"
+              >
+                {t('nav.login')}
+              </Link>
             </div>
             {navItems.map((item) => (
               <Link

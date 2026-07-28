@@ -19,7 +19,7 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: 'https://wolvcapital.com/sitemap.xml',
-    host: 'https://wolvcapital.com',
+    sitemap: 'https://www.wolvcapital.com/sitemap.xml',
+    host: 'https://www.wolvcapital.com',
   }
 }

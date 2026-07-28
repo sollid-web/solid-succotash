@@ -6,10 +6,12 @@ export function WolvWalletSection(): import("react/jsx-runtime").JSX.Element {
     <div style={{
       background: 'linear-gradient(145deg, rgba(42,82,190,0.22) 0%, rgba(0,168,150,0.14) 100%)',
       border: '1px solid rgba(42,82,190,0.38)',
+      borderTop: '1px solid rgba(255,255,255,0.14)',
       borderRadius: '24px',
       padding: '32px 28px',
       position: 'relative',
       overflow: 'hidden',
+      boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05)',
     }}>
       {/* Background glow orbs */}
       <div style={{

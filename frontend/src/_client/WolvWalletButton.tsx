@@ -445,6 +445,18 @@ export function WolvWalletButton({ compact = false }: WolvWalletButtonProps) {
                     </button>
                   </div>
                 )}
+                {isCorrectChain && (
+                  added ? (
+                    <div className="rounded-lg border border-teal-400/20 bg-teal-400/10 px-3 py-2 text-center text-xs font-semibold text-teal-300">
+                      ✅ WOLV added to wallet
+                    </div>
+                  ) : (
+                    <button type="button" onClick={addWolvToWallet} disabled={adding}
+                      className="w-full rounded-lg border border-teal-300/25 bg-white/5 px-3 py-2 text-sm font-semibold text-teal-300 transition hover:border-teal-300/50 disabled:opacity-60">
+                      {adding ? 'Adding…' : '+ Add WOLV to Wallet'}
+                    </button>
+                  )
+                )}
                 <button type="button" onClick={() => { disconnect(); setDropdownOpen(false); }}
                   className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 transition hover:border-teal-300/40">
                   Disconnect

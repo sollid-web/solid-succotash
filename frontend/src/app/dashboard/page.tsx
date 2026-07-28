@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import dynamic from 'next/dynamic';
+import { motion } from "framer-motion";
 
 import { WalletProvider } from '@/_client/WalletProvider';
 const WolvWalletSection = dynamic(() => import('@/_client/WolvWalletSection').then(mod => ({ default: mod.WolvWalletSection })), { ssr: false });
 import { apiFetch } from "@/lib/api";
+import { pressableTapProps, MotionLink } from "@/lib/motionPress";
 
 // Immutable constructor args of the deployed WOLVPresale contract
 // (0x04b5c5e204e812c176ce632f3781ea88c500497c) — fixed on-chain, safe to hardcode.
@@ -106,6 +108,17 @@ const statusConfig: Record<string, { color: string; bg: string; dot: string }> =
   pending:   { color: "#facc15", bg: "rgba(250,204,21,0.12)",  dot: "#facc15" },
   rejected:  { color: "#fca5a5", bg: "rgba(248,113,113,0.12)",   dot: "#fca5a5" },
   failed:    { color: "#fca5a5", bg: "rgba(248,113,113,0.12)",   dot: "#fca5a5" },
+};
+
+// Spring-based entrance stagger, replacing the old CSS @keyframes fadeUp
+// timing 1:1 (y: 16, ~0.05s steps) — same cadence, smoother easing curve.
+const containerVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.05, delayChildren: 0.05 } },
+};
+const itemVariants = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 120, damping: 20 } },
 };
 
 export default function DashboardPage() {
@@ -209,10 +222,12 @@ export default function DashboardPage() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
         
-        .stat-card { 
+        .stat-card {
           background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
           border: 1px solid rgba(255,255,255,0.08);
+          border-top: 1px solid rgba(255,255,255,0.16);
           backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
           transition: all 0.3s ease;
         }
         .stat-card:hover {
@@ -223,11 +238,19 @@ export default function DashboardPage() {
         .plan-card {
           background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
           border: 1px solid rgba(255,255,255,0.07);
+          border-top: 1px solid rgba(255,255,255,0.14);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
           transition: all 0.3s ease;
         }
         .plan-card:hover {
           border-color: rgba(0,168,150,0.35);
           box-shadow: 0 0 40px rgba(0,168,150,0.08);
+        }
+        .glass-surface {
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
+          box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
         }
         .glow-teal { box-shadow: 0 0 30px rgba(0,168,150,0.2); }
         .progress-bar {
@@ -237,17 +260,6 @@ export default function DashboardPage() {
         }
         .tx-row { transition: background 0.15s; }
         .tx-row:hover { background: rgba(255,255,255,0.03); }
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(16px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        .fade-up { animation: fadeUp 0.5s ease forwards; }
-        .fade-up-1 { animation-delay: 0.05s; opacity: 0; }
-        .fade-up-2 { animation-delay: 0.1s;  opacity: 0; }
-        .fade-up-3 { animation-delay: 0.15s; opacity: 0; }
-        .fade-up-4 { animation-delay: 0.2s;  opacity: 0; }
-        .fade-up-5 { animation-delay: 0.25s; opacity: 0; }
-        .fade-up-6 { animation-delay: 0.3s;  opacity: 0; }
         .shimmer {
           background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
           background-size: 200% 100%;
@@ -260,18 +272,19 @@ export default function DashboardPage() {
       `}</style>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-28 sm:pb-10">
+      <motion.div variants={containerVariants} initial="hidden" animate="show">
 
         {error && (
-          <div className="mb-6 rounded-2xl p-4 fade-up" style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", color: "#fca5a5" }}>
+          <motion.div variants={itemVariants} className="mb-6 rounded-2xl p-4" style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", color: "#fca5a5" }}>
             ⚠ {error}
-          </div>
+          </motion.div>
         )}
 
         {/* removed the portfolio overview hero section for mobile-first dashboard layout */}
 
         {/* ── Presale Banner ── */}
         {!presaleEnded && (
-          <Link href="/presale" className="fade-up fade-up-1 mb-6 block" style={{
+          <MotionLink href="/presale" variants={itemVariants} {...pressableTapProps} className="glass-surface mb-6 block" style={{
             borderRadius: "20px",
             background: "linear-gradient(135deg, rgba(245,158,11,0.16) 0%, rgba(217,119,6,0.08) 100%)",
             border: "1px solid rgba(245,158,11,0.3)",
@@ -300,14 +313,15 @@ export default function DashboardPage() {
             }}>
               Buy Now →
             </span>
-          </Link>
+          </MotionLink>
         )}
 
         {/* ── Virtual Card Banner ── */}
-        <div className="fade-up fade-up-2 mb-6" style={{
+        <motion.div variants={itemVariants} className="glass-surface mb-6" style={{
           borderRadius: "20px",
           background: "linear-gradient(135deg, rgba(26,58,143,0.6) 0%, rgba(14,165,201,0.4) 100%)",
           border: "1px solid rgba(0,168,150,0.3)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(255,255,255,0.06)",
           padding: "0",
           overflow: "hidden",
           display: "flex",
@@ -340,21 +354,22 @@ export default function DashboardPage() {
                 Visa Infinite · Digital payments worldwide
               </div>
             </div>
-            <Link href="/dashboard/card" style={{
+            <MotionLink href="/dashboard/card" {...pressableTapProps} style={{
               padding: "9px 18px", borderRadius: "10px",
               background: "rgba(255,255,255,0.12)",
               border: "1px solid rgba(255,255,255,0.2)",
               color: "#fff", fontSize: "13px", fontWeight: 600,
               textDecoration: "none", whiteSpace: "nowrap",
               backdropFilter: "blur(10px)",
+              boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
             }}>
               View Card →
-            </Link>
+            </MotionLink>
           </div>
-        </div>
+        </motion.div>
 
         {/* ── Stats Grid ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3 fade-up fade-up-3">
+        <motion.div variants={itemVariants} className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
           <MetricCard
             label="Total Invested"
             value={money(totalInvested)}
@@ -387,11 +402,11 @@ export default function DashboardPage() {
             accent="#00a896"
             loading={loading}
           />
-        </div>
+        </motion.div>
 
         {/* ── ROI Rate Banner ── */}
         {!loading && totalInvested > 0 && (
-          <div className="fade-up fade-up-3 mb-6 rounded-2xl px-5 py-4 flex items-center justify-between" style={{
+          <motion.div variants={itemVariants} className="glass-surface mb-6 rounded-2xl px-5 py-4 flex items-center justify-between" style={{
             background: "linear-gradient(135deg, rgba(245,158,11,0.08), rgba(245,158,11,0.03))",
             border: "1px solid rgba(245,158,11,0.15)",
           }}>
@@ -404,27 +419,31 @@ export default function DashboardPage() {
             <div style={{ color: "#f59e0b", fontWeight: 700, fontSize: "20px", fontFamily: "Inter, 'DM Sans', system-ui, sans-serif", fontVariantNumeric: "tabular-nums" }}>
               +{roiRate}%
             </div>
-          </div>
+          </motion.div>
         )}
 
 
         {/* ── WOLV Wallet ── */}
-        <section className="fade-up fade-up-4 mb-6">
+        <motion.section variants={itemVariants} className="mb-6">
           <Link href="/dashboard/wolv-token" style={{ textDecoration: "none", display: "block", marginBottom: "16px" }}>
             <h2 style={{ color: "#fff", fontSize: "18px", fontWeight: 600 }}>WOLV Token</h2>
             <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", marginTop: "2px" }}>
               Connect your wallet and view WOLV token rewards without leaving the dashboard.
             </p>
           </Link>
-          <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(0,168,150,0.2)", borderRadius: "20px", padding: "24px" }}>
+          <div style={{
+            background: "rgba(255,255,255,0.03)", border: "1px solid rgba(0,168,150,0.2)", borderRadius: "20px", padding: "24px",
+            backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)",
+            boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.05), 0 20px 50px rgba(0,0,0,0.25)",
+          }}>
             <WalletProvider>
               <WolvWalletSection />
             </WalletProvider>
           </div>
-        </section>
+        </motion.section>
 
         {/* ── Active Plans ── */}
-        <section className="mb-8 fade-up fade-up-4">
+        <motion.section variants={itemVariants} className="mb-8">
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
             <div>
               <h2 style={{ color: "#fff", fontSize: "18px", fontWeight: 600 }}>Active Plans</h2>
@@ -432,14 +451,14 @@ export default function DashboardPage() {
                 {activeInvestments.length} plan{activeInvestments.length !== 1 ? "s" : ""} running
               </p>
             </div>
-            <Link href="/dashboard/new-investment" style={{
+            <MotionLink href="/dashboard/new-investment" {...pressableTapProps} style={{
               color: "#bfdbfe", fontSize: "13px", fontWeight: 500, textDecoration: "none",
               padding: "6px 14px", borderRadius: "8px",
               border: "1px solid rgba(59,130,246,0.25)",
               background: "rgba(59,130,246,0.08)",
             }}>
               + Add Plan
-            </Link>
+            </MotionLink>
           </div>
 
           {loading ? (
@@ -465,7 +484,7 @@ export default function DashboardPage() {
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <motion.div variants={containerVariants} initial="hidden" animate="show" className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {activeInvestments.map((inv, idx) => {
                 const planName = inv.plan_name || inv.plan?.name || `Plan #${String(inv.id)}`;
                 const dailyRoi = Number(inv.plan_daily_roi ?? inv.plan?.daily_roi ?? inv.plan?.roi_rate) || 0;
@@ -495,7 +514,7 @@ export default function DashboardPage() {
                 const col = planColors[idx % planColors.length];
 
                 return (
-                  <div key={String(inv.id)} className="plan-card rounded-2xl p-5">
+                  <motion.div key={String(inv.id)} variants={itemVariants} className="plan-card rounded-2xl p-5">
                     {/* Plan header */}
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
                       <div>
@@ -597,7 +616,7 @@ export default function DashboardPage() {
                       </div>
                     )}
 
-                    <Link href={planSlug ? `/plans/${planSlug}` : "/plans"} style={{
+                    <MotionLink href={planSlug ? `/plans/${planSlug}` : "/plans"} {...pressableTapProps} style={{
                       display: "block", textAlign: "center", padding: "10px",
                       borderRadius: "10px", background: "rgba(255,255,255,0.05)",
                       border: "1px solid rgba(255,255,255,0.1)",
@@ -605,16 +624,16 @@ export default function DashboardPage() {
                       textDecoration: "none", transition: "all 0.2s",
                     }}>
                       View Details →
-                    </Link>
-                  </div>
+                    </MotionLink>
+                  </motion.div>
                 );
               })}
-            </div>
+            </motion.div>
           )}
-        </section>
+        </motion.section>
 
         {/* ── Recent Activity ── */}
-        <section className="fade-up fade-up-5 mb-8">
+        <motion.section variants={itemVariants} className="mb-8">
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
             <div>
               <h2 style={{ color: "#fff", fontSize: "18px", fontWeight: 600 }}>Recent Activity</h2>
@@ -622,17 +641,17 @@ export default function DashboardPage() {
                 Latest transactions
               </p>
             </div>
-            <Link href="/dashboard/transactions" style={{
+            <MotionLink href="/dashboard/transactions" {...pressableTapProps} style={{
               color: "#7dd3fc", fontSize: "13px", fontWeight: 500, textDecoration: "none",
               padding: "6px 14px", borderRadius: "8px",
               border: "1px solid rgba(59,130,246,0.3)",
               background: "rgba(59,130,246,0.08)",
             }}>
               View All
-            </Link>
+            </MotionLink>
           </div>
 
-          <div style={{
+          <div className="glass-surface" style={{
             borderRadius: "20px",
             background: "rgba(255,255,255,0.03)",
             border: "1px solid rgba(255,255,255,0.07)",
@@ -649,14 +668,14 @@ export default function DashboardPage() {
                 No transactions yet
               </div>
             ) : (
-              <div>
+              <motion.div variants={containerVariants} initial="hidden" animate="show">
                 {/* Header */}
                 <div style={{
-                  display: "grid", gridTemplateColumns: "auto 1fr auto auto",
+                  display: "grid", gridTemplateColumns: "auto 1fr auto",
                   gap: "12px", padding: "12px 20px",
                   borderBottom: "1px solid rgba(255,255,255,0.06)",
                 }}>
-                  {["Type", "Date", "Status", "Amount"].map(h => (
+                  {["Type", "Activity", "Amount"].map(h => (
                     <div key={h} style={{ color: "rgba(255,255,255,0.3)", fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600 }}>
                       {h}
                     </div>
@@ -669,8 +688,8 @@ export default function DashboardPage() {
                   const isCredit = ["deposit", "profit", "bonus"].includes(String(tx.tx_type));
 
                   return (
-                    <div key={tx.id} className="tx-row" style={{
-                      display: "grid", gridTemplateColumns: "auto 1fr auto auto",
+                    <motion.div key={tx.id} variants={itemVariants} className="tx-row" style={{
+                      display: "grid", gridTemplateColumns: "auto 1fr auto",
                       gap: "12px", padding: "14px 20px", alignItems: "center",
                       borderBottom: i < recentTransactions.slice(0,10).length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
                     }}>
@@ -683,23 +702,26 @@ export default function DashboardPage() {
                       }}>
                         {type.icon}
                       </div>
-                      {/* Label + date */}
-                      <div>
-                        <div style={{ color: "#fff", fontSize: "13px", fontWeight: 500, marginBottom: "2px" }}>
-                          {type.label}
+                      {/* Label + date + status — flex-wrap keeps the status pill from
+                          competing with the amount column on narrow viewports; it
+                          simply wraps under the date instead of squeezing sideways. */}
+                      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", columnGap: "8px", rowGap: "4px", minWidth: 0 }}>
+                        <div style={{ minWidth: 0 }}>
+                          <div style={{ color: "#fff", fontSize: "13px", fontWeight: 500, marginBottom: "2px" }}>
+                            {type.label}
+                          </div>
+                          <div style={{ color: "rgba(203,213,225,0.65)", fontSize: "11px", fontFamily: "Inter, system-ui, sans-serif" }}>
+                            {d ? d.toLocaleDateString("en-GB") : "-"} · {d ? d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : ""}
+                          </div>
                         </div>
-                        <div style={{ color: "rgba(203,213,225,0.65)", fontSize: "11px", fontFamily: "Inter, system-ui, sans-serif" }}>
-                          {d ? d.toLocaleDateString("en-GB") : "-"} · {d ? d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : ""}
+                        <div style={{
+                          padding: "3px 10px", borderRadius: "99px",
+                          background: stat.bg, fontSize: "11px", fontWeight: 600,
+                          color: stat.color, whiteSpace: "nowrap",
+                        }}>
+                          <span style={{ marginRight: "4px" }}>●</span>
+                          {String(tx.status).charAt(0).toUpperCase() + String(tx.status).slice(1)}
                         </div>
-                      </div>
-                      {/* Status */}
-                      <div style={{
-                        padding: "3px 10px", borderRadius: "99px",
-                        background: stat.bg, fontSize: "11px", fontWeight: 600,
-                        color: stat.color, whiteSpace: "nowrap",
-                      }}>
-                        <span style={{ marginRight: "4px" }}>●</span>
-                        {String(tx.status).charAt(0).toUpperCase() + String(tx.status).slice(1)}
                       </div>
                       {/* Amount */}
                       <div style={{
@@ -710,14 +732,15 @@ export default function DashboardPage() {
                       }}>
                         {isCredit ? "+" : "-"}{money(Number(tx.amount) || 0)}
                       </div>
-                    </div>
+                    </motion.div>
                   );
                 })}
-              </div>
+              </motion.div>
             )}
           </div>
-        </section>
+        </motion.section>
 
+      </motion.div>
       </main>
 
     </div>
@@ -729,7 +752,7 @@ function MetricCard({ label, value, sub, icon, accent, loading, className }: {
   accent: string; loading?: boolean; className?: string;
 }) {
   return (
-    <div className={`stat-card rounded-2xl p-4 ${className || ""}`}>
+    <motion.div variants={itemVariants} {...pressableTapProps} className={`stat-card rounded-2xl p-4 ${className || ""}`}>
       {loading ? (
         <div>
           <div className="shimmer rounded-lg" style={{ height: "12px", width: "60%", marginBottom: "12px" }} />
@@ -757,6 +780,6 @@ function MetricCard({ label, value, sub, icon, accent, loading, className }: {
           <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "11px" }}>{sub}</div>
         </>
       )}
-    </div>
+    </motion.div>
   );
-}// WOLV section added below via edit
+}

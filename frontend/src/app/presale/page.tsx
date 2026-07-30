@@ -2,6 +2,7 @@ import PublicLayout from '@/components/PublicLayout'
 import { generateOgMetadata } from '@/lib/og-metadata'
 import { WalletProviderClient } from '@/_client/WalletProviderClient'
 import PresaleWidget from '@/_client/PresaleWidget'
+import ShareButtons from '@/components/ShareButtons'
 
 export const metadata = generateOgMetadata('presale')
 
@@ -48,6 +49,13 @@ export default function PresalePage() {
               <WalletProviderClient>
                 <PresaleWidget />
               </WalletProviderClient>
+            </div>
+
+            <div className="mt-6 flex justify-center">
+              <ShareButtons
+                url="https://www.wolvcapital.com/presale"
+                text="WOLV Presale is live — $0.50 per WOLV, delivered instantly to your wallet."
+              />
             </div>
           </div>
         </section>

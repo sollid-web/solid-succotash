@@ -216,6 +216,18 @@ const CATEGORIES = [
 ];
 
 export default function FAQPage() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: CATEGORIES.flatMap((cat) =>
+      cat.questions.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a },
+      })),
+    ),
+  };
+
   return (
     <div
       style={{
@@ -225,6 +237,10 @@ export default function FAQPage() {
         color: "#fff",
       }}
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap');
         details { border-bottom: 1px solid rgba(255,255,255,0.06); }

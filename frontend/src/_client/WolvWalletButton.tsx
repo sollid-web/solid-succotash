@@ -10,7 +10,10 @@ import { QRCodeSVG } from 'qrcode.react';
 
 const WOLV_CONTRACT = '0xe0167279aef7bf4ad313d261da82e8366822270c';
 const WOLV_DECIMALS = 18;
-const PRICE_PER_WOLV = 1;
+// Matches the deployed StakingContract's wolvPerUsd() rate (2 WOLV per $1)
+// and the WOLVPresale contract's $0.50/WOLV price — kept in sync manually
+// since this is a simple display-only estimate, not a live price feed.
+const PRICE_PER_WOLV = 0.5;
 const WOLV_ABI = [
   {
     name: 'balanceOf',
@@ -325,6 +328,102 @@ function QRConnectTab() {
 }
 
 // ─────────────────────────────────────────────
+// Shared "not connected" tab switcher (Browser Wallet / Scan QR Code) —
+// used both inline (full mode) and inside a dropdown (compact mode), so
+// Android users — who have no browser-extension wallet support — get the
+// same direct QR access everywhere this button appears, not just on the
+// dashboard's full wallet panel.
+// ─────────────────────────────────────────────
+function ConnectTabs({
+  tab, setTab, openWallet, hasInjectedProvider, isMobileBrowser,
+}: {
+  tab: 'button' | 'qr';
+  setTab: (t: 'button' | 'qr') => void;
+  openWallet: () => void;
+  hasInjectedProvider: boolean;
+  isMobileBrowser: boolean;
+}) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      {/* Tab switcher */}
+      <div style={{
+        display: 'flex', gap: '4px', padding: '4px',
+        background: 'rgba(0,0,0,0.25)', borderRadius: '13px',
+        border: '1px solid rgba(255,255,255,0.07)',
+      }}>
+        {(['button', 'qr'] as const).map((t) => (
+          <button key={t} type="button" onClick={() => setTab(t)} style={{
+            flex: 1, padding: '9px 12px', borderRadius: '10px', fontSize: '13px',
+            fontWeight: tab === t ? 700 : 500, cursor: 'pointer', transition: 'all 0.2s',
+            background: tab === t ? 'linear-gradient(135deg,rgba(37,99,235,0.7),rgba(29,78,216,0.7))' : 'transparent',
+            border: tab === t ? '1px solid rgba(59,130,246,0.4)' : '1px solid transparent',
+            color: tab === t ? '#fff' : 'rgba(255,255,255,0.4)',
+            boxShadow: tab === t ? '0 4px 12px rgba(37,99,235,0.25)' : 'none',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px',
+          }}>
+            {t === 'button' ? (
+              <>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M19 7H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                  <path d="M16 12h.01"/>
+                </svg>
+                Browser Wallet
+              </>
+            ) : (
+              <>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+                  <rect x="3" y="14" width="7" height="7" rx="1"/>
+                  <path d="M14 14h2v2h-2zM18 14h3v2h-3zM14 18h2v3h-2zM18 18h3v3h-3z"/>
+                </svg>
+                Scan QR Code
+              </>
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab content */}
+      {tab === 'button' ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <button type="button" onClick={openWallet} style={{
+            width: '100%', padding: '14px 24px', borderRadius: '14px',
+            background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e3a8a 100%)',
+            border: '1px solid rgba(59,130,246,0.4)', color: '#fff', fontSize: '15px',
+            fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center',
+            justifyContent: 'center', gap: '10px',
+            boxShadow: '0 8px 24px rgba(37,99,235,0.4), inset 0 1px 0 rgba(255,255,255,0.12)',
+            transition: 'all 0.2s',
+          }}
+            onMouseOver={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 12px 32px rgba(37,99,235,0.55)'; }}
+            onMouseOut={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 8px 24px rgba(37,99,235,0.4)'; }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M19 7H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+              <path d="M16 12h.01"/><path d="M3 7V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2"/>
+            </svg>
+            Connect Wallet
+          </button>
+
+          {!hasInjectedProvider && !isMobileBrowser && (
+            <p style={{ color: 'rgba(255,255,255,0.28)', fontSize: '11px', textAlign: 'center', margin: 0, lineHeight: 1.7 }}>
+              No browser wallet detected
+            </p>
+          )}
+          {isMobileBrowser && (
+            <p style={{ color: 'rgba(255,255,255,0.28)', fontSize: '11px', textAlign: 'center', margin: 0, lineHeight: 1.7 }}>
+              No wallet app installed? Use "Scan QR Code" above instead.
+            </p>
+          )}
+        </div>
+      ) : (
+        <QRConnectTab />
+      )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
 // Main exported component
 // ─────────────────────────────────────────────
 export function WolvWalletButton({ compact = false }: WolvWalletButtonProps) {
@@ -347,10 +446,14 @@ export function WolvWalletButton({ compact = false }: WolvWalletButtonProps) {
 
   useEffect(() => {
     if (!mounted) return;
-    setHasInjectedProvider(typeof window !== 'undefined' && Boolean((window as any).ethereum));
-    setIsMobileBrowser(
-      typeof navigator !== 'undefined' && /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent),
-    );
+    const injected = typeof window !== 'undefined' && Boolean((window as any).ethereum);
+    const mobile = typeof navigator !== 'undefined' && /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    setHasInjectedProvider(injected);
+    setIsMobileBrowser(mobile);
+    // Android has no browser-extension wallet support at all, so the
+    // "Browser Wallet" tab is a dead end there — default straight to the
+    // QR tab instead of making Android users discover it themselves.
+    if (mobile && !injected) setTab('qr');
   }, [mounted]);
 
   useEffect(() => {
@@ -445,6 +548,18 @@ export function WolvWalletButton({ compact = false }: WolvWalletButtonProps) {
                     </button>
                   </div>
                 )}
+                {isCorrectChain && (
+                  added ? (
+                    <div className="rounded-lg border border-teal-400/20 bg-teal-400/10 px-3 py-2 text-center text-xs font-semibold text-teal-300">
+                      ✅ WOLV added to wallet
+                    </div>
+                  ) : (
+                    <button type="button" onClick={addWolvToWallet} disabled={adding}
+                      className="w-full rounded-lg border border-teal-300/25 bg-white/5 px-3 py-2 text-sm font-semibold text-teal-300 transition hover:border-teal-300/50 disabled:opacity-60">
+                      {adding ? 'Adding…' : '+ Add WOLV to Wallet'}
+                    </button>
+                  )
+                )}
                 <button type="button" onClick={() => { disconnect(); setDropdownOpen(false); }}
                   className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 transition hover:border-teal-300/40">
                   Disconnect
@@ -513,85 +628,27 @@ export function WolvWalletButton({ compact = false }: WolvWalletButtonProps) {
   // ── Not connected ──────────────────────────────────────────────────────
   if (compact) {
     return (
-      <button type="button" onClick={openWallet}
-        style={{ padding: '8px 16px', borderRadius: '10px', background: 'linear-gradient(135deg,#2563eb,#1d4ed8)', border: 'none', color: '#fff', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}>
-        Connect
-      </button>
+      <div className="relative wallet-dropdown">
+        <button type="button" onClick={() => setDropdownOpen(!dropdownOpen)}
+          style={{ padding: '8px 16px', borderRadius: '10px', background: 'linear-gradient(135deg,#2563eb,#1d4ed8)', border: 'none', color: '#fff', fontSize: '13px', fontWeight: 700, cursor: 'pointer' }}>
+          Connect
+        </button>
+        {dropdownOpen && (
+          <div className="absolute right-0 top-full z-50 mt-2 w-80 rounded-2xl border border-white/10 bg-[#071a3c] p-4 shadow-[0_18px_40px_rgba(0,0,0,0.45)]">
+            <ConnectTabs
+              tab={tab} setTab={setTab} openWallet={openWallet}
+              hasInjectedProvider={hasInjectedProvider} isMobileBrowser={isMobileBrowser}
+            />
+          </div>
+        )}
+      </div>
     );
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-
-      {/* Tab switcher */}
-      <div style={{
-        display: 'flex', gap: '4px', padding: '4px',
-        background: 'rgba(0,0,0,0.25)', borderRadius: '13px',
-        border: '1px solid rgba(255,255,255,0.07)',
-      }}>
-        {(['button', 'qr'] as const).map((t) => (
-          <button key={t} type="button" onClick={() => setTab(t)} style={{
-            flex: 1, padding: '9px 12px', borderRadius: '10px', fontSize: '13px',
-            fontWeight: tab === t ? 700 : 500, cursor: 'pointer', transition: 'all 0.2s',
-            background: tab === t ? 'linear-gradient(135deg,rgba(37,99,235,0.7),rgba(29,78,216,0.7))' : 'transparent',
-            border: tab === t ? '1px solid rgba(59,130,246,0.4)' : '1px solid transparent',
-            color: tab === t ? '#fff' : 'rgba(255,255,255,0.4)',
-            boxShadow: tab === t ? '0 4px 12px rgba(37,99,235,0.25)' : 'none',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '7px',
-          }}>
-            {t === 'button' ? (
-              <>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M19 7H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-                  <path d="M16 12h.01"/>
-                </svg>
-                Browser Wallet
-              </>
-            ) : (
-              <>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
-                  <rect x="3" y="14" width="7" height="7" rx="1"/>
-                  <path d="M14 14h2v2h-2zM18 14h3v2h-3zM14 18h2v3h-2zM18 18h3v3h-3z"/>
-                </svg>
-                Scan QR Code
-              </>
-            )}
-          </button>
-        ))}
-      </div>
-
-      {/* Tab content */}
-      {tab === 'button' ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <button type="button" onClick={openWallet} style={{
-            width: '100%', padding: '14px 24px', borderRadius: '14px',
-            background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e3a8a 100%)',
-            border: '1px solid rgba(59,130,246,0.4)', color: '#fff', fontSize: '15px',
-            fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center',
-            justifyContent: 'center', gap: '10px',
-            boxShadow: '0 8px 24px rgba(37,99,235,0.4), inset 0 1px 0 rgba(255,255,255,0.12)',
-            transition: 'all 0.2s',
-          }}
-            onMouseOver={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 12px 32px rgba(37,99,235,0.55)'; }}
-            onMouseOut={e => { (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 8px 24px rgba(37,99,235,0.4)'; }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 7H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
-              <path d="M16 12h.01"/><path d="M3 7V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2"/>
-            </svg>
-            Connect Wallet
-          </button>
-
-          {!hasInjectedProvider && !isMobileBrowser && (
-            <p style={{ color: 'rgba(255,255,255,0.28)', fontSize: '11px', textAlign: 'center', margin: 0, lineHeight: 1.7 }}>
-              No browser wallet detected
-            </p>
-          )}
-        </div>
-      ) : (
-        <QRConnectTab />
-      )}
-    </div>
+    <ConnectTabs
+      tab={tab} setTab={setTab} openWallet={openWallet}
+      hasInjectedProvider={hasInjectedProvider} isMobileBrowser={isMobileBrowser}
+    />
   );
 }

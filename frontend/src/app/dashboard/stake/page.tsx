@@ -299,7 +299,7 @@ export default function StakePage() {
         {[
           { label: 'Reward Pool',      value: `${poolBalanceFmt} WOLV`, color: '#00a896' },
           { label: 'BNB Price',        value: bnbPriceFmt,              color: '#f59e0b' },
-          { label: '1 WOLV =',         value: '$1.00 USD',              color: '#3b82f6' },
+          { label: '1 WOLV =',         value: '$0.50 USD',              color: '#3b82f6' },
           { label: 'My Pending',       value: isConnected ? `${totalPending.toLocaleString(undefined, { maximumFractionDigits: 4 })} WOLV` : '—', color: '#8b5cf6' },
           { label: 'My Staked (USD)',  value: isConnected ? `$${totalStakedUSD.toLocaleString()}` : '—', color: '#10b981' },
         ].map(s => (

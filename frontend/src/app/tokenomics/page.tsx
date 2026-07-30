@@ -51,7 +51,7 @@ export default function TokenomicsPage() {
               { label: "Total Supply",    value: "1,000,000,000" },
               { label: "Token Standard",  value: "BEP-20" },
               { label: "Network",         value: "BNB Smart Chain" },
-              { label: "1 WOLV =",        value: "$1.00 USD" },
+              { label: "1 WOLV =",        value: "$0.50 USD" },
             ].map(s => (
               <div key={s.label} className="bg-white border border-[#bfdbfe] rounded-xl px-4 py-5 text-center">
                 <div className="text-xs text-[#64748B] uppercase tracking-widest mb-2">{s.label}</div>
@@ -125,9 +125,9 @@ export default function TokenomicsPage() {
           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-10 text-center">
             <div className="text-[#94A3B8] text-xs uppercase tracking-widest mb-4">Reward Formula (on-chain)</div>
             <div className="font-mono text-[#2A52BE] text-lg font-bold mb-2">
-              WOLV Reward = (Stake USD × APY% × Lock Days) ÷ 365
+              WOLV Reward = (Stake USD × APY% × Lock Days ÷ 365) × 2
             </div>
-            <div className="text-[#64748B] text-xs">1 WOLV = $1.00 · APY expressed as basis points in contract · Result scaled to 18 decimals</div>
+            <div className="text-[#64748B] text-xs">1 WOLV = $0.50 (2 WOLV per $1) · APY expressed as basis points in contract · Result scaled to 18 decimals</div>
           </div>
 
           {/* Plan table */}

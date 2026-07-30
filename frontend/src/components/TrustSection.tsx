@@ -97,26 +97,6 @@ export default function TrustSection() {
         </div>
       </section>
 
-      {/* Statistics */}
-      <section className="py-16 md:py-24 bg-white">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { value: '45,000+', label: 'Registered Investors',   sub: 'From 120+ countries' },
-              { value: '99.9%',   label: 'Platform Uptime',        sub: 'Enterprise infrastructure' },
-              { value: '0',       label: 'Security Breaches',      sub: 'Industry-leading record' },
-              { value: 'Q3 2026', label: 'DEX Listing Target',     sub: 'PancakeSwap launch' },
-            ].map(s => (
-              <div key={s.label} className="text-center">
-                <div className="text-4xl md:text-5xl font-extrabold text-[#0b2f6b] mb-2">{s.value}</div>
-                <p className="text-gray-600 font-semibold">{s.label}</p>
-                <p className="text-xs text-gray-500 mt-1">{s.sub}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Risk Disclosure — bottom of page, less intrusive */}
       <section className="py-6 bg-amber-50 border-t-2 border-amber-300">
         <div className="container mx-auto px-4 lg:px-8">

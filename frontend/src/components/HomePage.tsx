@@ -11,6 +11,7 @@ import ComplianceSection from '@/components/sections/ComplianceSection'
 import SecuritySection from '@/components/sections/SecuritySection'
 import WolvTokenSection from '@/components/sections/WolvTokenSection'
 import FAQSection from '@/components/sections/FAQSection'
+import ShareButtons from '@/components/ShareButtons'
 
 export default function HomePage() {
   const plansRef = useRef<HTMLDivElement>(null)
@@ -27,6 +28,9 @@ export default function HomePage() {
       <HeroSection onPlansClick={handlePlansClick} />
       <PresaleHeroBanner />
       <TrustpilotWidget />
+      <div className="container mx-auto px-4 lg:px-8 flex justify-center py-4">
+        <ShareButtons url="https://www.wolvcapital.com" text="Invest, stake, and earn WOLV on WolvCapital — blockchain-verified returns." />
+      </div>
       <RiskBar />
       <HowItWorksSection />
       <div ref={plansRef}>

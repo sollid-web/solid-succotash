@@ -23,15 +23,22 @@ export default function SignupPage() {
   const [message, setMessage] = useState('')
   const [step, setStep] = useState<'form' | 'sent'>('form')
   const [selectedPlan, setSelectedPlan] = useState('')
+  const [referralFromUrl, setReferralFromUrl] = useState(false)
 
   const apiBase = getApiBaseUrl()
   const router = useRouter()
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const plan = new URLSearchParams(window.location.search).get('plan') || ''
+    const params = new URLSearchParams(window.location.search)
+    const plan = params.get('plan') || ''
     setSelectedPlan(plan)
-    trackEvent('signup_view', { page: 'signup', plan: plan || undefined })
+    const ref = params.get('ref') || ''
+    if (ref) {
+      setReferralCode(ref)
+      setReferralFromUrl(true)
+    }
+    trackEvent('signup_view', { page: 'signup', plan: plan || undefined, ref: ref || undefined })
   }, [])
 
   const completeSignup = async () => {
@@ -199,10 +206,13 @@ export default function SignupPage() {
                     <input
                       type="text"
                       value={referralCode}
-                      onChange={e => setReferralCode(e.target.value.trim())}
+                      onChange={e => { setReferralCode(e.target.value.trim()); setReferralFromUrl(false) }}
                       className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 placeholder-gray-400 bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all text-sm"
                       placeholder="ABC123"
                     />
+                    {referralFromUrl && (
+                      <p className="text-xs text-emerald-400 font-medium mt-1.5">✓ Referral code applied</p>
+                    )}
                   </div>
 
                   <button

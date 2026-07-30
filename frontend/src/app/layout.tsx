@@ -83,34 +83,10 @@ export default async function RootLayout({
     <html lang={locale}>
       <head>
         <meta name="google-site-verification" content="z2bE7_WWwLyDUFbwY9UFtrHVf1xXvFqq_iauSokX5yI" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'FAQPage',
-              mainEntity: [
-                {
-                  '@type': 'Question',
-                  name: 'How does WolvCapital generate investor returns?',
-                  acceptedAnswer: {
-                    '@type': 'Answer',
-                    text: 'WolvCapital uses diversified digital asset strategies with automated monitoring tools to generate structured daily returns.',
-                  },
-                },
-                {
-                  '@type': 'Question',
-                  name: 'Is WolvCapital regulated?',
-                  acceptedAnswer: {
-                    '@type': 'Answer',
-                    text: 'WolvCapital follows KYC, AML, and PCI-DSS compliance standards.',
-                  },
-                },
-              ],
-            }),
-          }}
-        />
 
+        {/* FAQPage schema lives on /faq itself (app/faq/page.tsx), generated
+            from the real Q&A content — a site-wide generic FAQPage schema
+            here would describe content not actually on most pages. */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

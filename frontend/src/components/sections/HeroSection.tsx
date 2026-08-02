@@ -47,9 +47,15 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
   const [timeLeft, setTimeLeft] = useState<string | null>(
     formatTimeLeft(PRESALE_END_TIME - Math.floor(Date.now() / 1000)),
   )
+  const [presaleEnded, setPresaleEnded] = useState(Math.floor(Date.now() / 1000) >= PRESALE_END_TIME)
 
   useEffect(() => {
-    const tick = () => setTimeLeft(formatTimeLeft(PRESALE_END_TIME - Math.floor(Date.now() / 1000)))
+    const tick = () => {
+      const secondsLeft = PRESALE_END_TIME - Math.floor(Date.now() / 1000)
+      setTimeLeft(formatTimeLeft(secondsLeft))
+      setPresaleEnded(secondsLeft <= 0)
+    }
+    tick()
     const interval = setInterval(tick, 60_000)
     return () => clearInterval(interval)
   }, [])
@@ -109,25 +115,27 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
         </motion.p>
 
         {/* Presale status card */}
-        <motion.div variants={itemVariants}>
-          <MotionLink
-            href="/presale"
-            {...pressableTapProps}
-            className={`block p-4 rounded-xl bg-[#0b1329]/60 border border-white/10 border-t-white/20 backdrop-blur-md space-y-2 hover:border-orange-400/40 transition ${glassGlow}`}
-          >
-            <div className="flex justify-between items-center text-xs">
-              <span className="flex items-center gap-2 font-semibold text-amber-400">
-                <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-                🔥 WOLV Presale Live
-              </span>
-              <span className="text-slate-400">$0.50 / WOLV</span>
-            </div>
-            <div className="flex justify-between items-center text-[11px] text-slate-400">
-              <span>{timeLeft ? `${timeLeft} left · $50,000 hard cap` : 'Hard cap $50,000'}</span>
-              <span className="text-orange-400 font-semibold">Join Presale →</span>
-            </div>
-          </MotionLink>
-        </motion.div>
+        {!presaleEnded && (
+          <motion.div variants={itemVariants}>
+            <MotionLink
+              href="/presale"
+              {...pressableTapProps}
+              className={`block p-4 rounded-xl bg-[#0b1329]/60 border border-white/10 border-t-white/20 backdrop-blur-md space-y-2 hover:border-orange-400/40 transition ${glassGlow}`}
+            >
+              <div className="flex justify-between items-center text-xs">
+                <span className="flex items-center gap-2 font-semibold text-amber-400">
+                  <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
+                  🔥 WOLV Presale Live
+                </span>
+                <span className="text-slate-400">$0.50 / WOLV</span>
+              </div>
+              <div className="flex justify-between items-center text-[11px] text-slate-400">
+                <span>{timeLeft ? `${timeLeft} left · $50,000 hard cap` : 'Hard cap $50,000'}</span>
+                <span className="text-orange-400 font-semibold">Join Presale →</span>
+              </div>
+            </MotionLink>
+          </motion.div>
+        )}
 
         {/* Staking APY tiers */}
         <motion.div variants={itemVariants} className="grid grid-cols-2 gap-2 text-center text-xs">
@@ -147,13 +155,24 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
 
         {/* Action buttons */}
         <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-3 pt-1">
-          <MotionLink
-            href="/presale"
-            {...pressableTapProps}
-            className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 transition shadow-lg shadow-orange-500/20 text-center"
-          >
-            Join Presale →
-          </MotionLink>
+          {!presaleEnded && (
+            <MotionLink
+              href="/presale"
+              {...pressableTapProps}
+              className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 transition shadow-lg shadow-orange-500/20 text-center"
+            >
+              Join Presale →
+            </MotionLink>
+          )}
+          {presaleEnded && (
+            <MotionLink
+              href="/wolv-token"
+              {...pressableTapProps}
+              className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition shadow-lg shadow-teal-500/20 text-center"
+            >
+              Get WOLV →
+            </MotionLink>
+          )}
           <MotionLink
             href="/plans"
             onClick={() => onPlansClick?.()}

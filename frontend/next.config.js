@@ -1,3 +1,15 @@
+// On Vercel, a missing NEXT_PUBLIC_API_URL doesn't fail the build — it just
+// makes every /api/* call (including login) silently 404 in production,
+// since the rewrite below falls back to an unreachable localhost:8000.
+// Fail the build instead of shipping that broken state.
+if (process.env.VERCEL && !process.env.NEXT_PUBLIC_API_URL) {
+  throw new Error(
+    'NEXT_PUBLIC_API_URL is not set. Set it in the Vercel project settings to the ' +
+    'deployed Django backend URL (e.g. https://api.wolvcapital.com) — without it, ' +
+    'login and every other /api/* request will 404 in production.',
+  )
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,

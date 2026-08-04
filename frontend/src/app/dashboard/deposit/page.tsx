@@ -29,7 +29,10 @@ export default function DepositPage() {
 
   const readErrorMessage = async (res: Response) => {
     const text = await res.text()
-    if (!text) return `Request failed (${res.status})`
+    if (!text) {
+      console.error(`Request failed with status ${res.status}`)
+      return "We're unable to process this right now. Please try again in a few minutes."
+    }
     try {
       const data = JSON.parse(text)
       if (data?.detail) return String(data.detail)

@@ -46,7 +46,15 @@ export default function LoginPage() {
       try { data = raw ? JSON.parse(raw) : null; } catch { data = null; }
 
       if (!response.ok) {
-        setError(data?.error || data?.detail || data?.message || `Login failed (${response.status})`);
+        const serverMessage = data?.error || data?.detail || data?.message;
+        if (serverMessage) {
+          setError(serverMessage);
+        } else if (response.status === 400 || response.status === 401) {
+          setError("Invalid email or password.");
+        } else {
+          console.error(`Login request failed with status ${response.status}`);
+          setError("We're unable to sign you in right now. Please try again in a few minutes.");
+        }
         return;
       }
 

@@ -73,7 +73,7 @@ export default function ContactPage() {
                 icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
                 title: 'Email Support',
                 titleColor: '#00c9b1',
-                lines: ['support@mail.wolvcapital.com', 'Our compliance and investor support teams respond to all inquiries within one business day.'],
+                lines: ['contact@wolvcapital.com', 'support@mail.wolvcapital.com', 'Our compliance and investor support teams respond to all inquiries within one business day.'],
               },
               {
                 color: 'linear-gradient(135deg,#7c3aed,#6d28d9)',

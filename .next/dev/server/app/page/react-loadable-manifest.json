@@ -1,0 +1,17 @@
+{
+  "[project]/src/_client/WalletProvider.tsx [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/src/_client/WalletProvider.tsx [app-client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/node_modules_@rainbow-me_rainbowkit_dist_index_e9aa457e.css",
+      "static/chunks/_72dbe296._.js",
+      "static/chunks/src__client_WalletProvider_tsx_fe36e504._.js"
+    ]
+  },
+  "[project]/src/components/sections/ComplianceSectionInner.tsx [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/src/components/sections/ComplianceSectionInner.tsx [app-client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/src_components_sections_ComplianceSectionInner_tsx_1d758799._.js",
+      "static/chunks/src_components_sections_ComplianceSectionInner_tsx_a975aaad._.js"
+    ]
+  }
+}

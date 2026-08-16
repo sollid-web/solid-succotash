@@ -1,0 +1,3 @@
+module.exports=[207082,575843,a=>{"use strict";var b=a.i(346271),c=a.i(238246);function d(a=8){if("undefined"!=typeof navigator&&"function"==typeof navigator.vibrate)try{navigator.vibrate(a)}catch{}}a.s(["triggerHaptic",()=>d],575843);let e=b.motion.create(c.default);a.s(["MotionLink",0,e,"pressableTapProps",0,{whileTap:{scale:.97},transition:{type:"spring",stiffness:400,damping:30},onTap:()=>d()}],207082)}];
+
+//# sourceMappingURL=src_lib_motionPress_ts_bf104873._.js.map

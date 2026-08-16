@@ -1,0 +1,51 @@
+{
+  "version": 3,
+  "middleware": {},
+  "sortedMiddleware": [],
+  "functions": {
+    "/og/route": {
+      "files": [
+        "server/middleware-build-manifest.js",
+        "server/interception-route-rewrite-manifest.js",
+        "server/server-reference-manifest.js",
+        "server/app/og/route_client-reference-manifest.js",
+        "server/edge/chunks/_next-internal_server_app_og_route_actions_76bb6e5d.js",
+        "server/edge/chunks/[root-of-the-server]__6c9d6c65._.js",
+        "server/edge/chunks/node_modules_next_dist_98c47059._.js",
+        "server/edge/chunks/node_modules_next_dist_compiled_@vercel_og_16be1ace._.js",
+        "server/edge/chunks/turbopack-edge-wrapper_b8ae7630.js"
+      ],
+      "name": "app/og/route",
+      "page": "/og/route",
+      "matchers": [
+        {
+          "regexp": "^/og(?:/)?$",
+          "originalSource": "/og"
+        }
+      ],
+      "wasm": [
+        {
+          "name": "wasm_fdb56e4cc5936d29",
+          "filePath": "server/edge/chunks/node_modules_next_dist_compiled_@vercel_og_resvg_23ace1ce.wasm"
+        },
+        {
+          "name": "wasm_1ccdc983b1fd9f87",
+          "filePath": "server/edge/chunks/node_modules_next_dist_compiled_@vercel_og_yoga_23ace1ce.wasm"
+        }
+      ],
+      "assets": [
+        {
+          "name": "server/edge/assets/noto-sans-v27-latin-regular.bdfa676c.ttf",
+          "filePath": "server/edge/assets/noto-sans-v27-latin-regular.bdfa676c.ttf"
+        }
+      ],
+      "env": {
+        "__NEXT_BUILD_ID": "HdIkJQw4_C8zg1O4CBD6l",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "q/u8b1ItWCdSBEalNLJV9B89pPh25qxPrMRjDMBH9ZU=",
+        "__NEXT_PREVIEW_MODE_ID": "b0a435d4ce79d87bc007273bacc4845b",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "491a31b7db0e79ef59b449c925ed3ed1bdf4266d96987aa60da3553882ee4b9c",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "8f2b90e8971b01922133928059b8435f20e0ceb0ab89a817c5b99544fbe22fd4"
+      }
+    }
+  }
+}

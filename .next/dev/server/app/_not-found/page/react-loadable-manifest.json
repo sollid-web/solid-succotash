@@ -1,0 +1,10 @@
+{
+  "[project]/src/_client/WalletProvider.tsx [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/src/_client/WalletProvider.tsx [app-client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/node_modules_@rainbow-me_rainbowkit_dist_index_e9aa457e.css",
+      "static/chunks/_72dbe296._.js",
+      "static/chunks/src__client_WalletProvider_tsx_6d92afdb._.js"
+    ]
+  }
+}

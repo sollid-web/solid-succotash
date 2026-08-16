@@ -1,0 +1,3 @@
+module.exports=[409586,a=>{"use strict";function b({children:a}){return a}a.s(["default",()=>b,"metadata",0,{title:"FAQ — WolvCapital | Common Questions About Digital Asset Investment",description:"Find answers to frequently asked questions about WolvCapital's investment plans, security features, withdrawals, verification process, and platform operations."}])}];
+
+//# sourceMappingURL=src_app_faq_layout_tsx_cee1e65e._.js.map

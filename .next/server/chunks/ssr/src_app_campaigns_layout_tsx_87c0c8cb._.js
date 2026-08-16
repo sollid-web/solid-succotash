@@ -1,0 +1,3 @@
+module.exports=[580185,a=>{"use strict";function b({children:a}){return a}a.s(["default",()=>b,"metadata",0,{title:"Campaigns & Announcements — WolvCapital",description:"Live announcements, promotions, and platform updates from WolvCapital — investment plan launches, presale milestones, and time-limited offers.",alternates:{canonical:"https://www.wolvcapital.com/campaigns"},openGraph:{title:"Campaigns & Announcements — WolvCapital",description:"Live announcements, promotions, and platform updates from WolvCapital.",url:"https://www.wolvcapital.com/campaigns",type:"website"},robots:{index:!0,follow:!0}}])}];
+
+//# sourceMappingURL=src_app_campaigns_layout_tsx_87c0c8cb._.js.map

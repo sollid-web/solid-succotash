@@ -1,0 +1,12 @@
+User-Agent: *
+Allow: /
+Allow: /accounts/signup
+Disallow: /dashboard/
+Disallow: /accounts/
+Disallow: /admin/
+Disallow: /wolv-admin/
+Disallow: /checkout/
+Disallow: /api/
+
+Host: https://www.wolvcapital.com
+Sitemap: https://www.wolvcapital.com/sitemap.xml

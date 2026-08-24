@@ -1,241 +1,96 @@
-import type { Metadata } from 'next'
-import Script from 'next/script'
-import { Suspense } from 'react'
-import { cookies } from 'next/headers'
-import { Analytics } from '@vercel/analytics/next'
-import { LocaleProvider } from '@/components/LocaleProvider'
-import { TranslationProvider } from '@/components/TranslationProvider'
-import AppChrome from '@/components/AppChrome'
-import GaPageView from '@/components/GaPageView'
-import SegmentProvider from '@/components/SegmentProvider'
-import RemoveSyncBannerClient from '@/components/RemoveSyncBannerClient'
-import '@/app/globals.css'
+'use client'
 
-export const metadata: Metadata = {
-  metadataBase: new URL('https://www.wolvcapital.com'),
-  title: {
-    default: 'WolvCapital — BNB Smart Chain Staking & Digital Asset Investment',
-    template: '%s | WolvCapital',
-  },
-  description: 'WolvCapital is a U.S. regulated digital investment platform offering 8%–25% APY staking plans on BNB Smart Chain. Verified on-chain rewards, KYC compliant, FinCEN registered.',
-  keywords: [
-    'digital asset investment', 'BNB Smart Chain staking', 'crypto investment platform',
-    'WOLV token', 'BEP-20 staking', 'blockchain investment', 'crypto APY',
-    'regulated crypto platform', 'FinCEN registered', 'KYC investment platform',
-    'WolvCapital', 'secure crypto staking', 'on-chain rewards',
-  ],
-  authors: [{ name: 'WolvCapital', url: 'https://wolvcapital.com' }],
-  creator: 'WolvCapital',
-  publisher: 'WolvCapital',
-  category: 'finance',
-  alternates: { canonical: 'https://www.wolvcapital.com' },
-  openGraph: {
-    title: 'WolvCapital — BNB Smart Chain Staking & Digital Asset Investment',
-    description: 'U.S. regulated platform offering 8%–25% APY staking. WOLV token rewards on BNB Smart Chain. KYC compliant · FinCEN registered · On-chain transparent.',
-    url: 'https://wolvcapital.com',
-    siteName: 'WolvCapital',
-    images: [
-      {
-        url: '/og-images/home-og.png',
-        width: 1200,
-        height: 630,
-        alt: 'WolvCapital — BNB Smart Chain Staking Platform',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'WolvCapital — BNB Smart Chain Staking & Digital Asset Investment',
-    description: 'U.S. regulated platform offering 8%–25% APY staking. WOLV token on BNB Smart Chain.',
-    images: ['/og-images/home-og.png'],
-    creator: '@WolvCapital',
-  },
-  icons: {
-    icon: [
-      { url: '/favicon.svg', type: 'image/svg+xml' },
-      { url: '/favicon.ico', sizes: '32x32' },
-    ],
-    apple: '/apple-touch-icon.png',
-    shortcut: '/favicon.ico',
-  },
-  manifest: '/manifest.json',
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
-  },
-}
+import { useEffect, useRef, useState } from 'react'
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  const cookieStore = await cookies()
-  const locale = cookieStore.get('django_language')?.value || 'en'
+const WOLV_AI_URL = 'https://supportai-maxmmdqp.manus.space'
 
-  const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
-  const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID
+export default function WolvAiWidget() {
+  const iframeRef = useRef<HTMLIFrameElement | null>(null)
+  const [src, setSrc] = useState<string | null>(null)
+
+  useEffect(() => {
+    // Computed client-side only, so this always reflects the real page the
+    // visitor is actually on (and avoids an SSR/hydration mismatch, since
+    // window isn't available during server rendering).
+    setSrc(`${WOLV_AI_URL}/embed?page=${encodeURIComponent(window.location.href)}`)
+  }, [])
+
+  useEffect(() => {
+    const iframe = iframeRef.current
+    if (!iframe) return
+
+    function reportPage() {
+      iframe?.contentWindow?.postMessage(
+        {
+          source: 'wolvcapital-ai',
+          type: 'navigation',
+          pageUrl: window.location.href,
+          pageTitle: document.title,
+        },
+        WOLV_AI_URL
+      )
+    }
+
+    iframe.addEventListener('load', reportPage)
+
+    // The widget lives in a cross-origin iframe pointed at a single /embed
+    // page, so it can't see Next.js client-side route changes on its own.
+    // Patching pushState/replaceState (and listening for popstate) tells it
+    // whenever the visitor navigates within the app via the router, keeping
+    // its page-context accurate without a full page reload.
+    const original: Partial<Record<'pushState' | 'replaceState', typeof window.history.pushState>> = {}
+    ;(['pushState', 'replaceState'] as const).forEach(name => {
+      original[name] = window.history[name]
+      window.history[name] = function (this: History, ...args: Parameters<History['pushState']>) {
+        const result = original[name]!.apply(this, args)
+        reportPage()
+        return result
+      }
+    })
+    window.addEventListener('popstate', reportPage)
+
+    return () => {
+      iframe.removeEventListener('load', reportPage)
+      ;(['pushState', 'replaceState'] as const).forEach(name => {
+        if (original[name]) window.history[name] = original[name]!
+      })
+      window.removeEventListener('popstate', reportPage)
+    }
+  }, [src])
+
+  if (!src) return null
 
   return (
-    <html lang={locale}>
-      <head>
-        <meta name="google-site-verification" content="z2bE7_WWwLyDUFbwY9UFtrHVf1xXvFqq_iauSokX5yI" />
-
-        {/* FAQPage schema lives on /faq itself (app/faq/page.tsx), generated
-            from the real Q&A content — a site-wide generic FAQPage schema
-            here would describe content not actually on most pages. */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@graph': [
-                {
-                  '@type': 'Organization',
-                  '@id': 'https://wolvcapital.com/#organization',
-                  name: 'WolvCapital',
-                  url: 'https://wolvcapital.com',
-                  logo: 'https://wolvcapital.com/wolv-icon.svg',
-                  description: 'U.S. regulated digital asset investment platform offering BNB Smart Chain staking with 8%–25% APY.',
-                  aggregateRating: {
-                    '@type': 'AggregateRating',
-                    ratingValue: '4.5',
-                    reviewCount: '12',
-                    bestRating: '5',
-                    worstRating: '1',
-                  },
-                  review: [
-                    {
-                      '@type': 'Review',
-                      reviewRating: { '@type': 'Rating', ratingValue: '5' },
-                      author: { '@type': 'Person', name: 'Lucas' },
-                      datePublished: '2026-04-05',
-                      reviewBody: 'WolvCapital\'s support team genuinely deserves a review. Every time I reached out, I got a fast and clear response without the usual back-and-forth or generic replies.',
-                    },
-                    {
-                      '@type': 'Review',
-                      reviewRating: { '@type': 'Rating', ratingValue: '5' },
-                      author: { '@type': 'Person', name: 'Cunningham' },
-                      datePublished: '2026-04-18',
-                      reviewBody: 'I\'ve been using WolvCapital for a while now, specifically their Pioneer Investment Plan, and my experience has been genuinely positive so far.',
-                    },
-                  ],
-                  address: {
-                    '@type': 'PostalAddress',
-                    streetAddress: '516 High St',
-                    addressLocality: 'Palo Alto',
-                    addressRegion: 'CA',
-                    postalCode: '94301',
-                    addressCountry: 'US',
-                  },
-                  contactPoint: {
-                    '@type': 'ContactPoint',
-                    email: 'support@mail.wolvcapital.com',
-                    contactType: 'customer support',
-                    availableLanguage: ['English'],
-                  },
-                  sameAs: [
-                    'https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c',
-                    'https://www.trustpilot.com/review/wolvcapital.com',
-                  ],
-                },
-                {
-                  '@type': 'WebSite',
-                  '@id': 'https://wolvcapital.com/#website',
-                  url: 'https://wolvcapital.com',
-                  name: 'WolvCapital',
-                  publisher: { '@id': 'https://wolvcapital.com/#organization' },
-                  potentialAction: {
-                    '@type': 'SearchAction',
-                    target: 'https://wolvcapital.com/blog?q={search_term_string}',
-                    'query-input': 'required name=search_term_string',
-                  },
-                },
-              ],
-            }),
-          }}
-        />
-      </head>
-
-      <body className="min-h-screen bg-white">
-        <RemoveSyncBannerClient />
-
-        <SegmentProvider writeKey={process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY || ''}>
-          {metaPixelId && (
-            <Script
-              id="meta-pixel"
-              strategy="afterInteractive"
-              dangerouslySetInnerHTML={{
-                __html: `
-                  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-                  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-                  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-                  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window, document,'script',
-                  'https://connect.facebook.net/en_US/fbevents.js');
-                  fbq('init', '${metaPixelId}');
-                  fbq('track', 'PageView');
-                `,
-              }}
-            />
-          )}
-
-          <LocaleProvider locale={locale}>
-            <TranslationProvider initialLocale={locale}>
-              <AppChrome>
-                <Suspense fallback={<div className="flex h-screen items-center justify-center">Loading...</div>}>
-                  {children}
-                </Suspense>
-              </AppChrome>
-            </TranslationProvider>
-          </LocaleProvider>
-
-          {measurementId && (
-            <>
-              <Script
-                strategy="afterInteractive"
-                src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
-              />
-              <Script
-                id="ga4-init"
-                strategy="afterInteractive"
-                dangerouslySetInnerHTML={{
-                  __html: `
-                    window.dataLayer = window.dataLayer || [];
-                    function gtag(){dataLayer.push(arguments);}
-                    gtag('js', new Date());
-                    gtag('config', '${measurementId}');
-                  `,
-                }}
-              />
-              <Suspense fallback={null}>
-                <GaPageView measurementId={measurementId} />
-              </Suspense>
-            </>
-          )}
-
-          <Analytics />
-          <Script
-            id="neural-support-config"
-            strategy="beforeInteractive"
-            dangerouslySetInnerHTML={{ __html: `
-              window.NeuralSupportConfig = {
-                convexUrl: "https://ceaseless-crocodile-860.convex.cloud",
-                siteUrl: "https://wolvcapital.com",
-                primaryColor: "#2A52BE",
-                greeting: "Hi! How can I help you today?",
-                agentName: "Alex",
-              };
-            `}}
-          />
-          <Script
-            src="https://ceaseless-crocodile-860.convex.site/widget.js"
-            strategy="afterInteractive"
-          />
-        </SegmentProvider>
-      </body>
-    </html>
+    <>
+      <style>{`
+        #wolvai-widget-frame {
+          position: fixed;
+          bottom: 0;
+          right: 0;
+          width: 400px;
+          height: 660px;
+          max-width: 100vw;
+          max-height: 100vh;
+          border: 0;
+          background: transparent;
+          z-index: 2147483000;
+          color-scheme: light;
+        }
+        @media (max-width: 480px) {
+          #wolvai-widget-frame {
+            width: 100vw;
+            height: 220px;
+          }
+        }
+      `}</style>
+      <iframe
+        id="wolvai-widget-frame"
+        ref={iframeRef}
+        src={src}
+        title="Wolvcapital AI support"
+        allow="clipboard-write"
+        loading="lazy"
+      />
+    </>
   )
 }

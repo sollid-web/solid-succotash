@@ -1,0 +1,220 @@
+diff --git a/TawkWidget.tsx b/TawkWidget.tsx
+deleted file mode 100644
+index e595faaf..00000000
+--- a/TawkWidget.tsx
++++ /dev/null
+@@ -1,62 +0,0 @@
+-'use client'
+-
+-import { useEffect } from 'react'
+-
+-declare global {
+-  interface Window {
+-    Tawk_API?: any
+-    Tawk_LoadStart?: Date
+-  }
+-}
+-
+-const OVERRIDE_PROPERTY_ID = '6a2706aa2d41c91c2b850b27'
+-const OVERRIDE_WIDGET_ID = 'default'
+-
+-const ENABLED = typeof process !== 'undefined'
+-  ? (((process as any).env?.NEXT_PUBLIC_TAWK_ENABLED ?? 'true') !== 'false')
+-  : true
+-
+-export default function TawkWidget() {
+-  useEffect(() => {
+-    if (!ENABLED) return
+-
+-    // Prevent double injection
+-    if (typeof window !== 'undefined' && (window as any).Tawk_API) return
+-
+-    ;(window as any).Tawk_API = (window as any).Tawk_API || {}
+-    ;(window as any).Tawk_LoadStart = new Date()
+-
+-    const s = document.createElement('script')
+-    s.id = 'tawk-override-embed'
+-    s.async = true
+-    s.src = `https://embed.tawk.to/${OVERRIDE_PROPERTY_ID}/${OVERRIDE_WIDGET_ID}`
+-    s.charset = 'UTF-8'
+-    s.setAttribute('crossorigin', '*')
+-    const first = document.getElementsByTagName('script')[0]
+-    first?.parentNode?.insertBefore(s, first)
+-
+-    // Small safeguard: when widget tries to open a new window, show widget instead.
+-    const originalOpen = window.open.bind(window)
+-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+-    ;(window as any).open = ((url?: string | URL, target?: string, features?: string) => {
+-      const asString = typeof url === 'string' ? url : (url as URL)?.toString?.() || ''
+-      if (asString.includes('tawk.to/chat/') && asString.includes('pop=1')) {
+-        try {
+-          const api = (window as any).Tawk_API
+-          api?.showWidget?.()
+-          api?.maximize?.()
+-        } catch {
+-          // ignore
+-        }
+-        return null as any
+-      }
+-      return originalOpen(url as any, target as any, features as any)
+-    }) as any
+-
+-    return () => {
+-      // no cleanup for injected script (leave Tawk to manage itself)
+-    }
+-  }, [])
+-
+-  return null
+-}
+diff --git a/src/app/layout.tsx bsrc/app/layout.tsx
+index 5a1c0c4d..abf23785 100644
+--- a/src/app/layout.tsx
++++ b/src/app/layout.tsx
+@@ -9,6 +9,7 @@ import AppChrome from '@/components/AppChrome'
+ import GaPageView from '@/components/GaPageView'
+ import SegmentProvider from '@/components/SegmentProvider'
+ import RemoveSyncBannerClient from '@/components/RemoveSyncBannerClient'
++import WolvAiWidget from '@/components/WolvAiWidget'
+ import '@/app/globals.css'
+ 
+ export const metadata: Metadata = {
+@@ -217,23 +218,7 @@ export default async function RootLayout({
+           )}
+ 
+           <Analytics />
+-          <Script
+-            id="neural-support-config"
+-            strategy="beforeInteractive"
+-            dangerouslySetInnerHTML={{ __html: `
+-              window.NeuralSupportConfig = {
+-                convexUrl: "https://ceaseless-crocodile-860.convex.cloud",
+-                siteUrl: "https://wolvcapital.com",
+-                primaryColor: "#2A52BE",
+-                greeting: "Hi! How can I help you today?",
+-                agentName: "Alex",
+-              };
+-            `}}
+-          />
+-          <Script
+-            src="https://ceaseless-crocodile-860.convex.site/widget.js"
+-            strategy="afterInteractive"
+-          />
++          <WolvAiWidget />
+         </SegmentProvider>
+       </body>
+     </html>
+diff --git a/src/components/TawkWidget.tsx b/src/components/TawkWidget.tsx
+deleted file mode 100644
+index 23929a1f..00000000
+--- a/src/components/TawkWidget.tsx
++++ /dev/null
+@@ -1,65 +0,0 @@
+-'use client'
+-
+-import { useEffect } from 'react'
+-
+-declare global {
+-  interface Window {
+-    Tawk_API?: any
+-    Tawk_LoadStart?: Date
+-  }
+-}
+-
+-export default function TawkWidget() {
+-  useEffect(() => {
+-    if (typeof window !== 'undefined' && (window as any).Tawk_API) return
+-
+-    ;(window as any).Tawk_API = (window as any).Tawk_API || {}
+-    ;(window as any).Tawk_LoadStart = new Date()
+-
+-    // 🌟 POSITION OVERRIDE: Moves the bubble to the bottom-left corner
+-    ;(window as any).Tawk_API.customStyle = {
+-      visibility: {
+-        desktop: {
+-          position: 'bl', // Bottom Left
+-          xOffset: '20px',
+-          yOffset: '20px'
+-        },
+-        mobile: {
+-          position: 'bl', // Bottom Left
+-          xOffset: '15px',
+-          yOffset: '15px'
+-        }
+-      }
+-    }
+-
+-    const s = document.createElement('script')
+-    s.id = 'tawk-override-embed'
+-    s.async = true
+-    s.src = 'https://embed.tawk.to/6a2706aa2d41c91c2b850b27/default'
+-    s.charset = 'UTF-8'
+-    s.setAttribute('crossorigin', '*')
+-    
+-    const target = document.head || document.getElementsByTagName('script')[0]
+-    target?.appendChild(s)
+-
+-    const originalOpen = window.open.bind(window)
+-    ;(window as any).open = ((url?: string | URL, targetEnv?: string, features?: string) => {
+-      const asString = typeof url === 'string' ? url : (url as URL)?.toString?.() || ''
+-      if (asString.includes('tawk.to/chat/') && asString.includes('pop=1')) {
+-        try {
+-          const api = (window as any).Tawk_API
+-          api?.showWidget?.()
+-          api?.maximize?.()
+-        } catch {
+-          // ignore
+-        }
+-        return null as any
+-      }
+-      return originalOpen(url as any, targetEnv as any, features as any)
+-    }) as any
+-
+-    return () => {}
+-  }, [])
+-
+-  return null
+-}
+diff --git a/src/components/WolvAiWidget.tsx b/src/components/WolvAiWidget.tsx
+new file mode 100644
+index 00000000..463e6bae
+--- /dev/null
++++ b/src/components/WolvAiWidget.tsx
+@@ -0,0 +1,38 @@
++'use client'
++
++const WOLV_AI_URL = 'https://wolv-ai-production.up.railway.app/widget'
++
++export default function WolvAiWidget() {
++  return (
++    <>
++      <style>{`
++        #wolvai-widget-frame {
++          position: fixed;
++          bottom: 0;
++          right: 0;
++          width: 400px;
++          height: 660px;
++          max-width: 100vw;
++          max-height: 100vh;
++          border: 0;
++          background: transparent;
++          z-index: 2147483000;
++          color-scheme: light;
++        }
++        @media (max-width: 480px) {
++          #wolvai-widget-frame {
++            width: 100vw;
++            height: 220px;
++          }
++        }
++      `}</style>
++      <iframe
++        id="wolvai-widget-frame"
++        src={WOLV_AI_URL}
++        title="Support chat"
++        allow="clipboard-write"
++        loading="lazy"
++      />
++    </>
++  )
++}

@@ -1,5 +1,9 @@
+const LIVE_API_ORIGIN = 'https://api.wolvcapital.com'
+
 export function getApiBaseUrl(): string {
-  return process.env.NEXT_PUBLIC_API_URL || ''
+  const configured = process.env.NEXT_PUBLIC_API_URL
+  const origin = configured || (process.env.NODE_ENV === 'production' ? LIVE_API_ORIGIN : '')
+  return origin.replace(/\/$/, '')
 }
 
 export function buildApiUrl(path: string): string {

@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
 import HomePageContent from '@/components/HomePage'
 import PublicLayout from '@/components/PublicLayout'
-import { LocaleProvider } from '@/components/LocaleProvider'
-import { detectLocale } from '@/lib/detectLocale'
 
 export const metadata: Metadata = {
   title: 'Wolv Capital — BNB Staking & Crypto Investment Platform',
@@ -39,22 +37,13 @@ export const metadata: Metadata = {
   },
 }
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>
-}) {
-  const resolvedParams = await searchParams
-  const locale = await detectLocale(resolvedParams)
-
+export default function Page() {
   return (
-    <LocaleProvider locale={locale}>
-      {/* HeroSection paints its own opaque background over this whole area now,
-          so the bg-hero-home image class is never actually visible here — it
-          was just wasted download/decode/paint weight sitting behind it. */}
-      <PublicLayout backgroundClassName="bg-[#070B19]">
-        <HomePageContent />
-      </PublicLayout>
-    </LocaleProvider>
+    /* HeroSection paints its own opaque background over this whole area now,
+       so the bg-hero-home image class is never actually visible here — it
+       was just wasted download/decode/paint weight sitting behind it. */
+    <PublicLayout backgroundClassName="bg-[#070B19]">
+      <HomePageContent />
+    </PublicLayout>
   )
 }

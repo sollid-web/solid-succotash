@@ -111,7 +111,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "/home/code/solid-succotash/frontend",
+    "outputFileTracingRoot": "/home/code/solid-succotash",
     "cacheComponents": false,
     "cacheLife": {
       "default": {
@@ -303,7 +303,7 @@
     "skipTrailingSlashRedirect": true,
     "skipProxyUrlNormalize": true,
     "turbopack": {
-      "root": "/home/code/solid-succotash/frontend"
+      "root": "/home/code/solid-succotash"
     },
     "skipMiddlewareUrlNormalize": true,
     "distDirRoot": ".next",
@@ -322,7 +322,7 @@
       "fallback": []
     }
   },
-  "appDir": "/home/code/solid-succotash/frontend",
+  "appDir": "/home/code/solid-succotash",
   "relativeAppDir": "",
   "files": [
     ".next/routes-manifest.json",

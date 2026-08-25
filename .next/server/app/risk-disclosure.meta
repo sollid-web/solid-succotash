@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/risk-disclosure/layout,_N_T_/risk-disclosure/page,_N_T_/risk-disclosure"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/risk-disclosure/__PAGE__",
+    "/risk-disclosure",
+    "/_index",
+    "/_head"
+  ]
+}

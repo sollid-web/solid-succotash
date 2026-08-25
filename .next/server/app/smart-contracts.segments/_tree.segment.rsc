@@ -1,0 +1,2 @@
+:HL["/_next/static/chunks/401e05f0154dc499.css","style"]
+0:{"buildId":"XFNnDbK1pbjedPIdaeilz","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"smart-contracts","paramType":null,"paramKey":"smart-contracts","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}

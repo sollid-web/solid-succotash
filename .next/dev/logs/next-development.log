@@ -1,10 +1,31 @@
-[00:00:05.301] Server  LOG      ✓ Ready in 4s
-[00:00:11.769] Server  LOG      ○ Compiling /_not-found/page ...
-[00:01:50.148] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:51.480] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:01:51.480] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/app/accounts/1/dashboard","route":"/app/accounts/1/dashboard"}
-[00:01:51.480] Browser LOG     %c[Vercel Web Analytics]%c [view] http://localhost:3000/app/accounts/1/dashboard color: rgb(120, 120, 120) color: inherit {"dp":"/app/accounts/1/dashboard","o":"http://localhost:3000/app/accounts/1/dashboard","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.1","sv":"0.1.3","ts":1785210894450} /_vercel/insights/view
-[00:01:57.124] Browser WARN    Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information.
-[00:01:57.125] Browser WARN    [Reown Config] Failed to fetch remote project configuration. Using local/default values. {}
-[00:01:57.658] Browser ERROR   Error checking Cross-Origin-Opener-Policy: HTTP error! status: 404
-[00:02:19.079] Server  LOG      ○ Compiling / ...
+[00:00:03.418] Server  LOG      ✓ Ready in 2.8s
+[00:00:09.910] Server  LOG      ○ Compiling / ...
+[00:00:25.037] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:25.160] Browser ERROR   Cannot render a <style> outside the main document without knowing its precedence and a unique href key. React can hoist and deduplicate <style> tags if you provide a `precedence` prop along with an `href` prop that does not conflict with the `href` values used in any other hoisted <style> or <link rel="stylesheet" ...> tags.  Note that hoisting <style> tags is considered an advanced feature that most will not use directly. Consider moving the <style> tag to the <head> or consider adding a `precedence="default"` and `href="some unique resource identifier"`.
+[00:09:19.259] Server  LOG      ○ Compiling / ...
+[00:09:29.487] Server  ERROR    ⨯ Error: useTranslation must be used within TranslationProvider
+[00:09:29.612] Server  ERROR    ⨯ Error: useTranslation must be used within TranslationProvider
+[00:09:30.815] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:09:30.933] Server  LOG      ✓ Compiled in 38ms
+[00:09:31.192] Browser ERROR   uncaughtError: Error: useTranslation must be used within TranslationProvider
+[00:13:38.362] Server  ERROR    ⨯ Error: useTranslation must be used within TranslationProvider
+[00:13:39.401] Server  ERROR    ⨯ Error: useTranslation must be used within TranslationProvider
+[00:13:40.915] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:13:41.574] Browser ERROR   uncaughtError: Error: useTranslation must be used within TranslationProvider
+[00:16:11.207] Server  LOG      ✓ Compiled in 15.1s
+[00:16:11.471] Server  WARN     ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[00:16:13.475] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:16:13.599] Server  LOG      ✓ Compiled in 49ms
+[00:16:18.145] Browser WARN    Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information.
+[00:16:23.306] Browser WARN    [Reown Config] Failed to fetch remote project configuration. Using local/default values. {}
+[00:17:18.468] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:17:21.584] Browser WARN    Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information.
+[00:17:21.584] Browser WARN    [Reown Config] Failed to fetch remote project configuration. Using local/default values. {}
+[00:18:43.394] Server  LOG      ○ Compiling / ...
+[00:18:56.929] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:18:57.416] Server  LOG      ✓ Compiled in 443ms
+[00:19:01.959] Browser WARN    Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information.
+[00:19:01.965] Browser WARN    [Reown Config] Failed to fetch remote project configuration. Using local/default values. {}
+[00:22:18.691] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:22:23.091] Browser WARN    Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information.
+[00:22:27.928] Browser WARN    [Reown Config] Failed to fetch remote project configuration. Using local/default values. {}

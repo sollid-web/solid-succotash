@@ -1,0 +1,3 @@
+:HL["/_next/static/chunks/401e05f0154dc499.css","style"]
+:HL["/og-images/plans-og.png","image"]
+0:{"buildId":"XFNnDbK1pbjedPIdaeilz","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"blog","paramType":null,"paramKey":"blog","hasRuntimePrefetch":false,"slots":{"children":{"name":"slug","paramType":"d","paramKey":"bnb-smart-chain-staking-guide-2026","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}

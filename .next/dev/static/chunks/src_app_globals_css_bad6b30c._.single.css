@@ -888,10 +888,6 @@ img, video {
   height: 100%;
 }
 
-.h-screen {
-  height: 100vh;
-}
-
 .max-h-96 {
   max-height: 24rem;
 }
@@ -2209,11 +2205,6 @@ img, video {
   background-color: rgb(243 232 255 / var(--tw-bg-opacity, 1));
 }
 
-.bg-purple-50 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(250 245 255 / var(--tw-bg-opacity, 1));
-}
-
 .bg-purple-700 {
   --tw-bg-opacity: 1;
   background-color: rgb(126 34 206 / var(--tw-bg-opacity, 1));
@@ -2643,6 +2634,10 @@ img, video {
 
 .to-slate-800 {
   --tw-gradient-to: #1e293b var(--tw-gradient-to-position);
+}
+
+.to-teal-500 {
+  --tw-gradient-to: #14b8a6 var(--tw-gradient-to-position);
 }
 
 .to-white {
@@ -3148,10 +3143,6 @@ img, video {
   letter-spacing: -.05em;
 }
 
-.tracking-wide {
-  letter-spacing: .025em;
-}
-
 .tracking-wider {
   letter-spacing: .05em;
 }
@@ -3256,10 +3247,6 @@ img, video {
 .text-\[\#f59e0b\] {
   --tw-text-opacity: 1;
   color: rgb(245 158 11 / var(--tw-text-opacity, 1));
-}
-
-.text-\[rgba\(255\,255\,255\,0\.4\)\] {
-  color: #fff6;
 }
 
 .text-\[rgba\(255\,255\,255\,0\.55\)\] {
@@ -3398,11 +3385,6 @@ img, video {
   color: rgb(6 95 70 / var(--tw-text-opacity, 1));
 }
 
-.text-emerald-900 {
-  --tw-text-opacity: 1;
-  color: rgb(6 78 59 / var(--tw-text-opacity, 1));
-}
-
 .text-gray-100 {
   --tw-text-opacity: 1;
   color: rgb(243 244 246 / var(--tw-text-opacity, 1));
@@ -3526,11 +3508,6 @@ img, video {
 .text-purple-700 {
   --tw-text-opacity: 1;
   color: rgb(126 34 206 / var(--tw-text-opacity, 1));
-}
-
-.text-purple-900 {
-  --tw-text-opacity: 1;
-  color: rgb(88 28 135 / var(--tw-text-opacity, 1));
 }
 
 .text-red-200 {
@@ -3815,6 +3792,11 @@ img, video {
 
 .shadow-orange-500\/20 {
   --tw-shadow-color: #f9731633;
+  --tw-shadow: var(--tw-shadow-colored);
+}
+
+.shadow-teal-500\/20 {
+  --tw-shadow-color: #14b8a633;
   --tw-shadow: var(--tw-shadow-colored);
 }
 
@@ -4463,6 +4445,12 @@ button, a, [role="button"] {
   background-color: #fff3;
 }
 
+.hover\:from-blue-700:hover {
+  --tw-gradient-from: #1d4ed8 var(--tw-gradient-from-position);
+  --tw-gradient-to: #1d4ed800 var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
 .hover\:from-orange-600:hover {
   --tw-gradient-from: #ea580c var(--tw-gradient-from-position);
   --tw-gradient-to: #ea580c00 var(--tw-gradient-to-position);
@@ -4491,6 +4479,10 @@ button, a, [role="button"] {
 
 .hover\:to-sky-600:hover {
   --tw-gradient-to: #0284c7 var(--tw-gradient-to-position);
+}
+
+.hover\:to-teal-600:hover {
+  --tw-gradient-to: #0d9488 var(--tw-gradient-to-position);
 }
 
 .hover\:text-\[\#00a896\]:hover {

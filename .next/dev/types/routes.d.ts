@@ -4,7 +4,7 @@
 type AppRoutes = "/" | "/about" | "/accounts/login" | "/accounts/signup" | "/accounts/verify-email" | "/admin/campaigns" | "/admin/withdrawals" | "/blog" | "/blog/[slug]" | "/campaigns" | "/checkout" | "/checkout/success" | "/contact" | "/dashboard" | "/dashboard/card" | "/dashboard/cards" | "/dashboard/cards/[id]" | "/dashboard/deposit" | "/dashboard/kyc" | "/dashboard/my-card" | "/dashboard/new-investment" | "/dashboard/purchase-card" | "/dashboard/stake" | "/dashboard/support" | "/dashboard/transactions" | "/dashboard/withdraw" | "/dashboard/wolv-token" | "/faq" | "/forgot-password" | "/how-it-works" | "/leadership" | "/legal" | "/legal-disclaimer" | "/legal/certificate-of-operation" | "/plans" | "/plans/horizon" | "/plans/pioneer" | "/plans/summit" | "/plans/vanguard" | "/presale" | "/privacy" | "/referral" | "/referrals" | "/reset-password" | "/risk-disclosure" | "/roadmap" | "/security" | "/smart-contracts" | "/terms-of-service" | "/tokenomics" | "/whitepaper" | "/withdrawal-policy" | "/wolv-admin" | "/wolv-token"
 type AppRouteHandlerRoutes = "/api/public/transactions" | "/market-data" | "/og"
 type PageRoutes = never
-type LayoutRoutes = "/" | "/accounts/signup" | "/contact" | "/dashboard" | "/faq" | "/wolv-admin" | "/wolv-token"
+type LayoutRoutes = "/" | "/accounts/signup" | "/campaigns" | "/contact" | "/dashboard" | "/faq" | "/wolv-admin" | "/wolv-token"
 type RedirectRoutes = never
 type RewriteRoutes = "/api/[[...path]]" | "/static/[[...path]]"
 type Routes = AppRoutes | PageRoutes | LayoutRoutes | RedirectRoutes | RewriteRoutes | AppRouteHandlerRoutes
@@ -78,6 +78,7 @@ export type ParamsOf<Route extends Routes> = ParamMap[Route]
 interface LayoutSlotMap {
   "/": never
   "/accounts/signup": never
+  "/campaigns": never
   "/contact": never
   "/dashboard": never
   "/faq": never

@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/tokenomics/layout,_N_T_/tokenomics/page,_N_T_/tokenomics"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/tokenomics/__PAGE__",
+    "/tokenomics",
+    "/_index",
+    "/_head"
+  ]
+}

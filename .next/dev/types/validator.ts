@@ -573,6 +573,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../src/app/campaigns/layout.tsx
+{
+  type __IsExpected<Specific extends LayoutConfig<"/campaigns">> = Specific
+  const handler = {} as typeof import("../../../src/app/campaigns/layout.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../src/app/contact/layout.tsx
 {
   type __IsExpected<Specific extends LayoutConfig<"/contact">> = Specific

@@ -3,19 +3,54 @@
 import { useEffect, useRef, useState } from 'react'
 
 const WOLV_AI_URL = 'https://supportai-maxmmdqp.manus.space'
+const VISITOR_KEY_NAME = 'wolvcapital-ai-visitor'
+const DISMISSED_KEY = 'wolvai-dismissed' // session-scoped, separate from the persistent visitor id below
 
 export default function WolvAiWidget() {
   const iframeRef = useRef<HTMLIFrameElement | null>(null)
   const [src, setSrc] = useState<string | null>(null)
-  // Starts collapsed so it never covers page content on load — the visitor
-  // opens it deliberately, same as Intercom/Tawk/Drift-style widgets.
+  // Starts closed on the server/first render (so server and client markup
+  // match), then flips open on mount unless the visitor already dismissed
+  // it earlier this session — see the effect below.
   const [isOpen, setIsOpen] = useState(false)
 
+  function closeWidget() {
+    setIsOpen(false)
+    try {
+      window.sessionStorage.setItem(DISMISSED_KEY, '1')
+    } catch {
+      // Storage can be unavailable (private browsing, embedded contexts,
+      // etc.) — closing still works, it just won't be remembered.
+    }
+  }
+
+  function reportPresence(visitorKey: string) {
+    // Fire-and-forget via an Image ping — no response is read, and a
+    // failure here (e.g. the endpoint not existing yet) fails silently
+    // rather than breaking the widget.
+    const ping = new Image()
+    ping.src = `${WOLV_AI_URL}/api/support/presence?visitorKey=${encodeURIComponent(visitorKey)}&pageUrl=${encodeURIComponent(window.location.href)}&_=${Date.now()}`
+  }
+
   useEffect(() => {
-    // Computed client-side only, so this always reflects the real page the
-    // visitor is actually on (and avoids an SSR/hydration mismatch, since
-    // window isn't available during server rendering).
-    setSrc(`${WOLV_AI_URL}/embed?page=${encodeURIComponent(window.location.href)}`)
+    // Persistent visitor id: survives across separate visits (days/weeks
+    // apart), so returning visitors are recognized as the same person.
+    let visitorKey = window.localStorage.getItem(VISITOR_KEY_NAME)
+    if (!visitorKey) {
+      visitorKey = window.crypto?.randomUUID ? window.crypto.randomUUID() : `wv_${Date.now()}_${Math.random().toString(36).slice(2)}`
+      window.localStorage.setItem(VISITOR_KEY_NAME, visitorKey)
+    }
+
+    setSrc(`${WOLV_AI_URL}/embed?page=${encodeURIComponent(window.location.href)}&visitorKey=${encodeURIComponent(visitorKey)}`)
+    reportPresence(visitorKey)
+
+    let alreadyDismissed = false
+    try {
+      alreadyDismissed = window.sessionStorage.getItem(DISMISSED_KEY) === '1'
+    } catch {
+      // Default to the friendlier behavior (auto-open) if storage isn't readable.
+    }
+    setIsOpen(!alreadyDismissed)
   }, [])
 
   useEffect(() => {
@@ -23,6 +58,7 @@ export default function WolvAiWidget() {
     if (!iframe) return
 
     function reportPage() {
+      const visitorKey = window.localStorage.getItem(VISITOR_KEY_NAME)
       iframe?.contentWindow?.postMessage(
         {
           source: 'wolvcapital-ai',
@@ -32,6 +68,7 @@ export default function WolvAiWidget() {
         },
         WOLV_AI_URL
       )
+      if (visitorKey) reportPresence(visitorKey)
     }
 
     iframe.addEventListener('load', reportPage)
@@ -69,7 +106,7 @@ export default function WolvAiWidget() {
     function handleMessage(event: MessageEvent) {
       if (event.origin !== WOLV_AI_URL) return
       if (event.data?.source === 'wolvcapital-ai' && event.data?.type === 'minimize') {
-        setIsOpen(false)
+        closeWidget()
       }
     }
     window.addEventListener('message', handleMessage)
@@ -85,8 +122,8 @@ export default function WolvAiWidget() {
           position: fixed;
           bottom: 96px;
           right: 20px;
-          width: 400px;
-          height: 660px;
+          width: 368px;
+          height: 540px;
           max-width: calc(100vw - 24px);
           max-height: calc(100vh - 120px);
           border: 0;
@@ -106,8 +143,8 @@ export default function WolvAiWidget() {
           #wolvai-widget-frame {
             right: 12px;
             bottom: 88px;
-            width: calc(100vw - 24px);
-            height: min(620px, calc(100vh - 120px));
+            width: min(340px, calc(100vw - 32px));
+            height: min(480px, calc(100vh - 160px));
           }
         }
         #wolvai-launcher {
@@ -132,9 +169,9 @@ export default function WolvAiWidget() {
       `}</style>
 
       {/* Iframe stays permanently mounted so its own useEffect-driven
-          diagnostics/navigation tracking fires the instant the visitor
-          lands on the page — not only once they choose to open the chat.
-          Only visibility toggles, never the iframe's existence. */}
+          diagnostics/presence tracking fires the instant the visitor lands
+          on the page — not only once they choose to open the chat. Only
+          visibility toggles, never the iframe's existence. */}
       <iframe
         id="wolvai-widget-frame"
         data-open={isOpen}
@@ -150,7 +187,7 @@ export default function WolvAiWidget() {
         id="wolvai-launcher"
         type="button"
         aria-label={isOpen ? 'Close support chat' : 'Open support chat'}
-        onClick={() => setIsOpen(open => !open)}
+        onClick={() => (isOpen ? closeWidget() : setIsOpen(true))}
       >
         {isOpen ? (
           <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">

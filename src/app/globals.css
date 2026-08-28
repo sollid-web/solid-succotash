@@ -493,3 +493,125 @@ button, a, [role='button'] {
 .wolv-btn-add { background: #fff; border: 1.5px solid #1d9e75; color: #1d9e75; border-radius: 10px; padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer; width: 100%; }
 .wolv-btn-add:hover { background: #1d9e75; color: #fff; }
 .wolv-success { text-align: center; font-size: 13px; color: #1d9e75; font-weight: 500; padding: 8px; }
+
+
+/* Admin console contrast scope.
+   The public site uses broad Web3 dark-theme selectors with !important. Keep
+   those styles for public routes, but give the operations console an explicit
+   light surface and readable controls. */
+.admin-console {
+  background-color: #f7f9fc !important;
+  color: #0f172a !important;
+  isolation: isolate;
+}
+
+.admin-console h1,
+.admin-console h2,
+.admin-console h3,
+.admin-console h4,
+.admin-console h5,
+.admin-console h6 {
+  color: #0f172a !important;
+}
+
+.admin-console p,
+.admin-console span,
+.admin-console li,
+.admin-console label {
+  color: #475569;
+}
+
+.admin-console .text-slate-950,
+.admin-console .text-slate-900,
+.admin-console .text-slate-800,
+.admin-console .text-slate-700,
+.admin-console .text-black {
+  color: #0f172a !important;
+}
+
+.admin-console .text-slate-600 {
+  color: #475569 !important;
+}
+
+.admin-console .text-slate-500 {
+  color: #64748b !important;
+}
+
+.admin-console .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+.admin-console .text-slate-300 {
+  color: #cbd5e1 !important;
+}
+
+.admin-console .text-white {
+  color: #ffffff !important;
+}
+
+.admin-console .bg-white {
+  background-color: #ffffff !important;
+}
+
+.admin-console .bg-slate-50,
+.admin-console .bg-slate-50\/70,
+.admin-console .bg-slate-50\/80 {
+  background-color: #f8fafc !important;
+}
+
+.admin-console .border-slate-100 {
+  border-color: #f1f5f9 !important;
+}
+
+.admin-console .border-slate-200,
+.admin-console .border-slate-200\/80 {
+  border-color: #e2e8f0 !important;
+}
+
+.admin-console input,
+.admin-console select,
+.admin-console textarea {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+  border-radius: 0.75rem !important;
+}
+
+.admin-console input::placeholder,
+.admin-console textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+.admin-console input:focus,
+.admin-console select:focus,
+.admin-console textarea:focus {
+  border-color: #06b6d4 !important;
+  box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.1) !important;
+}
+
+.admin-console select option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+.admin-console .admin-hero,
+.admin-console .admin-hero p,
+.admin-console .admin-hero span,
+.admin-console .admin-hero h1 {
+  color: #ffffff !important;
+}
+
+.admin-console .admin-hero .text-slate-300 {
+  color: #cbd5e1 !important;
+}
+
+@media (max-width: 640px) {
+  .admin-console main {
+    min-width: 0;
+  }
+
+  .admin-console h1 {
+    font-size: 2rem;
+    line-height: 1.1;
+  }
+}

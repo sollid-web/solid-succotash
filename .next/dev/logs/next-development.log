@@ -29,3 +29,4 @@
 [00:22:18.691] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
 [00:22:23.091] Browser WARN    Lit is in dev mode. Not recommended for production! See https://lit.dev/msg/dev-mode for more information.
 [00:22:27.928] Browser WARN    [Reown Config] Failed to fetch remote project configuration. Using local/default values. {}
+[05:10:18.940] Server  LOG      ✓ Compiled in 1206ms

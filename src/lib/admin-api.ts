@@ -112,6 +112,24 @@ export async function adminFetch(path: string, options: RequestInit = {}, canRef
   return response
 }
 
+export type AdminRequestResult = {
+  status: number
+  ok: boolean
+  payload: unknown
+  headers: Record<string, string>
+}
+
+export async function adminRequestWithMeta(path: string, options: RequestInit = {}): Promise<AdminRequestResult> {
+  if (!getApiBaseUrl()) {
+    throw new AdminApiError('NEXT_PUBLIC_API_URL is not configured. Set it to the Django API origin before using the admin console.', 0)
+  }
+  const response = await adminFetch(path, options)
+  const payload = await readPayload(response)
+  const headers: Record<string, string> = {}
+  response.headers.forEach((value, key) => { headers[key] = value })
+  return { status: response.status, ok: response.ok, payload, headers }
+}
+
 export async function adminRequest<T = unknown>(path: string, options: RequestInit = {}) {
   if (!getApiBaseUrl()) {
     throw new AdminApiError('NEXT_PUBLIC_API_URL is not configured. Set it to the Django API origin before using the admin console.', 0)

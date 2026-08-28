@@ -39,3 +39,11 @@ https://www.wolvcapital.com/admin
 ```
 
 A platform administrator must sign in before requests are enabled. User-scoped endpoints will return the data belonging to the signed-in account; staff-only endpoints will use the backend `IsPlatformAdmin` permission.
+
+## Interactive API testing sandbox
+
+Inside **API Center**, choose a preset endpoint or use the editor to customize the HTTP method and path. Replace `{id}`, `{session_id}`, and other placeholders before running a request. Query parameters can be entered without the leading question mark.
+
+The sandbox accepts request headers as a JSON object and supports **JSON**, **raw text**, or **no body** payload modes. It automatically preserves the current JWT authentication session, while any custom headers are merged into the request. Successful and failed HTTP responses are shown without hiding status codes, response headers, response bodies, or request duration. The twelve most recent requests are kept in the current page session for quick replay.
+
+DELETE requests and paths containing cron or webhook routes display a warning and require an explicit confirmation before execution. The sandbox does not persist custom payloads to the backend or store credentials in source code. Use production mutations carefully, especially for payment, KYC, card, scheduled-job, and webhook endpoints.

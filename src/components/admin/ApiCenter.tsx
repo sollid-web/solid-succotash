@@ -1,10 +1,28 @@
 'use client'
 
-import { Braces, Check, Copy, Play, RefreshCw, Search, Terminal, X } from 'lucide-react'
+import { AlertTriangle, Braces, Check, Copy, Play, RefreshCw, Search, Terminal, X } from 'lucide-react'
 import { FormEvent, useMemo, useState } from 'react'
-import { adminRequest } from '@/lib/admin-api'
+import { adminRequestWithMeta } from '@/lib/admin-api'
 
 type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
+type BodyMode = 'json' | 'text' | 'none'
+
+type ResponseState = {
+  status: number
+  ok: boolean
+  duration: number
+  payload: unknown
+  headers: Record<string, string>
+}
+
+type RequestHistoryEntry = {
+  id: number
+  method: Method
+  path: string
+  status: number | null
+  duration: number | null
+  createdAt: string
+}
 
 type Endpoint = {
   group: string
@@ -117,13 +135,17 @@ function pretty(value: unknown) {
 
 export default function ApiCenter() {
   const [selected, setSelected] = useState<Endpoint>(endpoints[0])
+  const [method, setMethod] = useState<Method>(endpoints[0].method)
   const [path, setPath] = useState(endpoints[0].path)
   const [body, setBody] = useState(endpoints[0].body ?? '')
+  const [bodyMode, setBodyMode] = useState<BodyMode>(endpoints[0].body ? 'json' : 'none')
+  const [headers, setHeaders] = useState('{\n  "Accept": "application/json"\n}')
   const [query, setQuery] = useState('')
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [response, setResponse] = useState<unknown>(null)
+  const [response, setResponse] = useState<ResponseState | null>(null)
+  const [history, setHistory] = useState<RequestHistoryEntry[]>([])
   const [copied, setCopied] = useState(false)
 
   const filtered = useMemo(() => {
@@ -134,8 +156,10 @@ export default function ApiCenter() {
 
   function selectEndpoint(endpoint: Endpoint) {
     setSelected(endpoint)
+    setMethod(endpoint.method)
     setPath(endpoint.path)
     setBody(endpoint.body ?? '')
+    setBodyMode(endpoint.body ? 'json' : 'none')
     setQuery('')
     setResponse(null)
     setError('')
@@ -143,22 +167,63 @@ export default function ApiCenter() {
 
   async function execute(event?: FormEvent) {
     event?.preventDefault()
+    const cleanPath = path.trim()
+    if (!cleanPath) {
+      setError('Enter an API path before running the request.')
+      return
+    }
+    if (cleanPath.includes('{')) {
+      setError('Replace every {parameter} placeholder in the path before running the request.')
+      return
+    }
+    const isSensitive = method === 'DELETE' || /\/(cron|webhook)\//i.test(cleanPath)
+    if (isSensitive && !window.confirm('This request may mutate data or trigger an operational webhook. Continue?')) return
+
     setLoading(true)
     setError('')
     setResponse(null)
+    const startedAt = performance.now()
     try {
-      const finalPath = path.includes('?') || !query.trim() ? path : `${path}?${query.trim().replace(/^\?/, '')}`
-      const options: RequestInit = { method: selected.method }
-      if (selected.method !== 'GET' && selected.method !== 'DELETE' && body.trim()) {
+      const finalPath = cleanPath.includes('?') || !query.trim() ? cleanPath : `${cleanPath}?${query.trim().replace(/^\\?/, '')}`
+      const requestHeaders: Record<string, string> = {}
+      if (headers.trim()) {
+        let parsedHeaders: unknown
         try {
-          options.body = JSON.stringify(JSON.parse(body))
-          options.headers = { 'Content-Type': 'application/json' }
+          parsedHeaders = JSON.parse(headers)
         } catch {
-          throw new Error('Request body must be valid JSON.')
+          throw new Error('Request headers must be valid JSON.')
+        }
+        if (!parsedHeaders || typeof parsedHeaders !== 'object' || Array.isArray(parsedHeaders)) {
+          throw new Error('Request headers must be a JSON object.')
+        }
+        Object.entries(parsedHeaders as Record<string, unknown>).forEach(([key, value]) => {
+          if (typeof value !== 'string') throw new Error(`Header "${key}" must have a string value.`)
+          requestHeaders[key] = value
+        })
+      }
+
+      const options: RequestInit = { method, headers: requestHeaders }
+      if (method !== 'GET' && method !== 'DELETE' && bodyMode !== 'none' && body.trim()) {
+        if (bodyMode === 'json') {
+          try {
+            options.body = JSON.stringify(JSON.parse(body))
+          } catch {
+            throw new Error('JSON request body must be valid JSON.')
+          }
+          if (!Object.keys(requestHeaders).some((key) => key.toLowerCase() === 'content-type')) requestHeaders['Content-Type'] = 'application/json'
+        } else {
+          options.body = body
+          if (!Object.keys(requestHeaders).some((key) => key.toLowerCase() === 'content-type')) requestHeaders['Content-Type'] = 'text/plain'
         }
       }
-      setResponse(await adminRequest(finalPath, options))
+
+      const result = await adminRequestWithMeta(finalPath, options)
+      const duration = Math.round(performance.now() - startedAt)
+      setResponse({ ...result, duration })
+      setHistory((items) => [{ id: Date.now(), method, path: finalPath, status: result.status, duration, createdAt: new Date().toLocaleTimeString() }, ...items].slice(0, 12))
     } catch (caught) {
+      const duration = Math.round(performance.now() - startedAt)
+      setHistory((items) => [{ id: Date.now(), method, path: cleanPath, status: null, duration, createdAt: new Date().toLocaleTimeString() }, ...items].slice(0, 12))
       setError(caught instanceof Error ? caught.message : 'Request failed.')
     } finally {
       setLoading(false)
@@ -166,7 +231,8 @@ export default function ApiCenter() {
   }
 
   async function copyResponse() {
-    await navigator.clipboard.writeText(pretty(response))
+    if (!response) return
+    await navigator.clipboard.writeText(pretty(response.payload))
     setCopied(true)
     window.setTimeout(() => setCopied(false), 1600)
   }
@@ -182,8 +248,18 @@ export default function ApiCenter() {
       </section>
       <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_8px_28px_rgba(15,23,42,0.04)] sm:p-7">
         <div className="flex items-start justify-between gap-4"><div><div className="mb-3 flex items-center gap-2"><span className={`rounded-lg px-2 py-1 text-[11px] font-bold ${methodClasses[selected.method]}`}>{selected.method}</span><span className="font-mono text-xs text-slate-400">{selected.group}</span></div><h2 className="text-2xl font-semibold tracking-[-0.03em] text-slate-950">{selected.label}</h2><p className="mt-2 text-sm leading-6 text-slate-500">{selected.description}</p></div><Terminal className="shrink-0 text-cyan-600" size={22} /></div>
-        <form onSubmit={execute} className="mt-7 space-y-5"><label className="block"><span className="mb-2 block text-sm font-semibold text-slate-700">Endpoint path</span><input value={path} onChange={(event) => setPath(event.target.value)} className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 font-mono text-sm outline-none focus:border-cyan-500" /></label><label className="block"><span className="mb-2 block text-sm font-semibold text-slate-700">Query string <span className="font-normal text-slate-400">(optional, without ?)</span></span><input value={query} onChange={(event) => setQuery(event.target.value)} className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 font-mono text-sm outline-none focus:border-cyan-500" placeholder="page=1&status=pending" /></label>{selected.method !== 'GET' && selected.method !== 'DELETE' && <label className="block"><span className="mb-2 block text-sm font-semibold text-slate-700">JSON request body</span><textarea value={body} onChange={(event) => setBody(event.target.value)} rows={9} className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 font-mono text-xs leading-6 outline-none focus:border-cyan-500" placeholder="{}" /></label>}{error && <div className="flex items-start gap-3 rounded-xl border border-rose-100 bg-rose-50 p-4 text-sm text-rose-700"><X className="mt-0.5 shrink-0" size={17} /><div><p className="font-semibold">Request failed</p><p className="mt-1">{error}</p></div></div>}<button type="submit" disabled={loading} className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 disabled:opacity-50">{loading ? <RefreshCw className="animate-spin" size={17} /> : <Play size={17} />} {loading ? 'Running request…' : 'Run authenticated request'}</button></form>
-        {response !== null && <div className="mt-7 overflow-hidden rounded-2xl border border-slate-800 bg-slate-950"><div className="flex items-center justify-between border-b border-white/10 px-4 py-3"><div className="flex items-center gap-2 text-xs font-semibold text-slate-300"><Check size={15} className="text-emerald-400" /> Response</div><button type="button" onClick={() => void copyResponse()} className="inline-flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-white/10 hover:text-white">{copied ? <Check size={14} /> : <Copy size={14} />} {copied ? 'Copied' : 'Copy'}</button></div><pre className="max-h-[360px] overflow-auto p-4 font-mono text-xs leading-6 text-cyan-100">{pretty(response)}</pre></div>}
+        <form onSubmit={execute} className="mt-7 space-y-5">
+          <div className="grid gap-4 sm:grid-cols-[150px_minmax(0,1fr)]"><label className="block"><span className="mb-2 block text-sm font-semibold text-slate-700">Method</span><select value={method} onChange={(event) => setMethod(event.target.value as Method)} className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm font-bold outline-none focus:border-cyan-500">{(['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] as Method[]).map((item) => <option key={item} value={item}>{item}</option>)}</select></label><label className="block"><span className="mb-2 block text-sm font-semibold text-slate-700">Endpoint path</span><input value={path} onChange={(event) => setPath(event.target.value)} className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 font-mono text-sm outline-none focus:border-cyan-500" /></label></div>
+          <label className="block"><span className="mb-2 block text-sm font-semibold text-slate-700">Query string <span className="font-normal text-slate-400">(optional, without ?)</span></span><input value={query} onChange={(event) => setQuery(event.target.value)} className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 font-mono text-sm outline-none focus:border-cyan-500" placeholder="page=1&status=pending" /></label>
+          <label className="block"><span className="mb-2 block text-sm font-semibold text-slate-700">Request headers <span className="font-normal text-slate-400">(JSON object)</span></span><textarea value={headers} onChange={(event) => setHeaders(event.target.value)} rows={4} className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 font-mono text-xs leading-6 outline-none focus:border-cyan-500" placeholder={'{\n  "Accept": "application/json"\n}'} /></label>
+          {method !== 'GET' && method !== 'DELETE' && <div className="space-y-3"><div className="flex flex-wrap items-center justify-between gap-3"><span className="text-sm font-semibold text-slate-700">Request payload</span><div className="flex rounded-lg border border-slate-200 bg-slate-50 p-1">{(['json', 'text', 'none'] as BodyMode[]).map((item) => <button key={item} type="button" onClick={() => setBodyMode(item)} className={`rounded-md px-2.5 py-1.5 text-[11px] font-bold uppercase ${bodyMode === item ? 'bg-white text-slate-950 shadow-sm' : 'text-slate-400'}`}>{item}</button>)}</div></div>{bodyMode !== 'none' && <textarea value={body} onChange={(event) => setBody(event.target.value)} rows={9} className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 font-mono text-xs leading-6 outline-none focus:border-cyan-500" placeholder={bodyMode === 'json' ? '{\n  "key": "value"\n}' : 'Raw text payload'} />}</div>}
+          {(method === 'DELETE' || /\/(cron|webhook)\//i.test(path)) && <div className="flex items-start gap-3 rounded-xl border border-amber-100 bg-amber-50 p-4 text-sm text-amber-800"><AlertTriangle className="mt-0.5 shrink-0" size={17} /><p><strong>Operational safeguard:</strong> this request may mutate data, trigger a scheduled job, or deliver a webhook. You will be asked to confirm before it runs.</p></div>}
+          {error && <div className="flex items-start gap-3 rounded-xl border border-rose-100 bg-rose-50 p-4 text-sm text-rose-700"><X className="mt-0.5 shrink-0" size={17} /><div><p className="font-semibold">Request failed</p><p className="mt-1">{error}</p></div></div>}
+          <button type="submit" disabled={loading} className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 disabled:opacity-50">{loading ? <RefreshCw className="animate-spin" size={17} /> : <Play size={17} />} {loading ? 'Running request…' : 'Run request'}</button>
+        </form>
+        {history.length > 0 && <div className="mt-7 rounded-2xl border border-slate-200 bg-slate-50/70 p-4"><div className="mb-3 flex items-center justify-between"><p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Recent requests</p><button type="button" onClick={() => setHistory([])} className="text-xs font-semibold text-slate-400 hover:text-slate-700">Clear</button></div><div className="space-y-2">{history.map((item) => <button type="button" key={item.id} onClick={() => { setMethod(item.method); setPath(item.path); setResponse(null); setError('') }} className="flex w-full items-center gap-3 rounded-xl bg-white px-3 py-2.5 text-left shadow-sm"><span className={`rounded-md px-1.5 py-0.5 text-[10px] font-bold ${methodClasses[item.method]}`}>{item.method}</span><span className="min-w-0 flex-1 truncate font-mono text-[11px] text-slate-600">{item.path}</span><span className={`text-[11px] font-bold ${item.status && item.status < 400 ? 'text-emerald-600' : 'text-rose-600'}`}>{item.status ?? 'ERR'}</span><span className="text-[10px] text-slate-400">{item.duration ?? 0}ms</span></button>)}</div></div>}
+        {response !== null && <div className="mt-7 overflow-hidden rounded-2xl border border-slate-800 bg-slate-950"><div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 px-4 py-3"><div className="flex items-center gap-3 text-xs font-semibold text-slate-300"><span className={`rounded-md px-2 py-1 font-bold ${response.ok ? 'bg-emerald-400/15 text-emerald-300' : 'bg-rose-400/15 text-rose-300'}`}>{response.status}</span><span>{response.ok ? 'Request succeeded' : 'Request returned an error'}</span><span className="text-slate-500">{response.duration}ms</span></div><button type="button" onClick={() => void copyResponse()} className="inline-flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:bg-white/10 hover:text-white">{copied ? <Check size={14} /> : <Copy size={14} />} {copied ? 'Copied' : 'Copy response'}</button></div><pre className="max-h-[360px] overflow-auto p-4 font-mono text-xs leading-6 text-cyan-100">{pretty(response.payload)}</pre><details className="border-t border-white/10"><summary className="cursor-pointer px-4 py-3 text-xs font-semibold text-slate-400">Response headers</summary><pre className="max-h-48 overflow-auto px-4 pb-4 font-mono text-[11px] leading-5 text-slate-400">{pretty(response.headers)}</pre></details></div>}
+
       </section>
     </div>
   </div>

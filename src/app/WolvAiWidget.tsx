@@ -30,8 +30,13 @@ export default function WolvAiWidget() {
     // rather than breaking the widget.
     const ping = new Image()
     ping.src = `${WOLV_AI_URL}/api/support/presence?visitorKey=${encodeURIComponent(visitorKey)}&pageUrl=${encodeURIComponent(window.location.href)}&_=${Date.now()}`
-  }
-
+  
+  fetch('/api/notify-visitor', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ visitorKey, pageUrl: window.location.href }),
+  }).catch(() => {})
+}
   useEffect(() => {
     // Persistent visitor id: survives across separate visits (days/weeks
     // apart), so returning visitors are recognized as the same person.

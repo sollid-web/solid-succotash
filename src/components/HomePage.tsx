@@ -11,6 +11,7 @@ import ComplianceSection from '@/components/sections/ComplianceSection'
 import SecuritySection from '@/components/sections/SecuritySection'
 import WolvTokenSection from '@/components/sections/WolvTokenSection'
 import FAQSection from '@/components/sections/FAQSection'
+import WolvChartSection from '@/components/sections/WolvChartSection'
 import ShareButtons from '@/components/ShareButtons'
 
 export default function HomePage() {
@@ -33,6 +34,7 @@ export default function HomePage() {
       </div>
       <RiskBar />
       <HowItWorksSection />
+      <WolvChartSection />
       <div ref={plansRef}>
         <StakingSection />
       </div>

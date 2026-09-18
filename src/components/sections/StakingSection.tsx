@@ -80,7 +80,7 @@ export default function StakingSection() {
                   ['Lock Period',    `${plan.lockDays} days`],
                   ['Early Exit Fee', plan.exitFee],
                   ['Stake With',     plan.token],
-                  ['Rewards In',     'WOLV ($1 each)'],
+                  ['Rewards In',     'WOLV Token'],
                 ].map(([l, v]) => (
                   <div key={l} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px' }}>{l}</span>
@@ -104,7 +104,7 @@ export default function StakingSection() {
         {/* Bottom note */}
         <div style={{ textAlign: 'center' }}>
           <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '12px', maxWidth: '600px', margin: '0 auto 24px' }}>
-            Staking contracts are publicly verified on BSCScan. Rewards are paid in WOLV tokens at $0.50 per WOLV. Early exit incurs a fee on principal. Past performance does not guarantee future returns.
+            Staking contracts are publicly verified on BSCScan. Rewards are paid in WOLV tokens on BNB Smart Chain. Early exit incurs a fee on principal. Past performance does not guarantee future returns.
           </p>
           <Link href="/dashboard/stake" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 32px', borderRadius: '10px', background: 'linear-gradient(135deg, #00a896, #1a3a8f)', color: '#fff', fontWeight: 700, fontSize: '14px', textDecoration: 'none' }}>
             View All Staking Plans →

@@ -114,28 +114,27 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
           {t('hero.subtitle')}
         </motion.p>
 
-        {/* Presale status card */}
-        {!presaleEnded && (
-          <motion.div variants={itemVariants}>
-            <MotionLink
-              href="/presale"
-              {...pressableTapProps}
-              className={`block p-4 rounded-xl bg-[#0b1329]/60 border border-white/10 border-t-white/20 backdrop-blur-md space-y-2 hover:border-orange-400/40 transition ${glassGlow}`}
-            >
-              <div className="flex justify-between items-center text-xs">
-                <span className="flex items-center gap-2 font-semibold text-amber-400">
-                  <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-                  🔥 WOLV Presale Live
-                </span>
-                <span className="text-slate-400">$0.50 / WOLV</span>
-              </div>
-              <div className="flex justify-between items-center text-[11px] text-slate-400">
-                <span>{timeLeft ? `${timeLeft} left · $50,000 hard cap` : 'Hard cap $50,000'}</span>
-                <span className="text-orange-400 font-semibold">Join Presale →</span>
-              </div>
-            </MotionLink>
-          </motion.div>
-        )}
+        {/* DEX Listing badge */}
+        <motion.div variants={itemVariants}>
+          <a
+            href="https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`block p-4 rounded-xl bg-[#0b1329]/60 border border-white/10 border-t-white/20 backdrop-blur-md space-y-2 hover:border-teal-400/40 transition ${glassGlow}`}
+          >
+            <div className="flex justify-between items-center text-xs">
+              <span className="flex items-center gap-2 font-semibold text-teal-400">
+                <span className="h-2 w-2 rounded-full bg-teal-400 animate-pulse" />
+                🚀 WOLV Now Live on PancakeSwap
+              </span>
+              <span className="text-slate-400">BSC · V2</span>
+            </div>
+            <div className="flex justify-between items-center text-[11px] text-slate-400">
+              <span>Contract verified · 231+ holders · BNB Chain</span>
+              <span className="text-teal-400 font-semibold">Buy WOLV →</span>
+            </div>
+          </a>
+        </motion.div>
 
         {/* Staking APY tiers */}
         <motion.div variants={itemVariants} className="grid grid-cols-2 gap-2 text-center text-xs">
@@ -164,15 +163,14 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
               Join Presale →
             </MotionLink>
           )}
-          {presaleEnded && (
-            <MotionLink
-              href="/wolv-token"
-              {...pressableTapProps}
-              className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition shadow-lg shadow-teal-500/20 text-center"
-            >
-              Get WOLV →
-            </MotionLink>
-          )}
+          <a
+            href="https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition shadow-lg shadow-teal-500/20 text-center"
+          >
+            Buy WOLV on PancakeSwap →
+          </a>
           <MotionLink
             href="/plans"
             onClick={() => onPlansClick?.()}

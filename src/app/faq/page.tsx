@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "FAQ — How Wolv Capital Staking Works | BNB Investment Questions",
-  description: "Answers to common questions about deposits, withdrawals, daily ROI, smart contract security, and the WOLV token. Everything you need before investing.",
+  description: "Answers to common questions about WOLV token staking, withdrawals, smart contract security, and BNB Smart Chain. Everything you need to know about WolvCapital.",
   keywords: [
     "WolvCapital FAQ",
     "WOLV token questions",
@@ -58,7 +58,7 @@ const CATEGORIES = [
     questions: [
       {
         q: "What investment plans are available?",
-        a: "WolvCapital offers four plans: Pioneer ($100 min · 8% APY · 90 days), Vanguard ($1,000 min · 12% APY · 150 days), Horizon ($5,000 min · 18% APY · 180 days), and Summit VIP ($15,000 min · 25% APY · 365 days). Each plan has a fixed term and structured daily return.",
+        a: "WolvCapital offers four WOLV staking tiers: Pioneer ($100 min · 8% target APY · 90 days), Vanguard ($1,000 min · 12% target APY · 150 days), Horizon ($5,000 min · 18% target APY · 180 days), and Summit VIP ($15,000 min · 25% target APY · 365 days). WOLV rewards accumulate on-chain and are claimable after the lock period. All smart contracts are verified on BSCScan.",
       },
       {
         q: "Are returns guaranteed?",
@@ -174,7 +174,7 @@ const CATEGORIES = [
     questions: [
       {
         q: "Is WolvCapital regulated?",
-        a: "Yes. WolvCapital is registered as an investment adviser with the U.S. Securities and Exchange Commission (SEC) and as a Money Services Business (MSB) with FinCEN. Full KYC/AML procedures are enforced on all accounts. Compliance disclosures are published at wolvcapital.com/compliance.",
+        a: "WolvCapital is registered as a Money Services Business (MSB) with FinCEN for AML/KYC compliance purposes. We are not registered as a securities broker or investment adviser. WOLV is a utility token on BNB Smart Chain — staking rewards are on-chain and verifiable by anyone on BSCScan. Full compliance disclosures are published at wolvcapital.com/risk-disclosure.",
       },
       {
         q: "How are my funds protected?",

@@ -4,7 +4,7 @@ import PlanCardsRow from './PlanCardsRow'
 
 export const metadata = {
   title: 'Investment Plans — Pioneer, Vanguard, Horizon & Summit | Wolv Capital',
-  description: 'Choose from 4 staking plans with daily ROI. Pioneer starts at $50, Summit up to $50,000. All plans run on BNB Smart Chain with verifiable smart contracts.',
+  description: 'Choose from 4 WOLV staking tiers on BNB Smart Chain. Pioneer, Vanguard, Horizon, and Summit VIP. Smart contracts verified on BSCScan. WOLV rewards claimable on-chain.',
   openGraph: {
     title: 'Investment Plans — WolvCapital',
     description: 'Plan structures • Eligibility • Key terms (no guarantees)',

@@ -3,14 +3,14 @@ import HomePageContent from '@/components/HomePage'
 import PublicLayout from '@/components/PublicLayout'
 
 export const metadata: Metadata = {
-  title: 'Wolv Capital — BNB Staking & Crypto Investment Platform',
-  description: 'Earn daily returns on BNB with Wolv Capitals transparent staking plans. Join thousands of investors earning passive income on the BSC network. Start from $50.',
+  title: 'WolvCapital — On-Chain Staking & WOLV Token | BNB Smart Chain',
+  description: 'WolvCapital is a Web3 staking protocol on BNB Smart Chain. Stake BNB or BUSD and earn WOLV token rewards. Contracts verified on BSCScan. WOLV now trading on PancakeSwap.',
   keywords:
-    'blockchain investment platform, WOLV staking, BNB staking, BUSD staking, verified investment returns, on-chain profit distribution, WOLV token, BEP20 investment token, KYC investment platform, transparent investment, blockchain verified returns, WolvCapital, crypto staking rewards, digital asset management, stake BNB earn rewards',
+    'WOLV token, BEP20 token, BNB Smart Chain staking, Web3 staking protocol, WOLV PancakeSwap, on-chain staking rewards, WolvCapital, blockchain staking, DeFi staking BNB, WOLV DEX, smart contract staking, KYC staking platform',
   openGraph: {
-    title: 'WolvCapital | Blockchain-Verified Returns, Invest, Stake & Earn On-Chain',
+    title: 'WolvCapital | On-Chain Staking & WOLV Token — BNB Smart Chain',
     description:
-      'Stake BNB or BUSD and earn WOLV rewards on-chain. Every return is recorded permanently on the BNB blockchain — independently verifiable, immutable, and transparent.',
+      'Stake BNB or BUSD and earn WOLV token rewards on BNB Smart Chain. Smart contracts verified on BSCScan. WOLV now live on PancakeSwap DEX.',
       images: [
       {
         url: "https://www.wolvcapital.com/images/hero/home-hero.webp",

@@ -34,7 +34,7 @@ const SECTIONS = [
     content: [
       "WolvCapital is a professionally managed digital asset investment platform combining structured investment plans, blockchain-verified profit distribution, and a decentralized staking ecosystem — all built on BNB Smart Chain.",
       "The platform issues WOLV, a fixed-supply BEP-20 token, as verifiable on-chain proof of investor earnings. Unlike traditional investment platforms that issue PDF statements, WolvCapital distributes WOLV tokens directly to investor wallets — creating permanent, publicly auditable records of every profit distribution.",
-      "WolvCapital operates under SEC registration, FinCEN MSB compliance, and full AML/KYC procedures, bridging institutional finance standards with blockchain transparency.",
+      "WolvCapital operates under FinCEN MSB compliance with full AML/KYC procedures, bridging Web3 transparency with on-chain verifiable staking rewards through the WOLV token.",
     ],
   },
   {
@@ -111,7 +111,7 @@ const SECTIONS = [
     title: "Compliance & Regulation",
     content: [
       "WolvCapital operates under a comprehensive compliance framework designed to meet international financial regulation standards.",
-      "SEC Registration: WolvCapital is registered as an investment adviser with the U.S. Securities and Exchange Commission. All investment plans are structured to comply with applicable securities laws.",
+      "FinCEN MSB Registration: WolvCapital is registered as a Money Services Business with FinCEN for AML/KYC compliance. WOLV is a BEP20 utility token on BNB Smart Chain — not a security. All smart contracts are publicly verified on BSCScan.",
       "FinCEN MSB: Registered as a Money Services Business with the Financial Crimes Enforcement Network. Subject to Bank Secrecy Act requirements including AML program, suspicious activity reporting, and recordkeeping.",
       "KYC/AML: Full Know Your Customer identity verification is required for all investors. Anti-Money Laundering screening is applied to all deposits and withdrawals. PCI-DSS compliance standards govern payment processing.",
       "Manual withdrawal approvals: Every withdrawal request undergoes manual human review before processing. This prevents unauthorized transfers, detects fraudulent activity, and ensures compliance with AML requirements.",

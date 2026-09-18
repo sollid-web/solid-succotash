@@ -40,7 +40,7 @@ export default function LegalPage() {
             <li>Responsible Communication & Disclosure</li>
             <li>User Identity & Account Protection (AML/KYC)</li>
             <li>Manual Off-Chain Review for All Transactions</li>
-            <li>Regulatory Compliance (SEC, CFTC, FinCEN)</li>
+            <li>Regulatory Compliance (FinCEN MSB, AML/KYC)</li>
           </ul>
           <h2 className="text-2xl font-semibold mb-4">Key Legal Documents</h2>
           <ul className="list-disc pl-6 mb-6 text-gray-700 space-y-2">

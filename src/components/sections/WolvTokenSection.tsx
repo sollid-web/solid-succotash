@@ -48,25 +48,6 @@ export default function WolvTokenSection() {
           ))}
         </div>
 
-        {/* Staking APY cards */}
-        <div style={{ marginBottom: '48px' }}>
-          <h3 style={{ color: '#fff', fontSize: '20px', fontWeight: 700, textAlign: 'center', marginBottom: '24px' }}>Staking Plans — Earn WOLV Rewards</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px' }}>
-            {[
-              { name: 'Pioneer',    apy: '8%',  days: '90',  min: '$100',    color: '#3b82f6' },
-              { name: 'Vanguard',   apy: '12%', days: '150', min: '$1,000',  color: '#00a896' },
-              { name: 'Horizon',    apy: '18%', days: '180', min: '$5,000',  color: '#8b5cf6' },
-              { name: 'Summit VIP', apy: '25%', days: '365', min: '$15,000', color: '#f59e0b' },
-            ].map(p => (
-              <div key={p.name} style={{ background: 'rgba(255,255,255,0.04)', border: `1px solid ${p.color}40`, borderRadius: '16px', padding: '20px', textAlign: 'center' }}>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: '#fff', marginBottom: '4px' }}>{p.name}</div>
-                <div style={{ fontSize: '32px', fontWeight: 800, color: p.color, fontFamily: 'monospace', lineHeight: 1 }}>{p.apy}</div>
-                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', marginTop: '4px' }}>APY · {p.days} days · Min {p.min}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Verified contracts */}
         <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(0,168,150,0.2)', borderRadius: '16px', padding: '28px', marginBottom: '32px' }}>
           <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>Verified Smart Contracts</div>

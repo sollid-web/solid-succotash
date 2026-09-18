@@ -21,12 +21,6 @@ function formatTimeLeft(seconds: number) {
   return `${d}d ${h}h ${m}m`
 }
 
-const PLANS = [
-  { plan: 'Pioneer', apy: '8%', days: '90d' },
-  { plan: 'Vanguard', apy: '12%', days: '150d' },
-  { plan: 'Horizon', apy: '18%', days: '180d' },
-  { plan: 'Summit VIP', apy: '25%', days: '365d' },
-]
 
 // Entrance stagger: headline -> description -> presale badge -> APY cards -> CTA buttons.
 const containerVariants = {
@@ -136,22 +130,6 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
           </a>
         </motion.div>
 
-        {/* Staking APY tiers */}
-        <motion.div variants={itemVariants} className="grid grid-cols-2 gap-2 text-center text-xs">
-          {PLANS.map(p => (
-            <motion.div
-              key={p.plan}
-              {...pressableTapProps}
-              whileHover={{ y: -3 }}
-              whileTap={{ scale: 0.97, boxShadow: '0 0 20px rgba(96,165,250,0.25)' }}
-              className={`p-2.5 rounded-lg bg-[#0b1329]/60 border border-white/10 border-t-white/20 backdrop-blur-md transition-shadow ${glassGlow}`}
-            >
-              <div className="text-slate-400 text-[10px]">{p.plan} ({p.days})</div>
-              <div className="text-blue-400 font-bold text-sm">{p.apy} APY</div>
-            </motion.div>
-          ))}
-        </motion.div>
-
         {/* Action buttons */}
         <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-3 pt-1">
           {!presaleEnded && (
@@ -171,14 +149,6 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
           >
             Buy WOLV on PancakeSwap →
           </a>
-          <MotionLink
-            href="/plans"
-            onClick={() => onPlansClick?.()}
-            {...pressableTapProps}
-            className="w-full sm:flex-1 py-3 px-6 rounded-lg font-semibold text-slate-200 border border-slate-700 bg-slate-900/50 hover:bg-slate-800 transition text-center"
-          >
-            {t('hero.button.viewPlans')}
-          </MotionLink>
         </motion.div>
 
         <Link href="/accounts/signup" className="block text-center text-sm text-blue-300 hover:text-blue-200 underline underline-offset-2">

@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Risk Disclosure — WolvCapital',
-  description: 'Understand the risks associated with digital asset investment. WolvCapital provides transparent disclosure of investment risks and volatility.',
+  description: 'Understand the risks of staking digital assets with WolvCapital. On-chain WOLV staking involves market volatility, smart contract risk, and potential loss of principal.',
   openGraph: {
     title: 'Risk Disclosure — WolvCapital',
     description: 'Understand Digital Asset Investment Risks',
@@ -21,35 +21,35 @@ export const metadata: Metadata = {
 const sections = [
   {
     title: 'Market Volatility',
-    text: 'Digital asset prices may experience rapid and unpredictable changes. Market conditions can impact the value of your investments at any time. Price swings of 20–50% within short periods are not uncommon in crypto markets.',
+    text: 'Digital asset prices including BNB and WOLV can experience rapid and unpredictable changes. Market conditions can impact the value of your staked principal and WOLV rewards at any time. Price swings of 20–50% within short periods are not uncommon in crypto markets.',
   },
   {
-    title: 'No Guarantees',
-    text: 'WolvCapital does not guarantee investment returns. While our strategies aim for consistent ROI, external factors including market downturns, liquidity constraints, and macroeconomic shifts may affect performance.',
+    title: 'No Guaranteed Returns',
+    text: 'WolvCapital does not guarantee any staking reward. APY figures shown are target estimates only. External factors including market downturns, liquidity constraints, and on-chain conditions may affect actual returns. You may receive less than the target APY or nothing at all.',
   },
   {
-    title: 'Operational Risk',
-    text: 'Technology failures, cybersecurity incidents, or human error may affect platform operations. We employ industry-standard security protocols including AES-256 encryption and MFA, but cannot eliminate all operational risk.',
+    title: 'Smart Contract Risk',
+    text: 'WOLV staking operates via smart contracts deployed on BNB Smart Chain. While contracts are publicly verified on BSCScan, smart contracts may contain bugs or vulnerabilities that could result in loss of funds. Always verify the contract address before interacting.',
   },
   {
     title: 'Regulatory Considerations',
-    text: 'Digital asset regulations vary by jurisdiction and are evolving rapidly. Legal or regulatory changes may impact platform operations, investment availability, or withdrawal processing times.',
+    text: 'Digital asset regulations vary by jurisdiction and are evolving rapidly. Legal or regulatory changes may impact platform operations, WOLV token availability, or withdrawal processing. Users are responsible for compliance with their local laws.',
   },
   {
     title: 'Liquidity Risk',
-    text: 'Some digital assets may have limited liquidity, making it difficult to exit positions at desired prices. Investment lock-up periods apply depending on your chosen plan.',
+    text: 'Staked principal is locked for the duration of your chosen staking tier. Early exit incurs penalty fees. While WOLV is tradeable on PancakeSwap V2, DEX liquidity may be limited — sell orders may cause significant price impact depending on pool depth.',
   },
   {
-    title: 'Counterparty Risk',
-    text: 'Investments may involve third-party service providers, exchanges, or custodians. The failure or insolvency of any counterparty could result in loss of funds.',
+    title: 'Token Price Risk',
+    text: 'WOLV rewards are denominated in WOLV tokens. The USD value of your earned WOLV depends entirely on the market price of WOLV at the time you trade it. WOLV price may decline significantly from the time rewards are earned to the time they are redeemed.',
   },
 ]
 
 const stats = [
   { value: 'HIGH', label: 'Volatility Class' },
-  { value: '24–72h', label: 'Review Period' },
-  { value: 'Manual', label: 'All Transactions' },
-  { value: 'U.S. Law', label: 'Governed By' },
+  { value: 'BNB Chain', label: 'Network' },
+  { value: 'BSCScan', label: 'Verified On' },
+  { value: 'FinCEN MSB', label: 'Compliance' },
 ]
 
 export default function RiskDisclosurePage() {
@@ -95,14 +95,14 @@ export default function RiskDisclosurePage() {
           {/* tag */}
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: '4px', padding: '4px 12px', marginBottom: '16px' }}>
             <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#ef4444' }} />
-            <span style={{ fontSize: '11px', color: '#fca5a5', fontWeight: 700, letterSpacing: '0.12em' }}>INVESTMENT RISK NOTICE</span>
+            <span style={{ fontSize: '11px', color: '#fca5a5', fontWeight: 700, letterSpacing: '0.12em' }}>STAKING RISK NOTICE</span>
           </div>
 
           <h1 style={{ fontSize: 'clamp(36px,7vw,58px)', fontWeight: 800, color: '#ffffff', margin: '0 0 14px', lineHeight: 1.08, textShadow: '0 0 60px rgba(239,68,68,0.2)' }}>
             Risk Disclosure
           </h1>
           <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.5)', fontWeight: 400, margin: '0 0 32px' }}>
-            All investments carry inherent risk · Digital assets are subject to market volatility
+            All staking carries inherent risk · Digital assets are subject to market volatility
           </p>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: '999px', padding: '10px 24px', marginBottom: '48px' }}>
             <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#ef4444" strokeWidth="2.5">
@@ -133,10 +133,10 @@ export default function RiskDisclosurePage() {
           </svg>
           <div>
             <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.8)', lineHeight: 1.8, margin: '0 0 10px' }}>
-              All investment opportunities carry inherent risk. Digital asset markets are particularly volatile, with prices subject to significant fluctuation. Past performance does not guarantee future results.
+              All staking positions carry inherent risk. Digital asset markets are particularly volatile, with prices subject to significant fluctuation. Past performance does not guarantee future results.
             </p>
             <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.8, margin: 0 }}>
-              By investing with WolvCapital, you acknowledge and accept the following risks:
+              By staking with WolvCapital, you acknowledge and accept the following risks:
             </p>
           </div>
         </div>

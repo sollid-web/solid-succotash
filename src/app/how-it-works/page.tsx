@@ -3,15 +3,15 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "How It Works — WolvCapital | Digital Asset Investment & Staking",
+  title: "How It Works — WolvCapital | WOLV Staking on BNB Smart Chain",
   description:
-    "Learn how WolvCapital works: create account, choose plan, deposit funds, earn staking rewards, stake WOLV tokens, and withdraw profits. Fully compliant, blockchain-verified investment platform.",
+    "Learn how WolvCapital works: create account, complete KYC, stake BNB or BUSD, earn WOLV token rewards, and trade WOLV on PancakeSwap V2. Smart contracts verified on BSCScan.",
   keywords:
-    "how it works, investment process, digital asset investment, WOLV staking, cryptocurrency investment, ROI tracking, secure investment platform, WolvCapital process",
+    "how it works, WOLV staking, BNB Smart Chain staking, WOLV token, PancakeSwap WOLV, Web3 staking protocol, WolvCapital process, KYC staking, BEP20 staking",
   openGraph: {
     title: "How It Works — WolvCapital",
     description:
-      "Step-by-step guide to investing and staking on WolvCapital. Earn APY + WOLV token rewards. KYC/AML compliant.",
+      "Step-by-step guide to WOLV staking on BNB Smart Chain. Earn WOLV token rewards. Trade on PancakeSwap V2. KYC/AML compliant.",
     images: ["/og-images/home-og.png"],
     type: "website",
   },
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "How It Works — WolvCapital",
     description:
-      "Invest, earn staking rewards, stake WOLV tokens. Professional digital asset investment platform.",
+      "Stake BNB or BUSD, earn WOLV token rewards on BNB Smart Chain. WOLV now live on PancakeSwap V2.",
     images: ["/og-images/home-og.png"],
   },
 };
@@ -29,7 +29,7 @@ const STEPS = [
     num: "01",
     title: "Create Your Account",
     description:
-      "Sign up with a valid email address and secure password. After email verification, your investor dashboard is activated with access to deposits, plan selection, and portfolio tracking — all protected by AML/KYC compliance and 256-bit SSL encryption.",
+      "Sign up with a valid email address and secure password. After email verification, your dashboard is activated with access to staking tiers, WOLV rewards tracking, and wallet connection — protected by KYC/AML compliance and SSL encryption.",
     icon: "👤",
     tag: "Getting Started",
   },
@@ -37,57 +37,57 @@ const STEPS = [
     num: "02",
     title: "Complete KYC Verification",
     description:
-      "Submit your identity documents for KYC review. This is required by regulation and protects every investor on the platform. Verification is typically completed within 24 hours. Only verified investors may deposit and withdraw.",
+      "Submit your identity documents for KYC review. This is required for AML compliance and protects all users on the platform. Verification is typically completed within 24 hours. Only verified users may stake and withdraw.",
     icon: "🪪",
     tag: "Compliance",
   },
   {
     num: "03",
-    title: "Make a Deposit",
+    title: "Deposit BNB or BUSD",
     description:
-      "Fund your account using supported cryptocurrencies. Deposits are recorded and reflected in your wallet after blockchain confirmation. All transactions are secured with institutional-grade encryption and AML review.",
+      "Fund your staking position using BNB or BUSD on BNB Smart Chain. Deposits are recorded on-chain and reflected in your dashboard after blockchain confirmation. All transactions are secured with AML review.",
     icon: "💳",
     tag: "Funding",
   },
   {
     num: "04",
-    title: "Choose an Investment Plan",
+    title: "Choose a Staking Tier",
     description:
-      "Select a plan matching your capital level and investment horizon. WolvCapital offers four tiers — Pioneer ($100+), Vanguard ($1,000+), Horizon ($5,000+), and Summit VIP ($15,000+) — each with a fixed term and structured APY.",
+      "Select a WOLV staking tier matching your lock period preference. WolvCapital offers four tiers — Pioneer ($100+), Vanguard ($1,000+), Horizon ($5,000+), and Summit VIP ($15,000+) — each with a defined lock period and target APY.",
     icon: "📊",
-    tag: "Investment",
+    tag: "Staking",
   },
   {
     num: "05",
-    title: "Earn Daily Returns",
+    title: "Earn WOLV Rewards On-Chain",
     description:
-      "Returns are calculated and credited daily. Your dashboard shows real-time earnings, cumulative profit, plan progress, and days remaining. All returns are tracked transparently with on-chain verification via the WOLV Token system.",
+      "WOLV token rewards accumulate on BNB Smart Chain for the duration of your staking lock period. Your dashboard shows real-time reward accumulation, staking progress, and days remaining. All activity is verifiable on BSCScan.",
     icon: "📈",
-    tag: "Returns",
+    tag: "Rewards",
   },
   {
     num: "06",
-    title: "Receive WOLV Profit Tokens",
+    title: "Receive WOLV Tokens",
     description:
-      "As your plan generates returns, WOLV tokens are distributed to your connected wallet as blockchain-backed proof of earnings. Connect MetaMask or Trust Wallet on your dashboard to receive and verify your WOLV balance on BNB Smart Chain.",
+      "WOLV tokens are distributed to your connected wallet as on-chain proof of staking rewards. Connect MetaMask or Trust Wallet on your dashboard to receive and verify your WOLV balance on BNB Smart Chain. WOLV contract: 0xe0167279aef7bf4ad313d261da82e8366822270c",
     icon: "🪙",
     tag: "WOLV Token",
     highlight: true,
   },
   {
     num: "07",
-    title: "Stake WOLV for Additional Rewards",
+    title: "Trade WOLV on PancakeSwap",
     description:
-      "Take your WOLV earnings further by staking them in WolvCapital's audited staking contracts. Choose from four staking tiers (Pioneer, Vanguard, Horizon, Summit VIP) offering 8%–25% APY. Rewards are powered by Chainlink price feeds and a 48-hour timelock-protected reward pool.",
+      "WOLV is now live on PancakeSwap V2 (BNB Smart Chain). Swap your earned WOLV for BNB directly from your wallet — no registration required. Track live price and chart on DEXScreener and DEXTools. Contract verified on BSCScan.",
     icon: "⬡",
-    tag: "Staking",
+    tag: "DEX Trading",
     highlight: true,
   },
   {
     num: "08",
     title: "Request a Withdrawal",
     description:
-      "Submit a withdrawal request with your destination wallet address. Requests enter our compliance review queue. Every withdrawal undergoes manual verification to confirm account ownership and transaction integrity — protecting you from unauthorized transfers.",
+      "Submit a withdrawal request with your destination wallet address after your lock period ends. Requests undergo compliance review to confirm account ownership and transaction integrity — protecting you from unauthorized transfers.",
     icon: "💸",
     tag: "Withdrawal",
   },
@@ -95,17 +95,17 @@ const STEPS = [
     num: "09",
     title: "Payout Release",
     description:
-      "Once approved, your payout is released to your wallet. Network confirmation times vary by asset and blockchain conditions. All payouts are processed with institutional-grade security and full audit trail.",
+      "Once approved, your principal is released to your wallet via on-chain transaction. Network confirmation times vary by blockchain conditions. All payouts are recorded on BNB Smart Chain and verifiable on BSCScan.",
     icon: "🚀",
     tag: "Payout",
   },
   {
     num: "10",
-    title: "Reinvest or Exit",
+    title: "Restake or Exit",
     description:
-      "After plan completion, withdraw your capital and earnings or reinvest into a new plan. WolvCapital supports flexible portfolio management — diversify across plan tiers, compound returns, or exit at any maturity point.",
+      "After your staking term completes, withdraw your principal and WOLV rewards or restake into a new tier. Diversify across staking tiers or exit at any maturity point. WOLV earned is tradeable on PancakeSwap at any time.",
     icon: "🔄",
-    tag: "Portfolio",
+    tag: "Restake",
   },
 ];
 
@@ -197,8 +197,8 @@ export default function HowItWorksPage() {
               marginBottom: "36px",
             }}
           >
-            From account creation to blockchain-verified profits — a complete
-            10-step guide to investing, earning, and staking on WolvCapital.
+            From account creation to on-chain WOLV rewards — a complete
+            10-step guide to staking and trading on WolvCapital.
           </p>
           <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
             <Link
@@ -441,7 +441,7 @@ export default function HowItWorksPage() {
               lineHeight: 1.7,
             }}
           >
-            Join WolvCapital investors earning APY and WOLV token rewards
+            Join WolvCapital users staking BNB and earning WOLV token rewards
             on BNB Smart Chain. Start with as little as $100.
           </p>
           <div

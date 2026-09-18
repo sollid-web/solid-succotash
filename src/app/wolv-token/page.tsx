@@ -221,7 +221,7 @@ export default function WolvTokenPage() {
                 <h3 className="text-xl font-bold text-yellow-400 mb-4">⚠️ Pre-Listing Token Value</h3>
                 <div className="space-y-3 text-gray-300">
                   <p>WOLV is currently in its <strong className="text-white">pre-listing phase</strong>. The $0.50 per WOLV value shown on the platform is an internal reference price set by WolvCapital — it is not yet determined by an open market.</p>
-                  <p>WOLV rewards earned now are <strong className="text-white">not yet realisable as cash</strong> until WOLV is listed on a decentralised exchange such as PancakeSwap and a liquidity pool is established.</p>
+                  <p>WOLV rewards are realisable on-chain. WOLV is <strong className="text-white">now live and trading on PancakeSwap V2</strong> (BNB Smart Chain) — swap WOLV for BNB directly from your wallet at any time.</p>
                   <p>Once listed, the market price of WOLV will be determined by supply and demand. WolvCapital plans to provide initial liquidity to support price stability at launch. DEX listing is scheduled for Q3 2026.</p>
                   <p className="text-yellow-300 text-sm font-medium">⚠️ All investments carry risk. Token value after listing may differ from the pre-listing reference price.</p>
                 </div>

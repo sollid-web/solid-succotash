@@ -36,21 +36,32 @@ export default function PresalePage() {
               </span>
             </h1>
 
-            <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed mb-12">
-              The WOLV presale has ended. Thank you to everyone who bought in at $0.50 per WOLV — tokens
-              were delivered instantly to buyers' wallets, verified on BscScan and Sourcify.
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed mb-8">
+              The WOLV presale concluded successfully. WOLV is now live and trading on PancakeSwap V2 — buy WOLV directly on DEX with any BNB wallet, no registration required.
             </p>
 
-            <div className="max-w-lg mx-auto rounded-2xl p-8" style={{ background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <WalletProviderClient>
-                <PresaleWidget />
-              </WalletProviderClient>
+            <div className="max-w-lg mx-auto rounded-2xl p-8 text-center" style={{ background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(10px)', border: '1px solid rgba(0,168,150,0.2)' }}>
+              <div className="text-4xl mb-4">🥞</div>
+              <h3 className="text-white font-bold text-xl mb-2">WOLV is Live on PancakeSwap</h3>
+              <p className="text-slate-400 text-sm mb-6">WOLV/BNB pair · PancakeSwap V2 · BNB Smart Chain · Contract verified on BSCScan</p>
+              <a
+                href="https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-white"
+                style={{ background: 'linear-gradient(135deg, #00a896, #2A52BE)' }}
+              >
+                Buy WOLV on PancakeSwap →
+              </a>
+              <p className="text-slate-500 text-xs mt-4">
+                Contract: 0xe0167279aef7bf4ad313d261da82e8366822270c
+              </p>
             </div>
 
             <div className="mt-6 flex justify-center">
               <ShareButtons
-                url="https://www.wolvcapital.com/presale"
-                text="The WOLV presale has ended — $0.50 per WOLV, delivered instantly to buyers' wallets."
+                url="https://www.wolvcapital.com/wolv-token"
+                text="WOLV is now live on PancakeSwap V2 — trade WOLV/BNB on BNB Smart Chain."
               />
             </div>
           </div>

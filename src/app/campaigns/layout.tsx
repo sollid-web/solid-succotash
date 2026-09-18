@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Campaigns & Announcements — WolvCapital',
-  description: 'Live announcements, promotions, and platform updates from WolvCapital — investment plan launches, presale milestones, and time-limited offers.',
+  description: 'Live announcements, promotions, and platform updates from WolvCapital — WOLV token updates, DEX milestones, staking news, and community campaigns.',
   alternates: { canonical: 'https://www.wolvcapital.com/campaigns' },
   openGraph: {
     title: 'Campaigns & Announcements — WolvCapital',

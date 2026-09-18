@@ -40,10 +40,10 @@ const PAGES: Record<string, { title: string; subtitle: string; accent: string; t
     tag: 'Technical Documentation',
   },
   presale: {
-    title: 'WOLV Presale',
-    subtitle: 'Buy WOLV at $0.50 in the public presale. Verified contract, fixed hard cap, instant delivery.',
-    accent: '#f97316',
-    tag: 'LIVE · Presale',
+    title: 'WOLV Token — Live on PancakeSwap',
+    subtitle: 'WOLV/BNB is now trading on PancakeSwap V2 · BNB Smart Chain · Contract verified on BSCScan.',
+    accent: '#00a896',
+    tag: 'LIVE · DEX',
   },
 }
 

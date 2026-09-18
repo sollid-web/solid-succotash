@@ -5,8 +5,6 @@ import { useEffect, useMemo, useState } from "react";
 import dynamic from 'next/dynamic';
 import { motion } from "framer-motion";
 
-import { WalletProvider } from '@/_client/WalletProvider';
-const WolvWalletSection = dynamic(() => import('@/_client/WolvWalletSection').then(mod => ({ default: mod.WolvWalletSection })), { ssr: false });
 const ReferralSummaryCard = dynamic(() => import('@/components/ReferralSummaryCard'), { ssr: false });
 import { apiFetch } from "@/lib/api";
 import { pressableTapProps, MotionLink } from "@/lib/motionPress";
@@ -424,22 +422,56 @@ export default function DashboardPage() {
         )}
 
 
-        {/* ── WOLV Wallet ── */}
+        {/* ── WOLV Live Chart ── */}
         <motion.section variants={itemVariants} className="mb-6">
-          <Link href="/dashboard/wolv-token" style={{ textDecoration: "none", display: "block", marginBottom: "16px" }}>
-            <h2 style={{ color: "#fff", fontSize: "18px", fontWeight: 600 }}>WOLV Token</h2>
-            <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", marginTop: "2px" }}>
-              Connect your wallet and view WOLV token rewards without leaving the dashboard.
-            </p>
-          </Link>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+            <div>
+              <h2 style={{ color: "#fff", fontSize: "18px", fontWeight: 600 }}>WOLV Live Chart</h2>
+              <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", marginTop: "2px" }}>
+                WOLV/BNB trading live on PancakeSwap V2 · BNB Smart Chain
+              </p>
+            </div>
+            <a
+              href="https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: "#5eead4", fontSize: "13px", fontWeight: 500, textDecoration: "none",
+                padding: "6px 14px", borderRadius: "8px",
+                border: "1px solid rgba(0,168,150,0.25)",
+                background: "rgba(0,168,150,0.08)",
+              }}
+            >
+              Buy WOLV →
+            </a>
+          </div>
           <div style={{
-            background: "rgba(255,255,255,0.03)", border: "1px solid rgba(0,168,150,0.2)", borderRadius: "20px", padding: "24px",
-            backdropFilter: "blur(18px)", WebkitBackdropFilter: "blur(18px)",
+            background: "rgba(255,255,255,0.03)", border: "1px solid rgba(0,168,150,0.2)", borderRadius: "20px",
+            overflow: "hidden",
             boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.05), 0 20px 50px rgba(0,0,0,0.25)",
           }}>
-            <WalletProvider>
-              <WolvWalletSection />
-            </WalletProvider>
+            <iframe
+              src="https://dexscreener.com/bsc/0xe0167279aef7bf4ad313d261da82e8366822270c?embed=1&theme=dark&trades=0&info=1"
+              style={{ width: "100%", height: "360px", border: "none", display: "block" }}
+              title="WOLV/BNB Live Chart"
+              loading="lazy"
+            />
+          </div>
+          <div style={{ display: "flex", gap: "8px", marginTop: "12px", flexWrap: "wrap" }}>
+            {[
+              { label: "📊 DEXScreener", href: "https://dexscreener.com/bsc/0xe0167279aef7bf4ad313d261da82e8366822270c" },
+              { label: "🔍 DEXTools", href: "https://www.dextools.io/app/en/bnb/pair-explorer/0xe0167279aef7bf4ad313d261da82e8366822270c" },
+              { label: "🔎 BscScan", href: "https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c" },
+            ].map(({ label, href }) => (
+              <a key={label} href={href} target="_blank" rel="noopener noreferrer" style={{
+                color: "rgba(255,255,255,0.5)", fontSize: "12px", textDecoration: "none",
+                padding: "5px 12px", borderRadius: "6px",
+                border: "1px solid rgba(255,255,255,0.08)",
+                background: "rgba(255,255,255,0.03)",
+              }}>
+                {label}
+              </a>
+            ))}
           </div>
         </motion.section>
 

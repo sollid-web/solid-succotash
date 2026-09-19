@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata = {
   title: 'Smart Contracts & Security — WolvCapital',
   description:
-    'Review the verified smart contracts and blockchain infrastructure securing the WolvCapital ecosystem. Transparent, audited, and built for decentralized asset management.',
+    'Review the verified smart contracts powering the WolvCapital WOLV staking protocol on BNB Smart Chain. Open-source, BSCScan verified, no admin backdoors.',
   alternates: {
     canonical: 'https://wolvcapital.com/smart-contracts',
   },

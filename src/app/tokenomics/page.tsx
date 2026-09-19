@@ -12,11 +12,11 @@ const CONTRACTS = {
 };
 
 const DISTRIBUTION = [
-  { label: "Investor Rewards",    pct: 60, amount: "600,000,000", color: "#2A52BE", desc: "Distributed to investors via staking rewards and profit distributions over the platform lifetime." },
+  { label: "Staking Rewards",     pct: 60, amount: "600,000,000", color: "#2A52BE", desc: "Distributed to stakers as on-chain WOLV token rewards over the platform lifetime. Held in the timelock-protected Reward Pool contract." },
   { label: "Treasury Reserve",    pct: 20, amount: "200,000,000", color: "#1E3A8A", desc: "Held in treasury for operational continuity, future reward pool top-ups, and platform development." },
-  { label: "Liquidity Reserve",   pct: 10, amount: "100,000,000", color: "#3b82f6", desc: "Reserved for future DEX liquidity provision on PancakeSwap to enable open market trading." },
+  { label: "Liquidity Reserve",   pct: 10, amount: "100,000,000", color: "#3b82f6", desc: "Allocated to DEX liquidity provision. WOLV/BNB pair is now live on PancakeSwap V2 — actively tradeable on BNB Smart Chain." },
   { label: "Team & Development",  pct:  7, amount:  "70,000,000", color: "#60a5fa", desc: "Allocated to the founding team and ongoing development. Subject to 12-month vesting schedule." },
-  { label: "Marketing & Growth",  pct:  3, amount:  "30,000,000", color: "#93c5fd", desc: "Reserved for partnerships, listings, community growth, and platform promotion." },
+  { label: "Marketing & Growth",  pct:  3, amount:  "30,000,000", color: "#93c5fd", desc: "Reserved for partnerships, exchange listings, community growth, and platform promotion." },
 ];
 
 const PLANS = [
@@ -51,7 +51,7 @@ export default function TokenomicsPage() {
               { label: "Total Supply",    value: "1,000,000,000" },
               { label: "Token Standard",  value: "BEP-20" },
               { label: "Network",         value: "BNB Smart Chain" },
-              { label: "1 WOLV =",        value: "$0.50 USD" },
+              { label: "1 WOLV =",        value: "Market Price" },
             ].map(s => (
               <div key={s.label} className="bg-white border border-[#bfdbfe] rounded-xl px-4 py-5 text-center">
                 <div className="text-xs text-[#64748B] uppercase tracking-widest mb-2">{s.label}</div>
@@ -127,7 +127,7 @@ export default function TokenomicsPage() {
             <div className="font-mono text-[#2A52BE] text-lg font-bold mb-2">
               WOLV Reward = (Stake USD × APY% × Lock Days ÷ 365) × 2
             </div>
-            <div className="text-[#64748B] text-xs">1 WOLV = $0.50 (2 WOLV per $1) · APY expressed as basis points in contract · Result scaled to 18 decimals</div>
+            <div className="text-[#64748B] text-xs">APY expressed as basis points in contract · Result scaled to 18 decimals · WOLV market price determined by DEX trading on PancakeSwap V2</div>
           </div>
 
           {/* Plan table */}

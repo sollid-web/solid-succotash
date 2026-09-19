@@ -109,17 +109,19 @@ export default function WolvTokenPage() {
 
             {/* CTA buttons */}
             <div className="flex flex-wrap justify-center gap-4 mb-16">
-              <Link href="/accounts/signup"
+              <a
+                href={`https://pancakeswap.finance/swap?outputCurrency=${WOLV_CONTRACT}`}
+                target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-white text-sm transition-all hover:scale-105"
                 style={{
                   background: 'linear-gradient(135deg, #2A52BE 0%, #00a896 100%)',
                   boxShadow: '0 0 30px rgba(0,168,150,0.3)',
                 }}>
-                Start Staking
+                🥞 Buy WOLV on PancakeSwap
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
-              </Link>
+              </a>
               <a href={`https://bscscan.com/token/${WOLV_CONTRACT}`}
                 target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm transition-all hover:scale-105"
@@ -132,6 +134,16 @@ export default function WolvTokenPage() {
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
+              </a>
+              <a href={`https://dexscreener.com/bsc/${WOLV_CONTRACT}`}
+                target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm transition-all hover:scale-105"
+                style={{
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  color: '#e2e8f0',
+                }}>
+                📊 Live Chart
               </a>
             </div>
 
@@ -203,46 +215,38 @@ export default function WolvTokenPage() {
                 <h3 className="text-xl font-bold text-white mb-6">How WOLV Works</h3>
                 <div className="space-y-4 text-gray-300">
                   <p>
-                    WOLV tokens are earned as verifiable proof of investment returns on WolvCapital.
-                    When you stake BUSD, you receive WOLV tokens proportional to your investment performance.
+                    WOLV is a BEP-20 utility token on BNB Smart Chain. When you stake BNB or BUSD on WolvCapital,
+                    you earn WOLV token rewards proportional to your staking tier and lock period.
                   </p>
                   <p>
-                    Every WOLV token distribution is recorded on the BNB blockchain, providing immutable,
-                    transparent proof of your investment returns that can be verified by anyone.
+                    Every WOLV distribution is recorded on BNB Smart Chain — immutable, transparent,
+                    and verifiable by anyone on BSCScan at any time using your wallet address.
                   </p>
                   <p>
-                    WOLV tokens can be held, traded, or used within the WolvCapital ecosystem for enhanced benefits.
+                    WOLV is now live and tradeable on PancakeSwap V2. Swap WOLV for BNB directly from
+                    your wallet — no registration required.
                   </p>
                 </div>
               </div>
 
-              {/* Pre-Listing Value Notice */}
-              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-8 mb-12">
-                <h3 className="text-xl font-bold text-yellow-400 mb-4">⚠️ Pre-Listing Token Value</h3>
+              {/* DEX Live Section */}
+              <div className="bg-teal-500/10 border border-teal-500/30 rounded-xl p-8 mb-12">
+                <h3 className="text-xl font-bold text-teal-400 mb-4">🚀 WOLV is Live on PancakeSwap V2</h3>
                 <div className="space-y-3 text-gray-300">
-                  <p>WOLV is currently in its <strong className="text-white">pre-listing phase</strong>. The $0.50 per WOLV value shown on the platform is an internal reference price set by WolvCapital — it is not yet determined by an open market.</p>
-                  <p>WOLV rewards are realisable on-chain. WOLV is <strong className="text-white">now live and trading on PancakeSwap V2</strong> (BNB Smart Chain) — swap WOLV for BNB directly from your wallet at any time.</p>
-                  <p>Once listed, the market price of WOLV will be determined by supply and demand. WolvCapital plans to provide initial liquidity to support price stability at launch. DEX listing is scheduled for Q3 2026.</p>
-                  <p className="text-yellow-300 text-sm font-medium">⚠️ All investments carry risk. Token value after listing may differ from the pre-listing reference price.</p>
-                </div>
-              </div>
-
-              {/* Staking Plans */}
-              <div className="mb-12">
-                <h3 className="text-2xl font-bold text-white text-center mb-8">Staking Plans — Earn WOLV Rewards</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {[
-                    { name: 'Pioneer',    apy: '8%',  days: '90',  min: '$100',    color: 'blue' },
-                    { name: 'Vanguard',   apy: '12%', days: '150', min: '$1,000',  color: 'teal' },
-                    { name: 'Horizon',    apy: '18%', days: '180', min: '$5,000',  color: 'purple' },
-                    { name: 'Summit VIP', apy: '25%', days: '365', min: '$15,000', color: 'amber' },
-                  ].map(plan => (
-                    <div key={plan.name} className={`bg-white/5 border border-${plan.color}-400/30 rounded-xl p-6 text-center`}>
-                      <div className="text-sm font-semibold text-white mb-2">{plan.name}</div>
-                      <div className={`text-3xl font-bold text-${plan.color}-400 font-mono mb-2`}>{plan.apy}</div>
-                      <div className="text-xs text-gray-400">APY • {plan.days} days • Min {plan.min}</div>
-                    </div>
-                  ))}
+                  <p>WOLV/BNB is now actively trading on PancakeSwap V2 on BNB Smart Chain. Buy or sell WOLV directly from any BNB wallet — no account registration required.</p>
+                  <p>Track live price, chart, and trading volume on <a href="https://dexscreener.com/bsc/0xe0167279aef7bf4ad313d261da82e8366822270c" target="_blank" rel="noopener noreferrer" className="text-teal-400 underline">DEXScreener</a> and <a href="https://www.dextools.io/app/en/bnb/pair-explorer/0xe0167279aef7bf4ad313d261da82e8366822270c" target="_blank" rel="noopener noreferrer" className="text-teal-400 underline">DEXTools</a>. Contract verified on BSCScan with 231+ on-chain holders.</p>
+                  <div className="pt-2">
+                    <a
+                      href="https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white text-sm"
+                      style={{ background: 'linear-gradient(135deg, #00a896, #2A52BE)' }}
+                    >
+                      🥞 Buy WOLV on PancakeSwap →
+                    </a>
+                  </div>
+                  <p className="text-yellow-300 text-sm font-medium pt-2">⚠️ Staking carries risk. WOLV market price is determined by supply and demand on DEX. Value may fluctuate significantly.</p>
                 </div>
               </div>
 
@@ -251,18 +255,15 @@ export default function WolvTokenPage() {
                 <h3 className="text-xl font-bold text-white mb-6">Verified Smart Contracts</h3>
                 <div className="space-y-4">
                   {[
-                    { name: 'WOLV Token Contract', address: WOLV_CONTRACT },
-                    { name: 'Reward Pool Contract', address: POOL_CONTRACT },
-                    { name: 'Staking Contract',     address: STAKING_CONTRACT },
+                    { name: 'WOLV Token Contract', address: WOLV_CONTRACT, href: `https://bscscan.com/token/${WOLV_CONTRACT}` },
+                    { name: 'Reward Pool Contract', address: POOL_CONTRACT, href: `https://bscscan.com/address/${POOL_CONTRACT}#code` },
+                    { name: 'Staking Contract',     address: STAKING_CONTRACT, href: `https://bscscan.com/address/${STAKING_CONTRACT}#code` },
                   ].map(contract => (
                     <div key={contract.name}
                       className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 bg-black/20 rounded-lg">
                       <span className="text-white font-medium mb-2 sm:mb-0">{contract.name}</span>
-                      <a
-                        href={contract.name === 'Reward Pool Contract' ? `https://bscscan.com/token/${WOLV_CONTRACT}?a=${contract.address}` : `https://bscscan.com/address/${contract.address}#code`}
-                        target="_blank" rel="noopener noreferrer"
-                        className="text-teal-400 hover:text-teal-300 font-mono text-sm break-all"
-                      >
+                      <a href={contract.href} target="_blank" rel="noopener noreferrer"
+                        className="text-teal-400 hover:text-teal-300 font-mono text-sm break-all">
                         {contract.address.slice(0, 10)}...{contract.address.slice(-8)} ↗
                       </a>
                     </div>
@@ -273,13 +274,18 @@ export default function WolvTokenPage() {
               {/* Call to Action */}
               <div className="text-center">
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link href="/dashboard/stake"
-                    className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-teal-500 to-blue-600 text-white font-bold rounded-lg hover:from-teal-600 hover:to-blue-700 transition-all duration-200">
-                    Start Staking WOLV →
-                  </Link>
-                  <Link href="/plans"
+                  <a
+                    href="https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-8 py-4 text-white font-bold rounded-lg transition-all duration-200"
+                    style={{ background: 'linear-gradient(135deg, #00a896, #2A52BE)' }}
+                  >
+                    🥞 Buy WOLV on PancakeSwap →
+                  </a>
+                  <Link href="/accounts/signup"
                     className="inline-flex items-center justify-center px-8 py-4 bg-white/10 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/20 transition-all duration-200">
-                    View All Plans
+                    Start Staking →
                   </Link>
                 </div>
               </div>

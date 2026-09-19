@@ -119,7 +119,7 @@ export default function HeroSection() {
       >
         <motion.div variants={itemVariants}>
           <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-blue-300">
-            Invest · Stake · Earn — All On-Chain
+            Stake · Earn WOLV · Trade On-Chain
           </p>
 
           <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">

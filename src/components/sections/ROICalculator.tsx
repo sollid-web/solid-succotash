@@ -285,7 +285,7 @@ export default function ROICalculator() {
 
             <p className="text-[10px] text-slate-600 text-center leading-relaxed">
               Projections use simple interest and are illustrative only. Digital assets are volatile.
-              Returns are not guaranteed. Review full risk disclosure before investing.
+              WOLV staking carries risk including potential loss of principal. Target APY is not guaranteed. Review full risk disclosure before staking.
             </p>
           </div>
         </div>

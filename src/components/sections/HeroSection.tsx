@@ -59,11 +59,8 @@ const itemVariants = {
   show: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 100, damping: 20 } },
 }
 
-interface HeroSectionProps {
-  onPlansClick?: () => void
-}
 
-export default function HeroSection({ onPlansClick }: HeroSectionProps) {
+export default function HeroSection() {
   const { t } = useTranslation()
   const { price: wolvPrice, change: wolvChange } = useLiveWolvPrice()
   const [timeLeft, setTimeLeft] = useState<string | null>(

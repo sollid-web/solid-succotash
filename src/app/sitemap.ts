@@ -9,7 +9,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     // ── Core ──────────────────────────────────────────────────────
     { url: `${baseUrl}/`,                    lastModified: now, changeFrequency: 'daily',   priority: 1.0 },
-    { url: `${baseUrl}/plans`,               lastModified: now, changeFrequency: 'weekly',  priority: 0.95 },
     { url: `${baseUrl}/wolv-token`,          lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
     { url: `${baseUrl}/presale`,             lastModified: now, changeFrequency: 'daily',   priority: 0.9 },
     { url: `${baseUrl}/how-it-works`,        lastModified: now, changeFrequency: 'monthly', priority: 0.85 },
@@ -17,20 +16,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/roadmap`,             lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/whitepaper`,          lastModified: now, changeFrequency: 'monthly', priority: 0.75 },
     { url: `${baseUrl}/smart-contracts`,     lastModified: now, changeFrequency: 'monthly', priority: 0.75 },
-    { url: `${baseUrl}/about`,              lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${baseUrl}/contact`,            lastModified: now, changeFrequency: 'monthly', priority: 0.75 },
-    { url: `${baseUrl}/security`,           lastModified: now, changeFrequency: 'monthly', priority: 0.75 },
-    { url: `${baseUrl}/leadership`,         lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${baseUrl}/referral`,           lastModified: now, changeFrequency: 'monthly', priority: 0.65 },
-    { url: `${baseUrl}/faq`,               lastModified: now, changeFrequency: 'weekly',  priority: 0.75 },
-    { url: `${baseUrl}/campaigns`,          lastModified: now, changeFrequency: 'weekly',  priority: 0.6 },
-    { url: `${baseUrl}/market-data`,        lastModified: now, changeFrequency: 'daily',   priority: 0.6 },
-
-    // ── Plan detail pages ─────────────────────────────────────────
-    { url: `${baseUrl}/plans/pioneer`,  lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
-    { url: `${baseUrl}/plans/vanguard`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
-    { url: `${baseUrl}/plans/horizon`,  lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
-    { url: `${baseUrl}/plans/summit`,   lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
+    { url: `${baseUrl}/about`,               lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/contact`,             lastModified: now, changeFrequency: 'monthly', priority: 0.75 },
+    { url: `${baseUrl}/security`,            lastModified: now, changeFrequency: 'monthly', priority: 0.75 },
+    { url: `${baseUrl}/leadership`,          lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/referral`,            lastModified: now, changeFrequency: 'monthly', priority: 0.65 },
+    { url: `${baseUrl}/faq`,                 lastModified: now, changeFrequency: 'weekly',  priority: 0.75 },
+    { url: `${baseUrl}/campaigns`,           lastModified: now, changeFrequency: 'weekly',  priority: 0.6 },
 
     // ── Blog ──────────────────────────────────────────────────────
     { url: `${baseUrl}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },

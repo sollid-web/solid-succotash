@@ -45,7 +45,6 @@ export default function NavBar() {
     { href: '/roadmap', label: 'Roadmap' },
     { href: '/whitepaper', label: 'Whitepaper' },
     { href: '/campaigns', label: 'Campaigns' },
-    { href: '#plans', labelKey: 'nav.plans' },
     { href: '#compliance', labelKey: 'nav.compliance' },
     { href: '/blog', labelKey: 'nav.blog' },
     { href: '/contact', labelKey: 'nav.contact' },

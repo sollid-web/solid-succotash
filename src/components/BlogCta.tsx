@@ -17,8 +17,8 @@ type BlogCtaProps = {
 
 export default function BlogCta({
   title = 'Ready to invest with more clarity and structure?',
-  description = "Explore WolvCapital's investment plans designed for disciplined growth.",
-  href = '/plans',
+  description = "Start earning WOLV rewards — create your account to access staking plans.",
+  href = '/accounts/signup',
 }: BlogCtaProps) {
   const handleClick = () => {
     if (typeof window === 'undefined') return
@@ -37,7 +37,7 @@ export default function BlogCta({
             onClick={handleClick}
             className="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-semibold text-[#0b2f6b] hover:text-[#2563eb] hover:border-gray-300 transition"
           >
-            Explore WolvCapital's investment plans
+            Start earning WOLV rewards
             <span aria-hidden className="ml-2">→</span>
           </Link>
         </div>

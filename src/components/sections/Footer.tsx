@@ -18,7 +18,6 @@ export default function Footer() {
                 {[
                   { key: 'footer.platform.createAccount', href: '/accounts/signup' },
                   { key: 'footer.platform.login', href: '/accounts/login' },
-                  { key: 'footer.platform.plans', href: '/plans' },
                   { key: 'footer.platform.virtualCard', href: '#virtual-card' },
                   { key: 'footer.platform.faq', href: '/faq' },
                   { key: 'WOLV Token', href: '/wolv-token' },

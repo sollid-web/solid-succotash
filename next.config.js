@@ -52,6 +52,14 @@ const nextConfig = {
   // This was causing broken styles and odd rendering in production.
   assetPrefix: '',
 
+  async redirects() {
+    return [
+      // Plans pages are now gated — redirect any direct links to login
+      { source: '/plans',          destination: '/accounts/login', permanent: false },
+      { source: '/plans/:path*',   destination: '/accounts/login', permanent: false },
+    ]
+  },
+
   async rewrites() {
     // Proxy API calls from the frontend domain to the Django backend.
     // This ensures links like https://wolvcapital.com/api/auth/verify-email/?token=...

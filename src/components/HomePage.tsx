@@ -2,6 +2,7 @@
 import { useRef } from 'react'
 import { useLenis } from 'lenis/dist/lenis-react'
 import HeroSection from '@/components/sections/HeroSection'
+import LiveStatsTicker from '@/components/sections/LiveStatsTicker'
 import PresaleHeroBanner from '@/components/sections/PresaleHeroBanner'
 import TrustpilotWidget from '@/components/TrustpilotWidget'
 import RiskBar from '@/components/sections/RiskBar'
@@ -26,6 +27,7 @@ export default function HomePage() {
   return (
     <div>
       <HeroSection onPlansClick={handlePlansClick} />
+      <LiveStatsTicker />
       <PresaleHeroBanner />
       <TrustpilotWidget />
       <div className="container mx-auto px-4 lg:px-8 flex justify-center py-4">

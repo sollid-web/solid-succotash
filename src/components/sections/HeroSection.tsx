@@ -1,10 +1,37 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useTranslation } from '@/components/TranslationProvider'
 import { MotionLink, pressableTapProps } from '@/lib/motionPress'
+
+const WOLV_CONTRACT = '0xe0167279aef7bf4ad313d261da82e8366822270c'
+
+function useLiveWolvPrice() {
+  const [price, setPrice] = useState<string | null>(null)
+  const [change, setChange] = useState<number | null>(null)
+
+  const fetch_ = useCallback(async () => {
+    try {
+      const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${WOLV_CONTRACT}`)
+      if (!res.ok) return
+      const data = await res.json()
+      const pair = data?.pairs?.[0]
+      if (!pair) return
+      setPrice(pair.priceUsd ? `$${Number(pair.priceUsd).toFixed(8)}` : null)
+      setChange(Number(pair.priceChange?.h24 ?? 0))
+    } catch { /* silent */ }
+  }, [])
+
+  useEffect(() => {
+    fetch_()
+    const id = setInterval(fetch_, 60_000)
+    return () => clearInterval(id)
+  }, [fetch_])
+
+  return { price, change }
+}
 
 // Purely additive inner-glow, no color values changed — just a subtle glass edge.
 const glassGlow = 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]'
@@ -38,6 +65,7 @@ interface HeroSectionProps {
 
 export default function HeroSection({ onPlansClick }: HeroSectionProps) {
   const { t } = useTranslation()
+  const { price: wolvPrice, change: wolvChange } = useLiveWolvPrice()
   const [timeLeft, setTimeLeft] = useState<string | null>(
     formatTimeLeft(PRESALE_END_TIME - Math.floor(Date.now() / 1000)),
   )
@@ -107,6 +135,25 @@ export default function HeroSection({ onPlansClick }: HeroSectionProps) {
         <motion.p variants={itemVariants} className="text-sm sm:text-base text-slate-300 leading-relaxed">
           {t('hero.subtitle')}
         </motion.p>
+
+        {/* Live WOLV price badge */}
+        {wolvPrice && (
+          <motion.div variants={itemVariants}>
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/[0.05] border border-white/10 text-xs font-mono">
+              <span className="flex items-center gap-1.5 text-slate-400">
+                <img src="/wolv-icon.svg" alt="WOLV" className="w-4 h-4 rounded-full" />
+                WOLV
+              </span>
+              <span className="text-white font-bold">{wolvPrice}</span>
+              {wolvChange !== null && (
+                <span className={wolvChange >= 0 ? 'text-emerald-400' : 'text-red-400'}>
+                  {wolvChange >= 0 ? '+' : ''}{wolvChange.toFixed(2)}%
+                </span>
+              )}
+              <span className="h-1.5 w-1.5 rounded-full bg-teal-400 animate-pulse" />
+            </div>
+          </motion.div>
+        )}
 
         {/* DEX Listing badge */}
         <motion.div variants={itemVariants}>

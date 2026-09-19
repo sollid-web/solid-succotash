@@ -67,7 +67,7 @@ const CONTRACTS = [
 
 export default function SecuritySection() {
   return (
-    <section id="security" className="py-24 bg-[#f8fafc] border-t border-[#E2E8F0] border-b">
+    <section id="security" className="py-24 bg-[#070B19] border-t border-white/[0.06] border-b border-white/[0.06]">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-4">
           <span className="text-[11px] font-bold tracking-widest text-brand-primary uppercase">
@@ -89,7 +89,7 @@ export default function SecuritySection() {
           {SECURITY_FEATURES.map((feature, idx) => (
             <div
               key={idx}
-              className="bg-white rounded-xl p-6 border border-[#E2E8F0] shadow-sm hover:shadow-lg hover:border-[#CBD5E1] transition"
+              className="rounded-xl p-6 border transition" style={{ background: "rgba(255,255,255,0.03)", borderColor: "rgba(0,168,150,0.2)" }}
             >
               <div className="w-12 h-12 bg-[#2A52BE] rounded-lg flex items-center justify-center text-white mb-4">
                 {feature.icon}
@@ -101,7 +101,7 @@ export default function SecuritySection() {
         </div>
 
         {/* Standards */}
-        <div className="bg-white rounded-xl p-12 border border-[#E2E8F0] mb-10">
+        <div className="rounded-xl p-12 border mb-10" style={{ background: "rgba(255,255,255,0.03)", borderColor: "rgba(0,168,150,0.2)" }}>
           <h3 className="text-center text-2xl font-bold text-[#0F172A] mb-12">Security & Transparency Standards</h3>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {STANDARDS.map((standard, idx) => (

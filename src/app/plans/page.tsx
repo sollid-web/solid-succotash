@@ -1,10 +1,12 @@
 import Link from 'next/link'
 import RiskDisclaimer from '@/components/RiskDisclaimer'
 import PlanCardsRow from './PlanCardsRow'
+import { getSiteUrl } from '@/lib/site-config'
 
 export const metadata = {
   title: 'Investment Plans — Pioneer, Vanguard, Horizon & Summit | Wolv Capital',
   description: 'Choose from 4 WOLV staking tiers on BNB Smart Chain. Pioneer, Vanguard, Horizon, and Summit VIP. Smart contracts verified on BSCScan. WOLV rewards claimable on-chain.',
+  alternates: { canonical: '/plans' },
   openGraph: {
     title: 'Investment Plans — WolvCapital',
     description: 'Plan structures • Eligibility • Key terms (no guarantees)',
@@ -95,7 +97,7 @@ const PLANS = [
 ] as const
 
 export default function PlansPage() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, '') ?? 'https://wolvcapital.com'
+  const baseUrl = getSiteUrl()
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#060c1a' }}>

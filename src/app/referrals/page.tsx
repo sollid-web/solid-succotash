@@ -3,11 +3,11 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Referral Program — Earn Rewards with WolvCapital',
   description: 'Invite friends to WolvCapital and earn rewards. Grow your passive income through our verified BNB Smart Chain investment platform.',
-  alternates: { canonical: 'https://wolvcapital.com/referral' },
+  alternates: { canonical: 'https://www.wolvcapital.com/referral' },
   openGraph: {
     title: 'Referral Program — WolvCapital',
     description: 'Earn rewards by referring investors to WolvCapital.',
-    url: 'https://wolvcapital.com/referral',
+    url: 'https://www.wolvcapital.com/referral',
     images: [{ url: '/og-images/referral-og.png', width: 1200, height: 630 }],
     type: 'website',
   },

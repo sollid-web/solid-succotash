@@ -5,6 +5,7 @@ import Script from 'next/script'
 import BlogCta from '@/components/BlogCta'
 import RiskDisclaimer from '@/components/RiskDisclaimer'
 import { getAllPostSlugs, getPostBySlug } from '@/lib/blog'
+import { getSiteUrl } from '@/lib/site-config'
 
 // 1. Define the Props interface for Next.js 15 async params
 interface PageProps {
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const post = await getPostBySlug(slug)
   if (!post) return {}
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, '') ?? 'https://wolvcapital.com'
+  const baseUrl = getSiteUrl()
   const url = `${baseUrl}/blog/${post.slug}`
   const pageTitle = `${post.title} | WolvCapital Blog`
 
@@ -60,7 +61,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   const publishedTime = new Date(post.publishedAt).toISOString()
   const modifiedTime = new Date(post.updatedAt || post.publishedAt).toISOString()
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, '') ?? 'https://wolvcapital.com'
+  const baseUrl = getSiteUrl()
   const canonicalUrl = `${baseUrl}/blog/${post.slug}`
 
   return (
@@ -150,4 +151,3 @@ export default async function BlogPostPage({ params }: PageProps) {
 function getAllPostsMeta() {
   throw new Error('Function not implemented.')
 }
-

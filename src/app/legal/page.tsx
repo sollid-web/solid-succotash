@@ -3,11 +3,11 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Legal & Compliance Overview — WolvCapital',
   description: 'WolvCapital legal and compliance framework. FinCEN registered, KYC/AML compliant. Access Terms of Service, Privacy Policy, Risk Disclosure, and Legal Disclaimer.',
-  alternates: { canonical: 'https://wolvcapital.com/legal' },
+  alternates: { canonical: 'https://www.wolvcapital.com/legal' },
   openGraph: {
     title: 'Legal & Compliance — WolvCapital',
     description: 'Full legal documentation for WolvCapital digital investment platform.',
-    url: 'https://wolvcapital.com/legal',
+    url: 'https://www.wolvcapital.com/legal',
     type: 'website',
   },
   robots: { index: true, follow: true },

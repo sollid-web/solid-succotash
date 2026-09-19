@@ -6,7 +6,7 @@
   // Auto-fix: force .convex.cloud — /api/query and /api/mutation only work on .convex.cloud, not .convex.site
   var CONVEX_URL = (config.convexUrl || 'https://quirky-spider-81.convex.cloud').replace(/\/+$/, '').replace('.convex.site', '.convex.cloud');
 
-  var SITE_URL = config.siteUrl || 'https://wolvcapital.com';
+  var SITE_URL = config.siteUrl || 'https://www.wolvcapital.com';
   var PRIMARY = config.primaryColor || '#2A52BE';
   var GREETING = config.greeting || 'Hi! How can I help you today?';
   var AGENT_NAME = config.agentName || 'Alex';

@@ -6,16 +6,16 @@ export const metadata = {
   description:
     'Review the verified smart contracts powering the WolvCapital WOLV staking protocol on BNB Smart Chain. Open-source, BSCScan verified, no admin backdoors.',
   alternates: {
-    canonical: 'https://wolvcapital.com/smart-contracts',
+    canonical: 'https://www.wolvcapital.com/smart-contracts',
   },
   openGraph: {
     title: 'Verified Smart Contracts — WolvCapital',
     description: 'Review the blockchain infrastructure and verified smart contracts securing the WolvCapital platform.',
-    url: 'https://wolvcapital.com/smart-contracts',
+    url: 'https://www.wolvcapital.com/smart-contracts',
     siteName: 'WolvCapital',
     images: [
       {
-        url: 'https://wolvcapital.com/og-contracts.png', // Suggest using an image featuring code/nodes or a security shield
+        url: 'https://www.wolvcapital.com/og-contracts.png', // Suggest using an image featuring code/nodes or a security shield
         width: 1200,
         height: 630,
         alt: 'WolvCapital Smart Contract Security',

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'WOLV Token — WolvCapital Profit Token',
     description: 'Earn WOLV tokens as verifiable proof of your investment returns on WolvCapital.',
-    url: 'https://wolvcapital.com/wolv-token',
+    url: 'https://www.wolvcapital.com/wolv-token',
     siteName: 'WolvCapital',
     type: 'website',
   },

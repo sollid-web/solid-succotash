@@ -3,11 +3,11 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Pioneer Plan — 8% APY · 90 Days · WolvCapital',
   description: 'Start the Pioneer staking plan on WolvCapital. Earn 8% APY over 90 days on BNB Smart Chain. Minimum $100. WOLV token rewards. KYC required.',
-  alternates: { canonical: 'https://wolvcapital.com/plans/pioneer' },
+  alternates: { canonical: 'https://www.wolvcapital.com/plans/pioneer' },
   openGraph: {
     title: 'Pioneer Plan — 8% APY · 90 Days · WolvCapital',
     description: 'Start the Pioneer staking plan on WolvCapital. Earn 8% APY over 90 days on BNB Smart Chain. Minimum $100. WOLV token rewards. KYC required.',
-    url: 'https://wolvcapital.com/plans/pioneer',
+    url: 'https://www.wolvcapital.com/plans/pioneer',
     images: [{ url: '/og-images/plans-og.png', width: 1200, height: 630 }],
     type: 'website',
   },

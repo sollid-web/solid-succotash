@@ -12,16 +12,16 @@ title: 'WOLV Token — The Native Asset of WolvCapital',
   description:
     'Discover the WOLV token, the utility token powering the WolvCapital ecosystem on the BNB Smart Chain. Explore tokenomics, use cases, and how to participate.',
   alternates: {
-    canonical: 'https://wolvcapital.com/wolv-token',
+    canonical: 'https://www.wolvcapital.com/wolv-token',
   },
   openGraph: {
     title: 'WOLV Token — The Native Asset of WolvCapital',
     description: 'Explore the utility and tokenomics of the WOLV token on the BNB Smart Chain.',
-    url: 'https://wolvcapital.com/wolv-token',
+    url: 'https://www.wolvcapital.com/wolv-token',
     siteName: 'WolvCapital',
     images: [
       {
-        url: 'https://wolvcapital.com/wolv-token-og.png', // Suggest using a stylized image of the WOLV logo here
+        url: 'https://www.wolvcapital.com/wolv-token-og.png', // Suggest using a stylized image of the WOLV logo here
         width: 1200,
         height: 630,
         alt: 'WOLV Token Details',

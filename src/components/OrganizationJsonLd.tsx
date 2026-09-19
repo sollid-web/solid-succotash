@@ -6,8 +6,8 @@ export default function OrganizationJsonLd() {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "WolvCapital",
-    "url": "https://wolvcapital.com",
-    "logo": "https://wolvcapital.com/wolv-logo.svg",
+    "url": "https://www.wolvcapital.com",
+    "logo": "https://www.wolvcapital.com/wolv-logo.svg",
     "sameAs": [
       "https://www.facebook.com/yourpage",
       "https://twitter.com/yourhandle",

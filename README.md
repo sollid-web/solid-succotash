@@ -90,7 +90,7 @@ Create `.env.local`:
 
 ```bash
 NEXT_PUBLIC_API_URL=http://localhost:8000
-NEXT_PUBLIC_SITE_URL=https://wolvcapital.com
+NEXT_PUBLIC_SITE_URL=https://www.wolvcapital.com
 ```
 
 ## Scripts

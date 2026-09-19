@@ -2,14 +2,17 @@ import React from 'react';
 import Image from 'next/image';
 import ReferralCTA from '../../components/ReferralCTA';
 import PublicLayout from '../../components/PublicLayout';
+import { getSiteUrl } from '@/lib/site-config';
 
 export const metadata = {
   title: 'Referral Program — WolvCapital | Earn Lifetime Commissions',
   description: 'Join WolvCapital\'s referral program and earn lifetime commissions on every investment made by your referrals. Automatic tracking, instant payouts, and unlimited earning potential.',
+  alternates: { canonical: '/referral' },
   keywords: 'referral program, earn commissions, investment referrals, passive income, affiliate program, WolvCapital referrals',
   openGraph: {
     title: 'Referral Program — WolvCapital',
     description: 'Earn Rewards by Inviting Investors • Lifetime Commissions',
+    url: '/referral',
     images: ['/og-images/referral-og.png'],
     type: 'website',
   },
@@ -24,7 +27,7 @@ export const metadata = {
 export default function ReferralPage() {
   // Real per-user referral links are only available once logged in (see the
   // dashboard's Referral Program section) — this public page shares itself.
-  const shareUrl = `${process.env.NEXT_PUBLIC_BASE_URL ?? 'https://www.wolvcapital.com'}/referral`;
+  const shareUrl = `${getSiteUrl()}/referral`;
 
   return (
     <PublicLayout>

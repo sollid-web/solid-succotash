@@ -3,11 +3,11 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Horizon Plan — 18% APY · 180 Days · WolvCapital',
   description: 'WolvCapital Horizon plan offers 18% APY over 180 days on BNB Smart Chain. Minimum $5,000. WOLV token rewards. For experienced investors.',
-  alternates: { canonical: 'https://wolvcapital.com/plans/horizon' },
+  alternates: { canonical: 'https://www.wolvcapital.com/plans/horizon' },
   openGraph: {
     title: 'Horizon Plan — 18% APY · 180 Days · WolvCapital',
     description: 'WolvCapital Horizon plan offers 18% APY over 180 days on BNB Smart Chain. Minimum $5,000. WOLV token rewards. For experienced investors.',
-    url: 'https://wolvcapital.com/plans/horizon',
+    url: 'https://www.wolvcapital.com/plans/horizon',
     images: [{ url: '/og-images/plans-og.png', width: 1200, height: 630 }],
     type: 'website',
   },

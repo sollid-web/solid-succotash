@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
-
-const SITE_URL = 'https://wolvcapital.com'
+import { SITE_URL } from '@/lib/site-config'
 
 const PAGE_COPY: Record<string, { title: string; description: string }> = {
   home: {

@@ -1,4 +1,6 @@
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, '') ?? 'https://wolvcapital.com'
+import { getSiteUrl } from '@/lib/site-config'
+
+const baseUrl = getSiteUrl()
 const canonicalUrl = `${baseUrl}/faq`
 
 export default function Head() {

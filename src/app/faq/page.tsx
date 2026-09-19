@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     title: "FAQ — WolvCapital",
     description:
       "Everything you need to know about investing, staking, and earning WOLV on WolvCapital.",
-    url: "https://wolvcapital.com/faq",
+    url: "https://www.wolvcapital.com/faq",
     siteName: "WolvCapital",
     type: "website",
   },

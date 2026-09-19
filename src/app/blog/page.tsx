@@ -2,22 +2,23 @@ import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllPostsMeta } from '@/lib/blog'
+import { getSiteUrl } from '@/lib/site-config'
 
 export const metadata = {
   title: 'Blog & Market Insights — WolvCapital',
   description:
     'Read expert insights on technology-driven asset growth, diversified digital investments, and virtual card solutions. Stay updated on secure, compliance-aware wealth management.',
   alternates: {
-    canonical: 'https://wolvcapital.com/blog', // Using absolute URLs for canonicals is better for SEO
+    canonical: 'https://www.wolvcapital.com/blog', // Using absolute URLs for canonicals is better for SEO
   },
   openGraph: {
     title: 'Blog & Market Insights — WolvCapital',
     description: 'Insights on technology-driven asset growth, diversified digital investments, and global virtual card solutions.',
-    url: 'https://wolvcapital.com/blog',
+    url: 'https://www.wolvcapital.com/blog',
     siteName: 'WolvCapital',
     images: [
       {
-        url: 'https://wolvcapital.com/og-blog.png', // Make sure this image route exists in your public folder
+        url: 'https://www.wolvcapital.com/og-blog.png', // Make sure this image route exists in your public folder
         width: 1200,
         height: 630,
         alt: 'WolvCapital Blog and Insights',
@@ -35,7 +36,7 @@ export const metadata = {
 
 export default function BlogIndexPage() {
   const posts = getAllPostsMeta()
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, '') ?? 'https://wolvcapital.com'
+  const baseUrl = getSiteUrl()
   const canonicalUrl = `${baseUrl}/blog`
 
   return (

@@ -9,17 +9,8 @@ const ReferralSummaryCard = dynamic(() => import('@/components/ReferralSummaryCa
 import { apiFetch } from "@/lib/api";
 import { pressableTapProps, MotionLink } from "@/lib/motionPress";
 
-// Immutable constructor args of the deployed WOLVPresale contract
-// (0x04b5c5e204e812c176ce632f3781ea88c500497c) — fixed on-chain, safe to hardcode.
-const PRESALE_END_TIME = 1785686442; // 2026-08-02T16:00:42Z
 
-function formatPresaleTimeLeft(seconds: number) {
-  if (seconds <= 0) return null;
-  const d = Math.floor(seconds / 86400);
-  const h = Math.floor((seconds % 86400) / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  return `${d}d ${h}h ${m}m`;
-}
+
 
 interface WalletData {
   balance: number;
@@ -127,20 +118,6 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [now] = useState(() => new Date());
-  const [presaleTimeLeft, setPresaleTimeLeft] = useState<string | null>(
-    formatPresaleTimeLeft(PRESALE_END_TIME - Math.floor(Date.now() / 1000)),
-  );
-  const [presaleEnded, setPresaleEnded] = useState(Math.floor(Date.now() / 1000) >= PRESALE_END_TIME);
-
-  useEffect(() => {
-    const tick = () => {
-      const secondsLeft = PRESALE_END_TIME - Math.floor(Date.now() / 1000);
-      setPresaleTimeLeft(formatPresaleTimeLeft(secondsLeft));
-      setPresaleEnded(secondsLeft <= 0);
-    };
-    const interval = setInterval(tick, 60_000);
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -281,12 +258,18 @@ export default function DashboardPage() {
 
         {/* removed the portfolio overview hero section for mobile-first dashboard layout */}
 
-        {/* ── Presale Banner ── */}
-        {!presaleEnded && (
-          <MotionLink href="/presale" variants={itemVariants} {...pressableTapProps} className="glass-surface mb-6 block" style={{
+        {/* ── DEX Live Banner ── */}
+        <MotionLink
+          href="https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c"
+          target="_blank"
+          rel="noopener noreferrer"
+          variants={itemVariants}
+          {...pressableTapProps}
+          className="glass-surface mb-6 block"
+          style={{
             borderRadius: "20px",
-            background: "linear-gradient(135deg, rgba(245,158,11,0.16) 0%, rgba(217,119,6,0.08) 100%)",
-            border: "1px solid rgba(245,158,11,0.3)",
+            background: "linear-gradient(135deg, rgba(0,168,150,0.16) 0%, rgba(26,58,143,0.08) 100%)",
+            border: "1px solid rgba(0,168,150,0.3)",
             padding: "16px 20px",
             display: "flex",
             alignItems: "center",
@@ -294,26 +277,25 @@ export default function DashboardPage() {
             gap: "12px",
             textDecoration: "none",
           }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0 }}>
-              <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#f59e0b", flexShrink: 0 }} className="animate-pulse" />
-              <div style={{ minWidth: 0 }}>
-                <div style={{ color: "#fbbf24", fontWeight: 700, fontSize: "13px" }}>
-                  🔥 WOLV Presale Live — $0.50 / WOLV
-                </div>
-                <div style={{ color: "rgba(255,255,255,0.55)", fontSize: "11px", marginTop: "2px" }}>
-                  {presaleTimeLeft ? `${presaleTimeLeft} left · $50,000 hard cap` : "Hard cap $50,000"}
-                </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0 }}>
+            <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#00a896", flexShrink: 0 }} className="animate-pulse" />
+            <div style={{ minWidth: 0 }}>
+              <div style={{ color: "#5eead4", fontWeight: 700, fontSize: "13px" }}>
+                🚀 WOLV is Live on PancakeSwap V2
+              </div>
+              <div style={{ color: "rgba(255,255,255,0.55)", fontSize: "11px", marginTop: "2px" }}>
+                WOLV/BNB · BNB Smart Chain · Contract verified · 231+ holders
               </div>
             </div>
-            <span style={{
-              padding: "8px 16px", borderRadius: "10px", flexShrink: 0,
-              background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.35)",
-              color: "#fbbf24", fontSize: "12px", fontWeight: 700, whiteSpace: "nowrap",
-            }}>
-              Buy Now →
-            </span>
-          </MotionLink>
-        )}
+          </div>
+          <span style={{
+            padding: "8px 16px", borderRadius: "10px", flexShrink: 0,
+            background: "rgba(0,168,150,0.15)", border: "1px solid rgba(0,168,150,0.35)",
+            color: "#5eead4", fontSize: "12px", fontWeight: 700, whiteSpace: "nowrap",
+          }}>
+            Buy WOLV →
+          </span>
+        </MotionLink>
 
         {/* ── Virtual Card Banner ── */}
         <motion.div variants={itemVariants} className="glass-surface mb-6" style={{
@@ -370,7 +352,7 @@ export default function DashboardPage() {
         {/* ── Stats Grid ── */}
         <motion.div variants={itemVariants} className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
           <MetricCard
-            label="Total Invested"
+            label="Total Staked"
             value={money(totalInvested)}
             sub="Active capital"
             icon="⬡"
@@ -378,9 +360,9 @@ export default function DashboardPage() {
             loading={loading}
           />
           <MetricCard
-            label="Locked ROI"
+            label="WOLV Rewards"
             value={money(lockedRoi)}
-            sub="Profit earned"
+            sub="Rewards earned"
             icon="◈"
             accent="#f59e0b"
             loading={loading}
@@ -403,16 +385,16 @@ export default function DashboardPage() {
           />
         </motion.div>
 
-        {/* ── ROI Rate Banner ── */}
+        {/* ── Rewards Rate Banner ── */}
         {!loading && totalInvested > 0 && (
           <motion.div variants={itemVariants} className="glass-surface mb-6 rounded-2xl px-5 py-4 flex items-center justify-between" style={{
             background: "linear-gradient(135deg, rgba(245,158,11,0.08), rgba(245,158,11,0.03))",
             border: "1px solid rgba(245,158,11,0.15)",
           }}>
             <div>
-              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px" }}>Overall ROI Rate</div>
+              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px" }}>Overall Staking Yield</div>
               <Link href="/dashboard/wolv-token" style={{ color: "rgba(255,255,255,0.3)", fontSize: "11px", marginTop: "4px", display: "inline-block", textDecoration: "underline" }}>
-                These profits become WOLV tokens →
+                Rewards distributed as WOLV tokens →
               </Link>
             </div>
             <div style={{ color: "#f59e0b", fontWeight: 700, fontSize: "20px", fontFamily: "Inter, 'DM Sans', system-ui, sans-serif", fontVariantNumeric: "tabular-nums" }}>
@@ -480,7 +462,7 @@ export default function DashboardPage() {
           <Link href="/referral" style={{ textDecoration: "none", display: "block", marginBottom: "16px" }}>
             <h2 style={{ color: "#fff", fontSize: "18px", fontWeight: 600 }}>Referral Program</h2>
             <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", marginTop: "2px" }}>
-              Share your link and earn lifetime commissions on every investment your referrals make.
+              Share your link and earn lifetime commissions on every stake your referrals make.
             </p>
           </Link>
           <ReferralSummaryCard />
@@ -518,13 +500,13 @@ export default function DashboardPage() {
             }}>
               <div style={{ fontSize: "40px", marginBottom: "12px" }}>📊</div>
               <div style={{ color: "rgba(255,255,255,0.6)", fontWeight: 500, marginBottom: "6px" }}>No active plans yet</div>
-              <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "13px", marginBottom: "20px" }}>Start investing to grow your portfolio</div>
+              <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "13px", marginBottom: "20px" }}>Start staking to earn WOLV token rewards</div>
               <Link href="/dashboard/new-investment" style={{
                 padding: "10px 24px", borderRadius: "10px",
                 background: "linear-gradient(135deg, #1d4ed8, #2563eb)",
                 color: "#fff", fontWeight: 600, fontSize: "14px", textDecoration: "none",
               }}>
-                Start Investing
+                Start Staking
               </Link>
             </div>
           ) : (
@@ -660,7 +642,7 @@ export default function DashboardPage() {
                       </div>
                     )}
 
-                    <MotionLink href={planSlug ? `/plans/${planSlug}` : "/plans"} {...pressableTapProps} style={{
+                    <MotionLink href="/dashboard/stake" {...pressableTapProps} style={{
                       display: "block", textAlign: "center", padding: "10px",
                       borderRadius: "10px", background: "rgba(255,255,255,0.05)",
                       border: "1px solid rgba(255,255,255,0.1)",

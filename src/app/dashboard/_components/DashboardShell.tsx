@@ -310,11 +310,13 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
         @media (max-width: 768px) {
           .desktop-nav { display: none !important; }
           .mobile-nav-toggle { display: flex !important; }
-          .header-bar { padding: 10px 0; }
+          .header-bar { padding: 10px 0; min-height: 56px; }
           .user-chip { padding: 6px 10px; }
           .user-name { display: none; }
           .notification-button { gap: 0; padding: 8px; }
-          .logout-button { padding: 8px 10px; font-size: 11px; }
+          .logout-button { display: none !important; }
+          .connect-wallet-button { display: none !important; }
+          .wallet-connect-wrapper { display: none !important; }
           .notification-dropdown { width: calc(100vw - 32px); max-width: 360px; right: 0; }
         }
         @media (min-width: 769px) {
@@ -468,13 +470,15 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
                 </div>
               )}
             </div>
-            <WalletConnectButton />
-            <button onClick={handleLogout} className="logout-button">
-              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-              </svg>
-              <span>Logout</span>
-            </button>
+            <div className="wallet-connect-wrapper" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <WalletConnectButton />
+              <button onClick={handleLogout} className="logout-button">
+                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                <span>Logout</span>
+              </button>
+            </div>
           </div>                                                   
         </div>
       </header>                                            
@@ -551,6 +555,23 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
                 <Link href="/admin/campaigns" onClick={() => setMobileNavOpen(false)} style={{ display: "block", padding: "12px 16px", borderRadius: "10px", fontSize: "14px", color: "rgba(255,255,255,0.6)" }}>Campaigns</Link>
               </>
             )}
+            {/* Mobile-only: wallet + logout */}
+            <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", marginTop: "8px", paddingTop: "8px" }}>
+              <div style={{ padding: "8px 16px" }}>
+                <WalletConnectButton />
+              </div>
+              <button onClick={() => { setMobileNavOpen(false); handleLogout(); }} style={{
+                display: "flex", alignItems: "center", gap: "10px",
+                width: "100%", padding: "12px 16px", borderRadius: "10px",
+                background: "rgba(239,68,68,0.08)", border: "none",
+                color: "#f87171", fontSize: "14px", fontWeight: 500, cursor: "pointer",
+              }}>
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Logout
+              </button>
+            </div>
           </div>
         )}
       </nav>

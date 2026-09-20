@@ -404,13 +404,13 @@ export default function DashboardPage() {
         )}
 
 
-        {/* ── WOLV Live Chart ── */}
+        {/* ── WOLV Trading ── */}
         <motion.section variants={itemVariants} className="mb-6">
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
             <div>
-              <h2 style={{ color: "#fff", fontSize: "18px", fontWeight: 600 }}>WOLV Live Chart</h2>
+              <h2 style={{ color: "#fff", fontSize: "18px", fontWeight: 600 }}>WOLV Token</h2>
               <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", marginTop: "2px" }}>
-                WOLV/BNB trading live on PancakeSwap V2 · BNB Smart Chain
+                WOLV/BNB live on PancakeSwap V2 · BNB Smart Chain
               </p>
             </div>
             <a
@@ -428,32 +428,48 @@ export default function DashboardPage() {
             </a>
           </div>
           <div style={{
-            background: "rgba(255,255,255,0.03)", border: "1px solid rgba(0,168,150,0.2)", borderRadius: "20px",
-            overflow: "hidden",
-            boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.05), 0 20px 50px rgba(0,0,0,0.25)",
+            background: "rgba(255,255,255,0.03)", border: "1px solid rgba(0,168,150,0.2)",
+            borderRadius: "20px", padding: "24px",
+            boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.05)",
           }}>
-            <iframe
-              src="https://dexscreener.com/bsc/0xe0167279aef7bf4ad313d261da82e8366822270c?embed=1&theme=dark&trades=0&info=1"
-              style={{ width: "100%", height: "360px", border: "none", display: "block" }}
-              title="WOLV/BNB Live Chart"
-              loading="lazy"
-            />
-          </div>
-          <div style={{ display: "flex", gap: "8px", marginTop: "12px", flexWrap: "wrap" }}>
-            {[
-              { label: "📊 DEXScreener", href: "https://dexscreener.com/bsc/0xe0167279aef7bf4ad313d261da82e8366822270c" },
-              { label: "🔍 DEXTools", href: "https://www.dextools.io/app/en/bnb/pair-explorer/0xe0167279aef7bf4ad313d261da82e8366822270c" },
-              { label: "🔎 BscScan", href: "https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c" },
-            ].map(({ label, href }) => (
-              <a key={label} href={href} target="_blank" rel="noopener noreferrer" style={{
-                color: "rgba(255,255,255,0.5)", fontSize: "12px", textDecoration: "none",
-                padding: "5px 12px", borderRadius: "6px",
-                border: "1px solid rgba(255,255,255,0.08)",
-                background: "rgba(255,255,255,0.03)",
-              }}>
-                {label}
-              </a>
-            ))}
+            {/* Token stats */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "12px", marginBottom: "20px" }}>
+              {[
+                { label: "Contract", value: "0xe016...270c", href: "https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c" },
+                { label: "Network", value: "BNB Smart Chain", href: null },
+                { label: "DEX", value: "PancakeSwap V2", href: null },
+                { label: "Holders", value: "231+", href: "https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c#balances" },
+                { label: "Max Supply", value: "1,000,000,000", href: null },
+                { label: "Status", value: "✅ Verified", href: "https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c#code" },
+              ].map(({ label, value, href }) => (
+                <div key={label} style={{ background: "rgba(255,255,255,0.04)", borderRadius: "12px", padding: "12px 14px" }}>
+                  <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "4px" }}>{label}</div>
+                  {href
+                    ? <a href={href} target="_blank" rel="noopener noreferrer" style={{ color: "#5eead4", fontSize: "13px", fontWeight: 500, textDecoration: "none" }}>{value} ↗</a>
+                    : <div style={{ color: "#fff", fontSize: "13px", fontWeight: 500 }}>{value}</div>
+                  }
+                </div>
+              ))}
+            </div>
+            {/* CTA links */}
+            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+              {[
+                { label: "🥞 Buy on PancakeSwap", href: "https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c", primary: true },
+                { label: "📊 DEXScreener", href: "https://dexscreener.com/bsc/0xe0167279aef7bf4ad313d261da82e8366822270c", primary: false },
+                { label: "🔍 DEXTools", href: "https://www.dextools.io/app/en/bnb/pair-explorer/0xe0167279aef7bf4ad313d261da82e8366822270c", primary: false },
+                { label: "🔎 BscScan", href: "https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c", primary: false },
+              ].map(({ label, href, primary }) => (
+                <a key={label} href={href} target="_blank" rel="noopener noreferrer" style={{
+                  color: primary ? "#0a0f1e" : "rgba(255,255,255,0.6)",
+                  fontSize: "12px", fontWeight: primary ? 700 : 500,
+                  textDecoration: "none", padding: "8px 14px", borderRadius: "8px",
+                  background: primary ? "linear-gradient(135deg, #00a896, #1a3a8f)" : "rgba(255,255,255,0.05)",
+                  border: primary ? "none" : "1px solid rgba(255,255,255,0.08)",
+                }}>
+                  {label}
+                </a>
+              ))}
+            </div>
           </div>
         </motion.section>
 

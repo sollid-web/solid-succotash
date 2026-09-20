@@ -18,7 +18,7 @@ const NAV_LINKS = [
   { href: "/dashboard", label: "Overview" },
   { href: "/dashboard/deposit", label: "Deposit" },
   { href: "/dashboard/withdraw", label: "Withdraw" },
-  { href: "/dashboard/new-investment", label: "Invest" },
+  { href: "/dashboard/new-investment", label: "Stake" },
   { href: "/dashboard/stake", label: "⬡ Stake WOLV" },
   { href: "/dashboard/wolv-token", label: "WOLV Token" },
   { href: "/dashboard/transactions", label: "Transactions" },
@@ -33,6 +33,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
   const [user, setUser] = useState<any>(null);
   const [kycVerified, setKycVerified] = useState<boolean | null>(null);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [notifications, setNotifications] = useState<any[]>([]);
   const notificationsRef = useRef<HTMLDivElement | null>(null);
@@ -306,14 +307,20 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
           box-shadow: 0 12px 40px rgba(2,6,23,0.6);
           z-index: 100;
         }
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
+          .desktop-nav { display: none !important; }
+          .mobile-nav-toggle { display: flex !important; }
           .header-bar { padding: 10px 0; }
           .user-chip { padding: 6px 10px; }
           .user-name { display: none; }
           .notification-button { gap: 0; padding: 8px; }
           .logout-button { padding: 8px 10px; font-size: 11px; }
           .notification-dropdown { width: calc(100vw - 32px); max-width: 360px; right: 0; }
-          .nav-link { padding: 12px 10px; font-size: 12px; }
+        }
+        @media (min-width: 769px) {
+          .desktop-nav { display: flex !important; }
+          .mobile-nav-toggle { display: none !important; }
+          .mobile-nav-dropdown { display: none !important; }
         }
         .shell-card {                                                
           background: rgba(255,255,255,0.04);                        
@@ -402,7 +409,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
             }}>W</div>
             <div>
               <div style={{ color: "#fff", fontWeight: 700, fontSize: "16px", lineHeight: 1.2 }}>WolvCapital</div>
-              <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", letterSpacing: "1px" }}>INVESTMENT DASHBOARD</div>
+              <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", letterSpacing: "1px" }}>STAKING DASHBOARD</div>
             </div>
           </div>
 
@@ -472,39 +479,80 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
         </div>
       </header>                                            
 
-      {/* Nav */}
-      <nav style={{ background: "rgba(10,15,30,0.8)", borderBottom: "1px solid rgba(255,255,255,0.05)", backdropFilter: "blur(10px)" }}>                                                 
-        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 16px", overflowX: "auto", display: "flex", alignItems: "center" }}>
-          {NAV_LINKS.map(link => {
-            const isActive = link.href === "/dashboard" ? pathname === "/dashboard" : pathname?.startsWith(link.href);
-            return (
-              <Link key={link.href} href={link.href} className={`nav-link ${isActive ? "active" : ""}`} style={{
-                padding: "14px 16px", fontSize: "13px", fontWeight: isActive ? 600 : 400,
-                color: isActive ? "#fff" : "rgba(255,255,255,0.4)",
-                position: "relative", whiteSpace: "nowrap",
-                borderBottom: isActive ? "2px solid #00a896" : "2px solid transparent",
-              }}>
-                {link.label}
-              </Link>
-            );
-          })}                                                        
-          
-          {(user?.is_staff || user?.is_superuser) && (
-            <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-              <Link href="/admin/withdrawals" style={{
-                padding: "14px 16px", fontSize: "13px", fontWeight: 400,
-                color: "rgba(255,255,255,0.4)", whiteSpace: "nowrap",
-                borderBottom: "2px solid transparent",
-              }}>Admin</Link>
-              <Link href="/admin/campaigns" style={{
-                padding: "14px 16px", fontSize: "13px", fontWeight: 400,
-                color: "rgba(255,255,255,0.4)", whiteSpace: "nowrap",
-                borderBottom: "2px solid transparent",
-              }}>Campaigns</Link>
-            </div>
-          )}
-                                                  
+      {/* Nav — desktop horizontal, mobile hamburger */}
+      <nav style={{ background: "rgba(10,15,30,0.9)", borderBottom: "1px solid rgba(255,255,255,0.05)", backdropFilter: "blur(10px)", position: "sticky", top: "65px", zIndex: 40 }}>
+        <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          {/* Desktop nav */}
+          <div className="desktop-nav" style={{ display: "flex", alignItems: "center", overflowX: "auto", flex: 1 }}>
+            {NAV_LINKS.map(link => {
+              const isActive = link.href === "/dashboard" ? pathname === "/dashboard" : pathname?.startsWith(link.href);
+              return (
+                <Link key={link.href} href={link.href} className={`nav-link ${isActive ? "active" : ""}`} style={{
+                  padding: "14px 16px", fontSize: "13px", fontWeight: isActive ? 600 : 400,
+                  color: isActive ? "#fff" : "rgba(255,255,255,0.4)",
+                  position: "relative", whiteSpace: "nowrap",
+                  borderBottom: isActive ? "2px solid #00a896" : "2px solid transparent",
+                }}>
+                  {link.label}
+                </Link>
+              );
+            })}
+            {(user?.is_staff || user?.is_superuser) && (
+              <>
+                <Link href="/admin/withdrawals" style={{ padding: "14px 16px", fontSize: "13px", fontWeight: 400, color: "rgba(255,255,255,0.4)", whiteSpace: "nowrap", borderBottom: "2px solid transparent" }}>Admin</Link>
+                <Link href="/admin/campaigns" style={{ padding: "14px 16px", fontSize: "13px", fontWeight: 400, color: "rgba(255,255,255,0.4)", whiteSpace: "nowrap", borderBottom: "2px solid transparent" }}>Campaigns</Link>
+              </>
+            )}
+          </div>
+
+          {/* Mobile hamburger button */}
+          <button
+            onClick={() => setMobileNavOpen(o => !o)}
+            className="mobile-nav-toggle"
+            aria-label="Toggle navigation"
+            style={{ background: "transparent", border: "none", color: "#fff", cursor: "pointer", padding: "14px 0 14px 16px", display: "none", flexShrink: 0 }}
+          >
+            {mobileNavOpen
+              ? <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              : <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+            }
+          </button>
         </div>
+
+        {/* Mobile nav dropdown */}
+        {mobileNavOpen && (
+          <div className="mobile-nav-dropdown" style={{
+            background: "rgba(10,15,30,0.98)", borderTop: "1px solid rgba(255,255,255,0.06)",
+            padding: "8px 16px 16px",
+          }}>
+            {NAV_LINKS.map(link => {
+              const isActive = link.href === "/dashboard" ? pathname === "/dashboard" : pathname?.startsWith(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileNavOpen(false)}
+                  style={{
+                    display: "block", padding: "12px 16px", borderRadius: "10px",
+                    fontSize: "14px", fontWeight: isActive ? 600 : 400,
+                    color: isActive ? "#fff" : "rgba(255,255,255,0.6)",
+                    background: isActive ? "rgba(0,168,150,0.1)" : "transparent",
+                    borderLeft: isActive ? "3px solid #00a896" : "3px solid transparent",
+                    marginBottom: "2px",
+                  }}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+            {(user?.is_staff || user?.is_superuser) && (
+              <>
+                <Link href="/admin/withdrawals" onClick={() => setMobileNavOpen(false)} style={{ display: "block", padding: "12px 16px", borderRadius: "10px", fontSize: "14px", color: "rgba(255,255,255,0.6)", marginBottom: "2px" }}>Admin</Link>
+                <Link href="/admin/campaigns" onClick={() => setMobileNavOpen(false)} style={{ display: "block", padding: "12px 16px", borderRadius: "10px", fontSize: "14px", color: "rgba(255,255,255,0.6)" }}>Campaigns</Link>
+              </>
+            )}
+          </div>
+        )}
       </nav>
 
       {/* Content */}
@@ -517,7 +565,7 @@ export default function DashboardShell({ children, banner }: DashboardShellProps
 
       {/* Footer */}
       <footer style={{ borderTop: "1px solid rgba(255,255,255,0.05)", padding: "24px 16px", textAlign: "center" }}>
-        <p style={{ color: "rgba(255,255,255,0.2)", fontSize: "12px" }}>© 2024 WolvCapital · Secure Investment Platform</p>
+        <p style={{ color: "rgba(255,255,255,0.2)", fontSize: "12px" }}>© 2026 WolvCapital · Web3 Staking Protocol · BNB Smart Chain</p>
       </footer>
     </div>
   );

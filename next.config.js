@@ -54,6 +54,10 @@ const nextConfig = {
 
   async redirects() {
     return [
+      // Consolidated blog topics: keep the stronger pillar URL.
+      { source: '/blog/wolvcapital-platform-review-2026', destination: '/blog/wolvcapital-review-2026', permanent: true },
+      { source: '/blog/passive-income-crypto-staking-realistic-2026', destination: '/blog/passive-income-crypto-staking-2026', permanent: true },
+      { source: '/blog/regulated-crypto-investment-platforms-2026', destination: '/blog/crypto-investment-platform-comparison-2026', permanent: true },
       // Plans pages are now gated — redirect any direct links to login
       { source: '/plans',          destination: '/accounts/login', permanent: false },
       { source: '/plans/:path*',   destination: '/accounts/login', permanent: false },

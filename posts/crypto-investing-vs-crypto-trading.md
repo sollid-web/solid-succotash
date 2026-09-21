@@ -1,6 +1,6 @@
 ---
 title: "Crypto Investing vs Crypto Trading"
-description: "A definitive comparison between long-term crypto investing and short-term trading, designed to help beginners choose the most sustainable path."
+description: "Compare crypto investing and crypto trading by time horizon, decision frequency, emotional pressure, and risk so you can choose an approach that fits your goals."
 publishedAt: "2025-06-25"
 updatedAt: "2026-03-15"
 ---

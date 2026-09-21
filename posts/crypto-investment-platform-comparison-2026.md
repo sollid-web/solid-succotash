@@ -1,6 +1,6 @@
 ---
 title: "Regulated Crypto Investment Platforms 2026: What to Look For"
-description: "Comparing regulated crypto investment platforms in 2026. Learn what KYC, AML, FinCEN registration, and on-chain transparency mean for your digital asset investment security."
+description: "Use this 2026 comparison checklist to evaluate crypto investment platforms by custody, fees, withdrawals, transparency, and the evidence behind their security claims."
 publishedAt: "2026-05-08"
 updatedAt: "2026-05-08"
 coverImage: "/og-images/about-og.png"

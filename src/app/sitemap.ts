@@ -5,7 +5,12 @@ import { getSiteUrl } from '@/lib/site-config'
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = getSiteUrl()
   const now = new Date().toISOString()
-  const blogPosts = getAllPostsMeta()
+  const redirectedBlogSlugs = new Set([
+    'wolvcapital-platform-review-2026',
+    'passive-income-crypto-staking-realistic-2026',
+    'regulated-crypto-investment-platforms-2026',
+  ])
+  const blogPosts = getAllPostsMeta().filter((post) => !redirectedBlogSlugs.has(post.slug))
 
   return [
     // ── Core ──────────────────────────────────────────────────────

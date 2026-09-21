@@ -60,6 +60,8 @@ We are building WolvCapital for people who actually want to [compound](https://w
 
 Compounding is not sexy. It's repetitive. It's saying no. It's avoiding mistakes that do not look like mistakes in the moment.
 
+That long view is the philosophical basis for our approach. Read [Why Long-Term Thinking Matters](/blog/why-long-term-thinking-matters) for the investor perspective behind it.
+
 And the people who do that well usually share a few traits:
 
 *   They care about [downside](https://gqg.com/downside-risk-management/), not just upside.

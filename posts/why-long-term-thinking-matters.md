@@ -7,6 +7,8 @@ updatedAt: "2026-02-06"
 
 Short-term thinking creates urgency. Long-term thinking creates stability.
 
+This principle also shapes WolvCapital's founding philosophy. Read [Why We Built WolvCapital](/blog/why-we-built-wolvcapital) to see how the long view informs the firm's approach to clarity, risk, and trust.
+
 ## Benefits of long-term thinking
 
 - smoother decision-making

@@ -1,7 +1,10 @@
 'use client'
 
+import { useWolvPrice } from '@/hooks/useWolvPrice'
+
 export default function WolvChartSection() {
   const CONTRACT = '0xe0167279aef7bf4ad313d261da82e8366822270c'
+  const { priceUsd, loading, error } = useWolvPrice()
 
   return (
     <section style={{
@@ -36,21 +39,21 @@ export default function WolvChartSection() {
         {/* Token info grid */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', marginBottom: '32px' }}>
           {[
+            { label: 'Live Price', value: loading ? 'Loading...' : error || !priceUsd ? 'View on DEX ↗' : `$${priceUsd.toFixed(10).replace(/\.?0+$/, '')}`, highlight: true },
             { label: 'Network', value: 'BNB Smart Chain' },
             { label: 'DEX', value: 'PancakeSwap V2' },
             { label: 'Holders', value: '231+' },
-            { label: 'Contract', value: 'Verified ✓' },
             { label: 'Max Supply', value: '1,000,000,000' },
-            { label: 'Token Type', value: 'BEP-20' },
-          ].map(({ label, value }) => (
+            { label: 'Status', value: 'Verified ✓' },
+          ].map(({ label, value, highlight }) => (
             <div key={label} style={{
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.08)',
+              background: highlight ? 'rgba(0,168,150,0.08)' : 'rgba(255,255,255,0.04)',
+              border: highlight ? '1px solid rgba(0,168,150,0.25)' : '1px solid rgba(255,255,255,0.08)',
               borderRadius: '14px',
               padding: '16px 20px',
             }}>
               <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{label}</div>
-              <div style={{ color: '#fff', fontSize: '14px', fontWeight: 700 }}>{value}</div>
+              <div style={{ color: highlight ? '#5eead4' : '#fff', fontSize: highlight ? '15px' : '14px', fontWeight: 700, fontFamily: highlight ? 'monospace' : 'inherit' }}>{value}</div>
             </div>
           ))}
         </div>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import dynamic from 'next/dynamic';
 import { motion } from "framer-motion";
+import { useWolvPrice, usdToWolvTokens, formatWolv } from '@/hooks/useWolvPrice';
 
 const ReferralSummaryCard = dynamic(() => import('@/components/ReferralSummaryCard'), { ssr: false });
 import { apiFetch } from "@/lib/api";
@@ -118,6 +119,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [now] = useState(() => new Date());
+  const wolvPrice = useWolvPrice();
 
   useEffect(() => {
     let cancelled = false;
@@ -361,8 +363,10 @@ export default function DashboardPage() {
           />
           <MetricCard
             label="WOLV Rewards"
-            value={money(lockedRoi)}
-            sub="Rewards earned"
+            value={`${formatWolv(usdToWolvTokens(lockedRoi))} WOLV`}
+            sub={wolvPrice.priceUsd
+              ? `≈ $${(usdToWolvTokens(lockedRoi) * wolvPrice.priceUsd).toFixed(4)} at market`
+              : "Loading market price..."}
             icon="◈"
             accent="#f59e0b"
             loading={loading}
@@ -432,7 +436,24 @@ export default function DashboardPage() {
             borderRadius: "20px", padding: "24px",
             boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.05)",
           }}>
-            {/* Token stats */}
+          {/* Live price badge */}
+          <div style={{
+            background: "rgba(0,168,150,0.08)", border: "1px solid rgba(0,168,150,0.2)",
+            borderRadius: "12px", padding: "12px 16px", marginBottom: "16px",
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+          }}>
+            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "12px" }}>
+              WOLV Market Price <span style={{ color: "rgba(255,255,255,0.25)", fontSize: "10px" }}>(DEX live)</span>
+            </div>
+            <div style={{ color: "#5eead4", fontWeight: 700, fontSize: "16px", fontFamily: "monospace" }}>
+              {wolvPrice.loading
+                ? "Loading..."
+                : wolvPrice.error || !wolvPrice.priceUsd
+                ? <a href="https://dexscreener.com/bsc/0xe0167279aef7bf4ad313d261da82e8366822270c" target="_blank" rel="noopener noreferrer" style={{ color: "#5eead4" }}>View on DEXScreener ↗</a>
+                : `$${wolvPrice.priceUsd.toFixed(10).replace(/\.?0+$/, '')}`
+              }
+            </div>
+          </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "12px", marginBottom: "20px" }}>
               {[
                 { label: "Contract", value: "0xe016...270c", href: "https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c" },

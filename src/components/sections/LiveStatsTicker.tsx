@@ -109,7 +109,7 @@ export default function LiveStatsTicker() {
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <Pulse />
-            <span className="text-[10px] uppercase tracking-widest text-teal-400 font-bold">Live Chain Data</span>
+            <span className="text-[10px] uppercase tracking-widest text-teal-400 font-bold">Live reference data</span>
           </div>
           {lastUpdated && (
             <span className="text-[10px] text-slate-600 font-mono">Updated {lastUpdated}</span>
@@ -130,7 +130,7 @@ export default function LiveStatsTicker() {
           />
           <StatItem
             label="Holders"
-            value={chain ? `${chain.holders.toLocaleString()}+` : '231+'}
+            value={chain ? chain.holders.toLocaleString() : '—'}
             highlight
           />
           <StatItem
@@ -140,7 +140,7 @@ export default function LiveStatsTicker() {
           />
           <StatItem
             label="Contract"
-            value="Verified ✓"
+            value="Public reference"
           />
           <div className="flex flex-col items-center gap-0.5 px-4 sm:px-6">
             <span className="text-[10px] uppercase tracking-widest text-slate-500 font-semibold">DEX</span>
@@ -154,6 +154,7 @@ export default function LiveStatsTicker() {
             </a>
           </div>
         </div>
+        <p className="mt-3 text-center text-[10px] text-slate-500">Sources: DexScreener and the public chain-stats endpoint. Values are informational, may be delayed, and are not proof of reserves, performance, or security. <a href="/metrics-methodology" className="font-semibold underline hover:text-slate-300">Methodology and limits</a>.</p>
       </div>
     </div>
   )

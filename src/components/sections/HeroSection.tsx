@@ -49,7 +49,7 @@ function formatTimeLeft(seconds: number) {
 }
 
 
-// Entrance stagger: headline -> description -> presale badge -> APY cards -> CTA buttons.
+// Entrance stagger: headline -> description -> market reference -> CTA buttons.
 const containerVariants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
@@ -119,7 +119,7 @@ export default function HeroSection() {
       >
         <motion.div variants={itemVariants}>
           <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-blue-300">
-            Stake · Earn WOLV · Trade On-Chain
+            Public token data · Platform terms · Risk information
           </p>
 
           <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
@@ -163,13 +163,13 @@ export default function HeroSection() {
             <div className="flex justify-between items-center text-xs">
               <span className="flex items-center gap-2 font-semibold text-teal-400">
                 <span className="h-2 w-2 rounded-full bg-teal-400 animate-pulse" />
-                🚀 WOLV Now Live on PancakeSwap
+                Public WOLV market reference
               </span>
               <span className="text-slate-400">BSC · V2</span>
             </div>
             <div className="flex justify-between items-center text-[11px] text-slate-400">
-              <span>Contract verified · 231+ holders · BNB Chain</span>
-              <span className="text-teal-400 font-semibold">Buy WOLV →</span>
+              <span>Check the address and current market data independently</span>
+              <span className="text-teal-400 font-semibold">Open market reference →</span>
             </div>
           </a>
         </motion.div>
@@ -191,12 +191,12 @@ export default function HeroSection() {
             rel="noopener noreferrer"
             className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition shadow-lg shadow-teal-500/20 text-center"
           >
-            Buy WOLV on PancakeSwap →
+            Open market reference →
           </a>
         </motion.div>
 
-        <Link href="/accounts/signup" className="block text-center text-sm text-blue-300 hover:text-blue-200 underline underline-offset-2">
-          {t('hero.button.openAccount')} →
+        <Link href="/verification-pack" className="block text-center text-sm text-blue-300 hover:text-blue-200 underline underline-offset-2">
+          Review the verification pack →
         </Link>
 
         {/* Trust badges */}
@@ -204,7 +204,7 @@ export default function HeroSection() {
           <span>{t('hero.badge.encryption')}</span>
           <span>{t('hero.badge.custody')}</span>
           <span>{t('hero.badge.fincen')}</span>
-          <span>BNB CHAIN VERIFIED</span>
+          <span>PUBLIC CONTRACT REFERENCES</span>
         </div>
       </motion.div>
     </section>

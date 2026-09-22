@@ -10,12 +10,12 @@ import OrganizationJsonLd from '@/components/OrganizationJsonLd'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: 'WolvCapital — On-Chain Staking & WOLV Token | BNB Smart Chain',
-  description: 'WolvCapital is a Web3 staking protocol on BNB Smart Chain. Review staking terms, public contract references, token data, and risks before participating.',
+  title: 'WolvCapital — WOLV Token Information | BNB Smart Chain',
+  description: 'Review WOLV token information, public contract references, platform terms, and digital-asset risks on BNB Smart Chain.',
   alternates: { canonical: '/' },
   openGraph: {
     siteName: 'WolvCapital',
-    images: [{ url: '/og-images/home-og.png', width: 1200, height: 630, alt: 'WolvCapital on-chain staking and WOLV token' }],
+    images: [{ url: '/og-images/home-og.png', width: 1200, height: 630, alt: 'WolvCapital WOLV token information and risk disclosures' }],
     url: '/',
     type: 'website',
   },

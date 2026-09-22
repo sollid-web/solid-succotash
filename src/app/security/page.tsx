@@ -6,13 +6,13 @@ import { Clock, Database, FileCheck, Lock, Server, Shield, ShieldCheck, Wallet }
 export const metadata: Metadata = {
   title: "Security — WolvCapital | On-Chain Transparency and Account Controls",
   description:
-    "Review WolvCapital account controls, KYC/AML processes, public contract references, timelock information, and smart-contract audit status.",
+    "Review WolvCapital account controls, public contract references, platform terms, and risk information.",
 };
 
 const CONTRACTS = [
   { name: "WOLV Token",       address: "0xe0167279aef7bf4ad313d261da82e8366822270c", desc: "Fixed supply · No mint · BEP-20", url: "https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c" },
   { name: "Reward Pool",      address: "0x7310f3e07627ce98246973e068bf2ff294f84e5f", desc: "48hr timelock · Treasury funded",  url: "https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c?a=0x7310f3e07627ce98246973e068bf2ff294f84e5f" },
-  { name: "Staking Contract", address: "0x7cd22f3c08b4195225da7d043cbe00da118d31ec", desc: "Chainlink oracle · Auditable",      url: "https://bscscan.com/address/0x7cd22f3c08b4195225da7d043cbe00da118d31ec#code" },
+  { name: "Staking Contract", address: "0x7cd22f3c08b4195225da7d043cbe00da118d31ec", desc: "Public contract reference",      url: "https://bscscan.com/address/0x7cd22f3c08b4195225da7d043cbe00da118d31ec#code" },
 ];
 
 export default function SecurityPage(): JSX.Element {
@@ -24,7 +24,7 @@ export default function SecurityPage(): JSX.Element {
         <div className="max-w-5xl mx-auto px-6 text-center">
           <div className="inline-flex items-center gap-2 rounded-full bg-white border border-[#bfdbfe] px-4 py-2 text-xs font-semibold text-[#1E3A8A] mb-4">
             <ShieldCheck className="h-4 w-4" />
-            Security & Fund Protection
+            Security information
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0F172A] mb-4" style={{ letterSpacing: '-0.02em' }}>
             Security and On-Chain Transparency
@@ -34,10 +34,10 @@ export default function SecurityPage(): JSX.Element {
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { label: "256-bit Encryption", icon: Lock },
-              { label: "KYC & AML", icon: FileCheck },
+              { label: "HTTPS transport", icon: Lock },
+              { label: "Account setup", icon: FileCheck },
               { label: "On-Chain Contracts", icon: Shield },
-              { label: "24/7 Monitoring", icon: Clock },
+              { label: "Activity review", icon: Clock },
             ].map(({ label, icon: Icon }) => (
               <div key={label} className="rounded-xl bg-white border border-[#bfdbfe] px-3 py-4 text-sm font-semibold text-[#1E3A8A] text-center">
                 <Icon className="h-4 w-4 mx-auto mb-2 text-[#2A52BE]" />
@@ -97,10 +97,10 @@ export default function SecurityPage(): JSX.Element {
           <div className="mt-6 rounded-xl bg-[#2A52BE]/10 border border-[#2A52BE]/30 px-6 py-5 flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="flex-1">
               <div className="text-white font-semibold text-sm mb-1">Smart Contract Audit</div>
-              <div className="text-[#94A3B8] text-xs">No full independent third-party security-audit report is published on this page at present. All contract source code is publicly readable on BSCScan; the audit status will be updated when a report is available.</div>
+              <div className="text-[#94A3B8] text-xs">No independent security-audit report is represented on this page. Public contract references are provided for information only; source visibility does not establish safety or eliminate risk.</div>
             </div>
             <div className="flex-shrink-0 px-4 py-2 rounded-lg bg-[#f59e0b]/15 border border-[#f59e0b]/30 text-[#f59e0b] text-xs font-bold">
-              Independent audit status: pending publication
+              Audit evidence: not published here
             </div>
           </div>
         </div>
@@ -115,7 +115,7 @@ export default function SecurityPage(): JSX.Element {
               Multi-Layer Protection
             </h2>
             <p className="text-[#64748B] text-sm max-w-xl mx-auto">
-              Beyond the blockchain, WolvCapital describes layered platform controls covering account access, fund handling, KYC/AML processes, data protection, and infrastructure.
+              Beyond the blockchain, review the platform terms, privacy information, account settings, and support process. Do not treat this page as a certification or guarantee.
             </p>
           </div>
 
@@ -132,14 +132,14 @@ export default function SecurityPage(): JSX.Element {
                 bullets: ["On-chain reward pool — visible to everyone", "Manual withdrawal validation", "Transparent transaction records", "48hr timelock on pool withdrawals"],
               },
               {
-                title: "KYC & Anti-Fraud",
+                title: "Account and activity review",
                 icon: Shield,
-                bullets: ["KYC verification required for withdrawals", "AML compliance monitoring", "Anomaly detection & human oversight", "Suspicious activity reporting"],
+                bullets: ["Eligibility information may be requested", "Activity may be reviewed under platform rules", "Contact support about unusual activity", "Review the current terms before transacting"],
               },
               {
                 title: "Data Security & Privacy",
                 icon: Database,
-                bullets: ["256-bit SSL encryption in transit", "Encrypted data at rest", "Restricted internal data access", "GDPR-aligned privacy policy"],
+                bullets: ["HTTPS transport", "Review the privacy notice", "Use strong account credentials", "Review current data-handling terms"],
               },
               {
                 title: "Infrastructure",
@@ -178,7 +178,7 @@ export default function SecurityPage(): JSX.Element {
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-2xl font-extrabold text-[#0F172A] mb-3" style={{ letterSpacing: '-0.02em' }}>Transparency Commitment</h2>
           <p className="text-sm sm:text-base text-[#475569] max-w-2xl mx-auto mb-8">
-            WolvCapital maintains detailed internal records of all account activity and transactions. All smart contracts are publicly verifiable on BSCScan. If you notice any suspicious activity, contact our security team immediately.
+            Review the current platform terms and contact support if you notice inaccurate information, an account issue, or suspicious activity. Public contract data is informational and does not guarantee an outcome.
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Link href="/contact" className="inline-flex items-center justify-center rounded-[7px] px-6 py-3 text-sm font-bold bg-[#2A52BE] text-white hover:bg-[#244bb0] transition">

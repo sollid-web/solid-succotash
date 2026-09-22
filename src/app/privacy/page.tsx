@@ -65,7 +65,7 @@ export default function PrivacyPage() {
         <div style={{ position: 'relative', zIndex: 1, borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(12px)', display: 'flex', justifyContent: 'center', gap: 0 }}>
           {[
             { label: 'Encryption', value: 'AES-256' },
-            { label: 'Compliance', value: 'GDPR · CCPA' },
+            { label: 'Privacy frameworks', value: 'Review current privacy notice' },
             { label: 'Data Retention', value: '7 Years' },
             { label: 'Auth', value: 'MFA Enforced' },
           ].map((s, i) => (
@@ -100,7 +100,7 @@ export default function PrivacyPage() {
               <ul style={{ margin: 0, paddingLeft: '18px' }}>
                 <li style={liStyle}><strong style={{ color: '#ffffff' }}>Identity Information:</strong> Full name, date of birth, nationality, and government-issued identification</li>
                 <li style={liStyle}><strong style={{ color: '#ffffff' }}>Contact Information:</strong> Email address, phone number, and residential address</li>
-                <li style={liStyle}><strong style={{ color: '#ffffff' }}>Verification Documents:</strong> Passport, driver's license, or other KYC documentation</li>
+                <li style={liStyle}><strong style={{ color: '#ffffff' }}>Account information:</strong> Passport, driver's license, or other account documents</li>
               </ul>
               <h3 style={h3Style}>Financial Data</h3>
               <ul style={{ margin: 0, paddingLeft: '18px' }}>
@@ -127,7 +127,7 @@ export default function PrivacyPage() {
               <h2 style={h2Style}>2. How We Use Your Data</h2>
               <ul style={{ margin: 0, paddingLeft: '18px' }}>
                 <li style={liStyle}><strong style={{ color: '#ffffff' }}>Service Provision:</strong> To provide our digital investment platform and process transactions</li>
-                <li style={liStyle}><strong style={{ color: '#ffffff' }}>Compliance:</strong> To comply with AML and KYC requirements</li>
+                <li style={liStyle}><strong style={{ color: '#ffffff' }}>Data governance:</strong> To support account administration, fraud prevention, and platform operations</li>
                 <li style={liStyle}><strong style={{ color: '#ffffff' }}>Security:</strong> To enhance platform security and prevent fraud</li>
                 <li style={liStyle}><strong style={{ color: '#ffffff' }}>Communication:</strong> To notify you about account activity and service updates</li>
                 <li style={liStyle}><strong style={{ color: '#ffffff' }}>Customer Support:</strong> To respond to your inquiries and provide assistance</li>

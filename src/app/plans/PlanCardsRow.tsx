@@ -39,9 +39,9 @@ export default function PlanCardsRow({ plans }: { plans: readonly Plan[] }) {
             <span style={{ fontSize: '11px', fontWeight: 700, color: plan.color, letterSpacing: '0.1em' }}>{plan.name.toUpperCase()}</span>
           </div>
 
-          {/* APY */}
-          <div style={{ fontSize: '28px', fontWeight: 800, color: '#ffffff', lineHeight: 1, marginBottom: '4px' }}>{plan.apy}</div>
-          <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginBottom: '16px' }}>{plan.duration} · {plan.min}–{plan.max}</div>
+          {/* Current terms */}
+          <div style={{ fontSize: '20px', fontWeight: 800, color: '#ffffff', lineHeight: 1.2, marginBottom: '4px' }}>Current terms</div>
+          <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)', marginBottom: '16px' }}>Review current lock and funding terms before use</div>
 
           <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.65)', lineHeight: 1.65, margin: '0 0 8px', flex: 1 }}>{plan.summary}</p>
           <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', margin: '0 0 16px' }}>{plan.fit}</p>

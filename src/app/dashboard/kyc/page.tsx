@@ -842,7 +842,7 @@ export default function KYCPage() {
       <div className="bg-gradient-to-br from-[#0b2f6b] via-[#1a3f7f] to-[#2563eb] rounded-2xl p-6 text-white">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <h1 className="text-2xl font-bold">KYC Verification</h1>
+            <h1 className="text-2xl font-bold">Account information</h1>
             <p className="text-blue-200 text-sm mt-1">Complete your identity verification to unlock full account access</p>
           </div>
           <div className="text-right flex-shrink-0">

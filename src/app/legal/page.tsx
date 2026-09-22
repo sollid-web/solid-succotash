@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Legal & Compliance Overview — WolvCapital',
+  title: 'Legal & Disclosures Overview — WolvCapital',
   description: 'WolvCapital legal and compliance framework. FinCEN registered, KYC/AML compliant. Access Terms of Service, Privacy Policy, Risk Disclosure, and Legal Disclaimer.',
   alternates: { canonical: 'https://www.wolvcapital.com/legal' },
   openGraph: {
-    title: 'Legal & Compliance — WolvCapital',
+    title: 'Legal & Disclosures — WolvCapital',
     description: 'Full legal documentation for WolvCapital digital investment platform.',
     url: 'https://www.wolvcapital.com/legal',
     type: 'website',
@@ -21,18 +21,18 @@ export default function LegalPage() {
     <div className="min-h-screen bg-white">
       <main className="min-h-screen bg-white">
         <section className="max-w-2xl mx-auto py-16 px-4">
-          <h1 className="text-4xl font-bold mb-6">Legal & Compliance Overview</h1>
+          <h1 className="text-4xl font-bold mb-6">Legal & Disclosures Overview</h1>
           
           {/* Blockquote replacing image */}
           <div className="mb-8 border-l-4 border-brand-primary pl-6 py-4">
             <blockquote className="text-lg italic text-gray-700 mb-2">
               "WolvCapital is committed to full regulatory transparency. All legal documents are available upon request and disclosed before account activation."
             </blockquote>
-            <p className="text-sm text-gray-600">— WolvCapital Compliance Team</p>
+            <p className="text-sm text-gray-600">— WolvCapital Disclosures Team</p>
           </div>
           
           <p className="text-lg text-gray-700 mb-8">WolvCapital is committed to maintaining high standards of operational transparency, data protection, and responsible investment practices. Our legal and compliance framework is designed to protect investors, ensure regulatory adherence, and foster trust in digital asset management.</p>
-          <h2 className="text-2xl font-semibold mb-4">Compliance Focus Areas</h2>
+          <h2 className="text-2xl font-semibold mb-4">Disclosures Focus Areas</h2>
           <ul className="list-disc pl-6 mb-6 text-gray-700 space-y-2">
             <li>Data Protection & Privacy (GDPR, CCPA)</li>
             <li>Secure Asset Handling & Custody</li>
@@ -40,7 +40,7 @@ export default function LegalPage() {
             <li>Responsible Communication & Disclosure</li>
             <li>User Identity & Account Protection (AML/KYC)</li>
             <li>Manual Off-Chain Review for All Transactions</li>
-            <li>Regulatory Compliance (FinCEN MSB, AML/KYC)</li>
+            <li>Regulatory Disclosures (FinCEN MSB, AML/KYC)</li>
           </ul>
           <h2 className="text-2xl font-semibold mb-4">Key Legal Documents</h2>
           <ul className="list-disc pl-6 mb-6 text-gray-700 space-y-2">

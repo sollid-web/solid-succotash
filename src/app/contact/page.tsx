@@ -32,11 +32,11 @@ export default function ContactPage() {
         <div style={{ maxWidth: '680px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0,168,150,0.1)', border: '1px solid rgba(0,168,150,0.3)', borderRadius: '4px', padding: '4px 12px', marginBottom: '16px' }}>
             <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00a896' }} />
-            <span style={{ fontSize: '11px', color: '#00c9b1', fontWeight: 700, letterSpacing: '0.12em' }}>INVESTOR SUPPORT & COMPLIANCE</span>
+            <span style={{ fontSize: '11px', color: '#00c9b1', fontWeight: 700, letterSpacing: '0.12em' }}>CUSTOMER SUPPORT & CONTACT</span>
           </div>
           <h1 style={{ fontSize: 'clamp(32px,6vw,52px)', fontWeight: 800, color: '#ffffff', margin: '0 0 16px', lineHeight: 1.1, textShadow: '0 0 60px rgba(0,168,150,0.25)' }}>Contact WolvCapital</h1>
           <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.75, margin: 0, maxWidth: '520px', marginLeft: 'auto', marginRight: 'auto' }}>
-            WolvCapital is a U.S. regulated digital investment platform. For compliance, account inquiries, or partnership discussions, please contact our investor support and compliance teams below.
+            For account questions, product information, support, or partnership discussions, please contact the team below. Regulatory status is not represented on this page.
           </p>
         </div>
       </div>
@@ -49,7 +49,7 @@ export default function ContactPage() {
           <h2 style={h2Style}>Registered Office</h2>
           <p style={{ ...pStyle, marginBottom: '16px' }}>
             516 High St, Palo Alto, CA 94301, United States<br />
-            <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: '14px' }}>WolvCapital's principal office is located in Palo Alto, California. All regulatory correspondence and investor communications are managed through this location in accordance with U.S. financial regulations.</span>
+            <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: '14px' }}>WolvCapital's principal office is listed as Palo Alto, California. Contact details and business information should be independently confirmed before relying on them.</span>
           </p>
           <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
             <MapWithOverlay
@@ -73,7 +73,7 @@ export default function ContactPage() {
                 icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
                 title: 'Email Support',
                 titleColor: '#00c9b1',
-                lines: ['contact@wolvcapital.com', 'support@mail.wolvcapital.com', 'Our compliance and investor support teams respond to all inquiries within one business day.'],
+                lines: ['contact@wolvcapital.com', 'support@mail.wolvcapital.com', 'Our support team aims to respond to inquiries within one business day.'],
               },
               {
                 color: 'linear-gradient(135deg,#7c3aed,#6d28d9)',
@@ -87,7 +87,7 @@ export default function ContactPage() {
                 icon: 'M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z',
                 title: 'Live Chat',
                 titleColor: '#34d399',
-                lines: ['Secure live chat is available via your dashboard after login.', 'All conversations are encrypted and monitored for regulatory compliance.'],
+                lines: ['Secure live chat is available via your dashboard after login.', 'Support conversations may be recorded or reviewed under the privacy and support terms.'],
               },
             ].map(({ color, icon, title, titleColor, lines }) => (
               <div key={title} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', marginBottom: '24px' }}>
@@ -119,7 +119,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <label style={labelStyle}>Subject *</label>
-                <input type="text" placeholder="Account inquiry, compliance, or partnership" required style={inputStyle} />
+                <input type="text" placeholder="Account inquiry, product information, or partnership" required style={inputStyle} />
               </div>
               <div>
                 <label style={labelStyle}>Message *</label>

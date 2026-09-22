@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import Link from "next/link";
 import { CalendarDays, CheckCircle2, DollarSign, ShieldCheck, TrendingUp, Wallet } from "lucide-react";
 
@@ -41,30 +40,7 @@ type PlanDetail = {
   stickyCtaLabel: string;
 };
 
-function formatUsd(value: number) {
-  if (!Number.isFinite(value)) return "$0.00";
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(value);
-}
-
 export default function PlanDetailPage({ plan }: { plan: PlanDetail }) {
-  const [amountInput, setAmountInput] = useState(String(plan.minUsd));
-
-  const parsedAmount = Number(amountInput);
-  const clampedAmount = useMemo(() => {
-    if (!Number.isFinite(parsedAmount)) return plan.minUsd;
-    return Math.min(Math.max(parsedAmount, plan.minUsd), plan.maxUsd);
-  }, [parsedAmount, plan.minUsd, plan.maxUsd]);
-
-  const dailyEarnings = clampedAmount * (plan.dailyRoiPct / 100);
-  const monthlyEstimate = dailyEarnings * 30;
-  const weeklyEstimate = dailyEarnings * 7;
-  const totalPotential = clampedAmount + dailyEarnings * plan.durationDays;
-
   const ctaClass =
     "inline-flex items-center justify-center rounded-full bg-[#4AB3F4] px-7 py-3.5 text-sm sm:text-base font-bold text-[#0F172A] shadow-sm hover:bg-[#3aa6e6] transition";
 
@@ -87,7 +63,7 @@ export default function PlanDetailPage({ plan }: { plan: PlanDetail }) {
             </Link>
             <p style={{ color: "rgba(255,255,255,0.45)" }}>{plan.ctaMicrotext}</p>
             <Link
-              href="#roi-calculator"
+              href="#current-terms"
               style={{ color: "#00c9b1" }}
             >
               {plan.secondaryLinkLabel}
@@ -104,10 +80,10 @@ export default function PlanDetailPage({ plan }: { plan: PlanDetail }) {
           </h2>
           <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { label: "Daily ROI", value: `${plan.dailyRoiPct}% credited daily`, icon: TrendingUp },
-              { label: "Duration", value: `${plan.durationDays} days growth horizon`, icon: CalendarDays },
-              { label: "Investment Range", value: `${formatUsd(plan.minUsd)}–${formatUsd(plan.maxUsd)}`, icon: DollarSign },
-              { label: "Withdrawals", value: "Flexible access based on platform policy", icon: Wallet },
+              { label: "Plan parameters", value: "See current terms", icon: TrendingUp },
+              { label: "Lock period", value: "See current terms", icon: CalendarDays },
+              { label: "Funding limits", value: "See current terms", icon: DollarSign },
+              { label: "Withdrawals", value: "See current terms", icon: Wallet },
             ].map((item) => {
               const Icon = item.icon;
               return (
@@ -123,63 +99,17 @@ export default function PlanDetailPage({ plan }: { plan: PlanDetail }) {
         </div>
       </section>
 
-      {/* ROI Calculator */}
-      <section id="roi-calculator" className="py-12">
+      {/* Current terms */}
+      <section id="current-terms" className="py-12">
         <div className="container mx-auto px-4 lg:px-8 max-w-3xl">
           <div style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
-            <h2 style={{ color: "#00c9b1" }}>{plan.calculatorTitle}</h2>
-            <p style={{ color: "rgba(255,255,255,0.65)" }}>{plan.calculatorHelper}</p>
-
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label style={{ color: "rgba(255,255,255,0.75)" }}>
-                  Investment Amount (USD)
-                </label>
-                <input
-                  type="number"
-                  inputMode="decimal"
-                  min={plan.minUsd}
-                  max={plan.maxUsd}
-                  value={amountInput}
-                  onChange={(e) => setAmountInput(e.target.value)}
-                  placeholder="Enter investment amount"
-                  style={{ border: "1px solid rgba(255,255,255,0.08)" }}
-                />
-                <p style={{ color: "rgba(255,255,255,0.45)" }}>
-                  Min {formatUsd(plan.minUsd)} • Max {formatUsd(plan.maxUsd)}
-                </p>
-                <div style={{ color: "rgba(255,255,255,0.75)" }}>
-                  Plan: <span className="font-semibold">{plan.name}</span> ({plan.dailyRoiPct}% daily)
-                </div>
-              </div>
-
-              <div style={{ background: "rgba(255,255,255,0.04)" }}>
-                <div style={{ color: "rgba(255,255,255,0.65)" }}>
-                  <span>Estimated Daily</span>
-                  <span style={{ color: "#00c9b1" }}>{formatUsd(dailyEarnings)}</span>
-                </div>
-                <div style={{ color: "rgba(255,255,255,0.65)" }}>
-                  <span>Estimated Weekly</span>
-                  <span style={{ color: "#00c9b1" }}>{formatUsd(weeklyEstimate)}</span>
-                </div>
-                <div style={{ color: "rgba(255,255,255,0.65)" }}>
-                  <span>Estimated Monthly</span>
-                  <span style={{ color: "#00c9b1" }}>{formatUsd(monthlyEstimate)}</span>
-                </div>
-                <div style={{ color: "rgba(255,255,255,0.65)" }}>
-                  <span>Total Potential</span>
-                  <span style={{ color: "#00c9b1" }}>{formatUsd(totalPotential)}</span>
-                </div>
-              </div>
-            </div>
-
-            <p style={{ color: "rgba(255,255,255,0.45)" }}>
-              Estimates shown are projections based on the plan’s APY rate.
+            <h2 style={{ color: "#00c9b1" }}>Review current terms</h2>
+            <p style={{ color: "rgba(255,255,255,0.65)" }}>
+              This page does not provide an earnings projection or return estimate. Review the current fees, lock period, funding limits, withdrawal conditions, liquidity, and risk disclosures before taking action.
             </p>
-
             <div className="mt-6">
-              <Link href={`/accounts/signup?plan=${plan.slug}`} className={ctaClass}>
-                {plan.calculatorCtaLabel}
+              <Link href="/risk-disclosure" style={{ color: "#00c9b1" }}>
+                Read the risk disclosure →
               </Link>
             </div>
           </div>

@@ -4,13 +4,13 @@ import Link from "next/link";
 export const metadata = {
   title: 'Smart Contracts & Security — WolvCapital',
   description:
-    'Review the verified smart contracts powering the WolvCapital WOLV staking protocol on BNB Smart Chain. Open-source, BSCScan verified, no admin backdoors.',
+    'Review public contract addresses, source links, network information, and stated limitations for WOLV-related contracts on BNB Smart Chain.',
   alternates: {
     canonical: 'https://www.wolvcapital.com/smart-contracts',
   },
   openGraph: {
-    title: 'Verified Smart Contracts — WolvCapital',
-    description: 'Review the blockchain infrastructure and verified smart contracts securing the WolvCapital platform.',
+    title: 'WolvCapital Contract References',
+    description: 'Review blockchain contract references and stated technical limitations for the WolvCapital platform.',
     url: 'https://www.wolvcapital.com/smart-contracts',
     siteName: 'WolvCapital',
     images: [
@@ -26,8 +26,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Verified Smart Contracts — WolvCapital',
-    description: 'Review the blockchain infrastructure and verified smart contracts securing our platform.',
+    title: 'WolvCapital Contract References',
+    description: 'Review blockchain contract references and stated technical limitations for our platform.',
   },
 };
 
@@ -40,8 +40,8 @@ const CONTRACTS = [
     chainId: 56,
     standard: "BEP-20",
     compiler: "Solidity v0.8.28",
-    sourceVerified: "Source verified on Sourcify",
-    verified: true,
+    sourceVerified: "Public source link",
+    verified: false,
     icon: "🪙",
     color: "#2A52BE",
     description:
@@ -68,8 +68,8 @@ const CONTRACTS = [
     chainId: 56,
     standard: "Custom",
     compiler: "Solidity v0.8.28",
-    sourceVerified: "Source verified on Sourcify",
-    verified: true,
+    sourceVerified: "Public source link",
+    verified: false,
     icon: "🏦",
     color: "#0ea5e9",
     description:
@@ -98,8 +98,8 @@ const CONTRACTS = [
     chainId: 56,
     standard: "Custom",
     compiler: "Solidity v0.8.28",
-    sourceVerified: "Source verified on Sourcify",
-    verified: true,
+    sourceVerified: "Public source link",
+    verified: false,
     icon: "⬡",
     color: "#10b981",
     description:
@@ -114,12 +114,12 @@ const CONTRACTS = [
     ],
     keyFacts: [
       "4 staking tiers: Pioneer, Vanguard, Horizon, Summit VIP",
-      "APY range: 8% – 25%",
+      "Rates and outcomes: review current terms",
       "Chainlink oracle for BNB/USD price feeds",
       "Lock periods: 90 / 150 / 180 / 365 days",
       "Reward rate locked in per-stake at the time you stake — later rate changes never affect existing stakes",
       "Rewards paid from timelock-protected RewardPool",
-      "No admin can access staker principal — only a pause switch",
+      "Review administrative roles and withdrawal conditions before use",
     ],
   },
 ];
@@ -201,14 +201,13 @@ export default function SmartContractsPage() {
               marginBottom: "28px",
             }}
           >
-            All WolvCapital smart contracts are open-source, verified on BSCScan,
-            and auditable by anyone. No hidden code. No admin backdoors.
+            The addresses below are public references for technical inspection. Source visibility does not establish safety, audit completion, absence of vulnerabilities, or absence of administrative risk.
           </p>
           <div style={{ display: "flex", gap: "8px", justifyContent: "center", flexWrap: "wrap" }}>
             {[
               { label: "3 Contracts", color: "#2A52BE" },
               { label: "BNB Smart Chain", color: "#f59e0b" },
-              { label: "All Verified ✓", color: "#10b981" },
+              { label: "Public references", color: "#10b981" },
               { label: "Solidity v0.8.28", color: "#8b5cf6" },
             ].map((b) => (
               <span

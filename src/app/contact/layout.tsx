@@ -2,11 +2,11 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Contact Us — WolvCapital Investor Support',
-  description: 'Contact WolvCapital for account assistance, compliance inquiries, or partnership discussions. U.S. regulated digital investment platform — support@mail.wolvcapital.com.',
+  description: 'Contact WolvCapital for account assistance, product information, or partnership discussions — support@mail.wolvcapital.com.',
   alternates: { canonical: 'https://www.wolvcapital.com/contact' },
   openGraph: {
-    title: 'Contact WolvCapital — Investor Support & Compliance',
-    description: 'Reach our investor support and compliance teams. Palo Alto, CA registered office.',
+    title: 'Contact WolvCapital — Customer Support',
+    description: 'Reach the WolvCapital support team. Palo Alto, California business address listed on the contact page.',
     url: 'https://www.wolvcapital.com/contact',
     images: [{ url: '/og-images/contact-og.png', width: 1200, height: 630 }],
     type: 'website',

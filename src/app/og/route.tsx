@@ -11,7 +11,7 @@ const TEAL = '#00a896'
 const PAGES: Record<string, { title: string; subtitle: string; accent: string; tag: string }> = {
   home: {
     title: 'WolvCapital',
-    subtitle: 'Next-generation DeFi on BNB Smart Chain. Stake, earn, and govern with WOLV.',
+    subtitle: 'Public token data, current terms, and digital-asset risk information.',
     accent: TEAL,
     tag: 'DeFi Protocol',
   },
@@ -23,7 +23,7 @@ const PAGES: Record<string, { title: string; subtitle: string; accent: string; t
   },
   tokenomics: {
     title: 'Tokenomics',
-    subtitle: 'Hard-capped supply of 1,000,000,000 WOLV. Transparent, auditable, on-chain.',
+    subtitle: 'Public token data, current terms, and digital-asset risk information.',
     accent: TEAL,
     tag: 'Supply & Distribution',
   },
@@ -51,7 +51,7 @@ const PAGES: Record<string, { title: string; subtitle: string; accent: string; t
 const TIERS: Record<string, { apy: string; duration: string; min: string; accent: string; gradient: string; label: string }> = {
   pioneer: {
     label: 'Pioneer Plan',
-    apy: '8%',
+    apy: 'Review terms',
     duration: '90 Days',
     min: '$100',
     accent: '#38bdf8',
@@ -59,7 +59,7 @@ const TIERS: Record<string, { apy: string; duration: string; min: string; accent
   },
   vanguard: {
     label: 'Vanguard Plan',
-    apy: '12%',
+    apy: 'Review terms',
     duration: '150 Days',
     min: '$1,000',
     accent: '#a855f7',
@@ -67,7 +67,7 @@ const TIERS: Record<string, { apy: string; duration: string; min: string; accent
   },
   horizon: {
     label: 'Horizon Plan',
-    apy: '18%',
+    apy: 'Review terms',
     duration: '180 Days',
     min: '$5,000',
     accent: '#f97316',
@@ -75,7 +75,7 @@ const TIERS: Record<string, { apy: string; duration: string; min: string; accent
   },
   summit: {
     label: 'Summit VIP',
-    apy: '25%',
+    apy: 'Review terms',
     duration: '365 Days',
     min: '$15,000',
     accent: '#eab308',
@@ -124,7 +124,7 @@ function PageImage({ page }: { page: typeof PAGES[string] }) {
           {[
             { label: 'Chain', value: 'BNB Smart Chain' },
             { label: 'Max Supply', value: '1,000,000,000' },
-            { label: 'APY up to', value: '25%' },
+            { label: 'Plan terms', value: 'Current' },
             { label: 'Mint', value: 'None · Fixed Supply' },
           ].map(s => (
             <div key={s.label} style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
@@ -169,7 +169,7 @@ function TierImage({ tier }: { tier: typeof TIERS[string] }) {
         </div>
         <div style={{ display: 'flex', width: '100%', borderTop: '1px solid #1e293b', paddingTop: '36px', justifyContent: 'space-between' }}>
           {[
-            { label: 'Yield Rate',      value: `${tier.apy} APY`, color: '#22c55e' },
+            { label: 'Terms',           value: tier.apy, color: '#22c55e' },
             { label: 'Contract Lock',   value: tier.duration,     color: '#ffffff' },
             { label: 'Minimum Funding', value: `${tier.min} USD`, color: '#ffffff' },
           ].map(m => (

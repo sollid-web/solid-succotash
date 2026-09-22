@@ -6,12 +6,10 @@ import TrustpilotWidget from '@/components/TrustpilotWidget'
 import RiskBar from '@/components/sections/RiskBar'
 import HowItWorksSection from '@/components/sections/HowItWorksSection'
 import WolvChartSection from '@/components/sections/WolvChartSection'
-import ComplianceSection from '@/components/sections/ComplianceSection'
 import SecuritySection from '@/components/sections/SecuritySection'
 import WolvTokenSection from '@/components/sections/WolvTokenSection'
 import FAQSection from '@/components/sections/FAQSection'
 import ShareButtons from '@/components/ShareButtons'
-import ROICalculator from '@/components/sections/ROICalculator'
 
 export default function HomePage() {
   return (
@@ -25,10 +23,8 @@ export default function HomePage() {
       </div>
       <RiskBar />
       <HowItWorksSection />
-      <ROICalculator />
       <WolvChartSection />
       <WolvTokenSection />
-      <ComplianceSection />
       <SecuritySection />
       <FAQSection />
     </div>

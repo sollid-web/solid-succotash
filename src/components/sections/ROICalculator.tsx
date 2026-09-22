@@ -85,13 +85,13 @@ export default function ROICalculator() {
         {/* Header */}
         <div className="text-center mb-10">
           <span className="text-[11px] font-bold tracking-widest uppercase text-teal-400">
-            Earnings Calculator
+            Scenario information
           </span>
           <h2 className="mt-3 text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            See What You Could Earn
+            Review terms before participating
           </h2>
           <p className="mt-2 text-sm text-slate-400 max-w-md mx-auto">
-            Enter an amount to see your projected WOLV rewards. Actual returns depend on market conditions.
+            This calculator is not a promise or forecast. Review the current terms, fees, lock periods, liquidity, and risks independently.
           </p>
         </div>
 
@@ -221,7 +221,7 @@ export default function ROICalculator() {
 
                 <div className="space-y-4">
                   <div>
-                    <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Projected Earnings</div>
+                    <div className="text-xs text-slate-500 uppercase tracking-wider mb-1">Illustrative output</div>
                     <div className="text-4xl font-extrabold text-white font-mono">
                       ${principal > 0 ? fmt(earningsUSD) : '0.00'}
                     </div>
@@ -284,8 +284,8 @@ export default function ROICalculator() {
             </Link>
 
             <p className="text-[10px] text-slate-600 text-center leading-relaxed">
-              Projections use simple interest and are illustrative only. Digital assets are volatile.
-              WOLV staking carries risk including potential loss of principal. Target APY is not guaranteed. Review full risk disclosure before staking.
+              This tool is informational only and should not be used as a forecast or investment decision.
+              Digital assets can lose value. Review the full risk disclosure and current terms before taking action.
             </p>
           </div>
         </div>

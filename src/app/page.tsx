@@ -3,14 +3,14 @@ import HomePageContent from '@/components/HomePage'
 import PublicLayout from '@/components/PublicLayout'
 
 export const metadata: Metadata = {
-  title: 'WolvCapital — On-Chain Staking & WOLV Token | BNB Smart Chain',
-  description: 'WolvCapital is a Web3 staking protocol on BNB Smart Chain. Review staking terms, public contract references, WOLV market data, and risks before participating.',
+  title: 'WolvCapital — WOLV Token Information | BNB Smart Chain',
+  description: 'Review WOLV token information, public contract references, platform terms, and digital-asset risks on BNB Smart Chain.',
   keywords:
-    'WOLV token, BEP-20 token, BNB Smart Chain staking, Web3 staking protocol, WOLV PancakeSwap, on-chain staking, WolvCapital, blockchain staking, DeFi staking BNB, WOLV DEX, smart contract verification, KYC staking platform',
+    'WOLV token, BEP-20 token, BNB Smart Chain, Web3 staking information, WOLV PancakeSwap, on-chain data, WolvCapital, blockchain records, WOLV DEX, contract references, digital-asset risks',
   openGraph: {
     title: 'WolvCapital | On-Chain Staking & WOLV Token — BNB Smart Chain',
     description:
-      'Review WOLV staking, public smart-contract references, on-chain data, and risk disclosures on BNB Smart Chain.',
+      'Review WOLV token information, public contract references, on-chain data, platform terms, and risk disclosures.',
       images: [
       {
         url: "https://www.wolvcapital.com/images/hero/home-hero.webp",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'WolvCapital | On-Chain Staking, WOLV Token Data, and Risk Disclosure',
     description:
-      'Review staking terms, target APY assumptions, public contract references, WOLV market data, and risks before participating.',
+      'Review WOLV token information, public contract references, platform terms, and digital-asset risks before participating.',
     images: [
       {
         url: "https://www.wolvcapital.com/images/hero/home-hero.webp",

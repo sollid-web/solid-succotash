@@ -5,7 +5,7 @@ import { getSiteUrl } from '@/lib/site-config'
 
 export const metadata = {
   title: 'Investment Plans — Pioneer, Vanguard, Horizon & Summit | Wolv Capital',
-  description: 'Choose from 4 WOLV staking tiers on BNB Smart Chain. Pioneer, Vanguard, Horizon, and Summit VIP. Smart contracts verified on BSCScan. WOLV rewards claimable on-chain.',
+  description: 'Review WOLV plan structures, public contract references, eligibility information, and risk disclosures on BNB Smart Chain.',
   alternates: { canonical: '/plans' },
   openGraph: {
     title: 'Investment Plans — WolvCapital',
@@ -25,7 +25,7 @@ const PLANS = [
   {
     key: 'pioneer',
     name: 'Pioneer',
-    apy: '8% APY',
+    apy: 'Current terms',
     duration: '90 Days',
     min: '$100',
     max: '$999',
@@ -43,7 +43,7 @@ const PLANS = [
   {
     key: 'vanguard',
     name: 'Vanguard',
-    apy: '12% APY',
+    apy: 'Current terms',
     duration: '150 Days',
     min: '$1,000',
     max: '$4,999',
@@ -52,16 +52,16 @@ const PLANS = [
     fit: 'Best for: investors seeking a mid-range plan structure.',
     details: [
       'Plan terms and eligibility are defined up front for clarity.',
-      'Requests are subject to compliance checks and manual approval.',
+      'Requests may be subject to account and platform review.',
       'Digital assets are volatile; outcomes can be positive or negative.',
-      'Account activity is logged for transparency and audit support.',
+      'Review available account records and current platform information.',
     ],
     href: '/plans/vanguard',
   },
   {
     key: 'horizon',
     name: 'Horizon',
-    apy: '18% APY',
+    apy: 'Current terms',
     duration: '180 Days',
     min: '$5,000',
     max: '$14,999',
@@ -79,16 +79,16 @@ const PLANS = [
   {
     key: 'summit',
     name: 'Summit VIP',
-    apy: '25% APY',
+    apy: 'Current terms',
     duration: '365 Days',
     min: '$15,000',
     max: '$100,000',
     color: '#f59e0b',
-    summary: 'Premium structure for institutional and high-net-worth allocations.',
+    summary: 'Premium structure for larger allocations; review current terms.',
     fit: 'Best for: high-allocation investors seeking a structured workflow.',
     details: [
       'Designed for investors who require a higher-touch, documented process.',
-      'Enhanced verification and review may apply.',
+      'Additional account information or review may apply.',
       'Market conditions can change rapidly; no guarantees.',
       'Support is available for understanding terms and requirements.',
     ],
@@ -127,7 +127,7 @@ export default function PlansPage() {
         <div style={{ maxWidth: '700px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1, flex: 1 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0,168,150,0.1)', border: '1px solid rgba(0,168,150,0.3)', borderRadius: '4px', padding: '4px 12px', marginBottom: '16px' }}>
             <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00a896' }} />
-            <span style={{ fontSize: '11px', color: '#00c9b1', fontWeight: 700, letterSpacing: '0.12em' }}>BNB SMART CHAIN · ON-CHAIN REWARDS</span>
+            <span style={{ fontSize: '11px', color: '#00c9b1', fontWeight: 700, letterSpacing: '0.12em' }}>BNB SMART CHAIN · PUBLIC TOKEN DATA</span>
           </div>
           <h1 style={{ fontSize: 'clamp(32px,6vw,52px)', fontWeight: 800, color: '#ffffff', margin: '0 0 16px', lineHeight: 1.1, textShadow: '0 0 60px rgba(0,168,150,0.25)' }}>
             Investment Plans
@@ -143,10 +143,10 @@ export default function PlansPage() {
         {/* Plan tier bar */}
         <div style={{ position: 'relative', zIndex: 1, borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(12px)', display: 'flex' }}>
           {[
-            { name: 'Pioneer', apy: '8% APY', color: '#00a896' },
-            { name: 'Vanguard', apy: '12% APY', color: '#3b82f6' },
-            { name: 'Horizon', apy: '18% APY', color: '#8b5cf6' },
-            { name: 'Summit VIP', apy: '25% APY', color: '#f59e0b' },
+            { name: 'Pioneer', apy: 'Current terms', color: '#00a896' },
+            { name: 'Vanguard', apy: 'Current terms', color: '#3b82f6' },
+            { name: 'Horizon', apy: 'Current terms', color: '#8b5cf6' },
+            { name: 'Summit VIP', apy: 'Current terms', color: '#f59e0b' },
           ].map((p, i, arr) => (
             <div key={p.name} style={{ flex: 1, padding: '16px 8px', textAlign: 'center', borderRight: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
               <div style={{ fontSize: '14px', fontWeight: 700, color: p.color, marginBottom: '2px' }}>{p.apy}</div>
@@ -163,7 +163,7 @@ export default function PlansPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '16px' }}>
             {[
               { step: '01', title: 'Review', text: 'Read the plan terms and disclosures. Choose what fits your goals and risk tolerance.' },
-              { step: '02', title: 'Request', text: 'Submit a request from your account. Eligibility checks and KYC verification may apply.' },
+              { step: '02', title: 'Request', text: 'Submit a request from your account. Eligibility and account-information checks may apply.' },
               { step: '03', title: 'Oversight', text: 'All investment activity is subject to manual review. Monitor status in your dashboard.' },
             ].map(({ step, title, text }) => (
               <div key={step} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '20px' }}>
@@ -184,7 +184,7 @@ export default function PlansPage() {
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#ffffff', margin: '0 0 10px' }}>Choose your plan</h2>
           <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.45)', margin: 0 }}>
-            All plans distribute rewards in WOLV tokens on BNB Smart Chain · Performance not guaranteed
+            Plan parameters and token outcomes can change · Review current terms and risks
           </p>
         </div>
 

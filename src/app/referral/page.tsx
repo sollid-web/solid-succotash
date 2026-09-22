@@ -115,11 +115,11 @@ export default function ReferralPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                 <div>
                   <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">Trusted Platform</h3>
-                  <p className="text-base sm:text-lg text-gray-700">Established security, KYC compliance, and global investor base.</p>
+                  <p className="text-base sm:text-lg text-gray-700">Published platform information, account terms, and public token data.</p>
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">Proven Returns</h3>
-                  <p className="text-base sm:text-lg text-gray-700">8%–25% APY staking plans backed by diversified digital asset strategies.</p>
+                  <p className="text-base sm:text-lg text-gray-700">Plan parameters and digital-asset features are subject to current terms and market risk.</p>
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-[#0b2f6b] mb-2">Simple Dashboard</h3>

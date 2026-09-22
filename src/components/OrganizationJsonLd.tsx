@@ -8,17 +8,16 @@ export default function OrganizationJsonLd() {
     "name": "WolvCapital",
     "url": "https://www.wolvcapital.com",
     "logo": "https://www.wolvcapital.com/wolv-logo.svg",
+    "description": "Web3 staking protocol on BNB Smart Chain with public contract references and WOLV token market information.",
     "sameAs": [
-      "https://www.facebook.com/yourpage",
-      "https://twitter.com/yourhandle",
-      "https://www.linkedin.com/company/yourcompany"
+      "https://x.com/wolvcapitals",
+      "https://t.me/wolvcapital"
     ],
     "contactPoint": [{
       "@type": "ContactPoint",
       "email": "support@mail.wolvcapital.com",
       "contactType": "customer support",
-      "areaServed": "Worldwide",
-      "availableLanguage": ["English"]
+      "availableLanguage": ["English", "German", "Spanish", "French", "Italian", "Portuguese", "Russian", "Norwegian"]
     }]
   };
 

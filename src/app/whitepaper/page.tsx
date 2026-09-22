@@ -43,8 +43,8 @@ const SECTIONS = [
     title: "Problem Statement",
     content: [
       "Traditional investment platforms suffer from a fundamental trust problem: profit records exist only as internal database entries or PDF statements that investors cannot independently verify. This creates opacity, disputes, and vulnerability to manipulation.",
-      "Simultaneously, the DeFi ecosystem offers on-chain transparency but lacks regulatory compliance, institutional custody, and professional portfolio management — making it inaccessible or unsafe for mainstream investors.",
-      "WolvCapital addresses both failures: institutional-grade compliance and custody combined with blockchain-verifiable profit records through the WOLV Token system.",
+      "The DeFi ecosystem offers on-chain transparency, but users must independently assess compliance, custody, portfolio management, and smart-contract risk before participating.",
+      "WolvCapital aims to make selected reward records easier to review through public blockchain references. On-chain records do not by themselves establish regulatory approval, custody protection, solvency, or future returns.",
     ],
   },
   {
@@ -67,7 +67,7 @@ const SECTIONS = [
       "Pioneer (Entry): Minimum $100 · 8% APY · 90-day term. Designed for first-time investors exploring the platform with minimal capital commitment.",
       "Vanguard (Growth): Minimum $1,000 · 12% APY · 150-day term. For investors ready to commit meaningful capital for consistent compounding returns.",
       "Horizon (Advanced): Minimum $5,000 · 18% APY · 180-day term. For serious investors seeking significant portfolio growth over a structured period.",
-      "Summit VIP (Elite): Minimum $10,000 · 25% APY · 365-day term. Priority support, maximum returns, and exclusive platform benefits for high-net-worth investors.",
+      "Summit VIP (Elite): Minimum $15,000 · 25% target APY · 365-day term. Terms, fees, eligibility, and risk disclosures should be reviewed before participation.",
     ],
   },
   {
@@ -79,7 +79,7 @@ const SECTIONS = [
       "Token contract: 0xe0167279aef7bf4ad313d261da82e8366822270c. The contract is open-source and verified on BSCScan. It includes an emergency pause function controlled exclusively by a multisig wallet for compliance use.",
       "Profit distribution: When investors earn returns on WolvCapital, WOLV tokens are transferred from the treasury wallet directly to the investor's connected wallet. This creates a permanent, on-chain record of every profit distribution — verifiable by anyone on BSCScan.",
       "Token utility: WOLV serves as (1) verifiable proof of staking rewards on BNB Smart Chain, (2) a tradeable BEP20 asset now live on PancakeSwap V2, and (3) a stakeable asset earning on-chain rewards. WOLV contract is publicly verified on BSCScan. WOLV is not pre-mined to founders or distributed for any purpose other than staking rewards.",
-      "Security audit: WOLV scored 87/100 on SolidityScan security audit. No malicious typecasting, no hidden owner, no self-destruct function, no blacklist capability, no fee manipulation. Full audit report available on SolidityScan.",
+      "Security review: WOLV has a published SolidityScan scanner score. A scanner score is not an independent audit and should not be treated as a guarantee that the token or platform is safe. Review the deployed source code and risk disclosures before interacting.",
     ],
   },
   {
@@ -87,7 +87,7 @@ const SECTIONS = [
     num: "06",
     title: "Staking System",
     content: [
-      "WolvCapital's staking system allows WOLV holders to stake their tokens and earn additional APY rewards. The system consists of two audited smart contracts: the StakingContract and the RewardPool.",
+      "WolvCapital's staking system allows WOLV holders to stake their tokens under published terms. The system references the StakingContract and RewardPool; their source code is publicly verifiable on BSCScan, which is not the same as an independent audit.",
       "StakingContract (0x7cd22f3c08b4195225da7d043cbe00da118d31ec): Handles stake deposits, lock periods, reward calculations using Chainlink price feeds, and claim processing. Four staking tiers are available: Starter (8% APY), Growth (12% APY), Pro (18% APY), and Elite (25% APY).",
       "RewardPool (0x7310f3e07627ce98246973e068bf2ff294f84e5f): Holds the WOLV reward supply available for staker claims. Protected by a 48-hour timelock — no funds can be moved without a 48-hour delay, preventing sudden rug pulls or unauthorized withdrawals.",
       "Chainlink integration: Reward calculations incorporate Chainlink's decentralized price feeds for fair and manipulation-resistant APY computation. This eliminates reliance on a single price source and protects stakers from oracle manipulation attacks.",
@@ -110,9 +110,9 @@ const SECTIONS = [
     num: "08",
     title: "Compliance & Regulation",
     content: [
-      "WolvCapital operates under a comprehensive compliance framework designed to meet international financial regulation standards.",
-      "FinCEN MSB Registration: WolvCapital is registered as a Money Services Business with FinCEN for AML/KYC compliance. WOLV is a BEP20 utility token on BNB Smart Chain — not a security. All smart contracts are publicly verified on BSCScan.",
-      "FinCEN MSB: Registered as a Money Services Business with the Financial Crimes Enforcement Network. Subject to Bank Secrecy Act requirements including AML program, suspicious activity reporting, and recordkeeping.",
+      "WolvCapital publishes compliance and risk information for users to review. Eligibility and permitted activities depend on the applicable jurisdiction and the platform terms.",
+      "FinCEN MSB Registration: The platform describes its FinCEN MSB registration as applying to AML/KYC compliance. FinCEN states that inclusion in the MSB registry is not a recommendation, certification of legitimacy, or government endorsement. Users should verify the legal entity, registration record, activities, and jurisdictional limits independently.",
+      "FinCEN MSB: Any MSB registration should be understood in its specific legal scope and should not be represented as a securities licence, investment-adviser registration, or general government approval.",
       "KYC/AML: Full Know Your Customer identity verification is required for all investors. Anti-Money Laundering screening is applied to all deposits and withdrawals. PCI-DSS compliance standards govern payment processing.",
       "Manual withdrawal approvals: Every withdrawal request undergoes manual human review before processing. This prevents unauthorized transfers, detects fraudulent activity, and ensures compliance with AML requirements.",
       "All compliance disclosures are published at wolvcapital.com/compliance. Risk disclosures are available at wolvcapital.com/risk-disclosure. By investing, all users acknowledge having read and accepted these disclosures.",
@@ -125,7 +125,7 @@ const SECTIONS = [
     content: [
       "Platform security: 256-bit SSL encryption on all connections. JWT authentication with token refresh. Session management with automatic expiry. Rate limiting on all API endpoints.",
       "Smart contract security: All contracts verified on BSCScan with public source code. WOLV token audited on SolidityScan (87/100). No admin keys with unilateral power — pause function requires multisig. RewardPool protected by 48-hour timelock.",
-      "Custody: Investor funds are held with licensed institutional custodians, not on the WolvCapital platform directly. This separates investor assets from platform operations.",
+      "Custody: Review the current custody and fund-handling disclosures, contract addresses, lock terms, and withdrawal policy before depositing. Do not rely on a general security statement as proof of custody protection.",
       "Bug bounty: WolvCapital maintains an internal bug bounty program. Security researchers who identify and responsibly disclose vulnerabilities are rewarded. Contact security@wolvcapital.com.",
       "Incident response: WolvCapital maintains a documented incident response procedure. The WOLV contract pause function allows immediate freeze of all token transfers in the event of a security incident requiring intervention.",
     ],

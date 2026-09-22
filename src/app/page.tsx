@@ -4,13 +4,13 @@ import PublicLayout from '@/components/PublicLayout'
 
 export const metadata: Metadata = {
   title: 'WolvCapital — On-Chain Staking & WOLV Token | BNB Smart Chain',
-  description: 'WolvCapital is a Web3 staking protocol on BNB Smart Chain. Stake BNB or BUSD and earn WOLV token rewards. Contracts verified on BSCScan. WOLV now trading on PancakeSwap.',
+  description: 'WolvCapital is a Web3 staking protocol on BNB Smart Chain. Review staking terms, public contract references, WOLV market data, and risks before participating.',
   keywords:
-    'WOLV token, BEP20 token, BNB Smart Chain staking, Web3 staking protocol, WOLV PancakeSwap, on-chain staking rewards, WolvCapital, blockchain staking, DeFi staking BNB, WOLV DEX, smart contract staking, KYC staking platform',
+    'WOLV token, BEP-20 token, BNB Smart Chain staking, Web3 staking protocol, WOLV PancakeSwap, on-chain staking, WolvCapital, blockchain staking, DeFi staking BNB, WOLV DEX, smart contract verification, KYC staking platform',
   openGraph: {
     title: 'WolvCapital | On-Chain Staking & WOLV Token — BNB Smart Chain',
     description:
-      'Stake BNB or BUSD and earn WOLV token rewards on BNB Smart Chain. Smart contracts verified on BSCScan. WOLV now live on PancakeSwap DEX.',
+      'Review WOLV staking, public smart-contract references, on-chain data, and risk disclosures on BNB Smart Chain.',
       images: [
       {
         url: "https://www.wolvcapital.com/images/hero/home-hero.webp",
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'WolvCapital | Blockchain-Verified Returns, Invest, Stake & Earn On-Chain',
+    title: 'WolvCapital | On-Chain Staking, WOLV Token Data, and Risk Disclosure',
     description:
-      'Stake BNB or BUSD, earn 8–25% APY in WOLV tokens. KYC-verified platform with on-chain proof of every return. Transparent, immutable, verifiable.',
+      'Review staking terms, target APY assumptions, public contract references, WOLV market data, and risks before participating.',
     images: [
       {
         url: "https://www.wolvcapital.com/images/hero/home-hero.webp",

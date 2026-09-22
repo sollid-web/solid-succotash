@@ -28,12 +28,12 @@ const SECURITY_FEATURES: SecurityFeature[] = [
   {
     icon: <CheckSquare className="w-6 h-6" />,
     title: 'Two-Factor Authentication',
-    description: 'Mandatory 2FA on all accounts ensures only you can access your portfolio — even if your password is compromised.',
+    description: 'Optional authenticator-based 2FA is available to strengthen account access and withdrawal protection.',
   },
   {
     icon: <Coins className="w-6 h-6" />,
-    title: 'Blockchain-Verified Returns',
-    description: 'Every profit we distribute is recorded permanently on the BNB blockchain as WOLV tokens — independently verifiable by anyone, anytime.',
+    title: 'On-Chain Reward Records',
+    description: 'WOLV reward transactions can be checked on BNB Smart Chain using the published contract addresses. On-chain records do not guarantee returns or token value.',
   },
   {
     icon: <TrendingUp className="w-6 h-6" />,
@@ -42,8 +42,8 @@ const SECURITY_FEATURES: SecurityFeature[] = [
   },
   {
     icon: <Layers className="w-6 h-6" />,
-    title: 'Audited Smart Contracts',
-    description: 'WOLV token, Reward Pool, and Staking contracts are all verified on BSCScan. Source code is public and readable by anyone.',
+    title: 'Publicly Verified Source Code',
+    description: 'The WOLV token, Reward Pool, and Staking contract addresses link to publicly verified source code on BSCScan. Source-code verification is not an independent security audit.',
   },
   {
     icon: <Eye className="w-6 h-6" />,
@@ -53,7 +53,7 @@ const SECURITY_FEATURES: SecurityFeature[] = [
 ]
 
 const STANDARDS = [
-  { label: '2FA',       value: 'Mandatory on all accounts',    color: 'from-indigo-600 to-indigo-700' },
+  { label: '2FA',       value: 'Optional authenticator 2FA',       color: 'from-indigo-600 to-indigo-700' },
   { label: 'SSL',       value: '256-bit encryption',           color: 'from-green-600 to-green-700' },
   { label: 'Chainlink', value: 'Tamper-proof price oracles',   color: 'from-blue-500 to-blue-700' },
   { label: 'BNB Chain', value: 'On-chain proof of returns',    color: 'from-yellow-500 to-yellow-600' },
@@ -77,10 +77,10 @@ export default function SecuritySection() {
 
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-[#0F172A] mb-4" style={{ letterSpacing: '-0.02em' }}>
-            Built for Trust. Verified on the Blockchain.
+            Built for Transparency. Verify on the Blockchain.
           </h2>
           <p className="text-[#64748B] text-lg max-w-2xl mx-auto">
-            WolvCapital combines institutional-grade security with fully audited smart contracts — so you never have to take our word for it.
+            WolvCapital publishes security controls and contract references so visitors can review the available evidence. Public source-code verification is not the same as an independent audit.
           </p>
         </div>
 
@@ -118,7 +118,7 @@ export default function SecuritySection() {
 
         {/* Verified contracts */}
         <div className="bg-[#0F172A] rounded-xl p-8 border border-[#1E3A5F]">
-          <h3 className="text-white font-bold text-lg mb-2">Verified Smart Contracts</h3>
+          <h3 className="text-white font-bold text-lg mb-2">Publicly Verified Smart Contracts</h3>
           <p className="text-[#64748B] text-sm mb-6">All contracts are publicly verified on BSCScan. Read the source code yourself.</p>
           <div className="flex flex-col gap-4">
             {CONTRACTS.map((c, idx) => (

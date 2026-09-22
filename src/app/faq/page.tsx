@@ -39,7 +39,7 @@ const CATEGORIES = [
       },
       {
         q: "What is the minimum investment?",
-        a: "The minimum is $100 on the Pioneer plan — our entry-level tier. Higher tiers start at $1,000 (Vanguard), $5,000 (Horizon), and $10,000 (Summit VIP). We recommend starting with Pioneer to familiarize yourself with the platform before committing larger capital.",
+        a: "The minimum is $100 on the Pioneer plan — our entry-level tier. Higher tiers start at $1,000 (Vanguard), $5,000 (Horizon), and $15,000 (Summit VIP). We recommend starting with Pioneer to familiarize yourself with the platform before committing larger capital.",
       },
       {
         q: "Is WolvCapital available in my country?",
@@ -97,7 +97,7 @@ const CATEGORIES = [
       },
       {
         q: "Is WOLV tradeable on exchanges?",
-        a: "Not yet. WOLV is currently earned exclusively through WolvCapital investment returns and staking rewards. WolvCapital plans to add WOLV liquidity on PancakeSwap and apply for CoinGecko and CoinMarketCap listings in Q3 2026. Early investors earning WOLV now will hold tokens before exchange listing.",
+        a: "Yes. WOLV is currently tradeable on PancakeSwap V2 according to the current platform information. Verify the contract address, pair, liquidity, price impact, and transaction details independently before trading.",
       },
       {
         q: "Can I verify my WOLV balance independently?",
@@ -116,7 +116,7 @@ const CATEGORIES = [
     questions: [
       {
         q: "What is WOLV staking?",
-        a: "WOLV staking allows you to deposit your WOLV tokens into WolvCapital's audited staking contracts and earn additional APY rewards. It's a way to compound your investment earnings — the WOLV you earn from investment plans can be staked to generate further returns.",
+        a: "WOLV staking allows you to deposit your WOLV tokens into the published staking contracts under the displayed tier terms and target APY assumptions. It's a way to compound your investment earnings — the WOLV you earn from investment plans can be staked to generate further returns.",
       },
       {
         q: "What staking tiers are available?",
@@ -139,8 +139,8 @@ const CATEGORIES = [
         a: "Each staking tier has a lock period. Unstaking before the lock period expires may result in forfeiture of accumulated rewards, depending on the tier terms. Full terms are displayed before you confirm any stake. We recommend staking only WOLV you do not need access to during the lock period.",
       },
       {
-        q: "Are the staking contracts audited?",
-        a: "Both the StakingContract and RewardPool are verified on BSCScan with public source code. The WOLV token contract scored 87/100 on SolidityScan. A full independent third-party audit of the staking contracts is planned for Q3 2026.",
+        q: "What is the current staking-contract audit status?",
+        a: "The StakingContract and RewardPool addresses link to publicly verified source code on BSCScan. Public verification is not an independent audit. No full independent third-party audit report is published on this page at present; status will be updated when a report is available.",
       },
     ],
   },
@@ -178,7 +178,7 @@ const CATEGORIES = [
       },
       {
         q: "How are my funds protected?",
-        a: "Investor funds are held with licensed institutional custodians — not on the WolvCapital platform directly. This separates your assets from platform operations. Additionally, all platform connections are protected by 256-bit SSL encryption and all accounts require KYC verification.",
+        a: "Review the current custody and fund-handling disclosures, contract addresses, lock terms, and withdrawal policy before depositing. Platform connections use HTTPS/TLS and account eligibility is subject to the applicable KYC process.",
       },
       {
         q: "What is KYC and why is it required?",
@@ -189,8 +189,8 @@ const CATEGORIES = [
         a: "Contact our security team immediately at support via the dashboard or through wolvcapital.com/contact. Do not attempt any transactions. Our team will freeze your account pending investigation. We also recommend immediately changing your password and enabling two-factor authentication.",
       },
       {
-        q: "Has WolvCapital been audited?",
-        a: "The WOLV token smart contract has been analyzed on SolidityScan (score: 87/100). A full independent third-party security audit of the staking contracts is planned for Q3 2026. All smart contract source code is public and verifiable on BSCScan.",
+        q: "What security reviews are available?",
+        a: "The WOLV token and staking-related contract addresses link to public source code on BSCScan. Any scanner score is not a substitute for an independent audit. No full independent third-party security-audit report is published on this page at present.",
       },
     ],
   },

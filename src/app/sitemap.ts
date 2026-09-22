@@ -16,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // ── Core ──────────────────────────────────────────────────────
     { url: `${baseUrl}/`,                    lastModified: now, changeFrequency: 'daily',   priority: 1.0 },
     { url: `${baseUrl}/wolv-token`,          lastModified: now, changeFrequency: 'weekly',  priority: 0.9 },
-    { url: `${baseUrl}/presale`,             lastModified: now, changeFrequency: 'daily',   priority: 0.9 },
+    { url: `${baseUrl}/presale`,             lastModified: now, changeFrequency: 'yearly',  priority: 0.3 },
     { url: `${baseUrl}/how-it-works`,        lastModified: now, changeFrequency: 'monthly', priority: 0.85 },
     { url: `${baseUrl}/tokenomics`,          lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/roadmap`,             lastModified: now, changeFrequency: 'monthly', priority: 0.8 },

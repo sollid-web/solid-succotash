@@ -35,7 +35,7 @@ export default function AboutPage() {
       initials: 'RU',
       name: 'Richard Uwe',
       role: 'Founder & CEO',
-      bio: 'Richard Uwe is the Founder and Chief Executive Officer of WolvCapital. With a career rooted in quantitative strategy, risk management, and algorithmic asset allocation, he designed WolvCapital with a "TradFi Compliance DNA" — integrating institutional-grade KYC, real-time AML monitoring, and audited smart contracts to prove that Web3 innovation can safely coexist with global compliance standards.',
+      bio: 'Richard Uwe is the Founder and Chief Executive Officer of WolvCapital. With a career rooted in quantitative strategy, risk management, and algorithmic asset allocation, he designed WolvCapital with a "TradFi Compliance DNA" — integrating KYC, AML monitoring, and publicly verifiable smart-contract references to make Web3 activity easier to review.',
       philosophy: '"Trust the code, verify on-chain, and eliminate the middleman."',
       links: [
         { label: 'X / Twitter', href: 'https://x.com/wolvcapitals', icon: '𝕏' },

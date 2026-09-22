@@ -4,9 +4,9 @@ import type { Metadata } from "next";
 import { Clock, Database, FileCheck, Lock, Server, Shield, ShieldCheck, Wallet } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Security — WolvCapital | Enterprise-Grade Fund Protection",
+  title: "Security — WolvCapital | On-Chain Transparency and Account Controls",
   description:
-    "WolvCapital employs enterprise-grade security: 256-bit SSL encryption, KYC/AML compliance, on-chain smart contracts with 48hr timelock, Chainlink oracles, and verified BSCScan contracts.",
+    "Review WolvCapital account controls, KYC/AML processes, public contract references, timelock information, and smart-contract audit status.",
 };
 
 const CONTRACTS = [
@@ -27,10 +27,10 @@ export default function SecurityPage(): JSX.Element {
             Security & Fund Protection
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0F172A] mb-4" style={{ letterSpacing: '-0.02em' }}>
-            Enterprise-Grade Security
+            Security and On-Chain Transparency
           </h1>
           <p className="text-base sm:text-lg text-[#475569] max-w-3xl mx-auto mb-8">
-            Your funds, data, and transactions are protected by industry-grade security controls, continuous monitoring, and verifiable on-chain smart contracts.
+            Review the security controls, public contract references, and risk disclosures that apply before using the platform.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
@@ -54,10 +54,10 @@ export default function SecurityPage(): JSX.Element {
           <div className="text-center mb-10">
             <span className="text-xs font-bold tracking-widest uppercase text-[#2A52BE] block mb-3">On-Chain Transparency</span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-3" style={{ letterSpacing: '-0.02em' }}>
-              Verified Smart Contracts
+              Publicly Verified Source Code
             </h2>
             <p className="text-[#94A3B8] text-sm max-w-2xl mx-auto">
-              All WolvCapital smart contracts are publicly verified on BSCScan. Anyone can read the source code, verify the logic, and monitor all transactions in real time — no trust required.
+              The listed contract addresses link to publicly verified source code on BSCScan. This helps visitors inspect deployed code, but source-code verification is not an independent security audit and does not eliminate financial or smart-contract risk.
             </p>
           </div>
 
@@ -97,10 +97,10 @@ export default function SecurityPage(): JSX.Element {
           <div className="mt-6 rounded-xl bg-[#2A52BE]/10 border border-[#2A52BE]/30 px-6 py-5 flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="flex-1">
               <div className="text-white font-semibold text-sm mb-1">Smart Contract Audit</div>
-              <div className="text-[#94A3B8] text-xs">Full third-party security audit scheduled for Q3 2026. All contract source code is publicly readable on BSCScan in the meantime.</div>
+              <div className="text-[#94A3B8] text-xs">No full independent third-party security-audit report is published on this page at present. All contract source code is publicly readable on BSCScan; the audit status will be updated when a report is available.</div>
             </div>
             <div className="flex-shrink-0 px-4 py-2 rounded-lg bg-[#f59e0b]/15 border border-[#f59e0b]/30 text-[#f59e0b] text-xs font-bold">
-              Audit: Q3 2026
+              Independent audit status: pending publication
             </div>
           </div>
         </div>
@@ -115,7 +115,7 @@ export default function SecurityPage(): JSX.Element {
               Multi-Layer Protection
             </h2>
             <p className="text-[#64748B] text-sm max-w-xl mx-auto">
-              Beyond the blockchain, WolvCapital employs enterprise-grade platform security at every layer.
+              Beyond the blockchain, WolvCapital describes layered platform controls covering account access, fund handling, KYC/AML processes, data protection, and infrastructure.
             </p>
           </div>
 

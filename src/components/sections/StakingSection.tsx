@@ -34,7 +34,7 @@ export default function StakingSection() {
             Stake & Earn WOLV On-Chain.
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '16px', maxWidth: '560px', margin: '0 auto', lineHeight: 1.7 }}>
-            Lock your assets in our audited smart contracts and earn WOLV rewards at up to 25% APY. Every reward is recorded permanently on the BNB blockchain.
+            Review the published contract references, lock periods, fees, and target APY assumptions before participating. WOLV rewards and principal are not guaranteed.
           </p>
         </div>
 
@@ -43,7 +43,7 @@ export default function StakingSection() {
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(0,168,150,0.08)', border: '1px solid rgba(0,168,150,0.2)', borderRadius: '99px', padding: '8px 20px' }}>
             <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00a896', display: 'inline-block' }} />
             <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>
-              Powered by Chainlink oracles · Audited contracts · BNB Smart Chain
+              Chainlink oracle references · Publicly verified source code · BNB Smart Chain
             </span>
           </div>
         </div>
@@ -104,7 +104,7 @@ export default function StakingSection() {
         {/* Bottom note */}
         <div style={{ textAlign: 'center' }}>
           <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '12px', maxWidth: '600px', margin: '0 auto 24px' }}>
-            Staking contracts are publicly verified on BSCScan. Rewards are paid in WOLV tokens on BNB Smart Chain. Early exit incurs a fee on principal. Past performance does not guarantee future returns.
+            Contract source code is publicly verified on BSCScan. Rewards are paid in WOLV tokens on BNB Smart Chain. Early exit may incur a fee on principal. Target APY is not a guarantee and you may lose capital.
           </p>
           <Link href="/dashboard/stake" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 32px', borderRadius: '10px', background: 'linear-gradient(135deg, #00a896, #1a3a8f)', color: '#fff', fontWeight: 700, fontSize: '14px', textDecoration: 'none' }}>
             View All Staking Plans →

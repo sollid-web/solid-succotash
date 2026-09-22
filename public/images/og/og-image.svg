@@ -40,7 +40,7 @@
   <text x="96" y="380" font-family="system-ui, sans-serif" font-size="56" font-weight="700" fill="#ffffff" letter-spacing="-1">Portfolios.</text>
 
   <!-- Subtext -->
-  <text x="96" y="430" font-family="system-ui, sans-serif" font-size="22" fill="rgba(255,255,255,0.7)">Transparent fees. Institutional custody. No guaranteed returns.</text>
+  <text x="96" y="430" font-family="system-ui, sans-serif" font-size="22" fill="rgba(255,255,255,0.7)">Transparent terms. Public contract references. No guaranteed returns.</text>
 
   <!-- Bottom strip -->
   <rect x="0" y="560" width="1200" height="70" fill="rgba(0,0,0,0.2)"/>
@@ -50,7 +50,7 @@
   <text x="96" y="602" font-family="system-ui, sans-serif" font-size="14" fill="rgba(255,255,255,0.3)" dx="200">·</text>
   <text x="320" y="602" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.6)" letter-spacing="2">KYC VERIFIED</text>
   <text x="320" y="602" font-family="system-ui, sans-serif" font-size="14" fill="rgba(255,255,255,0.3)" dx="170">·</text>
-  <text x="510" y="602" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.6)" letter-spacing="2">INSTITUTIONAL CUSTODY</text>
+  <text x="510" y="602" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.6)" letter-spacing="2">PUBLIC CONTRACT DATA</text>
   <text x="510" y="602" font-family="system-ui, sans-serif" font-size="14" fill="rgba(255,255,255,0.3)" dx="260">·</text>
   <text x="790" y="602" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.6)" letter-spacing="2">256-BIT ENCRYPTED</text>
 </svg>

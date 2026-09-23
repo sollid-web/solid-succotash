@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Pioneer Plan — 8% APY · 90 Days · WolvCapital',
-  description: 'Start the Pioneer staking plan on WolvCapital. Earn 8% APY over 90 days on BNB Smart Chain. Minimum $100. WOLV token rewards. KYC required.',
+  title: 'Pioneer Plan information — WolvCapital',
+  description: 'Start the Pioneer staking plan on WolvCapital. Review current plan information, contract references, and risk disclosures before continuing.',
   alternates: { canonical: 'https://www.wolvcapital.com/plans/pioneer' },
   openGraph: {
-    title: 'Pioneer Plan — 8% APY · 90 Days · WolvCapital',
-    description: 'Start the Pioneer staking plan on WolvCapital. Earn 8% APY over 90 days on BNB Smart Chain. Minimum $100. WOLV token rewards. KYC required.',
+    title: 'Pioneer Plan information — WolvCapital',
+    description: 'Start the Pioneer staking plan on WolvCapital. Review current plan information, contract references, and risk disclosures before continuing.',
     url: 'https://www.wolvcapital.com/plans/pioneer',
     images: [{ url: '/og-images/plans-og.png', width: 1200, height: 630 }],
     type: 'website',
@@ -22,7 +22,7 @@ export default function PioneerPlanPage() {
       plan={{
         slug: "pioneer",
         name: "Pioneer",
-        subtitleLine: "8% APY • 90 Days",
+        subtitleLine: "Review current terms • 90 Days",
         supportingLine:
           "Minimum $100 to $999 • Ideal for new investors seeking a simple, structured start.",
         dailyRoiPct: 1,
@@ -30,35 +30,35 @@ export default function PioneerPlanPage() {
         minUsd: 100,
         maxUsd: 999,
         ctaLabel: "Start Pioneer Plan",
-        ctaMicrotext: "USDT & BTC deposits • KYC required • Secure & encrypted",
-        secondaryLinkLabel: "View ROI Calculator",
+        ctaMicrotext: "Supported assets vary by current terms • current account terms apply • Review current security and privacy terms",
+        secondaryLinkLabel: "View outcome Calculator",
         highlightsTitle: "What you get with Pioneer",
         highlightsNote: "Transparent tracking inside your dashboard, updated daily.",
-        calculatorTitle: "Estimate your Pioneer earnings",
+        calculatorTitle: "Review Pioneer terms",
         calculatorHelper:
-          "Enter an amount within the plan limits to see estimated returns.",
+          "Enter an amount within the plan limits to see estimated outcomes.",
         calculatorCtaLabel: "Continue to Deposit & Activate",
         positioningTitle: "Designed for a steady start",
         positioningBody:
-          "The Pioneer Plan is built for investors who want clarity and simplicity. It provides APY tracking with a defined window so you can build confidence before scaling.",
+          "The Pioneer Plan is built for investors who want clarity and simplicity. It provides current plan terms tracking with a defined window so you can build confidence before scaling.",
         positioningBullets: [
           "You want a beginner-friendly plan with clear limits",
           "You prefer a 90-day investment window",
           "You want daily dashboard visibility without complexity",
-          "You value KYC and platform security standards",
+          "You value clear account and security information",
         ],
         activationTitle: "Activate in minutes",
         activationSteps: [
           "Create / Log in to your account",
-          "Complete KYC verification (required for access and security)",
+          "Review account information and current eligibility terms",
           "Deposit USDT or BTC and select Pioneer Plan",
         ],
         activationCtaLabel: "Start Pioneer Plan Now",
-        trustTitle: "Security & compliance first",
+        trustTitle: "Security & disclosure first",
         trustBody:
-          "Wolv Capital follows strict account protection practices designed to keep your profile secure and your activity traceable. Your dashboard, transactions, and verification steps are protected using modern encryption standards.",
+          "Wolv Capital follows account and security information designed to help visitors review the platform. Your dashboard, transactions, and verification steps are protected using modern encryption standards.",
         trustBullets: [
-          "KYC / AML Compliance",
+          "Account and activity terms",
           "Encrypted data handling",
           "Secure login protections (2FA recommended)",
           "24/7 Support availability",
@@ -71,12 +71,12 @@ export default function PioneerPlanPage() {
             a: "The Pioneer Plan accepts investments from $100 to $999.",
           },
           {
-            q: "When is ROI credited?",
-            a: "ROI is credited daily and can be tracked in your dashboard.",
+            q: "When is outcome credited?",
+            a: "outcome is shown according to current terms and can be tracked in your dashboard.",
           },
           {
-            q: "Do I need to complete KYC?",
-            a: "Yes. KYC is required to activate your account and access platform features.",
+            q: "What account information may be requested?",
+            a: "The platform may request account or eligibility information before particular features become available.",
           },
           {
             q: "Which assets can I deposit?",
@@ -89,10 +89,10 @@ export default function PioneerPlanPage() {
         ],
         finalCtaHeadline: "Ready to activate Pioneer?",
         finalCtaSubhead:
-          "Start earning APY with a plan built for new investors.",
+          "Review current plan terms with a plan built for new investors.",
         finalCtaLabel: "Activate Pioneer Plan",
-        finalCtaMicrotext: "Takes minutes • KYC required • USDT/BTC supported",
-        stickyBarText: "Pioneer Plan • 8% APY",
+        finalCtaMicrotext: "Review before continuing • current account terms apply • Supported assets vary by current terms",
+        stickyBarText: "Pioneer Plan • current terms",
         stickyCtaLabel: "Start Pioneer",
       }}
     />

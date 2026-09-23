@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Summit VIP Plan — 25% APY · 365 Days · WolvCapital',
-  description: 'WolvCapital Summit VIP: 25% APY over 365 days. Institutional-grade BNB Smart Chain staking. Minimum $15,000. Enhanced KYC. Maximum $100,000.',
+  title: 'Summit VIP Plan information — WolvCapital',
+  description: 'WolvCapital Summit VIP plan information. BNB Smart Chain plan information. Review current plan terms before continuing.',
   alternates: { canonical: 'https://www.wolvcapital.com/plans/summit' },
   openGraph: {
-    title: 'Summit VIP Plan — 25% APY · 365 Days · WolvCapital',
-    description: 'WolvCapital Summit VIP: 25% APY over 365 days. Institutional-grade BNB Smart Chain staking. Minimum $15,000. Enhanced KYC. Maximum $100,000.',
+    title: 'Summit VIP Plan information — WolvCapital',
+    description: 'WolvCapital Summit VIP plan information. BNB Smart Chain plan information. Review current plan terms before continuing.',
     url: 'https://www.wolvcapital.com/plans/summit',
     images: [{ url: '/og-images/plans-og.png', width: 1200, height: 630 }],
     type: 'website',
@@ -22,43 +22,43 @@ export default function SummitPlanPage() {
       plan={{
         slug: "summit",
         name: "Summit VIP",
-        subtitleLine: "25% APY • 365 Days",
+        subtitleLine: "Review current terms • 365 Days",
         supportingLine:
-          "Minimum $15,000 to $100,000 • Institutional/HNW plan for larger allocations.",
+          "Minimum $15,000 to $100,000 • Plan information for larger allocations; review current terms.",
         dailyRoiPct: 2,
         durationDays: 365,
         minUsd: 15000,
         maxUsd: 100000,
         ctaLabel: "Start Summit Plan",
-        ctaMicrotext: "USDT & BTC deposits • KYC required • Secure & encrypted",
-        secondaryLinkLabel: "View ROI Calculator",
+        ctaMicrotext: "Supported assets vary by current terms • current account terms apply • Review current security and privacy terms",
+        secondaryLinkLabel: "View outcome Calculator",
         highlightsTitle: "What you get with Summit VIP",
         highlightsNote: "Transparent tracking inside your dashboard, updated daily.",
-        calculatorTitle: "Estimate your Summit earnings",
+        calculatorTitle: "Review Summit terms",
         calculatorHelper:
-          "Enter an amount within the plan limits to see estimated returns.",
+          "Enter an amount within the plan limits to see estimated outcomes.",
         calculatorCtaLabel: "Continue to Deposit & Activate",
-        positioningTitle: "Designed for institutional allocations",
+        positioningTitle: "Designed for larger allocations",
         positioningBody:
           "The Summit VIP Plan is built for larger allocations that require structure, documentation, and consistent daily visibility across the investment window.",
         positioningBullets: [
           "You want a premium plan with higher allocation ranges",
-          "You’re comfortable with a 365-day growth window",
+          "You’re comfortable with a 365-day structure window",
           "You prefer clear reporting and daily dashboard tracking",
-          "You value KYC and platform security standards",
+          "You value clear account and security information",
         ],
         activationTitle: "Activate in minutes",
         activationSteps: [
           "Create / Log in to your account",
-          "Complete KYC verification (required for access and security)",
+          "Review account information and current eligibility terms",
           "Deposit USDT or BTC and select Summit VIP Plan",
         ],
         activationCtaLabel: "Start Summit Plan Now",
-        trustTitle: "Security & compliance first",
+        trustTitle: "Security & disclosure first",
         trustBody:
-          "Wolv Capital follows strict account protection practices designed to keep your profile secure and your activity traceable. Your dashboard, transactions, and verification steps are protected using modern encryption standards.",
+          "Wolv Capital follows account and security information designed to help visitors review the platform. Your dashboard, transactions, and verification steps are protected using modern encryption standards.",
         trustBullets: [
-          "KYC / AML Compliance",
+          "Account and activity terms",
           "Encrypted data handling",
           "Secure login protections (2FA recommended)",
           "24/7 Support availability",
@@ -71,12 +71,12 @@ export default function SummitPlanPage() {
             a: "The Summit VIP Plan accepts investments from $15,000 to $100,000.",
           },
           {
-            q: "When is ROI credited?",
-            a: "ROI is credited daily and can be tracked in your dashboard.",
+            q: "When is outcome credited?",
+            a: "outcome is shown according to current terms and can be tracked in your dashboard.",
           },
           {
-            q: "Do I need to complete KYC?",
-            a: "Yes. KYC is required to activate your account and access platform features.",
+            q: "What account information may be requested?",
+            a: "The platform may request account or eligibility information before particular features become available.",
           },
           {
             q: "Which assets can I deposit?",
@@ -89,10 +89,10 @@ export default function SummitPlanPage() {
         ],
         finalCtaHeadline: "Ready to activate Summit VIP?",
         finalCtaSubhead:
-          "Start earning APY with a plan built for higher allocations.",
+          "Review current plan terms with a plan built for higher allocations.",
         finalCtaLabel: "Activate Summit VIP",
-        finalCtaMicrotext: "Takes minutes • KYC required • USDT/BTC supported",
-        stickyBarText: "Summit VIP • 25% APY",
+        finalCtaMicrotext: "Review before continuing • current account terms apply • Supported assets vary by current terms",
+        stickyBarText: "Summit VIP • current terms",
         stickyCtaLabel: "Start Summit",
       }}
     />

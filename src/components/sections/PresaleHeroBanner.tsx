@@ -1,38 +1,7 @@
 'use client'
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Flame } from 'lucide-react'
-
-// Immutable constructor args of the deployed WOLVPresale contract
-// (0x04b5c5e204e812c176ce632f3781ea88c500497c) — these can never change
-// on-chain, so hardcoding them here carries no staleness risk.
-const PRESALE_END_TIME = 1785686442 // 2026-08-02T16:00:42Z
-
-function formatDuration(seconds: number) {
-  if (seconds <= 0) return null
-  const d = Math.floor(seconds / 86400)
-  const h = Math.floor((seconds % 86400) / 3600)
-  const m = Math.floor((seconds % 3600) / 60)
-  return `${d}d ${h}h ${m}m`
-}
 
 export default function PresaleHeroBanner() {
-  const [timeLeft, setTimeLeft] = useState<string | null>(
-    formatDuration(PRESALE_END_TIME - Math.floor(Date.now() / 1000)),
-  )
-  const [ended, setEnded] = useState(Math.floor(Date.now() / 1000) >= PRESALE_END_TIME)
-
-  useEffect(() => {
-    const tick = () => {
-      const secondsLeft = PRESALE_END_TIME - Math.floor(Date.now() / 1000)
-      setTimeLeft(formatDuration(secondsLeft))
-      setEnded(secondsLeft <= 0)
-    }
-    tick()
-    const interval = setInterval(tick, 60_000)
-    return () => clearInterval(interval)
-  }, [])
-
   return (
     <div className="bg-gradient-to-r from-teal-950 to-blue-950 border-t-4 border-teal-500 py-6 md:py-8">
       <div className="container mx-auto px-4 lg:px-8">

@@ -31,10 +31,10 @@ export default function StakingSection() {
         </div>
         <div style={{ textAlign: 'center', marginBottom: '56px' }}>
           <h2 style={{ fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em', marginBottom: '16px', lineHeight: 1.1 }}>
-            Stake & Earn WOLV On-Chain.
+            Review WOLV staking information
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '16px', maxWidth: '560px', margin: '0 auto', lineHeight: 1.7 }}>
-            Lock your assets in our audited smart contracts and earn WOLV rewards at up to 25% APY. Every reward is recorded permanently on the BNB blockchain.
+            Review the current contract references, lock periods, fees, and product terms before participating. Digital-asset positions can lose value.
           </p>
         </div>
 
@@ -43,7 +43,7 @@ export default function StakingSection() {
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(0,168,150,0.08)', border: '1px solid rgba(0,168,150,0.2)', borderRadius: '99px', padding: '8px 20px' }}>
             <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00a896', display: 'inline-block' }} />
             <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>
-              Powered by Chainlink oracles · Audited contracts · BNB Smart Chain
+              Public contract references · BNB Smart Chain · Review current terms
             </span>
           </div>
         </div>
@@ -72,13 +72,12 @@ export default function StakingSection() {
               </div>
               <div style={{ color: '#fff', fontSize: '18px', fontWeight: 700, marginBottom: '4px' }}>{plan.name}</div>
               <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px', marginBottom: '20px' }}>{plan.sub}</div>
-              <div style={{ color: plan.color, fontSize: '48px', fontWeight: 800, fontFamily: 'monospace', lineHeight: 1, marginBottom: '4px' }}>{plan.apy}</div>
-              <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '12px', marginBottom: '20px' }}>Annual Percentage Yield</div>
+              <div style={{ color: plan.color, fontSize: '24px', fontWeight: 800, lineHeight: 1.2, marginBottom: '20px' }}>Current terms</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '24px' }}>
                 {[
-                  ['Min Investment', plan.min],
+                  ['Min Investment', 'See current terms'],
                   ['Lock Period',    `${plan.lockDays} days`],
-                  ['Early Exit Fee', plan.exitFee],
+                  ['Early Exit Fee', 'See current terms'],
                   ['Stake With',     plan.token],
                   ['Rewards In',     'WOLV Token'],
                 ].map(([l, v]) => (
@@ -104,7 +103,7 @@ export default function StakingSection() {
         {/* Bottom note */}
         <div style={{ textAlign: 'center' }}>
           <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: '12px', maxWidth: '600px', margin: '0 auto 24px' }}>
-            Staking contracts are publicly verified on BSCScan. Rewards are paid in WOLV tokens on BNB Smart Chain. Early exit incurs a fee on principal. Past performance does not guarantee future returns.
+            Contract addresses and current terms should be reviewed before use. Public source visibility and displayed parameters do not guarantee returns, liquidity, or recovery.
           </p>
           <Link href="/dashboard/stake" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '14px 32px', borderRadius: '10px', background: 'linear-gradient(135deg, #00a896, #1a3a8f)', color: '#fff', fontWeight: 700, fontSize: '14px', textDecoration: 'none' }}>
             View All Staking Plans →

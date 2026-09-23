@@ -7,8 +7,8 @@ interface Props {
 }
 
 export default function WolvPriceStat({ contractAddress }: Props) {
-  const [value, setValue] = useState('$0.50')
-  const [sub, setSub] = useState('Presale reference')
+  const [value, setValue] = useState('Unavailable')
+  const [sub, setSub] = useState('DEX data unavailable')
 
   useEffect(() => {
     let cancelled = false
@@ -25,7 +25,7 @@ export default function WolvPriceStat({ contractAddress }: Props) {
           setSub(`Live · ${pair.dexId || 'DEX'}`)
         }
       } catch {
-        // keep the pre-listing fallback
+        // Keep the neutral unavailable state when the DEX data source cannot be reached.
       }
     }
 

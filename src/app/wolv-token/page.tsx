@@ -98,13 +98,12 @@ export default function WolvTokenPage() {
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
               }}>
-                Proof of Returns
+                On-Chain Token Records
               </span>
             </h1>
 
             <p className="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed mb-10">
-              Every profit distributed on WolvCapital is recorded permanently on the BNB blockchain —
-              verified by anyone, anywhere, anytime.
+              Token transfers and other public blockchain activity can be viewed on a block explorer. Public records do not prove profit, ownership, safety, or future value.
             </p>
 
             {/* CTA buttons */}
@@ -233,8 +232,8 @@ export default function WolvTokenPage() {
               <div className="bg-teal-500/10 border border-teal-500/30 rounded-xl p-8 mb-12">
                 <h3 className="text-xl font-bold text-teal-400 mb-4">🚀 WOLV is Live on PancakeSwap V2</h3>
                 <div className="space-y-3 text-gray-300">
-                  <p>WOLV/BNB is now actively trading on PancakeSwap V2 on BNB Smart Chain. Buy or sell WOLV directly from any BNB wallet — no account registration required.</p>
-                  <p>Track live price, chart, and trading volume on <a href="https://dexscreener.com/bsc/0xe0167279aef7bf4ad313d261da82e8366822270c" target="_blank" rel="noopener noreferrer" className="text-teal-400 underline">DEXScreener</a> and <a href="https://www.dextools.io/app/en/bnb/pair-explorer/0xe0167279aef7bf4ad313d261da82e8366822270c" target="_blank" rel="noopener noreferrer" className="text-teal-400 underline">DEXTools</a>. Contract verified on BSCScan with 231+ on-chain holders.</p>
+                  <p>WOLV market information and DEX availability can change. Review the pair, liquidity, price impact, contract address, and transaction details independently before trading.</p>
+                  <p>Track live price, chart, and trading volume on <a href="https://dexscreener.com/bsc/0xe0167279aef7bf4ad313d261da82e8366822270c" target="_blank" rel="noopener noreferrer" className="text-teal-400 underline">DEXScreener</a> and <a href="https://www.dextools.io/app/en/bnb/pair-explorer/0xe0167279aef7bf4ad313d261da82e8366822270c" target="_blank" rel="noopener noreferrer" className="text-teal-400 underline">DEXTools</a>. Contract address and public holder data are available on BSCScan.</p>
                   <div className="pt-2">
                     <a
                       href="https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c"
@@ -252,7 +251,7 @@ export default function WolvTokenPage() {
 
               {/* Smart Contracts */}
               <div className="bg-white/5 border border-teal-400/20 rounded-xl p-8 mb-12">
-                <h3 className="text-xl font-bold text-white mb-6">Verified Smart Contracts</h3>
+                <h3 className="text-xl font-bold text-white mb-6">Contract Addresses</h3>
                 <div className="space-y-4">
                   {[
                     { name: 'WOLV Token Contract', address: WOLV_CONTRACT, href: `https://bscscan.com/token/${WOLV_CONTRACT}` },

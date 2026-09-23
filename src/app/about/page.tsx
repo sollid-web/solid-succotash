@@ -2,17 +2,17 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'About Us — WolvCapital',
-  description: "Learn about WolvCapital's mission to provide secure, transparent digital asset investment opportunities with sustainable returns.",
+  description: "Learn about WolvCapital's product information, public token data, platform terms, and risk disclosures.",
   openGraph: {
     title: 'About WolvCapital',
-    description: 'Global, Secure, Transparent Digital Asset Management',
+    description: 'Digital-asset information, public token data, and platform disclosures',
     images: ['/og-images/about-og.png'],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'About WolvCapital',
-    description: 'Global, Secure, Transparent Digital Asset Management',
+    description: 'Digital-asset information, public token data, and platform disclosures',
     images: ['/og-images/about-og.png'],
   },
 }
@@ -24,10 +24,10 @@ export default function AboutPage() {
   const pStyle = { fontSize: '15px', color: 'rgba(255,255,255,0.72)', lineHeight: 1.8, margin: 0 }
   const accentBar = { width: '3px', minHeight: '24px', borderRadius: '4px', background: 'linear-gradient(180deg,#2a52be,#00a896)', flexShrink: 0 as const, marginTop: '4px' }
   const stats = [
-    { value: '120+', label: 'Countries Served' },
-    { value: '8–25%', label: 'APY Range' },
+    { value: '—', label: 'Supported regions: review current terms' },
+    { value: '—', label: 'Rates: review current terms' },
     { value: 'BEP-20', label: 'Token Standard' },
-    { value: 'FinCEN', label: 'MSB Registered' },
+    { value: '—', label: 'Regulatory status: not stated here' },
   ]
 
   const team = [
@@ -35,13 +35,13 @@ export default function AboutPage() {
       initials: 'RU',
       name: 'Richard Uwe',
       role: 'Founder & CEO',
-      bio: 'Richard Uwe is the Founder and Chief Executive Officer of WolvCapital. With a career rooted in quantitative strategy, risk management, and algorithmic asset allocation, he designed WolvCapital with a "TradFi Compliance DNA" — integrating institutional-grade KYC, real-time AML monitoring, and audited smart contracts to prove that Web3 innovation can safely coexist with global compliance standards.',
+      bio: 'Richard Uwe is the Founder and Chief Executive Officer of WolvCapital. With a career rooted in quantitative strategy, risk management, and algorithmic asset allocation, he designed WolvCapital with a "risk-aware product design" — publishing product information, public contract references, and risk disclosures so visitors can make their own assessment.',
       philosophy: '"Trust the code, verify on-chain, and eliminate the middleman."',
       links: [
         { label: 'X / Twitter', href: 'https://x.com/wolvcapitals', icon: '𝕏' },
         { label: 'Telegram', href: 'https://t.me/wolvcapital', icon: '✈' },
       ],
-      tags: ['Quantitative Strategy', 'DeFi Architecture', 'Risk Management', 'TradFi Compliance'],
+      tags: ['Quantitative Strategy', 'DeFi Architecture', 'Risk Management', 'Product information'],
     },
   ]
 
@@ -60,11 +60,11 @@ export default function AboutPage() {
         <div style={{ maxWidth: '700px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1, flex: 1 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0,168,150,0.1)', border: '1px solid rgba(0,168,150,0.3)', borderRadius: '4px', padding: '4px 12px', marginBottom: '16px' }}>
             <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00a896' }} />
-            <span style={{ fontSize: '11px', color: '#00c9b1', fontWeight: 700, letterSpacing: '0.12em' }}>U.S. REGULATED · GLOBAL PLATFORM</span>
+            <span style={{ fontSize: '11px', color: '#00c9b1', fontWeight: 700, letterSpacing: '0.12em' }}>DIGITAL-ASSET INFORMATION · GLOBAL ACCESS VARIES</span>
           </div>
           <h1 style={{ fontSize: 'clamp(32px,6vw,52px)', fontWeight: 800, color: '#ffffff', margin: '0 0 16px', lineHeight: 1.1, textShadow: '0 0 60px rgba(0,168,150,0.25)' }}>About WolvCapital</h1>
           <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.75, margin: '0 0 48px', maxWidth: '520px', marginLeft: 'auto', marginRight: 'auto' }}>
-            A digital asset investment platform dedicated to delivering secure, transparent, and technology-driven financial solutions for individuals worldwide.
+            A digital-asset information and platform service focused on public token data, contract references, current terms, and risk disclosures.
           </p>
         </div>
 
@@ -87,8 +87,8 @@ export default function AboutPage() {
           <div style={{ display: 'flex', gap: '14px' }}>
             <div style={accentBar} />
             <div>
-              <p style={{ ...pStyle, marginBottom: '14px' }}>Since inception, our mission has been to simplify access to digital asset opportunities while maintaining industry-leading security, compliance, and operational excellence.</p>
-              <p style={pStyle}>Our investment model focuses on sustainable returns of 8%–25% APY, supported by diversified digital asset strategies and on-chain reward distribution via BNB Smart Chain. We serve verified investors across more than 120 countries.</p>
+              <p style={{ ...pStyle, marginBottom: '14px' }}>Our goal is to make product information, public token data, platform terms, and risk disclosures easier to review.</p>
+              <p style={pStyle}>Product parameters, token values, availability, and outcomes can change. Review the current terms and supported-region information before using the service.</p>
             </div>
           </div>
         </div>
@@ -101,7 +101,7 @@ export default function AboutPage() {
               <h2 style={h2Style}>Our Commitment</h2>
               <p style={{ ...pStyle, marginBottom: '14px' }}>We prioritize integrity, transparency, and professional risk management. Each investor benefits from:</p>
               <ul style={{ margin: 0, paddingLeft: '18px' }}>
-                {['8%–25% APY Staking Plans on BNB Smart Chain','256-bit SSL encryption across all connections','KYC & AML compliance for every account','24/7 system monitoring and fraud detection','Protected user-data environment (GDPR · CCPA)'].map(b => (
+                {['Current plan information and terms','HTTPS transport and account-security guidance','Account eligibility information may be requested','Platform activity information and support process','Privacy and data-handling information'].map(b => (
                   <li key={b} style={{ fontSize: '15px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.75, marginBottom: '8px' }}>{b}</li>
                 ))}
               </ul>
@@ -115,7 +115,7 @@ export default function AboutPage() {
             <div style={accentBar} />
             <div>
               <h2 style={h2Style}>Our Vision</h2>
-              <p style={pStyle}>To become a trusted global leader in digital asset investment by offering accessible, secure, and consistent growth opportunities backed by innovation and professional oversight.</p>
+              <p style={pStyle}>To provide clear product information and risk context so visitors can make informed decisions about whether to continue.</p>
             </div>
           </div>
         </div>
@@ -131,7 +131,7 @@ export default function AboutPage() {
                   { title: 'Security First', text: 'Every system is built with protection in mind.' },
                   { title: 'Transparency', text: 'Investors receive clear insights into operations and policies.' },
                   { title: 'Accessibility', text: 'Our platform is designed for both new and experienced investors.' },
-                  { title: 'Sustainability', text: 'We prioritize steady, controlled investment performance.' },
+                  { title: 'Sustainability', text: 'We prioritize clear information and risk awareness.' },
                 ].map(({ title, text }) => (
                   <div key={title} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '16px' }}>
                     <h3 style={h3Style}>{title}</h3>

@@ -117,7 +117,7 @@ export default function TermsOfServicePage() {
               <h2 style={h2Style}>2. Eligibility</h2>
               <p style={{ ...pStyle }}>You must meet all of the following criteria to use the platform:</p>
               <ul style={{ margin: 0, paddingLeft: '18px' }}>
-                {['At least 18 years of age','Legally permitted to invest in digital assets in your jurisdiction','Capable of entering a binding legal contract','Able to pass KYC/AML verification'].map(b => <li key={b} style={liStyle}>{b}</li>)}
+                {['At least 18 years of age','Legally permitted to invest in digital assets in your jurisdiction','Capable of entering a binding legal contract','Able to provide any information required by the current account terms'].map(b => <li key={b} style={liStyle}>{b}</li>)}
               </ul>
             </div>
           </div>
@@ -129,7 +129,7 @@ export default function TermsOfServicePage() {
             <div style={accentBar} />
             <div style={{ flex: 1 }}>
               <h2 style={h2Style}>3. Investment Participation</h2>
-              <p style={pStyle}>All investment plans are subject to availability and compliance review. WolvCapital operates four staking tiers on BNB Smart Chain — Pioneer (8% APY), Vanguard (12% APY), Horizon (18% APY), and Summit VIP (25% APY). WolvCapital reserves the right to:</p>
+              <p style={pStyle}>Product features and plan parameters are subject to availability and the current platform terms. Review the applicable fees, lock periods, exit conditions, and risk disclosures before continuing. WolvCapital reserves the right to:</p>
               <ul style={{ margin: 0, paddingLeft: '18px' }}>
                 {['Modify investment plans and APY rates','Suspend or terminate platform access at any time','Require additional KYC/AML verification for withdrawals','Adjust reward pool allocations based on on-chain conditions'].map(b => <li key={b} style={liStyle}>{b}</li>)}
               </ul>

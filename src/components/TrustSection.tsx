@@ -14,7 +14,7 @@ export default function TrustSection() {
               Built for Trust. Verified on the Blockchain.
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              WolvCapital combines institutional-grade security with fully audited smart contracts so you always have full visibility into your rewards.
+              WolvCapital publishes security controls and contract references so you can review the available evidence. Public source-code verification is not the same as an independent audit.
             </p>
           </div>
 
@@ -103,7 +103,7 @@ export default function TrustSection() {
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 max-w-4xl mx-auto">
             <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0" strokeWidth={2.5} />
             <p className="text-sm text-amber-900 flex-1">
-              <strong>Important Disclosure:</strong> All investments carry risk, including potential loss of principal. WOLV is in pre-listing phase — token value is an internal reference price, not a market price. Please review our{' '}
+              <strong>Important Disclosure:</strong> All investments carry risk, including potential loss of principal. WOLV market value is determined by supply and demand on the DEX and may fluctuate significantly. Please review our{' '}
               <Link href="/risk-disclosure" className="font-bold underline hover:no-underline">Risk Disclosure</Link>
               {' '}before investing.
             </p>

@@ -4,19 +4,19 @@ import { SITE_URL } from '@/lib/site-config'
 const PAGE_COPY: Record<string, { title: string; description: string }> = {
   home: {
     title: 'WolvCapital',
-    description: 'Next-generation DeFi on BNB Smart Chain. Stake, earn, and govern with WOLV.',
+    description: 'Public WOLV token information, platform terms, contract references, and digital-asset risk context.',
   },
   'wolv-token': {
     title: 'WOLV Token — WolvCapital',
-    description: 'The core utility token powering the WolvCapital ecosystem. Fixed supply, no mint, no pause.',
+    description: 'Review WOLV token information, public contract references, market data, and digital-asset risks.',
   },
   tokenomics: {
     title: 'Tokenomics — WolvCapital',
-    description: 'Hard-capped supply of 1,000,000,000 WOLV. Transparent, auditable, on-chain.',
+    description: 'Public WOLV token information, allocation references, current terms, and digital-asset risk context.',
   },
   roadmap: {
     title: 'Roadmap — WolvCapital',
-    description: 'Our path to a fully decentralized, community-owned DeFi protocol.',
+    description: 'Review the published WolvCapital roadmap and the limits of forward-looking product information.',
   },
   whitepaper: {
     title: 'Whitepaper — WolvCapital',
@@ -24,7 +24,7 @@ const PAGE_COPY: Record<string, { title: string; description: string }> = {
   },
   presale: {
     title: 'WOLV Presale — WolvCapital',
-    description: 'Buy WOLV at $0.50 in the public presale. Verified contract, fixed hard cap, instant delivery.',
+    description: 'Historical WOLV presale information. Review current availability, terms, and risk disclosures before taking action.',
   },
 }
 

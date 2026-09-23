@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Vanguard Plan — 12% APY · 150 Days · WolvCapital',
-  description: 'Earn 12% APY over 150 days with WolvCapital Vanguard staking plan. BNB Smart Chain on-chain rewards. Minimum $1,000. KYC required.',
+  title: 'Vanguard Plan information — WolvCapital',
+  description: 'Review current plan information for WolvCapital Vanguard staking plan. BNB Smart Chain on-chain rewards. Minimum $1,000. current account terms apply.',
   alternates: { canonical: 'https://www.wolvcapital.com/plans/vanguard' },
   openGraph: {
-    title: 'Vanguard Plan — 12% APY · 150 Days · WolvCapital',
-    description: 'Earn 12% APY over 150 days with WolvCapital Vanguard staking plan. BNB Smart Chain on-chain rewards. Minimum $1,000. KYC required.',
+    title: 'Vanguard Plan information — WolvCapital',
+    description: 'Review current plan information for WolvCapital Vanguard staking plan. BNB Smart Chain on-chain rewards. Minimum $1,000. current account terms apply.',
     url: 'https://www.wolvcapital.com/plans/vanguard',
     images: [{ url: '/og-images/plans-og.png', width: 1200, height: 630 }],
     type: 'website',
@@ -22,43 +22,43 @@ export default function VanguardPlanPage() {
       plan={{
         slug: "vanguard",
         name: "Vanguard",
-        subtitleLine: "1.25% Daily ROI • 150 Days",
+        subtitleLine: "1.25% Daily outcome • 150 Days",
         supportingLine:
-          "Minimum $1,000 to $4,999 • Balanced growth for investors who want clear terms and oversight.",
+          "Minimum $1,000 to $4,999 • Balanced structure for investors who want clear terms and oversight.",
         dailyRoiPct: 1.25,
         durationDays: 150,
         minUsd: 1000,
         maxUsd: 4999,
         ctaLabel: "Start Vanguard Plan",
-        ctaMicrotext: "USDT & BTC deposits • KYC required • Secure & encrypted",
-        secondaryLinkLabel: "View ROI Calculator",
+        ctaMicrotext: "Supported assets vary by current terms • current account terms apply • Review current security and privacy terms",
+        secondaryLinkLabel: "View outcome Calculator",
         highlightsTitle: "What you get with Vanguard",
         highlightsNote: "Transparent tracking inside your dashboard, updated daily.",
-        calculatorTitle: "Estimate your Vanguard earnings",
+        calculatorTitle: "Review Vanguard terms",
         calculatorHelper:
-          "Enter an amount within the plan limits to see estimated returns.",
+          "Enter an amount within the plan limits to see estimated outcomes.",
         calculatorCtaLabel: "Continue to Deposit & Activate",
-        positioningTitle: "Designed for balanced growth",
+        positioningTitle: "Designed for balanced structure",
         positioningBody:
-          "The Vanguard Plan offers a measured approach with APY visibility and defined limits. It’s a solid fit for investors who want structure without the longest lockup.",
+          "The Vanguard Plan offers a measured approach with current plan terms visibility and defined limits. It’s a solid fit for investors who want structure without the longest lockup.",
         positioningBullets: [
-          "You want a balanced plan with a mid-range ROI",
-          "You’re comfortable with a 150-day growth window",
+          "You want a balanced plan with a mid-range outcome",
+          "You’re comfortable with a 150-day structure window",
           "You prefer consistent dashboard tracking over constant trading",
-          "You value KYC and platform security standards",
+          "You value clear account and security information",
         ],
         activationTitle: "Activate in minutes",
         activationSteps: [
           "Create / Log in to your account",
-          "Complete KYC verification (required for access and security)",
+          "Review account information and current eligibility terms",
           "Deposit USDT or BTC and select Vanguard Plan",
         ],
         activationCtaLabel: "Start Vanguard Plan Now",
-        trustTitle: "Security & compliance first",
+        trustTitle: "Security & disclosure first",
         trustBody:
-          "Wolv Capital follows strict account protection practices designed to keep your profile secure and your activity traceable. Your dashboard, transactions, and verification steps are protected using modern encryption standards.",
+          "Wolv Capital follows account and security information designed to help visitors review the platform. Your dashboard, transactions, and verification steps are protected using modern encryption standards.",
         trustBullets: [
-          "KYC / AML Compliance",
+          "Account and activity terms",
           "Encrypted data handling",
           "Secure login protections (2FA recommended)",
           "24/7 Support availability",
@@ -71,12 +71,12 @@ export default function VanguardPlanPage() {
             a: "The Vanguard Plan accepts investments from $1,000 to $4,999.",
           },
           {
-            q: "When is ROI credited?",
-            a: "ROI is credited daily and can be tracked in your dashboard.",
+            q: "When is outcome credited?",
+            a: "outcome is shown according to current terms and can be tracked in your dashboard.",
           },
           {
-            q: "Do I need to complete KYC?",
-            a: "Yes. KYC is required to activate your account and access platform features.",
+            q: "What account information may be requested?",
+            a: "The platform may request account or eligibility information before particular features become available.",
           },
           {
             q: "Which assets can I deposit?",
@@ -89,10 +89,10 @@ export default function VanguardPlanPage() {
         ],
         finalCtaHeadline: "Ready to activate Vanguard?",
         finalCtaSubhead:
-          "Start earning APY with a plan built for balanced growth.",
+          "Review current plan terms with a plan built for balanced structure.",
         finalCtaLabel: "Activate Vanguard Plan",
-        finalCtaMicrotext: "Takes minutes • KYC required • USDT/BTC supported",
-        stickyBarText: "Vanguard Plan • 1.25% Daily ROI",
+        finalCtaMicrotext: "Review before continuing • current account terms apply • Supported assets vary by current terms",
+        stickyBarText: "Vanguard Plan • current terms",
         stickyCtaLabel: "Start Vanguard",
       }}
     />

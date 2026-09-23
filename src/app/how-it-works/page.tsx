@@ -29,7 +29,7 @@ const STEPS = [
     num: "01",
     title: "Create Your Account",
     description:
-      "Sign up with a valid email address and secure password. After email verification, your dashboard is activated with access to staking tiers, WOLV rewards tracking, and wallet connection — protected by KYC/AML compliance and SSL encryption.",
+      "Sign up with a valid email address and secure password. After email verification, your dashboard is activated with access to staking tiers, WOLV rewards tracking, and wallet connection — subject to the current account, privacy, and security terms.",
     icon: "👤",
     tag: "Getting Started",
   },
@@ -37,7 +37,7 @@ const STEPS = [
     num: "02",
     title: "Complete KYC Verification",
     description:
-      "Submit your identity documents for KYC review. This is required for AML compliance and protects all users on the platform. Verification is typically completed within 24 hours. Only verified users may stake and withdraw.",
+      "Submit your identity documents for KYC review. This may be required before particular platform features become available. Verification is typically completed within 24 hours. Only verified users may stake and withdraw.",
     icon: "🪪",
     tag: "Compliance",
   },
@@ -45,7 +45,7 @@ const STEPS = [
     num: "03",
     title: "Deposit BNB or BUSD",
     description:
-      "Fund your staking position using BNB or BUSD on BNB Smart Chain. Deposits are recorded on-chain and reflected in your dashboard after blockchain confirmation. All transactions are secured with AML review.",
+      "Fund your staking position using BNB or BUSD on BNB Smart Chain. Deposits are recorded on-chain and reflected in your dashboard after blockchain confirmation. Review the transaction, fee, and withdrawal terms before funding.",
     icon: "💳",
     tag: "Funding",
   },
@@ -61,7 +61,7 @@ const STEPS = [
     num: "05",
     title: "Earn WOLV Rewards On-Chain",
     description:
-      "WOLV token rewards accumulate on BNB Smart Chain for the duration of your staking lock period. Your dashboard shows real-time reward accumulation, staking progress, and days remaining. All activity is verifiable on BSCScan.",
+      "WOLV token rewards accumulate on BNB Smart Chain for the duration of your staking lock period. Your dashboard shows real-time reward accumulation, staking progress, and days remaining. Some activity may be viewable on a public block explorer; public records do not guarantee an outcome.",
     icon: "📈",
     tag: "Rewards",
   },
@@ -78,7 +78,7 @@ const STEPS = [
     num: "07",
     title: "Trade WOLV on PancakeSwap",
     description:
-      "WOLV is now live on PancakeSwap V2 (BNB Smart Chain). Swap your earned WOLV for BNB directly from your wallet — no registration required. Track live price and chart on DEXScreener and DEXTools. Contract verified on BSCScan.",
+      "WOLV is now live on PancakeSwap V2 (BNB Smart Chain). Swap your earned WOLV for BNB directly from your wallet — no registration required. Track live price and chart on DEXScreener and DEXTools. Contract address is provided for independent inspection.",
     icon: "⬡",
     tag: "DEX Trading",
     highlight: true,

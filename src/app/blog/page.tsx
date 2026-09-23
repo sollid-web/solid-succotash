@@ -42,6 +42,7 @@ export default function BlogIndexPage() {
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#2563eb]">WolvCapital Research</p>
           <h1 className="mt-3 text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0b2f6b]">Crypto investing, explained clearly</h1>
           <p className="mt-4 text-base sm:text-lg text-gray-700 max-w-3xl">Objective education for beginners and intermediate investors. Learn how protocols work, what to verify independently, and how to make risk-aware decisions.</p>
+          <p className="mt-4 text-sm text-gray-600">Read our <Link href="/editorial-policy" className="font-semibold text-[#2563eb] underline">editorial policy</Link> for authorship, sources, updates, and corrections.</p>
           <nav aria-label="Blog topics" className="mt-8 flex flex-wrap gap-2">
             {categories.map((category) => <a key={category} href={category === 'All topics' ? '#articles' : `#${category.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`} className="rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-[#0b2f6b] hover:border-[#2563eb] hover:text-[#2563eb]">{category}</a>)}
           </nav>

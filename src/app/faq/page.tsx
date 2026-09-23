@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "FAQ — How Wolv Capital Staking Works | BNB Investment Questions",
-  description: "Answers to common questions about WOLV token staking, withdrawals, smart contract security, and BNB Smart Chain. Everything you need to know about WolvCapital.",
+  title: "FAQ — WolvCapital Platform and Token Information",
+  description: "Answers about WOLV token information, public contract references, platform terms, withdrawals, and digital-asset risks.",
   keywords: [
     "WolvCapital FAQ",
     "WOLV token questions",
@@ -11,12 +11,12 @@ export const metadata: Metadata = {
     "investment platform FAQ",
     "digital asset investment questions",
     "withdrawal process",
-    "KYC verification"
+    "account information review"
   ],
   openGraph: {
     title: "FAQ — WolvCapital",
     description:
-      "Everything you need to know about investing, staking, and earning WOLV on WolvCapital.",
+      "Review WOLV token information, platform terms, and digital-asset risks on WolvCapital.",
     url: "https://www.wolvcapital.com/faq",
     siteName: "WolvCapital",
     type: "website",
@@ -31,7 +31,7 @@ const CATEGORIES = [
     questions: [
       {
         q: "What is WolvCapital?",
-        a: "WolvCapital is a professionally managed digital asset investment platform. Investors deposit funds, choose a structured investment plan, and earn staking rewards — tracked live on a personal dashboard. Profits are distributed as WOLV tokens on BNB Smart Chain, giving every investor verifiable, blockchain-backed proof of their earnings.",
+        a: "WolvCapital publishes digital-asset product information, public contract references, platform terms, and risk disclosures. Token activity and outcomes can change and are not guaranteed.",
       },
       {
         q: "How do I create an account?",
@@ -39,11 +39,11 @@ const CATEGORIES = [
       },
       {
         q: "What is the minimum investment?",
-        a: "The minimum is $100 on the Pioneer plan — our entry-level tier. Higher tiers start at $1,000 (Vanguard), $5,000 (Horizon), and $10,000 (Summit VIP). We recommend starting with Pioneer to familiarize yourself with the platform before committing larger capital.",
+        a: "The minimum is $100 on the Pioneer plan — our entry-level tier. Higher tiers start at $1,000 (Vanguard), $5,000 (Horizon), and $15,000 (Summit VIP). We recommend starting with Pioneer to familiarize yourself with the platform before committing larger capital.",
       },
       {
         q: "Is WolvCapital available in my country?",
-        a: "WolvCapital serves investors globally. However, availability may be restricted based on local regulations in some jurisdictions. Complete KYC verification — the system will confirm your eligibility based on your country of residence during the verification process.",
+        a: "WolvCapital serves investors globally. However, availability may be restricted based on local regulations in some jurisdictions. Complete account information review — the system will confirm your eligibility based on your country of residence during the verification process.",
       },
       {
         q: "Do I need crypto experience to use WolvCapital?",
@@ -97,7 +97,7 @@ const CATEGORIES = [
       },
       {
         q: "Is WOLV tradeable on exchanges?",
-        a: "Not yet. WOLV is currently earned exclusively through WolvCapital investment returns and staking rewards. WolvCapital plans to add WOLV liquidity on PancakeSwap and apply for CoinGecko and CoinMarketCap listings in Q3 2026. Early investors earning WOLV now will hold tokens before exchange listing.",
+        a: "Yes. WOLV is currently tradeable on PancakeSwap V2 according to the current platform information. Verify the contract address, pair, liquidity, price impact, and transaction details independently before trading.",
       },
       {
         q: "Can I verify my WOLV balance independently?",
@@ -116,31 +116,31 @@ const CATEGORIES = [
     questions: [
       {
         q: "What is WOLV staking?",
-        a: "WOLV staking allows you to deposit your WOLV tokens into WolvCapital's audited staking contracts and earn additional APY rewards. It's a way to compound your investment earnings — the WOLV you earn from investment plans can be staked to generate further returns.",
+        a: "WOLV staking allows you to deposit your WOLV tokens into the published staking contracts under the displayed tier terms and target APY assumptions. It's a way to compound your investment earnings — the WOLV you earn from investment plans can be staked to generate further returns.",
       },
       {
-        q: "What staking tiers are available?",
-        a: "Four staking tiers are available: Pioneer (8% APY · 90-day lock), Vanguard (12% APY · 150-day lock), Horizon (18% APY · 180-day lock), and Summit VIP (25% APY · 365-day lock). Higher tiers offer better APY in exchange for longer lock periods.",
+        q: "What plan parameters are available?",
+        a: "Plan names, lock periods, fees, supported assets, and other parameters may change. Review the current terms and dashboard information before taking action.",
       },
       {
-        q: "How are staking rewards calculated?",
-        a: "Staking rewards are calculated using Chainlink price feeds integrated into the StakingContract. Chainlink's decentralized oracle network provides manipulation-resistant price data, ensuring APY calculations are fair and cannot be gamed by any single party.",
+        q: "Where can I review contract and pricing information?",
+        a: "Review the published contract addresses and current platform terms. Any displayed price, rate, or reward information can change and should not be treated as a guarantee.",
       },
       {
-        q: "Is the staking reward pool safe?",
-        a: "Yes. The RewardPool contract (0x7310f3e07627ce98246973e068bf2ff294f84e5f) is protected by a 48-hour timelock. No funds can be moved from the pool without a 48-hour delay — this prevents sudden unauthorized withdrawals. The pool balance is publicly visible on BSCScan at all times.",
+        q: "How can I inspect the reward pool?",
+        a: "The reward-pool address and relevant transaction data can be reviewed on a block explorer. A timelock or public balance does not guarantee safety, liquidity, or recovery.",
       },
       {
-        q: "How do I start staking?",
-        a: "Log into your dashboard and click Stake WOLV in the navigation. Connect your wallet, select a staking tier, enter the amount of WOLV to stake, and confirm the transaction in MetaMask or Trust Wallet. Your stake is immediately active and rewards begin accruing.",
+        q: "How do I review a staking position?",
+        a: "Review the current terms, wallet transaction, lock period, fees, and withdrawal conditions before confirming any position. Digital-asset activity can result in loss.",
       },
       {
         q: "Can I unstake early?",
         a: "Each staking tier has a lock period. Unstaking before the lock period expires may result in forfeiture of accumulated rewards, depending on the tier terms. Full terms are displayed before you confirm any stake. We recommend staking only WOLV you do not need access to during the lock period.",
       },
       {
-        q: "Are the staking contracts audited?",
-        a: "Both the StakingContract and RewardPool are verified on BSCScan with public source code. The WOLV token contract scored 87/100 on SolidityScan. A full independent third-party audit of the staking contracts is planned for Q3 2026.",
+        q: "Where are contract references listed?",
+        a: "Public contract addresses are listed for technical inspection. No audit, scanner result, or source-code link on this page should be treated as a safety guarantee."
       },
     ],
   },
@@ -151,11 +151,11 @@ const CATEGORIES = [
     questions: [
       {
         q: "How do I withdraw my funds?",
-        a: "Log into your dashboard, go to Withdraw, enter your destination wallet address and the amount, then submit the request. Your request enters the compliance review queue. Once approved, the payout is released to your wallet. Processing times vary by tier.",
+        a: "Log into your dashboard, go to Withdraw, enter your destination wallet address and the amount, then submit the request. Your request enters the platform review queue. Once approved, the payout is released to your wallet. Processing times vary by tier.",
       },
       {
         q: "Why are withdrawals reviewed manually?",
-        a: "Every withdrawal undergoes manual human review to confirm account ownership, verify the destination address, and screen for AML compliance. This protects you from unauthorized transfers and ensures every payout goes to the correct wallet. It is a security feature, not a restriction.",
+        a: "Withdrawal requests may be reviewed for account, destination-address, and operational reasons. Review the current withdrawal terms and expected processing times before relying on this feature.",
       },
       {
         q: "How long do withdrawals take?",
@@ -168,29 +168,29 @@ const CATEGORIES = [
     ],
   },
   {
-    id: "security-compliance",
-    label: "Security & Compliance",
+    id: "security-information",
+    label: "Security information",
     icon: "🛡️",
     questions: [
       {
-        q: "Is WolvCapital regulated?",
-        a: "WolvCapital is registered as a Money Services Business (MSB) with FinCEN for AML/KYC compliance purposes. We are not registered as a securities broker or investment adviser. WOLV is a utility token on BNB Smart Chain — staking rewards are on-chain and verifiable by anyone on BSCScan. Full compliance disclosures are published at wolvcapital.com/risk-disclosure.",
+        q: "Where can I find platform disclosures?",
+        a: "Review the terms of service, risk disclosure, privacy notice, withdrawal policy, and current product information. Nothing on this site should be treated as regulatory approval, a license, or investment advice."
       },
       {
-        q: "How are my funds protected?",
-        a: "Investor funds are held with licensed institutional custodians — not on the WolvCapital platform directly. This separates your assets from platform operations. Additionally, all platform connections are protected by 256-bit SSL encryption and all accounts require KYC verification.",
+        q: "How should I assess fund handling?",
+        a: "Review the current fund-handling, contract, custody, lock, fee, and withdrawal information before depositing. No protection or recovery outcome is promised."
       },
       {
-        q: "What is KYC and why is it required?",
-        a: "KYC (Know Your Customer) is an identity verification process required by financial regulations globally. It protects you and the platform from fraud, money laundering, and unauthorized account access. Without KYC completion, deposits and withdrawals are not permitted.",
+        q: "What account information may be requested?",
+        a: "The platform may request identity or eligibility information before allowing access to particular features. Review the privacy notice and current account terms before submitting information."
       },
       {
         q: "What happens if I suspect unauthorized activity?",
         a: "Contact our security team immediately at support via the dashboard or through wolvcapital.com/contact. Do not attempt any transactions. Our team will freeze your account pending investigation. We also recommend immediately changing your password and enabling two-factor authentication.",
       },
       {
-        q: "Has WolvCapital been audited?",
-        a: "The WOLV token smart contract has been analyzed on SolidityScan (score: 87/100). A full independent third-party security audit of the staking contracts is planned for Q3 2026. All smart contract source code is public and verifiable on BSCScan.",
+        q: "What technical information is available?",
+        a: "Public contract references and selected platform information are available for inspection. Public source visibility is not an independent audit and does not establish safety."
       },
     ],
   },

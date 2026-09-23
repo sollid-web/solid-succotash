@@ -12,57 +12,57 @@ interface SecurityFeature {
 const SECURITY_FEATURES: SecurityFeature[] = [
   {
     icon: <Shield className="w-6 h-6" />,
-    title: 'KYC Verification',
-    description: 'Every investor is fully identity-verified before accessing any investment plan. No anonymous accounts, no exceptions.',
+    title: 'Account setup',
+    description: 'Review the current account requirements before using any platform feature.',
   },
   {
     icon: <AlertTriangle className="w-6 h-6" />,
-    title: 'AML Compliance',
-    description: 'Anti-money laundering protocols screen every transaction in real time, keeping your funds protected and compliant.',
+    title: 'Activity review',
+    description: 'Account and transaction activity may be reviewed under the current platform rules and disclosures.',
   },
   {
     icon: <Lock className="w-6 h-6" />,
-    title: 'SSL Encryption',
-    description: 'Bank-grade 256-bit SSL encryption protects every connection and every piece of data you share with us.',
+    title: 'HTTPS transport',
+    description: 'Use the site over HTTPS and review the privacy and data-handling terms before submitting information.',
   },
   {
     icon: <CheckSquare className="w-6 h-6" />,
     title: 'Two-Factor Authentication',
-    description: 'Mandatory 2FA on all accounts ensures only you can access your portfolio — even if your password is compromised.',
+    description: 'Optional authenticator-based 2FA is available to strengthen account access and withdrawal protection.',
   },
   {
     icon: <Coins className="w-6 h-6" />,
-    title: 'Blockchain-Verified Returns',
-    description: 'Every profit we distribute is recorded permanently on the BNB blockchain as WOLV tokens — independently verifiable by anyone, anytime.',
+    title: 'On-Chain Reward Records',
+    description: 'WOLV reward transactions can be checked on BNB Smart Chain using the published contract addresses. On-chain records do not guarantee returns or token value.',
   },
   {
     icon: <TrendingUp className="w-6 h-6" />,
-    title: 'Chainlink Price Feeds',
-    description: 'Our staking contracts use Chainlink oracles for real-time BNB/USD pricing — tamper-proof and decentralised.',
+    title: 'Contract data sources',
+    description: 'Review the contract addresses and stated data-source references independently before relying on any displayed value.',
   },
   {
     icon: <Layers className="w-6 h-6" />,
-    title: 'Audited Smart Contracts',
-    description: 'WOLV token, Reward Pool, and Staking contracts are all verified on BSCScan. Source code is public and readable by anyone.',
+    title: 'Public contract references',
+    description: 'Contract addresses are provided for technical inspection. Public source visibility does not establish safety, audit completion, or absence of vulnerabilities.',
   },
   {
     icon: <Eye className="w-6 h-6" />,
-    title: '24/7 Monitoring',
-    description: 'Our systems monitor platform activity around the clock to detect and respond to any unusual behaviour instantly.',
+    title: 'Activity information',
+    description: 'Review available account and transaction information and contact support about unusual activity.',
   },
 ]
 
 const STANDARDS = [
-  { label: '2FA',       value: 'Mandatory on all accounts',    color: 'from-indigo-600 to-indigo-700' },
-  { label: 'SSL',       value: '256-bit encryption',           color: 'from-green-600 to-green-700' },
-  { label: 'Chainlink', value: 'Tamper-proof price oracles',   color: 'from-blue-500 to-blue-700' },
-  { label: 'BNB Chain', value: 'On-chain proof of returns',    color: 'from-yellow-500 to-yellow-600' },
+  { label: '2FA',       value: 'Optional authenticator 2FA',       color: 'from-indigo-600 to-indigo-700' },
+  { label: 'HTTPS',     value: 'Transport security',           color: 'from-green-600 to-green-700' },
+  { label: 'Data',      value: 'Review source references',      color: 'from-blue-500 to-blue-700' },
+  { label: 'On-chain',  value: 'Public transaction data',      color: 'from-yellow-500 to-yellow-600' },
 ]
 
 const CONTRACTS = [
   { name: 'WOLV Token',       address: '0xe0167279aef7bf4ad313d261da82e8366822270c', label: 'Fixed supply · No mint · BEP20' },
   { name: 'Reward Pool',      address: '0x7310f3e07627ce98246973e068bf2ff294f84e5f', label: '48hr timelock · Treasury funded' },
-  { name: 'Staking Contract', address: '0x7cd22f3c08b4195225da7d043cbe00da118d31ec', label: 'BNB & BUSD · Chainlink oracle' },
+  { name: 'Staking Contract', address: '0x7cd22f3c08b4195225da7d043cbe00da118d31ec', label: 'BNB & BUSD · public contract reference' },
 ]
 
 export default function SecuritySection() {
@@ -77,10 +77,10 @@ export default function SecuritySection() {
 
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-[#0F172A] mb-4" style={{ letterSpacing: '-0.02em' }}>
-            Built for Trust. Verified on the Blockchain.
+            Built for Transparency. Verify on the Blockchain.
           </h2>
           <p className="text-[#64748B] text-lg max-w-2xl mx-auto">
-            WolvCapital combines institutional-grade security with fully audited smart contracts — so you never have to take our word for it.
+            WolvCapital publishes selected account information and contract references for inspection. Public source visibility is not an independent audit or a safety guarantee.
           </p>
         </div>
 
@@ -118,8 +118,8 @@ export default function SecuritySection() {
 
         {/* Verified contracts */}
         <div className="bg-[#0F172A] rounded-xl p-8 border border-[#1E3A5F]">
-          <h3 className="text-white font-bold text-lg mb-2">Verified Smart Contracts</h3>
-          <p className="text-[#64748B] text-sm mb-6">All contracts are publicly verified on BSCScan. Read the source code yourself.</p>
+          <h3 className="text-white font-bold text-lg mb-2">Public Contract References</h3>
+          <p className="text-[#64748B] text-sm mb-6">Contract addresses are listed for independent inspection. Public source visibility is not an audit or safety guarantee.</p>
           <div className="flex flex-col gap-4">
             {CONTRACTS.map((c, idx) => (
               <div key={idx} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-[#1E3A5F]/40 rounded-lg border border-[#1E3A5F]">

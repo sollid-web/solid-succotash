@@ -40,7 +40,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     {schemas.map((schema, index) => <script key={index} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />)}
     <section className="pt-28 pb-10 bg-gray-50"><div className="container mx-auto px-4 lg:px-8 max-w-3xl">
       <div className="text-sm text-gray-500"><Link href="/blog" className="hover:text-[#0b2f6b]">Blog</Link><span aria-hidden className="mx-2">/</span><span>{post.category}</span></div>
-      <p className="mt-4 text-sm text-gray-500"><time dateTime={post.publishedAt}>{post.publishedAt}</time> · {post.author}</p>
+      <p className="mt-4 text-sm text-gray-500"><time dateTime={post.publishedAt}>{post.publishedAt}</time>{post.updatedAt && post.updatedAt !== post.publishedAt ? <> · Updated <time dateTime={post.updatedAt}>{post.updatedAt}</time></> : null} · {post.author} · <Link href="/editorial-policy" className="underline hover:text-[#0b2f6b]">Editorial policy</Link></p>
       <h1 className="mt-3 text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0b2f6b]">{post.title}</h1>
       <p className="mt-4 text-base sm:text-lg text-gray-700">{post.description}</p>
       <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-4"><p className="text-sm text-gray-600">Informational content only. This is not financial advice. Digital assets are volatile and you may lose capital.</p></div>

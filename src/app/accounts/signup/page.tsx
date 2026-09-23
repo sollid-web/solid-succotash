@@ -73,10 +73,10 @@ export default function SignupPage() {
   }
 
   const benefits = [
-    { icon: "📊", title: "Access All Plans", desc: "4 investment tiers with 8%–25% APY" },
-    { icon: "📈", title: "Real-Time Tracking", desc: "Monitor your portfolio growth live" },
+    { icon: "📊", title: "Access All Plans", desc: "Review current plan information" },
+    { icon: "📈", title: "Real-Time Tracking", desc: "Review available account information" },
     { icon: "🔒", title: "Secure Lock Plans", desc: "90–365 day structured staking terms" },
-    { icon: "🛡️", title: "Professional Security", desc: "AML/KYC compliance, 256-bit encryption" },
+    { icon: "🛡️", title: "Professional Security", desc: "Review current account and privacy terms" },
     { icon: "🤝", title: "Referral Rewards", desc: "Earn 3% from your network's investments" },
     { icon: "💬", title: "24/7 Support", desc: "Instant help from our dedicated team" },
   ]
@@ -96,7 +96,7 @@ export default function SignupPage() {
               Create Your WolvCapital Account
             </h1>
             <p className="text-blue-200 text-base md:text-lg max-w-xl mx-auto">
-              Join 45,000+ global investors growing their digital assets on a secure, transparent platform.
+              Create an account to review current product information, terms, and available features.
             </p>
           </div>
 
@@ -126,7 +126,7 @@ export default function SignupPage() {
                 {[
                   "Enter your email and create a secure password",
                   "Verify your email with the confirmation link",
-                  "Start investing and earning 8%–25% APY",
+                  "Review current terms and available features",
                 ].map((step, i) => (
                   <li key={i} className="flex items-center gap-3 sm:flex-col sm:text-center sm:max-w-[160px]">
                     <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-white text-sm flex-shrink-0">
@@ -263,9 +263,9 @@ export default function SignupPage() {
 
           {/* Trust bar */}
           <div className="mt-8 flex flex-wrap justify-center gap-8 text-blue-200 text-sm">
-            <span className="flex items-center gap-2"><span>🔒</span> 256-bit Encryption</span>
-            <span className="flex items-center gap-2"><span>✅</span> AML/KYC Compliant</span>
-            <span className="flex items-center gap-2"><span>🌍</span> 45,000+ Investors</span>
+            <span className="flex items-center gap-2"><span>🔒</span> HTTPS connections</span>
+            <span className="flex items-center gap-2"><span>✅</span> Account terms apply</span>
+            <span className="flex items-center gap-2"><span>🌍</span> Public information available</span>
           </div>
 
         </div>

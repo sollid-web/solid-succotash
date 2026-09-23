@@ -17,8 +17,8 @@ type BlogCtaProps = {
 
 export default function BlogCta({
   title = 'Ready to invest with more clarity and structure?',
-  description = "Start earning WOLV rewards — create your account to access staking plans.",
-  href = '/accounts/signup',
+  description = 'Review the public sources, terms, and risk information before deciding whether the platform is suitable for you.',
+  href = '/verification-pack',
 }: BlogCtaProps) {
   const handleClick = () => {
     if (typeof window === 'undefined') return
@@ -37,7 +37,7 @@ export default function BlogCta({
             onClick={handleClick}
             className="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-semibold text-[#0b2f6b] hover:text-[#2563eb] hover:border-gray-300 transition"
           >
-            Start earning WOLV rewards
+            Open the verification pack
             <span aria-hidden className="ml-2">→</span>
           </Link>
         </div>

@@ -44,6 +44,7 @@ export default function NavBar() {
     { href: '/tokenomics', label: 'Tokenomics' },
     { href: '/roadmap', label: 'Roadmap' },
     { href: '/whitepaper', label: 'Whitepaper' },
+    { href: '/verification-pack', label: 'Verification Pack' },
     { href: '/campaigns', label: 'Campaigns' },
     { href: '#compliance', labelKey: 'nav.compliance' },
     { href: '/blog', labelKey: 'nav.blog' },
@@ -80,13 +81,6 @@ export default function NavBar() {
                   )}
                 >
                   {item.label || t(item.labelKey!)}
-                  {(item.label === 'WOLV Token' || item.label === 'Buy WOLV') && (
-                    <span style={{
-                      marginLeft: '6px', fontSize: '9px', background: '#00a896',
-                      color: '#fff', padding: '1px 6px', borderRadius: '99px',
-                      fontWeight: 700, verticalAlign: 'middle', letterSpacing: '0.5px',
-                    }}>LIVE</span>
-                  )}
                 </Link>
               </li>
             ))}

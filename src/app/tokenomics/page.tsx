@@ -20,13 +20,12 @@ const DISTRIBUTION = [
 ];
 
 const PLANS = [
-  { name: "Pioneer",    apy: "8%",  days: 90,  min: "$100",    exit: "2.0%", wolv: "~1,973 WOLV per $100k staked/year" },
-  { name: "Vanguard",   apy: "12%", days: 150, min: "$1,000",  exit: "2.5%", wolv: "~2,959 WOLV per $100k staked/year" },
-  { name: "Horizon",    apy: "18%", days: 180, min: "$5,000",  exit: "3.0%", wolv: "~4,438 WOLV per $100k staked/year" },
-  { name: "Summit VIP", apy: "25%", days: 365, min: "$15,000", exit: "3.5%", wolv: "~25,000 WOLV per $100k staked/year" },
+  { name: "Pioneer",    apy: "See current terms", days: "See current terms", min: "See current terms", exit: "See current terms", wolv: "Not displayed" },
+  { name: "Vanguard",   apy: "See current terms", days: "See current terms", min: "See current terms", exit: "See current terms", wolv: "Not displayed" },
+  { name: "Horizon",    apy: "See current terms", days: "See current terms", min: "See current terms", exit: "See current terms", wolv: "Not displayed" },
+  { name: "Summit VIP", apy: "See current terms", days: "See current terms", min: "See current terms", exit: "See current terms", wolv: "Not displayed" },
 ];
 
-import LiveChainMetricsWrapper from "./LiveChainMetricsWrapper"
 import { generateOgMetadata } from '@/lib/og-metadata'
 export const metadata = generateOgMetadata('tokenomics')
 
@@ -37,12 +36,12 @@ export default function TokenomicsPage() {
       {/* Hero */}
       <section className="bg-[#eff6ff] py-16 border-b border-[#dbeafe]">
         <div className="max-w-5xl mx-auto px-6 text-center">
-          <span className="text-xs font-bold tracking-widest uppercase text-[#2A52BE] block mb-4">WOLV Tokenomics</span>
+          <span className="text-xs font-bold tracking-widest uppercase text-[#2A52BE] block mb-4">WOLV token information</span>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0F172A] mb-4" style={{ letterSpacing: '-0.02em' }}>
-            Supply, Distribution & Reward Model
+            Supply, allocation, and contract information
           </h1>
           <p className="text-base sm:text-lg text-[#475569] max-w-3xl mx-auto mb-8">
-            WOLV has a fixed supply of 1 billion tokens, minted once at deployment on BNB Smart Chain. No additional tokens can ever be created. All distribution is governed by publicly verifiable smart contracts.
+            The information below is provided for reference. Token supply, allocations, contract behavior, market data, and product terms should be checked independently against current on-chain records and the applicable platform terms.
           </p>
 
           {/* Key stats */}
@@ -66,7 +65,6 @@ export default function TokenomicsPage() {
       <section className="py-16 bg-white">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
-            <LiveChainMetricsWrapper />
 
             <span className="text-xs font-bold tracking-widest uppercase text-[#2A52BE] block mb-3">Allocation</span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]" style={{ letterSpacing: '-0.02em' }}>
@@ -112,22 +110,22 @@ export default function TokenomicsPage() {
       <section className="py-16 bg-[#0F172A]">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
-            <span className="text-xs font-bold tracking-widest uppercase text-[#2A52BE] block mb-3">Reward Mechanics</span>
+            <span className="text-xs font-bold tracking-widest uppercase text-[#2A52BE] block mb-3">Model information</span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-4" style={{ letterSpacing: '-0.02em' }}>
-              How Rewards Are Calculated
+              Review the current model and terms
             </h2>
             <p className="text-[#94A3B8] text-sm max-w-2xl mx-auto">
-              Rewards are calculated pro-rata based on your USD stake value, chosen plan APY, and lock duration. The formula is publicly readable in the smart contract.
+              Any displayed reward model or formula may change. Review the current contract behavior, fees, lock periods, liquidity, and risk disclosures before relying on it.
             </p>
           </div>
 
           {/* Formula */}
           <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-10 text-center">
-            <div className="text-[#94A3B8] text-xs uppercase tracking-widest mb-4">Reward Formula (on-chain)</div>
+            <div className="text-[#94A3B8] text-xs uppercase tracking-widest mb-4">Current model reference</div>
             <div className="font-mono text-[#2A52BE] text-lg font-bold mb-2">
-              WOLV Reward = (Stake USD × APY% × Lock Days ÷ 365) × 2
+              See current contract and platform terms
             </div>
-            <div className="text-[#64748B] text-xs">APY expressed as basis points in contract · Result scaled to 18 decimals · WOLV market price determined by DEX trading on PancakeSwap V2</div>
+            <div className="text-[#64748B] text-xs">Displayed rates, calculations, and market data can change and are not a promise of value or return.</div>
           </div>
 
           {/* Plan table */}
@@ -135,7 +133,7 @@ export default function TokenomicsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/10">
-                  {["Plan", "APY", "Lock Period", "Min Stake", "Exit Fee", "Example Yield"].map(h => (
+                  {["Plan", "Current terms", "Current terms", "Current terms", "Current terms", "Not displayed"].map(h => (
                     <th key={h} className="text-left py-3 px-4 text-xs font-semibold text-[#64748B] uppercase tracking-wider">{h}</th>
                   ))}
                 </tr>
@@ -163,18 +161,18 @@ export default function TokenomicsPage() {
           <div className="text-center mb-12">
             <span className="text-xs font-bold tracking-widest uppercase text-[#2A52BE] block mb-3">Long-Term Model</span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] mb-4" style={{ letterSpacing: '-0.02em' }}>
-              Sustainability & Supply Control
+              Supply and allocation information
             </h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
             {[
               { icon: "🔒", title: "Hard Capped Supply",      desc: "1 billion WOLV total — ever. The mint function does not exist in the contract. No inflation is possible." },
-              { icon: "📊", title: "Reward Pool Transparency", desc: "The reward pool balance is publicly visible on BSCScan. Investors can verify available rewards before staking." },
-              { icon: "⏱️", title: "48hr Withdrawal Timelock", desc: "Any treasury withdrawal from the reward pool is queued publicly 48 hours before execution — protecting investor funds." },
-              { icon: "🔁", title: "Treasury Top-Ups",         desc: "WolvCapital periodically funds the reward pool from treasury reserves. All funding transactions are on-chain and verifiable." },
-              { icon: "📈", title: "Sustainable APY Rates",    desc: "At maximum staking of $1M total, annual WOLV distribution is approximately 120,000 WOLV — less than 0.02% of total supply per year." },
-              { icon: "🛡️", title: "Audit Scheduled",         desc: "Full third-party smart contract security audit is scheduled for Q3 2026. Source code is publicly readable on BSCScan now." },
+              { icon: "📊", title: "Reward pool data reference", desc: "The reward pool balance is publicly visible on BSCScan. Investors can verify available rewards before staking." },
+              { icon: "⏱️", title: "Withdrawal condition reference", desc: "Any treasury withdrawal from the reward pool is queued publicly 48 hours before execution — describing a contract condition." },
+              { icon: "🔁", title: "Treasury transaction reference",         desc: "WolvCapital periodically funds the reward pool from treasury reserves. All funding transactions are on-chain and verifiable." },
+              { icon: "📈", title: "Current product terms",    desc: "The site does not publish a return projection here. Review current terms and risk information before participating." },
+              { icon: "🛡️", title: "Security review status",         desc: "No independent security-audit report is represented on this page. Public source visibility is not an audit or a safety guarantee." },
             ].map(f => (
               <div key={f.title} className="rounded-2xl bg-[#f8fafc] border border-[#e2e8f0] p-6">
                 <div className="text-2xl mb-3">{f.icon}</div>
@@ -190,16 +188,16 @@ export default function TokenomicsPage() {
       <section className="py-16 bg-[#eff6ff] border-t border-[#dbeafe]">
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-10">
-            <span className="text-xs font-bold tracking-widest uppercase text-[#2A52BE] block mb-3">Verified Contracts</span>
+            <span className="text-xs font-bold tracking-widest uppercase text-[#2A52BE] block mb-3">Contract references</span>
             <h2 className="text-2xl font-extrabold text-[#0F172A] mb-3" style={{ letterSpacing: '-0.02em' }}>Smart Contract Addresses</h2>
-            <p className="text-[#475569] text-sm max-w-xl mx-auto">All contracts are open-source and verified on BSCScan. Click any address to view the source code.</p>
+            <p className="text-[#475569] text-sm max-w-xl mx-auto">The addresses below are provided for independent technical inspection. Public source visibility does not establish safety, audit completion, or absence of vulnerabilities.</p>
           </div>
 
           <div className="flex flex-col gap-4 mb-10">
             {[
               { name: "WOLV Token",       address: CONTRACTS.token,   desc: "Fixed supply · No mint · BEP-20",     url: `https://bscscan.com/address/${CONTRACTS.token}#code` },
               { name: "Reward Pool",      address: CONTRACTS.pool,    desc: "48hr timelock · Treasury funded",      url: `https://bscscan.com/token/${CONTRACTS.token}?a=${CONTRACTS.pool}` },
-              { name: "Staking Contract", address: CONTRACTS.staking, desc: "Chainlink oracle · 4 staking plans",  url: `https://bscscan.com/address/${CONTRACTS.staking}#code` },
+              { name: "Staking Contract", address: CONTRACTS.staking, desc: "Public contract reference · 4 plan labels",  url: `https://bscscan.com/address/${CONTRACTS.staking}#code` },
             ].map(c => (
               <div key={c.name} className="bg-white border border-[#bfdbfe] rounded-xl px-6 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>

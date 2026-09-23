@@ -38,7 +38,7 @@ export default function HowItWorksSection() {
             number={3}
             icon={<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-9 h-9"><rect width="20" height="14" x="2" y="5" rx="2" /><line x1="2" x2="22" y1="10" y2="10" /></svg>}
             title="Stake & Earn On-Chain"
-            description="Your stake is locked in our audited smart contract. WOLV rewards accumulate automatically — verified on BNB Chain."
+            description="Your stake is subject to the published contract terms and lock period. WOLV rewards are recorded on BNB Smart Chain; returns and token value are not guaranteed."
           />
           <StepCircle
             number={4}

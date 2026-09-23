@@ -28,6 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/verification-pack`,   lastModified: now, changeFrequency: 'monthly', priority: 0.85 },
     { url: `${baseUrl}/how-to-verify-wolvcapital`, lastModified: now, changeFrequency: 'monthly', priority: 0.85 },
     { url: `${baseUrl}/partners`,         lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${baseUrl}/bnb-smart-chain-staking-guide`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/editorial-policy`,    lastModified: now, changeFrequency: 'yearly',  priority: 0.55 },
     { url: `${baseUrl}/metrics-methodology`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${baseUrl}/leadership`,          lastModified: now, changeFrequency: 'monthly', priority: 0.6 },

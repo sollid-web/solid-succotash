@@ -70,6 +70,7 @@ export default function StakePage() {
   const [error, setError]               = useState('')
   const [success, setSuccess]           = useState('')
   const [txHash, setTxHash]             = useState<`0x${string}` | undefined>()
+  const [reviewOpen, setReviewOpen]     = useState(false)
   const [tab, setTab]                   = useState<'stake' | 'positions'>('stake')
   const [positions, setPositions]       = useState<Position[]>([])
   const [posLoading, setPosLoading]     = useState(false)
@@ -179,7 +180,15 @@ export default function StakePage() {
     return (usd * plan.apy * plan.lockDays / 365 / 100).toLocaleString(undefined, { maximumFractionDigits: 2 })
   }
 
-  // ── Stake handler ─────────────────────────────────────────────────────────
+  // ── Review and submit flow ────────────────────────────────────────────────
+  const handleReview = () => {
+    setError(''); setSuccess('')
+    if (!isConnected || !address) return openConnectModal?.()
+    if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) return setError('Enter a valid amount')
+    if (token === 'BNB' && !bnbPrice) return setError('BNB price unavailable — try again shortly')
+    setReviewOpen(true)
+  }
+
   const handleStake = async () => {
     setError(''); setSuccess('')
     if (!isConnected || !address) return openConnectModal?.()
@@ -218,6 +227,7 @@ export default function StakePage() {
       // Refresh counts after stake
       await Promise.all([refetchCount(), refetchPool()])
       setAmount('')
+      setReviewOpen(false)
     } catch (e: any) {
       setError(e?.shortMessage || e?.message || 'Transaction failed')
     } finally {
@@ -409,7 +419,7 @@ export default function StakePage() {
               </div>
             )}
 
-            <motion.button onClick={handleStake} disabled={loading} {...pressableTapProps} style={{
+            <motion.button onClick={handleReview} disabled={loading} {...pressableTapProps} style={{
               width: '100%', padding: '14px', borderRadius: '10px', fontSize: '15px',
               fontWeight: 700, border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
               background: loading ? 'rgba(255,255,255,0.1)' : `linear-gradient(135deg,${plan.color},${plan.color}cc)`,
@@ -423,6 +433,52 @@ export default function StakePage() {
               *Target calculation only; not guaranteed. Funds are locked for {plan.lockDays} days. Early exit incurs {plan.exitFee} on principal. WOLV value, liquidity, withdrawals, and principal are not guaranteed. Review the <a href="/metrics-methodology" style={{ color: '#93c5fd', textDecoration: 'underline' }}>methodology</a> and <a href="/risk-disclosure" style={{ color: '#93c5fd', textDecoration: 'underline' }}>risk disclosure</a> before proceeding.
             </p>
           </div>
+
+          {reviewOpen && (
+            <div role="dialog" aria-modal="true" aria-labelledby="stake-review-title" style={{ position: 'fixed', inset: 0, zIndex: 100, background: 'rgba(2,6,23,0.78)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+              <div style={{ width: '100%', maxWidth: '560px', maxHeight: '90vh', overflowY: 'auto', borderRadius: '20px', padding: '24px', background: '#0b1329', border: '1px solid rgba(147,197,253,0.25)', boxShadow: '0 24px 80px rgba(0,0,0,0.55)' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '20px' }}>
+                  <div>
+                    <div style={{ color: '#93c5fd', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1.2px', marginBottom: '6px' }}>Step 2 · Review before wallet confirmation</div>
+                    <h2 id="stake-review-title" style={{ color: '#fff', fontSize: '22px', fontWeight: 700 }}>Review staking transaction</h2>
+                  </div>
+                  <button type="button" onClick={() => setReviewOpen(false)} aria-label="Close review" style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.55)', fontSize: '24px', cursor: 'pointer', lineHeight: 1 }}>×</button>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '18px' }}>
+                  {[
+                    ['Plan', plan.name],
+                    ['Asset', token],
+                    ['Amount', `${amount} ${token}`],
+                    ['Approx. USD', token === 'BNB' && bnbPrice ? `$${(Number(amount) * Number(bnbPrice) / 1e8).toLocaleString(undefined, { maximumFractionDigits: 2 })}` : `${amount} USD`],
+                    ['Lock period', `${plan.lockDays} days`],
+                    ['Early-exit fee', `${plan.exitFee} of principal`],
+                    ['Target APY*', plan.apyLabel],
+                    ['Target calculation*', `~${estimatedReward()} WOLV`],
+                  ].map(([label, value]) => (
+                    <div key={label} style={{ padding: '12px', borderRadius: '10px', background: 'rgba(255,255,255,0.045)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                      <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '4px' }}>{label}</div>
+                      <div style={{ color: '#fff', fontSize: '13px', fontWeight: 600, wordBreak: 'break-word' }}>{value}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{ padding: '14px', borderRadius: '12px', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.22)', color: 'rgba(255,255,255,0.7)', fontSize: '12px', lineHeight: 1.65, marginBottom: '16px' }}>
+                  <strong style={{ color: '#fbbf24' }}>Important:</strong> The target calculation is not guaranteed. WOLV value, liquidity, reward availability, withdrawals, and principal may change or be unavailable. Funds are locked for the stated period; early exit incurs the displayed fee.
+                </div>
+
+                <div style={{ padding: '12px 14px', borderRadius: '10px', background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.18)', color: 'rgba(255,255,255,0.58)', fontSize: '11px', lineHeight: 1.6, marginBottom: '18px' }}>
+                  Network: BNB Smart Chain · Staking contract: <a href={`https://bscscan.com/address/${STAKING_ADDRESS}`} target="_blank" rel="noreferrer" style={{ color: '#93c5fd', textDecoration: 'underline' }}>view contract</a> · Review the <a href="/metrics-methodology" style={{ color: '#93c5fd', textDecoration: 'underline' }}>methodology</a> and <a href="/risk-disclosure" style={{ color: '#93c5fd', textDecoration: 'underline' }}>risk disclosure</a> before continuing.
+                  {token === 'BUSD' && <span style={{ display: 'block', marginTop: '6px', color: '#fcd34d' }}>BUSD requires two wallet confirmations: approval, then staking.</span>}
+                </div>
+
+                <div style={{ display: 'flex', gap: '10px', flexDirection: 'column-reverse' }}>
+                  <button type="button" onClick={() => setReviewOpen(false)} disabled={loading} style={{ width: '100%', padding: '12px 16px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.72)', fontWeight: 600, cursor: 'pointer' }}>Go back and edit</button>
+                  <button type="button" onClick={handleStake} disabled={loading} style={{ width: '100%', padding: '12px 16px', borderRadius: '10px', background: loading ? 'rgba(255,255,255,0.1)' : `linear-gradient(135deg, ${plan.color}, ${plan.color}cc)`, border: 'none', color: '#fff', fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer' }}>{loading ? 'Waiting for wallet…' : token === 'BUSD' ? 'Continue to approval and staking' : 'Confirm in wallet'}</button>
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
 

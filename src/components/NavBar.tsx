@@ -49,6 +49,7 @@ export default function NavBar() {
     { href: '/campaigns', label: 'Campaigns' },
     { href: '#compliance', labelKey: 'nav.compliance' },
     { href: '/blog', labelKey: 'nav.blog' },
+    { href: '/learn', label: 'Learn' },
     { href: '/contact', labelKey: 'nav.contact' },
   ]
 

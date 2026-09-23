@@ -290,7 +290,7 @@ export default function StakePage() {
           WOLV Staking
         </h1>
         <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px' }}>
-          Stake BNB or BUSD — earn WOLV rewards live on BNB Smart Chain
+          Review staking terms and target reward assumptions on BNB Smart Chain
         </p>
       </div>
 
@@ -299,7 +299,7 @@ export default function StakePage() {
         {[
           { label: 'Reward Pool',      value: `${poolBalanceFmt} WOLV`, color: '#00a896' },
           { label: 'BNB Price',        value: bnbPriceFmt,              color: '#f59e0b' },
-          { label: '1 WOLV =',         value: '$0.50 USD',              color: '#3b82f6' },
+          { label: 'WOLV reference',    value: 'See market data',         color: '#3b82f6' },
           { label: 'My Pending',       value: isConnected ? `${totalPending.toLocaleString(undefined, { maximumFractionDigits: 4 })} WOLV` : '—', color: '#8b5cf6' },
           { label: 'My Staked (USD)',  value: isConnected ? `$${totalStakedUSD.toLocaleString()}` : '—', color: '#10b981' },
         ].map(s => (
@@ -343,7 +343,7 @@ export default function StakePage() {
                   <div style={{ color: '#fff', fontWeight: 700, fontSize: '14px', marginBottom: '2px' }}>{p.name}</div>
                   <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', marginBottom: '10px' }}>{p.sub}</div>
                   <div style={{ color: p.color, fontWeight: 800, fontSize: '26px', fontFamily: 'monospace', marginBottom: '2px' }}>{p.apyLabel}</div>
-                  <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', marginBottom: '4px' }}>APY</div>
+                  <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', marginBottom: '4px' }}>Target APY*</div>
                   <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: '11px' }}>Min {p.min} · Exit {p.exitFee}</div>
                 </motion.div>
               ))}
@@ -362,6 +362,9 @@ export default function StakePage() {
                   color: token === t ? '#fff' : 'rgba(255,255,255,0.4)',
                 }}>{t}</motion.button>
               ))}
+            </div>
+            <div style={{ padding: '12px 14px', borderRadius: '10px', background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.18)', color: 'rgba(255,255,255,0.6)', fontSize: '11px', lineHeight: 1.6, marginBottom: '18px' }}>
+              Review the selected plan, lock period, target calculation, and exit fee before confirming in your wallet. BUSD staking requires two wallet confirmations: token approval followed by staking.
             </div>
 
             {/* Amount */}
@@ -391,11 +394,11 @@ export default function StakePage() {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                   {[
                     ['Plan',         plan.name],
-                    ['APY',          plan.apyLabel],
+                    ['Target APY*',   plan.apyLabel],
                     ['Lock Period',  `${plan.lockDays} days`],
-                    ['Est. Reward',  `~${estimatedReward()} WOLV`],
+                    ['Target calculation*',  `~${estimatedReward()} WOLV`],
                     ['Exit Fee',     plan.exitFee],
-                    ['Paid In',      'WOLV ($1 each)'],
+                    ['Paid In',      token],
                   ].map(([l, v]) => (
                     <div key={l}>
                       <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>{l}</div>
@@ -413,11 +416,11 @@ export default function StakePage() {
               color: '#fff', transition: 'all 0.2s',
               boxShadow: loading ? 'none' : `0 8px 24px ${plan.color}40`,
             }}>
-              {!isConnected ? '🔗 Connect Wallet to Stake' : loading ? 'Processing...' : `Stake ${token} → Earn WOLV`}
+              {!isConnected ? '🔗 Connect Wallet to Review' : loading ? 'Processing...' : `Review ${token} staking →`}
             </motion.button>
 
             <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: '10px', marginTop: '10px', lineHeight: 1.6 }}>
-              Funds locked for {plan.lockDays} days. Early exit incurs {plan.exitFee} fee on principal. Rewards paid in WOLV at $1/WOLV. Principal at risk.
+              *Target calculation only; not guaranteed. Funds are locked for {plan.lockDays} days. Early exit incurs {plan.exitFee} on principal. WOLV value, liquidity, withdrawals, and principal are not guaranteed. Review the <a href="/metrics-methodology" style={{ color: '#93c5fd', textDecoration: 'underline' }}>methodology</a> and <a href="/risk-disclosure" style={{ color: '#93c5fd', textDecoration: 'underline' }}>risk disclosure</a> before proceeding.
             </p>
           </div>
         </>
@@ -482,7 +485,7 @@ export default function StakePage() {
                           <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: `${plan.color}20`, border: `1px solid ${plan.color}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: plan.color, fontSize: '16px' }}>⬡</div>
                           <div>
                             <div style={{ color: '#fff', fontWeight: 700, fontSize: '15px' }}>{plan.name}</div>
-                            <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px' }}>{p.token === 0 ? 'BNB' : 'BUSD'} · {plan.apyLabel} APY · Stake #{p.stakeId}</div>
+                            <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px' }}>{p.token === 0 ? 'BNB' : 'BUSD'} · {plan.apyLabel} target APY · Stake #{p.stakeId}</div>
                           </div>
                         </div>
                         <div style={{ padding: '4px 12px', borderRadius: '99px', fontSize: '11px', fontWeight: 600, background: locked ? 'rgba(245,158,11,0.12)' : 'rgba(16,185,129,0.12)', color: locked ? '#f59e0b' : '#34d399', border: `1px solid ${locked ? '#f59e0b' : '#34d399'}30` }}>

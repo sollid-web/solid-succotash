@@ -88,6 +88,9 @@ export default function WithdrawPage() {
       </div>
 
       <div style={{ maxWidth: "560px" }}>
+        <div style={{ padding: "14px 16px", borderRadius: "12px", background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.18)", color: "rgba(255,255,255,0.6)", fontSize: "12px", lineHeight: 1.6, marginBottom: "16px" }}>
+          Review the available balance, selected investment, amount, and any applicable conditions before submitting. Withdrawal requests may require review and are not instant. Read the <Link href="/withdrawal-policy" style={{ color: "#93c5fd", textDecoration: "underline" }}>withdrawal policy</Link> and <Link href="/risk-disclosure" style={{ color: "#93c5fd", textDecoration: "underline" }}>risk disclosure</Link> first.
+        </div>
         {error && <div style={{ padding: "12px 16px", borderRadius: "12px", background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)", color: "#f87171", fontSize: "13px", marginBottom: "16px" }}>{error}</div>}
         {message && <div style={{ padding: "12px 16px", borderRadius: "12px", background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.2)", color: "#34d399", fontSize: "13px", marginBottom: "16px" }}>{message}</div>}
         {!hasActiveCard && (
@@ -113,6 +116,7 @@ export default function WithdrawPage() {
           <div>
             <label>Amount (USD)</label>
             <input type="number" min="0" step="0.01" value={amount} onChange={e => setAmount(e.target.value)} placeholder="0.00" />
+            <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "11px", marginTop: "5px" }}>Displayed wallet balance: {money(wallet?.balance ?? 0)} · Enter the amount you are requesting, not a guaranteed payout.</p>
           </div>
           <div>
             <label>Reference / Notes</label>

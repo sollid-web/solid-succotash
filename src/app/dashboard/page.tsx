@@ -283,10 +283,10 @@ export default function DashboardPage() {
             <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#00a896", flexShrink: 0 }} className="animate-pulse" />
             <div style={{ minWidth: 0 }}>
               <div style={{ color: "#5eead4", fontWeight: 700, fontSize: "13px" }}>
-                🚀 WOLV is Live on PancakeSwap V2
+                Public WOLV market reference
               </div>
               <div style={{ color: "rgba(255,255,255,0.55)", fontSize: "11px", marginTop: "2px" }}>
-                WOLV/BNB · BNB Smart Chain · Contract verified · 231+ holders
+                WOLV/BNB · BNB Smart Chain · Check the contract and market data independently
               </div>
             </div>
           </div>
@@ -295,7 +295,7 @@ export default function DashboardPage() {
             background: "rgba(0,168,150,0.15)", border: "1px solid rgba(0,168,150,0.35)",
             color: "#5eead4", fontSize: "12px", fontWeight: 700, whiteSpace: "nowrap",
           }}>
-            Buy WOLV →
+            View reference →
           </span>
         </MotionLink>
 
@@ -396,13 +396,13 @@ export default function DashboardPage() {
             border: "1px solid rgba(245,158,11,0.15)",
           }}>
             <div>
-              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px" }}>Overall Staking Yield</div>
+              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "13px" }}>Recorded reward activity</div>
               <Link href="/dashboard/wolv-token" style={{ color: "rgba(255,255,255,0.3)", fontSize: "11px", marginTop: "4px", display: "inline-block", textDecoration: "underline" }}>
                 Rewards distributed as WOLV tokens →
               </Link>
             </div>
             <div style={{ color: "#f59e0b", fontWeight: 700, fontSize: "20px", fontFamily: "Inter, 'DM Sans', system-ui, sans-serif", fontVariantNumeric: "tabular-nums" }}>
-              +{roiRate}%
+              {roiRate}%
             </div>
           </motion.div>
         )}
@@ -414,7 +414,7 @@ export default function DashboardPage() {
             <div>
               <h2 style={{ color: "#fff", fontSize: "18px", fontWeight: 600 }}>WOLV Token</h2>
               <p style={{ color: "rgba(255,255,255,0.35)", fontSize: "12px", marginTop: "2px" }}>
-                WOLV/BNB live on PancakeSwap V2 · BNB Smart Chain
+                Public market reference · BNB Smart Chain
               </p>
             </div>
             <a
@@ -428,7 +428,7 @@ export default function DashboardPage() {
                 background: "rgba(0,168,150,0.08)",
               }}
             >
-              Buy WOLV →
+              View market reference →
             </a>
           </div>
           <div style={{
@@ -459,9 +459,8 @@ export default function DashboardPage() {
                 { label: "Contract", value: "0xe016...270c", href: "https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c" },
                 { label: "Network", value: "BNB Smart Chain", href: null },
                 { label: "DEX", value: "PancakeSwap V2", href: null },
-                { label: "Holders", value: "231+", href: "https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c#balances" },
                 { label: "Max Supply", value: "1,000,000,000", href: null },
-                { label: "Status", value: "✅ Verified", href: "https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c#code" },
+                { label: "Source", value: "BscScan", href: "https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c#code" },
               ].map(({ label, value, href }) => (
                 <div key={label} style={{ background: "rgba(255,255,255,0.04)", borderRadius: "12px", padding: "12px 14px" }}>
                   <div style={{ color: "rgba(255,255,255,0.35)", fontSize: "10px", letterSpacing: "0.5px", textTransform: "uppercase", marginBottom: "4px" }}>{label}</div>
@@ -475,7 +474,7 @@ export default function DashboardPage() {
             {/* CTA links */}
             <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
               {[
-                { label: "🥞 Buy on PancakeSwap", href: "https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c", primary: true },
+                { label: "🔎 Open market reference", href: "https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c", primary: true },
                 { label: "📊 DEXScreener", href: "https://dexscreener.com/bsc/0xe0167279aef7bf4ad313d261da82e8366822270c", primary: false },
                 { label: "🔍 DEXTools", href: "https://www.dextools.io/app/en/bnb/pair-explorer/0xe0167279aef7bf4ad313d261da82e8366822270c", primary: false },
                 { label: "🔎 BscScan", href: "https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c", primary: false },
@@ -537,7 +536,7 @@ export default function DashboardPage() {
             }}>
               <div style={{ fontSize: "40px", marginBottom: "12px" }}>📊</div>
               <div style={{ color: "rgba(255,255,255,0.6)", fontWeight: 500, marginBottom: "6px" }}>No active plans yet</div>
-              <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "13px", marginBottom: "20px" }}>Start staking to earn WOLV token rewards</div>
+              <div style={{ color: "rgba(255,255,255,0.3)", fontSize: "13px", marginBottom: "20px" }}>Review staking terms and target calculations before using the service</div>
               <Link href="/dashboard/new-investment" style={{
                 padding: "10px 24px", borderRadius: "10px",
                 background: "linear-gradient(135deg, #1d4ed8, #2563eb)",
@@ -600,7 +599,7 @@ export default function DashboardPage() {
                           </span>
                           {dailyRoi > 0 && (
                             <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "12px" }}>
-                              {dailyRoi}% APY
+                              {dailyRoi}% target APY*
                             </span>
                           )}
                         </div>

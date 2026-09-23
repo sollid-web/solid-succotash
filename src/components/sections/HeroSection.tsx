@@ -36,19 +36,6 @@ function useLiveWolvPrice() {
 // Purely additive inner-glow, no color values changed — just a subtle glass edge.
 const glassGlow = 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]'
 
-// Immutable constructor args of the deployed WOLVPresale contract
-// (0x04b5c5e204e812c176ce632f3781ea88c500497c) — fixed on-chain, safe to hardcode.
-const PRESALE_END_TIME = 1785686442 // 2026-08-02T16:00:42Z
-
-function formatTimeLeft(seconds: number) {
-  if (seconds <= 0) return null
-  const d = Math.floor(seconds / 86400)
-  const h = Math.floor((seconds % 86400) / 3600)
-  const m = Math.floor((seconds % 3600) / 60)
-  return `${d}d ${h}h ${m}m`
-}
-
-
 // Entrance stagger: headline -> description -> market reference -> CTA buttons.
 const containerVariants = {
   hidden: {},
@@ -63,21 +50,6 @@ const itemVariants = {
 export default function HeroSection() {
   const { t } = useTranslation()
   const { price: wolvPrice, change: wolvChange } = useLiveWolvPrice()
-  const [timeLeft, setTimeLeft] = useState<string | null>(
-    formatTimeLeft(PRESALE_END_TIME - Math.floor(Date.now() / 1000)),
-  )
-  const [presaleEnded, setPresaleEnded] = useState(Math.floor(Date.now() / 1000) >= PRESALE_END_TIME)
-
-  useEffect(() => {
-    const tick = () => {
-      const secondsLeft = PRESALE_END_TIME - Math.floor(Date.now() / 1000)
-      setTimeLeft(formatTimeLeft(secondsLeft))
-      setPresaleEnded(secondsLeft <= 0)
-    }
-    tick()
-    const interval = setInterval(tick, 60_000)
-    return () => clearInterval(interval)
-  }, [])
 
   return (
     <section className="relative min-h-screen bg-[#070B19] text-white flex flex-col justify-center px-4 py-16 overflow-hidden">
@@ -149,6 +121,7 @@ export default function HeroSection() {
               )}
               <span className="h-1.5 w-1.5 rounded-full bg-teal-400 animate-pulse" />
             </div>
+            <p className="mt-2 text-[10px] text-slate-500">Source: Dexscreener · Reference only · Market data changes frequently</p>
           </motion.div>
         )}
 
@@ -176,28 +149,13 @@ export default function HeroSection() {
 
         {/* Action buttons */}
         <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-3 pt-1">
-          {!presaleEnded && (
-            <MotionLink
-              href="/presale"
-              {...pressableTapProps}
-              className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 transition shadow-lg shadow-orange-500/20 text-center"
-            >
-              Join Presale →
-            </MotionLink>
-          )}
-          <a
-            href="https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition shadow-lg shadow-teal-500/20 text-center"
-          >
-            Open market reference →
-          </a>
+          <MotionLink href="/how-it-works" {...pressableTapProps} className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition shadow-lg shadow-teal-500/20 text-center">Review how it works →</MotionLink>
+          <Link href="/verification-pack" className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white border border-blue-400/40 bg-blue-500/10 hover:bg-blue-500/20 transition text-center">Open verification pack →</Link>
         </motion.div>
 
-        <Link href="/verification-pack" className="block text-center text-sm text-blue-300 hover:text-blue-200 underline underline-offset-2">
-          Review the verification pack →
-        </Link>
+        <a href="https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c" target="_blank" rel="noopener noreferrer" className="block text-center text-sm text-blue-300 hover:text-blue-200 underline underline-offset-2">
+          View WOLV market reference →
+        </a>
 
         {/* Trust badges */}
         <div className="pt-4 border-t border-slate-800/80 flex flex-wrap justify-between gap-2 text-[10px] text-slate-400 tracking-wider">

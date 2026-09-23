@@ -65,8 +65,9 @@ export default function VerificationPackPage() {
           </article>)}
         </div>
         <div className="mt-12 rounded-2xl border border-amber-200 bg-amber-50 p-6 text-sm leading-relaxed text-amber-950">
-          <strong>Important distinction:</strong> Public contract source code or blockchain records can support independent inspection, but they are not the same as an independent security audit, proof of reserves, custody statement, regulatory authorization, or guarantee of performance.
+          <strong>Important distinction:</strong> Public contract source code or blockchain records can be reviewed independently, but they are not the same as an independent security audit, proof of reserves, custody statement, regulatory authorization, or guarantee of performance.
         </div>
+        <p className="mt-6 text-sm text-slate-600">Need a step-by-step review? Read <Link href="/how-to-verify-wolvcapital" className="font-semibold text-blue-700 underline">How to verify WolvCapital independently</Link>.</p>
       </section>
       <section className="border-y border-slate-200 bg-white py-14">
         <div className="mx-auto grid max-w-5xl gap-10 px-4 lg:grid-cols-[1fr_1.1fr] lg:px-8">

@@ -27,7 +27,7 @@ export default function AboutPage() {
     { value: '—', label: 'Supported regions: review current terms' },
     { value: '—', label: 'Rates: review current terms' },
     { value: 'BEP-20', label: 'Token Standard' },
-    { value: '—', label: 'Regulatory status: not stated here' },
+    { value: '—', label: 'Regulatory status: review current terms' },
   ]
 
   const team = [

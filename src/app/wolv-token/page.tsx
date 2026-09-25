@@ -8,15 +8,15 @@ const POOL_CONTRACT  = '0x7310f3e07627ce98246973e068bf2ff294f84e5f'
 const STAKING_CONTRACT = '0x7cd22f3c08b4195225da7d043cbe00da118d31ec'
 
 export const metadata = {
-title: 'WOLV Token — The Native Asset of WolvCapital',
+title: 'WOLV Token — Public BNB Smart Chain Data',
   description:
-    'Discover the WOLV token, the utility token powering the WolvCapital ecosystem on the BNB Smart Chain. Explore tokenomics, use cases, and how to participate.',
+    'Review WOLV token data, public contract references, current supply information, and risk disclosures on BNB Smart Chain.',
   alternates: {
     canonical: 'https://www.wolvcapital.com/wolv-token',
   },
   openGraph: {
-    title: 'WOLV Token — The Native Asset of WolvCapital',
-    description: 'Explore the utility and tokenomics of the WOLV token on the BNB Smart Chain.',
+    title: 'WOLV Token — Public BNB Smart Chain Data',
+    description: 'Review public WOLV token data and contract references on BNB Smart Chain.',
     url: 'https://www.wolvcapital.com/wolv-token',
     siteName: 'WolvCapital',
     images: [
@@ -32,8 +32,8 @@ title: 'WOLV Token — The Native Asset of WolvCapital',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'WOLV Token — Powering WolvCapital',
-    description: 'Explore the utility and tokenomics of the WOLV token on the BNB Smart Chain.',
+    title: 'WOLV Token — Public BNB Smart Chain Data',
+    description: 'Review public WOLV token data and contract references on BNB Smart Chain.',
   },
 };
 export default function WolvTokenPage() {
@@ -116,7 +116,7 @@ export default function WolvTokenPage() {
                   background: 'linear-gradient(135deg, #2A52BE 0%, #00a896 100%)',
                   boxShadow: '0 0 30px rgba(0,168,150,0.3)',
                 }}>
-                🥞 Buy WOLV on PancakeSwap
+                View WOLV market reference
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
@@ -150,9 +150,9 @@ export default function WolvTokenPage() {
             <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-px rounded-2xl overflow-hidden"
               style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)' }}>
               {[
-                { label: 'Total Supply',    value: '1,000,000,000', sub: 'WOLV — Fixed Forever' },
+                { label: 'Max Supply',       value: '1,000,000,000', sub: 'WOLV — BSCScan reference' },
                 { label: 'Token Standard',  value: 'BEP-20',        sub: 'BNB Smart Chain' },
-                { label: 'Reward Pool',     value: '600,000,000',   sub: 'WOLV (60% Allocated)' },
+                { label: 'Reward Allocation', value: '600,000,000',   sub: 'WOLV — published allocation' },
               ].map((stat, i) => (
                 <div key={i} className="px-6 py-6 text-center"
                   style={{ background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(10px)' }}>
@@ -214,23 +214,21 @@ export default function WolvTokenPage() {
                 <h3 className="text-xl font-bold text-white mb-6">How WOLV Works</h3>
                 <div className="space-y-4 text-gray-300">
                   <p>
-                    WOLV is a BEP-20 utility token on BNB Smart Chain. When you stake BNB or BUSD on WolvCapital,
-                    you earn WOLV token rewards proportional to your staking tier and lock period.
+                    WOLV is a BEP-20 token on BNB Smart Chain. Staking terms, lock periods, fees, and reward outcomes are subject to the current platform terms and smart-contract state.
                   </p>
                   <p>
                     Every WOLV distribution is recorded on BNB Smart Chain — immutable, transparent,
                     and verifiable by anyone on BSCScan at any time using your wallet address.
                   </p>
                   <p>
-                    WOLV is now live and tradeable on PancakeSwap V2. Swap WOLV for BNB directly from
-                    your wallet — no registration required.
+                    Market availability and liquidity can change. Review the pair, price impact, liquidity, contract address, and transaction details independently before trading.
                   </p>
                 </div>
               </div>
 
               {/* DEX Live Section */}
               <div className="bg-teal-500/10 border border-teal-500/30 rounded-xl p-8 mb-12">
-                <h3 className="text-xl font-bold text-teal-400 mb-4">🚀 WOLV is Live on PancakeSwap V2</h3>
+                <h3 className="text-xl font-bold text-teal-400 mb-4">WOLV Market Reference</h3>
                 <div className="space-y-3 text-gray-300">
                   <p>WOLV market information and DEX availability can change. Review the pair, liquidity, price impact, contract address, and transaction details independently before trading.</p>
                   <p>Track live price, chart, and trading volume on <a href="https://dexscreener.com/bsc/0xe0167279aef7bf4ad313d261da82e8366822270c" target="_blank" rel="noopener noreferrer" className="text-teal-400 underline">DEXScreener</a> and <a href="https://www.dextools.io/app/en/bnb/pair-explorer/0xe0167279aef7bf4ad313d261da82e8366822270c" target="_blank" rel="noopener noreferrer" className="text-teal-400 underline">DEXTools</a>. Contract address and public holder data are available on BSCScan.</p>
@@ -242,7 +240,7 @@ export default function WolvTokenPage() {
                       className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white text-sm"
                       style={{ background: 'linear-gradient(135deg, #00a896, #2A52BE)' }}
                     >
-                      🥞 Buy WOLV on PancakeSwap →
+                      View WOLV market reference →
                     </a>
                   </div>
                   <p className="text-yellow-300 text-sm font-medium pt-2">⚠️ Staking carries risk. WOLV market price is determined by supply and demand on DEX. Value may fluctuate significantly.</p>
@@ -280,7 +278,7 @@ export default function WolvTokenPage() {
                     className="inline-flex items-center justify-center px-8 py-4 text-white font-bold rounded-lg transition-all duration-200"
                     style={{ background: 'linear-gradient(135deg, #00a896, #2A52BE)' }}
                   >
-                    🥞 Buy WOLV on PancakeSwap →
+                    View WOLV market reference →
                   </a>
                   <Link href="/accounts/signup"
                     className="inline-flex items-center justify-center px-8 py-4 bg-white/10 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/20 transition-all duration-200">

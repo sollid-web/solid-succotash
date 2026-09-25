@@ -9,7 +9,7 @@ export default function SECWarningBanner() {
         <div className="flex items-center justify-center py-2 px-4">
           <p className="text-center text-[12px] text-slate-400 leading-relaxed max-w-4xl">
             <span className="mr-1">🔒</span>
-            <span className="font-medium text-slate-300">Compliance:</span> WolvCapital is FinCEN MSB registered for AML/KYC compliance. WOLV is a BEP20 utility token — not a security. Staking involves risk.
+            <span className="font-medium text-slate-300">Compliance:</span> KYC/AML checks and eligibility review may apply under the current platform terms. WOLV is a BEP20 token reference. Staking involves risk.
             {' '}
             <Link href="/risk-disclosure" className="font-semibold text-teal-400 hover:text-teal-300 underline inline-flex items-center gap-1">
               Risk Disclosure →

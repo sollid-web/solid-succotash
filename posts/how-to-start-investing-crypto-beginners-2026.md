@@ -24,7 +24,7 @@ Only invest money you can afford to lose. Read any platform's [Risk Disclosure](
 
 ## Step 2: Choose a Regulated Platform
 
-Look for platforms with FinCEN MSB registration, KYC requirements, and verifiable on-chain contracts. Unregulated platforms with no KYC carry significantly higher risk of fraud.
+Look for platforms with KYC/AML controls, KYC requirements, and verifiable on-chain contracts. Unregulated platforms with no KYC carry significantly higher risk of fraud.
 
 WolvCapital is registered in Palo Alto, California and requires full KYC verification for all accounts.
 

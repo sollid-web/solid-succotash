@@ -239,7 +239,7 @@ export default function TermsOfServicePage() {
             <div style={accentBar} />
             <div style={{ flex: 1 }}>
               <h2 style={h2Style}>10. Governing Law & Jurisdiction</h2>
-              <p style={{ ...pStyle, margin: 0 }}>These Terms of Service are governed by the laws of the United States of America. Any disputes arising from your use of WolvCapital shall be subject to the exclusive jurisdiction of U.S. federal and state courts. WolvCapital operates in compliance with FinCEN MSB registration requirements and applicable AML/KYC regulations. WOLV is a BEP20 utility token and this platform does not offer securities or investment advice.</p>
+              <p style={{ ...pStyle, margin: 0 }}>These Terms of Service are governed by the laws of the United States of America. Any disputes arising from your use of WolvCapital shall be subject to the exclusive jurisdiction of U.S. federal and state courts. WolvCapital may request KYC/AML and eligibility information under its current platform terms. WOLV is a BEP20 token reference, and this website does not provide investment advice.</p>
             </div>
           </div>
         </div>

@@ -70,7 +70,7 @@ export default function LegalDisclaimerPage() {
               <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.75)', lineHeight: 1.8, margin: 0 }}>
                 If you have any questions about this Legal Disclaimer, please contact us at{" "}
                 <a href="mailto:legal@wolvcapital.com" style={{ color: '#00c9b1', fontWeight: 600, textDecoration: 'underline' }}>legal@wolvcapital.com</a>.
-                {" "}All communications are handled in accordance with U.S. regulatory requirements.
+                {" "}All communications are handled in accordance with the current privacy, account, and platform terms.
               </p>
             </div>
           </div>

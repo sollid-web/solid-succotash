@@ -105,7 +105,7 @@ const CATEGORIES = [
       },
       {
         q: "Why does my wallet show a security warning for WOLV?",
-        a: "Some wallet security scanners (like Blockaid) flag newly deployed tokens with low transaction history. This is a standard warning for new tokens — not an indicator of malicious code. WOLV scored 87/100 on SolidityScan audit and has no malicious functions. The warning will reduce as transaction history and liquidity grow. You can verify the contract source code yourself on BSCScan.",
+        a: "Some wallet security scanners may flag tokens with limited transaction history. This is a warning to investigate, not proof of malicious code. BSCScan currently shows no contract security audit submitted for the WOLV reference. Review the deployed functions and current on-chain data yourself.",
       },
     ],
   },

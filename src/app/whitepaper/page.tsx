@@ -12,17 +12,12 @@ const CONTRACTS = [
   {
     label: "Reward Pool",
     address: "0x7310f3e07627ce98246973e068bf2ff294f84e5f",
-    note: "48-hour timelock · Owner-funded · Verified",
+    note: "48-hour timelock functions · BSCScan reference · No audit submitted",
   },
   {
     label: "Staking Contract",
     address: "0x7cd22f3c08b4195225da7d043cbe00da118d31ec",
-    note: "Chainlink price feeds · 4 staking tiers · Verified",
-  },
-  {
-    label: "Presale Contract",
-    address: "0x04b5c5e204e812c176ce632f3781ea88c500497c",
-    note: "$0.50/WOLV · $50,000 hard cap · Chainlink BNB/USD · Verified",
+    note: "BNB/BUSD staking functions · BSCScan reference · No audit submitted",
   },
 ];
 
@@ -32,9 +27,9 @@ const SECTIONS = [
     num: "01",
     title: "Abstract",
     content: [
-      "WolvCapital is a professionally managed digital asset investment platform combining structured investment plans, blockchain-verified profit distribution, and a decentralized staking ecosystem — all built on BNB Smart Chain.",
+      "WolvCapital publishes structured platform information, public contract references, and staking information for a BNB Smart Chain-based digital-asset service.",
       "The platform issues WOLV, a fixed-supply BEP-20 token, as verifiable on-chain proof of investor earnings. Unlike traditional investment platforms that issue PDF statements, WolvCapital distributes WOLV tokens directly to investor wallets — creating permanent, publicly auditable records of every profit distribution.",
-      "WolvCapital operates under FinCEN MSB compliance with full AML/KYC procedures, bridging Web3 transparency with on-chain verifiable staking rewards through the WOLV token.",
+      "The platform publishes account, KYC/AML, contract, and risk information for review. No government registration, securities licence, audit, endorsement, or guaranteed outcome is claimed by this document.",
     ],
   },
   {
@@ -52,10 +47,10 @@ const SECTIONS = [
     num: "03",
     title: "Platform Architecture",
     content: [
-      "WolvCapital operates a two-layer architecture. The off-chain layer handles KYC verification, fiat onboarding, portfolio management, and manual withdrawal approvals — providing regulatory compliance and fraud prevention. The on-chain layer handles WOLV token distribution, staking contracts, and the reward pool.",
+      "WolvCapital operates a two-layer architecture. The off-chain layer may handle KYC verification, account eligibility, onboarding, portfolio information, and withdrawal review under the current platform terms. The on-chain layer handles WOLV token distribution, staking contracts, and the reward pool.",
       "The frontend is built on Next.js 16 deployed on Vercel, with a scalable cloud backend. All smart contracts are deployed on BNB Smart Chain (BSC) — chosen for its low transaction fees, EVM compatibility, and large ecosystem.",
-      "Yield Generation: Staking rewards are funded entirely from the Investor Rewards allocation — 600,000,000 WOLV (60% of total supply) held in the timelock-protected RewardPool contract (0x7310f3e07627ce98246973e068bf2ff294f84e5f). This allocation is fixed at deployment and cannot be increased or minted. Rewards are distributed proportionally to stakers based on their tier APY and lock duration. The RewardPool contract is publicly verifiable on BSCScan, allowing any investor to confirm the remaining reward supply at any time.",
-      "Investment plans operate on fixed-term, fixed-ROI structures. Returns are calculated server-side and reflected in the investor dashboard daily. When profits are distributed, WOLV tokens are transferred from the treasury wallet to investor wallets — creating an on-chain record of every distribution.",
+      "Reward pool: The published token allocation assigns 600,000,000 WOLV to staking rewards. The RewardPool address is publicly referenced on BSCScan, where users can inspect the deployed contract and current state. Allocation figures, pool balances, reward rates, liquidity, and outcomes can change or may differ from historical documentation.",
+      "Platform plans and staking positions have terms, lock periods, fees, and reward parameters that should be reviewed before use. On-chain transfers can be inspected independently, but a transaction record does not prove profit, solvency, custody, or future performance.",
     ],
   },
   {
@@ -75,11 +70,11 @@ const SECTIONS = [
     num: "05",
     title: "WOLV Token",
     content: [
-      "WOLV is a BEP-20 token deployed on BNB Smart Chain with a fixed supply of 1,000,000,000 (one billion) tokens. The entire supply was minted to the WolvCapital treasury wallet at deployment — no mint function exists in the contract. Supply can never increase beyond 1 billion.",
-      "Token contract: 0xe0167279aef7bf4ad313d261da82e8366822270c. The contract is open-source and verified on BSCScan. It includes an emergency pause function controlled exclusively by a multisig wallet for compliance use.",
-      "Profit distribution: When investors earn returns on WolvCapital, WOLV tokens are transferred from the treasury wallet directly to the investor's connected wallet. This creates a permanent, on-chain record of every profit distribution — verifiable by anyone on BSCScan.",
-      "Token utility: WOLV serves as (1) verifiable proof of staking rewards on BNB Smart Chain, (2) a tradeable BEP20 asset now live on PancakeSwap V2, and (3) a stakeable asset earning on-chain rewards. WOLV contract is publicly verified on BSCScan. WOLV is not pre-mined to founders or distributed for any purpose other than staking rewards.",
-      "Security review: WOLV has a published SolidityScan scanner score. A scanner score is not an independent audit and should not be treated as a guarantee that the token or platform is safe. Review the deployed source code and risk disclosures before interacting.",
+      "WOLV is a BEP-20 token deployed on BNB Smart Chain with a fixed supply of 1,000,000,000 (one billion) tokens. BSCScan currently shows a 1,000,000,000 WOLV maximum supply and a current supply of approximately 999,999,994.48 WOLV at the time reviewed. The published ABI exposes no mint function; burns can reduce the current supply.",
+      "Token contract: 0xe0167279aef7bf4ad313d261da82e8366822270c. The contract address and public ABI are available on BSCScan. BSCScan currently shows no contract security audit submitted for this token reference. Review the deployed functions and current state independently.",
+      "Token activity: WOLV transfers may be recorded on-chain. A transfer record does not establish that value was earned, will retain value, or represents a guaranteed return.",
+      "Token utility: WOLV transfers and other token activity can be inspected on BNB Smart Chain. Market availability, liquidity, token balances, and reward outcomes can change; check current BSCScan and DEX data rather than relying on static wording.",
+      "Security review: BSCScan currently shows no contract security audit submitted for the WOLV reference. Public contract information is not an independent audit or a safety guarantee. Review the deployed contract, permissions, and risk disclosures before interacting.",
     ],
   },
   {
@@ -87,11 +82,11 @@ const SECTIONS = [
     num: "06",
     title: "Staking System",
     content: [
-      "WolvCapital's staking system allows WOLV holders to stake their tokens under published terms. The system references the StakingContract and RewardPool; their source code is publicly verifiable on BSCScan, which is not the same as an independent audit.",
+      "WolvCapital's staking system references the StakingContract and RewardPool. Their BSCScan pages provide public contract and ABI/source information where available; this is not the same as an independent audit.",
       "StakingContract (0x7cd22f3c08b4195225da7d043cbe00da118d31ec): Handles stake deposits, lock periods, reward calculations using Chainlink price feeds, and claim processing. Four staking tiers are available: Starter (8% APY), Growth (12% APY), Pro (18% APY), and Elite (25% APY).",
-      "RewardPool (0x7310f3e07627ce98246973e068bf2ff294f84e5f): Holds the WOLV reward supply available for staker claims. Protected by a 48-hour timelock — no funds can be moved without a 48-hour delay, preventing sudden rug pulls or unauthorized withdrawals.",
-      "Chainlink integration: Reward calculations incorporate Chainlink's decentralized price feeds for fair and manipulation-resistant APY computation. This eliminates reliance on a single price source and protects stakers from oracle manipulation attacks.",
-      "The reward pool was initially funded with 1,000,000 WOLV from the treasury. WolvCapital commits to maintaining adequate pool funding as the staking user base grows. Pool balance is publicly visible on BSCScan at all times.",
+      "RewardPool (0x7310f3e07627ce98246973e068bf2ff294f84e5f): Holds the WOLV reward supply available for staker claims. The RewardPool ABI exposes a queue and execute withdrawal flow with a 48-hour timelock. This is a technical control, not a guarantee against loss, misuse, contract defects, or other risks.",
+      "The staking ABI exposes a BNB/USD feed reference. Oracle configuration, availability, and output should be inspected on-chain; no oracle eliminates all market, implementation, or operational risk.",
+      "Pool balance and funding activity can change. Review the current RewardPool balance and transaction history on BSCScan before relying on any reward or liquidity statement.",
     ],
   },
   {
@@ -99,10 +94,10 @@ const SECTIONS = [
     num: "07",
     title: "Tokenomics",
     content: [
-      "Total Supply: 1,000,000,000 WOLV (fixed, immutable). No additional tokens can ever be minted. The contract contains no mint function.",
+      "Maximum supply: 1,000,000,000 WOLV. BSCScan currently shows approximately 999,999,994.48 WOLV in current supply. The published ABI exposes no mint function; burns can reduce the current supply.",
       "Staking Rewards: 60% — 600,000,000 WOLV. Distributed to stakers as on-chain rewards over the platform lifetime.", "Treasury Reserve: 20% — 200,000,000 WOLV. Held in treasury for operational continuity, future reward pool top-ups, and platform development.", "Liquidity Reserve: 10% — 100,000,000 WOLV. Allocated to DEX liquidity provision. WOLV/BNB liquidity pool is now live on PancakeSwap V2 (BNB Smart Chain) — WOLV is actively tradeable on DEX.", "Team & Development: 7% — 70,000,000 WOLV. Allocated to the founding team and ongoing development. Subject to 12-month vesting schedule.", "Marketing & Growth: 3% — 30,000,000 WOLV. Reserved for partnerships, exchange listings, community growth, and platform promotion.",
       "No tokens are allocated to founders, team, or advisors outside the categories above. All WOLV in circulation represent either earned staking rewards or tokens acquired through the public presale or DEX. None are pre-mined to founders or distributed through private allocations.",
-      "DEX Listing: The WOLV public presale concluded successfully in August 2026. WOLV is now live and tradeable on PancakeSwap V2 (BNB Smart Chain) — WOLV/BNB pair contract verified on BSCScan. Token contract: 0xe0167279aef7bf4ad313d261da82e8366822270c. WOLV can be purchased directly on PancakeSwap by any wallet holder without registration. 231+ on-chain holders recorded at time of DEX launch.",
+      "DEX Listing: WOLV market information is available through public DEX and BSCScan references. The token address is 0xe0167279aef7bf4ad313d261da82e8366822270c. At the time reviewed, BSCScan showed 231 holders, 237 transfers, a 1,000,000,000 maximum supply, and approximately 999,999,994.48 WOLV current supply. These figures change over time and are not a guarantee of liquidity, price, or value.",
     ],
   },
   {
@@ -111,8 +106,8 @@ const SECTIONS = [
     title: "Compliance & Regulation",
     content: [
       "WolvCapital publishes compliance and risk information for users to review. Eligibility and permitted activities depend on the applicable jurisdiction and the platform terms.",
-      "FinCEN MSB Registration: The platform describes its FinCEN MSB registration as applying to AML/KYC compliance. FinCEN states that inclusion in the MSB registry is not a recommendation, certification of legitimacy, or government endorsement. Users should verify the legal entity, registration record, activities, and jurisdictional limits independently.",
-      "FinCEN MSB: Any MSB registration should be understood in its specific legal scope and should not be represented as a securities licence, investment-adviser registration, or general government approval.",
+      "KYC/AML and eligibility: The platform may request identity and eligibility information before access to particular features. Requirements and availability depend on the current platform terms and applicable jurisdiction.",
+      "No regulatory status, licence, government approval, or endorsement is claimed by this document. Review the current terms and jurisdictional limits independently.",
       "KYC/AML: Full Know Your Customer identity verification is required for all investors. Anti-Money Laundering screening is applied to all deposits and withdrawals. PCI-DSS compliance standards govern payment processing.",
       "Manual withdrawal approvals: Every withdrawal request undergoes manual human review before processing. This prevents unauthorized transfers, detects fraudulent activity, and ensures compliance with AML requirements.",
       "All compliance disclosures are published at wolvcapital.com/compliance. Risk disclosures are available at wolvcapital.com/risk-disclosure. By investing, all users acknowledge having read and accepted these disclosures.",
@@ -124,10 +119,10 @@ const SECTIONS = [
     title: "Security Architecture",
     content: [
       "Platform security: 256-bit SSL encryption on all connections. JWT authentication with token refresh. Session management with automatic expiry. Rate limiting on all API endpoints.",
-      "Smart contract security: All contracts verified on BSCScan with public source code. WOLV token audited on SolidityScan (87/100). No admin keys with unilateral power — pause function requires multisig. RewardPool protected by 48-hour timelock.",
+      "Smart contract security: Contract references: BSCScan pages provide public contract and ABI/source information where available. At the time reviewed, BSCScan showed no contract security audit submitted for the WOLV, RewardPool, or StakingContract references. Public code visibility is not an audit or safety guarantee.",
       "Custody: Review the current custody and fund-handling disclosures, contract addresses, lock terms, and withdrawal policy before depositing. Do not rely on a general security statement as proof of custody protection.",
-      "Bug bounty: WolvCapital maintains an internal bug bounty program. Security researchers who identify and responsibly disclose vulnerabilities are rewarded. Contact security@wolvcapital.com.",
-      "Incident response: WolvCapital maintains a documented incident response procedure. The WOLV contract pause function allows immediate freeze of all token transfers in the event of a security incident requiring intervention.",
+      "Bug bounty: WolvCapital maintains an internal bug bounty program. Security researchers should use the project's private disclosure process. No bounty or payment is promised.",
+      "Incident response: WolvCapital maintains a documented incident response procedure. Administrative controls and emergency behavior should be verified from the deployed contract and current permissions. This document does not promise a pause capability or guaranteed incident response.",
     ],
   },
   {
@@ -136,7 +131,7 @@ const SECTIONS = [
     title: "Roadmap",
     content: [
       "Q1 2026 (Completed): Platform launch · KYC/AML integration · Four investment plans live · Manual withdrawal system · Virtual Visa card integration.",
-      "Q2 2026 (Completed): WOLV Token deployment on BNB Smart Chain · Fixed supply tokenomics · Treasury model · BSCScan verification · Staking contracts (RewardPool + StakingContract) · Chainlink integration · Staking UI on dashboard.",
+      "Q2 2026 (Completed): WOLV Token deployment on BNB Smart Chain · Published token allocation · Treasury model · BSCScan contract references · Staking contracts (RewardPool + StakingContract) · BNB/USD feed reference · Staking UI on dashboard.",
       "Q3 2026 (Planned): PancakeSwap liquidity provision · CoinGecko and CoinMarketCap listing applications · Independent third-party smart contract audit · Gnosis Safe multisig implementation · Mobile app launch.",
       "Q4 2026 (Planned): WOLV governance proposals · Cross-chain bridge exploration (ETH/Polygon) · Institutional partnership programme · Enhanced staking tiers · Referral staking rewards.",
       "2027 (Vision): Fully decentralized governance · DAO transition for ecosystem reserve allocation · WOLV listed on tier-1 centralised exchanges · Expanded investment plan offerings.",
@@ -148,8 +143,8 @@ const SECTIONS = [
     title: "Risk Disclosures",
     content: [
       "Digital asset investments involve substantial risk of loss. Past performance does not guarantee future results. The value of digital assets can be highly volatile and may result in the loss of your entire investment.",
-      "WolvCapital is not a bank. Deposits are not FDIC or SIPC insured. WolvCapital does not guarantee investment returns. All projected ROI figures represent targets based on historical strategy performance, not guaranteed outcomes.",
-      "Smart contract risk: Despite audits, all smart contracts carry inherent risk. Bugs, exploits, or unforeseen interactions may result in loss of funds held in staking contracts.",
+      "WolvCapital is not a bank. No deposit, investor, or return protection is promised. Digital-asset positions involve risk, and no projected outcome is guaranteed.",
+      "Smart contract risk: Even publicly inspectable smart contracts carry inherent risk. Bugs, exploits, or unforeseen interactions may result in loss of funds held in staking contracts.",
       "Regulatory risk: The regulatory environment for digital assets is evolving. Changes in applicable laws or regulations may affect WolvCapital's ability to operate in certain jurisdictions.",
       "Full risk disclosure is available at wolvcapital.com/risk-disclosure. By using the WolvCapital platform, you confirm you have read, understood, and accepted all risk disclosures and Terms of Service.",
     ],
@@ -159,10 +154,10 @@ const SECTIONS = [
     num: "12",
     title: "Conclusion",
     content: [
-      "WolvCapital represents a new standard for investment platform transparency. By combining institutional-grade compliance, professional portfolio management, and blockchain-verifiable profit records through WOLV Token, we eliminate the trust gap that has historically separated mainstream investors from digital asset markets.",
-      "Every WOLV token in circulation represents real, earned investor profit — verifiable on-chain, permanent, and publicly auditable. This is not marketing. It is mathematics recorded on an immutable ledger.",
-      "We invite investors, auditors, regulators, and community members to verify everything we claim — on BSCScan, on SolidityScan, and on our published compliance documents. Trust should not be asked for. It should be earned and verifiable.",
-      "WolvCapital. Your profits. On-chain. Forever.",
+      "WolvCapital represents a new standard for investment platform transparency. By combining published platform information, KYC/AML controls, contract references, and blockchain transaction records through WOLV Token, we eliminate the trust gap that has historically separated mainstream investors from digital asset markets.",
+      "WOLV transfers and other token activity can be inspected on-chain. A token balance or transaction record does not establish that value was earned, will retain value, or represents a guaranteed return.",
+      "We invite users and community members to review the BSCScan references, current platform terms, and risk disclosures. Public information should be assessed independently and is not an endorsement or guarantee.",
+      "WolvCapital. Public references. Independent review.",
     ],
   },
 ];
@@ -243,7 +238,7 @@ export default function WhitepaperPage() {
               flexWrap: "wrap",
             }}
           >
-            {["12 Sections", "3 Verified Contracts", "1B WOLV Fixed Supply", "87/100 Audit Score"].map((badge) => (
+            {["12 Sections", "3 BSCScan References", "1B WOLV Maximum Supply", "No Audit Submitted"].map((badge) => (
               <span
                 key={badge}
                 style={{
@@ -345,7 +340,7 @@ export default function WhitepaperPage() {
                 marginBottom: "16px",
               }}
             >
-              Verified Contract Addresses
+              Public Contract Addresses
             </h2>
             {CONTRACTS.map((c) => (
               <div key={c.label} className="contract-row">
@@ -493,4 +488,3 @@ export default function WhitepaperPage() {
     </div>
   );
 }
-

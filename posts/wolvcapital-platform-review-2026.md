@@ -14,7 +14,7 @@ WolvCapital is a U.S.-based digital asset investment platform distributing rewar
 ## Platform Overview
 
 - Headquarters: 516 High St, Palo Alto, CA 94301, USA
-- Regulation: FinCEN MSB Registered
+- Regulation: KYC/AML controls
 - Blockchain: BNB Smart Chain (BEP-20)
 - Token: WOLV (1,000,000,000 fixed supply)
 - Supported Deposits: USDT, BTC
@@ -34,7 +34,7 @@ All three contracts are publicly verifiable on BSCScan. On-chain verifiability m
 
 ## Compliance
 
-Full KYC verification required for all accounts before any investment plan can be activated. AML program compliant with FinCEN requirements. All transactions undergo manual off-chain review.
+Full KYC verification required for all accounts before any investment plan can be activated. The platform describes AML controls under its current terms. All transactions undergo manual off-chain review.
 
 ## Key Risk Disclosures
 

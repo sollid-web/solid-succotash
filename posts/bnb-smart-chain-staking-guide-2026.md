@@ -49,7 +49,7 @@ All investments carry risk. Digital asset markets are volatile, and past perform
 - Manual off-chain review of all transactions
 - KYC and AML compliance for every account
 - 256-bit SSL encryption
-- FinCEN MSB registration
+- KYC/AML controls
 
 ## Getting Started
 

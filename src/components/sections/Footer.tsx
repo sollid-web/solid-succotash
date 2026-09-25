@@ -64,7 +64,7 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-[#475569] text-xs">{t('footer.copyright').replace('{year}', String(new Date().getFullYear()))}</p>
             <div className="flex items-center gap-3 text-xs text-[#94A3B8]">
-              <span className="px-2 py-1">{t('footer.badge.fincen')}</span>
+              <span className="px-2 py-1">{t('footer.badge.risk')}</span>
               <span className="px-2 py-1">{t('footer.badge.ssl')}</span>
               <span className="px-2 py-1">{t('footer.badge.pci')}</span>
             </div>

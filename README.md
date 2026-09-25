@@ -1,77 +1,92 @@
-# Solid Succotash
+# WolvCapital
+[![Network: BNB Smart Chain](https://img.shields.io/badge/network-BNB%20Smart%20Chain-F0B90B?logo=binance&logoColor=white)](https://www.bnbchain.org/en/smartchain)
+[![Framework: Next.js](https://img.shields.io/badge/framework-Next.js%2016-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
-## WolvCapital Web Platform
+WolvCapital is a JavaScript-first Next.js web application for a structured digital-asset investment platform. The frontend combines product and investment-plan pages, wallet connectivity, BNB Smart Chain staking flows, token and reward-pool visibility, educational content, and legal and risk-disclosure pages.
 
-A production-oriented web platform for WolvCapital, combining a responsive investment-product experience with content, legal/compliance pages, administrative workflows, and supporting automation. The project demonstrates how to organize a modern Next.js application around reusable UI, SEO, accessibility, testing, and operational documentation.
+> **Important:** This repository is software documentation, not financial advice or an investment recommendation. Digital assets are volatile and smart-contract interactions carry technical and financial risk. Review the application, contracts, disclosures, and applicable law independently before using the platform.
 
-> **Portfolio note:** This repository is presented as a software engineering project. Financial copy, investment claims, tokenomics, and compliance content should be reviewed by qualified legal and financial professionals before being used in production.
+## Project status
 
-## Why this project is interview-ready
+The application is configured for **BNB Smart Chain mainnet** through `wagmi` and RainbowKit's `bsc` chain configuration. The frontend is intended to be used with the WolvCapital web application and its separately managed Django/API backend. The repository is public source code; a DappBay listing, security review, audit, or BNB Chain endorsement is **not implied** by this README.
 
-This project is more than a landing page. It provides discussion points across frontend architecture, product design, accessibility, quality engineering, and delivery:
+## What the application provides
 
-- Built a responsive web experience with **Next.js, React, JavaScript/TypeScript, and Tailwind CSS**.
-- Uses reusable components and a clear separation between application code, static assets, content, tests, and operational scripts.
-- Includes interactive UI such as the accessible flip-card experience, with keyboard support and reduced-motion consideration.
-- Treats SEO as an engineering concern through metadata, Open Graph/Twitter card support, image optimization, and content structure.
-- Includes legal and risk-disclosure navigation appropriate for a financial-product interface.
-- Includes unit/integration and end-to-end testing foundations using **Jest** and **Playwright**.
-- Documents backend integration expectations, environment configuration, deployment options, and future product areas.
+- Responsive marketing, product, plan, dashboard, and account experiences.
+- Wallet connection through RainbowKit and Wagmi, with BNB Smart Chain as the configured chain.
+- On-chain staking interactions for BNB and BUSD-denominated plans.
+- WOLV token and reward-pool visibility with BSCScan and DEX reference links.
+- Content and education pages sourced from the `posts/` directory.
+- Legal, privacy, terms, risk-disclosure, withdrawal-policy, and methodology routes.
+- API proxying from Next.js to a separately deployed Django-compatible backend.
+- Search and social metadata, Open Graph assets, optimized images, and sitemap/robots routes.
+- Jest foundations and Playwright browser-test configuration.
 
-## Core capabilities
+## BNB Smart Chain integration
 
-- Responsive, mobile-first marketing and product pages
-- Reusable React UI components
-- Interactive virtual-card presentation
-- Accessible keyboard and reduced-motion interactions
-- Investment plan and product-content sections
-- Legal disclaimer, privacy, terms, and risk-disclosure routes/links
-- SEO metadata and social-sharing configuration
-- Optimized static images and lazy loading with Next/Image
-- Blog/content support through the `posts` directory
-- Django/API integration boundary through environment configuration
-- Automated browser testing with Playwright
-- JavaScript/TypeScript linting and Jest test configuration
+BNB Chain support is explicit in both the code and the runtime configuration:
 
-## Technology profile
+- `src/_client/WalletProvider.tsx` configures Wagmi with `wagmi/chains` → `bsc`.
+- The application uses BSCScan endpoints at `https://api.bscscan.com/api` for chain statistics.
+- Contract and transaction links use `https://bscscan.com`.
+- The staking UI identifies the network as **BNB Smart Chain** and reads and writes contract state through Wagmi.
 
-| Area | Technologies |
+The configured chain is BNB Smart Chain mainnet, chain ID `56`. Testnet support is not enabled by default. Do not use production contract addresses with a testnet wallet or a modified local configuration.
+
+### Contract references
+
+These addresses are read by the frontend and should be re-confirmed against the current deployment before every public listing update or production release.
+
+| Contract | Address | Explorer |
+| --- | --- | --- |
+| WOLV token | `0xe0167279aef7bf4ad313d261da82e8366822270c` | [View on BSCScan](https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c) |
+| Staking | `0x7cd22f3c08b4195225da7d043cbe00da118d31ec` | [View on BSCScan](https://bscscan.com/address/0x7cd22f3c08b4195225da7d043cbe00da118d31ec) |
+| Reward pool | `0x7310f3e07627ce98246973e068bf2ff294f84e5f` | [View on BSCScan](https://bscscan.com/address/0x7310f3e07627ce98246973e068bf2ff294f84e5f) |
+| BUSD reference | `0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56` | [View on BSCScan](https://bscscan.com/token/0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56) |
+
+The frontend does not replace an independent contract review. Verify source code, ownership, permissions, token balances, upgradeability, and current deployment state directly on the relevant explorer.
+
+## Technology
+
+| Area | Technology |
 | --- | --- |
-| UI | React, Next.js, Tailwind CSS |
-| Primary implementation | JavaScript with TypeScript support |
-| Testing | Jest, Playwright |
-| Content | Markdown/content assets and Next.js routes |
-| Integration | HTTP API boundary, Django-compatible deployment model |
-| Delivery | Node.js, Vercel, Docker, standalone Next.js deployment |
+| Application | Next.js 16 App Router, React 18 |
+| Language | JavaScript with TypeScript and TSX components |
+| Styling and motion | Tailwind CSS, Framer Motion, Lenis |
+| Wallet and chain | Wagmi, Viem, RainbowKit, WalletConnect |
+| Content | Markdown, `gray-matter`, unified/remark/rehype |
+| Testing | Jest, Testing Library, Playwright |
+| Deployment | Vercel-compatible Next.js deployment with a separate API backend |
 
-The repository's measured language composition is approximately **81.4% JavaScript, 10.1% RouterOS Script, 6.4% HTML, 2% TypeScript, and 0.1% CSS**. This is useful context in interviews: describe the project as a JavaScript-first Next.js application with TypeScript adoption and supporting infrastructure/automation scripts, rather than overstating it as a fully TypeScript codebase.
-
-## Project structure
+## Repository layout
 
 ```text
 .
-├── src/                 # Application code and reusable UI
-├── public/               # Images, icons, and static assets
-├── posts/                # Blog/content material
-├── e2e/                 # Playwright end-to-end tests
-├── tests/                # Additional test coverage
-├── scripts/              # Maintenance and operational scripts
-├── frontend/             # Documented frontend integration area, where applicable
-├── package.json          # Scripts and dependencies
-├── next.config.js        # Next.js configuration
-├── tailwind.config.js    # Design tokens and styling configuration
-└── playwright.config.ts  # Browser-test configuration
+├── src/
+│   ├── app/                 # App Router pages, API routes, and layouts
+│   └── _client/             # Client-only wallet and interactive components
+├── public/                  # Logos, icons, whitepaper, images, and static assets
+├── posts/                   # Markdown educational and product content
+├── tests/                   # Jest-oriented test files
+├── e2e/                    # Playwright browser tests
+├── scripts/                 # Maintained maintenance and generation scripts
+├── .env.example             # Documented environment variable template
+├── next.config.js           # Rewrites, redirects, image policy, and build checks
+├── package.json             # Development, test, lint, and build commands
+└── playwright.config.ts     # Browser-test configuration
 ```
 
-## Getting started
+## Local development
 
 ### Prerequisites
 
-- Node.js 18 or newer
-- npm
-- A configured API/backend if using dynamic integration features
+- Node.js 18 or newer. Node.js 20 or newer is recommended for the current dependency set.
+- npm 9 or newer.
+- A running or reachable backend when using authenticated or API-backed flows.
+- A WalletConnect project ID for wallet-connection features.
 
-### Installation
+### Install
 
 ```bash
 git clone https://github.com/sollid-web/solid-succotash.git
@@ -80,9 +95,9 @@ npm install
 cp .env.example .env.local
 ```
 
-Review `.env.local` and replace example values with local, non-secret configuration. Never commit credentials, private keys, or production tokens.
+Edit `.env.local` with local, non-secret values. Never commit `.env.local`, API keys, private keys, seed phrases, or wallet credentials.
 
-### Run locally
+### Run the development server
 
 ```bash
 npm run dev
@@ -90,49 +105,91 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-### Quality checks
+### Environment variables
 
-Use the scripts available in `package.json`; the typical checks are:
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `NEXT_PUBLIC_API_URL` | Production and API-backed flows | Django/API origin used by the Next.js rewrites. |
+| `NEXT_PUBLIC_SITE_URL` | Recommended | Canonical public frontend origin for metadata and links. |
+| `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | Wallet connection | WalletConnect project identifier used by RainbowKit. |
+| `BSCSCAN_API_KEY` | Optional | BSCScan API access for chain statistics; the route has a fallback response. |
+| `NEXT_PUBLIC_API_BASE_URL` | Optional | Legacy/client API base URL used by selected integrations. |
+| `TELEGRAM_BOT_TOKEN` | Optional/server-only | Telegram automation integration. Keep this secret. |
+| `TELEGRAM_CHAT_ID` | Optional/server-only | Telegram destination used by automation. |
+
+On Vercel, `NEXT_PUBLIC_API_URL` must be set. `next.config.js` intentionally fails the Vercel build when that value is missing because otherwise authenticated API requests would silently point at the local fallback.
+
+## Quality checks
+
+Run the following before opening a pull request or submitting an updated repository to DappBay:
 
 ```bash
 npm run lint
+npm run type-check
 npm test
 npm run build
 ```
 
-If an end-to-end script is configured in the local checkout, run it with Playwright after starting the application:
+Run browser tests against the configured local application when the required backend and test data are available:
 
 ```bash
-npx playwright test
+npm run dev
+npm run test:e2e
 ```
 
-## Engineering decisions worth discussing
+The end-to-end suite may require environment-specific authentication or seeded data. Record any unavailable external dependency in the pull request rather than weakening the test configuration.
 
-1. **Component boundaries:** interactive behavior is kept in client components while static page structure can remain server-rendered.
-2. **Accessibility:** interactive controls should be usable with keyboard input, expose meaningful labels, and respect `prefers-reduced-motion`.
-3. **Performance:** image optimization, lazy loading, and careful client-component usage reduce unnecessary browser work.
-4. **SEO:** metadata and social cards make product pages understandable to search engines and link previews.
-5. **Integration:** `NEXT_PUBLIC_API_URL` provides an explicit boundary between the frontend and a Django/API service.
-6. **Risk management:** financial and legal content is separated from generic marketing UI so it can be reviewed and changed deliberately.
+## Deployment notes
 
-## Interview walkthrough
+The frontend can be deployed as a standard Next.js application on Vercel or another Node-compatible host. Configure the same environment variables in the deployment environment, set the production API origin, and verify that the API rewrite reaches the Django backend.
 
-A strong five-minute explanation is:
+Before a production release:
 
-> “I built a JavaScript-first Next.js product experience for a financial platform. I focused on reusable responsive UI, accessible interactions, SEO, image performance, legal-content navigation, and a clean API boundary for a Django service. I also added Jest/Playwright foundations and documented deployment and operational concerns.”
+1. Confirm the wallet provider still targets BNB Smart Chain mainnet.
+2. Confirm every contract address and explorer link in the UI and documentation.
+3. Verify the deployed frontend origin and API origin.
+4. Exercise a read-only wallet flow before testing any write transaction.
+5. Review legal, risk, token, staking, and withdrawal copy with the responsible legal and compliance reviewers.
+6. Run linting, type checking, tests, and a production build from a clean checkout.
 
-Be ready to demonstrate one component, explain server versus client rendering, show how the environment variables are used, and describe how you would add authentication, API validation, observability, and stronger CI coverage.
+## DappBay listing profile
 
-## Responsible next steps
+BNB Chain's DappBay submission form asks for a concise project profile, a public source repository, a logo, screenshots, social links, contract information, and the supported BNB ecosystem network. The following draft keeps within the form's visible limits and should be reviewed by the project owner before submission.
 
-- Add a CI workflow that runs lint, tests, type checking, and production builds.
-- Add a screenshot or short demo GIF showing the primary user journey.
-- Add exact local setup instructions for any required backend and seed data.
-- Remove generated artifacts and ambiguous files from version control where possible.
-- Add explicit test coverage for navigation, legal links, keyboard interaction, and responsive layouts.
-- Document accessibility and performance results with Lighthouse or equivalent tooling.
-- Add a clear license and contribution guidelines if this is intended for public collaboration.
+| Field | Draft |
+| --- | --- |
+| dApp name | `WolvCapital` |
+| Categories | `DeFi`, `AI`, `Infra-and-Tools` — select no more than three and keep only categories that accurately describe the live product. |
+| Tagline | `Structured digital-asset investing and BNB Smart Chain staking in one transparent platform.` |
+| Description | `WolvCapital is a digital-asset platform built on BNB Smart Chain. The application combines structured investment-plan information, WOLV token visibility, wallet-connected staking for BNB and BUSD, reward-pool transparency, educational content, and risk disclosures. Users should verify contracts and review all disclosures before interacting with the platform.` |
+| Status | `Live` only if the public application and required backend are operational; otherwise select `Work in progress`. |
+| Supported network | `BNB Smart Chain` |
+| Primary repository | `https://github.com/sollid-web/solid-succotash` |
+
+DappBay's form currently limits the name to 40 characters, the tagline to 200 characters, the description to 1,000 characters, and repository descriptions to 200 characters. It requests one logo of at least 160 × 160 pixels and no more than 1 MB, plus one to five screenshots. It also allows audit-report links for projects that have them; an audit is not represented here because no audit provider or report has been verified in this repository.
+
+The repository itself is intended to satisfy the repository-side verification signals: it is public, identifies BNB Smart Chain explicitly, configures `bsc` in code, and documents the relevant contract references. DappBay review and listing remain subject to BNB Chain's own process and should be updated whenever the logo, description, repository, contract, or deployment changes.
+
+## Security and risk disclosure
+
+This repository contains client-side blockchain transaction flows. A connected wallet signs transactions locally; the frontend cannot remove the need for the user to review network, destination, amount, gas, allowance, and contract details. Never paste a private key or seed phrase into the application, repository, issue tracker, or chat.
+
+The DappBay risk scanner and third-party explorers are useful reference tools, not guarantees of safety, profitability, or endorsement. Users are responsible for their own research and transaction decisions. Report suspected vulnerabilities privately using the repository's [security policy](./SECURITY.md) rather than publishing exploitable details in a public issue.
+
+## Contribution guidance
+
+Keep pull requests focused and explain user-facing, contract-facing, or deployment-facing effects. Do not commit build output, dependency directories, local environment files, archives of source trees, editor backups, or temporary debugging artifacts. For changes that affect wallet transactions, include the affected chain, contract address, function names, and a clear test plan. See the [security policy](./SECURITY.md) for private vulnerability reporting and responsible disclosure guidance.
 
 ## License
 
-No license is currently declared. Add an explicit license before presenting this as an open-source project, or state the intended usage terms clearly.
+This project is released under the [MIT License](./LICENSE). See the [`LICENSE`](./LICENSE) file for the complete terms. The MIT License applies to the source code in this repository; it does not make financial, investment, token, or smart-contract claims, disclosures, or third-party services safe or endorsed.
+
+## References
+
+[1]: https://docs.bnbchain.org/join-ecosystem/platforms/dappbay/ "BNB Chain documentation: Submit Project on DappBay & DappRadar"
+[2]: https://dappbay.bnbchain.org/submit-dapp "DappBay: Submit a dApp"
+[3]: https://github.com/bnb-chain/bnb-chain-tutorial/blob/main/Readme-and-config-file-guideline.md "BNB Chain Repository Submission Guidelines"
+[4]: https://wagmi.sh/react/api/chains/bsc "Wagmi BNB Smart Chain configuration"
+[5]: https://bscscan.com/ "BSCScan block explorer"
+
+DappBay submission guidance is summarized from the official sources above and should be rechecked before filing because form fields and review criteria can change.

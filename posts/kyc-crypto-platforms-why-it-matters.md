@@ -22,7 +22,7 @@ KYC is the process by which a financial institution verifies the identity of its
 
 ## Why Regulated Platforms Require KYC
 
-KYC is required by law in most jurisdictions for financial services businesses. In the United States, FinCEN (Financial Crimes Enforcement Network) mandates that Money Services Businesses (MSBs) implement KYC/AML programs.
+KYC is required by law in most jurisdictions for financial services businesses. In the United States, applicable rules may require financial services businesses to implement KYC/AML programs.
 
 Platforms without KYC requirements:
 - Cannot credibly claim regulatory compliance
@@ -51,7 +51,7 @@ WolvCapital requires KYC for all accounts before any investment plan can be acti
 
 ## AML: The Other Side of Compliance
 
-Anti-Money Laundering (AML) programs work alongside KYC. WolvCapital's AML program monitors transactions for suspicious activity in compliance with FinCEN requirements. All transactions undergo manual off-chain review.
+Anti-Money Laundering (AML) programs work alongside KYC. WolvCapital's AML program monitors transactions for suspicious activity in the platform's stated compliance procedures. All transactions undergo manual off-chain review.
 
 ## Red Flags: When to Be Cautious
 

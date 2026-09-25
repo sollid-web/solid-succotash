@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Legal & Disclosures Overview — WolvCapital',
-  description: 'WolvCapital legal and compliance framework. FinCEN registered, KYC/AML compliant. Access Terms of Service, Privacy Policy, Risk Disclosure, and Legal Disclaimer.',
+  description: 'WolvCapital legal, account, KYC/AML, and risk information. Access Terms of Service, Privacy Policy, Risk Disclosure, and Legal Disclaimer.',
   alternates: { canonical: 'https://www.wolvcapital.com/legal' },
   openGraph: {
     title: 'Legal & Disclosures — WolvCapital',
@@ -40,7 +40,7 @@ export default function LegalPage() {
             <li>Responsible Communication & Disclosure</li>
             <li>User Identity & Account Protection (AML/KYC)</li>
             <li>Manual Off-Chain Review for All Transactions</li>
-            <li>Regulatory Disclosures (FinCEN MSB, AML/KYC)</li>
+            <li>Account, KYC/AML, and risk disclosures</li>
           </ul>
           <h2 className="text-2xl font-semibold mb-4">Key Legal Documents</h2>
           <ul className="list-disc pl-6 mb-6 text-gray-700 space-y-2">

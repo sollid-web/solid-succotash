@@ -41,7 +41,7 @@ const PAGES: Record<string, { title: string; subtitle: string; accent: string; t
   },
   presale: {
     title: 'WOLV Token — Live on PancakeSwap',
-    subtitle: 'WOLV/BNB is now trading on PancakeSwap V2 · BNB Smart Chain · Contract verified on BSCScan.',
+    subtitle: 'WOLV/BNB market reference on PancakeSwap V2 · BNB Smart Chain · Review current contract data on BSCScan.',
     accent: '#00a896',
     tag: 'LIVE · DEX',
   },

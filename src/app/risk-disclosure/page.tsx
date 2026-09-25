@@ -29,7 +29,7 @@ const sections = [
   },
   {
     title: 'Smart Contract Risk',
-    text: 'WOLV staking operates via smart contracts deployed on BNB Smart Chain. While contracts are publicly verified on BSCScan, smart contracts may contain bugs or vulnerabilities that could result in loss of funds. Always verify the contract address before interacting.',
+    text: 'WOLV staking operates via smart contracts deployed on BNB Smart Chain. BSCScan contract pages provide public references, but smart contracts may contain bugs or vulnerabilities that could result in loss of funds. Always verify the contract address before interacting.',
   },
   {
     title: 'Regulatory Considerations',
@@ -49,7 +49,7 @@ const stats = [
   { value: 'HIGH', label: 'Volatility Class' },
   { value: 'BNB Chain', label: 'Network' },
   { value: 'BSCScan', label: 'Verified On' },
-  { value: 'FinCEN MSB', label: 'Compliance' },
+  { value: 'KYC / AML', label: 'Account controls' },
 ]
 
 export default function RiskDisclosurePage() {

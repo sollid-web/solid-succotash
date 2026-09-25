@@ -1,4 +1,27 @@
-.vercel
-.node_modules
-.env.local
+# Dependencies
 node_modules/
+
+# Next.js and build output
+.next/
+out/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Deployment tooling
+.vercel/
+
+# TypeScript and test caches
+*.tsbuildinfo
+coverage/
+playwright-report/
+test-results/
+
+# Local archives, backups, patches, and editor artifacts
+*.zip
+*.save
+*.bak
+*.patch
+.DS_Store

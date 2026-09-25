@@ -43,7 +43,7 @@ export default function PresalePage() {
             <div className="max-w-lg mx-auto rounded-2xl p-8 text-center" style={{ background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(10px)', border: '1px solid rgba(0,168,150,0.2)' }}>
               <div className="text-4xl mb-4">🥞</div>
               <h3 className="text-white font-bold text-xl mb-2">WOLV is Live on PancakeSwap</h3>
-              <p className="text-slate-400 text-sm mb-6">WOLV/BNB pair · PancakeSwap V2 · BNB Smart Chain · Contract verified on BSCScan</p>
+              <p className="text-slate-400 text-sm mb-6">WOLV/BNB market reference · PancakeSwap V2 · BNB Smart Chain · Review contract data on BSCScan</p>
               <a
                 href="https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c"
                 target="_blank"

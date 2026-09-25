@@ -91,7 +91,7 @@ export default function HeroSection() {
       >
         <motion.div variants={itemVariants}>
           <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-blue-300">
-            Public token data · Platform terms · Risk information
+            WOLV data · BNB Smart Chain · Risk information
           </p>
 
           <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
@@ -149,8 +149,8 @@ export default function HeroSection() {
 
         {/* Action buttons */}
         <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-3 pt-1">
-          <MotionLink href="/how-it-works" {...pressableTapProps} className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition shadow-lg shadow-teal-500/20 text-center">Review how it works →</MotionLink>
-          <Link href="/verification-pack" className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white border border-blue-400/40 bg-blue-500/10 hover:bg-blue-500/20 transition text-center">Open verification pack →</Link>
+          <MotionLink href="/how-it-works" {...pressableTapProps} className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition shadow-lg shadow-teal-500/20 text-center">Explore how it works →</MotionLink>
+          <Link href="/verification-pack" className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white border border-blue-400/40 bg-blue-500/10 hover:bg-blue-500/20 transition text-center">Review public references →</Link>
         </motion.div>
 
         <a href="https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c" target="_blank" rel="noopener noreferrer" className="block text-center text-sm text-blue-300 hover:text-blue-200 underline underline-offset-2">
@@ -161,7 +161,7 @@ export default function HeroSection() {
         <div className="pt-4 border-t border-slate-800/80 flex flex-wrap justify-between gap-2 text-[10px] text-slate-400 tracking-wider">
           <span>{t('hero.badge.encryption')}</span>
           <span>{t('hero.badge.custody')}</span>
-          <span>{t('hero.badge.fincen')}</span>
+          <span>{t('hero.badge.kyc')}</span>
           <span>PUBLIC CONTRACT REFERENCES</span>
         </div>
       </motion.div>

@@ -46,7 +46,7 @@
   <rect x="0" y="560" width="1200" height="70" fill="rgba(0,0,0,0.2)"/>
 
   <!-- Bottom badges -->
-  <text x="96" y="602" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.6)" letter-spacing="2">FINCEN REGISTERED</text>
+  <text x="96" y="602" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.6)" letter-spacing="2">KYC / AML CONTROLS</text>
   <text x="96" y="602" font-family="system-ui, sans-serif" font-size="14" fill="rgba(255,255,255,0.3)" dx="200">·</text>
   <text x="320" y="602" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.6)" letter-spacing="2">KYC VERIFIED</text>
   <text x="320" y="602" font-family="system-ui, sans-serif" font-size="14" fill="rgba(255,255,255,0.3)" dx="170">·</text>

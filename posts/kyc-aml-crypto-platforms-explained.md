@@ -20,7 +20,7 @@ KYC (Know Your Customer) and AML (Anti-Money Laundering) compliance are among th
 
 ## Why Regulated Platforms Require KYC
 
-FinCEN mandates that U.S. Money Services Businesses implement KYC and AML programs. Platforms without KYC cannot credibly claim regulatory compliance, carry higher fraud risk, and offer little recourse if issues arise.
+Applicable rules may require that U.S. Money Services Businesses implement KYC and AML programs. Platforms without KYC cannot credibly claim regulatory compliance, carry higher fraud risk, and offer little recourse if issues arise.
 
 ## KYC Protects Investors
 

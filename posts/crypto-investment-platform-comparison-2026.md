@@ -15,11 +15,11 @@ With thousands of crypto platforms operating globally, choosing a regulated, tra
 
 A legitimate crypto investment platform should be registered with relevant financial authorities. In the United States, this means:
 
-- **FinCEN MSB Registration** — Money Services Business registration is required for platforms handling crypto transactions
+- **KYC/AML controls** — Money Services Business registration is required for platforms handling crypto transactions
 - **AML Program** — A written anti-money laundering policy
 - **SAR Filing** — Suspicious Activity Report obligations
 
-WolvCapital is FinCEN MSB registered and operates from its principal office at 516 High St, Palo Alto, CA 94301.
+WolvCapital is KYC/AML controls and operates from its principal office at 516 High St, Palo Alto, CA 94301.
 
 ## 2. On-Chain Transparency
 

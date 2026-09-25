@@ -54,10 +54,10 @@ export default function SecurityPage(): JSX.Element {
           <div className="text-center mb-10">
             <span className="text-xs font-bold tracking-widest uppercase text-[#2A52BE] block mb-3">On-Chain Transparency</span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-3" style={{ letterSpacing: '-0.02em' }}>
-              Publicly Verified Source Code
+              Public Contract References
             </h2>
             <p className="text-[#94A3B8] text-sm max-w-2xl mx-auto">
-              The listed contract addresses link to publicly verified source code on BSCScan. This helps visitors inspect deployed code, but source-code verification is not an independent security audit and does not eliminate financial or smart-contract risk.
+              The listed addresses link to BSCScan contract pages and public on-chain references. BSCScan currently shows no contract security audit submitted for these references. Public source or ABI information is not an independent security audit and does not eliminate financial or smart-contract risk.
             </p>
           </div>
 
@@ -81,9 +81,9 @@ export default function SecurityPage(): JSX.Element {
           {/* Blockchain protections */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
-              { icon: "🔒", title: "Fixed Supply",       desc: "1 billion WOLV minted once at deployment. No further minting is possible — enforced by contract code, not policy." },
-              { icon: "⏱️", title: "48hr Timelock",      desc: "Any withdrawal from the reward pool must be publicly queued 48 hours before execution. No instant draining is possible." },
-              { icon: "⚡", title: "Chainlink Oracles",  desc: "BNB/USD pricing is sourced from Chainlink — the industry standard for tamper-proof, decentralised price feeds." },
+              { icon: "🔒", title: "Maximum Supply",       desc: "BSCScan shows a 1 billion WOLV maximum supply and a current supply slightly below that amount. The published ABI exposes no mint function; supply may decrease through burns." },
+              { icon: "⏱️", title: "48hr Timelock",      desc: "The reward-pool ABI exposes queue and execute withdrawal functions with a 48-hour timelock flow. Review the deployed contract and current state before relying on this control." },
+              { icon: "⚡", title: "Chainlink Oracles",  desc: "The staking contract exposes a BNB/USD feed reference. Oracle availability, configuration, and output should be checked on-chain before use." },
             ].map(f => (
               <div key={f.title} className="rounded-xl bg-white/5 border border-white/10 p-5">
                 <div className="text-2xl mb-3">{f.icon}</div>
@@ -182,7 +182,7 @@ export default function SecurityPage(): JSX.Element {
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Link href="/contact" className="inline-flex items-center justify-center rounded-[7px] px-6 py-3 text-sm font-bold bg-[#2A52BE] text-white hover:bg-[#244bb0] transition">
-              Contact Security Team
+              Contact Support
             </Link>
             <a href="https://bscscan.com/token/0xe0167279aef7bf4ad313d261da82e8366822270c" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center justify-center rounded-[7px] px-6 py-3 text-sm font-bold border border-[#2A52BE] text-[#2A52BE] hover:bg-[#eff6ff] transition">

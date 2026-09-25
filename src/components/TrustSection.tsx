@@ -11,7 +11,7 @@ export default function TrustSection() {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="text-center mb-12 md:mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#0b2f6b] mb-4">
-              Built for Trust. Verified on the Blockchain.
+              Built for Transparency. Review the Blockchain.
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               WolvCapital publishes security controls and contract references so you can review the available evidence. Public source-code verification is not the same as an independent audit.
@@ -24,9 +24,9 @@ export default function TrustSection() {
                 <div className="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center mr-4">
                   <UserCheck className="w-8 h-8 text-green-600" strokeWidth={2.5} />
                 </div>
-                <h3 className="text-xl font-bold text-[#0b2f6b]">KYC Verified</h3>
+                <h3 className="text-xl font-bold text-[#0b2f6b]">KYC Review</h3>
               </div>
-              <p className="text-gray-600">All investors undergo comprehensive Know-Your-Customer verification before account activation, ensuring regulatory compliance and investor protection.</p>
+              <p className="text-gray-600">Account access may require Know-Your-Customer information and eligibility review under the current platform terms. KYC review is not a guarantee of protection or suitability.</p>
             </div>
 
             <div className="bg-white rounded-xl p-8 shadow-lg border-l-4 border-blue-500 hover:shadow-xl transition-all">
@@ -34,9 +34,9 @@ export default function TrustSection() {
                 <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mr-4">
                   <ShieldCheck className="w-8 h-8 text-blue-600" strokeWidth={2.5} />
                 </div>
-                <h3 className="text-xl font-bold text-[#0b2f6b]">AML Compliant</h3>
+                <h3 className="text-xl font-bold text-[#0b2f6b]">AML Controls</h3>
               </div>
-              <p className="text-gray-600">Advanced Anti-Money Laundering systems monitor all transactions in real-time, identifying and preventing suspicious activity while maintaining customer privacy.</p>
+              <p className="text-gray-600">Account and transaction activity may be reviewed under the current platform rules. AML controls do not eliminate fraud, operational, market, or smart-contract risk.</p>
             </div>
 
             <div className="bg-white rounded-xl p-8 shadow-lg border-l-4 border-purple-500 hover:shadow-xl transition-all">
@@ -46,7 +46,7 @@ export default function TrustSection() {
                 </div>
                 <h3 className="text-xl font-bold text-[#0b2f6b]">SSL Encryption</h3>
               </div>
-              <p className="text-gray-600">Military-grade SSL/TLS encryption protects all communications and financial data. Your account information is secured with multi-factor authentication.</p>
+              <p className="text-gray-600">Use the site over HTTPS and follow account-security guidance. Availability of multi-factor authentication and other controls depends on the current product configuration.</p>
             </div>
           </div>
 
@@ -58,7 +58,7 @@ export default function TrustSection() {
                 { icon: Shield,    color: 'indigo', label: '2FA',     sub: 'Two-Factor Auth' },
                 { icon: Lock,      color: 'green',  label: '256-bit', sub: 'SSL Encryption' },
                 { icon: Clock,     color: 'blue',   label: '24/7',    sub: 'Fraud Monitoring' },
-                { icon: FileCheck, color: 'teal',   label: 'PCI-DSS', sub: 'Level 1 Certified' },
+                { icon: FileCheck, color: 'teal',   label: 'Data',    sub: 'Handling information' },
               ].map(({ icon: Icon, color, label, sub }) => (
                 <div key={label} className="text-center">
                   <div className={`flex justify-center mb-3`}>
@@ -75,10 +75,10 @@ export default function TrustSection() {
         </div>
       </section>
 
-      {/* Verified Smart Contracts */}
+      {/* Public Contract References */}
       <section className="py-12 bg-white border-t border-gray-100">
         <div className="container mx-auto px-4 lg:px-8">
-          <h3 className="text-xl font-bold text-[#0b2f6b] text-center mb-8">Verified Smart Contracts</h3>
+          <h3 className="text-xl font-bold text-[#0b2f6b] text-center mb-8">Public Contract References</h3>
           <div className="max-w-3xl mx-auto space-y-3">
             {[
               { name: 'WOLV Token',        addr: '0xe0167279aef7bf4ad313d261da82e8366822270c' },

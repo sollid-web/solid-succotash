@@ -14,7 +14,7 @@ export default function PresaleHeroBanner() {
               🚀 WOLV is now live on PancakeSwap — trade on DEX
             </strong>
             <p className="text-teal-200 text-xs md:text-sm leading-relaxed">
-              WOLV/BNB pair is live on PancakeSwap V2 · BNB Smart Chain · Contract verified on BSCScan · 231+ holders
+              WOLV/BNB market reference · BNB Smart Chain · View the contract and current holder data on BSCScan
             </p>
           </div>
           <a
@@ -23,7 +23,7 @@ export default function PresaleHeroBanner() {
             rel="noopener noreferrer"
             className="w-full md:w-auto md:flex-shrink-0 inline-flex items-center justify-center gap-2 px-4 md:px-6 py-2 bg-teal-500 text-white rounded-lg font-semibold hover:bg-teal-600 transition whitespace-nowrap text-sm md:text-base"
           >
-            Buy WOLV
+            View WOLV market data
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>

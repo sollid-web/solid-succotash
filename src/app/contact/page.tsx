@@ -44,9 +44,9 @@ export default function ContactPage() {
       {/* Content */}
       <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '48px 16px 80px' }}>
 
-        {/* Registered Office */}
+        {/* Location reference */}
         <div style={{ ...cardStyle, marginBottom: '32px' }}>
-          <h2 style={h2Style}>Registered Office</h2>
+          <h2 style={h2Style}>Location reference</h2>
           <p style={{ ...pStyle, marginBottom: '16px' }}>
             516 High St, Palo Alto, CA 94301, United States<br />
             <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: '14px' }}>WolvCapital's principal office is listed as Palo Alto, California. Contact details and business information should be independently confirmed before relying on them.</span>
@@ -56,7 +56,7 @@ export default function ContactPage() {
               query="516 High St, Palo Alto, CA 94301, United States"
               overlayWebp="/images/office-location-map.webp"
               overlayFallback="/images/office-location-map.jpg"
-              title="WolvCapital Registered Office — United States"
+              title="WolvCapital Location reference — United States"
             />
           </div>
         </div>

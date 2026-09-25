@@ -39,13 +39,12 @@ const CONTRACTS = [
     network: "BNB Smart Chain (BSC)",
     chainId: 56,
     standard: "BEP-20",
-    compiler: "Solidity v0.8.28",
-    sourceVerified: "Public source link",
-    verified: false,
+    compiler: "Compiler details: review BSCScan",
+    sourceVerified: "BSCScan contract reference",
     icon: "🪙",
     color: "#2A52BE",
     description:
-      "The native profit token of WolvCapital. Fixed supply of 1,000,000,000 WOLV minted entirely at deployment. No mint function exists — supply is permanently capped. No owner, no pause, no admin controls of any kind.",
+      "A BEP-20 token reference on BNB Smart Chain. BSCScan shows a 1 billion maximum supply and a current supply slightly below that amount. The published ABI exposes no mint function; supply may decrease through burns.",
     functions: [
       { name: "burn(amount)", access: "Token holder", desc: "Holder can burn their own tokens" },
       { name: "burnFrom(account, amount)", access: "Approved spender", desc: "Burn from an approved account" },
@@ -53,10 +52,10 @@ const CONTRACTS = [
       { name: "approve(spender, amount)", access: "Token holder", desc: "Approve spender allowance" },
     ],
     keyFacts: [
-      "Total supply: 1,000,000,000 WOLV (fixed forever)",
+      "Maximum supply: 1,000,000,000 WOLV; current supply is lower due to burns",
       "No mint function — supply cannot increase",
-      "No owner — no admin key of any kind",
-      "No pause function — transfers can never be frozen",
+      "Review current administrative permissions on-chain",
+      "Review the published ABI for available token functions",
       "No blacklist, no fee, no tax on transfers",
     ],
   },
@@ -67,13 +66,12 @@ const CONTRACTS = [
     network: "BNB Smart Chain (BSC)",
     chainId: 56,
     standard: "Custom",
-    compiler: "Solidity v0.8.28",
-    sourceVerified: "Public source link",
-    verified: false,
+    compiler: "Compiler details: review BSCScan",
+    sourceVerified: "BSCScan contract reference",
     icon: "🏦",
     color: "#0ea5e9",
     description:
-      "Holds the WOLV reward supply for staker claims. Protected by a 48-hour timelock — no funds can leave the pool to the multisig without a mandatory 48-hour delay, visible on-chain the moment it's queued.",
+      "Holds the WOLV reward supply used by the staking flow. The deployed ABI exposes queue and execute withdrawal functions with a 48-hour timelock flow; review the current contract state and permissions independently.",
     functions: [
       { name: "fund(amount)", access: "Anyone", desc: "Add WOLV to the reward pool (requires prior approval)" },
       { name: "release(to, amount)", access: "StakingContract only", desc: "Release rewards to a staker" },
@@ -83,8 +81,8 @@ const CONTRACTS = [
       { name: "poolBalance()", access: "Public", desc: "View current WOLV in the pool" },
     ],
     keyFacts: [
-      "48-hour timelock on all multisig fund movements",
-      "Only StakingContract can call release()",
+      "Withdrawal functions include a 48-hour timelock flow",
+      "Review the deployed caller permissions for release()",
       "Anyone can fund the pool — no gatekeeping",
       "Pool balance publicly visible on BSCScan at all times",
       "No user funds held — reward supply only",
@@ -97,13 +95,12 @@ const CONTRACTS = [
     network: "BNB Smart Chain (BSC)",
     chainId: 56,
     standard: "Custom",
-    compiler: "Solidity v0.8.28",
-    sourceVerified: "Public source link",
-    verified: false,
+    compiler: "Compiler details: review BSCScan",
+    sourceVerified: "BSCScan contract reference",
     icon: "⬡",
     color: "#10b981",
     description:
-      "Manages WOLV staking positions across four tiers, funded with BNB or BUSD. Integrates Chainlink price feeds for USD-denominated stake sizing and rewards. Handles stake deposits, lock periods, and reward claims via the RewardPool.",
+      "Manages staking positions funded with BNB or BUSD. The deployed ABI exposes stake, claim, early-exit, plan, and price-feed functions. Review current plan values, permissions, lock periods, and fees on-chain before use.",
     functions: [
       { name: "stakeBNB(planId)", access: "Anyone", desc: "Stake BNB into a plan (0–3)" },
       { name: "stakeBUSD(planId, amount)", access: "Anyone", desc: "Stake BUSD into a plan (0–3)" },
@@ -208,7 +205,7 @@ export default function SmartContractsPage() {
               { label: "3 Contracts", color: "#2A52BE" },
               { label: "BNB Smart Chain", color: "#f59e0b" },
               { label: "Public references", color: "#10b981" },
-              { label: "Solidity v0.8.28", color: "#8b5cf6" },
+              { label: "Compiler details: review BSCScan", color: "#8b5cf6" },
             ].map((b) => (
               <span
                 key={b.label}
@@ -319,7 +316,7 @@ export default function SmartContractsPage() {
                       <h2 style={{ fontSize: "20px", fontWeight: 700, color: "#fff", letterSpacing: "-0.3px" }}>
                         {contract.name}
                       </h2>
-                      <span className="verified-badge">✓ Verified</span>
+                      <span className="verified-badge">BSCScan reference</span>
                     </div>
                     <div style={{ fontFamily: "monospace", fontSize: "12px", color: "#93c5fd" }}>
                       {contract.address}
@@ -443,7 +440,7 @@ export default function SmartContractsPage() {
             🔍 Verify Everything Yourself
           </h3>
           <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.45)", lineHeight: 1.7, marginBottom: "16px" }}>
-            All WolvCapital contracts are open-source and publicly verified on BSCScan. You do not need to trust our documentation — verify the source code, read the functions, and check the on-chain state yourself. That's the point of blockchain.
+            Use the BSCScan contract pages as the primary references for addresses, ABI/source availability, functions, and current state. BSCScan currently shows no contract security audit submitted for these references. Public contract information is not an audit, endorsement, or safety guarantee.
           </p>
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
             <Link href="/whitepaper" style={{ background: "rgba(42,82,190,0.2)", border: "1px solid rgba(42,82,190,0.3)", color: "#93c5fd", padding: "10px 20px", borderRadius: "8px", fontSize: "13px", fontWeight: 600, textDecoration: "none" }}>

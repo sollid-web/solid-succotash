@@ -5,18 +5,23 @@ import PublicLayout from '@/components/PublicLayout'
 export const metadata: Metadata = {
   title: 'WolvCapital — WOLV Token Information | BNB Smart Chain',
   description: 'Review WOLV token information, public contract references, platform terms, and digital-asset risks on BNB Smart Chain.',
+  alternates: {
+    canonical: 'https://www.wolvcapital.com/',
+  },
   keywords:
     'WOLV token, BEP-20 token, BNB Smart Chain, Web3 staking information, WOLV PancakeSwap, on-chain data, WolvCapital, blockchain records, WOLV DEX, contract references, digital-asset risks',
   openGraph: {
     title: 'WolvCapital | On-Chain Staking & WOLV Token — BNB Smart Chain',
     description:
       'Review WOLV token information, public contract references, on-chain data, platform terms, and risk disclosures.',
-      images: [
+    url: 'https://www.wolvcapital.com/',
+    siteName: 'WolvCapital',
+    images: [
       {
-        url: "https://www.wolvcapital.com/images/hero/home-hero.webp",
+        url: 'https://www.wolvcapital.com/og-images/home-og.png',
         width: 1200,
         height: 630,
-        alt: 'WolvCapital — Blockchain-Verified Investment & Staking Platform',
+        alt: 'WolvCapital WOLV token information and risk disclosures',
       },
     ],
     type: 'website',
@@ -28,10 +33,10 @@ export const metadata: Metadata = {
       'Review WOLV token information, public contract references, platform terms, and digital-asset risks before participating.',
     images: [
       {
-        url: "https://www.wolvcapital.com/images/hero/home-hero.webp",
+        url: 'https://www.wolvcapital.com/og-images/home-og.png',
         width: 1200,
         height: 630,
-        alt: 'WolvCapital — Blockchain-Verified Investment & Staking Platform',
+        alt: 'WolvCapital WOLV token information and risk disclosures',
       },
     ],
   },

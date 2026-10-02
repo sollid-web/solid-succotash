@@ -5,6 +5,7 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { apiFetch } from "@/lib/api"
 import { pressableTapProps } from "@/lib/motionPress"
+import { SITE_URL } from "@/lib/site-config"
 
 interface SummaryData {
   code: string
@@ -48,7 +49,7 @@ export default function ReferralSummaryCard() {
 
   const handleCopyLink = async () => {
     if (!summary?.code || typeof window === "undefined") return
-    const link = `${window.location.origin}/accounts/signup?ref=${encodeURIComponent(summary.code)}`
+    const link = `${SITE_URL}/accounts/signup?ref=${encodeURIComponent(summary.code)}`
     try {
       await navigator.clipboard.writeText(link)
       setCopied(true)

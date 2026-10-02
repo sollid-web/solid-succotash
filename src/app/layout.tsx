@@ -16,10 +16,13 @@ export const metadata: Metadata = {
   openGraph: {
     siteName: 'WolvCapital',
     images: [{ url: '/og-images/home-og.png', width: 1200, height: 630, alt: 'WolvCapital WOLV token information and risk disclosures' }],
-    url: '/',
+    url: 'https://www.wolvcapital.com/',
     type: 'website',
   },
-  twitter: { card: 'summary_large_image' },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/og-images/home-og.png'],
+  },
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {

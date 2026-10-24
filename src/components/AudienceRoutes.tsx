@@ -9,19 +9,19 @@ const routes = [
 
 export default function AudienceRoutes() {
   return (
-    <section className="bg-slate-50 py-14 sm:py-18" aria-labelledby="audience-routes-heading">
+    <section className="py-14 sm:py-18" aria-labelledby="audience-routes-heading">
       <div className="container mx-auto max-w-6xl px-4 lg:px-8">
         <div className="max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-700">Choose your starting point</p>
-          <h2 id="audience-routes-heading" className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">Get the information that matches your question</h2>
-          <p className="mt-4 leading-relaxed text-slate-600">WolvCapital serves different visitor needs. Choose a lower-commitment route before creating an account or visiting a market link.</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-300">Choose your starting point</p>
+          <h2 id="audience-routes-heading" className="mt-3 text-3xl font-extrabold tracking-tight text-white">Get the information that matches your question</h2>
+          <p className="mt-4 leading-relaxed text-white/60">WolvCapital serves different visitor needs. Choose a lower-commitment route before creating an account or visiting a market link.</p>
         </div>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {routes.map((route) => <article key={route.href} className="flex flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-blue-700">{route.eyebrow}</p>
-            <h3 className="mt-3 text-lg font-bold text-slate-950">{route.title}</h3>
-            <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600">{route.text}</p>
-            <Link href={route.href} className="mt-5 text-sm font-semibold text-[#0b2f6b] hover:text-blue-700">{route.label} →</Link>
+          {routes.map((route) => <article key={route.href} className="glass flex flex-col p-5 transition-transform duration-300 hover:-translate-y-1">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-teal-300">{route.eyebrow}</p>
+            <h3 className="mt-3 text-lg font-bold text-white">{route.title}</h3>
+            <p className="mt-2 flex-1 text-sm leading-relaxed text-white/60">{route.text}</p>
+            <Link href={route.href} className="mt-5 text-sm font-semibold text-teal-300 hover:text-teal-200">{route.label} →</Link>
           </article>)}
         </div>
       </div>

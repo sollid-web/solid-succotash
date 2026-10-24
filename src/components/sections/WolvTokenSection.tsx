@@ -1,79 +1,61 @@
 import Link from 'next/link'
+import Reveal from '@/components/web3/Reveal'
+import GlassCard from '@/components/web3/GlassCard'
+import ContractRow from '@/components/web3/ContractRow'
+import LiveChainPanel from '@/components/web3/LiveChainPanel'
+import AddWolvToWallet from '@/components/web3/AddWolvToWallet'
+import { CONTRACTS } from '@/lib/contracts'
 
-const WOLV_CONTRACT = '0xe0167279aef7bf4ad313d261da82e8366822270c'
-const POOL_CONTRACT = '0x7310f3e07627ce98246973e068bf2ff294f84e5f'
-const STAKING_CONTRACT = '0x7cd22f3c08b4195225da7d043cbe00da118d31ec'
+const FACTS = [
+  { label: 'Token Name', value: 'Wolv Capital' },
+  { label: 'Symbol', value: 'WOLV' },
+  { label: 'Network', value: 'BNB Smart Chain' },
+  { label: 'Max Supply', value: '1,000,000,000' },
+  { label: 'Mint Function', value: 'None' },
+  { label: 'Reward Pool', value: 'Live on BscScan' },
+]
 
 export default function WolvTokenSection() {
   return (
-    <section id="wolv-token" style={{
-      background: 'linear-gradient(135deg, #0a0f1e 0%, #0f1a35 100%)',
-      padding: '80px 24px',
-      position: 'relative',
-      overflow: 'hidden',
-    }}>
-      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(0,168,150,0.12) 0%, transparent 70%)' }} />
-      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(0,168,150,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,168,150,0.04) 1px, transparent 1px)', backgroundSize: '50px 50px' }} />
-
-      <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(0,168,150,0.12)', border: '1px solid rgba(0,168,150,0.3)', borderRadius: '99px', padding: '6px 16px', fontSize: '12px', color: '#00a896', fontWeight: 600, letterSpacing: '0.5px', marginBottom: '20px' }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00a896', display: 'inline-block' }} />
-            LIVE ON BNB CHAIN
+    <section id="wolv-token" className="relative px-6 py-20 sm:py-24">
+      <div className="mx-auto max-w-[1100px] space-y-12">
+        <Reveal className="text-center">
+          <span className="glass inline-flex items-center gap-2 px-4 py-1.5 text-xs font-semibold tracking-[0.12em] text-teal-300" style={{ borderRadius: 9999 }}>
+            <span className="live-dot" /> LIVE ON BNB CHAIN
           </span>
-          <h2 style={{ fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em', marginBottom: '16px', lineHeight: 1.1 }}>
-            WOLV — The Proof of Your Returns
+          <h2 className="mt-5 text-[clamp(28px,5vw,48px)] font-extrabold leading-[1.08] tracking-tight">
+            <span className="text-gradient">WOLV — The Proof of Your Returns</span>
           </h2>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '16px', maxWidth: '600px', margin: '0 auto', lineHeight: 1.7 }}>
+          <p className="mx-auto mt-4 max-w-[600px] text-base leading-7 text-white/55">
             Every profit distributed on WolvCapital is recorded permanently on the BNB blockchain. Stake BNB or BUSD, earn WOLV rewards — verified by anyone, anywhere, anytime.
           </p>
-        </div>
+        </Reveal>
 
-        {/* Token stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '48px' }}>
-          {[
-            { label: 'Token Name',    value: 'Wolv Capital' },
-            { label: 'Symbol',        value: 'WOLV' },
-            { label: 'Network',       value: 'BNB Smart Chain' },
-            { label: 'Max Supply',    value: '1,000,000,000' },
-            { label: 'Mint Function', value: 'None' },
-            { label: 'Reward Pool',   value: 'Live on BSCScan' },
-          ].map(s => (
-            <div key={s.label} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '14px', padding: '20px', textAlign: 'center' }}>
-              <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>{s.label}</div>
-              <div style={{ fontSize: '16px', fontWeight: 700, color: '#00a896', fontFamily: 'monospace' }}>{s.value}</div>
-            </div>
+        <Reveal><LiveChainPanel /></Reveal>
+
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+          {FACTS.map((f, i) => (
+            <Reveal key={f.label} delay={i * 0.06}>
+              <GlassCard className="p-5 text-center">
+                <div className="mb-2 text-[11px] uppercase tracking-[0.14em] text-white/40">{f.label}</div>
+                <div className="text-base font-bold text-teal-300" style={{ fontFamily: "'DM Mono', monospace" }}>{f.value}</div>
+              </GlassCard>
+            </Reveal>
           ))}
         </div>
 
-        {/* Verified contracts */}
-        <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(0,168,150,0.2)', borderRadius: '16px', padding: '28px', marginBottom: '32px' }}>
-          <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>Verified Smart Contracts</div>
-          {[
-            { name: 'WOLV Token',       address: WOLV_CONTRACT },
-            { name: 'Reward Pool',      address: POOL_CONTRACT },
-            { name: 'Staking Contract', address: STAKING_CONTRACT },
-          ].map(c => (
-            <div key={c.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.06)', flexWrap: 'wrap', gap: '8px' }}>
-              <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', fontWeight: 500 }}>{c.name}</span>
-              <a href={c.name === 'Reward Pool' ? `https://bscscan.com/token/${WOLV_CONTRACT}?a=${c.address}` : `https://bscscan.com/address/${c.address}#code`} target="_blank" rel="noopener noreferrer" style={{ color: '#00a896', fontSize: '12px', fontFamily: 'monospace' }}>
-                {c.address.slice(0, 10)}...{c.address.slice(-8)} ↗
-              </a>
-            </div>
-          ))}
-        </div>
+        <Reveal>
+          <GlassCard tilt={0} className="p-6 sm:p-7">
+            <div className="mb-3 text-xs uppercase tracking-[0.14em] text-white/40">Verified Smart Contracts</div>
+            {CONTRACTS.map(c => <ContractRow key={c.key} name={c.name} address={c.address} href={c.href} />)}
+          </GlassCard>
+        </Reveal>
 
-        {/* CTAs */}
-        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link href="/dashboard/stake" style={{ padding: '14px 32px', borderRadius: '10px', background: 'linear-gradient(135deg, #00a896, #1a3a8f)', color: '#fff', fontWeight: 700, fontSize: '14px', textDecoration: 'none' }}>
-            Start Staking →
-          </Link>
-          <Link href="/wolv-token" style={{ padding: '14px 32px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', fontWeight: 600, fontSize: '14px', textDecoration: 'none' }}>
-            Learn About WOLV
-          </Link>
-        </div>
+        <Reveal className="flex flex-wrap justify-center gap-3">
+          <Link href="/dashboard/stake" className="btn-glow">Start Staking →</Link>
+          <Link href="/wolv-token" className="btn-glass">Learn About WOLV</Link>
+          <AddWolvToWallet />
+        </Reveal>
       </div>
     </section>
   )

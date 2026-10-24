@@ -54,7 +54,7 @@ export default function NavBar() {
   ]
 
   return (
-    <nav style={{ background: 'rgba(6,12,26,0.92)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(42,82,190,0.2)' }} className="sticky top-0 w-full z-50 shadow-sm">
+    <nav className="glass-nav sticky top-0 w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-[68px]">
 

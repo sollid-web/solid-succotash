@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap');
 @import './web3-theme.css';
+@import './glass.css';
 
 @tailwind base;
 @tailwind components;

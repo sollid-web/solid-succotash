@@ -8,7 +8,7 @@ export default function HowItWorksSection() {
   const { t } = useTranslation()
 
   return (
-    <section className="py-12 md:py-20 bg-[#070B19] relative overflow-hidden">
+    <section className="py-12 md:py-20 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-4">
           <span className="text-[11px] font-bold tracking-widest text-teal-400 uppercase">

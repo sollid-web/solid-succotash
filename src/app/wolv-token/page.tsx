@@ -2,6 +2,12 @@ import Link from 'next/link'
 import PublicLayout from '@/components/PublicLayout'
 import { generateOgMetadata } from '@/lib/og-metadata'
 import WolvPriceStat from '@/components/WolvPriceStat'
+import TokenOrb from '@/components/web3/TokenOrb'
+import Reveal from '@/components/web3/Reveal'
+import GlassCard from '@/components/web3/GlassCard'
+import ContractRow from '@/components/web3/ContractRow'
+import LiveChainPanel from '@/components/web3/LiveChainPanel'
+import AddWolvToWallet from '@/components/web3/AddWolvToWallet'
 
 const WOLV_CONTRACT = '0xe0167279aef7bf4ad313d261da82e8366822270c'
 const POOL_CONTRACT  = '0x7310f3e07627ce98246973e068bf2ff294f84e5f'
@@ -38,7 +44,7 @@ title: 'WOLV Token — Public BNB Smart Chain Data',
 };
 export default function WolvTokenPage() {
   return (
-    <PublicLayout backgroundClassName="bg-hero-wolv overlay-dark-60">
+    <PublicLayout backgroundClassName="bg-transparent">
       <div className="min-h-screen">
 
         {/* ── Hero ── */}
@@ -61,34 +67,13 @@ export default function WolvTokenPage() {
           <div className="relative container mx-auto px-4 lg:px-8 text-center">
 
             {/* Live badge */}
-            <span className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-widest mb-8"
-              style={{ background: 'rgba(0,168,150,0.15)', border: '1px solid rgba(0,168,150,0.35)', color: '#00c9b1' }}>
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
-                  style={{ background: '#00a896' }} />
-                <span className="relative inline-flex rounded-full h-2 w-2"
-                  style={{ background: '#00a896' }} />
-              </span>
+            <span className="glass inline-flex items-center gap-2 px-4 py-1.5 text-xs font-bold uppercase tracking-widest mb-8 text-teal-300" style={{ borderRadius: 9999 }}>
+              <span className="live-dot" />
               Live on BNB Chain
             </span>
 
-            {/* Token logo */}
-            <div className="flex justify-center mb-8">
-              <div className="relative">
-                <div className="absolute inset-0 rounded-full" style={{
-                  background: 'radial-gradient(circle, rgba(0,168,150,0.3) 0%, transparent 70%)',
-                  filter: 'blur(20px)',
-                  transform: 'scale(1.4)',
-                }} />
-                <div className="relative w-24 h-24 rounded-full flex items-center justify-center text-4xl font-black text-white"
-                  style={{
-                    background: 'linear-gradient(135deg, #2A52BE 0%, #00a896 100%)',
-                    boxShadow: '0 0 40px rgba(0,168,150,0.4), 0 0 80px rgba(42,82,190,0.2)',
-                  }}>
-                  W
-                </div>
-              </div>
-            </div>
+            {/* Token orb */}
+            <div className="flex justify-center mb-8"><TokenOrb size={200} /></div>
 
             {/* Headline */}
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-[1.05] tracking-tight">
@@ -111,11 +96,7 @@ export default function WolvTokenPage() {
               <a
                 href={`https://pancakeswap.finance/swap?outputCurrency=${WOLV_CONTRACT}`}
                 target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-white text-sm transition-all hover:scale-105"
-                style={{
-                  background: 'linear-gradient(135deg, #2A52BE 0%, #00a896 100%)',
-                  boxShadow: '0 0 30px rgba(0,168,150,0.3)',
-                }}>
+                className="btn-glow">
                 View WOLV market reference
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -123,12 +104,7 @@ export default function WolvTokenPage() {
               </a>
               <a href={`https://bscscan.com/token/${WOLV_CONTRACT}`}
                 target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm transition-all hover:scale-105"
-                style={{
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  color: '#e2e8f0',
-                }}>
+                className="btn-glass">
                 View on BSCScan
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -136,26 +112,24 @@ export default function WolvTokenPage() {
               </a>
               <a href={`https://dexscreener.com/bsc/${WOLV_CONTRACT}`}
                 target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm transition-all hover:scale-105"
-                style={{
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  color: '#e2e8f0',
-                }}>
+                className="btn-glass">
                 📊 Live Chart
               </a>
+              <AddWolvToWallet />
             </div>
 
+            {/* Live on-chain data */}
+            <div className="max-w-5xl mx-auto mb-10 text-left"><LiveChainPanel /></div>
+
             {/* Key stats bar */}
-            <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-px rounded-2xl overflow-hidden"
-              style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <div className="glass max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-px">
               {[
                 { label: 'Max Supply',       value: '1,000,000,000', sub: 'WOLV — BSCScan reference' },
                 { label: 'Token Standard',  value: 'BEP-20',        sub: 'BNB Smart Chain' },
                 { label: 'Reward Allocation', value: '600,000,000',   sub: 'WOLV — published allocation' },
               ].map((stat, i) => (
                 <div key={i} className="px-6 py-6 text-center"
-                  style={{ background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(10px)' }}>
+                  style={{ background: 'transparent' }}>
                   <div className="text-xs text-gray-400 uppercase tracking-widest mb-2">{stat.label}</div>
                   <div className="text-xl font-extrabold mb-1" style={{ color: '#00c9b1' }}>{stat.value}</div>
                   <div className="text-xs text-gray-500">{stat.sub}</div>
@@ -187,7 +161,7 @@ export default function WolvTokenPage() {
         </section>
 
         {/* ── Token Information ── */}
-        <section className="py-16 bg-gradient-to-br from-slate-900 to-slate-800">
+        <section className="py-16">
           <div className="container mx-auto px-4 lg:px-8">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-12">WOLV Token Details</h2>
@@ -248,25 +222,14 @@ export default function WolvTokenPage() {
               </div>
 
               {/* Smart Contracts */}
-              <div className="bg-white/5 border border-teal-400/20 rounded-xl p-8 mb-12">
-                <h3 className="text-xl font-bold text-white mb-6">Contract Addresses</h3>
-                <div className="space-y-4">
-                  {[
-                    { name: 'WOLV Token Contract', address: WOLV_CONTRACT, href: `https://bscscan.com/token/${WOLV_CONTRACT}` },
-                    { name: 'Reward Pool Contract', address: POOL_CONTRACT, href: `https://bscscan.com/address/${POOL_CONTRACT}#code` },
-                    { name: 'Staking Contract',     address: STAKING_CONTRACT, href: `https://bscscan.com/address/${STAKING_CONTRACT}#code` },
-                  ].map(contract => (
-                    <div key={contract.name}
-                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 bg-black/20 rounded-lg">
-                      <span className="text-white font-medium mb-2 sm:mb-0">{contract.name}</span>
-                      <a href={contract.href} target="_blank" rel="noopener noreferrer"
-                        className="text-teal-400 hover:text-teal-300 font-mono text-sm break-all">
-                        {contract.address.slice(0, 10)}...{contract.address.slice(-8)} ↗
-                      </a>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <Reveal className="mb-12">
+                <GlassCard tilt={0} rim className="p-6 sm:p-8">
+                  <h3 className="text-xl font-bold text-white mb-4">Contract Addresses</h3>
+                  <ContractRow name="WOLV Token Contract" address={WOLV_CONTRACT} href={`https://bscscan.com/token/${WOLV_CONTRACT}`} />
+                  <ContractRow name="Reward Pool Contract" address={POOL_CONTRACT} href={`https://bscscan.com/address/${POOL_CONTRACT}#code`} />
+                  <ContractRow name="Staking Contract" address={STAKING_CONTRACT} href={`https://bscscan.com/address/${STAKING_CONTRACT}#code`} />
+                </GlassCard>
+              </Reveal>
 
               {/* Call to Action */}
               <div className="text-center">
@@ -275,13 +238,12 @@ export default function WolvTokenPage() {
                     href="https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center px-8 py-4 text-white font-bold rounded-lg transition-all duration-200"
-                    style={{ background: 'linear-gradient(135deg, #00a896, #2A52BE)' }}
+                    className="btn-glow"
                   >
                     View WOLV market reference →
                   </a>
                   <Link href="/accounts/signup"
-                    className="inline-flex items-center justify-center px-8 py-4 bg-white/10 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/20 transition-all duration-200">
+                    className="btn-glass">
                     Start Staking →
                   </Link>
                 </div>

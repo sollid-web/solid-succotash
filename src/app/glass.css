@@ -1,0 +1,202 @@
+/* ============================================================
+   WolvCapital — Liquid Glass layer (imported after web3-theme.css)
+   Perf rules: animate transform/opacity only, blur on static layers,
+   hover effects only on hover-capable devices, honor reduced motion.
+   ============================================================ */
+:root {
+  --g-teal: 0, 201, 177;
+  --g-blue: 59, 130, 246;
+  --g-violet: 139, 92, 246;
+  --g-edge: rgba(255, 255, 255, 0.14);
+  --g-fill: linear-gradient(145deg, rgba(255,255,255,0.10), rgba(255,255,255,0.025) 55%, rgba(255,255,255,0.05));
+}
+
+/* Glass surface */
+.glass {
+  position: relative;
+  background: var(--g-fill);
+  border: 1px solid var(--g-edge);
+  border-top-color: rgba(255,255,255,0.28);
+  border-left-color: rgba(255,255,255,0.20);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  box-shadow:
+    0 10px 40px -12px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    inset 0 -1px 0 rgba(255,255,255,0.04);
+  border-radius: 20px;
+  overflow: hidden;
+  isolation: isolate;
+}
+.glass-strong { -webkit-backdrop-filter: blur(28px) saturate(180%); backdrop-filter: blur(28px) saturate(180%); background: linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.04)); }
+
+/* Specular sheen that follows the pointer (set by GlassCard via --mx/--my) */
+.glass::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), rgba(var(--g-teal), 0.20), rgba(var(--g-blue), 0.08) 40%, transparent 70%);
+  transition: opacity .3s ease;
+}
+@media (hover: hover) { .glass:hover::before { opacity: 1; } }
+
+/* Liquid highlight sweep */
+.glass::after {
+  content: ''; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%; z-index: -1; pointer-events: none;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,0.10), transparent);
+  transform: translateX(0) skewX(-18deg); opacity: 0;
+}
+@media (hover: hover) { .glass:hover::after { animation: glass-sweep 1.1s ease forwards; } }
+@keyframes glass-sweep { 0% { transform: translateX(0) skewX(-18deg); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateX(420%) skewX(-18deg); opacity: 0; } }
+
+/* Animated gradient rim */
+.glass-rim { --a: 0deg; }
+.glass-rim > .rim { position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none; z-index: 1;
+  background: conic-gradient(from var(--a), rgba(var(--g-teal),.0), rgba(var(--g-teal),.9), rgba(var(--g-blue),.0) 40%, rgba(var(--g-violet),.7) 70%, rgba(var(--g-teal),.0));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: rim-spin 7s linear infinite; opacity: .75; }
+@property --a { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@keyframes rim-spin { to { --a: 360deg; } }
+
+/* Aurora background (fixed, transform-only animation) */
+.aurora { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.aurora i { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .5; will-change: transform; }
+.aurora i:nth-child(1) { width: 46vmax; height: 46vmax; left: -12vmax; top: -10vmax; background: rgba(var(--g-blue), .35); animation: drift-a 26s ease-in-out infinite alternate; }
+.aurora i:nth-child(2) { width: 40vmax; height: 40vmax; right: -14vmax; top: 18vh; background: rgba(var(--g-teal), .28); animation: drift-b 32s ease-in-out infinite alternate; }
+.aurora i:nth-child(3) { width: 36vmax; height: 36vmax; left: 25vw; bottom: -18vmax; background: rgba(var(--g-violet), .26); animation: drift-c 38s ease-in-out infinite alternate; }
+@keyframes drift-a { to { transform: translate3d(14vw, 10vh, 0) scale(1.15); } }
+@keyframes drift-b { to { transform: translate3d(-16vw, -8vh, 0) scale(.9); } }
+@keyframes drift-c { to { transform: translate3d(-10vw, -14vh, 0) scale(1.2); } }
+@media (max-width: 640px) { .aurora i { filter: blur(60px); } .aurora i:nth-child(3) { display: none; } }
+
+/* Floating + gradient text + pulse dot */
+.float-slow { animation: float-y 7s ease-in-out infinite; }
+@keyframes float-y { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+.text-gradient { background: linear-gradient(100deg, #fff 0%, #9be8ff 40%, #00c9b1 70%, #8b5cf6 100%); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent !important; animation: text-flow 8s linear infinite; }
+@keyframes text-flow { to { background-position: 200% center; } }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: rgb(var(--g-teal)); box-shadow: 0 0 0 0 rgba(var(--g-teal), .6); animation: live-pulse 1.8s ease-out infinite; }
+@keyframes live-pulse { to { box-shadow: 0 0 0 10px rgba(var(--g-teal), 0); } }
+
+/* Glass buttons */
+.btn-glow { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: .5rem; padding: .85rem 1.6rem; border-radius: 14px; font-weight: 700; color: #fff !important; text-align: center;
+  background: linear-gradient(135deg, rgba(42,82,190,.95), rgba(0,168,150,.95)); box-shadow: 0 8px 30px -8px rgba(var(--g-teal), .6), inset 0 1px 0 rgba(255,255,255,.35); transition: transform .2s ease, box-shadow .2s ease; }
+.btn-glow:hover { transform: translateY(-2px); box-shadow: 0 14px 40px -8px rgba(var(--g-teal), .8), inset 0 1px 0 rgba(255,255,255,.45); }
+.btn-glass { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; padding: .85rem 1.6rem; border-radius: 14px; font-weight: 600; color: #fff !important; text-align: center;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.18); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); transition: background .2s ease, border-color .2s ease, transform .2s ease; }
+.btn-glass:hover { background: rgba(255,255,255,.13); border-color: rgba(var(--g-teal), .5); transform: translateY(-2px); }
+
+/* Floating glass nav (beats web3-theme.css !important header/nav rule) */
+nav.glass-nav { background: rgba(8, 14, 32, 0.55) !important; -webkit-backdrop-filter: blur(22px) saturate(180%) !important; backdrop-filter: blur(22px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.10) !important; box-shadow: 0 8px 32px -16px rgba(0,0,0,.6), inset 0 -1px 0 rgba(255,255,255,.04); }
+
+/* Scroll progress bar */
+.scroll-progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 60; transform-origin: 0 50%; background: linear-gradient(90deg, #2A52BE, #00c9b1, #8b5cf6); }
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora i, .float-slow, .text-gradient, .live-dot, .glass-rim > .rim, .glass:hover::after { animation: none !important; }
+}
+
+/* ============================================================
+   GLOBAL UPGRADE — turns the existing dark cards on every page into
+   liquid glass without touching each page's markup. Scoped to <main>
+   (public pages); dashboards keep their own shell.
+   ============================================================ */
+
+/* Tailwind translucent cards: bg-white/N + rounded-lg/xl/2xl/3xl */
+main [class*="bg-white/"][class*="rounded-"]:not(button):not(a):not(input),
+main [class*="bg-slate-9"][class*="rounded-"]:not(button):not(a),
+/* Inline-style cards: translucent white background + radius 10–29px */
+main [style*="background: rgba(255, 255, 255, 0.02)"][style*="border-radius: 1"],
+main [style*="background: rgba(255, 255, 255, 0.02)"][style*="border-radius: 2"],
+main [style*="background: rgba(255, 255, 255, 0.02)"][style*="border-radius:1"],
+main [style*="background: rgba(255, 255, 255, 0.02)"][style*="border-radius:2"],
+main [style*="background: rgba(255, 255, 255, 0.03)"][style*="border-radius: 1"],
+main [style*="background: rgba(255, 255, 255, 0.03)"][style*="border-radius: 2"],
+main [style*="background: rgba(255, 255, 255, 0.03)"][style*="border-radius:1"],
+main [style*="background: rgba(255, 255, 255, 0.03)"][style*="border-radius:2"],
+main [style*="background: rgba(255, 255, 255, 0.04)"][style*="border-radius: 1"],
+main [style*="background: rgba(255, 255, 255, 0.04)"][style*="border-radius: 2"],
+main [style*="background: rgba(255, 255, 255, 0.04)"][style*="border-radius:1"],
+main [style*="background: rgba(255, 255, 255, 0.04)"][style*="border-radius:2"],
+main [style*="background: rgba(255, 255, 255, 0.05)"][style*="border-radius: 1"],
+main [style*="background: rgba(255, 255, 255, 0.05)"][style*="border-radius: 2"],
+main [style*="background: rgba(255, 255, 255, 0.05)"][style*="border-radius:1"],
+main [style*="background: rgba(255, 255, 255, 0.05)"][style*="border-radius:2"],
+main [style*="background: rgba(255, 255, 255, 0.06)"][style*="border-radius: 1"],
+main [style*="background: rgba(255, 255, 255, 0.06)"][style*="border-radius: 2"],
+main [style*="background: rgba(255, 255, 255, 0.06)"][style*="border-radius:1"],
+main [style*="background: rgba(255, 255, 255, 0.06)"][style*="border-radius:2"],
+main [style*="background: rgba(255, 255, 255, 0.08)"][style*="border-radius: 1"],
+main [style*="background: rgba(255, 255, 255, 0.08)"][style*="border-radius: 2"],
+main [style*="background: rgba(255, 255, 255, 0.08)"][style*="border-radius:1"],
+main [style*="background: rgba(255, 255, 255, 0.08)"][style*="border-radius:2"],
+main [style*="background:rgba(255,255,255,0.02)"][style*="border-radius: 1"],
+main [style*="background:rgba(255,255,255,0.02)"][style*="border-radius: 2"],
+main [style*="background:rgba(255,255,255,0.02)"][style*="border-radius:1"],
+main [style*="background:rgba(255,255,255,0.02)"][style*="border-radius:2"],
+main [style*="background:rgba(255,255,255,0.03)"][style*="border-radius: 1"],
+main [style*="background:rgba(255,255,255,0.03)"][style*="border-radius: 2"],
+main [style*="background:rgba(255,255,255,0.03)"][style*="border-radius:1"],
+main [style*="background:rgba(255,255,255,0.03)"][style*="border-radius:2"],
+main [style*="background:rgba(255,255,255,0.04)"][style*="border-radius: 1"],
+main [style*="background:rgba(255,255,255,0.04)"][style*="border-radius: 2"],
+main [style*="background:rgba(255,255,255,0.04)"][style*="border-radius:1"],
+main [style*="background:rgba(255,255,255,0.04)"][style*="border-radius:2"],
+main [style*="background:rgba(255,255,255,0.05)"][style*="border-radius: 1"],
+main [style*="background:rgba(255,255,255,0.05)"][style*="border-radius: 2"],
+main [style*="background:rgba(255,255,255,0.05)"][style*="border-radius:1"],
+main [style*="background:rgba(255,255,255,0.05)"][style*="border-radius:2"],
+main [style*="background:rgba(255,255,255,0.06)"][style*="border-radius: 1"],
+main [style*="background:rgba(255,255,255,0.06)"][style*="border-radius: 2"],
+main [style*="background:rgba(255,255,255,0.06)"][style*="border-radius:1"],
+main [style*="background:rgba(255,255,255,0.06)"][style*="border-radius:2"],
+main [style*="background:rgba(255,255,255,0.08)"][style*="border-radius: 1"],
+main [style*="background:rgba(255,255,255,0.08)"][style*="border-radius: 2"],
+main [style*="background:rgba(255,255,255,0.08)"][style*="border-radius:1"],
+main [style*="background:rgba(255,255,255,0.08)"][style*="border-radius:2"],
+main .card-brand, main article[class*="rounded-"], main details {
+  background: var(--g-fill) !important;
+  border-color: var(--g-edge) !important;
+  border-top-color: rgba(255,255,255,0.26) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(155%);
+  backdrop-filter: blur(16px) saturate(155%);
+  box-shadow: 0 10px 36px -14px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.18) !important;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .25s ease, box-shadow .25s ease, background .25s ease;
+}
+@media (hover: hover) {
+  main [class*="bg-white/"][class*="rounded-"]:not(button):not(a):not(input):hover,
+  main article[class*="rounded-"]:hover {
+    border-color: rgba(var(--g-teal), .45) !important;
+    box-shadow: 0 18px 50px -16px rgba(var(--g-teal), .28), inset 0 1px 0 rgba(255,255,255,0.28) !important;
+  }
+}
+
+/* Sections: never paint opaque gradients over the aurora */
+main section[class*="bg-gradient"], main section[class*="from-slate"], main section[class*="bg-slate-9"], main section[class*="bg-[#0"] { background-image: none !important; background-color: transparent !important; }
+main section:nth-of-type(even) { background-color: transparent !important; }
+
+/* Tables */
+main table { border-collapse: separate; border-spacing: 0; border-radius: 16px; overflow: hidden; background: var(--g-fill) !important; border: 1px solid var(--g-edge) !important; -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+main tbody tr { transition: background .2s ease; }
+main tbody tr:hover td { background: rgba(var(--g-teal), .07) !important; }
+
+/* Inputs: glass fields with a teal focus halo */
+main input:not([type="checkbox"]):not([type="radio"]), main select, main textarea {
+  background: rgba(255,255,255,0.06) !important; border: 1px solid rgba(255,255,255,0.16) !important; border-radius: 12px;
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+main input:focus, main select:focus, main textarea:focus { outline: none; border-color: rgba(var(--g-teal), .7) !important; box-shadow: 0 0 0 4px rgba(var(--g-teal), .16); background: rgba(255,255,255,0.09) !important; }
+
+/* Gradient CTA buttons get the glow/lift treatment */
+main a[class*="bg-gradient-to"], main button[class*="bg-gradient-to"], main a[style*="linear-gradient(135deg, #2A52BE"], main a[style*="linear-gradient(135deg, #00a896"],
+main a[style*="linear-gradient(135deg,#2A52BE"], main a[style*="linear-gradient(135deg,#00a896"] {
+  box-shadow: 0 10px 30px -10px rgba(var(--g-teal), .6), inset 0 1px 0 rgba(255,255,255,.3) !important;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+@media (hover: hover) { main a[class*="bg-gradient-to"]:hover, main button[class*="bg-gradient-to"]:hover { transform: translateY(-2px); } }
+
+/* Plain-text page titles get the flowing gradient (titles with nested markup keep their own colors) */
+main h1:not(:has(*)) { background: linear-gradient(100deg,#fff 0%,#bfeaff 45%,#00c9b1 85%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+/* Scroll reveal (classes toggled by ScrollReveal.tsx; content stays visible without JS) */
+.sr-hide { opacity: 0; transform: translateY(26px) scale(.985); }
+.sr-show { opacity: 1; transform: none; transition: opacity .7s cubic-bezier(.2,.8,.2,1) var(--sr-d, 0s), transform .7s cubic-bezier(.2,.8,.2,1) var(--sr-d, 0s); }
+@media (prefers-reduced-motion: reduce) { .sr-hide { opacity: 1; transform: none; } }

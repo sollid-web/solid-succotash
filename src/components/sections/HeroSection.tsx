@@ -5,6 +5,10 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useTranslation } from '@/components/TranslationProvider'
 import { MotionLink, pressableTapProps } from '@/lib/motionPress'
+import GlassCard from '@/components/web3/GlassCard'
+import TokenOrb from '@/components/web3/TokenOrb'
+import AddWolvToWallet from '@/components/web3/AddWolvToWallet'
+import { pancakeSwapUrl } from '@/lib/contracts'
 
 const WOLV_CONTRACT = '0xe0167279aef7bf4ad313d261da82e8366822270c'
 
@@ -33,138 +37,81 @@ function useLiveWolvPrice() {
   return { price, change }
 }
 
-// Purely additive inner-glow, no color values changed — just a subtle glass edge.
-const glassGlow = 'shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]'
-
-// Entrance stagger: headline -> description -> market reference -> CTA buttons.
 const containerVariants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
 }
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 24 },
   show: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 100, damping: 20 } },
 }
-
 
 export default function HeroSection() {
   const { t } = useTranslation()
   const { price: wolvPrice, change: wolvChange } = useLiveWolvPrice()
 
   return (
-    <section className="relative min-h-screen bg-[#070B19] text-white flex flex-col justify-center px-4 py-16 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-blue-600/10 via-transparent to-[#070B19] pointer-events-none z-0" />
+    <section className="relative min-h-[100svh] text-white flex items-center px-4 py-16 overflow-hidden">
+      {/* Aurora mesh lives in AppChrome; this just adds a soft vignette into the page below. */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[#060c1a]/80 z-0" />
 
-      {/* Ambient glow orbs. Previously 4 layered elements at blur-120/140px with
-          backdrop-blur-xl cards sampling them every frame — real scroll jank,
-          especially on mobile. Back to 2, lighter blur, GPU-hinted via willChange. */}
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute -left-16 top-8 w-[400px] h-[400px] rounded-full bg-blue-600/15 blur-[90px] z-0"
-        style={{ willChange: 'transform, opacity' }}
-        animate={{ scale: [1, 1.08, 1], opacity: [0.12, 0.18, 0.12] }}
-        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute -right-10 bottom-10 w-[350px] h-[350px] rounded-full bg-amber-500/10 blur-[90px] z-0"
-        style={{ willChange: 'transform, opacity' }}
-        animate={{ scale: [1, 1.08, 1], opacity: [0.12, 0.18, 0.12] }}
-        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-      />
-
-      {/* Sleek low-opacity dot-grid texture so the ambient light filters through a subtle technical surface. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.03] z-0"
-        style={{
-          backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)',
-          backgroundSize: '28px 28px',
-        }}
-      />
-
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="show"
-        className="relative z-10 max-w-xl mx-auto w-full space-y-6"
-      >
-        <motion.div variants={itemVariants}>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-blue-300">
-            WOLV data · BNB Smart Chain · Risk information
-          </p>
-
-          <h1 className="mt-3 text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200">
-              {t('hero.title')}
-            </span>
-          </h1>
-        </motion.div>
-
-        <motion.p variants={itemVariants} className="text-sm sm:text-base text-slate-300 leading-relaxed">
-          {t('hero.subtitle')}
-        </motion.p>
-
-        {/* Live WOLV price badge */}
-        {wolvPrice && (
+      <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
+        <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-6">
           <motion.div variants={itemVariants}>
-            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/[0.05] border border-white/10 text-xs font-mono">
-              <span className="flex items-center gap-1.5 text-slate-400">
-                <img src="/wolv-icon.svg" alt="WOLV" className="w-4 h-4 rounded-full" />
-                WOLV
-              </span>
-              <span className="text-white font-bold">{wolvPrice}</span>
-              {wolvChange !== null && (
-                <span className={wolvChange >= 0 ? 'text-emerald-400' : 'text-red-400'}>
-                  {wolvChange >= 0 ? '+' : ''}{wolvChange.toFixed(2)}%
-                </span>
-              )}
-              <span className="h-1.5 w-1.5 rounded-full bg-teal-400 animate-pulse" />
-            </div>
-            <p className="mt-2 text-[10px] text-slate-500">Source: Dexscreener · Reference only · Market data changes frequently</p>
+            <span className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-teal-200" style={{ borderRadius: 9999 }}>
+              <span className="live-dot" />
+              WOLV data · BNB Smart Chain · Risk information
+            </span>
+            <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05]">
+              <span className="text-gradient">{t('hero.title')}</span>
+            </h1>
           </motion.div>
-        )}
 
-        {/* DEX Listing badge */}
-        <motion.div variants={itemVariants}>
-          <a
-            href="https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`block p-4 rounded-xl bg-[#0b1329]/60 border border-white/10 border-t-white/20 backdrop-blur-md space-y-2 hover:border-teal-400/40 transition ${glassGlow}`}
-          >
-            <div className="flex justify-between items-center text-xs">
-              <span className="flex items-center gap-2 font-semibold text-teal-400">
-                <span className="h-2 w-2 rounded-full bg-teal-400 animate-pulse" />
-                Public WOLV market reference
-              </span>
-              <span className="text-slate-400">BSC · V2</span>
-            </div>
-            <div className="flex justify-between items-center text-[11px] text-slate-400">
-              <span>Check the address and current market data independently</span>
-              <span className="text-teal-400 font-semibold">Open market reference →</span>
-            </div>
-          </a>
+          <motion.p variants={itemVariants} className="max-w-xl text-base sm:text-lg text-slate-300 leading-relaxed">
+            {t('hero.subtitle')}
+          </motion.p>
+
+          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-3 pt-1">
+            <MotionLink href="/how-it-works" {...pressableTapProps} className="btn-glow">Explore how it works →</MotionLink>
+            <Link href="/verification-pack" className="btn-glass">Review public references →</Link>
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-x-5 gap-y-2 pt-2 text-[10px] tracking-wider text-slate-400">
+            <span>{t('hero.badge.encryption')}</span>
+            <span>{t('hero.badge.custody')}</span>
+            <span>{t('hero.badge.kyc')}</span>
+            <span>PUBLIC CONTRACT REFERENCES</span>
+          </motion.div>
         </motion.div>
 
-        {/* Action buttons */}
-        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-3 pt-1">
-          <MotionLink href="/how-it-works" {...pressableTapProps} className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition shadow-lg shadow-teal-500/20 text-center">Explore how it works →</MotionLink>
-          <Link href="/verification-pack" className="w-full sm:flex-1 py-3 px-6 rounded-lg font-bold text-white border border-blue-400/40 bg-blue-500/10 hover:bg-blue-500/20 transition text-center">Review public references →</Link>
+        <motion.div variants={containerVariants} initial="hidden" animate="show" className="flex flex-col items-center gap-6">
+          <motion.div variants={itemVariants}><TokenOrb size={230} /></motion.div>
+
+          <motion.div variants={itemVariants} className="w-full max-w-sm">
+            <GlassCard rim strong tilt={6} className="p-5 space-y-4">
+              <div className="flex items-center justify-between text-xs">
+                <span className="flex items-center gap-2 font-semibold text-teal-300"><span className="live-dot" />WOLV market reference</span>
+                <span className="text-slate-400">BSC · V2</span>
+              </div>
+              <div className="flex items-end justify-between">
+                <span className="text-2xl font-bold" style={{ fontFamily: "'DM Mono', monospace" }}>
+                  {wolvPrice ?? <span className="inline-block h-7 w-32 animate-pulse rounded bg-white/10 align-middle" />}
+                </span>
+                {wolvChange !== null && (
+                  <span className={`text-sm font-semibold ${wolvChange >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                    {wolvChange >= 0 ? '▲ +' : '▼ '}{wolvChange.toFixed(2)}%
+                  </span>
+                )}
+              </div>
+              <div className="flex gap-2">
+                <a href={pancakeSwapUrl} target="_blank" rel="noopener noreferrer" className="btn-glass flex-1 !py-2.5 text-sm">Market reference ↗</a>
+                <AddWolvToWallet className="btn-glass flex-1 !py-2.5 text-sm" />
+              </div>
+              <p className="text-[10px] text-slate-500">Source: Dexscreener · Reference only · Market data changes frequently</p>
+            </GlassCard>
+          </motion.div>
         </motion.div>
-
-        <a href="https://pancakeswap.finance/swap?outputCurrency=0xe0167279aef7bf4ad313d261da82e8366822270c" target="_blank" rel="noopener noreferrer" className="block text-center text-sm text-blue-300 hover:text-blue-200 underline underline-offset-2">
-          View WOLV market reference →
-        </a>
-
-        {/* Trust badges */}
-        <div className="pt-4 border-t border-slate-800/80 flex flex-wrap justify-between gap-2 text-[10px] text-slate-400 tracking-wider">
-          <span>{t('hero.badge.encryption')}</span>
-          <span>{t('hero.badge.custody')}</span>
-          <span>{t('hero.badge.kyc')}</span>
-          <span>PUBLIC CONTRACT REFERENCES</span>
-        </div>
-      </motion.div>
+      </div>
     </section>
   )
 }

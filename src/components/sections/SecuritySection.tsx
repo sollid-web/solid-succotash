@@ -67,7 +67,7 @@ const CONTRACTS = [
 
 export default function SecuritySection() {
   return (
-    <section id="security" className="py-24 bg-[#070B19] border-t border-white/[0.06] border-b border-white/[0.06]">
+    <section id="security" className="py-24 border-t border-white/[0.06] border-b border-white/[0.06]">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center mb-4">
           <span className="text-[11px] font-bold tracking-widest text-brand-primary uppercase">

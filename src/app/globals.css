@@ -34,6 +34,40 @@
   --cta-sky-2: #cfeeff;
   --cta-sky-3: #a7dcff;
   --cta-sky-4: #7cc7ff;
+
+  /* Single WolvCapital blue brand source used across public surfaces. */
+  --brand-blue: #2A52BE;
+  --brand-blue-deep: #1E3A8A;
+  --brand-blue-bright: #3B82F6;
+  --brand-blue-soft: #60A5FA;
+  --brand-blue-rgb: 42, 82, 190;
+}
+
+/* Keep the existing glass system on-brand instead of drifting into teal/violet. */
+:root {
+  --g-teal: var(--brand-blue-rgb);
+  --g-blue: 30, 58, 138;
+  --g-violet: 59, 130, 246;
+  --web3-teal: var(--brand-blue);
+  --web3-blue: var(--brand-blue-deep);
+  --web3-glow-teal: rgba(var(--brand-blue-rgb), 0.15);
+  --web3-border-teal: rgba(var(--brand-blue-rgb), 0.2);
+  --brand-secondary: var(--brand-blue-deep);
+  --brand-accent: var(--brand-blue-bright);
+  --brand-gradient: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-blue-deep) 100%);
+  --brand-gradient-hover: linear-gradient(135deg, var(--brand-blue-deep) 0%, var(--brand-blue) 100%);
+}
+
+/* Final public-brand guardrails: blue is the only accent family. */
+.text-teal-300, .text-teal-400, .text-teal-500, .text-cyan-200, .text-cyan-300, .text-cyan-400,
+.text-emerald-200, .text-emerald-300, .text-emerald-400, .text-emerald-500 {
+  color: var(--brand-blue-soft) !important;
+}
+.bg-teal-500, .bg-emerald-500, .bg-cyan-500 {
+  background-color: var(--brand-blue) !important;
+}
+.border-teal-300, .border-teal-400, .border-emerald-300, .border-cyan-300 {
+  border-color: rgba(var(--brand-blue-rgb), 0.45) !important;
 }
 
 /* Base Styles */

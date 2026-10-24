@@ -1,14 +1,10 @@
-// On Vercel, a missing NEXT_PUBLIC_API_URL doesn't fail the build — it just
-// makes every /api/* call (including login) silently 404 in production,
-// since the rewrite below falls back to an unreachable localhost:8000.
-// Fail the build instead of shipping that broken state.
-if (process.env.VERCEL && !process.env.NEXT_PUBLIC_API_URL) {
-  throw new Error(
-    'NEXT_PUBLIC_API_URL is not set. Set it in the Vercel project settings to the ' +
-    'deployed Django backend URL (e.g. https://api.wolvcapital.com) — without it, ' +
-    'login and every other /api/* request will 404 in production.',
-  )
-}
+// Keep production deploys functional even when the optional project variable is
+// missing. The public API has a stable production origin; an explicit variable
+// still wins for staging, previews, and self-hosted deployments.
+const configuredApiOrigin =
+  process.env.NEXT_PUBLIC_API_URL ||
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  (process.env.VERCEL ? 'https://api.wolvcapital.com' : 'http://localhost:8000')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -68,7 +64,7 @@ const nextConfig = {
     // Proxy API calls from the frontend domain to the Django backend.
     // This ensures links like https://www.wolvcapital.com/api/auth/verify-email/?token=...
     // reach Django instead of returning a Next.js 404.
-    const backendBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+    const backendBase = configuredApiOrigin
     return [
       // Proxy Django static assets (needed for admin CSS/JS).
       {

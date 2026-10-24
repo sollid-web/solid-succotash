@@ -1,0 +1,260 @@
+{
+  "routes": [
+    {
+      "path": "/about",
+      "title": "About"
+    },
+    {
+      "path": "/accounts/login",
+      "title": "Accounts/Login"
+    },
+    {
+      "path": "/accounts/signup",
+      "title": "Accounts/Signup"
+    },
+    {
+      "path": "/accounts/verify-email",
+      "title": "Accounts/Verify Email"
+    },
+    {
+      "path": "/admin/campaigns",
+      "title": "Admin/Campaigns"
+    },
+    {
+      "path": "/admin",
+      "title": "Admin"
+    },
+    {
+      "path": "/admin/withdrawals",
+      "title": "Admin/Withdrawals"
+    },
+    {
+      "path": "/blog/:slug",
+      "title": "Blog/:Slug"
+    },
+    {
+      "path": "/blog",
+      "title": "Blog"
+    },
+    {
+      "path": "/bnb-smart-chain-staking-guide",
+      "title": "Bnb Smart Chain Staking Guide"
+    },
+    {
+      "path": "/campaigns",
+      "title": "Campaigns"
+    },
+    {
+      "path": "/checkout",
+      "title": "Checkout"
+    },
+    {
+      "path": "/checkout/success",
+      "title": "Checkout/Success"
+    },
+    {
+      "path": "/contact",
+      "title": "Contact"
+    },
+    {
+      "path": "/dashboard/card",
+      "title": "Dashboard/Card"
+    },
+    {
+      "path": "/dashboard/cards/:id",
+      "title": "Dashboard/Cards/:Id"
+    },
+    {
+      "path": "/dashboard/cards",
+      "title": "Dashboard/Cards"
+    },
+    {
+      "path": "/dashboard/deposit",
+      "title": "Dashboard/Deposit"
+    },
+    {
+      "path": "/dashboard/kyc",
+      "title": "Dashboard/Kyc"
+    },
+    {
+      "path": "/dashboard/my-card",
+      "title": "Dashboard/My Card"
+    },
+    {
+      "path": "/dashboard/new-investment",
+      "title": "Dashboard/New Investment"
+    },
+    {
+      "path": "/dashboard",
+      "title": "Dashboard"
+    },
+    {
+      "path": "/dashboard/purchase-card",
+      "title": "Dashboard/Purchase Card"
+    },
+    {
+      "path": "/dashboard/stake",
+      "title": "Dashboard/Stake"
+    },
+    {
+      "path": "/dashboard/support",
+      "title": "Dashboard/Support"
+    },
+    {
+      "path": "/dashboard/transactions",
+      "title": "Dashboard/Transactions"
+    },
+    {
+      "path": "/dashboard/withdraw",
+      "title": "Dashboard/Withdraw"
+    },
+    {
+      "path": "/dashboard/wolv-token",
+      "title": "Dashboard/Wolv Token"
+    },
+    {
+      "path": "/editorial-policy",
+      "title": "Editorial Policy"
+    },
+    {
+      "path": "/faq",
+      "title": "Faq"
+    },
+    {
+      "path": "/fees-withdrawals-custody",
+      "title": "Fees Withdrawals Custody"
+    },
+    {
+      "path": "/forgot-password",
+      "title": "Forgot Password"
+    },
+    {
+      "path": "/how-it-works",
+      "title": "How It Works"
+    },
+    {
+      "path": "/how-to-verify-wolvcapital",
+      "title": "How To Verify Wolvcapital"
+    },
+    {
+      "path": "/leadership",
+      "title": "Leadership"
+    },
+    {
+      "path": "/learn",
+      "title": "Learn"
+    },
+    {
+      "path": "/legal/certificate-of-operation",
+      "title": "Legal/Certificate Of Operation"
+    },
+    {
+      "path": "/legal",
+      "title": "Legal"
+    },
+    {
+      "path": "/legal-disclaimer",
+      "title": "Legal Disclaimer"
+    },
+    {
+      "path": "/metrics-methodology",
+      "title": "Metrics Methodology"
+    },
+    {
+      "path": "/",
+      "title": "Home"
+    },
+    {
+      "path": "/partners",
+      "title": "Partners"
+    },
+    {
+      "path": "/plans/horizon",
+      "title": "Plans/Horizon"
+    },
+    {
+      "path": "/plans",
+      "title": "Plans"
+    },
+    {
+      "path": "/plans/pioneer",
+      "title": "Plans/Pioneer"
+    },
+    {
+      "path": "/plans/summit",
+      "title": "Plans/Summit"
+    },
+    {
+      "path": "/plans/vanguard",
+      "title": "Plans/Vanguard"
+    },
+    {
+      "path": "/presale",
+      "title": "Presale"
+    },
+    {
+      "path": "/privacy",
+      "title": "Privacy"
+    },
+    {
+      "path": "/referral",
+      "title": "Referral"
+    },
+    {
+      "path": "/referrals",
+      "title": "Referrals"
+    },
+    {
+      "path": "/reset-password",
+      "title": "Reset Password"
+    },
+    {
+      "path": "/risk-disclosure",
+      "title": "Risk Disclosure"
+    },
+    {
+      "path": "/roadmap",
+      "title": "Roadmap"
+    },
+    {
+      "path": "/security",
+      "title": "Security"
+    },
+    {
+      "path": "/security-audit-status",
+      "title": "Security Audit Status"
+    },
+    {
+      "path": "/smart-contracts",
+      "title": "Smart Contracts"
+    },
+    {
+      "path": "/terms-of-service",
+      "title": "Terms Of Service"
+    },
+    {
+      "path": "/tokenomics",
+      "title": "Tokenomics"
+    },
+    {
+      "path": "/verification-pack",
+      "title": "Verification Pack"
+    },
+    {
+      "path": "/whitepaper",
+      "title": "Whitepaper"
+    },
+    {
+      "path": "/withdrawal-policy",
+      "title": "Withdrawal Policy"
+    },
+    {
+      "path": "/wolv-admin",
+      "title": "Wolv Admin"
+    },
+    {
+      "path": "/wolv-token",
+      "title": "Wolv Token"
+    }
+  ]
+}

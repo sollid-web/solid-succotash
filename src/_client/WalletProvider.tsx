@@ -1,5 +1,4 @@
 'use client';
-import '@rainbow-me/rainbowkit/styles.css';
 import { RainbowKitProvider, getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 import { bsc } from 'wagmi/chains';

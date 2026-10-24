@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import './globals.css'
+import '@rainbow-me/rainbowkit/styles.css'
 import AppChrome from '@/components/AppChrome'
 import { TranslationProvider } from '@/components/TranslationProvider'
 import WolvAiWidget from './WolvAiWidget'

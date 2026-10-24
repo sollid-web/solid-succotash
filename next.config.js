@@ -6,6 +6,11 @@ const configuredApiOrigin =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
   (process.env.VERCEL ? 'https://api.wolvcapital.com' : 'http://localhost:8000')
 
+function normalizeApiOrigin(value) {
+  const origin = value.trim().replace(/\/$/, '')
+  return /^https?:\/\//i.test(origin) ? origin : `https://${origin}`
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -64,7 +69,7 @@ const nextConfig = {
     // Proxy API calls from the frontend domain to the Django backend.
     // This ensures links like https://www.wolvcapital.com/api/auth/verify-email/?token=...
     // reach Django instead of returning a Next.js 404.
-    const backendBase = configuredApiOrigin
+    const backendBase = normalizeApiOrigin(configuredApiOrigin)
     return [
       // Proxy Django static assets (needed for admin CSS/JS).
       {

@@ -137,8 +137,8 @@ export default function NavBar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileOpen && (
-        <div className="lg:hidden" style={{ background: 'rgba(6,12,26,0.98)', borderTop: '1px solid rgba(42,82,190,0.2)', backdropFilter: 'blur(20px)' }}>
-          <div className="px-4 py-4 flex flex-col gap-1">
+        <div className="lg:hidden absolute right-3 top-[calc(100%+10px)] w-[min(340px,calc(100vw-24px))] overflow-hidden rounded-2xl border border-blue-300/20 bg-[#071633]/95 shadow-[0_24px_70px_rgba(0,0,0,.55)] backdrop-blur-2xl" style={{ animation: 'nav-dropdown-in 180ms ease-out both' }}>
+          <div className="max-h-[min(70vh,520px)] overflow-y-auto px-3 py-3">
             <div className="pb-3 mb-2 flex items-center justify-between gap-2" style={{ borderBottom: '1px solid rgba(42,82,190,0.2)' }}>
               <LanguageSwitcher />
               <Link

@@ -70,6 +70,8 @@
   border-color: rgba(var(--brand-blue-rgb), 0.45) !important;
 }
 
+@keyframes nav-dropdown-in { from { opacity: 0; transform: translateY(-6px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
 /* Base Styles */
 html {
   /* Enable smooth scrolling across the site */

@@ -634,7 +634,7 @@ export function WolvWalletButton({ compact = false }: WolvWalletButtonProps) {
           Connect
         </button>
         {dropdownOpen && (
-          <div className="absolute right-0 top-full z-50 mt-2 w-80 rounded-2xl border border-white/10 bg-[#071a3c] p-4 shadow-[0_18px_40px_rgba(0,0,0,0.45)]">
+          <div className="absolute right-0 top-full z-50 mt-3 w-[min(360px,calc(100vw-24px))] max-h-[min(78vh,640px)] overflow-y-auto rounded-2xl border border-blue-300/20 bg-[#071633]/98 p-4 shadow-[0_24px_70px_rgba(0,0,0,.58)] backdrop-blur-2xl">
             <ConnectTabs
               tab={tab} setTab={setTab} openWallet={openWallet}
               hasInjectedProvider={hasInjectedProvider} isMobileBrowser={isMobileBrowser}

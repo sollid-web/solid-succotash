@@ -50,9 +50,12 @@ export default function MarketWidget() {
 
   return (
     <section
-      className="max-w-[520px] rounded-xl border border-gray-200 bg-white p-5"
+      className="market-widget max-w-[620px] rounded-[24px] border border-white/10 bg-[#081633]/90 p-5 text-white shadow-[0_24px_80px_rgba(0,0,0,.35)] backdrop-blur-xl sm:p-6"
     >
-      <h3 className="mb-3 font-semibold">Market Overview</h3>
+      <div className="mb-5 flex items-start justify-between gap-4">
+        <div><p className="text-[10px] uppercase tracking-[0.22em] text-blue-200/60">Live reference frame</p><h3 className="mt-2 text-lg font-semibold tracking-tight">Market overview</h3></div>
+        <span className="inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-400/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-blue-200"><span className="h-1.5 w-1.5 rounded-full bg-blue-300 shadow-[0_0_12px_#60a5fa]" /> Online</span>
+      </div>
 
       {status === "loading" ? (
         <p className="text-sm text-gray-600">Loading live market data…</p>
